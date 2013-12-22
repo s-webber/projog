@@ -1,0 +1,19 @@
+# This file defines the contents of the manual's "table of contents".
+# It is used as part of the build process to generate the manual.html page of the website.
+# See org.projog.build.TableOfContentsReader for more details.
+* concepts/getting-started.pl
++ Prolog Concepts
+- concepts/prolog-introduction.pl
+- concepts/prolog-unification.pl
+- concepts/prolog-lists.pl
+- concepts/prolog-arithmetic.pl
+- concepts/prolog-term-comparison.pl
+- concepts/prolog-io.pl
+- concepts/prolog-debugging.pl
++ Prolog Commands
+[COMMANDS]
++ Prolog Applications
+- applications/towers-of-hanoi.pl
+* calling-prolog-from-java Using Prolog in Java Applications
+* extending-prolog-with-java Adding Extra Functionality to Prolog Using Java
+* adding-new-prolog-arithmetic-operators Adding New Arithmetic Operators to Prolog

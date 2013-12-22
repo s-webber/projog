@@ -1,0 +1,100 @@
+package org.projog.content_generated_at_runtime;
+import org.projog.core.udp.compiler.*;
+import org.projog.core.udp.interpreter.*;
+import org.projog.core.udp.*;
+import org.projog.core.term.*;
+import org.projog.core.*;
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+// testCutSingleRuleMultipleResults/-1
+public final class %CLASS_NAME% implements CompiledPredicate {
+   private final boolean initRule0() {
+      return true;
+   }
+   private final boolean retryRule0() {
+      do {
+         mainloop:
+         switch (conjunctionCtr) {
+            case 0:
+            if (e0==null) {
+               e0 = RepeatSetAmount_1.getPredicate(INTEGER_5);
+            } else {
+               if (e0.isRetryable()==false) {
+                  return false;
+               }
+            }
+            if (!e0.evaluate(INTEGER_5)) {
+               e0 = null;
+               return false;
+            }
+            case 1:
+            if (e1==null) {
+               e1 = RepeatSetAmount_1.getPredicate(INTEGER_3);
+            } else {
+               if (e1.isRetryable()==false) {
+                  isCut = true;
+                  return false;
+               }
+            }
+            if (!e1.evaluate(INTEGER_3)) {
+               e1 = null;
+               isCut = true;
+               return false;
+            }
+            conjunctionCtr = 1;
+            return true;
+         }
+      } while (true);
+   }
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
+      RepeatSetAmount_1 = (org.projog.core.function.flow.RepeatSetAmount)_kb.getPredicateFactory(new PredicateKey("repeat", 1));
+   }
+   %CLASS_NAME%() {
+   }
+   private final void backtrack() {
+   }
+   public final boolean evaluate(final Term... args) {
+      if (isCut) {
+         return false;
+      }
+      if (isRetrying) {
+         if (retryRule0()) {
+            return true;
+         }
+         isRetrying = false;
+      } else {
+         if (initRule0() && retryRule0()) {
+            isRetrying = true;
+            return true;
+         }
+      }
+      // Fail 1
+      return false;
+   }
+   public final boolean isRetryable() {
+      return true;
+   }
+   public final boolean couldReEvaluationSucceed() {
+      if (e0!=null && e0.couldReEvaluationSucceed()) {
+         return true;
+      }
+      if (e1!=null && e1.couldReEvaluationSucceed()) {
+         return true;
+      }
+      return false;
+   }
+   public final void setKnowledgeBase(KnowledgeBase kb) {
+      throw new RuntimeException();
+   }
+   public final Predicate getPredicate(final Term... termArgs) {
+      return new %CLASS_NAME%();
+   }
+   private static final Term INTEGER_5 = new IntegerNumber(5);
+   private static final Term INTEGER_3 = new IntegerNumber(3);
+   private static org.projog.core.function.flow.RepeatSetAmount RepeatSetAmount_1;
+   private boolean isCut;
+   private boolean isRetrying;
+   private int clauseCtr;
+   private int conjunctionCtr;
+   private org.projog.core.function.flow.RepeatSetAmount e0;
+   private org.projog.core.function.flow.RepeatSetAmount e1;
+}

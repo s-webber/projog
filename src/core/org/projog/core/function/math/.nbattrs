@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE attributes PUBLIC "-//NetBeans//DTD DefaultAttributes 1.0//EN" "http://www.netbeans.org/dtds/attributes-1_0.dtd">
+<attributes version="1.0">
+    <fileobject name="Add.java">
+        <attr name="class_dependency_org.projog.core.term.Predicate" stringvalue="Add"/>
+    </fileobject>
+    <fileobject name="Is.java">
+        <attr name="class_dependency_org.projog.core.Evaluatable" stringvalue="Is"/>
+    </fileobject>
+</attributes>

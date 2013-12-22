@@ -1,0 +1,120 @@
+package org.projog.content_generated_at_runtime;
+import org.projog.core.udp.compiler.*;
+import org.projog.core.udp.interpreter.*;
+import org.projog.core.udp.*;
+import org.projog.core.term.*;
+import org.projog.core.*;
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+// testCallCompiledEvaluatable/2
+public final class %CLASS_NAME% implements CompiledPredicate {
+   private final boolean initRule0() {
+      v0_A = a0;
+      v0_B = a1;
+      final Numeric y0;
+      Numeric num0 = kb.getNumeric((((y0=kb.getNumeric(v0_B)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getInt()*2):new DoubleNumber(y0.getDouble()*2.0)));
+      final Numeric y1;
+      v0_C = (((y1=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y1.getInt()+1):new DoubleNumber(y1.getDouble()+1.0));
+      return true;
+   }
+   private final boolean retryRule0() {
+      do {
+         mainloop:
+         switch (conjunctionCtr) {
+            case 0:
+            if (c0_0==null) {
+               c0_0 = new CompiledPredicateSourceGeneratorTest$3(v0_A, v0_B, v0_C);
+            } else {
+               v0_B = _0;
+               v0_A = _1;
+               v0_C = _2;
+            }
+            if (!c0_0.evaluate((Term[])null)) {
+               return false;
+            }
+            _0 = v0_B;
+            v0_B = v0_B.getTerm();
+            _1 = v0_A;
+            v0_A = v0_A.getTerm();
+            _2 = v0_C;
+            v0_C = v0_C.getTerm();
+            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, DOUBLE_1_5, kb)!=1) {
+               v0_A.backtrack();
+               v0_B.backtrack();
+               v0_C.backtrack();
+               break mainloop;
+            }
+            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, DOUBLE_18_5, kb)>0) {
+               v0_A.backtrack();
+               v0_B.backtrack();
+               v0_C.backtrack();
+               break mainloop;
+            }
+            conjunctionCtr = 1;
+            return true;
+            case 1:
+            conjunctionCtr = 0;
+            v0_A.backtrack();
+            v0_B.backtrack();
+            v0_C.backtrack();
+         }
+      } while (true);
+   }
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
+      kb = _kb;
+   }
+   %CLASS_NAME%(final Term in0, final Term in1) {
+      a0 = in0.getTerm();
+      a1 = in1.getTerm();
+   }
+   private final void backtrack() {
+      a0.backtrack();
+      a1.backtrack();
+   }
+   public final boolean evaluate(final Term... args) {
+      if (isRetrying) {
+         if (retryRule0()) {
+            return true;
+         }
+         isRetrying = false;
+      } else {
+         if (initRule0() && retryRule0()) {
+            isRetrying = true;
+            return true;
+         }
+      }
+      // Fail 1
+      return false;
+   }
+   public final boolean isRetryable() {
+      return true;
+   }
+   public final boolean couldReEvaluationSucceed() {
+      if (c0_0!=null && c0_0.couldReEvaluationSucceed()) {
+         return true;
+      }
+      return false;
+   }
+   public final void setKnowledgeBase(KnowledgeBase kb) {
+      throw new RuntimeException();
+   }
+   public final Predicate getPredicate(final Term... termArgs) {
+      return new %CLASS_NAME%(termArgs[0], termArgs[1]);
+   }
+   private static final Term INTEGER_2 = new IntegerNumber(2);
+   private static final Term INTEGER_1 = new IntegerNumber(1);
+   private static final Term DOUBLE_1_5 = new DoubleNumber(1.5);
+   private static final Term DOUBLE_18_5 = new DoubleNumber(18.5);
+   private static KnowledgeBase kb;
+   private boolean isRetrying;
+   private int clauseCtr;
+   private int conjunctionCtr;
+   private Term a0;
+   private Term a1;
+   private CompiledPredicateSourceGeneratorTest$3 c0_0;
+   private Term v0_A;
+   private Term v0_B;
+   private Term v0_C;
+   private Term _0;
+   private Term _1;
+   private Term _2;
+}

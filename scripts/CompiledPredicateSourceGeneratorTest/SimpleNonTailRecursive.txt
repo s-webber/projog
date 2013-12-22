@@ -1,0 +1,64 @@
+package org.projog.content_generated_at_runtime;
+import org.projog.core.udp.compiler.*;
+import org.projog.core.udp.interpreter.*;
+import org.projog.core.udp.*;
+import org.projog.core.term.*;
+import org.projog.core.*;
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+// testSimpleNonTailRecursive/1
+public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
+   private final boolean initRule0() {
+      final Term v0_N;
+      return true;
+   }
+   private final boolean initRule1() {
+      final Term v1_N;
+      v1_N = a0;
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_N, INTEGER_1, kb)!=1) {
+         return false;
+      }
+      final Numeric y0;
+      final Term v1_N1;
+      v1_N1 = (((y0=kb.getNumeric(v1_N)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getInt()-1):new DoubleNumber(y0.getDouble()-1.0));
+      a0 = v1_N1.getTerm();
+      return true;
+   }
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
+      kb = _kb;
+   }
+   %CLASS_NAME%(final Term in0) {
+      a0 = in0.getTerm();
+   }
+   protected final void backtrack() {
+      a0.backtrack();
+   }
+   protected final boolean matchFirstRule() {
+      return initRule0();
+   }
+   protected final boolean matchSecondRule() {
+      return initRule1();
+   }
+   public final boolean isRetryable() {
+      return true;
+   }
+   public final boolean couldReEvaluationSucceed() {
+      if (clauseCtr<2) {
+         return true;
+      }
+      return false;
+   }
+   public final void setKnowledgeBase(KnowledgeBase kb) {
+      throw new RuntimeException();
+   }
+   public final Predicate getPredicate(final Term... termArgs) {
+      return new %CLASS_NAME%(termArgs[0]);
+   }
+   private static final Term INTEGER_1 = new IntegerNumber(1);
+   private static KnowledgeBase kb;
+   public final boolean[] isSingleResultIfArgumentImmutable() {
+      return new boolean[]{false};
+   }
+   private int clauseCtr;
+   private int conjunctionCtr;
+   private Term a0;
+}

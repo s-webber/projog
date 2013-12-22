@@ -1,0 +1,86 @@
+/*
+ * Copyright 2013 S Webber
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.projog.core.term;
+
+/**
+ * Static factory methods for creating new instances of {@link List}.
+ */
+public final class ListFactory {
+   /**
+    * A "{@code .}" is the functor name for all lists in Prolog.
+    */
+   public static final String LIST_PREDICATE_NAME = ".";
+
+   /**
+    * Private constructor as all methods are static.
+    */
+   private ListFactory() {
+      // do nothing
+   }
+
+   /**
+    * Returns a new {@link List} with specified head and tail.
+    * 
+    * @param head the first argument in the list
+    * @param tail the second argument in the list
+    * @return a new {@link List} with specified head and tail
+    */
+   public static List createList(Term head, Term tail) {
+      return createList(head, tail, head.isImmutable() && tail.isImmutable());
+   }
+
+   /**
+    * Returns a new {@link List} with the specified terms and a empty list as the final tail element.
+    * <p>
+    * By having a {@code List} with a {@code List} as it's tail it is possible to represent an ordered sequence of the
+    * specified terms.
+    * 
+    * @param terms contents of the list
+    * @return a new {@link List} with the specified terms and a empty list as the final tail element
+    */
+   public static Term create(Term[] terms) {
+      return create(terms, EmptyList.EMPTY_LIST);
+   }
+
+   /**
+    * Returns a new {@link List} with the specified terms and the second parameter as the tail element.
+    * <p>
+    * By having a {@code List} with a {@code List} as it's tail it is possible to represent an ordered sequence of the
+    * specified terms.
+    * 
+    * @param terms contents of the list
+    * @return a new {@link List} with the specified terms and the second parameter as the tail element
+    */
+   public static Term create(Term[] terms, Term tail) {
+      int numberOfElements = terms.length;
+      if (numberOfElements == 0) {
+         return EmptyList.EMPTY_LIST;
+      }
+      // keep track of whether sublists are immutable
+      boolean isImmutable = tail.isImmutable();
+      Term list = tail;
+      for (int i = numberOfElements - 1; i > -1; i--) {
+         Term element = terms[i];
+         isImmutable = isImmutable && element.isImmutable();
+         list = createList(element, list, isImmutable);
+      }
+      return list;
+   }
+
+   private static List createList(Term head, Term tail, boolean isImmutable) {
+      return new List(head, tail, isImmutable);
+   }
+}

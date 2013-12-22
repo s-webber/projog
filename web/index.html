@@ -1,0 +1,33 @@
+<center>
+
+   Projog is an implementation of the <strong>Prolog</strong> logic programming language for the <strong>Java</strong> platform.
+
+   <div style="background-color: #eeeeee; width: 80%; text-align: left;">
+   <ul>
+   <li><b>Powerful</b> - provides a range of built-in predicates including support for <a href="prolog-arithmetic.html">arithmetic</a>, <a href="prolog-debugging.html">debugging</a> and <a href="prolog-io.html">input / output</a>.</li>
+   <li><b>Documented</b> - comprehensive <a href="manual.html">manual</a> contains full list of supported commands with examples.</li>
+   <li><b>Efficient</b> - user defined predicates are optimised at runtime (including tail-recursion optimisation) and automatically compiled to Java bytecode for maximised performance.</li>
+   <li><b>Interoperable</b> - provides an API for <a href="calling-prolog-from-java.html">using Prolog from within Java applications</a>.</li>
+   <li><b>Extendable</b> - provides a mechanism to plug-in new <a href="extending-prolog-with-java.html">predicates</a> and <a href="adding-new-prolog-arithmetic-operators.html">arithmetic operators</a> written in Java.</li>
+   <li><b>Cross-platform</b> - as Projog is written in Java it can run anywhere that has a JVM.</li>
+   <li><b>Open source</b> - using Apache License, Version 2.0.</li>
+   <li><b>Dynamic</b> - includes a console application that allows queries to be entered and immediately evaluated:</li>
+   </ul>
+   
+<center><div class="code" style="background-color: #ffffff; width: 350px; text-align: left;"><code>
+<span class="output">?-</span><span class="input"> write('hello, world'), nl.</span><br>
+<span class="output">hello, world<br>
+</span><br>
+<span class="output">yes</span><br>
+<br>
+<span class="output">?-</span><span class="input"> W=X, X=1+1, Y is W, Z is -W.</span><br>
+<span class="output"></span><span class="output">W = 1 + 1</span><br>
+<span class="output">X = 1 + 1</span><br>
+<span class="output">Y = 2</span><br>
+<span class="output">Z = -2</span><br>
+<br>
+<span class="output">yes</span></code></div></center>
+&nbsp;
+   </div>
+
+</center>

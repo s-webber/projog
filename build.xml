@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2013 S Webber
+  
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project name="projog" default="unit-test">
+
+	<property name="core-jar" value="build/lib/projog-core.jar"/>
+	<property name="junit-jar" value="lib/junit-3.8.1.jar"/>
+	<!--
+	dynamicContentDir is the output directory for classes generated at runtime
+	-->
+	<property name="dynamicContentDir" value="projogGeneratedClasses"/>
+
+	<tstamp>
+		<format property="build.timestamp" pattern="yyyyMMdd HH:mm"/>
+	</tstamp>
+
+<!-- CLEAN -->
+	<target name="clean" description="deletes build directory">
+		<delete dir="build" failonerror="false"/>
+		<delete dir="${dynamicContentDir}" failonerror="false"/>
+	</target>
+	
+<!-- COMPILE -->
+	<target name="compile.core">
+		<!-- compile to classes -->
+		<mkdir dir="build/classes/core"/>
+		<javac srcdir="src/core" destdir="build/classes/core" debug="on">
+			<compilerarg value="-Xlint"/>
+		</javac>
+	</target>
+
+	<target name="compile.jar">
+		<!-- produce jar containing core classes and properties files -->
+		<mkdir dir="build/lib"/>
+		<jar destfile="${core-jar}">
+			<manifest>
+			    <attribute name="Main-Class" value="org.projog.tools.ProjogConsole"/>
+			    <attribute name="Build-Timestamp" value="${build.timestamp}"/>
+			</manifest>
+			<fileset dir="etc">
+				<include name="projog-bootstrap.pl"/>
+			</fileset>
+			<fileset dir="build/classes/core">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="compile.build-utils">
+		<mkdir dir="build/classes/build-utils"/>
+		<path id="classpath.compile.build-utils">
+			<pathelement location="${core-jar}"/>
+		</path>
+		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on">
+			<classpath refid="classpath.compile.build-utils"/>
+		</javac>
+	</target>
+
+	<target name="compile.tests">
+		<mkdir dir="build/classes/tests"/>
+		<path id="classpath.compile.tests">
+			<pathelement location="${junit-jar}"/>
+			<pathelement location="${core-jar}"/>
+		</path>
+		<javac srcdir="src/tests" destdir="build/classes/tests" debug="on">
+			<classpath refid="classpath.compile.tests"/>
+		</javac>
+	</target>
+
+	<target name="compile" depends="compile.core,compile.jar,compile.build-utils,compile.tests"
+	        description="compiles all classes and produces jar of core code"/>
+
+<!-- UNIT TEST -->
+	<target name="unit-test" depends="compile"
+	        description="runs junit tests">
+		<mkdir dir="${dynamicContentDir}"/>
+		<junit haltonfailure="on" fork="yes" dir=".">
+			<formatter type="plain" usefile="false"/>
+			<classpath location="${junit-jar}"/>
+			<classpath location="${core-jar}"/>
+			<classpath location="build/classes/tests"/>
+			<!--
+			${dynamicContentDir} is used by StaticUserDefinedPredicateFactoryTest
+			and CompiledPredicateSourceGeneratorTest
+			(As specified by TestUtils.COMPILATION_ENABLED_PROPERTIES)
+			-->
+			<classpath location="${dynamicContentDir}"/>
+			<batchtest fork="yes" todir=".">
+				<fileset dir="src/tests">
+					<include name="**/*Test.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+<!-- SYSTEM TESTS -->
+	<target name="sys-test.generate">
+		<!--
+		 Extract prolog code from comments in java source code
+		 into seperate files for use by SysTestRunner
+		-->
+		<java classname="org.projog.build.SysTestGenerator" failonerror="true">
+			<classpath>
+				<pathelement location="${core-jar}"/>
+				<pathelement location="build/classes/build-utils"/>
+			</classpath>
+		</java>
+		
+		<!-- 
+		 copy example prolog scripts to 
+		 where SysTestRunner will look for them
+		-->
+		<copy todir="build/scripts">
+			<fileset dir="scripts"/>
+		</copy>
+	</target>
+
+	<target name="sys-test.run.interpreted">
+		<java classname="org.projog.build.SysTestRunner" failonerror="true" fork="true">
+			<classpath>
+				<pathelement location="${core-jar}"/>
+				<pathelement location="build/classes/build-utils"/>
+				<pathelement location="etc"/>
+			</classpath>
+			<sysproperty key="projog.compile" value="false"/>
+		</java>
+	</target>
+
+	<target name="sys-test.run.compiled">
+		<mkdir dir="${dynamicContentDir}"/>
+		<java classname="org.projog.build.SysTestRunner" failonerror="true" fork="true">
+			<classpath>
+				<pathelement location="${dynamicContentDir}"/>
+				<pathelement location="${core-jar}"/>
+				<pathelement location="build/classes/build-utils"/>
+				<pathelement location="etc"/>
+			</classpath>
+			<sysproperty key="projog.generatedClasses" value="${dynamicContentDir}"/>
+		</java>
+	</target>
+
+	<target name="sys-test.run" depends="sys-test.run.interpreted,sys-test.run.compiled"/>
+
+	<target name="sys-test" depends="sys-test.generate,sys-test.run"
+	        description="runs system tests generated from prolog statements included in comments of java code"/>
+
+	<target name="clean-test" depends="clean,compile,unit-test,sys-test"
+	        description="deletes build directory and recompiles before running both unit and system tests"/>
+
+<!-- WEB PAGES -->
+	<target name="web" depends="sys-test.generate"
+	        description="builds static html pages">
+		<copy todir="build/docs">
+			<fileset dir="web">
+				<include name="*.css"/>
+				<include name="favicon.ico"/>
+			</fileset>
+		</copy>
+		<java classname="org.projog.build.HtmlGenerator" failonerror="true">
+			<classpath>
+				<pathelement location="${core-jar}"/>
+				<pathelement location="build/classes/build-utils"/>
+			</classpath>
+		</java>
+	</target>
+
+<!-- JAVADOC -->
+	<target name="javadoc"
+	        description="produces javadoc for core classes">
+		<mkdir dir="build/lib"/>
+		<javadoc destdir="build/docs/javadoc" packagenames="*" windowTitle="Projog Javadoc">
+			<doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
+			<header><![CDATA[Projog]]></header>
+			<footer><![CDATA[Projog]]></footer>
+			<bottom><![CDATA[<a href='http://www.projog.org'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language.]]></bottom>
+			<sourcepath>
+				<pathelement location="src/core"/>
+			</sourcepath>
+		</javadoc>
+	</target>
+
+<!-- RELEASE BINARY -->
+	<target name="release-bin" depends="clean,compile,unit-test,sys-test,web,javadoc"
+	        description="builds zip containing jar, html documentation and batch files">
+		<zip destfile="projog-bin.zip">
+			<fileset dir="etc">
+				<include name="projog-console*.bat"/>
+				<include name="README.txt"/>
+				<include name="towers-of-hanoi-example.pl"/>
+			</fileset>
+			<fileset dir="build">
+				<include name="docs/**"/>
+				<include name="lib/**"/>
+			</fileset>
+		</zip>
+	</target>
+
+<!-- RELEASE SOURCE -->
+	<target name="release-src"
+	        description="builds zip of all this module excluding contents of build directory">
+		<zip destfile="projog-src.zip">
+			<fileset dir=".">
+				<include name="**"/>
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="*.tmp"/>
+				<exclude name=".*"/>
+				<exclude name="projog-*.zip"/>
+			</fileset>
+		</zip>
+	</target>
+
+</project>

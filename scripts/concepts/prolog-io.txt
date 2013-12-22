@@ -1,0 +1,33 @@
+Input and Output
+<p>
+Prolog provides commands to enable the input and output of characters and terms to the filesystem.
+</p>
+<p>
+The <code><a href="CurrentOutput.html">current_output</a></code> and
+ <code><a href="CurrentInput.html">current_input</a></code> commands can be used to identify the current
+source of output and input.
+</p>
+<p>
+The process for writing to a file is:
+<ul>
+<li>Use <code><a href="Open.html">open</a></code> to open a file for writing.</li>
+<li>Use <code><a href="SetOutput.html">set_output</a></code> to direct output to the newly opened file.</li>
+<li>Use
+ <code><a href="PutChar.html">put_char</a></code>,
+ <code><a href="NewLine.html">nl</a></code>,
+ <code><a href="Write.html">write</a></code> and
+ <code><a href="WriteCanonical.html">write_canonical</a></code> to write content to the file.</li>
+<li>Use <code><a href="Close.html">close</a></code> to close the file.</li>
+</ul>
+</p>
+<p>
+The process for reading from a file is:
+<ul>
+<li>Use <code><a href="Open.html">open</a></code> to open a file for reading.</li>
+<li>Use <code><a href="SetInput.html">set_input</a></code> to specify the newly opened file as the source for input.</li>
+<li>Use
+ <code><a href="GetChar.html">get_char</a></code> and
+ <code><a href="Read.html">read</a></code> to read content from the file.</li>
+<li>Use <code><a href="Close.html">close</a></code> to close the file.</li>
+</ul>
+</p>

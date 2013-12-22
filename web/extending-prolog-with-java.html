@@ -1,0 +1,165 @@
+<p>
+Projog provides a mechanism for "plugging in" or "injecting" implementations of <a href="javadoc/org/projog/core/PredicateFactory.html" title="interface in org.projog.core"><code>PredicateFactory</code></a> at runtime. 
+This mechanism provides an easy way to configure and extend the functionality of Projog - 
+including adding functionality not possible to define in pure Prolog syntax.
+</p>
+<p>
+Rather than directly implementing <code>PredicateFactory</code> it is recommended to 
+extend either <a href="javadoc/org/projog/core/function/AbstractSingletonPredicate.html" title="class in org.projog.core.function"><code>AbstractSingletonPredicate</code></a>
+or <a href="javadoc/org/projog/core/function/AbstractRetryablePredicate.html" title="class in org.projog.core.function"><code>AbstractRetryablePredicate</code></a>.
+</p>
+<p>
+Before implementing new versions of <code>PredicateFactory</code> it is recommended to first read the javadoc of the 
+<a href="javadoc/org/projog/core/Predicate.html#evaluate(org.projog.core.term.Term...)">
+<code>Predicate.evaluate(Term[])</code>
+</a> 
+and 
+<a href="javadoc/org/projog/core/PredicateFactory.html#getPredicate(org.projog.core.term.Term...)">
+<code>PredicateFactory.getPredicate(Term[])</code>
+</a>
+methods.
+</p>
+
+<h3>Example usage</h3>
+
+<p>
+Contents of <code>org/projog/example/SingletonPredicateExample.java</code>:
+</p>
+
+<div class="code"><code>package org.projog.example;<br>
+<br>
+import java.text.SimpleDateFormat;<br>
+import java.util.Date;<br>
+<br>
+import org.projog.core.function.AbstractSingletonPredicate;<br>
+import org.projog.core.term.Atom;<br>
+import org.projog.core.term.Term;<br>
+<br>
+public class SingletonPredicateExample extends AbstractSingletonPredicate {<br>
+&nbsp;&nbsp;&nbsp;public boolean evaluate(Term... args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return evaluate(args[0]);<br>
+&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;/**<br>
+&nbsp;&nbsp;&nbsp; * Overloaded version of {@link #evaluate(Term...)} <br>
+&nbsp;&nbsp;&nbsp; * that avoids the overhead of creating a new {@code Term} array.<br>
+&nbsp;&nbsp;&nbsp; * <br>
+&nbsp;&nbsp;&nbsp; * @see org.projog.core.Predicate#evaluate(Term...)<br>
+&nbsp;&nbsp;&nbsp; */<br>
+&nbsp;&nbsp;&nbsp;public boolean evaluate(Term arg) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String currentDate = sdf.format(new Date()); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return arg.unify(new Atom(currentDate));<br>
+&nbsp;&nbsp;&nbsp;}<br>
+}</code></div>
+
+<p>
+Contents of <code>org/projog/example/RetryablePredicateExample.java</code>:
+</p>
+
+<div class="code"><code>package org.projog.example;<br>
+<br>
+import java.util.Iterator;<br>
+import java.util.Map;<br>
+import java.util.Map.Entry;<br>
+<br>
+import org.projog.core.function.AbstractRetryablePredicate;<br>
+import org.projog.core.term.Atom;<br>
+import org.projog.core.term.Term;<br>
+<br>
+public class RetryablePredicateExample extends AbstractRetryablePredicate {<br>
+&nbsp;&nbsp;&nbsp;private Iterator&lt;Map.Entry&lt;Object, Object&gt;&gt; systemProperties;<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;public boolean evaluate(Term... args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return evaluate(args[0], args[1]);<br>
+&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;/**<br>
+&nbsp;&nbsp;&nbsp; * Overloaded version of {@link #evaluate(Term...)} <br>
+&nbsp;&nbsp;&nbsp; * that avoids the overhead of creating a new {@code Term} array.<br>
+&nbsp;&nbsp;&nbsp; * <br>
+&nbsp;&nbsp;&nbsp; * @see org.projog.core.Predicate#evaluate(Term...)<br>
+&nbsp;&nbsp;&nbsp; */<br>
+&nbsp;&nbsp;&nbsp;public boolean evaluate(Term arg1, Term arg2) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (systemProperties==null) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;systemProperties = System.getProperties().entrySet().iterator();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg1.backtrack();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg2.backtrack();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (systemProperties.hasNext()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entry&lt;Object, Object&gt; entry = systemProperties.next();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key = (String) entry.getKey();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String value = (String) entry.getValue();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (arg1.unify(new Atom(key)) &amp;&amp; arg2.unify(new Atom(value))) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg1.backtrack();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg2.backtrack();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false;<br>
+&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;public RetryablePredicateExample getPredicate(Term... args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return getPredicate(args[0], args[1]);<br>
+&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;/**<br>
+&nbsp;&nbsp;&nbsp; * Overloaded version of {@link #getPredicate(Term...)} <br>
+&nbsp;&nbsp;&nbsp; * that avoids the overhead of creating a new {@code Term} array.<br>
+&nbsp;&nbsp;&nbsp; * <br>
+&nbsp;&nbsp;&nbsp; * @see org.projog.core.PredicateFactory#getPredicate(Term...)<br>
+&nbsp;&nbsp;&nbsp; */<br>
+&nbsp;&nbsp;&nbsp;public RetryablePredicateExample getPredicate(Term arg1, Term arg2) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new RetryablePredicateExample();<br>
+&nbsp;&nbsp;&nbsp;}<br>
+}</code></div>
+
+<p>
+Example of integrating <code>org.projog.example.SingletonPredicateExample</code> and <code>org.projog.example.RetryablePredicateExample</code> into Projog:
+</p>
+
+<div class="code">
+<pre>
+?- pj_add_predicate('date'/1, 'org.projog.example.SingletonPredicateExample').
+
+yes
+
+?- date(X).
+X = 20130202
+
+yes
+
+?- date('20130202').
+
+yes
+
+?- date('20130203').
+
+no
+
+?- pj_add_predicate('props'/2, 'org.projog.example.RetryablePredicateExample').
+
+yes
+
+?- props('path.separator',Y).
+Y = ;
+
+yes (0 ms)
+
+no (0 ms)
+
+?- props(X,Y).
+X = java.runtime.name
+Y = Java(TM) SE Runtime Environment
+
+yes
+X = java.vm.vendor
+Y = Sun Microsystems Inc.
+
+yes
+X = java.vendor.url
+Y = http://java.sun.com/
+</pre>
+</div>

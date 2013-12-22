@@ -1,0 +1,55 @@
+<p>
+Projog provides a mechanism for "plugging in" or "injecting" implementations of <a href="javadoc/org/projog/core/Calculatable.html" title="interface in org.projog.core"><code>Calculatable</code></a> at runtime.
+This mechanism provides an easy way to configure and extend the arithmetic operations supported by Projog.
+</p>
+
+<h3>Example usage</h3>
+
+<p>
+Contents of <code>org/projog/example/CalculatableExample.java</code>:
+</p>
+
+<div class="code"><code>package org.projog.example;<br>
+<br>
+import org.projog.core.Calculatable;<br>
+import org.projog.core.KnowledgeBase;<br>
+import org.projog.core.term.DoubleNumber;<br>
+import org.projog.core.term.Numeric;<br>
+import org.projog.core.term.Term;<br>
+import org.projog.core.term.TermUtils;<br>
+<br>
+public class CalculatableExample implements Calculatable {<br>
+&nbsp;&nbsp;&nbsp;@Override<br>
+&nbsp;&nbsp;&nbsp;public Numeric calculate(KnowledgeBase kb, Term[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Numeric input = TermUtils.castToNumeric(args[0]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long rounded = Math.round(input.getDouble());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new IntegerNumber((int) rounded);<br>
+&nbsp;&nbsp;&nbsp;}<br>
+}</code></div>
+
+<p>
+Example of integrating <code>org.projog.example.CalculatableExample</code> into Projog:
+</p>
+
+<div class="code">
+<pre>
+?- pj_add_calculatable('round', 'org.projog.example.CalculatableExample').
+
+yes
+
+?- X is round(109).
+X = 109
+
+yes
+
+?- X is round(109.5).
+X = 110
+
+yes
+
+?- X is round(109.49).
+X = 109
+
+yes
+</pre>
+</div>

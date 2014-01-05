@@ -1,0 +1,17 @@
+*.class
+*.jar
+*.zip
+*.tmp
+*.bat
+
+.classpath
+.project
+
+.settings/
+bin/
+build/
+lib/
+target/
+dist/
+tmp/
+projogGeneratedClasses/

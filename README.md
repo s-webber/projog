@@ -1,10 +1,13 @@
 # [projog](http://www.projog.org/)
-==================================================
 
-Prolog logic programming for the Java platform.
+*Prolog logic programming for the Java platform.*
+
+- [Frequently Asked Questions](http://projog.org/faq.html)
+- [Getting Started](http://projog.org/getting-started.html)
+- [Calling Prolog from Java](http://projog.org/calling-prolog-from-java.html)
+- [Extending Prolog using Java](http://projog.org/extending-prolog-with-java.html)
 
 ## Directory structure
---------------------------------------
 
 * `build.xml` - Ant build script.
 * `etc` - Extra resources that get included in a release.

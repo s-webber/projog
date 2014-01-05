@@ -24,7 +24,8 @@
 	<property name="dynamicContentDir" value="projogGeneratedClasses"/>
 
 	<tstamp>
-		<format property="build.timestamp" pattern="yyyyMMdd HH:mm"/>
+		<format property="manifest.timestamp" pattern="yyyy-MM-dd HH:mm"/>
+		<format property="filename.timestamp" pattern="yyyyMMddHHmm"/>
 	</tstamp>
 
 <!-- CLEAN -->
@@ -48,7 +49,7 @@
 		<jar destfile="${core-jar}">
 			<manifest>
 			    <attribute name="Main-Class" value="org.projog.tools.ProjogConsole"/>
-			    <attribute name="Build-Timestamp" value="${build.timestamp}"/>
+			    <attribute name="Build-Timestamp" value="${manifest.timestamp}"/>
 			</manifest>
 			<fileset dir="etc">
 				<include name="projog-bootstrap.pl"/>
@@ -167,6 +168,7 @@
 			<fileset dir="web">
 				<include name="*.css"/>
 				<include name="favicon.ico"/>
+				<include name="robots.txt"/>
 			</fileset>
 		</copy>
 		<java classname="org.projog.build.HtmlGenerator" failonerror="true">
@@ -192,35 +194,36 @@
 		</javadoc>
 	</target>
 
-<!-- RELEASE BINARY -->
-	<target name="release-bin" depends="clean,compile,unit-test,sys-test,web,javadoc"
-	        description="builds zip containing jar, html documentation and batch files">
-		<zip destfile="projog-bin.zip">
+<!-- RELEASE -->
+	<target name="release-setup" depends="clean,compile,unit-test,sys-test,web,javadoc"/>
+
+	<target name="release-bin" depends="release-setup"
+	        description="builds release candidate as zip containing jar, html documentation and batch files">
+		<zip destfile="build/projog-bin-${filename.timestamp}.zip">
 			<fileset dir="etc">
 				<include name="projog-console*.bat"/>
 				<include name="README.txt"/>
 				<include name="towers-of-hanoi-example.pl"/>
 			</fileset>
 			<fileset dir="build">
-				<include name="docs/**"/>
+				<include name="docs/*.html"/>
+				<include name="docs/*.css"/>
+				<include name="docs/javadoc/**"/>
 				<include name="lib/**"/>
 			</fileset>
 		</zip>
 	</target>
 
-<!-- RELEASE SOURCE -->
-	<target name="release-src"
-	        description="builds zip of all this module excluding contents of build directory">
-		<zip destfile="projog-src.zip">
-			<fileset dir=".">
+	<target name="release-web" depends="release-setup"
+	        description="builds zip of web content for projog.org">
+		<zip destfile="build/projog-web-${filename.timestamp}.zip">
+			<fileset dir="build/docs">
 				<include name="**"/>
-				<exclude name="build/**"/>
-				<exclude name="tmp/**"/>
-				<exclude name="*.tmp"/>
-				<exclude name=".*"/>
-				<exclude name="projog-*.zip"/>
 			</fileset>
 		</zip>
 	</target>
+
+	<target name="release-all" depends="release-bin,release-web"
+	        description="builds zip of web content and zip of binary release"/>
 
 </project>

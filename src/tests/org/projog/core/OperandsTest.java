@@ -57,7 +57,7 @@ public class OperandsTest extends TestCase {
    public void testOperands() {
       Operands operands = new Operands();
 
-      List<TestOperand> testCases = new ArrayList<TestOperand>();
+      List<TestOperand> testCases = new ArrayList<>();
 
       // add 3 operands for each type of associativity
       int ctr = 1;

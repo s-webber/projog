@@ -107,7 +107,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
 
    private String getPredicateReturnType(PredicateFactory ef) {
       try {
-         Method m = ef.getClass().getDeclaredMethod("getPredicate", new Class[] {Term[].class});
+         Method m = ef.getClass().getDeclaredMethod("getPredicate", new Class<?>[] {Term[].class});
          return m.getReturnType().getName();
       } catch (NoSuchMethodException e) {
          throw new RuntimeException(e);

@@ -45,7 +45,7 @@ abstract class AbstractMultiAnswerClauseAction implements ClauseAction {
    @Override
    public boolean evaluate(Term[] queryArgs) {
       if (sharedVariables == null) {
-         sharedVariables = new HashMap<Variable, Variable>();
+         sharedVariables = new HashMap<>();
          Term[] consequentArgs = new Term[originalConsequentArgs.length];
          for (int i = 0; i < consequentArgs.length; i++) {
             consequentArgs[i] = originalConsequentArgs[i].copy(sharedVariables);

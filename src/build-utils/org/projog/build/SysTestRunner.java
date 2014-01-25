@@ -54,7 +54,7 @@ public class SysTestRunner implements Observer {
    private static final ProjogSystemProperties SYSTEM_PROPERTIES = new ProjogSystemProperties();
 
    private final StringBuilder errorMessages = new StringBuilder();
-   private final Map<Object, Integer> spypointSourceIds = new HashMap<Object, Integer>();
+   private final Map<Object, Integer> spypointSourceIds = new HashMap<>();
    private Projog projog;
    private int numQueries;
    private int errorCtr;
@@ -68,7 +68,7 @@ public class SysTestRunner implements Observer {
          throw new RuntimeException(f.getPath() + " not found");
       }
 
-      List<File> scripts = new ArrayList<File>();
+      List<File> scripts = new ArrayList<>();
       if (f.isDirectory()) {
          findAllScriptsInDirectory(f, scripts);
       } else {

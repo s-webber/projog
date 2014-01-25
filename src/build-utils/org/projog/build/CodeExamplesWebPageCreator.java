@@ -50,7 +50,7 @@ class CodeExamplesWebPageCreator {
             return name.endsWith(".pl");
          }
       });
-      List<CodeExampleWebPage> indexOfGeneratedPages = new ArrayList<CodeExampleWebPage>();
+      List<CodeExampleWebPage> indexOfGeneratedPages = new ArrayList<>();
       for (File scriptFile : scriptFiles) {
          CodeExampleWebPage page = CodeExampleWebPage.create(scriptFile);
          indexOfGeneratedPages.add(page);

@@ -29,7 +29,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 public class ProjogException extends RuntimeException {
    private static final long serialVersionUID = 1L;
 
-   private final List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates = new ArrayList<InterpretedUserDefinedPredicate>();
+   private final List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates = new ArrayList<>();
 
    public ProjogException(String message) {
       super(message, null);

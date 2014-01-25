@@ -81,8 +81,8 @@ public final class QueryStatement {
          return new QueryResult(predicateFactory, parsedInput, variables);
       }
 
-      Map<String, Variable> copyVariables = new HashMap<String, Variable>(numVariables);
-      Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>(numVariables);
+      Map<String, Variable> copyVariables = new HashMap<>(numVariables);
+      Map<Variable, Variable> sharedVariables = new HashMap<>(numVariables);
       for (Map.Entry<String, Variable> e : variables.entrySet()) {
          String id = e.getKey();
          Variable v = new Variable(id);

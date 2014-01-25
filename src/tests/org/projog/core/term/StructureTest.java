@@ -191,7 +191,7 @@ public class StructureTest extends TestCase {
 
       assertSame(original, original.getTerm());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      Map<Variable, Variable> sharedVariables = new HashMap<>();
       Structure copy1 = original.copy(sharedVariables);
       assertNotSame(original, copy1);
       assertStrictEquality(original, copy1, false);

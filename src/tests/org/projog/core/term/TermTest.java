@@ -69,7 +69,7 @@ public class TermTest extends TestCase {
    /** check calling copy() on an immutable Term returns the Term */
    public void testCopy() {
       for (Term t1 : IMMUTABLE_TERMS) {
-         Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+         Map<Variable, Variable> sharedVariables = new HashMap<>();
          Term t2 = t1.copy(sharedVariables);
          assertSame(t1, t2);
          assertTrue(sharedVariables.isEmpty());

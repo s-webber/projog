@@ -82,11 +82,7 @@ public class SysTestGenerator {
 
    private static void produceScriptFileFromJavaFile(File javaFile) {
       COMMANDS_OUTPUT_DIR.mkdirs();
-      FileReader fr = null;
-      BufferedReader br = null;
-      try {
-         fr = new FileReader(javaFile);
-         br = new BufferedReader(fr);
+      try (FileReader fr = new FileReader(javaFile); BufferedReader br = new BufferedReader(fr)) {
          boolean sysTestRead = false;
          boolean javadocRead = false;
          String line;
@@ -108,15 +104,6 @@ public class SysTestGenerator {
          }
       } catch (Exception e) {
          throw new RuntimeException("cannot generate script from " + javaFile + " due to " + e, e);
-      } finally {
-         try {
-            br.close();
-         } catch (Exception e) {
-         }
-         try {
-            fr.close();
-         } catch (Exception e) {
-         }
       }
    }
 
@@ -124,11 +111,7 @@ public class SysTestGenerator {
       String scriptName = replaceFileExtension(javaFile.getName(), ".pl");
       File scriptFile = new File(COMMANDS_OUTPUT_DIR, scriptName);
 
-      FileWriter fw = null;
-      BufferedWriter bw = null;
-      try {
-         fw = new FileWriter(scriptFile);
-         bw = new BufferedWriter(fw);
+      try (FileWriter fw = new FileWriter(scriptFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
          while (!"*/".equals(line = br.readLine().trim())) {
             bw.write(line);
@@ -136,19 +119,6 @@ public class SysTestGenerator {
          }
       } catch (IOException e) {
          throw new RuntimeException("Could not produce: " + scriptFile + " due to: " + e, e);
-      } finally {
-         try {
-            bw.flush();
-         } catch (Exception e) {
-         }
-         try {
-            bw.close();
-         } catch (Exception e) {
-         }
-         try {
-            fw.close();
-         } catch (Exception e) {
-         }
       }
    }
 
@@ -161,11 +131,7 @@ public class SysTestGenerator {
       String textFileName = replaceFileExtension(javaFile.getName(), TEXT_FILE_EXTENSION);
       File textFile = new File(COMMANDS_OUTPUT_DIR, textFileName);
 
-      FileWriter fw = null;
-      BufferedWriter bw = null;
-      try {
-         fw = new FileWriter(textFile);
-         bw = new BufferedWriter(fw);
+      try (FileWriter fw = new FileWriter(textFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
          while (!"*/".equals(line = br.readLine().trim())) {
             line = line.trim();
@@ -180,19 +146,6 @@ public class SysTestGenerator {
          }
       } catch (IOException e) {
          throw new RuntimeException("Could not produce: " + textFile + " due to: " + e, e);
-      } finally {
-         try {
-            bw.flush();
-         } catch (Exception e) {
-         }
-         try {
-            bw.close();
-         } catch (Exception e) {
-         }
-         try {
-            fw.close();
-         } catch (Exception e) {
-         }
       }
    }
 

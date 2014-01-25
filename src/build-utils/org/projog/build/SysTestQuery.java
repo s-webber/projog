@@ -24,7 +24,7 @@ import java.util.List;
  * Contains the Prolog syntax of the query plus the expected results of trying to evaluate it.
  */
 class SysTestQuery implements SysTestContent {
-   private final List<SysTestAnswer> answers = new ArrayList<SysTestAnswer>();
+   private final List<SysTestAnswer> answers = new ArrayList<>();
    private final String queryStr;
    private boolean continuesUntilFails;
    private String expectedExceptionMessage;

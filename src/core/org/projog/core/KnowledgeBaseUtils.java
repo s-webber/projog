@@ -50,7 +50,7 @@ public final class KnowledgeBaseUtils {
     * Returns list of all user defined predicates with the specified name.
     */
    public static List<PredicateKey> getPredicateKeysByName(KnowledgeBase kb, String predicateName) {
-      List<PredicateKey> matchingKeys = new ArrayList<PredicateKey>();
+      List<PredicateKey> matchingKeys = new ArrayList<>();
       for (PredicateKey key : kb.getUserDefinedPredicates().keySet()) {
          if (predicateName.equals(key.getName())) {
             matchingKeys.add(key);
@@ -105,7 +105,7 @@ public final class KnowledgeBaseUtils {
     * returned array.
     */
    public static Term[] toArrayOfConjunctions(Term t) {
-      List<Term> l = new ArrayList<Term>();
+      List<Term> l = new ArrayList<>();
       while (isConjunction(t)) {
          l.add(0, t.getArgs()[1]);
          t = t.getArgs()[0];

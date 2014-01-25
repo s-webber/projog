@@ -36,7 +36,7 @@ import org.projog.core.term.TermUtils;
  */
 public final class CalculatableFactory extends AbstractSingletonPredicate { // only public so it is included in javadoc
    private final Object lock = new Object();
-   private final HashMap<String, Calculatable> calculatables = new HashMap<String, Calculatable>();
+   private final HashMap<String, Calculatable> calculatables = new HashMap<>();
 
    CalculatableFactory() {
       // only created by KnowledgeBase which is in the same package as this class

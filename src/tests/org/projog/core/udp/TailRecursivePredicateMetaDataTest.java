@@ -96,7 +96,7 @@ public class TailRecursivePredicateMetaDataTest extends TestCase {
    }
 
    private List<ClauseModel> setClauses(String... sentences) {
-      clauses = new ArrayList<ClauseModel>();
+      clauses = new ArrayList<>();
 
       for (String sentence : sentences) {
          ClauseModel clause = TestUtils.createClauseModel(sentence);
@@ -107,7 +107,7 @@ public class TailRecursivePredicateMetaDataTest extends TestCase {
    }
 
    private List<ClauseModel> copyClauses() {
-      List<ClauseModel> copy = new ArrayList<ClauseModel>(clauses.size());
+      List<ClauseModel> copy = new ArrayList<>(clauses.size());
       for (ClauseModel clause : clauses) {
          copy.add(clause.copy());
       }

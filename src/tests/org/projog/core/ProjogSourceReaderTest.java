@@ -140,12 +140,13 @@ public class ProjogSourceReaderTest extends TestCase {
          BUILD_DIR.mkdir();
          File tempFile = File.createTempFile(getClass().getName(), ".tmp", BUILD_DIR);
          tempFile.deleteOnExit();
-         FileWriter fw = new FileWriter(tempFile);
-         fw.write(contents);
-         fw.close();
+         try (FileWriter fw = new FileWriter(tempFile)) {
+            fw.write(contents);
+         }
          return tempFile;
       } catch (Exception e) {
          throw new RuntimeException(e);
       }
    }
+
 }

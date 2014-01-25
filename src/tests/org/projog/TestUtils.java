@@ -164,12 +164,10 @@ public class TestUtils {
    }
 
    public static Term[] parseTermsFromFile(File f) {
-      FileReader fr = null;
-      try {
-         fr = new FileReader(f);
+      try (FileReader fr = new FileReader(f)) {
          SentenceParser sp = SentenceParser.getInstance(fr, KNOWLEDGE_BASE.getOperands());
 
-         ArrayList<Term> result = new ArrayList<Term>();
+         ArrayList<Term> result = new ArrayList<>();
          Term next;
          while ((next = sp.parseSentence()) != null) {
             result.add(next);
@@ -177,11 +175,6 @@ public class TestUtils {
          return result.toArray(new Term[result.size()]);
       } catch (IOException e) {
          throw new RuntimeException("Could not parse: " + f, e);
-      } finally {
-         try {
-            fr.close();
-         } catch (Exception e) {
-         }
       }
    }
 

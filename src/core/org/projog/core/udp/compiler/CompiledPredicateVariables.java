@@ -50,15 +50,15 @@ final class CompiledPredicateVariables {
    private static final String BOOLEAN_PREFIX = "b";
 
    // use LinkedHashMap and LinkedHashSet implementations so order is predictable - purely so unit tests are easier 
-   private final Map<String, String> memberPredicates = new LinkedHashMap<String, String>();
-   private final Map<String, PredicateFactoryStaticVariable> requiredPredicateFactories = new LinkedHashMap<String, PredicateFactoryStaticVariable>();
+   private final Map<String, String> memberPredicates = new LinkedHashMap<>();
+   private final Map<String, PredicateFactoryStaticVariable> requiredPredicateFactories = new LinkedHashMap<>();
    // key = variable name, value = class name
-   private final Map<String, String> memberCompiledPredicates = new LinkedHashMap<String, String>();
-   private final Map<String, Term> staticMemberVariables = new LinkedHashMap<String, Term>();
-   private final Set<String> memberVariables = new LinkedHashSet<String>();
-   private final Set<String> memberTerms = new LinkedHashSet<String>();
-   private final Set<String> declaredVariables = new HashSet<String>();
-   private final Set<String> assignedVariables = new HashSet<String>();
+   private final Map<String, String> memberCompiledPredicates = new LinkedHashMap<>();
+   private final Map<String, Term> staticMemberVariables = new LinkedHashMap<>();
+   private final Set<String> memberVariables = new LinkedHashSet<>();
+   private final Set<String> memberTerms = new LinkedHashSet<>();
+   private final Set<String> declaredVariables = new HashSet<>();
+   private final Set<String> assignedVariables = new HashSet<>();
 
    private int tempTermCtr;
    private int tempNumericCtr;
@@ -198,7 +198,7 @@ final class CompiledPredicateVariables {
    }
 
    List<MemberVariable> getVariablesToDeclare() {
-      List<MemberVariable> result = new ArrayList<MemberVariable>();
+      List<MemberVariable> result = new ArrayList<>();
       for (Map.Entry<String, String> e : memberCompiledPredicates.entrySet()) {
          result.add(new MemberVariable(e.getValue(), e.getKey()));
       }

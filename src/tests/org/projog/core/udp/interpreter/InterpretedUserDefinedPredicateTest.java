@@ -131,7 +131,7 @@ public class InterpretedUserDefinedPredicateTest extends TestCase {
    }
 
    private InterpretedUserDefinedPredicate getInterpretedUserDefinedPredicate(ClauseAction... rows) {
-      List<ClauseAction> list = new ArrayList<ClauseAction>();
+      List<ClauseAction> list = new ArrayList<>();
       for (ClauseAction row : rows) {
          list.add(row);
       }

@@ -225,7 +225,7 @@ public final class Projog {
     * Provides programmatic access to the stack trace information printed by {@link #printProjogStackTrace(Throwable)}.
     */
    public ProjogStackTraceElement[] getStackTrace(Throwable exception) {
-      List<ProjogStackTraceElement> result = new ArrayList<ProjogStackTraceElement>();
+      List<ProjogStackTraceElement> result = new ArrayList<>();
       StackTraceElement[] elements = exception.getStackTrace();
       List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates = getInterpretedUserDefinedPredicates(exception);
       for (StackTraceElement element : elements) {
@@ -242,7 +242,7 @@ public final class Projog {
          ProjogException pe = (ProjogException) e;
          return pe.getInterpretedUserDefinedPredicates();
       } else {
-         return new ArrayList<InterpretedUserDefinedPredicate>();
+         return new ArrayList<>();
       }
    }
 

@@ -63,7 +63,7 @@ final class ClauseMetaData {
     * <p>
     * Uses LinkedHashSet to ensure a predictable order (just to make unit tests easier).
     */
-   private final Set<Variable> variablesToBackTrack = new LinkedHashSet<Variable>();
+   private final Set<Variable> variablesToBackTrack = new LinkedHashSet<>();
    private final Set<Variable> ignorableVariables;
    private int conjunctionIndex = -1;
    private int lastBacktrackPoint;
@@ -72,7 +72,7 @@ final class ClauseMetaData {
    private int termVariableCtr;
    private int numericCtr;
 
-   @SuppressWarnings("unchecked")
+   @SuppressWarnings({"unchecked", "rawtypes"})
    ClauseMetaData(KnowledgeBase kb, int clauseIndex, ClauseModel clauseModel, boolean isTailRecursive) {
       this.clauseIndex = clauseIndex;
       this.term = clauseModel.getOriginal();
@@ -152,12 +152,12 @@ final class ClauseMetaData {
    }
 
    private Set<Variable> getConsequentVariablesThatCanBeIgnored() {
-      Set<Variable> declaredOnce = new HashSet<Variable>();
+      Set<Variable> declaredOnce = new HashSet<>();
       getSingletonVariables(consequent, declaredOnce, new HashSet<Variable>());
 
       Set<Variable> antecedantVariables = getAntecedantVariables();
 
-      Set<Variable> ignorableVariables = new HashSet<Variable>();
+      Set<Variable> ignorableVariables = new HashSet<>();
       for (Variable v : declaredOnce) {
          if (antecedantVariables.contains(v) == false) {
             ignorableVariables.add(v);
@@ -183,7 +183,7 @@ final class ClauseMetaData {
    }
 
    private Set<Variable> getAntecedantVariables() {
-      final Set<Variable> antecedantVariables = new HashSet<Variable>();
+      final Set<Variable> antecedantVariables = new HashSet<>();
       for (Set<Variable> v : variablesInConjunction) {
          antecedantVariables.addAll(v);
       }

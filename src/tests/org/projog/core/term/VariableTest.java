@@ -119,7 +119,7 @@ public class VariableTest extends TestCase {
 
    public void testCopy() {
       Variable v = variable();
-      Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = v.copy(sharedVariables);
       assertEquals(1, sharedVariables.size());
       assertSame(copy, sharedVariables.get(v));
@@ -141,7 +141,7 @@ public class VariableTest extends TestCase {
       Structure s1 = structure("name", v);
       Structure s2 = structure("name", v);
 
-      Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      Map<Variable, Variable> sharedVariables = new HashMap<>();
 
       Structure c1 = s1.copy(sharedVariables);
       assertTrue(c1.unify(structure("name", a)));

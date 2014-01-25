@@ -116,7 +116,7 @@ public final class Univ extends AbstractSingletonPredicate {
          throw new ProjogException("First argument is not an atom in list: " + t);
       }
       String predicateName = t.getArgument(0).getName();
-      ArrayList<Term> predicateArgs = new ArrayList<Term>();
+      ArrayList<Term> predicateArgs = new ArrayList<>();
       Term arg = t.getArgument(1);
       while (arg.getType() == TermType.LIST) {
          predicateArgs.add(arg.getArgument(0));

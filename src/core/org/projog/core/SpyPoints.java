@@ -37,7 +37,7 @@ import org.projog.core.term.Term;
  */
 public final class SpyPoints {
    private final Object lock = new Object();
-   private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<PredicateKey, SpyPoint>();
+   private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>();
    private final KnowledgeBase kb;
    private boolean traceEnabled;
 

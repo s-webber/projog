@@ -69,7 +69,7 @@ public final class ClauseActionFactory {
       boolean hasVariables = false;
       boolean hasConcreteTerms = false;
       boolean hasSharedVariables = false;
-      Set<Term> variables = new HashSet<Term>();
+      Set<Term> variables = new HashSet<>();
       for (Term t : consequent.getArgs()) {
          if (t == AnonymousVariable.ANONYMOUS_VARIABLE) {
             // nothing to do

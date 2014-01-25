@@ -49,7 +49,7 @@ public final class TermUtils {
    public static Term[] copy(final Term... input) {
       final int numTerms = input.length;
       final Term[] output = new Term[numTerms];
-      final Map<Variable, Variable> vars = new HashMap<Variable, Variable>();
+      final Map<Variable, Variable> vars = new HashMap<>();
       for (int i = 0; i < numTerms; i++) {
          output[i] = input[i].copy(vars);
       }
@@ -97,7 +97,7 @@ public final class TermUtils {
     * @return all {@link Variable}s contained in the specified term.
     */
    public static Set<Variable> getAllVariablesInTerm(final Term argument) {
-      final Set<Variable> variables = new LinkedHashSet<Variable>();
+      final Set<Variable> variables = new LinkedHashSet<>();
       getAllVariablesInTerm(argument, variables);
       return variables;
    }

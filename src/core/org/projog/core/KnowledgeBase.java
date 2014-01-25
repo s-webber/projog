@@ -72,7 +72,7 @@ public final class KnowledgeBase {
    private final Object userDefinedPredicatesLock = new Object();
 
    /** Enforce predictable ordering for when iterated by <code>listing(X)</code>. */
-   private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<PredicateKey, UserDefinedPredicateFactory>();
+   private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<>();
 
    /**
     * Constructs a new {@code KnowledgeBase} object using {@link ProjogSystemProperties}

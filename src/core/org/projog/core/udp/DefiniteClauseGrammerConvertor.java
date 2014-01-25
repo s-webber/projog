@@ -69,7 +69,7 @@ final class DefiniteClauseGrammerConvertor {
 
    // TODO this method is too long - refactor
    private static Term convertConjunctionOfAtomsAntecedant(Term consequent, Term[] conjunctionOfAtoms) {
-      ArrayList<Term> newSequence = new ArrayList<Term>();
+      ArrayList<Term> newSequence = new ArrayList<>();
 
       Variable lastArg = new Variable("A0");
 
@@ -125,7 +125,7 @@ final class DefiniteClauseGrammerConvertor {
    }
 
    private static Term appendToEndOfList(Term list, Term newTail) {
-      ArrayList<Term> terms = new ArrayList<Term>();
+      ArrayList<Term> terms = new ArrayList<>();
       while (list.getType() == TermType.LIST) {
          terms.add(list.getArgument(0));
          list = list.getArgument(1);

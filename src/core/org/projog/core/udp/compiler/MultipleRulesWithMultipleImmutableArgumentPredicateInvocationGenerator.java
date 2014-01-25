@@ -62,7 +62,7 @@ final class MultipleRulesWithMultipleImmutableArgumentPredicateInvocationGenerat
          g.outputIfTrueThenBreak(ctrVarName + ">" + (mrwmia.data.length - 1), r);
          g.assign("final Term[] data" + ctrVarName, functionVariableName + ".data[" + ctrVarName + "++]");
          // LinkedHashSet so predictable order (makes unit tests easier)
-         Set<String> varsToBacktrack = new LinkedHashSet<String>();
+         Set<String> varsToBacktrack = new LinkedHashSet<>();
          for (int i = 0; i < function.getNumberOfArguments(); i++) {
             Term arg = function.getArgument(i);
             if (termsThatAreNotYetAssignedButReusedLater.contains(arg) == false) {

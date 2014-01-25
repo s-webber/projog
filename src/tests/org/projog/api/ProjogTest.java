@@ -257,25 +257,19 @@ public class ProjogTest extends TestCase {
     * instance.
     */
    private File createTestScript() {
-      PrintWriter pw = null;
       try {
          File f = File.createTempFile(getClass().getName(), ".pl", new File("build"));
          f.deleteOnExit();
-         pw = new PrintWriter(f);
-         pw.println("test(a,b).");
-         pw.println("test(A,A) :- A is 1.");
-         pw.println("test(a,c).");
-         pw.println("test(z,9).");
-         pw.println("test(a,e).");
-         pw.flush();
+         try (PrintWriter pw = new PrintWriter(f)) {
+            pw.println("test(a,b).");
+            pw.println("test(A,A) :- A is 1.");
+            pw.println("test(a,c).");
+            pw.println("test(z,9).");
+            pw.println("test(a,e).");
+         }
          return f;
       } catch (Exception e) {
          throw new RuntimeException("error creating test script" + e, e);
-      } finally {
-         try {
-            pw.close();
-         } catch (Exception e) {
-         }
       }
    }
 }

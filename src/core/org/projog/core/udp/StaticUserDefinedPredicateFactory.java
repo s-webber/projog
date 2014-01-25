@@ -50,7 +50,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    public StaticUserDefinedPredicateFactory(PredicateKey predicateKey) {
       this.predicateKey = predicateKey;
-      this.implications = new ArrayList<ClauseModel>();
+      this.implications = new ArrayList<>();
    }
 
    @Override
@@ -110,7 +110,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private List<ClauseAction> createClauseActionsFromClauseModels() {
-      final List<ClauseAction> rows = new ArrayList<ClauseAction>(implications.size());
+      final List<ClauseAction> rows = new ArrayList<>(implications.size());
       for (ClauseModel clauseModel : implications) {
          ClauseAction row = ClauseActionFactory.getClauseAction(kb, clauseModel);
          rows.add(row);
@@ -199,7 +199,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private List<ClauseModel> getCopyOfImplications() {
-      List<ClauseModel> copyImplications = new ArrayList<ClauseModel>(implications.size());
+      List<ClauseModel> copyImplications = new ArrayList<>(implications.size());
       for (ClauseModel clauseModel : implications) {
          copyImplications.add(clauseModel.copy());
       }

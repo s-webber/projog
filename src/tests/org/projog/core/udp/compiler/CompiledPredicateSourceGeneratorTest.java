@@ -21,9 +21,10 @@ import static org.projog.core.KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,14 +149,14 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
    }
 
    private Map<String, List<Term>> getTestFunctionNames() {
-      Map<String, List<Term>> testFunctions = new HashMap<String, List<Term>>();
+      Map<String, List<Term>> testFunctions = new HashMap<>();
       Term[] allTerms = parseTermsFromFile(PROLOG_SOURCE);
       for (Term t : allTerms) {
          String name = getFunctionName(t);
          if (name.startsWith("test")) {
             List<Term> functionTerms = testFunctions.get(name);
             if (functionTerms == null) {
-               functionTerms = new ArrayList<Term>();
+               functionTerms = new ArrayList<>();
                testFunctions.put(name, functionTerms);
             }
             functionTerms.add(t);
@@ -211,7 +212,7 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
    }
 
    private List<ClauseModel> createClauseModels(Term[] terms) {
-      List<ClauseModel> implications = new ArrayList<ClauseModel>();
+      List<ClauseModel> implications = new ArrayList<>();
       for (Term t : terms) {
          ClauseModel ci = ClauseModel.createClauseModel(t);
          implications.add(ci);
@@ -236,23 +237,14 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
       return writer.save(outputDir);
    }
 
-   private static void assertContentsMatch(File f1, File f2) {
-      assertExists(f1);
-      assertExists(f2);
+   private static void assertContentsMatch(File expected, File actual) {
+      assertExists(expected);
+      assertExists(actual);
 
-      FileReader fr1 = null;
-      FileReader fr2 = null;
-      BufferedReader br1 = null;
-      BufferedReader br2 = null;
       int lineCtr = 0;
-      try {
-         String name1 = f1.getName();
-         String name2 = f2.getName();
-
-         fr1 = new FileReader(f1);
-         fr2 = new FileReader(f2);
-         br1 = new BufferedReader(fr1);
-         br2 = new BufferedReader(fr2);
+      try (FileReader fr1 = new FileReader(expected); FileReader fr2 = new FileReader(actual); BufferedReader br1 = new BufferedReader(fr1); BufferedReader br2 = new BufferedReader(fr2)) {
+         String name1 = expected.getName();
+         String name2 = actual.getName();
 
          while (true) {
             lineCtr++;
@@ -267,34 +259,26 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
             if (next2 == null) {
                throw new RuntimeException(name2 + " ends before " + name1);
             }
-            next1 = tokenFilterFilename(next1, f2);
+            next1 = tokenFilterFilename(next1, actual);
             if (next1.equals(next2) == false) {
                throw new RuntimeException("[" + next1 + "] in " + name1 + " not equals to [" + next2 + "] in " + name2 + " line " + lineCtr);
             }
          }
       } catch (Exception e) {
-         //         try {
-         //            java.io.FileWriter fw = new java.io.FileWriter(f1);
-         //            FileReader fr = new FileReader(f2);
-         //            BufferedReader br = new BufferedReader(fr);
-         //            java.io.PrintWriter pw = new java.io.PrintWriter(fw);
-         //            String next;
-         //            while ((next = br.readLine()) != null) {
-         //               String fileName = f2.getName();
-         //               String className = fileName.substring(0, fileName.indexOf('.'));
-         //               next = next.replace(className, "%CLASS_NAME%");
-         //               pw.println(next);
-         //            }
-         //            fw.close();
-         //            fr.close();
-         //         } catch (Exception e2) {
-         //         }
-         throw new RuntimeException("Comparing " + f1.getAbsolutePath() + " to " + f2.getAbsolutePath() + " caused " + e, e);
-      } finally {
-         close(fr1);
-         close(fr2);
-         close(br1);
-         close(br2);
+         throw new RuntimeException("Comparing " + expected.getAbsolutePath() + " to " + actual.getAbsolutePath() + " caused " + e, e);
+      }
+   }
+
+   private static void replaceExpectedWithActual(File expected, File actual) {
+      try (FileWriter fw = new FileWriter(expected); FileReader fr = new FileReader(actual); BufferedReader br = new BufferedReader(fr); PrintWriter pw = new PrintWriter(fw)) {
+         String next;
+         while ((next = br.readLine()) != null) {
+            String fileName = actual.getName();
+            String className = fileName.substring(0, fileName.indexOf('.'));
+            next = next.replace(className, "%CLASS_NAME%");
+            pw.println(next);
+         }
+      } catch (Exception e2) {
       }
    }
 
@@ -324,14 +308,6 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
       String fileName = f.getName();
       String className = fileName.substring(0, fileName.indexOf('.'));
       return line.replace("%CLASS_NAME%", className);
-   }
-
-   private static void close(Reader r) {
-      try {
-         r.close();
-      } catch (Exception e) {
-         // ignore
-      }
    }
 
    private void addSingletonCompiledPredicate(String keySyntax) {

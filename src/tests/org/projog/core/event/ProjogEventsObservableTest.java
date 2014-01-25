@@ -65,7 +65,7 @@ public class ProjogEventsObservableTest extends TestCase {
    }
 
    private static class DummyObserver implements Observer {
-      final List<Object> l = new ArrayList<Object>();
+      final List<Object> l = new ArrayList<>();
 
       @Override
       public void update(Observable o, Object arg) {

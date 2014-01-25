@@ -38,11 +38,11 @@ import java.util.Map;
 public final class Operands {
    private final Object LOCK = new Object();
 
-   private final Map<String, Operand> infixOperands = new HashMap<String, Operand>();;
+   private final Map<String, Operand> infixOperands = new HashMap<>();
 
-   private final Map<String, Operand> prefixOperands = new HashMap<String, Operand>();
+   private final Map<String, Operand> prefixOperands = new HashMap<>();
 
-   private final Map<String, Operand> postfixOperands = new HashMap<String, Operand>();
+   private final Map<String, Operand> postfixOperands = new HashMap<>();
 
    /**
     * Adds a new operator.

@@ -385,7 +385,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       } else if (isNoMoreThanTwoElementList(t2) && t1.getType() == TermType.NAMED_VARIABLE) {
          Set<Variable> variables = TermUtils.getAllVariablesInTerm(t1);
          variables.addAll(TermUtils.getAllVariablesInTerm(t2));
-         Set<Variable> newlyDeclaredVariables = new HashSet<Variable>();
+         Set<Variable> newlyDeclaredVariables = new HashSet<>();
          for (Variable v : variables) {
             if (declareVariableIfNotAlready(v, false)) {
                newlyDeclaredVariables.add(v);
@@ -429,7 +429,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
 
    final Map<String, String> assignTempVariablesBackToTerm() {
       // use LinkedHashMap so order predictable (makes unit tests easier)
-      Map<String, String> variablesToKeepTempVersionOf = new LinkedHashMap<String, String>();
+      Map<String, String> variablesToKeepTempVersionOf = new LinkedHashMap<>();
       for (String variableId : getVariablesToKeepTempVersionOf()) {
          String tmpVariableName = classVariables.getNewTempVariableName();
          assign(variableId, tmpVariableName);
@@ -459,7 +459,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          return Collections.EMPTY_SET;
       }
 
-      Set<String> alreadyDeclaredVariables = new HashSet<String>();
+      Set<String> alreadyDeclaredVariables = new HashSet<>();
       Set<Variable> variables1 = TermUtils.getAllVariablesInTerm(currentClause.getConsequent());
       for (Variable v : variables1) {
          String variableId = getVariableId(v);
@@ -478,7 +478,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       if (start < 0) {
          start = 0;
       }
-      Set<String> usedLaterVariables = new HashSet<String>();
+      Set<String> usedLaterVariables = new HashSet<>();
       for (int i = start; i < currentClause.getConjunctionCount(); i++) {
          Set<Variable> variables = currentClause.getVariablesInConjunction(i);
          for (Variable v : variables) {
@@ -488,7 +488,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       }
 
       // LinkedHashSet to make order predictable (makes unit tests easier)
-      Set<String> result = new LinkedHashSet<String>();
+      Set<String> result = new LinkedHashSet<>();
       for (String variableId : alreadyDeclaredVariables) {
          if (usedLaterVariables.contains(variableId) && classVariables.isMemberVariable(variableId)) {
             result.add(variableId);
@@ -500,7 +500,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    final Map<Term, String> getTermsThatRequireBacktrack(Term function) {
       Set<Variable> x = getTermArgumentsThatAreCurrentlyUnassignedAndNotReusedWithinTheTerm(function);
       // use LinkedHashMap so order is predictable - purely so unit tests are easier 
-      Map<Term, String> tempVars = new LinkedHashMap<Term, String>();
+      Map<Term, String> tempVars = new LinkedHashMap<>();
 
       for (int i = 0; i < function.getNumberOfArguments(); i++) {
          Term arg = function.getArgument(i);
@@ -524,8 +524,8 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
     */
    final Set<Variable> getTermArgumentsThatAreCurrentlyUnassignedAndNotReusedWithinTheTerm(Term function) {
       // LinkedHashSet so predictable order (makes unit tests easier)
-      final Set<Variable> result = new LinkedHashSet<Variable>();
-      final Set<Variable> duplicates = new HashSet<Variable>();
+      final Set<Variable> result = new LinkedHashSet<>();
+      final Set<Variable> duplicates = new HashSet<>();
       for (int i = 0; i < function.getNumberOfArguments(); i++) {
          Term t = function.getArgument(i);
          if (t.getType() == TermType.NAMED_VARIABLE) {

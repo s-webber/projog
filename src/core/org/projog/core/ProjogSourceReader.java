@@ -43,7 +43,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  */
 public final class ProjogSourceReader {
    private final KnowledgeBase kb;
-   private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new LinkedHashMap<PredicateKey, UserDefinedPredicateFactory>();
+   private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new LinkedHashMap<>();
 
    /**
     * Populates the KnowledgeBase with clauses defined in the file.
@@ -53,19 +53,12 @@ public final class ProjogSourceReader {
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
     */
    public static void parseFile(KnowledgeBase kb, File prologSourceFile) {
-      Reader reader = null;
-      try {
-         notifyReadingFromFileSystem(kb, prologSourceFile);
-         reader = new FileReader(prologSourceFile);
+      notifyReadingFromFileSystem(kb, prologSourceFile);
+      try (Reader reader = new FileReader(prologSourceFile)) {
          ProjogSourceReader projogSourceReader = new ProjogSourceReader(kb);
          projogSourceReader.parse(reader);
       } catch (Exception e) {
          throw new ProjogException("Could not read prolog source from file: " + prologSourceFile + " due to: " + e, e);
-      } finally {
-         try {
-            reader.close();
-         } catch (Exception e) {
-         }
       }
    }
 
@@ -80,18 +73,11 @@ public final class ProjogSourceReader {
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
     */
    public static void parseResource(KnowledgeBase kb, String prologSourceResourceName) {
-      Reader reader = null;
-      try {
-         reader = getReader(kb, prologSourceResourceName);
+      try (Reader reader = getReader(kb, prologSourceResourceName)) {
          ProjogSourceReader projogSourceReader = new ProjogSourceReader(kb);
          projogSourceReader.parse(reader);
       } catch (Exception e) {
          throw new ProjogException("Could not read prolog source from resource: " + prologSourceResourceName, e);
-      } finally {
-         try {
-            reader.close();
-         } catch (Exception e) {
-         }
       }
    }
 

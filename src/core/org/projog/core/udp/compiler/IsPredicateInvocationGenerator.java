@@ -34,7 +34,7 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
     * <p>
     * Maps from Prolog version (key) to Java version (value).
     */
-   private static final Map<String, String> ops = new HashMap<String, String>();
+   private static final Map<String, String> ops = new HashMap<>();
    static {
       ops.put("+", "+");
       ops.put("-", "-");

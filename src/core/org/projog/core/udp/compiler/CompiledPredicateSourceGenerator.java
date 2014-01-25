@@ -737,7 +737,7 @@ final class CompiledPredicateSourceGenerator {
    private Set<Variable> declareArgumentVariabledNotAlreadyDeclared(Term argument) {
       Set<Variable> variablesInTerm = TermUtils.getAllVariablesInTerm(argument);
       // LinkedSet so order predictable (makes unit tests easier)
-      Set<Variable> newlyDeclaredVariables = new LinkedHashSet<Variable>();
+      Set<Variable> newlyDeclaredVariables = new LinkedHashSet<>();
       for (Variable v : variablesInTerm) {
          if (w.declareVariableIfNotAlready(v, false)) {
             newlyDeclaredVariables.add(v);

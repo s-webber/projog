@@ -160,7 +160,7 @@ public class SpyPointsTest extends TestCase {
    public void testSpyPointUpdatesObserver() {
       // add an observer to the KnowledgeBase's ProjogEventsObservable
       // so we can keep track of ProjogEvent objects created by the SpyPoint
-      final List<Object> events = new ArrayList<Object>();
+      final List<Object> events = new ArrayList<>();
       Observer observer = new Observer() {
          @Override
          public void update(Observable o, Object arg) {

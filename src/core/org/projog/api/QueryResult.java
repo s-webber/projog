@@ -132,6 +132,6 @@ public final class QueryResult {
     * @return id's of all variables defined in the query this object represents
     */
    public Set<String> getVariableIds() {
-      return new TreeSet<String>(variables.keySet());
+      return new TreeSet<>(variables.keySet());
    }
 }

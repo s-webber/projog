@@ -57,7 +57,7 @@ class TableOfContentsReader {
    }
 
    List<TableOfContentsEntry> getEntries() {
-      List<TableOfContentsEntry> result = new ArrayList<TableOfContentsEntry>();
+      List<TableOfContentsEntry> result = new ArrayList<>();
       TableOfContentsEntry previous = null;
       TableOfContentsEntry current;
       while ((current = getNext()) != null) {

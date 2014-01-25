@@ -69,7 +69,7 @@ public class InterpretedTailRecursivePredicateFactoryTest extends TestCase {
    }
 
    private List<ClauseModel> createClauseModels(String firstClauseSyntax, String secondClauseSyntax) {
-      List<ClauseModel> clauses = new ArrayList<ClauseModel>();
+      List<ClauseModel> clauses = new ArrayList<>();
       clauses.add(createClauseModel(firstClauseSyntax));
       clauses.add(createClauseModel(secondClauseSyntax));
       return clauses;

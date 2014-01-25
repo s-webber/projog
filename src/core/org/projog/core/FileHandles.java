@@ -38,8 +38,8 @@ import org.projog.core.term.Term;
  */
 public final class FileHandles {
    private final Object LOCK = new Object();
-   private final Map<String, InputStream> inputHandles = new HashMap<String, InputStream>();
-   private final Map<String, PrintStream> outputHandles = new HashMap<String, PrintStream>();
+   private final Map<String, InputStream> inputHandles = new HashMap<>();
+   private final Map<String, PrintStream> outputHandles = new HashMap<>();
 
    /** Current input used by get_char and read */
    private Term currentInputHandle;

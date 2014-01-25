@@ -89,11 +89,8 @@ public class HtmlGenerator {
    @SuppressWarnings("rawtypes")
    private static void produceWebContentNotIncludedInTableOfContents() throws Exception {
       Properties p = new Properties();
-      FileInputStream fis = new FileInputStream(STATIC_PAGES_LIST);
-      try {
+      try (FileInputStream fis = new FileInputStream(STATIC_PAGES_LIST)) {
          p.load(fis);
-      } finally {
-         fis.close();
       }
       Iterator itr = p.entrySet().iterator();
       while (itr.hasNext()) {
@@ -110,11 +107,7 @@ public class HtmlGenerator {
    private static void produceTableOfContents(List<TableOfContentsEntry> entries) throws Exception {
       File manualHtml = new File(DOCS_OUTPUT_DIR, MANUAL_HTML);
 
-      FileWriter fw = null;
-      BufferedWriter bw = null;
-      try {
-         fw = new FileWriter(manualHtml);
-         bw = new BufferedWriter(fw);
+      try (FileWriter fw = new FileWriter(manualHtml); BufferedWriter bw = new BufferedWriter(fw)) {
          bw.write("<span class=\"manual\">");
          for (TableOfContentsEntry next : entries) {
             if (next.isHeader()) {
@@ -136,21 +129,6 @@ public class HtmlGenerator {
       } catch (Exception e) {
          e.printStackTrace();
          throw e;
-      } finally {
-         try {
-            if (bw != null) {
-               bw.close();
-            }
-         } catch (Exception e) {
-            e.printStackTrace();
-         }
-         try {
-            if (fw != null) {
-               fw.close();
-            }
-         } catch (Exception e) {
-            e.printStackTrace();
-         }
       }
 
       addHeadersAndFooters("Manual Contents", manualHtml);
@@ -205,9 +183,7 @@ public class HtmlGenerator {
    }
 
    private static void addHeadersAndFooters(String filename, String title, StringBuffer content) {
-      FileWriter fw = null;
-      try {
-         fw = new FileWriter(new File(DOCS_OUTPUT_DIR, filename));
+      try (FileWriter fw = new FileWriter(new File(DOCS_OUTPUT_DIR, filename))) {
          fw.write(HEADER_BEFORE_TITLE);
          fw.write(removeHtmlMarkup(title));
          fw.write(HEADER_AFTER_TITLE);
@@ -216,11 +192,6 @@ public class HtmlGenerator {
       } catch (Exception e) {
          e.printStackTrace();
          throw new RuntimeException(e);
-      } finally {
-         try {
-            fw.close();
-         } catch (Exception e) {
-         }
       }
    }
 
@@ -230,11 +201,7 @@ public class HtmlGenerator {
 
    private static StringBuffer readTextFile(File f) {
       StringBuffer contents = new StringBuffer();
-      FileReader fr = null;
-      BufferedReader br = null;
-      try {
-         fr = new FileReader(f);
-         br = new BufferedReader(fr);
+      try (FileReader fr = new FileReader(f); BufferedReader br = new BufferedReader(fr)) {
          String next;
          while ((next = br.readLine()) != null) {
             contents.append(next + LINE_BREAK);
@@ -244,15 +211,6 @@ public class HtmlGenerator {
          System.out.println("CANNOT READ: " + f.getAbsolutePath());
          e.printStackTrace();
          throw new RuntimeException(e);
-      } finally {
-         try {
-            br.close();
-         } catch (Exception e) {
-         }
-         try {
-            fr.close();
-         } catch (Exception e) {
-         }
       }
    }
 }

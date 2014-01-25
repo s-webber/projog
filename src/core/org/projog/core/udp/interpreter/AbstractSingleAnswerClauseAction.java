@@ -39,7 +39,7 @@ abstract class AbstractSingleAnswerClauseAction implements ClauseAction {
 
    @Override
    public boolean evaluate(Term[] queryArgs) {
-      final Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      final Map<Variable, Variable> sharedVariables = new HashMap<>();
       final Term[] newConsequentArgs = new Term[originalConsequentArgs.length];
       for (int i = 0; i < originalConsequentArgs.length; i++) {
          newConsequentArgs[i] = originalConsequentArgs[i].copy(sharedVariables);

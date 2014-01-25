@@ -27,7 +27,7 @@ import java.util.List;
 class JavaSourceWriter {
    private static final String SEMI_COLON = ";";
 
-   private final List<String> lines = new ArrayList<String>();
+   private final List<String> lines = new ArrayList<>();
 
    private String packageStructure;
 

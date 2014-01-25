@@ -179,7 +179,7 @@ class SysTestParser {
       boolean hasLinks = false;
       SysTestParser p = null;
       try {
-         List<SysTestQuery> queries = new ArrayList<SysTestQuery>();
+         List<SysTestQuery> queries = new ArrayList<>();
          p = new SysTestParser(testScript);
          SysTestContent c;
          while ((c = p.getNext()) != null) {
@@ -272,7 +272,7 @@ class SysTestParser {
    }
 
    private List<SysTestAnswer> getAnswers() throws IOException {
-      List<SysTestAnswer> answers = new ArrayList<SysTestAnswer>();
+      List<SysTestAnswer> answers = new ArrayList<>();
       SysTestAnswer answer;
       while ((answer = getAnswer()) != null) {
          answers.add(answer);

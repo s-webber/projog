@@ -34,7 +34,7 @@ import org.projog.core.term.Term;
  */
 public final class PluginPredicateFactoryFactory extends AbstractSingletonPredicate { // only public so it is included in javadoc
    private final Object lock = new Object();
-   private final HashMap<PredicateKey, PredicateFactory> plugins = new HashMap<PredicateKey, PredicateFactory>();
+   private final HashMap<PredicateKey, PredicateFactory> plugins = new HashMap<>();
 
    PluginPredicateFactoryFactory() {
       // only created by KnowledgeBase which is in the same package as this class

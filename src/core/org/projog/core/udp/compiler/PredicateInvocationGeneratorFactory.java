@@ -46,7 +46,7 @@ final class PredicateInvocationGeneratorFactory {
    private static final RecursivePredicateInvocationGenerator RECURSIVE_PREDICATE_INVOCATION_GENERATOR = new RecursivePredicateInvocationGenerator();
 
    // TODO make this mapping configurable via properties file so it can be easily extended
-   private static final Map<Class<? extends PredicateFactory>, PredicateInvocationGenerator> mappings = new HashMap<Class<? extends PredicateFactory>, PredicateInvocationGenerator>();
+   private static final Map<Class<? extends PredicateFactory>, PredicateInvocationGenerator> mappings = new HashMap<>();
    static {
       mappings.put(org.projog.core.udp.SingleRuleWithSingleImmutableArgumentPredicate.class, new SingleRuleWithSingleImmutableArgumentPredicateInvocationGenerator());
       mappings.put(org.projog.core.udp.SingleRuleWithMultipleImmutableArgumentsPredicate.class, new SingleRuleWithMultipleImmutableArgumentPredicateInvocationGenerator());

@@ -46,7 +46,7 @@ public final class SentenceParser extends TermParser {
    // (Improve code structure to make meaning more explicit? More/better comments?
    // Link to external documentation that describes the specifics of Prolog syntax and operand precedence?)
 
-   private final Set<Term> parsedInfixTerms = new HashSet<Term>();
+   private final Set<Term> parsedInfixTerms = new HashSet<>();
    private Term lastParsedTerm;
 
    /**

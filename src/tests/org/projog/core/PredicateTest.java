@@ -47,7 +47,7 @@ public class PredicateTest extends TestCase {
     * <p>
     * Used to automatically generate input to plantuml to generate uml class diagram.
     */
-   private final Map<String, String> classStructure = new HashMap<String, String>();
+   private final Map<String, String> classStructure = new HashMap<>();
 
    public void testBuiltInPredicates() throws Exception {
       Term[] terms = parseTermsFromFile(BOOTSTRAP_FILE);
@@ -71,7 +71,7 @@ public class PredicateTest extends TestCase {
       assertFalse(builtInPredicateCtr == 0);
 
       // produce input required by plantuml to generate uml class diagram
-      Set<String> abstractClasses = new HashSet<String>();
+      Set<String> abstractClasses = new HashSet<>();
       for (Map.Entry<String, String> e : classStructure.entrySet()) {
          String key = e.getKey();
          if (key.startsWith("Abstract")) {
@@ -113,7 +113,7 @@ public class PredicateTest extends TestCase {
 
    @SuppressWarnings("rawtypes")
    private Class[] getMethodParameters(PredicateKey key) {
-      List<Class> args = new ArrayList<Class>();
+      List<Class> args = new ArrayList<>();
       for (int i = 1; i <= key.getNumArgs(); i++) {
          args.add(Term.class);
       }

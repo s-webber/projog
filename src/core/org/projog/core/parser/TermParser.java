@@ -57,7 +57,7 @@ class TermParser {
    /** The dot character indicates the end of a Prolog statement (i.e a fact, rule or query). */
    static final Atom PERIOD = new Atom(".");
    /** A collection of {@code Variable}s this parser currently knows about (key = the variable id). */
-   private final HashMap<String, Variable> variables = new HashMap<String, Variable>();
+   private final HashMap<String, Variable> variables = new HashMap<>();
    /** Provides access to the underlying stream used as the source for the Prolog syntax being parsed. */
    protected final CharacterParser parser;
    protected final Operands operands;
@@ -294,7 +294,7 @@ class TermParser {
 
    /** Returns a newly created {@code List} with elements read from the parser. */
    private Term parseList() {
-      ArrayList<Term> args = new ArrayList<Term>();
+      ArrayList<Term> args = new ArrayList<>();
       Term tail = EmptyList.EMPTY_LIST;
 
       while (true) {

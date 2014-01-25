@@ -52,11 +52,7 @@ class BuildUtilsConstants {
     * @return contents of file
     */
    static byte[] toByteArray(File f) {
-      FileInputStream fis = null;
-      ByteArrayOutputStream baos = null;
-      try {
-         fis = new FileInputStream(f);
-         baos = new ByteArrayOutputStream();
+      try (FileInputStream fis = new FileInputStream(f); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
          int next;
          while ((next = fis.read()) != -1) {
             baos.write(next);
@@ -64,15 +60,6 @@ class BuildUtilsConstants {
          return baos.toByteArray();
       } catch (Exception e) {
          throw new RuntimeException(e);
-      } finally {
-         try {
-            fis.close();
-         } catch (Exception e) {
-         }
-         try {
-            baos.close();
-         } catch (Exception e) {
-         }
       }
    }
 
@@ -83,12 +70,8 @@ class BuildUtilsConstants {
     * @return list of lines contained in specified file
     */
    static List<String> readFile(File f) {
-      List<String> result = new ArrayList<String>();
-      FileReader fr = null;
-      BufferedReader br = null;
-      try {
-         fr = new FileReader(f);
-         br = new BufferedReader(fr);
+      List<String> result = new ArrayList<>();
+      try (FileReader fr = new FileReader(f); BufferedReader br = new BufferedReader(fr)) {
          String next;
          while ((next = br.readLine()) != null) {
             result.add(next);
@@ -98,15 +81,6 @@ class BuildUtilsConstants {
          }
       } catch (Exception e) {
          throw new RuntimeException("could not read text file: " + f, e);
-      } finally {
-         try {
-            br.close();
-         } catch (Exception e) {
-         }
-         try {
-            fr.close();
-         } catch (Exception e) {
-         }
       }
       return result;
    }
@@ -118,21 +92,10 @@ class BuildUtilsConstants {
     * @return the newly created file
     */
    static File writeToTempFile(CharSequence contents) throws IOException {
-      FileWriter fw = null;
-      BufferedWriter bw = null;
-      try {
-         File f = File.createTempFile("systest", ".tmp", BUILD_DIR);
-         fw = new FileWriter(f);
-         bw = new BufferedWriter(fw);
+      File f = File.createTempFile("systest", ".tmp", BUILD_DIR);
+      try (FileWriter fw = new FileWriter(f); BufferedWriter bw = new BufferedWriter(fw)) {
          bw.append(contents);
          return f;
-      } finally {
-         if (bw != null) {
-            bw.close();
-         }
-         if (fw != null) {
-            fw.close();
-         }
       }
    }
 }

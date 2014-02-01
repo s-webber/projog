@@ -64,9 +64,9 @@ class TableOfContentsReader {
          result.add(current);
          if (!current.isHeader()) {
             if (previous != null) {
-               previous.next = current;
+               previous.setNext(current);
             }
-            current.previous = previous;
+            current.setPrevious(previous);
             previous = current;
          }
       }

@@ -96,40 +96,7 @@ class CodeExamplesWebPageCreator {
                htmlBreak();
             }
 
-            // print query
-            SysTestQuery query = (SysTestQuery) content;
-            String question = query.getQueryStr() + ".";
-            programOutput(QUESTION_PREDICATE_NAME);
-            userInput(question);
-            htmlBreak();
-
-            // iterate through answers, printing variable assignments and system output
-            List<SysTestAnswer> answers = query.getAnswers();
-            SysTestAnswer lastAnswer = answers.isEmpty() ? null : answers.get(answers.size() - 1);
-            for (SysTestAnswer answer : answers) {
-               programOutput(answer.getExpectedOutput());
-               for (Map.Entry<String, String> assignment : answer.getAssignments()) {
-                  String variable = assignment.getKey();
-                  String term = assignment.getValue();
-                  programOutput(variable + " = " + term);
-                  htmlBreak();
-               }
-               htmlBreak();
-               programOutput("yes");
-               if (query.isContinuesUntilFails() || answer != lastAnswer) {
-                  userInput(";");
-                  htmlBreak();
-               }
-            }
-
-            // if required, output any exception or failed evaluation
-            if (query.getExpectedExceptionMessage() != null) {
-               htmlBreak();
-               programOutput(query.getExpectedExceptionMessage());
-            } else if (query.isContinuesUntilFails()) {
-               htmlBreak();
-               programOutput("no");
-            }
+            printQuery((SysTestQuery) content);
          } else if (content instanceof SysTestComment) {
             if (inCodeSection || inQuerySection) {
                tableBottom();
@@ -137,8 +104,7 @@ class CodeExamplesWebPageCreator {
             inCodeSection = false;
             inQuerySection = false;
 
-            String comment = ((SysTestComment) content).comment;
-            println("<span class=\"comment\">" + comment + "</span>");
+            printComment((SysTestComment) content);
          } else if (content instanceof SysTestCode) {
             String code = ((SysTestCode) content).code;
             // ignore leading blank lines at top of code section
@@ -162,10 +128,7 @@ class CodeExamplesWebPageCreator {
                lastLineWasBlank = true;
             }
          } else if (content instanceof SysTestLink) {
-            SysTestLink link = (SysTestLink) content;
-            String target = link.target;
-            String title = TableOfContentsReader.getTitleForTarget(target);
-            println("See <a href=\"" + target + HTML_FILE_EXTENSION + "\">" + title + "</a>");
+            printLink((SysTestLink) content);
          } else {
             throw new RuntimeException("don't know about SysTestContent: " + content);
          }
@@ -175,6 +138,56 @@ class CodeExamplesWebPageCreator {
       }
 
       println("</div>");
+   }
+
+   private void printQuery(SysTestQuery query) throws IOException {
+      String question = query.getQueryStr() + ".";
+      programOutput(QUESTION_PREDICATE_NAME);
+      userInput(question);
+      htmlBreak();
+
+      // iterate through answers, printing variable assignments and system output
+      List<SysTestAnswer> answers = query.getAnswers();
+      SysTestAnswer lastAnswer = answers.isEmpty() ? null : answers.get(answers.size() - 1);
+      for (SysTestAnswer answer : answers) {
+         programOutput(answer.getExpectedOutput());
+         printVariables(answer);
+         htmlBreak();
+         programOutput("yes");
+         if (query.isContinuesUntilFails() || answer != lastAnswer) {
+            userInput(";");
+            htmlBreak();
+         }
+      }
+
+      // if required, output any exception or failed evaluation
+      if (query.getExpectedExceptionMessage() != null) {
+         htmlBreak();
+         programOutput(query.getExpectedExceptionMessage());
+      } else if (query.isContinuesUntilFails()) {
+         htmlBreak();
+         programOutput("no");
+      }
+   }
+
+   private void printVariables(SysTestAnswer answer) throws IOException {
+      for (Map.Entry<String, String> assignment : answer.getAssignments()) {
+         String variable = assignment.getKey();
+         String term = assignment.getValue();
+         programOutput(variable + " = " + term);
+         htmlBreak();
+      }
+   }
+
+   private void printComment(SysTestComment comment) throws IOException {
+      String text = comment.comment;
+      println("<span class=\"comment\">" + text + "</span>");
+   }
+
+   private void printLink(SysTestLink link) throws IOException {
+      String target = link.target;
+      String title = TableOfContentsReader.getTitleForTarget(target);
+      println("See <a href=\"" + target + HTML_FILE_EXTENSION + "\">" + title + "</a>");
    }
 
    private void userInput(String userInput) throws IOException {

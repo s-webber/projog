@@ -16,13 +16,10 @@
 package org.projog.build;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,19 +80,5 @@ class BuildUtilsConstants {
          throw new RuntimeException("could not read text file: " + f, e);
       }
       return result;
-   }
-
-   /**
-    * Writes the specified sequence of char values to a file.
-    * 
-    * @param contents the content to be written to the newly created file
-    * @return the newly created file
-    */
-   static File writeToTempFile(CharSequence contents) throws IOException {
-      File f = File.createTempFile("systest", ".tmp", BUILD_DIR);
-      try (FileWriter fw = new FileWriter(f); BufferedWriter bw = new BufferedWriter(fw)) {
-         bw.append(contents);
-         return f;
-      }
    }
 }

@@ -299,10 +299,10 @@ class SysTestParser {
          answer.setExpectedOutput(expectedOutput);
       }
       if (line.startsWith(ANSWER_NO_VARIABLES_TAG)) {
-         // query suceeds but no vars to check
+         // query succeeds but no variables to check
          return answer;
       } else if (line.startsWith(ANSWER_TAG)) {
-         // query suceeds with vars to check
+         // query succeeds with variables to check
          line = getText(line);
          boolean finished = line.trim().length() > 0;
          do {

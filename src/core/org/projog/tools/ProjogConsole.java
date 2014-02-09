@@ -15,17 +15,17 @@
  */
 package org.projog.tools;
 
-import static java.lang.System.out;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.projog.api.Projog;
@@ -43,33 +43,43 @@ import org.projog.core.term.Term;
  * <p>
  * <img src="doc-files/ProjogConsole.png">
  */
-public final class ProjogConsole implements Observer {
-   // TODO need to unit test this - including testing the generation of error messages when an error occurs while evaluating a query.
-
+public class ProjogConsole implements Observer {
    /** Command user can enter to exit the console application. */
    private static final String QUIT_COMMAND = "quit.";
+   private static final String CONTINUE_EVALUATING = ";";
+   private static final String STOP_EVALUATING = "q";
 
+   private final Scanner in;
+   private final PrintStream out;
    private final Projog projog;
 
-   private ProjogConsole() {
-      projog = new Projog(this);
+   ProjogConsole(InputStream in, PrintStream out) {
+      this.in = new Scanner(in);
+      this.out = out;
+      this.projog = new Projog(this);
    }
 
-   private void run(List<String> startupScriptFilenames) throws IOException {
-      out.println("Projog Console\nwww.projog.org");
+   void run(List<String> startupScriptFilenames) throws IOException {
+      out.println("Projog Console");
+      out.println("www.projog.org");
 
       consultScripts(startupScriptFilenames);
 
-      try (InputStreamReader isr = new InputStreamReader(System.in); BufferedReader in = new BufferedReader(isr)) {
-         String inputSyntax;
-         do {
-            out.print("\n" + QUESTION_PREDICATE_NAME + " ");
-            inputSyntax = in.readLine();
-            if (isNotEmpty(inputSyntax)) {
-               parseAndExecute(inputSyntax, in);
-            }
-         } while (!QUIT_COMMAND.equals(inputSyntax));
+      while (true) {
+         printPrompt();
+
+         String inputSyntax = in.nextLine();
+         if (QUIT_COMMAND.equals(inputSyntax)) {
+            return;
+         } else if (isNotEmpty(inputSyntax)) {
+            parseAndExecute(inputSyntax);
+         }
       }
+   }
+
+   private void printPrompt() {
+      out.println();
+      out.print(QUESTION_PREDICATE_NAME + " ");
    }
 
    private static boolean isNotEmpty(String input) {
@@ -89,29 +99,33 @@ public final class ProjogConsole implements Observer {
 
    private void consultScripts(List<String> scriptFilenames) {
       for (String startupScriptName : scriptFilenames) {
-         try {
-            File startupScriptFile = new File(startupScriptName);
-            projog.consultFile(startupScriptFile);
-         } catch (Throwable e) {
-            out.println();
-            processThrowable(e);
-         }
+         consultScript(startupScriptName);
       }
    }
 
-   private void parseAndExecute(String inputSyntax, BufferedReader in) {
+   private void consultScript(String startupScriptName) {
+      try {
+         File startupScriptFile = new File(startupScriptName);
+         projog.consultFile(startupScriptFile);
+      } catch (Throwable e) {
+         out.println();
+         processThrowable(e);
+      }
+   }
+
+   private void parseAndExecute(String inputSyntax) {
       try {
          QueryStatement s = projog.query(inputSyntax);
          QueryResult r = s.getResult();
          Set<String> variableIds = r.getVariableIds();
-         while (evaluateOnce(r, variableIds)) {
-            waitForPromptToContinue(in);
+         while (evaluateOnce(r, variableIds) && shouldContinue()) {
+            // keep evaluating the query
          }
          out.println();
       } catch (ParserException pe) {
          out.println();
          out.println("Error parsing query:");
-         pe.getDescription(System.out);
+         pe.getDescription(out);
       } catch (Throwable e) {
          out.println();
          processThrowable(e);
@@ -119,12 +133,16 @@ public final class ProjogConsole implements Observer {
       }
    }
 
-   private void waitForPromptToContinue(BufferedReader in) {
-      try {
-         in.readLine();
-      } catch (Exception e) {
-         // This shouldn't happen but make stacktrace visible if it does
-         e.printStackTrace();
+   private boolean shouldContinue() {
+      while (true) {
+         String input = in.nextLine();
+         if (CONTINUE_EVALUATING.equals(input)) {
+            return true;
+         } else if (STOP_EVALUATING.equals(input)) {
+            return false;
+         } else {
+            out.print("Invalid. Enter ; to continue or q to quit. ");
+         }
       }
    }
 
@@ -132,7 +150,7 @@ public final class ProjogConsole implements Observer {
       if (e instanceof ParserException) {
          ParserException pe = (ParserException) e;
          out.println("ParserException at line: " + pe.getLineNumber());
-         pe.getDescription(System.out);
+         pe.getDescription(out);
       } else if (e instanceof ProjogException) {
          out.println(e.getMessage());
          Throwable cause = e.getCause();
@@ -158,38 +176,48 @@ public final class ProjogConsole implements Observer {
       }
    }
 
-   /** Returns {@code true} if {@code QueryResult} can be retried */
+   /** Returns {@code true} if {@code QueryResult} can be re-tried */
    private boolean evaluateOnce(QueryResult r, Set<String> variableIds) {
       long start = System.currentTimeMillis();
       boolean success = r.next();
       if (success) {
+         printVariableAssignments(r, variableIds);
+      }
+      printOutcome(success, System.currentTimeMillis() - start);
+      return success && !r.isExhausted();
+   }
+
+   private void printVariableAssignments(QueryResult r, Set<String> variableIds) {
+      if (!variableIds.isEmpty()) {
+         out.println();
          for (String variableId : variableIds) {
             Term answer = r.getTerm(variableId);
             String s = projog.toString(answer);
             out.println(variableId + " = " + s);
          }
-         out.println();
-         out.print("yes (" + (System.currentTimeMillis() - start) + " ms)");
-         return r.isExhausted() == false;
-      } else {
-         out.println();
-         out.print("no (" + (System.currentTimeMillis() - start) + " ms)");
-         return false;
       }
+   }
+
+   private void printOutcome(boolean success, long timing) {
+      out.println();
+      out.print(success ? "yes" : "no");
+      out.print(" (");
+      out.print(timing);
+      out.print(" ms)");
    }
 
    public static void main(String[] args) throws IOException {
       ArrayList<String> startupScriptFilenames = new ArrayList<>();
       for (String arg : args) {
          if (arg.startsWith("-")) {
-            out.println();
-            out.println("don't know about argument: " + arg);
+            System.out.println();
+            System.out.println("don't know about argument: " + arg);
             System.exit(-1);
          }
          startupScriptFilenames.add(arg);
       }
 
-      ProjogConsole console = new ProjogConsole();
+      ProjogConsole console = new ProjogConsole(System.in, System.out);
       console.run(startupScriptFilenames);
    }
 }

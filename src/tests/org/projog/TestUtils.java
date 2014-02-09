@@ -17,6 +17,7 @@ package org.projog;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ import org.projog.core.udp.ClauseModel;
  * Helper methods for performing unit tests.
  */
 public class TestUtils {
-   public static final String LINE_SEPARATOR = System.getProperty("line.separator");
+   public static final String LINE_SEPARATOR = System.lineSeparator();
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
    public static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_calculatable", 2);
    public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogSystemProperties() {
@@ -65,6 +66,8 @@ public class TestUtils {
       }
    };
 
+   private static final File TEMP_DIR = new File("build");
+
    private static final KnowledgeBase KNOWLEDGE_BASE = createKnowledgeBase();
 
    /**
@@ -72,6 +75,25 @@ public class TestUtils {
     */
    private TestUtils() {
       // do nothing
+   }
+
+   public static File writeToTempFile(Class<?> c, String contents) {
+      try {
+         File tempFile = createTempFile(c.getClass());
+         try (FileWriter fw = new FileWriter(tempFile)) {
+            fw.write(contents);
+         }
+         return tempFile;
+      } catch (Exception e) {
+         throw new RuntimeException(e);
+      }
+   }
+
+   private static File createTempFile(Class<?> c) throws IOException {
+      TEMP_DIR.mkdir();
+      File tempFile = File.createTempFile(c.getName(), ".tmp", TEMP_DIR);
+      tempFile.deleteOnExit();
+      return tempFile;
    }
 
    public static KnowledgeBase createKnowledgeBase() {

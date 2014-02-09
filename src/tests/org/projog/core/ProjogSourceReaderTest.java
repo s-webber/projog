@@ -16,10 +16,10 @@
 package org.projog.core;
 
 import static org.projog.TestUtils.createKnowledgeBase;
+import static org.projog.TestUtils.writeToTempFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintStream;
 
 import junit.framework.TestCase;
@@ -30,8 +30,6 @@ import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
 public class ProjogSourceReaderTest extends TestCase {
-   private static final File BUILD_DIR = new File("build");
-
    public void testParseFileNotFound() {
       File f = new File("does_not_exist");
       try {
@@ -136,17 +134,6 @@ public class ProjogSourceReaderTest extends TestCase {
    }
 
    private File writeToFile(String contents) {
-      try {
-         BUILD_DIR.mkdir();
-         File tempFile = File.createTempFile(getClass().getName(), ".tmp", BUILD_DIR);
-         tempFile.deleteOnExit();
-         try (FileWriter fw = new FileWriter(tempFile)) {
-            fw.write(contents);
-         }
-         return tempFile;
-      } catch (Exception e) {
-         throw new RuntimeException(e);
-      }
+      return writeToTempFile(this.getClass(), contents);
    }
-
 }

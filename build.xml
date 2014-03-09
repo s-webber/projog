@@ -14,10 +14,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project name="projog" default="unit-test">
+<project name="projog" default="test">
 
 	<property name="core-jar" value="build/lib/projog-core.jar"/>
-	<property name="junit-jar" value="lib/junit-3.8.1.jar"/>
+	<property name="junit-jar" value="lib/junit-4.11.jar"/>
+	<property name="junit-url" value="http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar"/>
 	<!--
 	dynamicContentDir is the output directory for classes generated at runtime
 	-->
@@ -33,7 +34,16 @@
 		<delete dir="build" failonerror="false"/>
 		<delete dir="${dynamicContentDir}" failonerror="false"/>
 	</target>
-	
+
+<!-- JUNIT DEPENDENCY -->
+	<target name="check-junit">
+		<available file="${junit-jar}" property="junit.exists"/>
+	</target>
+
+	<target name="get-junit" depends="check-junit" unless="junit.exists">
+		<get src="${junit-url}" dest="${junit-jar}"/>
+	</target>
+
 <!-- COMPILE -->
 	<target name="compile.core">
 		<!-- compile to classes -->
@@ -70,7 +80,7 @@
 		</javac>
 	</target>
 
-	<target name="compile.tests">
+	<target name="compile.tests" depends="get-junit">
 		<mkdir dir="build/classes/tests"/>
 		<path id="classpath.compile.tests">
 			<pathelement location="${junit-jar}"/>
@@ -160,6 +170,9 @@
 
 	<target name="clean-test" depends="clean,compile,unit-test,sys-test"
 	        description="deletes build directory and recompiles before running both unit and system tests"/>
+
+<!-- ALL TESTS -->
+	<target name="test" depends="unit-test,sys-test"/>
 
 <!-- WEB PAGES -->
 	<target name="web" depends="sys-test.generate"

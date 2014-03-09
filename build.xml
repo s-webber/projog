@@ -17,7 +17,8 @@
 <project name="projog" default="test">
 
 	<property name="core-jar" value="build/lib/projog-core.jar"/>
-	<property name="junit-jar" value="lib/junit-4.11.jar"/>
+	<property name="lib" value="lib"/>
+	<property name="junit-jar" value="${lib}/junit-4.11.jar"/>
 	<property name="junit-url" value="http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar"/>
 	<!--
 	dynamicContentDir is the output directory for classes generated at runtime
@@ -41,6 +42,7 @@
 	</target>
 
 	<target name="get-junit" depends="check-junit" unless="junit.exists">
+		<mkdir dir="${lib}"/>
 		<get src="${junit-url}" dest="${junit-jar}"/>
 	</target>
 
@@ -222,7 +224,7 @@
 				<include name="docs/*.html"/>
 				<include name="docs/*.css"/>
 				<include name="docs/javadoc/**"/>
-				<include name="lib/**"/>
+				<include name="${lib}/**"/>
 			</fileset>
 		</zip>
 	</target>

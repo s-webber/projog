@@ -150,12 +150,12 @@ public class SentenceParserTest extends TestCase {
     */
    public void testParseOperandXF() {
       Operands o = new Operands();
-      o.addOperand("£", "xf", 900);
-      SentenceParser sp = SentenceParser.getInstance("a £.", o);
+      o.addOperand("~", "xf", 900);
+      SentenceParser sp = SentenceParser.getInstance("a ~.", o);
       Term t = sp.parseSentence();
-      assertEquals("£(a)", t.toString());
+      assertEquals("~(a)", t.toString());
       try {
-         sp = SentenceParser.getInstance("a £ £.", o);
+         sp = SentenceParser.getInstance("a ~ ~.", o);
          sp.parseSentence();
          fail();
       } catch (ParserException e) {
@@ -171,10 +171,10 @@ public class SentenceParserTest extends TestCase {
     */
    public void testParseOperandYF() {
       Operands o = new Operands();
-      o.addOperand("£", "yf", 900);
-      SentenceParser sp = SentenceParser.getInstance("a £ £.", o);
+      o.addOperand(":", "yf", 900);
+      SentenceParser sp = SentenceParser.getInstance("a : :.", o);
       Term t = sp.parseSentence();
-      assertEquals("£(£(a))", t.toString());
+      assertEquals(":(:(a))", t.toString());
    }
 
    public void testBuiltInPredicateNamesAsAtomArguments() {

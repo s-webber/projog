@@ -39,7 +39,7 @@ public class TermParserTest extends TestCase {
       testNonVariableTerm(new Atom("x_1"), "x_1");
       testNonVariableTerm(new Atom("xttRytf_uiu"), "xttRytf_uiu");
       testNonVariableTerm(new Atom("Abc"), "'Abc'");
-      testNonVariableTerm(new Atom("a B 1.2,3;4 !£$% c"), "'a B 1.2,3;4 !£$% c'");
+      testNonVariableTerm(new Atom("a B 1.2,3;4 !:$% c"), "'a B 1.2,3;4 !:$% c'");
       testNonVariableTerm(new Atom("'"), "''''");
       testNonVariableTerm(new Atom("Ab'c"), "'Ab''c'");
       testNonVariableTerm(new Atom("A'b''c"), "'A''b''''c'");

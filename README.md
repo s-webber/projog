@@ -1,6 +1,6 @@
 # [projog](http://www.projog.org/)
 
-*Prolog logic programming for the Java platform.*
+Projog provides an implementation of the Prolog programming language for the Java platform. Prolog is a declarative logic programming language where programs are represented as facts and rules.
 
 - [Frequently Asked Questions](http://projog.org/faq.html)
 - [Getting Started](http://projog.org/getting-started.html)
@@ -17,6 +17,8 @@
 * `src/code` - Core Projog Java source code, including inference engine, built-in predicates and console application.
 * `src/tests` - JUnit tests.
 * `web` - Used to construct content of http://www.projog.org/
+
+[![Build Status](https://travis-ci.org/webber-s/projog.png?branch=master)](https://travis-ci.org/webber-s/projog)
 
 --------------------------------------
 

@@ -15,13 +15,18 @@
  */
 package org.projog.core.udp;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.variable;
 
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
@@ -29,9 +34,10 @@ import org.projog.core.PredicateKey;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
+public class DynamicUserDefinedPredicateFactoryTest {
    private static final String TEST_PREDICATE_NAME = "test";
 
+   @Test
    public void testSimpleAdditionAndIteration_1() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       assertIterator(dp);
@@ -46,6 +52,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertIterator(dp, "c", "a", "b");
    }
 
+   @Test
    public void testSimpleAdditionAndIteration_2() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       assertIterator(dp);
@@ -60,6 +67,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertIterator(dp, "b", "a", "c");
    }
 
+   @Test
    public void testRemoval() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       addLast(dp, "a");
@@ -102,6 +110,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertIterator(itr4, "d");
    }
 
+   @Test
    public void testRemoveFirstAndLast() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       addLast(dp, "a");
@@ -123,6 +132,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertIterator(dp, "b", "c", "d");
    }
 
+   @Test
    public void testRemoveAll() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       addLast(dp, "a");
@@ -140,6 +150,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertFalse(dp.getImplications().hasNext());
    }
 
+   @Test
    public void testGetClauseModel() {
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();
       ClauseModel ci1 = createClauseModel("a");
@@ -162,6 +173,7 @@ public class DynamicUserDefinedPredicateFactoryTest extends TestCase {
       assertSame(original.getOriginal(), actual.getOriginal());
    }
 
+   @Test
    public void testGetPredicate() {
       String[] data = {"a", "b", "c"};
       DynamicUserDefinedPredicateFactory dp = createDynamicPredicate();

@@ -15,28 +15,35 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
-public class FileHandlesTest extends TestCase {
+public class FileHandlesTest {
+   @Test
    public void testDefaultInputStream() {
       FileHandles fh = new FileHandles();
       assertSame(System.in, fh.getCurrentInputStream());
    }
 
+   @Test
    public void testDefaultOututStream() {
       FileHandles fh = new FileHandles();
       assertSame(System.out, fh.getCurrentOutputStream());
    }
 
+   @Test
    public void testDefaultInputHandle() {
       FileHandles fh = new FileHandles();
       Term expected = new Atom("user_input");
@@ -44,6 +51,7 @@ public class FileHandlesTest extends TestCase {
       assertTrue(expected.strictEquality(actual));
    }
 
+   @Test
    public void testDefaultOutputHandle() {
       FileHandles fh = new FileHandles();
       Term expected = new Atom("user_output");
@@ -51,6 +59,7 @@ public class FileHandlesTest extends TestCase {
       assertTrue(expected.strictEquality(actual));
    }
 
+   @Test
    public void testSetInputFailure() {
       FileHandles fh = new FileHandles();
       Term t = atom("test");
@@ -62,6 +71,7 @@ public class FileHandlesTest extends TestCase {
       }
    }
 
+   @Test
    public void testSetOutputFailure() {
       FileHandles fh = new FileHandles();
       Term t = atom("test");
@@ -73,6 +83,7 @@ public class FileHandlesTest extends TestCase {
       }
    }
 
+   @Test
    public void testWriteAndRead() throws IOException {
       FileHandles fh = new FileHandles();
       String filename = "build/filehandlestest.tmp";

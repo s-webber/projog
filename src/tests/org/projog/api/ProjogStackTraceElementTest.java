@@ -15,8 +15,10 @@
  */
 package org.projog.api;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
+import org.junit.Test;
 import org.projog.core.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -27,7 +29,8 @@ import org.projog.core.term.Term;
  * For a more thorough test, including how it is used by {@link Projog#getStackTrace(Throwable)}, see
  * {@link ProjogTest#testIOExceptionWhileEvaluatingQueries()}.
  */
-public class ProjogStackTraceElementTest extends TestCase {
+public class ProjogStackTraceElementTest {
+   @Test
    public void test() {
       final PredicateKey key = new PredicateKey("test", 1);
       final int clauseIdx = 9;

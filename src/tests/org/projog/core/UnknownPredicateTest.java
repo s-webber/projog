@@ -15,9 +15,13 @@
  */
 package org.projog.core;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 
-public class UnknownPredicateTest extends TestCase {
+import org.junit.Test;
+
+public class UnknownPredicateTest {
+   @Test
    public void testUnknownPredicate() {
       UnknownPredicate e = UnknownPredicate.UNKNOWN_PREDICATE;
       assertSame(e, e.getPredicate());

@@ -15,14 +15,20 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class OperandsTest extends TestCase {
+public class OperandsTest {
    private static final String[] ASSOCIATIVITES = {"fx", "fy", "xfx", "xfy", "yfx", "xf", "yf"};
 
+   @Test
    public void testInvalidAssociativity() {
       try {
          new Operands().addOperand("test", "yfy", 100);
@@ -32,6 +38,7 @@ public class OperandsTest extends TestCase {
       }
    }
 
+   @Test
    public void testDuplicate() {
       Operands operands = new Operands();
       operands.addOperand("test", "xfx", 100);
@@ -54,6 +61,7 @@ public class OperandsTest extends TestCase {
       operands.addOperand("test", "fx", 100);
    }
 
+   @Test
    public void testOperands() {
       Operands operands = new Operands();
 

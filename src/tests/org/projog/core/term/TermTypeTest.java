@@ -15,9 +15,14 @@
  */
 package org.projog.core.term;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class TermTypeTest extends TestCase {
+import org.junit.Test;
+
+public class TermTypeTest {
+   @Test
    public void testIsNumeric() {
       assertTrue(TermType.DOUBLE.isNumeric());
       assertTrue(TermType.INTEGER.isNumeric());
@@ -30,6 +35,7 @@ public class TermTypeTest extends TestCase {
       assertFalse(TermType.NAMED_VARIABLE.isNumeric());
    }
 
+   @Test
    public void testIsStructure() {
       assertTrue(TermType.EMPTY_LIST.isStructure());
       assertTrue(TermType.LIST.isStructure());
@@ -42,6 +48,7 @@ public class TermTypeTest extends TestCase {
       assertFalse(TermType.NAMED_VARIABLE.isStructure());
    }
 
+   @Test
    public void testIsVariable() {
       assertTrue(TermType.ANONYMOUS_VARIABLE.isVariable());
       assertTrue(TermType.NAMED_VARIABLE.isVariable());
@@ -54,6 +61,7 @@ public class TermTypeTest extends TestCase {
       assertFalse(TermType.STRUCTURE.isVariable());
    }
 
+   @Test
    public void testGetPrecedence() {
       assertEquals(1, TermType.ANONYMOUS_VARIABLE.getPrecedence());
       assertEquals(2, TermType.NAMED_VARIABLE.getPrecedence());

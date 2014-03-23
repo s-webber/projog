@@ -15,6 +15,11 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
@@ -26,8 +31,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
@@ -35,15 +39,17 @@ import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
 
-public class SpyPointsTest extends TestCase {
+public class SpyPointsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
+   @Test
    public void testGetSameSpyPointForSamePredicateKey() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key = createKey("test", 2);
       assertSame(testObject.getSpyPoint(key), testObject.getSpyPoint(key));
    }
 
+   @Test
    public void testGetSameSpyPointWhenPredicateKeysEqual() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key1 = createKey("test", 2);
@@ -52,6 +58,7 @@ public class SpyPointsTest extends TestCase {
       assertSame(testObject.getSpyPoint(key1), testObject.getSpyPoint(key2));
    }
 
+   @Test
    public void testGetDifferentSpyPointWhenPredicateKeysNotEqual() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key1 = createKey("test1", -1);
@@ -63,6 +70,7 @@ public class SpyPointsTest extends TestCase {
       assertNotSame(testObject.getSpyPoint(key3), testObject.getSpyPoint(key4));
    }
 
+   @Test
    public void testGetSpyPoints() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey[] keys = {createKey("test1", -1), createKey("test1", 0), createKey("test1", 2), createKey("test2", 2)};
@@ -79,6 +87,7 @@ public class SpyPointsTest extends TestCase {
       }
    }
 
+   @Test
    public void testSetSpyPointOnlyAltersSingleSpyPoint() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key1 = createKey("test1", 2);
@@ -102,6 +111,7 @@ public class SpyPointsTest extends TestCase {
       assertFalse(sp2.isSet());
    }
 
+   @Test
    public void testSetSpyPointWorksEvenBeforeGetSpyPointCalled() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key = createKey("test", 2);
@@ -109,6 +119,7 @@ public class SpyPointsTest extends TestCase {
       assertTrue(testObject.getSpyPoint(key).isSet());
    }
 
+   @Test
    public void testSpyPointAffectedBySetTraceEnabledCallAfterItWasCreated() {
       SpyPoints testObject = new SpyPoints(kb);
       SpyPoints.SpyPoint sp = testObject.getSpyPoint(createKey("test", 1));
@@ -119,6 +130,7 @@ public class SpyPointsTest extends TestCase {
       assertFalse(sp.isEnabled());
    }
 
+   @Test
    public void testSpyPointAffectedBySetTraceEnabledCallBeforeItWasCreated() {
       SpyPoints testObject = new SpyPoints(kb);
       testObject.setTraceEnabled(true);
@@ -128,6 +140,7 @@ public class SpyPointsTest extends TestCase {
       assertFalse(sp.isEnabled());
    }
 
+   @Test
    public void testSetTraceEnabledIndependantOfSetSpyPoint() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key = createKey("test", 2);
@@ -157,6 +170,7 @@ public class SpyPointsTest extends TestCase {
       assertTrue(sp.isSet() == false && sp.isEnabled() == true);
    }
 
+   @Test
    public void testSpyPointUpdatesObserver() {
       // add an observer to the KnowledgeBase's ProjogEventsObservable
       // so we can keep track of ProjogEvent objects created by the SpyPoint

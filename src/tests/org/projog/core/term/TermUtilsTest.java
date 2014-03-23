@@ -15,6 +15,11 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
@@ -24,15 +29,16 @@ import static org.projog.TestUtils.variable;
 
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.core.ProjogException;
 
-public class TermUtilsTest extends TestCase {
+public class TermUtilsTest {
+   @Test
    public void testEmptyArray() {
       assertEquals(0, TermUtils.EMPTY_ARRAY.length);
    }
 
+   @Test
    public void testCopy() {
       // setup input terms
       Atom a = atom("a");
@@ -72,6 +78,7 @@ public class TermUtilsTest extends TestCase {
       assertEquals(id, ((Variable) t).getId());
    }
 
+   @Test
    public void testBacktrack() {
       // setup input terms
       Atom a = atom("a");
@@ -100,6 +107,7 @@ public class TermUtilsTest extends TestCase {
       }
    }
 
+   @Test
    public void testUnifySuccess() {
       // setup input terms
       Variable x = variable("X");
@@ -120,6 +128,7 @@ public class TermUtilsTest extends TestCase {
       assertSame(c, z.getTerm());
    }
 
+   @Test
    public void testUnifyFailure() {
       // setup input terms
       Variable x = variable("X");
@@ -142,6 +151,7 @@ public class TermUtilsTest extends TestCase {
       assertSame(b, y.getTerm());
    }
 
+   @Test
    public void testGetAllVariablesInTerm() {
       Variable q = variable("Q");
       Variable r = variable("R");
@@ -161,16 +171,19 @@ public class TermUtilsTest extends TestCase {
       }
    }
 
+   @Test
    public void testCastToNumericIntegerNumber() {
       IntegerNumber i = integerNumber();
       assertSame(i, TermUtils.castToNumeric(i));
    }
 
+   @Test
    public void testCastToNumericDoubleNumber() {
       DoubleNumber d = doubleNumber();
       assertSame(d, TermUtils.castToNumeric(d));
    }
 
+   @Test
    public void testCastToNumericAtom() {
       try {
          Atom a = atom("1");
@@ -181,6 +194,7 @@ public class TermUtilsTest extends TestCase {
       }
    }
 
+   @Test
    public void testCastToNumericVariable() {
       Variable v = variable();
       try {
@@ -194,11 +208,13 @@ public class TermUtilsTest extends TestCase {
       assertSame(i, TermUtils.castToNumeric(v));
    }
 
+   @Test
    public void testGetAtomName() {
       Atom a = atom("testAtomName");
       assertEquals("testAtomName", TermUtils.getAtomName(a));
    }
 
+   @Test
    public void testGetAtomNameException() {
       Structure p = structure("testAtomName");
       try {

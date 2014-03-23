@@ -15,14 +15,18 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.ADD_CALCULATABLE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.DoubleNumber;
@@ -32,21 +36,24 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
-public class CalculatableFactoryTest extends TestCase {
+public class CalculatableFactoryTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
+   @Test
    public void testGetNumericIntegerNumber() {
       CalculatableFactory cf = getCalculatableFactory();
       IntegerNumber i = integerNumber(1);
       assertSame(i, cf.getNumeric(i));
    }
 
+   @Test
    public void testGetNumericDoubleNumber() {
       CalculatableFactory cf = getCalculatableFactory();
       DoubleNumber d = doubleNumber(17.6);
       assertSame(d, cf.getNumeric(d));
    }
 
+   @Test
    public void testGetNumericException() {
       CalculatableFactory cf = getCalculatableFactory();
       try {
@@ -57,6 +64,7 @@ public class CalculatableFactoryTest extends TestCase {
       }
    }
 
+   @Test
    public void testGetNumericPredicate() {
       CalculatableFactory cf = getCalculatableFactory();
       String dummyCalculatableName = "dummy_calculatable";

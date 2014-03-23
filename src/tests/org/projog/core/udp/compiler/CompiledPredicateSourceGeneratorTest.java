@@ -15,24 +15,24 @@
  */
 package org.projog.core.udp.compiler;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseTermsFromFile;
 import static org.projog.core.KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.api.Projog;
 import org.projog.core.KnowledgeBase;
@@ -61,7 +61,7 @@ import org.projog.core.udp.StaticUserDefinedPredicateFactory;
  * 
  * @see org.projog.TestUtils#COMPILATION_ENABLED_PROPERTIES
  */
-public class CompiledPredicateSourceGeneratorTest extends TestCase {
+public class CompiledPredicateSourceGeneratorTest {
    /**
     * Directory containing expected values.
     */
@@ -99,6 +99,7 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
     * <p>
     * (If assertContentsMatch didn't work then it would make the other tests invalid.)
     */
+   @Test
    public void testTestUtilsAssertContentMatches() {
       File files[] = getAllNonDebugTestFiles();
       assertTrue(files.length > 1);
@@ -125,6 +126,7 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
     * <p>
     * Check syntax in test script can be parsed correctly and compiles to bytecode without any exceptions.
     */
+   @Test
    public void testScriptCompiles() {
       Projog p = new Projog(TestUtils.COMPILATION_ENABLED_PROPERTIES);
       p.consultFile(PROLOG_SOURCE);
@@ -133,6 +135,7 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
    /**
     * Test the Java source files generated as a result of consulting {@link #PROLOG_SOURCE} match the expected values.
     */
+   @Test
    public void testScriptGeneration() {
       File expectedSourceContent[] = getAllNonDebugTestFiles();
       Map<String, List<Term>> testFunctions = getTestFunctionNames();
@@ -266,19 +269,6 @@ public class CompiledPredicateSourceGeneratorTest extends TestCase {
          }
       } catch (Exception e) {
          throw new RuntimeException("Comparing " + expected.getAbsolutePath() + " to " + actual.getAbsolutePath() + " caused " + e, e);
-      }
-   }
-
-   private static void replaceExpectedWithActual(File expected, File actual) {
-      try (FileWriter fw = new FileWriter(expected); FileReader fr = new FileReader(actual); BufferedReader br = new BufferedReader(fr); PrintWriter pw = new PrintWriter(fw)) {
-         String next;
-         while ((next = br.readLine()) != null) {
-            String fileName = actual.getName();
-            String className = fileName.substring(0, fileName.indexOf('.'));
-            next = next.replace(className, "%CLASS_NAME%");
-            pw.println(next);
-         }
-      } catch (Exception e2) {
       }
    }
 

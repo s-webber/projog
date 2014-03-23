@@ -15,6 +15,12 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
@@ -26,44 +32,50 @@ import static org.projog.TestUtils.variable;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 
 /**
  * @see TermTest
  */
-public class ListTest extends TestCase {
+public class ListTest {
    private static final Term head = new Atom("a");
    private static final Term tail = new Atom("b");
    private static final List testList = new List(head, tail, true);
 
+   @Test
    public void testGetName() {
       assertEquals(".", testList.getName());
    }
 
+   @Test
    public void testToString() {
       assertEquals(".(a, b)", testList.toString());
    }
 
+   @Test
    public void testGetTerm() {
       List l = testList.getTerm();
       assertSame(testList, l);
    }
 
+   @Test
    public void testGetType() {
       assertSame(TermType.LIST, testList.getType());
    }
 
+   @Test
    public void testGetNumberOfArguments() {
       assertEquals(2, testList.getNumberOfArguments());
    }
 
+   @Test
    public void testGetArgument() {
       assertSame(head, testList.getArgument(0));
       assertSame(tail, testList.getArgument(1));
    }
 
+   @Test
    public void testGetArgs() {
       try {
          testList.getArgs();
@@ -73,10 +85,12 @@ public class ListTest extends TestCase {
       }
    }
 
+   @Test
    public void testCopyNoVariableElements() {
       assertSame(testList, testList.copy(null));
    }
 
+   @Test
    public void testCopyVariableElements() {
       Atom a = new Atom("a");
       Atom b = new Atom("b");
@@ -116,10 +130,12 @@ public class ListTest extends TestCase {
       assertEquals(".(p(a), b)", copy2.toString());
    }
 
+   @Test
    public void testGetValueNoVariableElements() {
       assertSame(testList, testList.getTerm());
    }
 
+   @Test
    public void testListWithVariableArguments() {
       Atom a = new Atom("a");
       Atom b = new Atom("b");
@@ -132,6 +148,7 @@ public class ListTest extends TestCase {
       assertStrictEqualityUnifyAndBacktrack(l2, l1);
    }
 
+   @Test
    public void testUnifyWhenBothListsHaveVariableArguments_1() {
       // [x, Y]
       List l1 = new List(new Atom("x"), new Variable("Y"), false);
@@ -142,6 +159,7 @@ public class ListTest extends TestCase {
       assertEquals(l1.toString(), l2.toString());
    }
 
+   @Test
    public void testUnifyWhenBothListsHaveVariableArguments_2() {
       // [x, z]
       List l1 = new List(new Atom("x"), new Atom("z"), false);
@@ -156,6 +174,7 @@ public class ListTest extends TestCase {
       assertEquals(".(X, y)", l2.toString());
    }
 
+   @Test
    public void testUnifyWhenBothListsHaveVariableArguments_3() {
       // [X, z]
       List l1 = new List(new Variable("X"), new Atom("z"), false);
@@ -170,6 +189,7 @@ public class ListTest extends TestCase {
       assertEquals(".(X, z)", l1.toString());
    }
 
+   @Test
    public void testLongList() {
       StringBuilder bigListSyntaxBuilder1 = new StringBuilder("[");
       StringBuilder bigListSyntaxBuilder2 = new StringBuilder("[");
@@ -202,6 +222,7 @@ public class ListTest extends TestCase {
       assertMatch(t1, t3, false);
    }
 
+   @Test
    public void testIsImmutable() {
       Variable v = variable("X");
       Atom a = atom("test");

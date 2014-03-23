@@ -15,18 +15,23 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import junit.framework.TestCase;
 
-public class ListFactoryTest extends TestCase {
+import org.junit.Test;
+
+public class ListFactoryTest {
+   @Test
    public void testCreationWithoutTail() {
       testCreation(null);
    }
 
+   @Test
    public void testCreationWithTail() {
       testCreation(new Atom("tail"));
    }

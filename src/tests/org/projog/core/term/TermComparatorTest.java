@@ -15,6 +15,8 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
@@ -22,9 +24,10 @@ import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
-import junit.framework.TestCase;
 
-public class TermComparatorTest extends TestCase {
+import org.junit.Test;
+
+public class TermComparatorTest {
    /**
     * selection of terms ordered in lowest precedence first order
     * <p>
@@ -51,6 +54,7 @@ public class TermComparatorTest extends TestCase {
 
    structure("a", atom("a"), atom("b")), structure("a", atom("a"), atom("z")), structure("a", atom("a"), structure("z"))};
 
+   @Test
    public void testCompareTerms() {
       for (int i = 0; i < TERMS_ORDERED_IN_LOWEST_PRECEDENCE.length; i++) {
          Term t1 = TERMS_ORDERED_IN_LOWEST_PRECEDENCE[i];
@@ -70,6 +74,7 @@ public class TermComparatorTest extends TestCase {
       }
    }
 
+   @Test
    public void testVariablesAssignedToEachOther() {
       Atom a = atom("a");
       Variable x = new Variable("X");
@@ -101,10 +106,12 @@ public class TermComparatorTest extends TestCase {
       testEqual(z, a);
    }
 
+   @Test
    public void testAnonymousVariableComparedToSelf() {
       testEqual(AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE);
    }
 
+   @Test
    public void testAnonymousVariableComparedToRest() {
       for (Term t : TERMS_ORDERED_IN_LOWEST_PRECEDENCE) {
          testIsGreater(t, AnonymousVariable.ANONYMOUS_VARIABLE);

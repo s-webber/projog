@@ -15,9 +15,14 @@
  */
 package org.projog.core.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseTerm;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DoubleNumber;
@@ -30,7 +35,8 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
-public class TermParserTest extends TestCase {
+public class TermParserTest {
+   @Test
    public void testAtoms() {
       testNonVariableTerm(new Atom("x"), "x");
       testNonVariableTerm(new Atom("xyz"), "xyz");
@@ -45,6 +51,7 @@ public class TermParserTest extends TestCase {
       testNonVariableTerm(new Atom("A'b''c"), "'A''b''''c'");
    }
 
+   @Test
    public void testIntegerNumbers() {
       // Note: parser doesn't handle negative numbers
       for (int i = 0; i < 10; i++) {
@@ -53,6 +60,7 @@ public class TermParserTest extends TestCase {
       testNonVariableTerm(new IntegerNumber(Integer.MAX_VALUE), Integer.toString(Integer.MAX_VALUE));
    }
 
+   @Test
    public void testDoubleNumbers() {
       // Note: parser doesn't handle negative numbers
       for (int i = 0; i < 10; i++) {
@@ -67,12 +75,14 @@ public class TermParserTest extends TestCase {
       testNonVariableTerm(new DoubleNumber(340.28235), "3.4028235E2");
    }
 
+   @Test
    public void testInvalidDoubleNumbers() {
       // must have extra digits after the 'e' or 'E'
       parseInvalid("3.403e");
       parseInvalid("3.403E");
    }
 
+   @Test
    public void testPredicates() {
       testPredicate("p(a,b,c)");
       testPredicate("p( a, b, c )");
@@ -87,6 +97,7 @@ public class TermParserTest extends TestCase {
       assertTrue("actual " + t.getClass(), t instanceof Structure);
    }
 
+   @Test
    public void testInvalidPredicateSyntax() {
       parseInvalid("p(");
       parseInvalid("p(a ,b, c");
@@ -94,6 +105,7 @@ public class TermParserTest extends TestCase {
       parseInvalid("p(a, b c)");
    }
 
+   @Test
    public void testLists() {
       Atom a = new Atom("a");
       Atom b = new Atom("b");
@@ -122,6 +134,7 @@ public class TermParserTest extends TestCase {
       assertTrue(expected.strictEquality(actual));
    }
 
+   @Test
    public void testInvalidListSyntax() {
       parseInvalid("[a, b c]");
       parseInvalid("[a, b; c]");
@@ -131,12 +144,14 @@ public class TermParserTest extends TestCase {
       parseInvalid("[a, b, c | d , e]");
    }
 
+   @Test
    public void testEmptyList() {
       assertSame(EmptyList.EMPTY_LIST, parseTerm("[]"));
       assertSame(EmptyList.EMPTY_LIST, parseTerm(".()"));
       assertSame(EmptyList.EMPTY_LIST, parseTerm("'.'()"));
    }
 
+   @Test
    public void testListsUsingPredicateSyntax() {
       testPredicate(".(1)");
       testPredicate(".(1, 2, 3)");
@@ -151,6 +166,7 @@ public class TermParserTest extends TestCase {
       testList("'.'(a, '.'(b, '.'(c, [])))", new Term[] {a, b, c}, EmptyList.EMPTY_LIST);
    }
 
+   @Test
    public void testVariables() {
       testVariableTerm(new Variable("X"), "X");
       testVariableTerm(new Variable("XYZ"), "XYZ");
@@ -159,6 +175,7 @@ public class TermParserTest extends TestCase {
       testVariableTerm(new Variable("X_1"), "X_1");
    }
 
+   @Test
    public void testAnonymousVariable() {
       testVariableTerm(AnonymousVariable.ANONYMOUS_VARIABLE, "_");
       testVariableTerm(AnonymousVariable.ANONYMOUS_VARIABLE, "_123");

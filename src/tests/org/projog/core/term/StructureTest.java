@@ -15,6 +15,12 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
@@ -27,17 +33,18 @@ import static org.projog.TestUtils.variable;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * @see TermTest
  */
-public class StructureTest extends TestCase {
+public class StructureTest {
+   @Test
    public void testCreationWithArguments() {
       Term[] args = {atom(), structure(), integerNumber(), doubleNumber(), variable()};
       Structure p = structure("test", args);
       assertEquals("test", p.getName());
-      assertEquals(args, p.getArgs());
+      assertArrayEquals(args, p.getArgs());
       assertEquals(5, p.getNumberOfArguments());
       for (int i = 0; i < args.length; i++) {
          assertSame(args[i], p.getArgument(i));
@@ -46,17 +53,20 @@ public class StructureTest extends TestCase {
       assertEquals("test(test, test(), 1, 1.0, X)", p.toString());
    }
 
+   @Test
    public void testGetValueNoVariables() {
       Structure p = structure("p", atom(), structure("p", atom()), list(integerNumber(), doubleNumber()));
       Structure p2 = p.getTerm();
       assertSame(p, p2);
    }
 
+   @Test
    public void testGetValueUnassignedVariables() {
       Structure p = structure("p", variable(), structure("p", variable()), list(variable(), variable()));
       assertSame(p, p.getTerm());
    }
 
+   @Test
    public void testGetValueAssignedVariable() {
       Variable x = variable("X");
       Structure p1 = structure("p", atom(), structure("p", atom(), x, integerNumber()), list(integerNumber(), doubleNumber()));
@@ -67,11 +77,13 @@ public class StructureTest extends TestCase {
       assertStrictEquality(p1, p2, true);
    }
 
+   @Test
    public void testCreationEmptyList() {
       Term t = Structure.createStructure(".", new Term[0]);
       assertSame(EmptyList.EMPTY_LIST, t);
    }
 
+   @Test
    public void testCreationList() {
       Term t = Structure.createStructure(".", new Term[] {atom("a"), atom("b")});
       assertEquals(TermType.LIST, t.getType());
@@ -80,6 +92,7 @@ public class StructureTest extends TestCase {
       assertEquals(l.toString(), t.toString());
    }
 
+   @Test
    public void testUnifyWhenBothPredicatesHaveVariableArguments() {
       // test(x, Y)
       Structure p1 = structure("test", new Atom("x"), new Variable("Y"));
@@ -90,6 +103,7 @@ public class StructureTest extends TestCase {
       assertEquals(p1.toString(), p2.toString());
    }
 
+   @Test
    public void testUnifyWhenPredicateHasSameVariableTwiceAsArgument() {
       // test(x, y)
       Structure p1 = structure("test", new Atom("x"), new Atom("y"));
@@ -114,6 +128,7 @@ public class StructureTest extends TestCase {
       assertEquals("test(X, X)", p2.toString());
    }
 
+   @Test
    public void testUnifyVariableThatIsPredicateArgument() {
       // test(X, X)
       Variable v = new Variable("X");
@@ -123,6 +138,7 @@ public class StructureTest extends TestCase {
       assertEquals("test(x, x)", p.toString());
    }
 
+   @Test
    public void testUnifyDifferentNamesSameArguments() {
       Term[] args = {atom(), integerNumber(), doubleNumber()};
       Structure p1 = structure("test1", args);
@@ -132,6 +148,7 @@ public class StructureTest extends TestCase {
       assertStrictEqualityAndUnify(p1, p3, false);
    }
 
+   @Test
    public void testSameNamesDifferentArguments() {
       Structure[] predicates = {
                structure("test1", new Atom("a"), new Atom("b"), new Atom("c")),
@@ -151,6 +168,7 @@ public class StructureTest extends TestCase {
       }
    }
 
+   @Test
    public void testUnifyWrongType() {
       Structure p = structure("1", TermUtils.EMPTY_ARRAY);
       assertStrictEqualityAndUnify(p, new Atom("1"), false);
@@ -158,18 +176,21 @@ public class StructureTest extends TestCase {
       assertStrictEqualityAndUnify(p, new DoubleNumber(1), false);
    }
 
+   @Test
    public void testCopyNoArguments() {
       Structure p = structure("test", TermUtils.EMPTY_ARRAY);
       Structure copy = p.copy(null);
       assertTrue(p == copy);
    }
 
+   @Test
    public void testCopyWithoutVariablesOrNestedArguments() {
       Structure p = structure("test", atom(), integerNumber(), doubleNumber());
       Structure copy = p.copy(null);
       assertSame(p, copy);
    }
 
+   @Test
    public void testCopyWithVariables() {
       Structure p = structure("test", atom(), integerNumber(), doubleNumber(), variable());
       Structure copy = p.copy(new HashMap<Variable, Variable>());
@@ -184,6 +205,7 @@ public class StructureTest extends TestCase {
       assertTrue(p.getArgs()[3] != copy.getArgs()[3]);
    }
 
+   @Test
    public void testCopyWithAssignedVariable() {
       Variable X = new Variable("X");
       Structure arg = structure("p", X);
@@ -216,6 +238,7 @@ public class StructureTest extends TestCase {
       assertEquals("p(p(a))", copy2.toString());
    }
 
+   @Test
    public void testIsImmutable() {
       Variable v = variable("X");
       Atom a = atom("test");

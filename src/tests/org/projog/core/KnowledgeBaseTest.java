@@ -15,14 +15,18 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.function.bool.True;
 import org.projog.core.function.compare.Equal;
@@ -33,40 +37,46 @@ import org.projog.core.term.Term;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
-public class KnowledgeBaseTest extends TestCase {
+public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
    /** Check that {@link ProjogSystemProperties} is used by default. */
+   @Test
    public void testDefaultProjogProperties() {
       KnowledgeBase kb = new KnowledgeBase();
       assertSame(ProjogSystemProperties.class, kb.getProjogProperties().getClass());
    }
 
    /** Check that {@link ProjogProperties} is configurable. */
+   @Test
    public void testConfiguredProjogProperties() {
       KnowledgeBase kb = new KnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
       assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, kb.getProjogProperties());
    }
 
    /** @see SpyPointsTest */
+   @Test
    public void testGetSpyPoints() {
       SpyPoints sp = kb.getSpyPoints();
       assertSame(sp, kb.getSpyPoints());
    }
 
    /** @see FileHandlesTest */
+   @Test
    public void testGetFileHandles() {
       FileHandles fh = kb.getFileHandles();
       assertSame(fh, kb.getFileHandles());
    }
 
    /** @see OperandsTest */
+   @Test
    public void testGetOperands() {
       Operands o = kb.getOperands();
       assertSame(o, kb.getOperands());
    }
 
    /** @see CalculatableFactoryTest */
+   @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));
       Numeric n = kb.getNumeric(p);
@@ -74,6 +84,7 @@ public class KnowledgeBaseTest extends TestCase {
       assertEquals(4, n.getInt());
    }
 
+   @Test
    public void testUserDefinedPredicatesUnmodifiable() {
       Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
       try {
@@ -84,6 +95,7 @@ public class KnowledgeBaseTest extends TestCase {
       }
    }
 
+   @Test
    public void testCannotOverwritePluginPredicate() {
       Term input = atom("true");
       PredicateKey key = PredicateKey.createForTerm(input);
@@ -101,6 +113,7 @@ public class KnowledgeBaseTest extends TestCase {
       }
    }
 
+   @Test
    public void testUserDefinedPredicates() {
       assertTrue(kb.getUserDefinedPredicates().isEmpty());
 
@@ -129,21 +142,25 @@ public class KnowledgeBaseTest extends TestCase {
       assertNotSame(udp2, udp3);
    }
 
+   @Test
    public void testGetPredicateAndGetPredicateFactory_1() {
       Term input = atom("true");
       assertGetPredicateFactory(input, True.class);
    }
 
+   @Test
    public void testGetPredicateAndGetPredicateFactory_2() {
       Term input = atom("does_not_exist");
       assertGetPredicateFactory(input, UnknownPredicate.class);
    }
 
+   @Test
    public void testGetPredicateAndGetPredicateFactory_3() {
       Term input = structure("=", atom(), atom());
       assertGetPredicateFactory(input, Equal.class);
    }
 
+   @Test
    public void testGetPredicateAndGetPredicateFactory_4() {
       Term input = structure("=", atom(), atom(), atom());
       assertGetPredicateFactory(input, UnknownPredicate.class);
@@ -158,6 +175,7 @@ public class KnowledgeBaseTest extends TestCase {
       assertSame(expected, ef2.getClass());
    }
 
+   @Test
    public void testTermToString() {
       String inputSyntax = "X = 1 + 1 , p(1, 7.3, [_,[]|c])";
       Term inputTerm = TestUtils.parseSentence(inputSyntax + ".");

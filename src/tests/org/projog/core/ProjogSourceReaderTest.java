@@ -15,6 +15,12 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.writeToTempFile;
 
@@ -22,14 +28,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.core.parser.ParserException;
 import org.projog.core.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
-public class ProjogSourceReaderTest extends TestCase {
+public class ProjogSourceReaderTest {
+   @Test
    public void testParseFileNotFound() {
       File f = new File("does_not_exist");
       try {
@@ -40,6 +46,7 @@ public class ProjogSourceReaderTest extends TestCase {
       }
    }
 
+   @Test
    public void testParserException() {
       String message = "While parsing arguments of test_dynamic expected ) or , but got: d";
       String lineWithSyntaxError = "test_dynamic(a,b,c d). % Line 3";
@@ -68,6 +75,7 @@ public class ProjogSourceReaderTest extends TestCase {
       assertEquals("^", lines[2].trim());
    }
 
+   @Test
    public void testDynamicKeywordForAlreadyDefinedFunction() {
       try {
          File f = writeToFile("test_dynamic(a,b).\n" + "test_dynamic(a,b,c).\n" + "test_dynamic(a,b,c,d).\n" + "?- dynamic(test_dynamic/3).");
@@ -78,6 +86,7 @@ public class ProjogSourceReaderTest extends TestCase {
       }
    }
 
+   @Test
    public void testDynamicKeyword() {
       KnowledgeBase kb = createKnowledgeBase();
       File f = writeToFile("?- dynamic(test_dynamic/3).\n"

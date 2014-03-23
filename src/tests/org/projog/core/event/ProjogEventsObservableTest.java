@@ -15,14 +15,18 @@
  */
 package org.projog.core.event;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ProjogEventsObservableTest extends TestCase {
+public class ProjogEventsObservableTest {
+   @Test
    public void testProjogEventsObservable() {
       ProjogEventsObservable testObject = new ProjogEventsObservable();
 

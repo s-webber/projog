@@ -15,39 +15,49 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 /**
  * @see TermTest
  */
-public class AtomTest extends TestCase {
+public class AtomTest {
+   @Test
    public void testGetName() {
       Atom a = new Atom("test");
       assertEquals("test", a.getName());
    }
 
+   @Test
    public void testToString() {
       Atom a = new Atom("test");
       assertEquals("test", a.toString());
    }
 
+   @Test
    public void testGetTerm() {
       Atom a = atom();
       Atom b = a.getTerm();
       assertSame(a, b);
    }
 
+   @Test
    public void testGetType() {
       Atom a = atom();
       assertSame(TermType.ATOM, a.getType());
    }
 
+   @Test
    public void testGetNumberOfArguments() {
       Atom a = atom();
       assertEquals(0, a.getNumberOfArguments());
    }
 
+   @Test
    public void testGetArgument() {
       try {
          Atom a = atom();
@@ -58,6 +68,7 @@ public class AtomTest extends TestCase {
       }
    }
 
+   @Test
    public void testGetArgs() {
       Atom a = atom();
       assertSame(TermUtils.EMPTY_ARRAY, a.getArgs());

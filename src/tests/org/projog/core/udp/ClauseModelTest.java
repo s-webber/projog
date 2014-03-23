@@ -15,24 +15,29 @@
  */
 package org.projog.core.udp;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.term.Term;
 
-public class ClauseModelTest extends TestCase {
+public class ClauseModelTest {
+   @Test
    public void testSingleTerm() {
       assertClauseModel("a.", "a", "true");
    }
 
+   @Test
    public void testSimpleImplication() {
       assertClauseModel("a :- true.", "a", "true");
    }
 
+   @Test
    public void testConjunctionImplication() {
       assertClauseModel("a :- b, c, d.", "a", ",(,(b, c), d)");
    }
 
+   @Test
    public void testDefinteClauseGrammer() {
       assertClauseModel("a --> b, c.", "a(A2, A0)", ",(b(A2, A1), c(A1, A0))");
    }

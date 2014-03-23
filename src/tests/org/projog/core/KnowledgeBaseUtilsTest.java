@@ -15,32 +15,39 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.structure;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.function.bool.True;
 import org.projog.core.term.Term;
 
-public class KnowledgeBaseUtilsTest extends TestCase {
+public class KnowledgeBaseUtilsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
+   @Test
    public void testConjunctionPredicateName() {
       assertEquals(",", KnowledgeBaseUtils.CONJUNCTION_PREDICATE_NAME);
    }
 
+   @Test
    public void testImplicationPredicateName() {
       assertEquals(":-", KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME);
    }
 
+   @Test
    public void testQuestionPredicateName() {
       assertEquals("?-", KnowledgeBaseUtils.QUESTION_PREDICATE_NAME);
    }
 
+   @Test
    public void testGetPredicateKeysByName() {
       String predicateName = "testGetPredicateKeysByName";
 
@@ -63,6 +70,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       }
    }
 
+   @Test
    public void testGetPredicate() {
       assertGetPredicate(atom("true"), True.class);
       assertGetPredicate(atom("does_not_exist"), UnknownPredicate.class);
@@ -73,6 +81,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertSame(expected, e.getClass());
    }
 
+   @Test
    public void testIsQuestionFunctionCall() {
       assertTrue(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", atom())));
       assertTrue(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", structure("=", atom(), atom()))));
@@ -83,6 +92,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure(":-", atom())));
    }
 
+   @Test
    public void testIsDynamicFunctionCall() {
       assertTrue(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", atom())));
       assertTrue(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", structure("=", atom(), atom()))));
@@ -93,6 +103,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure(":-", atom())));
    }
 
+   @Test
    public void testIsConjuction() {
       assertFalse(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("true.")));
       assertTrue(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("true, true.")));
@@ -100,6 +111,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertTrue(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("repeat(3), X<1, write(V), nl, true, !, fail.")));
    }
 
+   @Test
    public void testIsSingleAnswer() {
       // test single term representing a predicate that is not repeatable
       assertTrue(KnowledgeBaseUtils.isSingleAnswer(kb, atom("true")));
@@ -122,6 +134,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, disjunctionOfTerms));
    }
 
+   @Test
    public void testToArrayOfConjunctions() {
       Term t = TestUtils.parseSentence("a, b(1,2,3), c.");
       Term[] conjunctions = KnowledgeBaseUtils.toArrayOfConjunctions(t);
@@ -131,6 +144,7 @@ public class KnowledgeBaseUtilsTest extends TestCase {
       assertSame(t.getArgument(1), conjunctions[2]);
    }
 
+   @Test
    public void testToArrayOfConjunctionsNoneConjunctionArgument() {
       Term t = TestUtils.parseSentence("a(b(1,2,3), c).");
       Term[] conjunctions = KnowledgeBaseUtils.toArrayOfConjunctions(t);

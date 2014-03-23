@@ -15,6 +15,11 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.structure;
@@ -23,14 +28,14 @@ import static org.projog.TestUtils.variable;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.core.ProjogException;
 
 /**
  * @see TermTest
  */
-public class VariableTest extends TestCase {
+public class VariableTest {
+   @Test
    public void testUnassignedVariableMethods() {
       Variable v = new Variable("X");
 
@@ -72,6 +77,7 @@ public class VariableTest extends TestCase {
       v.backtrack();
    }
 
+   @Test
    public void testUnifyVariables_1() {
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
@@ -82,6 +88,7 @@ public class VariableTest extends TestCase {
       assertStrictEquality(x, y, false);
    }
 
+   @Test
    public void testUnifyVariables_2() {
       Atom a = atom();
       Variable x = new Variable("X");
@@ -94,6 +101,7 @@ public class VariableTest extends TestCase {
       assertSame(a, y.getTerm());
    }
 
+   @Test
    public void testUnifyVariables_3() {
       Atom a = atom();
       Variable x = new Variable("X");
@@ -103,6 +111,7 @@ public class VariableTest extends TestCase {
       assertSame(a, x.getTerm());
    }
 
+   @Test
    public void testVariablesUnifiedToTheSameTerm() {
       Atom a = atom();
       Variable x = new Variable("X");
@@ -117,6 +126,7 @@ public class VariableTest extends TestCase {
       assertSame(a, y.getTerm());
    }
 
+   @Test
    public void testCopy() {
       Variable v = variable();
       Map<Variable, Variable> sharedVariables = new HashMap<>();
@@ -135,6 +145,7 @@ public class VariableTest extends TestCase {
     * This behaviour is required for things like
     * {@link org.projog.core.udp.interpreter.InterpretedTailRecursivePredicate} to work.
     */
+   @Test
    public void testCopy_2() {
       Variable v = variable();
       Atom a = atom();
@@ -158,6 +169,7 @@ public class VariableTest extends TestCase {
       assertSame(a, c2.getArgument(0));
    }
 
+   @Test
    public void testIsImmutable() {
       Variable v = new Variable("X");
       assertFalse(v.isImmutable());
@@ -166,12 +178,14 @@ public class VariableTest extends TestCase {
       assertFalse(v.isImmutable());
    }
 
+   @Test
    public void testUnifyAnonymousVariable() {
       Variable v = variable();
       assertTrue(v.unify(AnonymousVariable.ANONYMOUS_VARIABLE));
       assertSame(v, v.getTerm());
    }
 
+   @Test
    public void testVariableChain() {
       final Variable v1 = variable();
       Variable v2 = v1;

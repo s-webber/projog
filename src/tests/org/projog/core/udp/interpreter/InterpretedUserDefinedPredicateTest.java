@@ -15,14 +15,16 @@
  */
 package org.projog.core.udp.interpreter;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.variable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateKey;
@@ -30,7 +32,7 @@ import org.projog.core.SpyPoints;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
-public class InterpretedUserDefinedPredicateTest extends TestCase {
+public class InterpretedUserDefinedPredicateTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
    private final PredicateKey key = PredicateKey.createForTerm(atom("test"));
    private final SpyPoints.SpyPoint spyPoint = kb.getSpyPoints().getSpyPoint(key);
@@ -39,22 +41,26 @@ public class InterpretedUserDefinedPredicateTest extends TestCase {
    private final DummyClauseAction singleResultC = new DummyClauseAction(atom("c"));
    private final DummyClauseAction multiResultXYZ = new DummyClauseAction(atom("x"), atom("y"), atom("z"));
 
+   @Test
    public void testEmpty() {
       InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate();
       assertTrue(p.isRetryable());
       assertFalse(p.evaluate());
    }
 
+   @Test
    public void testSingleClauseActionMatchingImmutableInputArg() {
       assertEvaluatesOnce(atom("a"), singleResultA);
       assertDoesNotEvaluate(atom("b"), singleResultA);
    }
 
+   @Test
    public void testImmutableInputArgMatchingMoreThanOnce() {
       ClauseAction[] rows = {singleResultA, singleResultA, singleResultA};
       assertEvaluates(atom("a"), rows.length, rows);
    }
 
+   @Test
    public void testManyClauseActionsMatchingImmutableInputArg() {
       ClauseAction[] rows = {singleResultA, singleResultB, singleResultC};
       assertEvaluatesOnce(atom("a"), rows);
@@ -63,6 +69,7 @@ public class InterpretedUserDefinedPredicateTest extends TestCase {
       assertDoesNotEvaluate(atom("d"), rows);
    }
 
+   @Test
    public void testSingleRetryableClauseActionsMatchingImmutableInputArg() {
       assertEvaluatesOnce(atom("x"), multiResultXYZ);
       assertEvaluatesOnce(atom("y"), multiResultXYZ);
@@ -70,6 +77,7 @@ public class InterpretedUserDefinedPredicateTest extends TestCase {
       assertDoesNotEvaluate(atom("d"), multiResultXYZ);
    }
 
+   @Test
    public void testMixtureOfClauseActionsMatchingImmutableInputArg() {
       ClauseAction[] rows = {singleResultA, singleResultB, multiResultXYZ, singleResultC};
       assertEvaluatesOnce(atom("a"), rows);
@@ -100,18 +108,22 @@ public class InterpretedUserDefinedPredicateTest extends TestCase {
       assertFalse(p.evaluate(queryArgs));
    }
 
+   @Test
    public void testSingleClauseActionMatchingVariable() {
       assertEvaluateWithVariableInputArgument(singleResultA);
    }
 
+   @Test
    public void testManyClauseActionsMatchingVariable() {
       assertEvaluateWithVariableInputArgument(singleResultA, singleResultB, singleResultC);
    }
 
+   @Test
    public void testSingleRetryableClauseActionsMatchingVariable() {
       assertEvaluateWithVariableInputArgument(multiResultXYZ);
    }
 
+   @Test
    public void testMixtureOfClauseActionsMatchingVariable() {
       assertEvaluateWithVariableInputArgument(singleResultA, singleResultB, multiResultXYZ, singleResultC);
    }

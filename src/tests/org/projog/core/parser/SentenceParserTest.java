@@ -15,15 +15,19 @@
  */
 package org.projog.core.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseSentence;
 import static org.projog.TestUtils.write;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.Operands;
 import org.projog.core.term.Term;
 
-public class SentenceParserTest extends TestCase {
+public class SentenceParserTest {
+   @Test
    public void testIncompleteSentences() {
       error(":-");
       error(":- .");
@@ -35,12 +39,14 @@ public class SentenceParserTest extends TestCase {
       error(":- X is [a, b, c | d]"); // no '.' character at end of sentence
    }
 
+   @Test
    public void testIncompletePredicateSyntax() {
       error(":- X is p("); // no )
       error(":- X is p(a, b"); // no )
       error(":- X is p(a b"); // no ,
    }
 
+   @Test
    public void testInvalidListSyntax() {
       error(":- X is ["); // no ]
       error(":- X is [a b"); // no , or |
@@ -50,6 +56,7 @@ public class SentenceParserTest extends TestCase {
       error(":- X is [a, b | c, d]"); // 2 args after |
    }
 
+   @Test
    public void testInvalidOperators() {
       error("a xyz b.");
       error("a $ b.");
@@ -57,6 +64,7 @@ public class SentenceParserTest extends TestCase {
       error("$ b.");
    }
 
+   @Test
    public void testInvalidOperatorOrder() {
       error("1 :- 2 :- 3.");
       error(":- X = 1 + 2 + 3 + 4 = 5.");
@@ -67,6 +75,7 @@ public class SentenceParserTest extends TestCase {
       error("?- ?- true.");
    }
 
+   @Test
    public void testEquationPrecedence() {
       checkEquation("1+2-3*4/5", "-(+(1, 2), /(*(3, 4), 5))");
       checkEquation("1+2-3/4*5", "-(+(1, 2), *(/(3, 4), 5))");
@@ -94,6 +103,7 @@ public class SentenceParserTest extends TestCase {
       checkEquation("1+2*3*4*5+6*7*8*9+0", "+(+(+(1, *(*(*(2, 3), 4), 5)), *(*(*(6, 7), 8), 9)), 0)");
    }
 
+   @Test
    public void testMultiTerm() {
       String[] sentences = {"p(A, B, C) :- A = 1 , B = 2 , C = 3", "p(X, Y, Z) :- X = 1 , Y = 2 , Z = 3", "p(Q, W, E) :- Q = 1 ; W = 2 ; E = 3"};
       String source = sentences[0] + ".\n" + sentences[1] + ". " + sentences[2] + ".";
@@ -105,6 +115,7 @@ public class SentenceParserTest extends TestCase {
       }
    }
 
+   @Test
    public void testBrackets() {
       Term t1 = parseSentence("?- fail, fail ; true.");
       assertEquals("?- fail , fail ; true", write(t1));
@@ -124,6 +135,7 @@ public class SentenceParserTest extends TestCase {
       parseSentence("?- ( p :- A = 1 , B = 2 , C = 3).");
    }
 
+   @Test
    public void testExtraTextAfterFullStop() {
       SentenceParser sp = getSentenceParser("?- consult(\'bench.pl\'). jkhkj");
       Term t = sp.parseSentence();
@@ -136,6 +148,7 @@ public class SentenceParserTest extends TestCase {
       }
    }
 
+   @Test
    public void testMixtureOfPrefixInfixAndPostfixOperands() {
       Term t = parseSentence("a --> { 1 + -2 }.");
       assertEquals("-->(a, {(}(+(1, -2))))", t.toString());
@@ -148,6 +161,7 @@ public class SentenceParserTest extends TestCase {
     * A "x" means that the argument can contain operators of <i>only</i> a lower level of priority than the operator
     * represented by "f".
     */
+   @Test
    public void testParseOperandXF() {
       Operands o = new Operands();
       o.addOperand("~", "xf", 900);
@@ -169,6 +183,7 @@ public class SentenceParserTest extends TestCase {
     * A "y" means that the argument can contain operators of <i>the same</i> or lower level of priority than the
     * operator represented by "f".
     */
+   @Test
    public void testParseOperandYF() {
       Operands o = new Operands();
       o.addOperand(":", "yf", 900);
@@ -177,6 +192,7 @@ public class SentenceParserTest extends TestCase {
       assertEquals(":(:(a))", t.toString());
    }
 
+   @Test
    public void testBuiltInPredicateNamesAsAtomArguments() {
       check("[=]", ".(=, [])");
       check("[=, = | =]", ".(=, .(=, =))");

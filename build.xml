@@ -19,7 +19,10 @@
 	<property name="core-jar" value="build/lib/projog-core.jar"/>
 	<property name="lib" value="lib"/>
 	<property name="junit-jar" value="${lib}/junit-4.11.jar"/>
-	<property name="junit-url" value="http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar"/>
+	<property name="hamcrest-jar" value="${lib}/hamcrest-core-1.3.jar"/>
+	<property name="maven-url" value="http://search.maven.org/remotecontent?filepath="/>
+	<property name="junit-url" value="${maven-url}junit/junit/4.11/junit-4.11.jar"/>
+	<property name="hamcrest-url" value="${maven-url}org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
 	<!--
 	dynamicContentDir is the output directory for classes generated at runtime
 	-->
@@ -43,6 +46,8 @@
 
 	<target name="get-junit" depends="check-junit" unless="junit.exists">
 		<mkdir dir="${lib}"/>
+		<!-- JUnit has a dependency on Hamcrest -->
+		<get src="${hamcrest-url}" dest="${hamcrest-jar}"/>
 		<get src="${junit-url}" dest="${junit-jar}"/>
 	</target>
 
@@ -103,6 +108,7 @@
 		<junit haltonfailure="on" fork="yes" dir=".">
 			<formatter type="plain" usefile="false"/>
 			<classpath location="${junit-jar}"/>
+			<classpath location="${hamcrest-jar}"/>
 			<classpath location="${core-jar}"/>
 			<classpath location="build/classes/tests"/>
 			<!--

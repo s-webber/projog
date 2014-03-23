@@ -15,14 +15,17 @@
  */
 package org.projog.core.function;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.term.Term;
 
-public class AbstractRetryablePredicateTest extends TestCase {
+public class AbstractRetryablePredicateTest {
+   @Test
    public void testSimpleImplementation() {
       AbstractRetryablePredicate pf = new AbstractRetryablePredicate() {
          @Override

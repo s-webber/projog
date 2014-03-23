@@ -15,18 +15,23 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
 
-public class PredicateKeyTest extends TestCase {
+public class PredicateKeyTest {
+   @Test
    public void testCanCreate() {
       String name = "abc";
       testCanCreate(atom(name), name, -1);
@@ -53,6 +58,7 @@ public class PredicateKeyTest extends TestCase {
       assertEquals(name + "/" + numArgs, k.toString());
    }
 
+   @Test
    public void testNotEquals() {
       // different named atoms
       testNotEquals(atom("abc"), atom("abC"));
@@ -73,6 +79,7 @@ public class PredicateKeyTest extends TestCase {
       assertFalse(k1.equals(k2));
    }
 
+   @Test
    public void testEquals() {
       // structures with same name and number of arguments
       Term t1 = structure("abc", atom("a"), atom("b"), atom("c"));
@@ -90,12 +97,14 @@ public class PredicateKeyTest extends TestCase {
       assertEquals(k1.hashCode(), k2.hashCode());
    }
 
+   @Test
    public void testNotEqualsNonPredicateKey() {
       PredicateKey k1 = PredicateKey.createForTerm(structure());
       String s = "Not an instanceof PredicateKey";
       assertFalse(k1.equals(s));
    }
 
+   @Test
    public void testCannotCreateForTerm() {
       testCannotCreateForTerm(integerNumber());
       testCannotCreateForTerm(doubleNumber());
@@ -113,6 +122,7 @@ public class PredicateKeyTest extends TestCase {
       }
    }
 
+   @Test
    public void testCannotCreateFromNameAndArity() {
       testCannotCreateFromNameAndArity(integerNumber());
       testCannotCreateFromNameAndArity(structure("\\", atom(), atom()));
@@ -128,6 +138,7 @@ public class PredicateKeyTest extends TestCase {
       }
    }
 
+   @Test
    public void testCompareTo() {
       PredicateKey k = createKey("bcde", 2);
 

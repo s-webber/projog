@@ -15,17 +15,23 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-public class PluginPredicateFactoryFactoryTest extends TestCase {
+public class PluginPredicateFactoryFactoryTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
+   @Test
    public void testAddPredicateFactory() {
       PluginPredicateFactoryFactory pf = getPluginPredicateFactoryFactory();
 
@@ -61,6 +67,7 @@ public class PluginPredicateFactoryFactoryTest extends TestCase {
       }
    }
 
+   @Test
    public void testEvaluate() {
       PluginPredicateFactoryFactory pf = getPluginPredicateFactoryFactory();
       String dummyPredicateName = "testEvaluate";

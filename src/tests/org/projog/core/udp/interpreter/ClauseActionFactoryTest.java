@@ -15,11 +15,15 @@
  */
 package org.projog.core.udp.interpreter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.parseSentence;
 import static org.projog.TestUtils.variable;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.CutException;
 import org.projog.core.KnowledgeBase;
@@ -30,10 +34,11 @@ import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
 
-public class ClauseActionFactoryTest extends TestCase {
+public class ClauseActionFactoryTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
    /** @see AlwaysMatchedClauseAction */
+   @Test
    public void testAlwaysMatchedClauseAction() {
       testAlwaysMatchedClauseAction("test.");
       testAlwaysMatchedClauseAction("test().");
@@ -50,6 +55,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see ImmutableArgumentsClauseAction */
+   @Test
    public void testImmutableArgumentsClauseAction() {
       ClauseAction ca = getClauseAction("test(a, 1, 1.2, p(a, b, c), _).");
       assertEquals(ImmutableArgumentsClauseAction.class, ca.getClass());
@@ -59,6 +65,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see MutableArgumentsClauseAction */
+   @Test
    public void testMutableArgumentsClauseAction() {
       ClauseAction ca = getClauseAction("test(a, X).");
       assertEquals(MutableArgumentsClauseAction.class, ca.getClass());
@@ -81,6 +88,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see MultiFunctionSingleResultClauseAction */
+   @Test
    public void testMultiFunctionSingleResultClauseAction1() {
       ClauseAction ca = getClauseAction("test(X, Y) :- true, N is X+1, N<5, N=Y.");
       assertEquals(MultiFunctionSingleResultClauseAction.class, ca.getClass());
@@ -95,6 +103,7 @@ public class ClauseActionFactoryTest extends TestCase {
       assertFalse(ca.getFree().evaluate(new Term[] {integerNumber(4), y}));
    }
 
+   @Test
    public void testMultiFunctionSingleResultClauseAction2() {
       ClauseAction ca = getClauseAction("test(X, Y) :- Y is X mod 2, Y=1.");
       assertEquals(MultiFunctionSingleResultClauseAction.class, ca.getClass());
@@ -103,6 +112,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see CutClauseAction */
+   @Test
    public void testCutClauseAction() {
       ClauseAction ca = getClauseAction("test(a,b,Z) :- !.");
       assertEquals(CutClauseAction.class, ca.getClass());
@@ -137,6 +147,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see SingleFunctionSingleResultClauseAction */
+   @Test
    public void testSingleFunctionSingleResultClauseAction() {
       ClauseAction ca = getClauseAction("test(Y) :- Y is 3+2.");
       assertEquals(SingleFunctionSingleResultClauseAction.class, ca.getClass());
@@ -146,6 +157,7 @@ public class ClauseActionFactoryTest extends TestCase {
    }
 
    /** @see SingleFunctionMultiResultClauseAction */
+   @Test
    public void testSingleFunctionMultiResultClauseAction() {
       int iterations = 3;
       ClauseAction ca = getClauseAction("test() :- repeat(" + iterations + ").");

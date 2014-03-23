@@ -15,6 +15,11 @@
  */
 package org.projog.api;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.LINE_SEPARATOR;
@@ -27,8 +32,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
@@ -42,7 +46,8 @@ import org.projog.core.term.Atom;
  * creating a {@link QueryResult}. The {@link QueryResult} uses a new {@link Projog} instance that has been populated
  * with the contents of {@link #createTestScript()}
  */
-public class ProjogTest extends TestCase {
+public class ProjogTest {
+   @Test
    public void testSimpleQuery() {
       QueryResult r = createQueryResult();
       assertTrue(r.next());
@@ -63,6 +68,7 @@ public class ProjogTest extends TestCase {
       assertFalse(r.next());
    }
 
+   @Test
    public void testQueryMultiResultsAfterSetTerm() {
       QueryResult r = createQueryResult();
       Atom a = atom("a");
@@ -80,6 +86,7 @@ public class ProjogTest extends TestCase {
       assertFalse(r.next());
    }
 
+   @Test
    public void testQuerySingleResultsAfterSetTerm() {
       QueryResult r = createQueryResult();
       Atom z = atom("z");
@@ -91,6 +98,7 @@ public class ProjogTest extends TestCase {
       assertFalse(r.next());
    }
 
+   @Test
    public void testQueryNoResultsAfterSetTerm() {
       QueryResult r = createQueryResult();
       Atom y = atom("y");
@@ -99,6 +107,7 @@ public class ProjogTest extends TestCase {
       assertFalse(r.next());
    }
 
+   @Test
    public void testSetTermForUnknownVariable() {
       QueryResult r = createQueryResult();
       Atom x = atom("x");
@@ -110,6 +119,7 @@ public class ProjogTest extends TestCase {
       }
    }
 
+   @Test
    public void testSetTermAfterNext() {
       QueryResult r = createQueryResult();
       Atom x = atom("x");
@@ -122,6 +132,7 @@ public class ProjogTest extends TestCase {
       }
    }
 
+   @Test
    public void testGetTermForUnknownVariable() {
       QueryResult r = createQueryResult();
       r.getTerm("X");
@@ -134,6 +145,7 @@ public class ProjogTest extends TestCase {
       }
    }
 
+   @Test
    public void testInvalidQuery() {
       try {
          Projog p = createProjog();
@@ -144,6 +156,7 @@ public class ProjogTest extends TestCase {
       }
    }
 
+   @Test
    public void testMoreThanOneSentenceInQuery() {
       try {
          Projog p = createProjog();
@@ -161,6 +174,7 @@ public class ProjogTest extends TestCase {
     * This method is a little different than the other tests in the class in that it does not use
     * {@link #createQueryResult()}.
     */
+   @Test
    public void testProjogExceptionWhileEvaluatingQueries() {
       Projog p = createProjog();
       StringReader sr = new StringReader("a(A) :- b(A). b(Z) :- c(Z, 5). c(X,Y) :- Z is X + Y, Z < 9.");
@@ -183,6 +197,7 @@ public class ProjogTest extends TestCase {
     * specified by the {@link ProjogProperties#getRuntimeCompilationOutputDirectory} method implemented by
     * {@link TestUtils#COMPILATION_ENABLED_PROPERTIES} on the classpath for this test to work.
     */
+   @Test
    public void testIOExceptionWhileEvaluatingQueries() {
       Projog p = new Projog(COMPILATION_ENABLED_PROPERTIES);
       StringBuilder inputSource = new StringBuilder();

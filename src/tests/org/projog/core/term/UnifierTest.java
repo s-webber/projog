@@ -15,15 +15,21 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import junit.framework.TestCase;
 
-public class UnifierTest extends TestCase {
+import org.junit.Test;
+
+public class UnifierTest {
    /** [a] unified with [a] */
+   @Test
    public void testExactMatchSingleImmutableArguments() {
       Atom inputArg = new Atom("a");
       Atom consequentArg = new Atom("a");
@@ -35,12 +41,14 @@ public class UnifierTest extends TestCase {
    }
 
    /** [a] unified with [b] */
+   @Test
    public void testNoMatchSingleImmutableArguments() {
       Atom a = new Atom("a");
       Atom b = new Atom("b");
       assertPreMatchFailed(new Term[] {a}, new Term[] {b});
    }
 
+   @Test
    public void testExactMatchManyImmutableArguments() {
       Term[] inputArgs = createListOfImmutableArguments();
       Term[] copyInputArgs = copy(inputArgs);
@@ -62,6 +70,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [X] unified with [a] */
+   @Test
    public void testSingleVariableInInput() {
       Atom a = atom("a");
       Variable v = variable("X");
@@ -74,6 +83,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [a] unified with [X] */
+   @Test
    public void testSingleVariableInConsequent() {
       Atom a = atom("a");
       Variable v = variable("X");
@@ -85,6 +95,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [X] unified with [Y] */
+   @Test
    public void testVariableInInputAndConsequent() {
       Variable v1 = variable("X");
       Variable v2 = variable("Y");
@@ -96,6 +107,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [X] unified with [Y] when X already unified to a */
+   @Test
    public void testSingleAssignedVariableInInput_1() {
       Variable x = variable("X");
       Variable y = variable("Y");
@@ -114,6 +126,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [X] unified with [a] when X already unified to a */
+   @Test
    public void testSingleAssignedVariableInInput_2() {
       Variable x = variable("X");
       Atom a1 = atom("a");
@@ -132,6 +145,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [X] unified with [b] when X already unified to a */
+   @Test
    public void testSingleAssignedVariableInInput_3() {
       Variable x = variable("X");
       Atom a = atom("a");
@@ -150,6 +164,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [_] unified with [a] */
+   @Test
    public void testAnonymousVariableInInput() {
       Term[] input = {AnonymousVariable.ANONYMOUS_VARIABLE};
       Atom a = atom();
@@ -160,6 +175,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [a] unified with [_] */
+   @Test
    public void testAnonymousVariableInOutput() {
       Atom a = atom();
       Term[] input = {a};
@@ -170,6 +186,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [_] unified with [_] */
+   @Test
    public void testAnonymousVariableInBothInputAndOutput() {
       Term[] input = {AnonymousVariable.ANONYMOUS_VARIABLE};
       Term[] consequent = {AnonymousVariable.ANONYMOUS_VARIABLE};
@@ -179,6 +196,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [a, X] unified with [Y, b] */
+   @Test
    public void testPrematch_1() {
       Atom a = atom("a");
       Variable x = variable("X");
@@ -199,6 +217,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [a, X, 1] unified with [Y, b, 2] */
+   @Test
    public void testPrematch_2() {
       Atom a = atom("a");
       Variable x = variable("X");
@@ -217,6 +236,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [p(X), a] unified with [p(Y), Y] */
+   @Test
    public void testPrematch_3() {
       Variable x = variable("X");
       Term inputArg1 = structure("p", x);
@@ -252,6 +272,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [p(Y), Y] unified with [p(X), a] */
+   @Test
    public void testPrematch_4() {
       Variable y = variable("Y");
       Term inputArg1 = structure("p", y);
@@ -282,6 +303,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [p(Y), Y] unified with [p(a), b] */
+   @Test
    public void testPrematch_5() {
       Variable y = variable("Y");
       Structure inputArg1 = structure("p", y);
@@ -300,6 +322,7 @@ public class UnifierTest extends TestCase {
    }
 
    /** [p(a), b] unified with [p(Y), Y] */
+   @Test
    public void testPrematch_6() {
       Variable y = variable("Y");
 

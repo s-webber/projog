@@ -15,6 +15,9 @@
  */
 package org.projog.core;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.parseTermsFromFile;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
@@ -29,13 +32,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-public class PredicateTest extends TestCase {
+public class PredicateTest {
    private static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
 
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
@@ -49,6 +51,7 @@ public class PredicateTest extends TestCase {
     */
    private final Map<String, String> classStructure = new HashMap<>();
 
+   @Test
    public void testBuiltInPredicates() throws Exception {
       Term[] terms = parseTermsFromFile(BOOTSTRAP_FILE);
       int builtInPredicateCtr = 0;

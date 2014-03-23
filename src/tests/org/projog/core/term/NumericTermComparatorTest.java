@@ -15,21 +15,24 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
-import junit.framework.TestCase;
 
+import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
-public class NumericTermComparatorTest extends TestCase {
+public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
+   @Test
    public void testCompareDecimalValues() {
       compare(doubleNumber(2.1), integerNumber(2));
       compare(doubleNumber(2.1), doubleNumber(2.1));
@@ -37,6 +40,7 @@ public class NumericTermComparatorTest extends TestCase {
       compare(doubleNumber(2.1), doubleNumber(-2.1));
    }
 
+   @Test
    public void testCompareIntegerValues() {
       int[] values = {0, 1, 2, 7, -1, -2, 7, Integer.MIN_VALUE, Integer.MAX_VALUE};
       for (int i1 = 0; i1 < values.length; i1++) {
@@ -46,6 +50,7 @@ public class NumericTermComparatorTest extends TestCase {
       }
    }
 
+   @Test
    public void testAtoms() {
       try {
          NUMERIC_TERM_COMPARATOR.compare(atom("a"), atom("b"));
@@ -55,6 +60,7 @@ public class NumericTermComparatorTest extends TestCase {
       }
    }
 
+   @Test
    public void testUnassignedVariables() {
       try {
          NUMERIC_TERM_COMPARATOR.compare(variable("X"), variable("Y"));
@@ -64,6 +70,7 @@ public class NumericTermComparatorTest extends TestCase {
       }
    }
 
+   @Test
    public void testAssignedVariables() {
       Term x = variable("X");
       Term y = variable("Y");
@@ -79,6 +86,7 @@ public class NumericTermComparatorTest extends TestCase {
     * @see NumericTermComparator#compare(Term, Term, KnowledgeBase)
     * @see #testStructuresRepresentingCalculatables
     */
+   @Test
    public void testOverloadedCompareMethod() {
       compare("1+1", "5-3", kb, 0);
       compare("1.5", "3/2.0", kb, 0);
@@ -93,6 +101,7 @@ public class NumericTermComparatorTest extends TestCase {
     * that represent arithmetic expressions but {@link NumericTermComparator#compare(Term, Term)} throws a
     * {@code ProjogException}
     */
+   @Test
    public void testStructuresRepresentingCalculatables() {
       Structure addition = structure("+", integerNumber(1), integerNumber(3));
       Structure subtraction = structure("-", integerNumber(5), integerNumber(2));

@@ -15,6 +15,9 @@
  */
 package org.projog.core.term;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
@@ -25,7 +28,7 @@ import static org.projog.TestUtils.variable;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Test implementations of {@link Term}
@@ -43,7 +46,7 @@ import junit.framework.TestCase;
  * @see StructureTest
  * @see VariableTest
  */
-public class TermTest extends TestCase {
+public class TermTest {
    private static final Term[] IMMUTABLE_TERMS = {atom("a"), atom("b"), atom("c"), atom("A"), atom("B"), atom("C"), atom("abc"), atom("ABC"), atom("AbC"), atom("0"), atom("1"), atom("-1"), atom("[]"),
 
    integerNumber(0), integerNumber(1), integerNumber(-1), integerNumber(Integer.MIN_VALUE), integerNumber(Integer.MAX_VALUE),
@@ -57,6 +60,7 @@ public class TermTest extends TestCase {
    EmptyList.EMPTY_LIST};
 
    /** check both unify and strictEquality methods against various immutable Terms */
+   @Test
    public void testUnifyAndStrictEquality() {
       for (Term t1 : IMMUTABLE_TERMS) {
          for (Term t2 : IMMUTABLE_TERMS) {
@@ -67,6 +71,7 @@ public class TermTest extends TestCase {
    }
 
    /** check calling copy() on an immutable Term returns the Term */
+   @Test
    public void testCopy() {
       for (Term t1 : IMMUTABLE_TERMS) {
          Map<Variable, Variable> sharedVariables = new HashMap<>();
@@ -77,6 +82,7 @@ public class TermTest extends TestCase {
    }
 
    /** check calling getValue() on an immutable Term returns the Term */
+   @Test
    public void testGetValue() {
       for (Term t1 : IMMUTABLE_TERMS) {
          Term t2 = t1.getTerm();
@@ -84,6 +90,7 @@ public class TermTest extends TestCase {
       }
    }
 
+   @Test
    public void testIsImmutable() {
       for (Term element : IMMUTABLE_TERMS) {
          assertTrue(element.isImmutable());
@@ -91,6 +98,7 @@ public class TermTest extends TestCase {
    }
 
    /** check calling backtrack() has no effect on an immutable Term */
+   @Test
    public void testBacktrack() {
       for (Term t : IMMUTABLE_TERMS) {
          // keep track of the Term's current properties
@@ -108,6 +116,7 @@ public class TermTest extends TestCase {
       }
    }
 
+   @Test
    public void testUnifyAndStrictEqualityWithVariable() {
       for (Term t : IMMUTABLE_TERMS) {
          Variable v = variable("X");
@@ -150,6 +159,7 @@ public class TermTest extends TestCase {
    }
 
    /** test {@link AnonymousVariable} unifies with everything and is strictly equal to nothing */
+   @Test
    public void testUnifyAndStrictEqualityWithAnonymousVariable() {
       for (Term t : IMMUTABLE_TERMS) {
          assertUnify(t, AnonymousVariable.ANONYMOUS_VARIABLE, true);

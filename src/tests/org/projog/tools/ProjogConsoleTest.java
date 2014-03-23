@@ -1,6 +1,7 @@
 package org.projog.tools;
 
 import static java.lang.System.lineSeparator;
+import static org.junit.Assert.assertEquals;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.writeToTempFile;
 
@@ -11,9 +12,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import junit.framework.TestCase;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class ProjogConsoleTest extends TestCase {
+public class ProjogConsoleTest {
    private static final String ERROR_MESSAGE = "Invalid. Enter ; to continue or q to quit. ";
    private static final String PROMPT = "?- ";
    private static final String EXPECTED_HEADER = concatenate("[31966667] INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "www.projog.org", "");
@@ -22,11 +24,13 @@ public class ProjogConsoleTest extends TestCase {
    private static final String YES = "yes (0 ms)";
    private static final String NO = "no (0 ms)";
 
-   @Override
-   public void setUp() {
+   @BeforeClass
+   public static void setUp() {
+      // this will ensure the required output directory exists when the tests are run
       COMPILATION_ENABLED_PROPERTIES.getRuntimeCompilationOutputDirectory();
    }
 
+   @Test
    public void testTrue() throws IOException {
       String input = createInput("true.");
       String expected = createExpectedOutput(PROMPT, YES);
@@ -34,6 +38,7 @@ public class ProjogConsoleTest extends TestCase {
       compare(expected, actual);
    }
 
+   @Test
    public void testFail() throws IOException {
       String input = createInput("fail.");
       String expected = createExpectedOutput(PROMPT, NO);
@@ -41,6 +46,7 @@ public class ProjogConsoleTest extends TestCase {
       compare(expected, actual);
    }
 
+   @Test
    public void testSingleVariable() throws IOException {
       String input = createInput("X = y.");
       String expected = createExpectedOutput(PROMPT, "X = y", "", YES);
@@ -48,6 +54,7 @@ public class ProjogConsoleTest extends TestCase {
       compare(expected, actual);
    }
 
+   @Test
    public void testMultipleVariables() throws IOException {
       String input = createInput("W=X, X=1+1, Y is W, Z is -W.");
       String expected = createExpectedOutput(PROMPT, "W = 1 + 1", "X = 1 + 1", "Y = 2", "Z = -2", "", YES);
@@ -55,6 +62,7 @@ public class ProjogConsoleTest extends TestCase {
       compare(expected, actual);
    }
 
+   @Test
    public void testInvalidSyntax() throws IOException {
       String input = createInput("X is 1 + 1");
       String expected = createExpectedOutput(PROMPT, "Error parsing query:", "Unexpected end after: is(X, +(1, 1))", "?-X is 1 + 1", "            ^");
@@ -63,6 +71,7 @@ public class ProjogConsoleTest extends TestCase {
    }
 
    /** Test inputting {@code ;} to continue evaluation and {@code q} to quit, plus validation of invalid input. */
+   @Test
    public void testRepeat() throws IOException {
       String input = createInput("repeat.", ";", ";", "z", "", "qwerty", "q");
       String expected = createExpectedOutput(PROMPT, YES, YES, YES + ERROR_MESSAGE + ERROR_MESSAGE + ERROR_MESSAGE);
@@ -71,6 +80,7 @@ public class ProjogConsoleTest extends TestCase {
    }
 
    /** Tests {@code trace} functionality using query against terms input using {@code consult}>. */
+   @Test
    public void testConsultAndTrace() throws IOException {
       File tempFile = createFileToConsult("test(a).", "test(b).", "test(c).");
       String path = tempFile.getPath();

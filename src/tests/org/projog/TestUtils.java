@@ -15,13 +15,13 @@
  */
 package org.projog;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import junit.framework.Assert;
 
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateKey;
@@ -201,7 +201,7 @@ public class TestUtils {
    }
 
    public static void assertStrictEquality(Term t1, Term t2, boolean expectedResult) {
-      Assert.assertTrue(t1.strictEquality(t2) == expectedResult);
-      Assert.assertTrue(t2.strictEquality(t1) == expectedResult);
+      assertTrue(t1.strictEquality(t2) == expectedResult);
+      assertTrue(t2.strictEquality(t1) == expectedResult);
    }
 }

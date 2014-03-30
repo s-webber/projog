@@ -47,6 +47,12 @@ import org.projog.core.term.Variable;
  % Z=UNINSTANTIATED VARIABLE
  % %ANSWER%
 
+ % %QUERY% findall(X,x(X,y,z),L)
+ % %ANSWER%
+ % L=[]
+ % X=UNINSTANTIATED VARIABLE
+ % %ANSWER%
+ 
  q(a(W)).
  q(C).
  q(1).

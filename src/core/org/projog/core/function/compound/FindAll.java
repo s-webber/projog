@@ -77,7 +77,7 @@ import org.projog.core.term.Variable;
  * <code>findall(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
  * <code>P</code>. Succeeds with <code>L</code> unified to an empty list if <code>P</code> has no solutions.
  */
-public class FindAll extends AbstractSingletonPredicate {
+public final class FindAll extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term... args) {
       return evaluate(args[0], args[1], args[2]);

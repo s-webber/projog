@@ -42,6 +42,7 @@
 ?- pj_add_predicate(';'/2, 'org.projog.core.function.compound.Disjunction').
 ?- pj_add_predicate('/'('\+', 1), 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(call/1, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.function.compound.FindAll').
 
 % construct

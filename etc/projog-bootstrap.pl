@@ -44,6 +44,7 @@
 ?- pj_add_predicate(call/1, 'org.projog.core.function.compound.Call').
 ?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.function.compound.FindAll').
+?- pj_add_predicate(setof/3, 'org.projog.core.function.compound.SetOf').
 
 % construct
 ?- pj_add_predicate(functor/3, 'org.projog.core.function.construct.Functor').

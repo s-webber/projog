@@ -75,7 +75,7 @@ import org.projog.core.term.Variable;
  * <code>findall(X,P,L)</code> - find all solutions that satisfy the goal.
  * <p>
  * <code>findall(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
- * <code>P</code>.
+ * <code>P</code>. Succeeds with <code>L</code> unified to an empty list if <code>P</code> has no solutions.
  */
 public class FindAll extends AbstractSingletonPredicate {
    @Override
@@ -107,16 +107,12 @@ public class FindAll extends AbstractSingletonPredicate {
       do {
          solutions.add(template.copy(new HashMap<Variable, Variable>()));
       } while (hasFoundAnotherSolution(predicate, goalArguments));
-      final Term output = toListTerm(solutions);
+      final Term output = ListFactory.create(solutions);
       output.backtrack();
       return output;
    }
 
    private boolean hasFoundAnotherSolution(final Predicate predicate, final Term[] goalArguments) {
       return predicate.isRetryable() && predicate.couldReEvaluationSucceed() && predicate.evaluate(goalArguments);
-   }
-
-   private Term toListTerm(final List<Term> solutions) {
-      return ListFactory.create(solutions.toArray(new Term[solutions.size()]));
    }
 }

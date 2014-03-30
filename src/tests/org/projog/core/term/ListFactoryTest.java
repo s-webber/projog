@@ -17,36 +17,23 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Test;
 
 public class ListFactoryTest {
    @Test
    public void testCreationWithoutTail() {
-      testCreation(null);
-   }
-
-   @Test
-   public void testCreationWithTail() {
-      testCreation(new Atom("tail"));
-   }
-
-   private void testCreation(Term tail) {
-      Term[] args = new Term[] {atom(), structure(), integerNumber(), doubleNumber(), variable()};
-
-      Term l;
-      if (tail == null) {
-         l = ListFactory.create(args);
-      } else {
-         l = ListFactory.create(args, tail);
-      }
-      testIsList(l);
-      assertEquals(args[0], l.getArgument(0));
+      final Term[] args = createArguments();
+      Term l = ListFactory.create(args);
 
       for (Term arg : args) {
          testIsList(l);
@@ -54,12 +41,37 @@ public class ListFactoryTest {
          l = l.getArgument(1);
       }
 
-      if (tail == null) {
-         assertSame(TermType.EMPTY_LIST, l.getType());
-         assertSame(EmptyList.EMPTY_LIST, l);
-      } else {
-         assertEquals(tail, l);
+      assertSame(TermType.EMPTY_LIST, l.getType());
+      assertSame(EmptyList.EMPTY_LIST, l);
+   }
+
+   @Test
+   public void testCreationWithTail() {
+      final Term[] args = createArguments();
+      final Term tail = new Atom("tail");
+      Term l = ListFactory.create(args, tail);
+
+      for (Term arg : args) {
+         testIsList(l);
+         assertEquals(arg, l.getArgument(0));
+         l = l.getArgument(1);
       }
+
+      assertSame(tail, l);
+   }
+
+   /** Check {@link ListFactory#create(Collection)} works the same as {@link ListFactory#create(Term[])} */
+   @Test
+   public void testCreationWithJavaCollection() {
+      final Term[] args = createArguments();
+      final Collection<Term> c = Arrays.asList(args);
+      final Term listFromArray = ListFactory.create(args);
+      final Term listFromCollection = ListFactory.create(c);
+      assertTrue(listFromCollection.strictEquality(listFromArray));
+   }
+
+   private Term[] createArguments() {
+      return new Term[] {atom(), structure(), integerNumber(), doubleNumber(), variable()};
    }
 
    private void testIsList(Term l) {

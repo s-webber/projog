@@ -15,6 +15,8 @@
  */
 package org.projog.core.term;
 
+import java.util.Collection;
+
 /**
  * Static factory methods for creating new instances of {@link List}.
  */
@@ -40,6 +42,16 @@ public final class ListFactory {
     */
    public static List createList(Term head, Term tail) {
       return createList(head, tail, head.isImmutable() && tail.isImmutable());
+   }
+
+   /**
+    * Returns a new {@link List} with the specified terms and a empty list as the final tail element.
+    * 
+    * @param terms contents of the list
+    * @return a new {@link List} with the specified terms and a empty list as the final tail element
+    */
+   public static Term create(final Collection<Term> terms) {
+      return create(terms.toArray(new Term[terms.size()]));
    }
 
    /**

@@ -16,7 +16,6 @@
 package org.projog.core.function.compound;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -83,7 +82,10 @@ import org.projog.core.term.Variable;
  * <code>bagof(X,P,L)</code> - find all solutions that satisfy the goal.
  * <p>
  * <code>bagof(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
- * <code>P</code>.
+ * <code>P</code>. If <code>P</code> contains uninstantiated variables, other than <code>X</code>, it is possible that
+ * <code>bagof</code> can be successfully evaluated multiple times - for each possible values of the uninstantiated
+ * variables. The elements in <code>L</code> will appear in the order they were found and may include duplicates. Fails
+ * if <code>P</code> has no solutions.
  */
 public class BagOf extends AbstractRetryablePredicate {
    private List<Variable> variablesNotInTemplate;
@@ -131,7 +133,7 @@ public class BagOf extends AbstractRetryablePredicate {
          template.backtrack();
          Entry<Key, List<Term>> e = itr.next();
          bag.backtrack();
-         bag.unify(toListTerm(e.getValue()));
+         bag.unify(ListFactory.create(e.getValue()));
          for (int i = 0; i < variablesNotInTemplate.size(); i++) {
             Variable v = variablesNotInTemplate.get(i);
             v.backtrack();
@@ -176,10 +178,6 @@ public class BagOf extends AbstractRetryablePredicate {
 
    private boolean hasFoundAnotherSolution(final Predicate predicate, final Term[] goalArguments) {
       return predicate.isRetryable() && predicate.couldReEvaluationSucceed() && predicate.evaluate(goalArguments);
-   }
-
-   private Term toListTerm(final Collection<Term> solutions) {
-      return ListFactory.create(solutions.toArray(new Term[solutions.size()]));
    }
 
    @Override

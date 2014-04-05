@@ -55,7 +55,7 @@
 	<target name="compile.core">
 		<!-- compile to classes -->
 		<mkdir dir="build/classes/core"/>
-		<javac srcdir="src/core" destdir="build/classes/core" debug="on">
+		<javac srcdir="src/core" destdir="build/classes/core" debug="on" includeantruntime="false">
 			<compilerarg value="-Xlint"/>
 		</javac>
 	</target>
@@ -82,7 +82,7 @@
 		<path id="classpath.compile.build-utils">
 			<pathelement location="${core-jar}"/>
 		</path>
-		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on">
+		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false">
 			<classpath refid="classpath.compile.build-utils"/>
 		</javac>
 	</target>
@@ -93,7 +93,7 @@
 			<pathelement location="${junit-jar}"/>
 			<pathelement location="${core-jar}"/>
 		</path>
-		<javac srcdir="src/tests" destdir="build/classes/tests" debug="on">
+		<javac srcdir="src/tests" destdir="build/classes/tests" debug="on" includeantruntime="false">
 			<classpath refid="classpath.compile.tests"/>
 		</javac>
 	</target>

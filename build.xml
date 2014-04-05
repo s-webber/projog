@@ -206,9 +206,9 @@
 		<mkdir dir="build/lib"/>
 		<javadoc destdir="build/docs/javadoc" packagenames="*" windowTitle="Projog Javadoc">
 			<doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
-			<header><![CDATA[Projog]]></header>
-			<footer><![CDATA[Projog]]></footer>
-			<bottom><![CDATA[<a href='http://www.projog.org'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language.]]></bottom>
+			<header><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>Projog</a>]]></header>
+			<footer><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>Projog</a>]]></footer>
+			<bottom><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language.]]></bottom>
 			<sourcepath>
 				<pathelement location="src/core"/>
 			</sourcepath>

@@ -81,15 +81,6 @@ public final class NumericTermComparator implements Comparator<Term> {
    public int compare(Term t1, Term t2) {
       Numeric n1 = TermUtils.castToNumeric(t1);
       Numeric n2 = TermUtils.castToNumeric(t2);
-
-      double d1 = n1.getDouble();
-      double d2 = n2.getDouble();
-      if (d1 == d2) {
-         return 0;
-      } else if (d1 > d2) {
-         return 1;
-      } else {
-         return -1;
-      }
+      return Double.compare(n1.getDouble(), n2.getDouble());
    }
 }

@@ -134,7 +134,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
    public int compareTo(PredicateKey o) {
       int c = name.compareTo(o.name);
       if (c == 0) {
-         return numArgs - o.numArgs;
+         return Integer.compare(numArgs, o.numArgs);
       } else {
          return c;
       }

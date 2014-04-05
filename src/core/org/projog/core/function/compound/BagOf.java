@@ -99,7 +99,7 @@ public final class BagOf extends AbstractCollectionOf {
       return new BagOf(getKnowledgeBase());
    }
 
-   /** "bagof" returns all elements (including duplicates) in the order they where found. */
+   /** "bagof" returns all elements (including duplicates) in the order they were found. */
    @Override
    protected void add(List<Term> l, Term t) {
       l.add(t);

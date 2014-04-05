@@ -123,7 +123,7 @@ public final class FileHandles {
             currentOutputHandle = handle;
             out = outputHandles.get(handleName);
          } else {
-            throw new ProjogException("can not find file handle with name:" + handleName);
+            throw new ProjogException("cannot find file handle with name:" + handleName);
          }
       }
    }

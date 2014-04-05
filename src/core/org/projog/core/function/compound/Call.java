@@ -59,7 +59,8 @@ import org.projog.core.term.Term;
  * <p>
  * The predicate <code>call</code> makes it possible to call goals that are determined at runtime rather than when a
  * program is written. <code>call(X)</code> succeeds if the goal represented by the term <code>X</code> succeeds.
- * <code>call(X)</code> fails if the goal represented by the term <code>X</code> fails.
+ * <code>call(X)</code> fails if the goal represented by the term <code>X</code> fails. An attempt is made to retry the
+ * goal during backtracking.
  * </p>
  */
 public final class Call extends AbstractRetryablePredicate {

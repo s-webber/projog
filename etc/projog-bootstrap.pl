@@ -23,6 +23,7 @@
 ?- pj_add_predicate(number/1, 'org.projog.core.function.classify.IsNumber').
 ?- pj_add_predicate(atomic/1, 'org.projog.core.function.classify.IsAtomic').
 ?- pj_add_predicate(integer/1, 'org.projog.core.function.classify.IsInteger').
+?- pj_add_predicate(float/1, 'org.projog.core.function.classify.IsFloat').
 
 % compare
 ?- pj_add_predicate('='/2, 'org.projog.core.function.compare.Equal').

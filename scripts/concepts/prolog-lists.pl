@@ -124,33 +124,35 @@ append([X|Xs],Ys,[X|Zs]) :- append(Xs,Ys,Zs).
 % %NO%
 
 % Reversing the order of terms in a list.
-reverse(Xs,Ys) :- reverse(Xs,[],Ys).
-reverse([X|Xs],Acc,Ys) :- reverse(Xs,[X|Acc],Ys).
-reverse([],Ys,Ys).
+% (Note: Projog provides a built-in reverse(X,Y) predicate.)
 
-% %TRUE% reverse([],[])
-% %TRUE_NO% reverse([a],[a])
-% %FALSE% reverse([a],[b])
-% %TRUE_NO% reverse([a,b],[b,a])
-% %FALSE% reverse([a,b],[a,b])
-% %FALSE% reverse([a,b],[a,a])
-% %FALSE% reverse([a,b],[b,b])
-% %FALSE% reverse([a,b],[a])
-% %FALSE% reverse([a,b],[b])
-% %FALSE% reverse([a,b],[c,b,a])
-% %TRUE_NO% reverse([a,b,c,d,e,f],[f,e,d,c,b,a])
-% %FALSE% reverse([a,b,c,d,e,f],[f,e,d,c,a,b])
-% %QUERY% reverse([a,b,c,X,e,Y],[f,Z,d,c,b,a])
+reverse_list(Xs,Ys) :- reverse_list(Xs,[],Ys).
+reverse_list([X|Xs],Acc,Ys) :- reverse_list(Xs,[X|Acc],Ys).
+reverse_list([],Ys,Ys).
+
+% %TRUE% reverse_list([],[])
+% %TRUE_NO% reverse_list([a],[a])
+% %FALSE% reverse_list([a],[b])
+% %TRUE_NO% reverse_list([a,b],[b,a])
+% %FALSE% reverse_list([a,b],[a,b])
+% %FALSE% reverse_list([a,b],[a,a])
+% %FALSE% reverse_list([a,b],[b,b])
+% %FALSE% reverse_list([a,b],[a])
+% %FALSE% reverse_list([a,b],[b])
+% %FALSE% reverse_list([a,b],[c,b,a])
+% %TRUE_NO% reverse_list([a,b,c,d,e,f],[f,e,d,c,b,a])
+% %FALSE% reverse_list([a,b,c,d,e,f],[f,e,d,c,a,b])
+% %QUERY% reverse_list([a,b,c,X,e,Y],[f,Z,d,c,b,a])
 % %ANSWER%
 % X=d
 % Y=f
 % Z=e
 % %ANSWER%
 % %NO%
-% %QUERY% reverse([a,b,c,d,e,f],X)
+% %QUERY% reverse_list([a,b,c,d,e,f],X)
 % %ANSWER% X=[f,e,d,c,b,a]
 % %NO%
-% %QUERY% reverse([a,b,c,[1,2,3]],X)
+% %QUERY% reverse_list([a,b,c,[1,2,3]],X)
 % %ANSWER% X=[[1,2,3],c,b,a]
 % %NO%
 

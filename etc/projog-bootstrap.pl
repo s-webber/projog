@@ -93,6 +93,7 @@
 
 % list
 ?- pj_add_predicate(length/2, 'org.projog.core.function.list.Length').
+?- pj_add_predicate(reverse/2, 'org.projog.core.function.list.Reverse').
 
 % numerical operations
 ?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').

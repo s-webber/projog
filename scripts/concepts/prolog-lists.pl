@@ -210,24 +210,25 @@ last(X,Xs) :- append(As,[X],Xs).
 % %NO%
 
 % Get a count of the number of terms contained in a list.
+% (Note: Projog provides a built-in length(X,Y) predicate.)
 
-length([],0).
-length([X|Xs],A) :- length(Xs,B), A is B+1.
+list_length([],0).
+list_length([X|Xs],A) :- list_length(Xs,B), A is B+1.
 
-% %QUERY% length([],X)
+% %QUERY% list_length([],X)
 % %ANSWER% X=0
 % %NO%
-% %QUERY% length([a],X)
+% %QUERY% list_length([a],X)
 % %ANSWER% X=1
 % %NO%
-% %QUERY% length([a,b],X)
+% %QUERY% list_length([a,b],X)
 % %ANSWER% X=2
 % %NO%
-% %QUERY% length([a,b,c,d,e,f],X)
+% %QUERY% list_length([a,b,c,d,e,f],X)
 % %ANSWER% X=6
 % %NO%
-% %TRUE_NO% length([a,b,c,d,e,f],6)
-% %FALSE% length([a,b,c,d,e,f],5)
+% %TRUE_NO% list_length([a,b,c,d,e,f],6)
+% %FALSE% list_length([a,b,c,d,e,f],5)
 
 % Delete elements from a list.
 

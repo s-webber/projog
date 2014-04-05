@@ -91,6 +91,9 @@
 ?- pj_add_predicate(repeat/1, 'org.projog.core.function.flow.RepeatSetAmount').
 ?- pj_add_predicate('!', 'org.projog.core.function.flow.Cut').
 
+% list
+?- pj_add_predicate(length/2, 'org.projog.core.function.list.Length').
+
 % numerical operations
 ?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').
 ?- pj_add_calculatable('-', 'org.projog.core.function.math.Subtract').

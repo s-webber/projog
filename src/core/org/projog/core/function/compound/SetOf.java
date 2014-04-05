@@ -89,30 +89,20 @@ public final class SetOf extends AbstractCollectionOf {
 
    /** "setof" excludes duplicates and orders elements using {@link TermComparator}. */
    @Override
-   protected void add(List<Term> l, Term t) {
-      if (isNotAlreadyInList(l, t)) {
-         addInCorrectPosition(l, t);
-      }
-   }
-
-   private boolean isNotAlreadyInList(List<Term> l, Term t) {
-      for (Term e : l) {
-         if (t.strictEquality(e)) {
-            return false;
-         }
-      }
-      return true;
-   }
-
-   private void addInCorrectPosition(List<Term> l, Term t) {
-      final int numberOfElements = l.size();
+   protected void add(List<Term> list, Term newTerm) {
+      final int numberOfElements = list.size();
       for (int i = 0; i < numberOfElements; i++) {
-         final Term next = l.get(i);
-         if (TERM_COMPARATOR.compare(t, next) < 0) {
-            l.add(i, t);
+         final Term next = list.get(i);
+         final int comparison = TERM_COMPARATOR.compare(newTerm, next);
+         if (comparison < 0) {
+            // found correct position - so add
+            list.add(i, newTerm);
+            return;
+         } else if (comparison == 0 && newTerm.strictEquality(next)) {
+            // duplicate - so ignore
             return;
          }
       }
-      l.add(t);
+      list.add(newTerm);
    }
 }

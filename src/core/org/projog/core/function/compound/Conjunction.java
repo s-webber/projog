@@ -141,8 +141,7 @@ public final class Conjunction extends AbstractRetryablePredicate {
    // as over complexity in internal workings (e.g. when and what it backtracks)
    // may not be detectable via a system test. 
 
-   private final PredicateFactory firstPredicateFactory;
-   private final PredicateFactory secondPredicateFactory;
+   private PredicateFactory secondPredicateFactory;
    private Predicate firstPredicate;
    private Predicate secondPredicate;
    private boolean firstGo = true;
@@ -150,12 +149,10 @@ public final class Conjunction extends AbstractRetryablePredicate {
    private Term tmpInputArg2;
 
    public Conjunction() {
-      this(null, null);
    }
 
-   private Conjunction(PredicateFactory firstPredicateFactory, PredicateFactory secondPredicateFactory) {
-      this.firstPredicateFactory = firstPredicateFactory;
-      this.secondPredicateFactory = secondPredicateFactory;
+   private Conjunction(KnowledgeBase knowledgeBase) {
+      setKnowledgeBase(knowledgeBase);
    }
 
    @Override
@@ -170,8 +167,7 @@ public final class Conjunction extends AbstractRetryablePredicate {
     * @see org.projog.core.PredicateFactory#getPredicate(Term...)
     */
    public Conjunction getPredicate(Term arg1, Term arg2) {
-      KnowledgeBase kb = getKnowledgeBase();
-      return new Conjunction(kb.getPredicateFactory(arg1), kb.getPredicateFactory(arg2));
+      return new Conjunction(getKnowledgeBase());
    }
 
    @Override
@@ -186,7 +182,7 @@ public final class Conjunction extends AbstractRetryablePredicate {
     */
    public boolean evaluate(Term inputArg1, Term inputArg2) {
       if (firstGo) {
-         firstPredicate = firstPredicateFactory.getPredicate(inputArg1.getArgs());
+         firstPredicate = getKnowledgeBase().getPredicateFactory(inputArg1).getPredicate(inputArg1.getArgs());
 
          while ((firstGo || firstPredicate.isRetryable()) && firstPredicate.evaluate(inputArg1.getArgs())) {
             firstGo = false;
@@ -222,6 +218,9 @@ public final class Conjunction extends AbstractRetryablePredicate {
       tmpInputArg2 = inputArg2.getTerm();
       secondArg = tmpInputArg2.copy(new HashMap<Variable, Variable>());
       if (Unifier.preMatch(tmpInputArg2.getArgs(), secondArg.getArgs())) {
+         if (secondPredicateFactory == null) {
+            secondPredicateFactory = getKnowledgeBase().getPredicateFactory(secondArg);
+         }
          secondPredicate = secondPredicateFactory.getPredicate(secondArg.getArgs());
          return true;
       } else {

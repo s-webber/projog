@@ -140,6 +140,13 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertFalse(pf instanceof CompiledTailRecursivePredicate);
    }
 
+   @Test
+   public void testConjunctionContainingVariables() {
+      Term[] clauses = toTerms("and(X,Y) :- X, Y.");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+   }
+
    private PredicateFactory getActualPredicateFactory(Term... clauses) {
       return getActualPredicateFactory(COMPILATION_DISABLED_KB, clauses);
    }

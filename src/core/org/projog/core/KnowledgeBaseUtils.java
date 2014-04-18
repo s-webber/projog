@@ -90,7 +90,9 @@ public final class KnowledgeBaseUtils {
     * Returns {@code true} if the predicate represented by the specified {@link Term} never succeeds on re-evaluation.
     */
    public static boolean isSingleAnswer(KnowledgeBase kb, Term term) {
-      if (isConjunction(term)) {
+      if (term.getType().isVariable()) {
+         return false;
+      } else if (isConjunction(term)) {
          return isConjunctionWithSingleResult(kb, term);
       } else {
          PredicateFactory ef = kb.getPredicateFactory(term);

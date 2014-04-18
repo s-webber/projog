@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -186,7 +187,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private PredicateFactory createPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions) {
       List<ClauseModel> clauseModels = getCopyOfImplications();
 
-      if (getProperties().isRuntimeCompilationEnabled()) {
+      if (getProperties().isRuntimeCompilationEnabled() && isSuitableForCompilation(clauseModels)) {
          return CompiledPredicateClassGenerator.generateCompiledPredicate(kb, clauseModels);
       }
 
@@ -204,6 +205,20 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          copyImplications.add(clauseModel.copy());
       }
       return copyImplications;
+   }
+
+   private boolean isSuitableForCompilation(List<ClauseModel> clauseModels) {
+      for (ClauseModel cm : clauseModels) {
+         Term antecedant = cm.getAntecedant();
+         if (KnowledgeBaseUtils.isConjunction(antecedant)) {
+            for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
+               if (t.getType().isVariable()) {
+                  return false;
+               }
+            }
+         }
+      }
+      return true;
    }
 
    private SpyPoints.SpyPoint getSpyPoint() {

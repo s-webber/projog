@@ -21,6 +21,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.structure;
+import static org.projog.TestUtils.variable;
 
 import java.util.List;
 
@@ -112,26 +113,43 @@ public class KnowledgeBaseUtilsTest {
    }
 
    @Test
-   public void testIsSingleAnswer() {
+   public void testIsSingleAnswer_NonRetryablePredicate() {
       // test single term representing a predicate that is not repeatable
       assertTrue(KnowledgeBaseUtils.isSingleAnswer(kb, atom("true")));
+   }
 
+   @Test
+   public void testIsSingleAnswer_RetryablePredicate() {
       // test single term representing a predicate that *is* repeatable
       assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, atom("repeat")));
+   }
 
+   @Test
+   public void testIsSingleAnswer_NonRetryableConjuction() {
       // test conjunction of terms that are all not repeatable
       Term conjuctionOfNonRepeatableTerms = TestUtils.parseSentence("write(X), nl, true, X<1.");
       assertTrue(KnowledgeBaseUtils.isSingleAnswer(kb, conjuctionOfNonRepeatableTerms));
+   }
 
+   @Test
+   public void testIsSingleAnswer_RetryableConjuction() {
       // test conjunction of terms where one is repeatable
       Term conjuctionIncludingRepeatableTerm = TestUtils.parseSentence("write(X), nl, repeat, true, X<1.");
       assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, conjuctionIncludingRepeatableTerm));
+   }
 
+   @Test
+   public void testIsSingleAnswer_Disjunction() {
       // test disjunction
       // (Note that the disjunction used in the test *would* only give a single answer 
       // but KnowledgeBaseUtils.isSingleAnswer is not currently smart enough to spot this)
       Term disjunctionOfTerms = TestUtils.parseSentence("true ; fail.");
       assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, disjunctionOfTerms));
+   }
+
+   @Test
+   public void testIsSingleAnswer_Variable() {
+      assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, variable()));
    }
 
    @Test

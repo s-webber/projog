@@ -82,7 +82,7 @@ public class ProjogSourceReaderTest {
          ProjogSourceReader.parseFile(createKnowledgeBase(), f);
          fail();
       } catch (ProjogException e) {
-         assertMessageContainsText(e, "Can not declare: test_dynamic/3 as a dynamic predicate when it has already been used.");
+         assertMessageContainsText(e, "Cannot declare: test_dynamic/3 as a dynamic predicate when it has already been used.");
       }
    }
 

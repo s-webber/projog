@@ -196,7 +196,7 @@ public final class ProjogSourceReader {
          userDefinedPredicate = new DynamicUserDefinedPredicateFactory(kb, key);
          userDefinedPredicates.put(key, userDefinedPredicate);
       } else {
-         throw new ProjogException("Can not declare: " + key + " as a dynamic predicate when it has already been used. Query: " + t);
+         throw new ProjogException("Cannot declare: " + key + " as a dynamic predicate when it has already been used. Query: " + t);
       }
    }
 

@@ -187,7 +187,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private PredicateFactory createPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions) {
       List<ClauseModel> clauseModels = getCopyOfImplications();
 
-      if (getProperties().isRuntimeCompilationEnabled() && isSuitableForCompilation(clauseModels)) {
+      if (getProperties().isRuntimeCompilationEnabled() && isPredicateSuitableForCompilation(clauseModels)) {
          return CompiledPredicateClassGenerator.generateCompiledPredicate(kb, clauseModels);
       }
 
@@ -207,14 +207,23 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return copyImplications;
    }
 
-   private boolean isSuitableForCompilation(List<ClauseModel> clauseModels) {
+   private boolean isPredicateSuitableForCompilation(List<ClauseModel> clauseModels) {
       for (ClauseModel cm : clauseModels) {
          Term antecedant = cm.getAntecedant();
-         if (KnowledgeBaseUtils.isConjunction(antecedant)) {
-            for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
-               if (t.getType().isVariable()) {
-                  return false;
-               }
+         if (!isTermSuitableForCompilation(antecedant)) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private boolean isTermSuitableForCompilation(Term antecedant) {
+      if (antecedant.getType().isVariable()) {
+         return false;
+      } else if (KnowledgeBaseUtils.isConjunction(antecedant)) {
+         for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
+            if (t.getType().isVariable()) {
+               return false;
             }
          }
       }

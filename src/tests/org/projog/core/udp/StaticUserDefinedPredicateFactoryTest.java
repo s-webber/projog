@@ -147,6 +147,13 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
    }
 
+   @Test
+   public void testVariableAntecedant() {
+      Term[] clauses = toTerms("true(X) :- X.");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+   }
+
    private PredicateFactory getActualPredicateFactory(Term... clauses) {
       return getActualPredicateFactory(COMPILATION_DISABLED_KB, clauses);
    }

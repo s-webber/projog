@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.CutException;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -167,6 +168,24 @@ public class ClauseActionFactoryTest {
          assertTrue(ca.evaluate(TermUtils.EMPTY_ARRAY));
       }
       assertFalse(ca.evaluate(TermUtils.EMPTY_ARRAY));
+   }
+
+   /** @see SingleFunctionMultiResultClauseAction */
+   @Test
+   public void testSingleFunctionMultiResultClauseActionVariableAntecedant() {
+      ClauseAction ca = getClauseAction("true(X) :- X.");
+      assertEquals(SingleFunctionMultiResultClauseAction.class, ca.getClass());
+      assertTrue(ca.couldReEvaluationSucceed());
+
+      assertTrue(ca.evaluate(new Term[] {new Atom("true")}));
+      assertFalse(ca.couldReEvaluationSucceed());
+
+      ca = ca.getFree();
+      assertFalse(ca.evaluate(new Term[] {new Atom("fail")}));
+
+      ca = ca.getFree();
+      assertTrue(ca.evaluate(new Term[] {new Atom("repeat")}));
+      assertTrue(ca.couldReEvaluationSucceed());
    }
 
    // helper methods

@@ -40,6 +40,9 @@ public final class ClauseActionFactory {
    public static ClauseAction getClauseAction(KnowledgeBase kb, ClauseModel clauseModel) {
       Term consequent = clauseModel.getConsequent();
       Term antecedant = clauseModel.getAntecedant();
+      if (antecedant.getType().isVariable()) {
+         return new SingleFunctionMultiResultClauseAction(kb, clauseModel);
+      }
       PredicateFactory ef = kb.getPredicateFactory(antecedant);
 
       if (ef.getClass() == True.class) {

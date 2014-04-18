@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
@@ -31,26 +30,23 @@ import org.projog.core.udp.ClauseModel;
  */
 public final class SingleFunctionMultiResultClauseAction extends AbstractMultiAnswerClauseAction {
    private final Term originalAntecedant;
-   private final PredicateFactory predicateFactory;
    private Term antecedant;
    private Predicate predicate;
 
    SingleFunctionMultiResultClauseAction(KnowledgeBase kb, ClauseModel ci) {
       super(kb, ci.getConsequent().getArgs());
       originalAntecedant = ci.getAntecedant();
-      predicateFactory = kb.getPredicateFactory(originalAntecedant);
    }
 
    private SingleFunctionMultiResultClauseAction(SingleFunctionMultiResultClauseAction original) {
       super(original);
       originalAntecedant = original.originalAntecedant;
-      predicateFactory = original.predicateFactory;
    }
 
    @Override
    protected boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables) {
       antecedant = originalAntecedant.copy(sharedVariables);
-      predicate = predicateFactory.getPredicate(antecedant.getArgs());
+      predicate = kb.getPredicateFactory(antecedant).getPredicate(antecedant.getArgs());
       return predicate.evaluate(antecedant.getArgs());
    }
 

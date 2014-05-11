@@ -2,7 +2,10 @@
 *.jar
 *.zip
 *.tmp
+*.out
 *.bat
+*.sh
+test.pl
 
 .classpath
 .project
@@ -13,5 +16,8 @@ build/
 lib/
 target/
 dist/
+scripts/tmp
+scripts/temp
 tmp/
+temp/
 projogGeneratedClasses/

@@ -1,19 +1,4 @@
 <?xml version="1.0"?>
-<!--
- Copyright 2013 S Webber
-  
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
-     http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
 <project name="projog" default="test">
 
 	<property name="core-jar" value="build/lib/projog-core.jar"/>
@@ -27,6 +12,7 @@
 	dynamicContentDir is the output directory for classes generated at runtime
 	-->
 	<property name="dynamicContentDir" value="projogGeneratedClasses"/>
+	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
 
 	<tstamp>
 		<format property="manifest.timestamp" pattern="yyyy-MM-dd HH:mm"/>
@@ -65,7 +51,7 @@
 		<mkdir dir="build/lib"/>
 		<jar destfile="${core-jar}">
 			<manifest>
-			    <attribute name="Main-Class" value="org.projog.tools.ProjogConsole"/>
+			    <attribute name="Main-Class" value="${mainClass}"/>
 			    <attribute name="Build-Timestamp" value="${manifest.timestamp}"/>
 			</manifest>
 			<fileset dir="etc">
@@ -176,11 +162,21 @@
 	<target name="sys-test" depends="sys-test.generate,sys-test.run"
 	        description="runs system tests generated from prolog statements included in comments of java code"/>
 
-	<target name="clean-test" depends="clean,compile,unit-test,sys-test"
-	        description="deletes build directory and recompiles before running both unit and system tests"/>
-
 <!-- ALL TESTS -->
 	<target name="test" depends="unit-test,sys-test"/>
+
+<!-- RUN CONSOLE REPL -->
+	<target name="repl" depends="compile.core">
+		<mkdir dir="${dynamicContentDir}"/>
+		<java classname="${mainClass}" fork="true" spawn="true">
+			<classpath>
+				<pathelement location="${dynamicContentDir}"/>
+				<pathelement location="build/classes/core"/>
+				<pathelement location="etc"/>
+			</classpath>
+			<sysproperty key="projog.generatedClasses" value="${dynamicContentDir}"/>
+		</java>
+	</target>
 
 <!-- WEB PAGES -->
 	<target name="web" depends="sys-test.generate"
@@ -232,6 +228,7 @@
 				<include name="docs/javadoc/**"/>
 				<include name="${lib}/**"/>
 			</fileset>
+			<fileset dir="." includes="LICENSE"/>
 		</zip>
 	</target>
 

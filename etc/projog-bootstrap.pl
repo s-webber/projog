@@ -39,6 +39,7 @@
 ?- pj_add_predicate('@>'/2, 'org.projog.core.function.compare.TermGreaterThan').
 ?- pj_add_predicate('@>='/2, 'org.projog.core.function.compare.TermGreaterThanOrEqual').
 ?- pj_add_predicate('@=<'/2, 'org.projog.core.function.compare.TermLessThanOrEqual').
+?- pj_add_predicate('\='/2, 'org.projog.core.function.compare.NotUnifiable').
 
 % compound
 ?- pj_add_predicate(','/2, 'org.projog.core.function.compound.Conjunction').
@@ -132,6 +133,7 @@
 ?- op(700, xfx, '@=<').
 ?- op(700, xfx, '@>').
 ?- op(700, xfx, '@>=').
+?- op(700, xfx, '\=').
 ?- op(700, xfx, 'is').
 ?- op(500, yfx, '+').
 ?- op(500, yfx, '-').

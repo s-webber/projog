@@ -98,6 +98,7 @@
 % list
 ?- pj_add_predicate(length/2, 'org.projog.core.function.list.Length').
 ?- pj_add_predicate(reverse/2, 'org.projog.core.function.list.Reverse').
+?- pj_add_predicate(memberchk/2, 'org.projog.core.function.list.MemberCheck').
 
 % numerical operations
 ?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').

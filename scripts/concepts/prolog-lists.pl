@@ -7,21 +7,22 @@ list([X|Xs]) :- list(Xs).
 % %FALSE% list(abc)
 
 % Determining is a term is contained in a list.
+% (Note: Projog provides built-in member(X,Y) and memberchk(X,Y) predicates.)
 
-:- member(X,[X|Xs]).
-member(X,[Y|Ys]) :- member(X,Ys).
+:- list_member(X,[X|Xs]).
+list_member(X,[Y|Ys]) :- list_member(X,Ys).
 
-% %QUERY% member(X, [a,b,c])
+% %QUERY% list_member(X, [a,b,c])
 % %ANSWER% X=a
 % %ANSWER% X=b
 % %ANSWER% X=c
 % %NO%
 
-% %TRUE_NO% member(a, [a,b,c])
-% %TRUE_NO% member(b, [a,b,c])
-% %TRUE_NO% member(c, [a,b,c])
-% %FALSE% member(d, [a,b,c])
-% %QUERY% member(a,[a,a,a])
+% %TRUE_NO% list_member(a, [a,b,c])
+% %TRUE_NO% list_member(b, [a,b,c])
+% %TRUE_NO% list_member(c, [a,b,c])
+% %FALSE% list_member(d, [a,b,c])
+% %QUERY% list_member(a,[a,a,a])
 % %ANSWER/%
 % %ANSWER/%
 % %ANSWER/%

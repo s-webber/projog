@@ -5,9 +5,6 @@ import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
 /* SYSTEM TEST
- :- member(X,[X|Xs]).
- member(X,[Y|Ys]) :- member(X,Ys).
- 
  print_first_sentence(X) :- 
     atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
  

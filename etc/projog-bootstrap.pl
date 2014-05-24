@@ -108,6 +108,7 @@
 ?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').
 ?- pj_add_calculatable('-', 'org.projog.core.function.math.Subtract').
 ?- pj_add_calculatable('/', 'org.projog.core.function.math.Divide').
+?- pj_add_calculatable('//', 'org.projog.core.function.math.IntegerDivide').
 ?- pj_add_calculatable('*', 'org.projog.core.function.math.Multiply').
 ?- pj_add_calculatable(mod, 'org.projog.core.function.math.Modulo').
 ?- pj_add_calculatable(rem, 'org.projog.core.function.math.Remainder').

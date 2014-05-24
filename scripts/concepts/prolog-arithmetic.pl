@@ -13,8 +13,14 @@
 % %QUERY% X is 6*7
 % %ANSWER% X=42
 
-% %QUERY% X is 5/3
-% %ANSWER% X=1
+% %QUERY% X is 6/2
+% %ANSWER% X=3
+
+% %QUERY% X is 6//2
+% %ANSWER% X=3
+
+% %QUERY% X is 7//2
+% %ANSWER% X=3
 
 % %QUERY% X is 5 mod 3
 % %ANSWER% X=2

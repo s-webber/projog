@@ -1,6 +1,7 @@
 package org.projog.core.udp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.SpyPoints;
 import org.projog.core.function.bool.True;
@@ -229,6 +231,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    @Override
    public Predicate getPredicate(Term... args) {
+      if (args.length != Math.max(predicateKey.getNumArgs(), 0)) {
+         throw new ProjogException("User defined predicate: " + predicateKey + " is being called with the wrong number of arguments: " + args.length + " " + Arrays.toString(args));
+      }
       compile();
       return compiledPredicateFactory.getPredicate(args);
    }

@@ -65,6 +65,7 @@ public final class AtomConcat extends AbstractSingletonPredicate {
             throw new ProjogException("If third argument is not an atom then both first and second arguments must be: " + arg1 + " " + arg2 + " " + arg3);
          }
       } else {
+         // TODO add support for when first two args are variables #7
          throw new ProjogException("If first and second arguments are not both atoms then third argument must be: " + arg1 + " " + arg2 + " " + arg3);
       }
    }

@@ -95,32 +95,33 @@ sublist(Xs,[Y|Ys]) :- sublist(Xs,Ys).
 % %NO%
 
 % Appending two lists.
+% (Note: Projog provides a built-in append(X,Y,Z) predicate.)
 
-:- append([],Ys,Ys).
-append([X|Xs],Ys,[X|Zs]) :- append(Xs,Ys,Zs).
+:- append_to_list([],Ys,Ys).
+append_to_list([X|Xs],Ys,[X|Zs]) :- append_to_list(Xs,Ys,Zs).
 
-% %TRUE% append([a,b,c],[d,e,f],[a,b,c,d,e,f])
-% %FALSE% append([a,b,c],[d,e,f],[a,b,c,d,e,g])
-% %FALSE% append([a,b,c],[d,e,f],[a,b,c,d,e,f,g])
-% %QUERY% append([a,X,c],[d,e,Y],[a,b,c,Z,e,f])
+% %TRUE% append_to_list([a,b,c],[d,e,f],[a,b,c,d,e,f])
+% %FALSE% append_to_list([a,b,c],[d,e,f],[a,b,c,d,e,g])
+% %FALSE% append_to_list([a,b,c],[d,e,f],[a,b,c,d,e,f,g])
+% %QUERY% append_to_list([a,X,c],[d,e,Y],[a,b,c,Z,e,f])
 % %ANSWER%
 % X=b
 % Y=f
 % Z=d
 % %ANSWER%
 % %NO%
-% %QUERY% append([a,X,c],[Y,e(X,Y),f],[a,b,c,d,Z,f])
+% %QUERY% append_to_list([a,X,c],[Y,e(X,Y),f],[a,b,c,d,Z,f])
 % %ANSWER%
 % X=b
 % Y=d
 % Z=e(b, d)
 % %ANSWER%
 % %NO%
-% %QUERY% append([a,b,c],[d,e,f],X)
+% %QUERY% append_to_list([a,b,c],[d,e,f],X)
 % %ANSWER% X=[a,b,c,d,e,f]
-% %QUERY% append([a,b,c],X,[a,b,c,d,e,f])
+% %QUERY% append_to_list([a,b,c],X,[a,b,c,d,e,f])
 % %ANSWER% X=[d,e,f]
-% %QUERY% append(X,[d,e,f],[a,b,c,d,e,f])
+% %QUERY% append_to_list(X,[d,e,f],[a,b,c,d,e,f])
 % %ANSWER% X=[a,b,c]
 % %NO%
 
@@ -158,7 +159,7 @@ reverse_list([],Ys,Ys).
 % %NO%
 
 % Determine if elements are next to each other in a list.
-adjacent(X,Y,Zs) :- append(As,[X,Y|Ys],Zs).
+adjacent(X,Y,Zs) :- append_to_list(As,[X,Y|Ys],Zs).
 
 % %TRUE_NO% adjacent(a,b,[a,b,c,d,e,f])
 % %TRUE_NO% adjacent(c,d,[a,b,c,d,e,f])
@@ -195,7 +196,7 @@ adjacent(X,Y,Zs) :- append(As,[X,Y|Ys],Zs).
 % %NO%
 
 % Find the last element of a list.
-last(X,Xs) :- append(As,[X],Xs).
+last(X,Xs) :- append_to_list(As,[X],Xs).
 
 % %TRUE_NO% last(f,[a,b,c,d,e,f])
 % %FALSE% last(a,[a,b,c,d,e,f])

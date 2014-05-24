@@ -109,7 +109,7 @@
 % %QUERY% X is 5 mod 2
 % %ANSWER% X = 1
 
-% %QUERY% ?- X is 5 mod -2
+% %QUERY% X is 5 mod -2
 % %ANSWER% X = -1
 
 % %QUERY% X is -5 mod -2

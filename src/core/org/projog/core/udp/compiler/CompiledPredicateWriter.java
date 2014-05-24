@@ -304,6 +304,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
                addLine("} else {");
             }
          }
+         
          beginIf(compiledPredicateVariableName + "==null");
 
          for (Variable v : variablesInCurrentFunction) {
@@ -444,7 +445,8 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          return Collections.EMPTY_SET;
       }
 
-      Set<String> alreadyDeclaredVariables = new HashSet<>();
+      // LinkedHashSet to make order predictable (makes unit tests easier)
+      Set<String> alreadyDeclaredVariables = new LinkedHashSet<>();
       Set<Variable> variables1 = TermUtils.getAllVariablesInTerm(currentClause.getConsequent());
       for (Variable v : variables1) {
          String variableId = getVariableId(v);

@@ -18,8 +18,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr0!=0) {
-               v0_RuleNo = _1;
-               v0_X = _2;
+               v0_X = _1;
+               v0_RuleNo = _2;
                _0.backtrack();
             } else {
                _0 = v0_X.getTerm();
@@ -35,10 +35,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _0.backtrack();
                }
             } while (true);
-            _1 = v0_RuleNo;
-            v0_RuleNo = v0_RuleNo.getTerm();
-            _2 = v0_X;
+            _1 = v0_X;
             v0_X = v0_X.getTerm();
+            _2 = v0_RuleNo;
+            v0_RuleNo = v0_RuleNo.getTerm();
             if (!v0_RuleNo.unify(INTEGER_1)) {
                v0_RuleNo.backtrack();
                break mainloop;
@@ -334,8 +334,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr9!=0) {
-               v7_Y = _12;
-               v7_RuleNo = _13;
+               v7_RuleNo = _12;
+               v7_Y = _13;
                _11.backtrack();
             } else {
                _11 = v7_Y.getTerm();
@@ -351,10 +351,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _11.backtrack();
                }
             } while (true);
-            _12 = v7_Y;
-            v7_Y = v7_Y.getTerm();
-            _13 = v7_RuleNo;
+            _12 = v7_RuleNo;
             v7_RuleNo = v7_RuleNo.getTerm();
+            _13 = v7_Y;
+            v7_Y = v7_Y.getTerm();
             if (!v7_RuleNo.unify(INTEGER_8)) {
                v7_RuleNo.backtrack();
                break mainloop;
@@ -378,8 +378,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr10!=0) {
-               v8_RuleNo = _15;
-               v8_X = _16;
+               v8_X = _15;
+               v8_RuleNo = _16;
                _14.backtrack();
             } else {
                _14 = v8_X.getTerm();
@@ -395,14 +395,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _14.backtrack();
                }
             } while (true);
-            _15 = v8_RuleNo;
-            v8_RuleNo = v8_RuleNo.getTerm();
-            _16 = v8_X;
+            _15 = v8_X;
             v8_X = v8_X.getTerm();
+            _16 = v8_RuleNo;
+            v8_RuleNo = v8_RuleNo.getTerm();
             case 1:
             if (inlinedCtr11!=0) {
-               v8_RuleNo = _18;
-               v8_X = _19;
+               v8_X = _18;
+               v8_RuleNo = _19;
                _17.backtrack();
             } else {
                _17 = v8_X.getTerm();
@@ -419,10 +419,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _17.backtrack();
                }
             } while (true);
-            _18 = v8_RuleNo;
-            v8_RuleNo = v8_RuleNo.getTerm();
-            _19 = v8_X;
+            _18 = v8_X;
             v8_X = v8_X.getTerm();
+            _19 = v8_RuleNo;
+            v8_RuleNo = v8_RuleNo.getTerm();
             conjunctionCtr = 1;
             if (!v8_RuleNo.unify(INTEGER_9)) {
                v8_RuleNo.backtrack();
@@ -638,8 +638,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr16!=0) {
-               v13_RuleNo = _33;
-               v13_X = _34;
+               v13_X = _33;
+               v13_RuleNo = _34;
                _32.backtrack();
             } else {
                _32 = v13_X.getTerm();
@@ -655,10 +655,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _32.backtrack();
                }
             } while (true);
-            _33 = v13_RuleNo;
-            v13_RuleNo = v13_RuleNo.getTerm();
-            _34 = v13_X;
+            _33 = v13_X;
             v13_X = v13_X.getTerm();
+            _34 = v13_RuleNo;
+            v13_RuleNo = v13_RuleNo.getTerm();
             if (!v13_RuleNo.unify(INTEGER_14)) {
                v13_RuleNo.backtrack();
                break mainloop;

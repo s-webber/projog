@@ -24,17 +24,17 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             if (c0_0==null) {
                c0_0 = new CompiledPredicateSourceGeneratorTest$3(v0_A, v0_B, v0_C);
             } else {
-               v0_B = _0;
-               v0_A = _1;
+               v0_A = _0;
+               v0_B = _1;
                v0_C = _2;
             }
             if (!c0_0.evaluate((Term[])null)) {
                return false;
             }
-            _0 = v0_B;
-            v0_B = v0_B.getTerm();
-            _1 = v0_A;
+            _0 = v0_A;
             v0_A = v0_A.getTerm();
+            _1 = v0_B;
+            v0_B = v0_B.getTerm();
             _2 = v0_C;
             v0_C = v0_C.getTerm();
             if (NUMERIC_TERM_COMPARATOR.compare(v0_A, DOUBLE_1_5, kb)!=1) {

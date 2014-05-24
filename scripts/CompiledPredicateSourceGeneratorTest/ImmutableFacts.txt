@@ -20,10 +20,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr0!=0) {
-               v0_Z = _1;
-               v0_Y = _2;
-               v0_X = _3;
-               v0_W = _4;
+               v0_W = _1;
+               v0_X = _2;
+               v0_Y = _3;
+               v0_Z = _4;
                _0.backtrack();
             } else {
                _0 = v0_X.getTerm();
@@ -39,20 +39,20 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _0.backtrack();
                }
             } while (true);
-            _1 = v0_Z;
-            v0_Z = v0_Z.getTerm();
-            _2 = v0_Y;
-            v0_Y = v0_Y.getTerm();
-            _3 = v0_X;
-            v0_X = v0_X.getTerm();
-            _4 = v0_W;
+            _1 = v0_W;
             v0_W = v0_W.getTerm();
+            _2 = v0_X;
+            v0_X = v0_X.getTerm();
+            _3 = v0_Y;
+            v0_Y = v0_Y.getTerm();
+            _4 = v0_Z;
+            v0_Z = v0_Z.getTerm();
             case 1:
             if (inlinedCtr1!=0) {
-               v0_Z = _7;
-               v0_Y = _8;
-               v0_X = _9;
-               v0_W = _10;
+               v0_W = _7;
+               v0_X = _8;
+               v0_Y = _9;
+               v0_Z = _10;
                _6.backtrack();
             } else {
                _6 = v0_W.getTerm();
@@ -80,14 +80,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _7 = v0_Z;
-            v0_Z = v0_Z.getTerm();
-            _8 = v0_Y;
-            v0_Y = v0_Y.getTerm();
-            _9 = v0_X;
-            v0_X = v0_X.getTerm();
-            _10 = v0_W;
+            _7 = v0_W;
             v0_W = v0_W.getTerm();
+            _8 = v0_X;
+            v0_X = v0_X.getTerm();
+            _9 = v0_Y;
+            v0_Y = v0_Y.getTerm();
+            _10 = v0_Z;
+            v0_Z = v0_Z.getTerm();
             conjunctionCtr = 1;
             if (!IsAtom_1.evaluate(v0_W)) {
                v0_W.backtrack();
@@ -95,10 +95,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 2:
             if (inlinedCtr2!=0) {
-               v0_Z = _12;
-               v0_Y = _13;
-               v0_X = _14;
-               v0_W = _15;
+               v0_W = _12;
+               v0_X = _13;
+               v0_Y = _14;
+               v0_Z = _15;
                _11.backtrack();
             } else {
                _11 = v0_Y.getTerm();
@@ -116,14 +116,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _11.backtrack();
                }
             } while (true);
-            _12 = v0_Z;
-            v0_Z = v0_Z.getTerm();
-            _13 = v0_Y;
-            v0_Y = v0_Y.getTerm();
-            _14 = v0_X;
-            v0_X = v0_X.getTerm();
-            _15 = v0_W;
+            _12 = v0_W;
             v0_W = v0_W.getTerm();
+            _13 = v0_X;
+            v0_X = v0_X.getTerm();
+            _14 = v0_Y;
+            v0_Y = v0_Y.getTerm();
+            _15 = v0_Z;
+            v0_Z = v0_Z.getTerm();
             conjunctionCtr = 2;
             // SingleRuleWithSingleImmutableArgumentPredicateGenerator
             if (!v0_W.unify(ATOM)) {
@@ -131,9 +131,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 3:
             if (inlinedCtr3!=0) {
-               v0_Z = _17;
+               v0_X = _17;
                v0_Y = _18;
-               v0_X = _19;
+               v0_Z = _19;
                _16.backtrack();
             } else {
                _16 = v0_Z.getTerm();
@@ -150,12 +150,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _16.backtrack();
                }
             } while (true);
-            _17 = v0_Z;
-            v0_Z = v0_Z.getTerm();
+            _17 = v0_X;
+            v0_X = v0_X.getTerm();
             _18 = v0_Y;
             v0_Y = v0_Y.getTerm();
-            _19 = v0_X;
-            v0_X = v0_X.getTerm();
+            _19 = v0_Z;
+            v0_Z = v0_Z.getTerm();
             conjunctionCtr = 3;
             if (!v0_X.unify(ATOM_0)) {
                break mainloop;
@@ -183,9 +183,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 4:
             if (inlinedCtr4!=0) {
-               v0_Z = _23;
+               v0_X = _23;
                v0_Y = _24;
-               v0_X = _25;
+               v0_Z = _25;
                _20.backtrack();
                _21.backtrack();
                _22.backtrack();
@@ -223,12 +223,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _23 = v0_Z;
-            v0_Z = v0_Z.getTerm();
+            _23 = v0_X;
+            v0_X = v0_X.getTerm();
             _24 = v0_Y;
             v0_Y = v0_Y.getTerm();
-            _25 = v0_X;
-            v0_X = v0_X.getTerm();
+            _25 = v0_Z;
+            v0_Z = v0_Z.getTerm();
             conjunctionCtr = 4;
             return true;
          }

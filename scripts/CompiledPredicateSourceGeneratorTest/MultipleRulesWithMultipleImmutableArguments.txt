@@ -150,9 +150,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr2!=0) {
-               v2_Y = _1;
-               v2_Z = _2;
-               v2_X = _3;
+               v2_X = _1;
+               v2_Y = _2;
+               v2_Z = _3;
                v2_RuleNo = _4;
                _0.backtrack();
             } else {
@@ -179,12 +179,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _1 = v2_Y;
-            v2_Y = v2_Y.getTerm();
-            _2 = v2_Z;
-            v2_Z = v2_Z.getTerm();
-            _3 = v2_X;
+            _1 = v2_X;
             v2_X = v2_X.getTerm();
+            _2 = v2_Y;
+            v2_Y = v2_Y.getTerm();
+            _3 = v2_Z;
+            v2_Z = v2_Z.getTerm();
             _4 = v2_RuleNo;
             v2_RuleNo = v2_RuleNo.getTerm();
             if (!v2_X.unify(ATOM_0)) {
@@ -193,9 +193,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 1:
             if (inlinedCtr3!=0) {
-               v2_Y = _8;
-               v2_Z = _9;
-               v2_X = _10;
+               v2_X = _8;
+               v2_Y = _9;
+               v2_Z = _10;
                v2_RuleNo = _11;
                _5.backtrack();
                _6.backtrack();
@@ -232,12 +232,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _8 = v2_Y;
-            v2_Y = v2_Y.getTerm();
-            _9 = v2_Z;
-            v2_Z = v2_Z.getTerm();
-            _10 = v2_X;
+            _8 = v2_X;
             v2_X = v2_X.getTerm();
+            _9 = v2_Y;
+            v2_Y = v2_Y.getTerm();
+            _10 = v2_Z;
+            v2_Z = v2_Z.getTerm();
             _11 = v2_RuleNo;
             v2_RuleNo = v2_RuleNo.getTerm();
             conjunctionCtr = 1;
@@ -269,11 +269,11 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                v3_A = new Variable("A");
             }
             if (inlinedCtr4!=0) {
-               v3_RuleNo = _15;
-               v3_Z = _16;
-               v3_A = _17;
-               v3_X = _18;
-               v3_Y = _19;
+               v3_X = _15;
+               v3_Y = _16;
+               v3_Z = _17;
+               v3_RuleNo = _18;
+               v3_A = _19;
                _14.backtrack();
                _13.backtrack();
             } else {
@@ -304,16 +304,16 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _15 = v3_RuleNo;
-            v3_RuleNo = v3_RuleNo.getTerm();
-            _16 = v3_Z;
-            v3_Z = v3_Z.getTerm();
-            _17 = v3_A;
-            v3_A = v3_A.getTerm();
-            _18 = v3_X;
+            _15 = v3_X;
             v3_X = v3_X.getTerm();
-            _19 = v3_Y;
+            _16 = v3_Y;
             v3_Y = v3_Y.getTerm();
+            _17 = v3_Z;
+            v3_Z = v3_Z.getTerm();
+            _18 = v3_RuleNo;
+            v3_RuleNo = v3_RuleNo.getTerm();
+            _19 = v3_A;
+            v3_A = v3_A.getTerm();
             if (!v3_A.unify(v3_X)) {
                v3_X.backtrack();
                v3_A.backtrack();
@@ -657,8 +657,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
          switch (conjunctionCtr) {
             case 0:
             if (inlinedCtr12!=0) {
-               v9_Y = _28;
-               v9_X = _29;
+               v9_X = _28;
+               v9_Y = _29;
                v9_Z = _30;
                v9_RuleNo = _31;
                _27.backtrack();
@@ -687,10 +687,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _28 = v9_Y;
-            v9_Y = v9_Y.getTerm();
-            _29 = v9_X;
+            _28 = v9_X;
             v9_X = v9_X.getTerm();
+            _29 = v9_Y;
+            v9_Y = v9_Y.getTerm();
             _30 = v9_Z;
             v9_Z = v9_Z.getTerm();
             _31 = v9_RuleNo;

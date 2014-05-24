@@ -115,6 +115,21 @@ public final class TermUtils {
    }
 
    /**
+    * Return the integer value represented by the specified term.
+    * 
+    * @param t the term representing an integer value
+    * @return the integer value represented by {@code t}
+    * @throws ProjogException if the specified {@link Term} does not represent a term of type {@link TermType#INTEGER}
+    */
+   public static int toInt(final Term t) {
+      if (t.getType() == TermType.INTEGER) {
+         return ((Numeric) t.getTerm()).getInt();
+      } else {
+         throw new ProjogException("Expected integer but got: " + t.getType() + " with value: " + t);
+      }
+   }
+
+   /**
     * Return the name of the {@link Atom} represented by the specified {@link Atom}.
     * 
     * @param t the term representing an {@link Atom}

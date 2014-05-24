@@ -194,6 +194,30 @@ public class TermUtilsTest {
    }
 
    @Test
+   public void testToInt() {
+      assertEquals(Integer.MAX_VALUE, TermUtils.toInt(integerNumber(Integer.MAX_VALUE)));
+      assertEquals(1, TermUtils.toInt(integerNumber(1)));
+      assertEquals(0, TermUtils.toInt(integerNumber(0)));
+      assertEquals(Integer.MIN_VALUE, TermUtils.toInt(integerNumber(Integer.MIN_VALUE)));
+   }
+
+   @Test
+   public void testToIntExceptions() {
+      try {
+         TermUtils.toInt(atom("test"));
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Expected integer but got: ATOM with value: test", e.getMessage());
+      }
+      try {
+         TermUtils.toInt(doubleNumber(0));
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Expected integer but got: DOUBLE with value: 0.0", e.getMessage());
+      }
+   }
+
+   @Test
    public void testGetAtomName() {
       Atom a = atom("testAtomName");
       assertEquals("testAtomName", TermUtils.getAtomName(a));

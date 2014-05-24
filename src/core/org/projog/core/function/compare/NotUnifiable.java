@@ -4,27 +4,23 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* SYSTEM TEST
- % %FALSE% abc \= def
+ % %TRUE% abc \= def
 
- % %QUERY% abc \= X
- % %ANSWER% X=UNINSTANTIATED VARIABLE
+ % %FALSE% X \= Y
 
- % %QUERY% a(abc, X) \= a(Y, def)
- % %ANSWER% 
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
+ % %FALSE% p(X,b) \= p(a,Y)
+
+ % %QUERY% p(X,b,c) \= p(a,Y,z)
  % %ANSWER%
- 
- % %QUERY% X = def, Y = abc, a(abc, X) \= a(Y, def)
- % %ANSWER% 
- % X=def
- % Y=abc
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE 
  % %ANSWER%
  */
 /**
- * <code>X \= Y</code> - checks whether two terms can be unified.
+ * <code>X \= Y</code> - checks whether two terms cannot be unified.
  * <p>
- * If <code>X</code> can be unified with <code>Y</code> the goal succeeds else the goal fails.
+ * If <code>X</code> can be NOT unified with <code>Y</code> the goal succeeds
+ * else the goal fails.
  * </p>
  */
 public final class NotUnifiable extends AbstractSingletonPredicate {
@@ -34,14 +30,15 @@ public final class NotUnifiable extends AbstractSingletonPredicate {
    }
 
    /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
+    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead
+    * of creating a new {@code Term} array.
     * 
     * @see org.projog.core.Predicate#evaluate(Term...)
     */
    public boolean evaluate(Term arg1, Term arg2) {
-      final boolean result = arg1.unify(arg2);
+      final boolean unifiable = arg1.unify(arg2);
       arg1.backtrack();
       arg2.backtrack();
-      return result;
+      return !unifiable;
    }
 }

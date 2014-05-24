@@ -165,19 +165,6 @@
 <!-- ALL TESTS -->
 	<target name="test" depends="unit-test,sys-test"/>
 
-<!-- RUN CONSOLE REPL -->
-	<target name="repl" depends="compile.core">
-		<mkdir dir="${dynamicContentDir}"/>
-		<java classname="${mainClass}" fork="true" spawn="true">
-			<classpath>
-				<pathelement location="${dynamicContentDir}"/>
-				<pathelement location="build/classes/core"/>
-				<pathelement location="etc"/>
-			</classpath>
-			<sysproperty key="projog.generatedClasses" value="${dynamicContentDir}"/>
-		</java>
-	</target>
-
 <!-- WEB PAGES -->
 	<target name="web" depends="sys-test.generate"
 	        description="builds static html pages">

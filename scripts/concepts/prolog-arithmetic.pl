@@ -19,6 +19,9 @@
 % %QUERY% X is 6//2
 % %ANSWER% X=3
 
+% %QUERY% X is 7/2
+% %ANSWER% X=3.5
+
 % %QUERY% X is 7//2
 % %ANSWER% X=3
 

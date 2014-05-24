@@ -18,6 +18,7 @@ import org.projog.core.term.TermType;
  % %FALSE% integer([1,2,3])
  % %FALSE% integer([])
  % %FALSE% integer(X)
+ % %FALSE% integer(_)
 */
 /**
  * <code>integer(X)</code> - checks that a term is an integer.

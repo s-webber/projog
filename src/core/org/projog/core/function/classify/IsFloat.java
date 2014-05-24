@@ -18,6 +18,7 @@ import org.projog.core.term.TermType;
  % %FALSE% float([1.0,2.0,3.0])
  % %FALSE% float([])
  % %FALSE% float(X)
+ % %FALSE% float(_)
 */
 /**
  * <code>float(X)</code> - checks that a term is a floating point number.

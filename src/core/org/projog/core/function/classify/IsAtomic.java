@@ -8,6 +8,7 @@ import org.projog.core.term.TermType;
  % %TRUE% atomic(abc)
  % %TRUE% atomic(1)
  % %FALSE% atomic(X)
+ % %FALSE% atomic(_)
  % %FALSE% atomic(a(b,c))
  % %FALSE% atomic([a,b,c])
  */

@@ -2,7 +2,6 @@ package org.projog.core.function.classify;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 
 /* SYSTEM TEST
  % %TRUE% nonvar(abc)
@@ -13,6 +12,7 @@ import org.projog.core.term.TermType;
  % %ANSWER% X=1
  % %FALSE% nonvar(X)
  % %FALSE% X=Y, nonvar(X)
+ % %FALSE% nonvar(_)
  */
 /**
  * <code>nonvar(X)</code> - checks that a term is not an uninstantiated variable.
@@ -27,7 +27,6 @@ public final class IsNonVar extends AbstractSingletonPredicate {
    }
 
    public boolean evaluate(Term arg) {
-      TermType type = arg.getType();
-      return type.isVariable() == false;
+      return !arg.getType().isVariable();
    }
 }

@@ -2,7 +2,6 @@ package org.projog.core.function.classify;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 
 /* SYSTEM TEST
  % %FALSE% var(abc)
@@ -17,6 +16,7 @@ import org.projog.core.term.TermType;
  % X=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE
  % %ANSWER%
+ % %TRUE% var(_)
  */
 /**
  * <code>var(X)</code> - checks that a term is an uninstantiated variable.
@@ -36,7 +36,6 @@ public final class IsVar extends AbstractSingletonPredicate {
     * @see org.projog.core.Predicate#evaluate(Term...)
     */
    public boolean evaluate(Term arg) {
-      TermType type = arg.getType();
-      return type.isVariable();
+      return arg.getType().isVariable();
    }
 }

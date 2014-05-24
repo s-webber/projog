@@ -12,7 +12,8 @@ import org.projog.core.term.Term;
  % %FALSE% compound(1)
  % %FALSE% compound(1.5)
  % %FALSE% compound(X)
-*/
+ % %FALSE% compound(_)
+ */
 /**
  * <code>compound(X)</code> - checks that a term is a compound term.
  * <p>

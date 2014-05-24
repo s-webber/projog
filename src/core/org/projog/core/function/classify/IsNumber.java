@@ -2,7 +2,6 @@ package org.projog.core.function.classify;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 
 /* SYSTEM TEST
  % %TRUE% number(1)
@@ -20,6 +19,7 @@ import org.projog.core.term.TermType;
  % %FALSE% number([a,b,c]) 
  % %FALSE% number([])
  % %FALSE% number(X)
+ % %FALSE% number(_)
  */
 /**
  * <code>number(X)</code> - checks that a term is numeric.
@@ -39,7 +39,6 @@ public final class IsNumber extends AbstractSingletonPredicate {
     * @see org.projog.core.Predicate#evaluate(Term...)
     */
    public boolean evaluate(Term arg) {
-      TermType type = arg.getType();
-      return type.isNumeric();
+      return arg.getType().isNumeric();
    }
 }

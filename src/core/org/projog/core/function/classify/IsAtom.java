@@ -8,6 +8,7 @@ import org.projog.core.term.TermType;
  % %TRUE% atom(abc)
  % %FALSE% atom(1)
  % %FALSE% atom(X)
+ % %FALSE% atom(_)
  % %FALSE% atom(a(b,c))
  % %FALSE% atom([a,b,c]) 
  */
@@ -29,7 +30,6 @@ public final class IsAtom extends AbstractSingletonPredicate {
     * @see org.projog.core.Predicate#evaluate(Term...)
     */
    public boolean evaluate(Term arg) {
-      TermType type = arg.getType();
-      return type == TermType.ATOM;
+      return arg.getType() == TermType.ATOM;
    }
 }

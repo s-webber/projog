@@ -106,11 +106,20 @@
 % %QUERY% X is 8 / 2.5
 % %ANSWER% X=3.2
 
-% %QUERY% X is 3.25 mod 2.5
-% %ANSWER% X=0.75
+% %QUERY% X is 5 mod 2.
+% %ANSWER% X = 1
+% %QUERY% ?- X is 5 mod -2.
+% %ANSWER% X = -1
+% %QUERY% X is -5 mod -2.
+% %ANSWER% X = -1
+% %QUERY% X is -5 mod 2.
+% %ANSWER% X = 1
+% %QUERY% X is 5 rem 2.
+% %ANSWER% X = 1
+% %QUERY% X is 5 rem -2.
+% %ANSWER% X = 1
+% %QUERY% X is -5 rem -2.
+% %ANSWER% X = -1
+% %QUERY% X is -5 rem 2.
+% %ANSWER% X = -1
 
-% %QUERY% X is 3.25 mod 2
-% %ANSWER% X=1.25
-
-% %QUERY% X is 3 mod 2.5
-% %ANSWER% X=0.5

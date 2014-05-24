@@ -108,7 +108,8 @@
 ?- pj_add_calculatable('-', 'org.projog.core.function.math.Subtract').
 ?- pj_add_calculatable('/', 'org.projog.core.function.math.Divide').
 ?- pj_add_calculatable('*', 'org.projog.core.function.math.Multiply').
-?- pj_add_calculatable(mod, 'org.projog.core.function.math.Mod').
+?- pj_add_calculatable(mod, 'org.projog.core.function.math.Modulo').
+?- pj_add_calculatable(rem, 'org.projog.core.function.math.Remainder').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').
@@ -141,4 +142,5 @@
 ?- op(400, yfx, '*').
 ?- op(400, yfx, '//').
 ?- op(400, yfx, 'mod').
+?- op(400, yfx, 'rem').
 ?- op(200, fy, '-').

@@ -7,7 +7,12 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 
-public class IntegerDivide implements Calculatable {
+/** 
+ * Performs integer division.
+ * <p>
+ * The result will be rounded down to the nearest whole number.
+ */
+public final class IntegerDivide implements Calculatable {
    @Override
    public IntegerNumber calculate(KnowledgeBase kb, Term[] args) {
       final int dividend = toInt(args[0]);

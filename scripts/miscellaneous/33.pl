@@ -13,7 +13,7 @@ b(A,C) :- a(A,A,C).
 % %ANSWER% A=25
 % %ANSWER% A=1
 
-% %QUERY% b(26/4-1,A)
+% %QUERY% b(26//4-1,A)
 % %ANSWER% A=10
 % %ANSWER% A=0
 % %ANSWER% A=25

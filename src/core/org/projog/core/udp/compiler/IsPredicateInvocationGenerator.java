@@ -24,7 +24,6 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
       ops.put("+", "+");
       ops.put("-", "-");
       ops.put("*", "*");
-      ops.put("/", "/");
       ops.put("mod", "%");
    }
 

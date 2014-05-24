@@ -30,9 +30,9 @@ testCalculatables(A,B,C) :- Y is 1.5, A is Y.
 testCalculatables(A,B,C) :- A is B+C.
 testCalculatables(A,B,C) :- A is B-C.
 testCalculatables(A,B,C) :- A is B*C.
-testCalculatables(A,B,C) :- A is B/C.
-testCalculatables(A,B,C) :- A is (B/C)+B*C-2.
-testCalculatables(A,B,C) :- A=Z, Z is (B/C)+B*C-(1.25+0.25+1).
+testCalculatables(A,B,C) :- A is B//C.
+testCalculatables(A,B,C) :- A is (B//C)+B*C-2.
+testCalculatables(A,B,C) :- A=Z, Z is (B//C)+B*C-(1.25+0.25+1).
 testCalculatables(A,B,C) :- Z is B+C, A is Z.
 
 % %TRUE% notrace

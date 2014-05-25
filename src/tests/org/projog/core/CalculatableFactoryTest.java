@@ -2,10 +2,7 @@ package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.ADD_CALCULATABLE_KEY;
-import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
@@ -13,7 +10,6 @@ import static org.projog.TestUtils.variable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.DoubleNumber;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
@@ -26,21 +22,21 @@ public class CalculatableFactoryTest {
 
    @Test
    public void testGetNumericIntegerNumber() {
-      CalculatableFactory cf = getCalculatableFactory();
+      CalculatableFactory cf = createCalculatableFactory();
       IntegerNumber i = integerNumber(1);
       assertSame(i, cf.getNumeric(i));
    }
 
    @Test
    public void testGetNumericDoubleNumber() {
-      CalculatableFactory cf = getCalculatableFactory();
+      CalculatableFactory cf = createCalculatableFactory();
       DoubleNumber d = doubleNumber(17.6);
       assertSame(d, cf.getNumeric(d));
    }
 
    @Test
    public void testGetNumericException() {
-      CalculatableFactory cf = getCalculatableFactory();
+      CalculatableFactory cf = createCalculatableFactory();
       try {
          cf.getNumeric(variable("X"));
          fail();
@@ -51,13 +47,10 @@ public class CalculatableFactoryTest {
 
    @Test
    public void testGetNumericPredicate() {
-      CalculatableFactory cf = getCalculatableFactory();
+      CalculatableFactory cf = createCalculatableFactory();
       String dummyCalculatableName = "dummy_calculatable";
-      String dummyCalculatableClassName = new DummyCalculatable().getClass().getName();
       int input = 7;
       Structure p = structure(dummyCalculatableName, integerNumber(input));
-      Term evaluateArg1 = atom(dummyCalculatableName);
-      Term evaluateArg2 = atom(dummyCalculatableClassName);
 
       // try to use calculatable by a name that there is no match for (expect exception)
       try {
@@ -68,7 +61,7 @@ public class CalculatableFactoryTest {
       }
 
       // add new calculatable
-      assertTrue(cf.evaluate(evaluateArg1, evaluateArg2));
+      cf.addCalculatable(dummyCalculatableName, new DummyCalculatable());
 
       // assert that the factory is now using the newly added calculatable
       Numeric n = cf.getNumeric(p);
@@ -78,18 +71,15 @@ public class CalculatableFactoryTest {
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         cf.evaluate(evaluateArg1, evaluateArg2);
-         fail("could re-add calculatable named: " + evaluateArg1);
+         cf.addCalculatable(dummyCalculatableName, new DummyCalculatable());
+         fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
       }
    }
 
-   private CalculatableFactory getCalculatableFactory() {
-      PredicateFactory ef = kb.getPredicateFactory(ADD_CALCULATABLE_KEY);
-      assertSame(CalculatableFactory.class, ef.getClass());
-      assertTrue(ef instanceof AbstractSingletonPredicate);
-      return (CalculatableFactory) ef;
+   private CalculatableFactory createCalculatableFactory() {
+      return new CalculatableFactory(kb);
    }
 
    /**

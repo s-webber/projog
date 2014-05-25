@@ -33,24 +33,13 @@ public final class KnowledgeBase {
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 
-   /**
-    * Represents the {@code pj_add_calculatable/2} predicate hardcoded in every {@code KnowledgeBase}.
-    * <p>
-    * The {@code pj_add_calculatable/2} predicate allows implementations of {@link Calculatable} to be "plugged-in" to a
-    * {@code KnowledgeBase} at runtime using Prolog syntax. The {@code pj_add_calculatable/2} predicate is implemented
-    * by {@link #calculatableFactory} which provides the functionality for adding new calculatables.
-    * 
-    * @see CalculatableFactory#evaluate(Term[])
-    */
-   private static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_calculatable", 2);
-
    private final ProjogEventsObservable observable = new ProjogEventsObservable();
    private final SpyPoints spyPoints = new SpyPoints(this);
    private final FileHandles fileHandles = new FileHandles();
    private final Operands operands = new Operands();
    private final ProjogProperties projogProperties;
    private final PluginPredicateFactoryFactory pluginPredicateFactoryFactory = new PluginPredicateFactoryFactory();
-   private final CalculatableFactory calculatableFactory = new CalculatableFactory();
+   private final CalculatableFactory calculatableFactory = new CalculatableFactory(this);
    private final Write writer = new Write();
 
    /** Used to synchronize access to {@link #userDefinedPredicates} */
@@ -73,11 +62,9 @@ public final class KnowledgeBase {
       this.projogProperties = projogProperties;
 
       pluginPredicateFactoryFactory.setKnowledgeBase(this);
-      calculatableFactory.setKnowledgeBase(this);
       writer.setKnowledgeBase(this);
 
       pluginPredicateFactoryFactory.addPredicateFactory(ADD_PREDICATE_KEY, pluginPredicateFactoryFactory);
-      pluginPredicateFactoryFactory.addPredicateFactory(ADD_CALCULATABLE_KEY, calculatableFactory);
    }
 
    /**
@@ -126,6 +113,10 @@ public final class KnowledgeBase {
     */
    public Numeric getNumeric(Term t) {
       return calculatableFactory.getNumeric(t);
+   }
+
+   public void addCalculatable(String functionName, Calculatable calculatable) {
+      calculatableFactory.addCalculatable(functionName, calculatable);
    }
 
    /**

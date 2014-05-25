@@ -10,7 +10,8 @@ import org.projog.core.term.Term;
 /** 
  * Performs integer division.
  * <p>
- * The result will be rounded down to the nearest whole number.
+ * The result will be rounded towards zero. 
+ * e.g. <code>7 // 2</code> is rounded down to <code>3</code> while <code>-7 // 2</code> is rounded up to <code>-3</code>
  */
 public final class IntegerDivide implements Calculatable {
    @Override

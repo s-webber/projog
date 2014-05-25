@@ -8,6 +8,7 @@ import org.projog.core.ProjogException;
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Numeric}.
  * 
+ * @see #compare(Term, Term, KnowledgeBase)
  * @see TermComparator
  */
 public final class NumericTermComparator implements Comparator<Term> {

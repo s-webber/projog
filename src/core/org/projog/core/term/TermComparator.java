@@ -7,6 +7,7 @@ import org.projog.core.ProjogException;
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Term}.
  * 
+ * @see #compare(Term, Term)
  * @see NumericTermComparator
  */
 public final class TermComparator implements Comparator<Term> {
@@ -86,7 +87,7 @@ public final class TermComparator implements Comparator<Term> {
    private int compareStructures(Term t1, Term t2) {
       // compare number of arguments
       int t1Length = t1.getNumberOfArguments();
-      int t2Length = t2.getNumberOfArguments();;
+      int t2Length = t2.getNumberOfArguments();
       if (t1Length != t2Length) {
          return t1Length > t2Length ? 1 : -1;
       }

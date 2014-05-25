@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.projog.core.CutException;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
@@ -49,14 +50,27 @@ public final class QueryResult {
     */
    public boolean next() {
       if (predicate == null) {
-         for (int i = 0; i < args.length; i++) {
-            args[i] = query.getArgument(i).getTerm();
-         }
-         predicate = predicateFactory.getPredicate(args);
-         return predicate.evaluate(args);
+         return doFirstEvaluationOfQuery();
       } else if (predicate.isRetryable()) {
-         return predicate.evaluate(args);
+         return doRetryEvaluationOfQuery();
       } else {
+         return false;
+      }
+   }
+
+   private boolean doFirstEvaluationOfQuery() {
+      for (int i = 0; i < args.length; i++) {
+         args[i] = query.getArgument(i).getTerm();
+      }
+      predicate = predicateFactory.getPredicate(args);
+      return predicate.evaluate(args);
+   }
+
+   private boolean doRetryEvaluationOfQuery() {
+      try {
+         return predicate.evaluate(args);
+      } catch (CutException e) {
+         // e.g. for a query like: ?- true, !.
          return false;
       }
    }

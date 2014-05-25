@@ -5,6 +5,10 @@ import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
 /* SYSTEM TEST
+ % %QUERY% repeat, !
+ % %ANSWER/%
+ % %NO%
+
  print_first_sentence(X) :- 
     atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
  

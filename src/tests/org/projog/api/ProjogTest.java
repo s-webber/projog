@@ -227,6 +227,16 @@ public class ProjogTest {
       }
    }
 
+   /** Tests a query that contains a cut (i.e. !). */
+   @Test
+   public void testQueryContainingCut() {
+      Projog p = createProjog();
+      QueryStatement s = p.query("repeat, !.");
+      QueryResult r = s.getResult();
+      assertTrue(r.next());
+      assertFalse(r.next());
+   }
+
    private void assertProjogStackTraceElement(ProjogStackTraceElement actual, String expectedKey, int expectedClauseIdx, String expectedTerm) {
       assertEquals(expectedKey, actual.getPredicateKey().toString());
       assertEquals(expectedClauseIdx, actual.getClauseIdx());

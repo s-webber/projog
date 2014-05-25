@@ -105,6 +105,7 @@
 ?- pj_add_predicate(memberchk/2, 'org.projog.core.function.list.MemberCheck').
 ?- pj_add_predicate(append/3, 'org.projog.core.function.list.Append').
 ?- pj_add_predicate(subtract/3, 'org.projog.core.function.list.Subtract').
+?- pj_add_predicate(keysort/2, 'org.projog.core.function.list.KeySort').
 
 % numerical operations
 ?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').

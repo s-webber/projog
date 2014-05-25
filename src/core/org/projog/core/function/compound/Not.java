@@ -8,6 +8,10 @@ import org.projog.core.term.Term;
 /* SYSTEM TEST
  % %FALSE% \+ true
  % %TRUE% \+ fail
+ 
+ % Note: "not" is a synonym for "\+".
+ % %FALSE% not(true)
+ % %TRUE% not(fail)
  */
 /**
  * <code>\+ X</code> - "not".

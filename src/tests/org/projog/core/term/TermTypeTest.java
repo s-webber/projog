@@ -53,8 +53,9 @@ public class TermTypeTest {
       assertEquals(3, TermType.DOUBLE.getPrecedence());
       assertEquals(4, TermType.INTEGER.getPrecedence());
       assertEquals(5, TermType.ATOM.getPrecedence());
+      // all compound structures share the same precedence
       assertEquals(6, TermType.STRUCTURE.getPrecedence());
-      assertEquals(7, TermType.EMPTY_LIST.getPrecedence());
-      assertEquals(8, TermType.LIST.getPrecedence());
+      assertEquals(6, TermType.EMPTY_LIST.getPrecedence());
+      assertEquals(6, TermType.LIST.getPrecedence());
    }
 }

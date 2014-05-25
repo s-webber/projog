@@ -19,14 +19,14 @@ public enum TermType {
    /** @see Structure */
    STRUCTURE(true, false, false, 6),
    /** @see EmptyList */
-   EMPTY_LIST(true, false, false, 7),
+   EMPTY_LIST(true, false, false, 6),
    /** @see List */
-   LIST(true, false, false, 8);
+   LIST(true, false, false, 6);
 
    private final boolean isStructure;
    private final boolean isNumeric;
    private final boolean isVariable;
-   private final int precedence; // could use ordinal but best not to
+   private final int precedence;
 
    private TermType(boolean isStructure, boolean isNumeric, boolean isVariable, int precedence) {
       this.isStructure = isStructure;

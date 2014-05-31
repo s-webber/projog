@@ -18,11 +18,6 @@ abstract class AbstractTermSplitFunction extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       if (arg1.getType().isVariable()) {
          return evaluateWithVariableFirstArgument(arg1, arg2);

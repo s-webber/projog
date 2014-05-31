@@ -5,7 +5,7 @@ import java.util.List;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
+/* TEST
  z(r).
  z(t).
  z(y).
@@ -17,39 +17,39 @@ import org.projog.core.term.Term;
  x(d,b,c).
  x(a,b,c).
 
- % %QUERY% bagof(X,x(X,Y,Z),L)
- % %ANSWER%
+ %QUERY bagof(X,x(X,Y,Z),L)
+ %ANSWER
  % L=[a,w,d,a]
  % X=UNINSTANTIATED VARIABLE
  % Y=b
  % Z=c
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=r
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=t
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=y
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[1]
  % X=UNINSTANTIATED VARIABLE
  % Y=2
  % Z=3
- % %ANSWER%
+ %ANSWER
  
- % %FALSE% bagof(X,x(X,y,z),L)
+ %FALSE bagof(X,x(X,y,z),L)
  */
 /**
  * <code>bagof(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -74,12 +74,6 @@ public final class BagOf extends AbstractCollectionOf {
       return getPredicate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public BagOf getPredicate(Term template, Term goal, Term bag) {
       return new BagOf(getKnowledgeBase());
    }

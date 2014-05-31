@@ -11,20 +11,20 @@ import org.projog.core.term.TermUtils;
 import org.projog.core.term.Unifier;
 import org.projog.core.term.Variable;
 
-/* SYSTEM TEST
- % %TRUE% true, true
- % %FALSE% true, fail
- % %FALSE% fail, true
- % %FALSE% fail, fail
+/* TEST
+ %TRUE true, true
+ %FALSE true, fail
+ %FALSE fail, true
+ %FALSE fail, fail
  
- % %TRUE% true, true, true
- % %FALSE% true, fail, fail
- % %FALSE% fail, true, fail
- % %FALSE% fail, fail, true
- % %FALSE% true, true, fail
- % %FALSE% true, fail, true 
- % %FALSE% fail, true, true
- % %FALSE% fail, fail, fail
+ %TRUE true, true, true
+ %FALSE true, fail, fail
+ %FALSE fail, true, fail
+ %FALSE fail, fail, true
+ %FALSE true, true, fail
+ %FALSE true, fail, true 
+ %FALSE fail, true, true
+ %FALSE fail, fail, fail
  
  :- b.
  :- c.
@@ -32,8 +32,8 @@ import org.projog.core.term.Variable;
  :- y.
  a :- b,c,d.
  x :- y,z.
- % %TRUE% a
- % %FALSE% x
+ %TRUE a
+ %FALSE x
 
  :- p2(1).
  :- p2(2).
@@ -49,69 +49,69 @@ import org.projog.core.term.Variable;
 
  p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
  
- % %QUERY% p1(X, Y, Z)
- % %ANSWER%
+ %QUERY p1(X, Y, Z)
+ %ANSWER
  % X=1
  % Y=a
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=1
  % Y=b
  % Z=[a,b,c]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=1
  % Y=b
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=1
  % Y=c
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=2
  % Y=a
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=2
  % Y=b
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=2
  % Y=c
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=3
  % Y=a
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=3
  % Y=b
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=3
  % Y=c
  % Z=[1,2,3]
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=3
  % Y=c
  % Z=[q,w,e,r,t,y]
- % %ANSWER%
+ %ANSWER
  
- % %QUERY% p2(X), p2(X), p2(X)
- % %ANSWER% X=1
- % %ANSWER% X=2
- % %ANSWER% X=3
+ %QUERY p2(X), p2(X), p2(X)
+ %ANSWER X=1
+ %ANSWER X=2
+ %ANSWER X=3
 
- % %FALSE% p2(X), p3(X), p2(X)
+ %FALSE p2(X), p3(X), p2(X)
  */
 /**
  * <code>X,Y</code> - conjunction.
@@ -145,12 +145,6 @@ public final class Conjunction extends AbstractRetryablePredicate {
       return getPredicate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public Conjunction getPredicate(Term arg1, Term arg2) {
       return new Conjunction(getKnowledgeBase());
    }
@@ -160,11 +154,6 @@ public final class Conjunction extends AbstractRetryablePredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term inputArg1, Term inputArg2) {
       if (firstGo) {
          firstPredicate = getKnowledgeBase().getPredicateFactory(inputArg1).getPredicate(inputArg1.getArgs());

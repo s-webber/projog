@@ -3,22 +3,22 @@ package org.projog.core.function.compare;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %FALSE% X==Y
- % %QUERY% X==X
- % %ANSWER% X=UNINSTANTIATED VARIABLE
- % %QUERY% X=Y, X==Y, Y=1
- % %ANSWER%
+/* TEST
+ %FALSE X==Y
+ %QUERY X==X
+ %ANSWER X=UNINSTANTIATED VARIABLE
+ %QUERY X=Y, X==Y, Y=1
+ %ANSWER
  % X=1
  % Y=1
- % %ANSWER%
- % %FALSE% append([A|B],C) == append(X,Y)
- % %QUERY% append([A|B],C) == append([A|B],C)
- % %ANSWER% 
+ %ANSWER
+ %FALSE append([A|B],C) == append(X,Y)
+ %QUERY append([A|B],C) == append([A|B],C)
+ %ANSWER 
  % A=UNINSTANTIATED VARIABLE
  % B=UNINSTANTIATED VARIABLE
  % C=UNINSTANTIATED VARIABLE
- % %ANSWER% 
+ %ANSWER 
  */
 /**
  * <code>X==Y</code> - a strict equality test.
@@ -34,11 +34,6 @@ public final class StrictEquality extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       return arg1.strictEquality(arg2);
    }

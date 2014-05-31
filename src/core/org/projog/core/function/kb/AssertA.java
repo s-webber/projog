@@ -3,18 +3,18 @@ package org.projog.core.function.kb;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
-/* SYSTEM TEST
- % %QUERY% X=p(1), asserta(X), asserta(p(2)), asserta(p(3))
- % %ANSWER% X=p(1)
- % %QUERY% p(X)
- % %ANSWER% X=3
- % %ANSWER% X=2
- % %ANSWER% X=1
+/* TEST
+ %QUERY X=p(1), asserta(X), asserta(p(2)), asserta(p(3))
+ %ANSWER X=p(1)
+ %QUERY p(X)
+ %ANSWER X=3
+ %ANSWER X=2
+ %ANSWER X=1
 
- % %QUERY% retract(p(X))
- % %ANSWER% X=3
- % %ANSWER% X=2
- % %ANSWER% X=1
+ %QUERY retract(p(X))
+ %ANSWER X=3
+ %ANSWER X=2
+ %ANSWER X=1
  */
 /**
  * <code>asserta(X)</code> - adds a clause to the front of the knowledge base.

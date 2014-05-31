@@ -5,10 +5,10 @@ import org.projog.core.Predicate;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% once(repeat)
- % %TRUE% once(true)
- % %FALSE% once(fail)
+/* TEST
+ %TRUE once(repeat)
+ %TRUE once(true)
+ %FALSE once(fail)
  */
 /**
  * <code>once(X)</code> - calls the goal represented by a term.
@@ -23,11 +23,6 @@ public final class Once extends AbstractSingletonPredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
       return e.evaluate(t.getArgs());

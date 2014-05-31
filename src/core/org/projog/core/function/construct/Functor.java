@@ -11,42 +11,42 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
-/* SYSTEM TEST
- % %QUERY% functor(f(a,b,c(Z)),F,N)
- % %ANSWER%
+/* TEST
+ %QUERY functor(f(a,b,c(Z)),F,N)
+ %ANSWER
  % Z=UNINSTANTIATED VARIABLE
  % F=f
  % N=3
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% functor(a+b,F,N)
- % %ANSWER%
+ %QUERY functor(a+b,F,N)
+ %ANSWER
  % F=+
  % N=2
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% functor([a,b,c],F,N)
- % %ANSWER%
+ %QUERY functor([a,b,c],F,N)
+ %ANSWER
  % F=.
  % N=2
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% functor(atom,F,N)
- % %ANSWER%
+ %QUERY functor(atom,F,N)
+ %ANSWER
  % F=atom
  % N=0
- % %ANSWER%
+ %ANSWER
 
- % %FALSE% functor([a,b,c],'.',3)
- % %FALSE% functor([a,b,c],a,Z)
+ %FALSE functor([a,b,c],'.',3)
+ %FALSE functor([a,b,c],a,Z)
 
- % %QUERY% functor( X, sentence, 2)
- % %ANSWER% X = sentence(_, _)
+ %QUERY functor( X, sentence, 2)
+ %ANSWER X = sentence(_, _)
 
  copy(Old, New) :- functor(Old, F, N), functor(New, F, N).
 
- % %QUERY% copy(sentence(a,b), X)
- % %ANSWER% X = sentence(_, _)
+ %QUERY copy(sentence(a,b), X)
+ %ANSWER X = sentence(_, _)
  */
 /**
  * <code>functor(T,F,N)</code>
@@ -61,11 +61,6 @@ public final class Functor extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term t, Term f, Term n) {
       switch (t.getType()) {
          case ATOM:

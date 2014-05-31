@@ -10,46 +10,46 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %QUERY% p(a,b,c) =.. X
- % %ANSWER% X=[p,a,b,c]
+/* TEST
+ %QUERY p(a,b,c) =.. X
+ %ANSWER X=[p,a,b,c]
 
- % %FALSE% p(a,b,c) =.. [p,x,y,z]
+ %FALSE p(a,b,c) =.. [p,x,y,z]
 
- % %FALSE% p(a,b,c) =.. []
+ %FALSE p(a,b,c) =.. []
  
- % %QUERY% [a,b,c,d] =.. X
- % %ANSWER% X=[.,a,[b,c,d]]
+ %QUERY [a,b,c,d] =.. X
+ %ANSWER X=[.,a,[b,c,d]]
 
- % %QUERY% [a,b,c,d] =.. [X|Y]
- % %ANSWER% 
+ %QUERY [a,b,c,d] =.. [X|Y]
+ %ANSWER 
  % X=.
  % Y=[a,[b,c,d]]
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% X =.. [a,b,c,d]
- % %ANSWER% X=a(b, c, d)
+ %QUERY X =.. [a,b,c,d]
+ %ANSWER X=a(b, c, d)
 
- % %QUERY% X =.. [a,[b,c],d]
- % %ANSWER% X=a([b,c], d)
+ %QUERY X =.. [a,[b,c],d]
+ %ANSWER X=a([b,c], d)
 
- % %QUERY% a+b =.. X
- % %ANSWER% X=[+,a,b]
+ %QUERY a+b =.. X
+ %ANSWER X=[+,a,b]
 
- % %QUERY% a+b =.. [+, X, Y]
- % %ANSWER%
+ %QUERY a+b =.. [+, X, Y]
+ %ANSWER
  % X=a
  % Y=b
- % %ANSWER%
+ %ANSWER
  
- % %QUERY% a =.. [a]
- % %EXCEPTION% Expected first argument to be a variable or a predicate but got a ATOM with value: a
+ %QUERY a =.. [a]
+ %ERROR Expected first argument to be a variable or a predicate but got a ATOM with value: a
 
- % %QUERY% a+b =.. '+ X Y'
- % %EXCEPTION% Expected second argument to be a variable or a list but got a ATOM with value: + X Y
+ %QUERY a+b =.. '+ X Y'
+ %ERROR Expected second argument to be a variable or a list but got a ATOM with value: + X Y
 
- % %QUERY% X =.. Y
- % %EXCEPTION% Both arguments are variables: X and: Y
+ %QUERY X =.. Y
+ %ERROR Both arguments are variables: X and: Y
  */
 /**
  * <code>X=..L</code> - "univ".
@@ -64,11 +64,6 @@ public final class Univ extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       TermType argType1 = arg1.getType();
       TermType argType2 = arg2.getType();

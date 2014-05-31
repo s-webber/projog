@@ -9,8 +9,8 @@ inform(X,Y) :-
    write([move,a,disc,from,the,X,pole,to,the,Y,pole]),
    nl.
 
-% %QUERY% hanoi(3)
-% %OUTPUT%
+%QUERY hanoi(3)
+%OUTPUT
 % [move,a,disc,from,the,left,pole,to,the,centre,pole]
 % [move,a,disc,from,the,left,pole,to,the,right,pole]
 % [move,a,disc,from,the,centre,pole,to,the,right,pole]
@@ -19,12 +19,12 @@ inform(X,Y) :-
 % [move,a,disc,from,the,right,pole,to,the,centre,pole]
 % [move,a,disc,from,the,left,pole,to,the,centre,pole]
 %
-% %OUTPUT%
-% %ANSWER/%
-% %NO%
+%OUTPUT
+%ANSWER/
+%NO
 
-% %QUERY% hanoi(5)
-% %OUTPUT%
+%QUERY hanoi(5)
+%OUTPUT
 % [move,a,disc,from,the,left,pole,to,the,centre,pole]
 % [move,a,disc,from,the,left,pole,to,the,right,pole]
 % [move,a,disc,from,the,centre,pole,to,the,right,pole]
@@ -57,13 +57,13 @@ inform(X,Y) :-
 % [move,a,disc,from,the,right,pole,to,the,centre,pole]
 % [move,a,disc,from,the,left,pole,to,the,centre,pole]
 %
-% %OUTPUT%
-% %ANSWER/%
-% %NO%
+%OUTPUT
+%ANSWER/
+%NO
 
-% %QUERY% hanoi(X)
-% %ANSWER% X = 0
-% %NO%
+%QUERY hanoi(X)
+%ANSWER X = 0
+%NO
 
-% %QUERY% hanoi(x)
-% %EXCEPTION% Cannot find calculatable: x
+%QUERY hanoi(x)
+%ERROR Cannot find calculatable: x

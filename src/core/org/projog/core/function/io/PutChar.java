@@ -4,8 +4,8 @@ import static org.projog.core.term.TermUtils.getAtomName;
 
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>put_char(X)</code> - writes a character.
@@ -22,11 +22,6 @@ public final class PutChar extends org.projog.core.function.AbstractSingletonPre
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term argument) {
       String textToOutput = getAtomName(argument);
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(textToOutput);

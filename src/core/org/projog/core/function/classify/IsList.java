@@ -4,14 +4,14 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE% is_list([1.0,2.0,3.0])
- % %TRUE% is_list([])
- % %TRUE% is_list([a|[]])
+/* TEST
+ %TRUE is_list([1.0,2.0,3.0])
+ %TRUE is_list([])
+ %TRUE is_list([a|[]])
 
- % %FALSE% is_list([a|b])
- % %FALSE% is_list([a|X])
- % %FALSE% is_list(X)
+ %FALSE is_list([a|b])
+ %FALSE is_list([a|X])
+ %FALSE is_list(X)
  */
 /**
  * <code>is_list(X)</code> - checks that a term is a list.
@@ -26,12 +26,6 @@ public final class IsList extends AbstractSingletonPredicate {
 		return evaluate(args[0]);
 	}
 
-	/**
-	 * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead
-	 * of creating a new {@code Term} array.
-	 * 
-	 * @see org.projog.core.Predicate#evaluate(Term...)
-	 */
 	public boolean evaluate(final Term arg) {
 		switch (arg.getType()) {
 		case EMPTY_LIST:

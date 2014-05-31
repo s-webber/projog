@@ -2,13 +2,13 @@ package org.projog.core.function.io;
 
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %QUERY% write('a'), write('b'), nl, write('c')
- % %OUTPUT%
+/* TEST
+ %QUERY write('a'), write('b'), nl, write('c')
+ %OUTPUT
  % ab
  % c
- % %OUTPUT%
- % %ANSWER/%
+ %OUTPUT
+ %ANSWER/
  */
 /**
  * <code>nl</code> - outputs a new line character.
@@ -25,11 +25,6 @@ public final class NewLine extends org.projog.core.function.AbstractSingletonPre
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().println();
       return true;

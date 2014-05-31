@@ -4,42 +4,42 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %QUERY% X is 3
- % %ANSWER% X=3
- % %QUERY% X is 3+2
- % %ANSWER% X=5
- % %QUERY% X is 3.5+2.25
- % %ANSWER% X=5.75
- % %TRUE% 5 is 5
- % %FALSE% 5 is 6
- % %TRUE% 5 is 4+1
- % %FALSE% 5 is 4+2
+/* TEST
+ %QUERY X is 3
+ %ANSWER X=3
+ %QUERY X is 3+2
+ %ANSWER X=5
+ %QUERY X is 3.5+2.25
+ %ANSWER X=5.75
+ %TRUE 5 is 5
+ %FALSE 5 is 6
+ %TRUE 5 is 4+1
+ %FALSE 5 is 4+2
  
- % %QUERY% X is Y
- % %EXCEPTION% Can't get Numeric for term: Y of type: NAMED_VARIABLE
+ %QUERY X is Y
+ %ERROR Can't get Numeric for term: Y of type: NAMED_VARIABLE
 
- % %QUERY% Z=1+1, Y=9-Z, X is Y
- % %ANSWER%
+ %QUERY Z=1+1, Y=9-Z, X is Y
+ %ANSWER
  % X=7
  % Y=9 - (1 + 1)
  % Z = 1 + 1
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% X is _
- % %EXCEPTION% Can't get Numeric for term: _ of type: ANONYMOUS_VARIABLE
+ %QUERY X is _
+ %ERROR Can't get Numeric for term: _ of type: ANONYMOUS_VARIABLE
 
- % %QUERY% X is sum(1,2)
- % %EXCEPTION% Cannot find calculatable: sum
+ %QUERY X is sum(1,2)
+ %ERROR Cannot find calculatable: sum
 
- % %QUERY% X is ten
- % %EXCEPTION% Cannot find calculatable: ten
+ %QUERY X is ten
+ %ERROR Cannot find calculatable: ten
 
- % %QUERY% X is []
- % %EXCEPTION% Can't get Numeric for term: [] of type: EMPTY_LIST
+ %QUERY X is []
+ %ERROR Can't get Numeric for term: [] of type: EMPTY_LIST
 
- % %QUERY% X is [1,2,3]
- % %EXCEPTION% Can't get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
+ %QUERY X is [1,2,3]
+ %ERROR Can't get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
  */
 /**
  * <code>X is Y</code> - evaluate arithmetic expression.
@@ -54,11 +54,6 @@ public final class Is extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       Numeric n = getKnowledgeBase().getNumeric(arg2);
       return arg1.unify(n);

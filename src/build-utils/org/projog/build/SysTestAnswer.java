@@ -45,4 +45,9 @@ class SysTestAnswer {
    int getAssignmentsCount() {
       return assignments.size();
    }
+
+   @Override
+   public String toString() {
+      return "[" + super.toString() + " " + assignments.toString() + "]";
+   }
 }

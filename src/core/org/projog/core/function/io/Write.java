@@ -5,13 +5,13 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
-/* SYSTEM TEST
- % %QUERY% write( 1+1 )
- % %OUTPUT% 1 + 1
- % %ANSWER/%
- % %QUERY% write( '+'(1,1) )
- % %OUTPUT% 1 + 1
- % %ANSWER/%
+/* TEST
+ %QUERY write( 1+1 )
+ %OUTPUT 1 + 1
+ %ANSWER/
+ %QUERY write( '+'(1,1) )
+ %OUTPUT 1 + 1
+ %ANSWER/
  */
 /**
  * <code>write(X)</code> - writes a term to the output stream.
@@ -32,11 +32,6 @@ public final class Write extends org.projog.core.function.AbstractSingletonPredi
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       String s = toString(arg);
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(s);

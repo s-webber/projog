@@ -25,11 +25,6 @@ abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public final boolean evaluate(Term template, Term goal, Term bag) {
       if (itr == null) {
          init(template, goal);

@@ -5,38 +5,38 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
-/* SYSTEM TEST
- % %QUERY% repeat(3), write('hello, world'), nl
- % %OUTPUT% 
+/* TEST
+ %QUERY repeat(3), write('hello, world'), nl
+ %OUTPUT
  % hello, world
  %
- % %OUTPUT%
- % %ANSWER/% 
- % %OUTPUT% 
+ %OUTPUT
+ %ANSWER/
+ %OUTPUT 
  % hello, world
  %
- % %OUTPUT%
- % %ANSWER/% 
- % %OUTPUT% 
+ %OUTPUT
+ %ANSWER/
+ %OUTPUT 
  % hello, world
  %
- % %OUTPUT%
- % %ANSWER/% 
+ %OUTPUT
+ %ANSWER/ 
 
- % %QUERY% repeat(1)
- % %ANSWER/%
- % %QUERY% repeat(2)
- % %ANSWER/%
- % %ANSWER/%
- % %QUERY% repeat(3)
- % %ANSWER/%
- % %ANSWER/%
- % %ANSWER/%
- % %FALSE% repeat(0)
- % %FALSE% repeat(-1)
+ %QUERY repeat(1)
+ %ANSWER/
+ %QUERY repeat(2)
+ %ANSWER/
+ %ANSWER/
+ %QUERY repeat(3)
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %FALSE repeat(0)
+ %FALSE repeat(-1)
 
- % %QUERY% repeat(X)
- % %EXCEPTION% Expected Numeric but got: NAMED_VARIABLE with value: X
+ %QUERY repeat(X)
+ %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
 */
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.
@@ -63,11 +63,6 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       return evaluate();
    }
@@ -96,12 +91,6 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
       }
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public RepeatSetAmount getPredicate(Term arg) {
       Numeric n = TermUtils.castToNumeric(arg);
       return new RepeatSetAmount(n.getInt());

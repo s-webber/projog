@@ -9,42 +9,42 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %QUERY% flatten([a,[[b]],[c]], X)
- % %ANSWER% X=[a,b,c]
+/* TEST
+ %QUERY flatten([a,[[b]],[c]], X)
+ %ANSWER X=[a,b,c]
  
- % %QUERY% flatten([a,b,c], X)
- % %ANSWER% X=[a,b,c]
+ %QUERY flatten([a,b,c], X)
+ %ANSWER X=[a,b,c]
 
- % %QUERY% flatten([[[[a]]],[],[],[]], X)
- % %ANSWER% X=[a]
+ %QUERY flatten([[[[a]]],[],[],[]], X)
+ %ANSWER X=[a]
 
- % %QUERY% flatten([a], X)
- % %ANSWER% X=[a]
+ %QUERY flatten([a], X)
+ %ANSWER X=[a]
  
- % %QUERY% flatten(a, X)
- % %ANSWER% X=[a]
+ %QUERY flatten(a, X)
+ %ANSWER X=[a]
 
- % %QUERY% flatten([[[[]]],[],[],[]], X)
- % %ANSWER% X=[]
+ %QUERY flatten([[[[]]],[],[],[]], X)
+ %ANSWER X=[]
 
- % %QUERY% flatten([], X)
- % %ANSWER% X=[]
+ %QUERY flatten([], X)
+ %ANSWER X=[]
  
- % %QUERY% flatten([a|b], X)
- % %ANSWER% X=[a,b]
+ %QUERY flatten([a|b], X)
+ %ANSWER X=[a,b]
 
- % %QUERY% flatten([a|[]], X)
- % %ANSWER% X=[a]
+ %QUERY flatten([a|[]], X)
+ %ANSWER X=[a]
  
- % %QUERY% flatten([[a|b],[c,d|e],[f|[]],g|h], X)
- % %ANSWER% X=[a,b,c,d,e,f,g,h]
+ %QUERY flatten([[a|b],[c,d|e],[f|[]],g|h], X)
+ %ANSWER X=[a,b,c,d,e,f,g,h]
  
- % %QUERY% flatten([p([[a]]),[[[p(p())]],[p([a,b,c])]]], X)
- % %ANSWER% X=[p([[a]]),p(p()),p([a,b,c])]
+ %QUERY flatten([p([[a]]),[[[p(p())]],[p([a,b,c])]]], X)
+ %ANSWER X=[p([[a]]),p(p()),p([a,b,c])]
  
- % %FALSE% flatten([a,b,c], [c,b,a])
- % %FALSE% flatten([a,b,c], [a,[b],c])
+ %FALSE flatten([a,b,c], [c,b,a])
+ %FALSE flatten([a,b,c], [a,[b],c])
  */
 /**
  * <code>flatten(X,Y)</code> - flattens a nested list.
@@ -57,11 +57,6 @@ public final class Flatten extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(final Term original, final Term expected) {
       final Term flattenedVersion;
       switch (original.getType()) {

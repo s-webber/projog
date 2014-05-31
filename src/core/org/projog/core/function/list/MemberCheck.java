@@ -5,23 +5,23 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE% memberchk(a, [a,b,c])
- % %TRUE% memberchk(b, [a,b,c])
- % %TRUE% memberchk(c, [a,b,c])
+/* TEST
+ %TRUE memberchk(a, [a,b,c])
+ %TRUE memberchk(b, [a,b,c])
+ %TRUE memberchk(c, [a,b,c])
 
- % %FALSE% memberchk(d, [a,b,c])
- % %FALSE% memberchk(d, [])
- % %FALSE% memberchk([], [])
+ %FALSE memberchk(d, [a,b,c])
+ %FALSE memberchk(d, [])
+ %FALSE memberchk([], [])
  
- % %QUERY% memberchk(X, [a,b,c])
- % %ANSWER% X=a
+ %QUERY memberchk(X, [a,b,c])
+ %ANSWER X=a
  
- % %QUERY% memberchk(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
- % %ANSWER% 
+ %QUERY memberchk(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
+ %ANSWER 
  % X=a
  % Y=UNINSTANTIATED VARIABLE
- % %ANSWER%
+ %ANSWER
 */
 /**
  * <code>memberchk(E, L)</code> - checks is a term is a member of a list.
@@ -37,11 +37,6 @@ public final class MemberCheck extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term element, Term list) {
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
          throw new ProjogException("Expected list but got: " + list);

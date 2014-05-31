@@ -14,33 +14,33 @@ import org.projog.core.term.Term;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
-/* SYSTEM TEST
+/* TEST
  test(X) :- X < 3.
  test(X) :- X > 9.
  test(X) :- X = 5.
- % %QUERY% listing(test)
- % %OUTPUT%
+ %QUERY listing(test)
+ %OUTPUT
  % test(X) :- X < 3
  % test(X) :- X > 9
  % test(X) :- X = 5
  %
- % %OUTPUT%
- % %ANSWER/%
+ %OUTPUT
+ %ANSWER/
  
  overloaded_predicate_name(X) :- X = this_rule_has_one_argument.
  overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments, X = Y.
- % %QUERY% listing(overloaded_predicate_name)
- % %OUTPUT%
+ %QUERY listing(overloaded_predicate_name)
+ %OUTPUT
  % overloaded_predicate_name(X) :- X = this_rule_has_one_argument
  % overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments , X = Y
  %
- % %OUTPUT%
- % %ANSWER/%
+ %OUTPUT
+ %ANSWER/
 
- % %TRUE% listing(predicate_name_that_doesnt_exist_in_knowledge_base)
+ %TRUE listing(predicate_name_that_doesnt_exist_in_knowledge_base)
 
- % %QUERY% listing(X)
- % %EXCEPTION% Expected an atom but got: NAMED_VARIABLE with value: X
+ %QUERY listing(X)
+ %ERROR Expected an atom but got: NAMED_VARIABLE with value: X
  */
 /**
  * <code>listing(X)</code> - outputs current clauses.
@@ -55,11 +55,6 @@ public final class Listing extends AbstractSingletonPredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       KnowledgeBase kb = getKnowledgeBase();
       String predicateName = getAtomName(arg);

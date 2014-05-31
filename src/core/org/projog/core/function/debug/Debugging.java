@@ -7,8 +7,8 @@ import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-debugging
+/* TEST
+ %LINK prolog-debugging
  */
 /**
  * <code>debugging</code> - lists current spy points.
@@ -22,11 +22,6 @@ public final class Debugging extends AbstractSingletonPredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       SpyPoints spyPoints = getKnowledgeBase().getSpyPoints();
       Map<PredicateKey, SpyPoints.SpyPoint> map = spyPoints.getSpyPoints();

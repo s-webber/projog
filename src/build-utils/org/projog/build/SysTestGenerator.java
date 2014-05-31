@@ -73,7 +73,7 @@ public class SysTestGenerator {
          String line;
          while ((!sysTestRead || !javadocRead) && (line = br.readLine()) != null) {
             line = line.trim();
-            if ("/* SYSTEM TEST".equals(line)) {
+            if ("/* TEST".equals(line)) {
                sysTestRead = true;
                writeScriptFile(javaFile, br);
             } else if (sysTestRead && !javadocRead && "/**".equals(line)) {

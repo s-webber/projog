@@ -6,11 +6,11 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE% append([a,b,c], [d,e,f], [a,b,c,d,e,f])
+/* TEST
+ %TRUE append([a,b,c], [d,e,f], [a,b,c,d,e,f])
  
- % %QUERY% append([a,b,c], [d,e,f], X)
- % %ANSWER% X=[a,b,c,d,e,f]
+ %QUERY append([a,b,c], [d,e,f], X)
+ %ANSWER X=[a,b,c,d,e,f]
  */
 /**
  * <code>append(X,Y,Z)</code> - concatenates two lists.
@@ -25,12 +25,6 @@ public final class Append extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead
-    * of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(final Term prefix, final Term suffix, final Term concatenated) {
       assertList(prefix);
       assertList(suffix);

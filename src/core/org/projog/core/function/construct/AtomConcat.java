@@ -9,21 +9,21 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE% atom_concat(abc, def, abcdef)
+/* TEST
+ %TRUE atom_concat(abc, def, abcdef)
   
- % %QUERY% atom_concat(X, def, abcdef)
- % %ANSWER% X=abc
+ %QUERY atom_concat(X, def, abcdef)
+ %ANSWER X=abc
 
- % %QUERY% atom_concat(abc, X, abcdef)
- % %ANSWER% X=def
+ %QUERY atom_concat(abc, X, abcdef)
+ %ANSWER X=def
  
- % %QUERY% atom_concat(abc, def, X)
- % %ANSWER% X=abcdef
+ %QUERY atom_concat(abc, def, X)
+ %ANSWER X=abcdef
  
- % %FALSE% atom_concat(abc, def, qwerty)
- % %FALSE% atom_concat(X, def, qwerty)
- % %FALSE% atom_concat(abc, X, qwerty)
+ %FALSE atom_concat(abc, def, qwerty)
+ %FALSE atom_concat(X, def, qwerty)
+ %FALSE atom_concat(abc, X, qwerty)
  */
 /**
  * <code>atom_concat(X, Y, Z)</code> - concatenates atom names.
@@ -38,11 +38,6 @@ public final class AtomConcat extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       assertAtomOrVariable(arg1);
       assertAtomOrVariable(arg2);

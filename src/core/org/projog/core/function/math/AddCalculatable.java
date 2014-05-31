@@ -7,14 +7,14 @@ import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %QUERY% X is sum(1, 1)
- % %EXCEPTION% Cannot find calculatable: sum
+/* TEST
+ %QUERY X is sum(1, 1)
+ %ERROR Cannot find calculatable: sum
  
- % %TRUE% pj_add_calculatable('sum', 'org.projog.core.function.math.Add')
+ %TRUE pj_add_calculatable('sum', 'org.projog.core.function.math.Add')
  
- % %QUERY% X is sum(1, 1)
- % %ANSWER% X=2
+ %QUERY X is sum(1, 1)
+ %ANSWER X=2
  */
 /**
 * <code>pj_add_calculatable(X,Y)</code> - defines a Java class as an arithmetic function.
@@ -28,11 +28,6 @@ public class AddCalculatable extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term functionName, Term javaClass) {
       String key = getAtomName(functionName);
       String className = getAtomName(javaClass);

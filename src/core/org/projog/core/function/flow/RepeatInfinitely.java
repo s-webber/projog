@@ -3,7 +3,7 @@ package org.projog.core.function.flow;
 import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
+/* TEST
  write_to_file(X) :-
     open('io_test.tmp', write, Z), 
     set_output(Z), 
@@ -24,12 +24,12 @@ import org.projog.core.term.Term;
     C=='.', 
     !.
 	
- % %TRUE% write_to_file('The first sentence. The second sentence.')
+ %TRUE write_to_file('The first sentence. The second sentence.')
  
- % %QUERY% read_from_file()
- % %OUTPUT% The first sentence.
- % %ANSWER/%
- % %NO%
+ %QUERY read_from_file()
+ %OUTPUT The first sentence.
+ %ANSWER/
+ %NO
  */
 /**
  * <code>repeat</code>- always succeeds.
@@ -43,11 +43,6 @@ public final class RepeatInfinitely extends AbstractRetryablePredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       return true;
    }
@@ -57,12 +52,6 @@ public final class RepeatInfinitely extends AbstractRetryablePredicate {
       return getPredicate();
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public RepeatInfinitely getPredicate() {
       return this;
    }

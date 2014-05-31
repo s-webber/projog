@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>read(X)</code> - reads a term from the input stream.
@@ -23,11 +23,6 @@ public final class Read extends org.projog.core.function.AbstractSingletonPredic
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term argument) {
       InputStreamReader isr = new InputStreamReader(getKnowledgeBase().getFileHandles().getCurrentInputStream());
       SentenceParser sp = SentenceParser.getInstance(isr, getKnowledgeBase().getOperands());

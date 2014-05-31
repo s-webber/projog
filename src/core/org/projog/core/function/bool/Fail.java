@@ -3,8 +3,8 @@ package org.projog.core.function.bool;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %FALSE% fail
+/* TEST
+ %FALSE fail
 
  a(1).
  a(2).
@@ -12,8 +12,8 @@ import org.projog.core.term.Term;
 
  test :- a(X), a(Y), write(Y), write(' '), write(X), nl, fail.
 
- % %QUERY% test
- % %OUTPUT%
+ %QUERY test
+ %OUTPUT
  % 1 1
  % 2 1
  % 3 1
@@ -24,7 +24,7 @@ import org.projog.core.term.Term;
  % 2 3
  % 3 3
  %
- % %OUTPUT%
+ %OUTPUT
  */
 /**
  * <code>fail</code> - always fails.
@@ -38,11 +38,6 @@ public final class Fail extends AbstractSingletonPredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       return false;
    }

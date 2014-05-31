@@ -2,30 +2,30 @@ package org.projog.core.function.construct;
 
 import org.projog.core.term.Atom;
 
-/* SYSTEM TEST
- % %QUERY% atom_chars(X,[a,p,p,l,e])
- % %ANSWER% X = apple
+/* TEST
+ %QUERY atom_chars(X,[a,p,p,l,e])
+ %ANSWER X = apple
 
- % %QUERY% atom_chars(apple,X)
- % %ANSWER% X = [a,p,p,l,e]
+ %QUERY atom_chars(apple,X)
+ %ANSWER X = [a,p,p,l,e]
 
- % %TRUE% atom_chars(apple,[a,p,p,l,e])
+ %TRUE atom_chars(apple,[a,p,p,l,e])
 
- % %FALSE% atom_chars(apple,[a,p,l,l,e])
+ %FALSE atom_chars(apple,[a,p,l,l,e])
 
- % %FALSE% atom_chars(apple,[a,p,p,l,e,s])
+ %FALSE atom_chars(apple,[a,p,p,l,e,s])
 
- % %QUERY% atom_chars(apple,[X,Y,Y,Z,e])
- % %ANSWER% 
+ %QUERY atom_chars(apple,[X,Y,Y,Z,e])
+ %ANSWER 
  % X = a
  % Y = p
  % Z = l
- % %ANSWER%
+ %ANSWER
 
- % %FALSE% atom_chars(apple,[X,Y,Z,Z,e])
+ %FALSE atom_chars(apple,[X,Y,Z,Z,e])
  
- % %QUERY% atom_chars(X,'apple')
- % %EXCEPTION% As the first argument: X is a variable the second argument needs to be a list but was: apple of type: ATOM
+ %QUERY atom_chars(X,'apple')
+ %ERROR As the first argument: X is a variable the second argument needs to be a list but was: apple of type: ATOM
  */
 /**
  * <code>atom_chars(A,L)</code> - compares an atom to a list of characters.

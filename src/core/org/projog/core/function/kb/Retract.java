@@ -3,56 +3,56 @@ package org.projog.core.function.kb;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% assertz(p(a,b,c))
- % %TRUE% assertz(p(1,2,3))
- % %TRUE% assertz(p(a,c,e))
+/* TEST
+ %TRUE assertz(p(a,b,c))
+ %TRUE assertz(p(1,2,3))
+ %TRUE assertz(p(a,c,e))
  
- % %FALSE% retract(p(x,y,z))
- % %FALSE% retract(p(a,b,e))
+ %FALSE retract(p(x,y,z))
+ %FALSE retract(p(a,b,e))
  
- % %QUERY% p(X,Y,Z)
- % %ANSWER%
+ %QUERY p(X,Y,Z)
+ %ANSWER
  % X=a
  % Y=b
  % Z=c
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=1
  % Y=2
  % Z=3
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=a
  % Y=c
  % Z=e
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% retract(p(a,Y,Z))
- % %ANSWER%
+ %QUERY retract(p(a,Y,Z))
+ %ANSWER
  % Y=b
  % Z=c
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % Y=c
  % Z=e
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% p(X,Y,Z)
- % %ANSWER%
+ %QUERY p(X,Y,Z)
+ %ANSWER
  % X=1
  % Y=2
  % Z=3
- % %ANSWER%
+ %ANSWER
  
- % %QUERY% retract(p(X,Y,Z))
- % %ANSWER%
+ %QUERY retract(p(X,Y,Z))
+ %ANSWER
  % X=1
  % Y=2
  % Z=3
- % %ANSWER%
+ %ANSWER
  
- % %FALSE% p(X,Y,Z)
+ %FALSE p(X,Y,Z)
  */
 /**
  * <code>retract(X)</code> - remove clauses from the knowledge base.
@@ -75,12 +75,6 @@ public final class Retract extends AbstractUserDefinedPredicateInspectionFunctio
       return getPredicate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public Retract getPredicate(Term arg) {
       return new Retract(getKnowledgeBase());
    }
@@ -90,11 +84,6 @@ public final class Retract extends AbstractUserDefinedPredicateInspectionFunctio
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       return internalEvaluate(arg, null);
    }

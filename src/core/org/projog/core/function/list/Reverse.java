@@ -9,27 +9,27 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% reverse([a],[a])
- % %TRUE% reverse([a,b,c],[c,b,a])
- % %QUERY% reverse([a,b,c],X)
- % %ANSWER% X=[c,b,a]
- % %QUERY% reverse(X,[a,b,c])
- % %ANSWER% X=[c,b,a]
+/* TEST
+ %TRUE reverse([a],[a])
+ %TRUE reverse([a,b,c],[c,b,a])
+ %QUERY reverse([a,b,c],X)
+ %ANSWER X=[c,b,a]
+ %QUERY reverse(X,[a,b,c])
+ %ANSWER X=[c,b,a]
 
- % %TRUE% reverse([],[])
- % %QUERY% reverse([],X)
- % %ANSWER% X=[]
- % %QUERY% reverse([],X)
- % %ANSWER% X=[]
+ %TRUE reverse([],[])
+ %QUERY reverse([],X)
+ %ANSWER X=[]
+ %QUERY reverse([],X)
+ %ANSWER X=[]
 
- % %FALSE% reverse([a,b,c],[])
- % %FALSE% reverse([a,b,c],[a,b,c])
- % %FALSE% reverse([a,b,c],[d,c,b,a])
- % %FALSE% reverse([a,b,c,d],[c,b,a])
- % %FALSE% reverse([a,b,c],'abc')
- % %FALSE% reverse('abc',X)
- % %FALSE% reverse([a,b|c],X)
+ %FALSE reverse([a,b,c],[])
+ %FALSE reverse([a,b,c],[a,b,c])
+ %FALSE reverse([a,b,c],[d,c,b,a])
+ %FALSE reverse([a,b,c,d],[c,b,a])
+ %FALSE reverse([a,b,c],'abc')
+ %FALSE reverse('abc',X)
+ %FALSE reverse([a,b|c],X)
  */
 /**
  * <code>reverse(X,Y)</code> - reverses the order of elements in a list.
@@ -44,11 +44,6 @@ public final class Reverse extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(final Term list1, final Term list2) {
       if (list1.getType() == LIST) {
          return evaluate(list2, reverse(list1));

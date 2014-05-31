@@ -3,8 +3,8 @@ package org.projog.core.function.debug;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-debugging
+/* TEST
+ %LINK prolog-debugging
  */
 /**
  * <code>notrace</code> - disables exhaustive tracing.
@@ -19,11 +19,6 @@ public final class NoTrace extends AbstractSingletonPredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       getKnowledgeBase().getSpyPoints().setTraceEnabled(false);
       return true;

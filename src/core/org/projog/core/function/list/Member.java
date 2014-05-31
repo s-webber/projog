@@ -5,33 +5,33 @@ import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE_NO% member(a, [a,b,c])
- % %TRUE_NO% member(b, [a,b,c])
- % %TRUE% member(c, [a,b,c])
+/* TEST
+ %TRUE_NO member(a, [a,b,c])
+ %TRUE_NO member(b, [a,b,c])
+ %TRUE member(c, [a,b,c])
  
- % %FALSE% member(d, [a,b,c])
- % %FALSE% member(d, [])
- % %FALSE% member([], [])
+ %FALSE member(d, [a,b,c])
+ %FALSE member(d, [])
+ %FALSE member([], [])
 
- % %QUERY% member(X, [a,b,c])
- % %ANSWER% X=a
- % %ANSWER% X=b
- % %ANSWER% X=c
+ %QUERY member(X, [a,b,c])
+ %ANSWER X=a
+ %ANSWER X=b
+ %ANSWER X=c
  
- % %QUERY% member(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
- % %ANSWER% 
+ %QUERY member(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
+ %ANSWER 
  % X=a
  % Y=UNINSTANTIATED VARIABLE
- % %ANSWER%
- % %ANSWER% 
+ %ANSWER
+ %ANSWER 
  % X=z
  % Y=b
- % %ANSWER%
- % %ANSWER% 
+ %ANSWER
+ %ANSWER 
  % X=x(b)
  % Y=b
- % %ANSWER%
+ %ANSWER
  */
 /**
  * <code>member(E, L)</code> - enumerates members of a list.
@@ -48,12 +48,6 @@ public final class Member extends AbstractRetryablePredicate {
       return getPredicate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public Member getPredicate(Term element, Term list) {
       final Member m = new Member();
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
@@ -68,11 +62,6 @@ public final class Member extends AbstractRetryablePredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term element, Term secondArg) {
       while (true) {
          if (couldReEvaluationSucceed()) {

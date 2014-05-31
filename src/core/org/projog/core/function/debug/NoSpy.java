@@ -1,7 +1,7 @@
 package org.projog.core.function.debug;
 
-/* SYSTEM TEST
- % %LINK% prolog-debugging
+/* TEST
+ %LINK prolog-debugging
  */
 /**
  * <code>nospy X</code> - removes a spy point for a predicate.

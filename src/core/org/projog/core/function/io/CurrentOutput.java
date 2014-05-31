@@ -2,8 +2,8 @@ package org.projog.core.function.io;
 
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>current_output(X)</code> - match a term to the current output stream.
@@ -18,11 +18,6 @@ public final class CurrentOutput extends org.projog.core.function.AbstractSingle
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term argument) {
       return argument.unify(getKnowledgeBase().getFileHandles().getCurrentOutputHandle());
    }

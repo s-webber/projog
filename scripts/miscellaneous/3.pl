@@ -1,14 +1,14 @@
 % same predicate name included twice in conjunction of implication
-% %QUERY% a(X,Y)
-% %ANSWER%
+%QUERY a(X,Y)
+%ANSWER
 % X=q
 % Y=e
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % X=r
 % Y=e
-% %ANSWER%
-% %NO%
+%ANSWER
+%NO
 :- w(q,i).
 :- w(r,i).
 :- w(e,o).

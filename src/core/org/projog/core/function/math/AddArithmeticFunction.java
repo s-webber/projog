@@ -13,19 +13,19 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
-/* SYSTEM TEST
+/* TEST
  squared(X,Y) :- Y is X * X.
  
- % %QUERY% squared(3,X)
- % %ANSWER% X=9
+ %QUERY squared(3,X)
+ %ANSWER X=9
  
- % %QUERY% X is squared(3)
- % %EXCEPTION% Cannot find calculatable: squared
+ %QUERY X is squared(3)
+ %ERROR Cannot find calculatable: squared
  
- % %TRUE% arithmetic_function(squared/1)
+ %TRUE arithmetic_function(squared/1)
  
- % %QUERY% X is squared(3)
- % %ANSWER% X=9
+ %QUERY X is squared(3)
+ %ANSWER X=9
  */
 /**
  * <code>arithmetic_function(X)</code> - defines a predicate as an arithmetic function.
@@ -38,11 +38,6 @@ public class AddArithmeticFunction extends AbstractSingletonPredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
       getKnowledgeBase().addCalculatable(key.getName(), new ArithmeticFunction(key));

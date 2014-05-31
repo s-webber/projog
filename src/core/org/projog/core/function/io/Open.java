@@ -6,8 +6,8 @@ import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>open(X,Y,Z)</code> - opens a file.
@@ -27,11 +27,6 @@ public final class Open extends org.projog.core.function.AbstractSingletonPredic
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term fileNameAtom, Term operationAtom, Term variableToAssignTo) {
       String operation = getAtomName(operationAtom);
       String fileName = getAtomName(fileNameAtom);

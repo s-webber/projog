@@ -4,13 +4,13 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %TRUE% atomic(abc)
- % %TRUE% atomic(1)
- % %FALSE% atomic(X)
- % %FALSE% atomic(_)
- % %FALSE% atomic(a(b,c))
- % %FALSE% atomic([a,b,c])
+/* TEST
+ %TRUE atomic(abc)
+ %TRUE atomic(1)
+ %FALSE atomic(X)
+ %FALSE atomic(_)
+ %FALSE atomic(a(b,c))
+ %FALSE atomic([a,b,c])
  */
 /**
  * <code>atomic(X)</code> - checks that a term is atomic.
@@ -24,11 +24,6 @@ public final class IsAtomic extends AbstractSingletonPredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       TermType type = arg.getType();
       return type == TermType.ATOM || type.isNumeric();

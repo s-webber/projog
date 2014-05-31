@@ -3,31 +3,31 @@ package org.projog.core.function.kb;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
+/* TEST
  :- test(a,b).
  :- test(1,2).
  :- test(A,B,C).
  :- test(p(),p(1)).
- % %QUERY% clause(test(X,Y), Z)
- % %ANSWER%
+ %QUERY clause(test(X,Y), Z)
+ %ANSWER
  % X=a
  % Y=b
  % Z=true
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=1
  % Y=2
  % Z=true
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X=p()
  % Y=p(1)
  % Z=true
- % %ANSWER%
+ %ANSWER
  
- % %TRUE% clause(test(a,b,c), true)
- % %TRUE% clause(test(1,2,3), true)
- % %FALSE% clause(tset(1,2,3), true)
+ %TRUE clause(test(a,b,c), true)
+ %TRUE clause(test(1,2,3), true)
+ %FALSE clause(tset(1,2,3), true)
  */
 /**
  * <code>clause(X,Y)</code> - matches terms to existing clauses.
@@ -51,12 +51,6 @@ public final class InspectClause extends AbstractUserDefinedPredicateInspectionF
       return getPredicate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public InspectClause getPredicate(Term arg1, Term arg2) {
       return new InspectClause(getKnowledgeBase());
    }
@@ -66,11 +60,6 @@ public final class InspectClause extends AbstractUserDefinedPredicateInspectionF
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       return internalEvaluate(arg1, arg2);
    }

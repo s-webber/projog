@@ -3,16 +3,16 @@ package org.projog.core.function.classify;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% nonvar(abc)
- % %TRUE% nonvar(1)
- % %TRUE% nonvar(a(b,c))
- % %TRUE% nonvar([a,b,c])
- % %QUERY% X=1, nonvar(X)
- % %ANSWER% X=1
- % %FALSE% nonvar(X)
- % %FALSE% X=Y, nonvar(X)
- % %FALSE% nonvar(_)
+/* TEST
+ %TRUE nonvar(abc)
+ %TRUE nonvar(1)
+ %TRUE nonvar(a(b,c))
+ %TRUE nonvar([a,b,c])
+ %QUERY X=1, nonvar(X)
+ %ANSWER X=1
+ %FALSE nonvar(X)
+ %FALSE X=Y, nonvar(X)
+ %FALSE nonvar(_)
  */
 /**
  * <code>nonvar(X)</code> - checks that a term is not an uninstantiated variable.

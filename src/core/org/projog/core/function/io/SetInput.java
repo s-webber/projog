@@ -2,8 +2,8 @@ package org.projog.core.function.io;
 
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>set_input(X)</code> - sets the current input.
@@ -21,11 +21,6 @@ public final class SetInput extends org.projog.core.function.AbstractSingletonPr
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       getKnowledgeBase().getFileHandles().setInput(arg);
       return true;

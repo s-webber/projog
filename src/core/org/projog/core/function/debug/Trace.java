@@ -2,8 +2,8 @@ package org.projog.core.function.debug;
 
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-debugging
+/* TEST
+ %LINK prolog-debugging
  */
 /**
  * <code>trace</code> - enables exhaustive tracing.
@@ -17,11 +17,6 @@ public final class Trace extends org.projog.core.function.AbstractSingletonPredi
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       getKnowledgeBase().getSpyPoints().setTraceEnabled(true);
       return true;

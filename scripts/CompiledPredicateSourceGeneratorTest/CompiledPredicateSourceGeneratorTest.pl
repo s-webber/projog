@@ -5,25 +5,25 @@ testTrueFail(X) :- X = 'rule2', fail.
 testTrueFail(X) :- fail, X = 'rule3'.
 testTrueFail(X) :- true, X = 'rule4'.
 
-% %TRUE% notrace
-% %QUERY% testTrueFail(X)
-% %ANSWER% X=rule1
-% %ANSWER% X=rule4
+%TRUE notrace
+%QUERY testTrueFail(X)
+%ANSWER X=rule1
+%ANSWER X=rule4
 
-% %TRUE% trace
-% %QUERY% testTrueFail(X)
-% %OUTPUT%
+%TRUE trace
+%QUERY testTrueFail(X)
+%OUTPUT
 % [1] CALL testTrueFail( X )
 % [1] EXIT testTrueFail( rule1 )
 %
-% %OUTPUT%
-% %ANSWER% X=rule1
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=rule1
+%OUTPUT
 % [1] REDO testTrueFail( rule1 )
 % [1] EXIT testTrueFail( rule4 )
 %
-% %OUTPUT%
-% %ANSWER% X=rule4
+%OUTPUT
+%ANSWER X=rule4
 
 testCalculatables(A,B,C) :- A is 1000, Z is 500*2, A is Z.
 testCalculatables(A,B,C) :- Y is 1.5, A is Y.
@@ -35,86 +35,86 @@ testCalculatables(A,B,C) :- A is (B//C)+B*C-2.
 testCalculatables(A,B,C) :- A=Z, Z is (B//C)+B*C-(1.25+0.25+1).
 testCalculatables(A,B,C) :- Z is B+C, A is Z.
 
-% %TRUE% notrace
-% %QUERY% testCalculatables(X, 3, 7)
-% %ANSWER% X=1000
-% %ANSWER% X=1.5
-% %ANSWER% X=10
-% %ANSWER% X=-4
-% %ANSWER% X=21
-% %ANSWER% X=0
-% %ANSWER% X=19
-% %ANSWER% X=18.5
-% %ANSWER% X=10
+%TRUE notrace
+%QUERY testCalculatables(X, 3, 7)
+%ANSWER X=1000
+%ANSWER X=1.5
+%ANSWER X=10
+%ANSWER X=-4
+%ANSWER X=21
+%ANSWER X=0
+%ANSWER X=19
+%ANSWER X=18.5
+%ANSWER X=10
 
-% %TRUE% trace
-% %QUERY% testCalculatables(X, 3, 7)
-% %OUTPUT%
+%TRUE trace
+%QUERY testCalculatables(X, 3, 7)
+%OUTPUT
 % [1] CALL testCalculatables( X, 3, 7 )
 % [1] EXIT testCalculatables( 1000, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=1000
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=1000
+%OUTPUT
 % [1] REDO testCalculatables( 1000, 3, 7 )
 % [1] EXIT testCalculatables( 1.5, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=1.5
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=1.5
+%OUTPUT
 % [1] REDO testCalculatables( 1.5, 3, 7 )
 % [1] EXIT testCalculatables( 10, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=10
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=10
+%OUTPUT
 % [1] REDO testCalculatables( 10, 3, 7 )
 % [1] EXIT testCalculatables( -4, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=-4
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=-4
+%OUTPUT
 % [1] REDO testCalculatables( -4, 3, 7 )
 % [1] EXIT testCalculatables( 21, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=21
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=21
+%OUTPUT
 % [1] REDO testCalculatables( 21, 3, 7 )
 % [1] EXIT testCalculatables( 0, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=0
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=0
+%OUTPUT
 % [1] REDO testCalculatables( 0, 3, 7 )
 % [1] EXIT testCalculatables( 19, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=19
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=19
+%OUTPUT
 % [1] REDO testCalculatables( 19, 3, 7 )
 % [1] EXIT testCalculatables( 18.5, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=18.5
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=18.5
+%OUTPUT
 % [1] REDO testCalculatables( 18.5, 3, 7 )
 % [1] EXIT testCalculatables( 10, 3, 7 )
 %
-% %OUTPUT%
-% %ANSWER% X=10
+%OUTPUT
+%ANSWER X=10
 
 testCallCompiledEvaluatable(A, B) :- C is (B*2)+1, testCalculatables(A, B, C), A>1.5, A=<18.5.
 
-% %TRUE% notrace
-% %QUERY% testCallCompiledEvaluatable(X, 3)
-% %ANSWER% X=10
-% %ANSWER% X=18.5
-% %ANSWER% X=10
+%TRUE notrace
+%QUERY testCallCompiledEvaluatable(X, 3)
+%ANSWER X=10
+%ANSWER X=18.5
+%ANSWER X=10
 
-% %TRUE% trace
-% %QUERY% testCallCompiledEvaluatable(X, 3)
-% %OUTPUT%
+%TRUE trace
+%QUERY testCallCompiledEvaluatable(X, 3)
+%OUTPUT
 % [1] CALL testCallCompiledEvaluatable( X, 3 )
 % [2] CALL testCalculatables( X, 3, 7 )
 % [2] EXIT testCalculatables( 1000, 3, 7 )
@@ -124,9 +124,9 @@ testCallCompiledEvaluatable(A, B) :- C is (B*2)+1, testCalculatables(A, B, C), A
 % [2] EXIT testCalculatables( 10, 3, 7 )
 % [1] EXIT testCallCompiledEvaluatable( 10, 3 )
 %
-% %OUTPUT%
-% %ANSWER% X=10
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=10
+%OUTPUT
 % [1] REDO testCallCompiledEvaluatable( 10, 3 )
 % [2] REDO testCalculatables( 10, 3, 7 )
 % [2] EXIT testCalculatables( -4, 3, 7 )
@@ -140,66 +140,66 @@ testCallCompiledEvaluatable(A, B) :- C is (B*2)+1, testCalculatables(A, B, C), A
 % [2] EXIT testCalculatables( 18.5, 3, 7 )
 % [1] EXIT testCallCompiledEvaluatable( 18.5, 3 )
 %
-% %OUTPUT%
-% %ANSWER% X=18.5
-% %OUTPUT%
+%OUTPUT
+%ANSWER X=18.5
+%OUTPUT
 % [1] REDO testCallCompiledEvaluatable( 18.5, 3 )
 % [2] REDO testCalculatables( 18.5, 3, 7 )
 % [2] EXIT testCalculatables( 10, 3, 7 )
 % [1] EXIT testCallCompiledEvaluatable( 10, 3 )
 %
-% %OUTPUT%
-% %ANSWER% X=10
+%OUTPUT
+%ANSWER X=10
 
 testSimpleTailRecursive([]).
 testSimpleTailRecursive([X|Xs]) :- testSimpleTailRecursive(Xs).
 
-% %TRUE% notrace
-% %TRUE% testSimpleTailRecursive([a,b,c])
-% %FALSE% testSimpleTailRecursive(abc)
+%TRUE notrace
+%TRUE testSimpleTailRecursive([a,b,c])
+%FALSE testSimpleTailRecursive(abc)
 
-% %TRUE% trace
-% %TRUE% testSimpleTailRecursive([a,b,c])
-% %FALSE% testSimpleTailRecursive(abc)
+%TRUE trace
+%TRUE testSimpleTailRecursive([a,b,c])
+%FALSE testSimpleTailRecursive(abc)
 
 testSimpleNonTailRecursive(N). 
 testSimpleNonTailRecursive(N) :- N > 1, N1 is N-1, testSimpleNonTailRecursive(N1).
 
-% %TRUE% notrace
-% %QUERY% testSimpleNonTailRecursive(3)
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
-% %NO%
+%TRUE notrace
+%QUERY testSimpleNonTailRecursive(3)
+%ANSWER/
+%ANSWER/
+%ANSWER/
+%NO
 
 testNumericComparison(A,B,C) :- A>B, A<C.
 testNumericComparison(A,B,C) :- A>=B, A=<C.
 testNumericComparison(A,B,C) :- A=:=B, A=\=C.
 
-% %QUERY% testNumericComparison(6,5,7)
-% %ANSWER/%
-% %ANSWER/%
-% %NO%
+%QUERY testNumericComparison(6,5,7)
+%ANSWER/
+%ANSWER/
+%NO
 
-% %TRUE_NO% testNumericComparison(6,6,6)
+%TRUE_NO testNumericComparison(6,6,6)
 
 testNonOptimisedAbstractSingletonEvaluatable(X) :- atom(X), X@<b.
 
-% %TRUE% testNonOptimisedAbstractSingletonEvaluatable(a)
-% %FALSE% testNonOptimisedAbstractSingletonEvaluatable(b)
-% %FALSE% testNonOptimisedAbstractSingletonEvaluatable(c)
-% %FALSE% testNonOptimisedAbstractSingletonEvaluatable(a())
-% %FALSE% testNonOptimisedAbstractSingletonEvaluatable(X)
+%TRUE testNonOptimisedAbstractSingletonEvaluatable(a)
+%FALSE testNonOptimisedAbstractSingletonEvaluatable(b)
+%FALSE testNonOptimisedAbstractSingletonEvaluatable(c)
+%FALSE testNonOptimisedAbstractSingletonEvaluatable(a())
+%FALSE testNonOptimisedAbstractSingletonEvaluatable(X)
 
 testNonOptimisedAbstractRetryableEvaluatable(X) :- repeat(X), repeat(3).
 
-% %QUERY% testNonOptimisedAbstractRetryableEvaluatable(2)
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
+%QUERY testNonOptimisedAbstractRetryableEvaluatable(2)
+%ANSWER/
+%ANSWER/
+%ANSWER/
+%ANSWER/
+%ANSWER/
+%ANSWER/
 
 multiple_rules_with_multiple_immutable_arguments(q,w,e).
 multiple_rules_with_multiple_immutable_arguments(a,s,d).
@@ -224,14 +224,14 @@ testImmutableFacts(W, X, Y, Z) :-
 	atom(X), atom(Y), atom(Z),
 	multiple_rules_with_multiple_immutable_arguments(X,Y,Z).
 	
-% %QUERY% testImmutableFacts(W, X, Y, Z)
-% %ANSWER% 
+%QUERY testImmutableFacts(W, X, Y, Z)
+%ANSWER 
 % W=z
 % X=a
 % Y=s
 % Z=d
-% %ANSWER%
-% %NO%
+%ANSWER
+%NO
 
 testMultipleRulesWithMultipleImmutableArguments(X, Y, Z, RuleNo) :- 
 	multiple_rules_with_multiple_immutable_arguments(A,B,C), A=X, B=Y, C=Z, RuleNo=1.
@@ -265,68 +265,68 @@ testMultipleRulesWithMultipleImmutableArguments(X, Y, Z, RuleNo) :-
 	multiple_rules_with_multiple_immutable_arguments(z,x,Z), 
 	RuleNo=10.
 
-% %QUERY% testMultipleRulesWithMultipleImmutableArguments(X,Y,Z,RuleNo)
-% %ANSWER% 
+%QUERY testMultipleRulesWithMultipleImmutableArguments(X,Y,Z,RuleNo)
+%ANSWER 
 % X=q
 % Y=w
 % Z=e
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % Y=s
 % Z=d
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % Y=x
 % Z=z
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=q
 % Y=w
 % Z=e
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % Y=s
 % Z=d
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % Y=x
 % Z=z
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=q
 % Y=w
 % Z=e
 % RuleNo=3
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % Y=x
 % Z=z
 % RuleNo=4
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=UNINSTANTIATED VARIABLE
 % Y=UNINSTANTIATED VARIABLE
 % Z=UNINSTANTIATED VARIABLE
 % RuleNo=9
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=q
 % Y=s
 % Z=z
 % RuleNo=10
-% %ANSWER%
-% %NO%
+%ANSWER
+%NO
 
 testSingleRuleWithMultipleImmutableArguments(X, Y, Z, RuleNo) :- 
 	single_rule_with_multiple_immutable_arguments(A,B,C), A=X, B=Y, C=Z, RuleNo=1.
@@ -354,37 +354,37 @@ testSingleRuleWithMultipleImmutableArguments(X, Y, Z, RuleNo) :-
 	single_rule_with_multiple_immutable_arguments(a,Y,d), 
 	RuleNo=9.
 
-% %QUERY% testSingleRuleWithMultipleImmutableArguments(X,Y,Z,RuleNo)
-% %ANSWER% 
+%QUERY testSingleRuleWithMultipleImmutableArguments(X,Y,Z,RuleNo)
+%ANSWER 
 % X=a
 % Y=s
 % Z=d
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % Y=a
 % Z=s
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % Y=s
 % Z=d
 % RuleNo=3
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=UNINSTANTIATED VARIABLE
 % Y=UNINSTANTIATED VARIABLE
 % Z=UNINSTANTIATED VARIABLE
 % RuleNo=4
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % Y=s
 % Z=a
 % RuleNo=9
-% %ANSWER%
+%ANSWER
 
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
 	single_rule_with_single_immutable_argument(X), RuleNo=1.
@@ -411,40 +411,40 @@ testSingleRuleWithSingleImmutableArgument(X, RuleNo) :-
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
 	X=z(), single_rule_with_single_immutable_argument(X), RuleNo=12.
 
-% %QUERY% testSingleRuleWithSingleImmutableArgument(X,RuleNo)
-% %ANSWER% 
+%QUERY testSingleRuleWithSingleImmutableArgument(X,RuleNo)
+%ANSWER 
 % X=z
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=UNINSTANTIATED VARIABLE
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=5
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=6
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=7
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=8
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=9
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=z
 % RuleNo=10
-% %ANSWER%
-% %NO%
+%ANSWER
+%NO
 
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
 	multiple_rules_with_single_immutable_argument(X), RuleNo=1.
@@ -478,108 +478,108 @@ testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :-
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
 	X=s(), multiple_rules_with_single_immutable_argument(X), RuleNo=14.
 
-% %QUERY% testMultipleRulesWithSingleImmutableArgument(X,RuleNo)
-% %ANSWER% 
+%QUERY testMultipleRulesWithSingleImmutableArgument(X,RuleNo)
+%ANSWER 
 % X=s
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=1
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=UNINSTANTIATED VARIABLE
 % RuleNo=2
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=5
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=5
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=5
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=6
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=6
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=6
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=7
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=7
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=7
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=8
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=8
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=8
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=9
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=9
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=9
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=d
 % RuleNo=10
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=s
 % RuleNo=11
-% %ANSWER%
-% %ANSWER% 
+%ANSWER
+%ANSWER 
 % X=a
 % RuleNo=12
-% %ANSWER%
-% %NO%
+%ANSWER
+%NO
 
 testCutSingleRuleMultipleResults :- repeat(5), !, repeat(3).
 
-% %QUERY% testCutSingleRuleMultipleResults
-% %ANSWER/%
-% %ANSWER/%
-% %ANSWER/%
-% %NO%
+%QUERY testCutSingleRuleMultipleResults
+%ANSWER/
+%ANSWER/
+%ANSWER/
+%NO
 
 testCutSingleRuleSingleResult :- 1<2, !, 2>1.
 
-% %TRUE% testCutSingleRuleSingleResult
+%TRUE testCutSingleRuleSingleResult
 
 testCutManyRules(X,Y,RuleNo) :- RuleNo=1, X>5, !, Y<7, repeat(3).
 testCutManyRules(X,Y,RuleNo) :- RuleNo=2, X<3, !, Y<7, repeat(7), !, repeat(3), !.
@@ -587,32 +587,32 @@ testCutManyRules(X,Y,RuleNo) :- RuleNo=3.
 testCutManyRules(X,Y,RuleNo) :- RuleNo=4, X>3, !, Y<7, repeat(3), !.
 testCutManyRules(X,Y,RuleNo) :- RuleNo=5, repeat(2).
 
-% %QUERY% testCutManyRules(6, 6, RuleNo)
-% %ANSWER% RuleNo=1
-% %ANSWER% RuleNo=1
-% %ANSWER% RuleNo=1
-% %NO%
+%QUERY testCutManyRules(6, 6, RuleNo)
+%ANSWER RuleNo=1
+%ANSWER RuleNo=1
+%ANSWER RuleNo=1
+%NO
 
-% %FALSE% testCutManyRules(6, 7, RuleNo)
+%FALSE testCutManyRules(6, 7, RuleNo)
 
-% %QUERY% testCutManyRules(2, 6, RuleNo)
-% %ANSWER% RuleNo=2
-% %NO%
+%QUERY testCutManyRules(2, 6, RuleNo)
+%ANSWER RuleNo=2
+%NO
 
-% %FALSE% testCutManyRules(2, 7, RuleNo)
+%FALSE testCutManyRules(2, 7, RuleNo)
 
-% %QUERY% testCutManyRules(4, 6, RuleNo)
-% %ANSWER% RuleNo=3
-% %ANSWER% RuleNo=4
-% %NO%
+%QUERY testCutManyRules(4, 6, RuleNo)
+%ANSWER RuleNo=3
+%ANSWER RuleNo=4
+%NO
 
-% %QUERY% testCutManyRules(4, 7, RuleNo)
-% %ANSWER% RuleNo=3
-% %NO%
+%QUERY testCutManyRules(4, 7, RuleNo)
+%ANSWER RuleNo=3
+%NO
 
-% %QUERY% testCutManyRules(3, 6, RuleNo)
-% %ANSWER% RuleNo=3
-% %ANSWER% RuleNo=5
-% %ANSWER% RuleNo=5
+%QUERY testCutManyRules(3, 6, RuleNo)
+%ANSWER RuleNo=3
+%ANSWER RuleNo=5
+%ANSWER RuleNo=5
 
 % TODO calling recursive functions

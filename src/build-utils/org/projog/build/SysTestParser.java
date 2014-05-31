@@ -25,46 +25,46 @@ import java.util.List;
  * <li>Test that that the query <code>?- test().</code> succeeds once and no attempt will be made to find an alternative
  * solution:
  * 
- * <pre>% %TRUE% test1()</pre>
+ * <pre>%TRUE test1()</pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> succeeds once and will fail when an attempt is made to find an
  * alternative solution:
  * 
- * <pre>% %TRUE_NO% test1()</pre>
+ * <pre>%TRUE_NO test1()</pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will fail on the first attempt to evaluate it:
  * 
- * <pre>% %FALSE% test1()</pre>
+ * <pre>%FALSE test1()</pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and there will be no attempt to
  * evaluate it for a fourth time:
  * 
  * <pre>
- * % %QUERY% test()
- * % %ANSWER/%
- * % %ANSWER/%
- * % %ANSWER/%
+ * %QUERY test()
+ * %ANSWER/
+ * %ANSWER/
+ * %ANSWER/
  * </pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and will fail when an attempt is made
  * to evaluate it for a fourth time:
  * 
  * <pre>
- * % %QUERY% test()
- * % %ANSWER/%
- * % %ANSWER/%
- * % %ANSWER/%
- * % %NO%
+ * %QUERY test()
+ * %ANSWER/
+ * %ANSWER/
+ * %ANSWER/
+ * %NO
  * </pre>
  * </li>
  * <li>Test that that the query <code>?- test(X).</code> will succeed three times and there will be no attempt to
  * evaluate it for a fourth time, specifying expectations about variable unification:
  * 
  * <pre>
- * % %QUERY% test(X)
- * % %ANSWER% X=a
- * % %ANSWER% X=b
- * % %ANSWER% X=c
+ * %QUERY test(X)
+ * %ANSWER X=a
+ * %ANSWER X=b
+ * %ANSWER X=c
  * </pre>
  * The test contains the following expectations about variable unification:
  * <ul>
@@ -77,20 +77,20 @@ import java.util.List;
  * made to evaluate it for a fourth time, specifying expectations about variable unification:
  * 
  * <pre>
- * % %QUERY% test(X,Y)
- * % %ANSWER%
+ * %QUERY test(X,Y)
+ * %ANSWER
  * X=a
  * Y=1
- * % %ANSWER%
- * % %ANSWER%
+ * %ANSWER
+ * %ANSWER
  * X=b
  * Y=2
- * % %ANSWER%
- * % %ANSWER%
+ * %ANSWER
+ * %ANSWER
  * X=c
  * Y=3
- * % %ANSWER%
- * % %NO%
+ * %ANSWER
+ * %NO
  * </pre>
  * The test contains the following expectations about variable unification:
  * <ul>
@@ -106,22 +106,22 @@ import java.util.List;
  * evaluate it for a fourth time, specifying expectations about what should be written to standard output:
  * 
  * <pre>
- * % %QUERY% repeat(3), write('hello world'), nl
- * % %OUTPUT% 
+ * %QUERY repeat(3), write('hello world'), nl
+ * %OUTPUT 
  * % hello world
  * %
- * % %OUTPUT%
- * % %ANSWER/% 
- * % %OUTPUT% 
+ * %OUTPUT
+ * %ANSWER/ 
+ * %OUTPUT 
  * % hello world
  * %
- * % %OUTPUT%
- * % %ANSWER/% 
- * % %OUTPUT% 
+ * %OUTPUT
+ * %ANSWER/ 
+ * %OUTPUT 
  * % hello world
  * %
- * % %OUTPUT%
- * % %ANSWER/%
+ * %OUTPUT
+ * %ANSWER/
  * </pre>
  * The test contains expectations that every evaluation will cause the text <code>hello world</code> and a new-line
  * character to be written to the standard output stream.</li>
@@ -129,14 +129,14 @@ import java.util.List;
  * message:
  * 
  * <pre>
- * % %QUERY% repeat(X)
- * % %EXCEPTION% Expected Numeric but got: NAMED_VARIABLE with value: X
+ * %QUERY repeat(X)
+ * %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
  * </pre>
  * </li>
  * <li>The following would be ignored when running the system tests but would be used when constructing the web based
  * documentation to include a link to <code>test.html</code>:
  * 
- * <pre>% %LINK% test</pre>
+ * <pre>%LINK test</pre>
  * </li>
  * </ol>
  * </p>
@@ -145,17 +145,16 @@ import java.util.List;
 class SysTestParser {
    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
    private static final String COMMENT_CHARACTER = "%";
-   private static final String TAG_PREFIX = "% %";
-   private static final String TRUE_TAG = "% %TRUE%";
-   private static final String TRUE_NO_TAG = "% %TRUE_NO%";
-   private static final String NO_TAG = "% %NO%";
-   private static final String FALSE_TAG = "% %FALSE%";
-   private static final String QUERY_TAG = "% %QUERY%";
-   private static final String ANSWER_TAG = "% %ANSWER%";
-   private static final String ANSWER_NO_VARIABLES_TAG = "% %ANSWER/%";
-   private static final String OUTPUT_TAG = "% %OUTPUT%";
-   private static final String EXCEPTION_TAG = "% %EXCEPTION%";
-   private static final String LINK_TAG = "% %LINK%";
+   private static final String TRUE_TAG = "%TRUE";
+   private static final String TRUE_NO_TAG = "%TRUE_NO";
+   private static final String NO_TAG = "%NO";
+   private static final String FALSE_TAG = "%FALSE";
+   private static final String QUERY_TAG = "%QUERY";
+   private static final String ANSWER_TAG = "%ANSWER";
+   private static final String ANSWER_NO_VARIABLES_TAG = "%ANSWER/";
+   private static final String OUTPUT_TAG = "%OUTPUT";
+   private static final String EXCEPTION_TAG = "%ERROR";
+   private static final String LINK_TAG = "%LINK";
 
    /**
     * @throws RuntimeException if script has no tests and no links
@@ -203,12 +202,12 @@ class SysTestParser {
          return null;
       } else if (line.startsWith(LINK_TAG)) {
          return new SysTestLink(getText(line).trim());
-      } else if (line.startsWith(TRUE_TAG)) {
-         return createSingleCorrectAnswerWithNoAssignmentsQuery(line);
       } else if (line.startsWith(TRUE_NO_TAG)) {
          SysTestQuery query = createSingleCorrectAnswerWithNoAssignmentsQuery(line);
          query.setContinuesUntilFails(true);
          return query;
+      } else if (line.startsWith(TRUE_TAG)) {
+         return createSingleCorrectAnswerWithNoAssignmentsQuery(line);
       } else if (line.startsWith(FALSE_TAG)) {
          String queryStr = getText(line);
          // no answers
@@ -239,8 +238,6 @@ class SysTestParser {
             reset();
          }
          return query;
-      } else if (line.startsWith(TAG_PREFIX)) {
-         throw new RuntimeException("Don't know what to do with markup: " + line + " in: " + testScript);
       } else if (line.startsWith(COMMENT_CHARACTER)) {
          return new SysTestComment(line.substring(1));
       } else {
@@ -329,8 +326,20 @@ class SysTestParser {
       return expectedOutput;
    }
 
+   /**
+    * Get text minus any sys-test markup.
+    * 
+    * @param line e.g.: {@code %QUERY X is 1}
+    * @return e.g.: {@code X is 1}
+    */
    private static String getText(String line) {
-      return line.substring(line.indexOf(COMMENT_CHARACTER, 3) + 1);
+      line = line.trim();
+      int spacePos = line.indexOf(" ");
+      if (spacePos == -1) {
+         return "";
+      } else {
+         return line.substring(spacePos);
+      }
    }
 
    private void mark() throws IOException {

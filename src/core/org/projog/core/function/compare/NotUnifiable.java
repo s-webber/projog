@@ -3,18 +3,18 @@ package org.projog.core.function.compare;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% abc \= def
+/* TEST
+ %TRUE abc \= def
 
- % %FALSE% X \= Y
+ %FALSE X \= Y
 
- % %FALSE% p(X,b) \= p(a,Y)
+ %FALSE p(X,b) \= p(a,Y)
 
- % %QUERY% p(X,b,c) \= p(a,Y,z)
- % %ANSWER%
+ %QUERY p(X,b,c) \= p(a,Y,z)
+ %ANSWER
  % X=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE 
- % %ANSWER%
+ %ANSWER
  */
 /**
  * <code>X \= Y</code> - checks whether two terms cannot be unified.
@@ -29,12 +29,6 @@ public final class NotUnifiable extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead
-    * of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       final boolean unifiable = arg1.unify(arg2);
       arg1.backtrack();

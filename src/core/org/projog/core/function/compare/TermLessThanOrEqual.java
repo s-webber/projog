@@ -4,12 +4,12 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 
-/* SYSTEM TEST
- % %FALSE% b@=<a
- % %TRUE% b@=<b
- % %TRUE% b@=<c
- % %FALSE% b@=<1
- % %TRUE% b@=<b()
+/* TEST
+ %FALSE b@=<a
+ %TRUE b@=<b
+ %TRUE b@=<c
+ %FALSE b@=<1
+ %TRUE b@=<b()
  */
 /**
  * <code>X@=&lt;Y</code> - term "less than or equal" test.
@@ -23,11 +23,6 @@ public final class TermLessThanOrEqual extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       return TermComparator.TERM_COMPARATOR.compare(arg1, arg2) < 1;
    }

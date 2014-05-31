@@ -8,7 +8,7 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 
-/* SYSTEM TEST
+/* TEST
  z(r).
  z(t).
  z(y).
@@ -20,39 +20,39 @@ import org.projog.core.term.TermComparator;
  x(d,b,c).
  x(a,b,c).
 
- % %QUERY% setof(X,x(X,Y,Z),L)
- % %ANSWER%
+ %QUERY setof(X,x(X,Y,Z),L)
+ %ANSWER
  % L=[a,d,w]
  % X=UNINSTANTIATED VARIABLE
  % Y=b
  % Z=c
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=r
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=t
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[q]
  % X=UNINSTANTIATED VARIABLE
  % Y=y
  % Z=e
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % L=[1]
  % X=UNINSTANTIATED VARIABLE
  % Y=2
  % Z=3
- % %ANSWER%
+ %ANSWER
 
- % %FALSE% setof(X,x(X,y,z),L)
+ %FALSE setof(X,x(X,y,z),L)
  */
 /**
  * <code>setof(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -77,12 +77,6 @@ public final class SetOf extends AbstractCollectionOf {
       return getPredicate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public SetOf getPredicate(Term template, Term goal, Term bag) {
       return new SetOf(getKnowledgeBase());
    }

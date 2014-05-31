@@ -6,20 +6,20 @@ import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %QUERY% arg(2, a(b,c(d)), X)
- % %ANSWER% X=c(d)
+/* TEST
+ %QUERY arg(2, a(b,c(d)), X)
+ %ANSWER X=c(d)
 
- % %QUERY% arg(1, a+(b+c), X )
- % %ANSWER% X=a
+ %QUERY arg(1, a+(b+c), X )
+ %ANSWER X=a
 
- % %FALSE% arg(1, a+(b+c), b)
+ %FALSE arg(1, a+(b+c), b)
 
- % %QUERY% arg(2, [a,b,c], X)
- % %ANSWER% X=[b,c]
+ %QUERY arg(2, [a,b,c], X)
+ %ANSWER X=[b,c]
  
- % %QUERY% arg(3, [a,b,c], X)
- % %EXCEPTION% Cannot get argument at position: 3 from: .(a, .(b, .(c, [])))
+ %QUERY arg(3, [a,b,c], X)
+ %ERROR Cannot get argument at position: 3 from: .(a, .(b, .(c, [])))
  */
 /**
  * <code>arg(N,T,A)</code> - allows access to an argument of a structure.
@@ -35,11 +35,6 @@ public final class Arg extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int argIdx = castToNumeric(arg1).getInt();
       if (arg2.getNumberOfArguments() < argIdx) {

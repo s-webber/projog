@@ -32,404 +32,404 @@ test6(X, Y) :- p(A), p(B), X=Y, X = A, B = Y.
 test6(X, Y) :- p(X), p(B), X=B, X = A, B = Y.
 test6(X, Y) :- p(X), p(B), B=A, X = A, B = Y.
 
-% %FALSE% test1(1,2)
-% %FALSE% test1(W,5)
+%FALSE test1(1,2)
+%FALSE test1(W,5)
 
-% %FALSE% test2(1,2)
-% %FALSE% test2(W,5)
+%FALSE test2(1,2)
+%FALSE test2(W,5)
 
-% %FALSE% test3(1,2)
-% %FALSE% test3(W,5)
+%FALSE test3(1,2)
+%FALSE test3(W,5)
 
-% %FALSE% test4(1,2)
-% %FALSE% test4(W,5)
+%FALSE test4(1,2)
+%FALSE test4(W,5)
 
-% %FALSE% test5(1,2)
-% %FALSE% test5(W,5)
+%FALSE test5(1,2)
+%FALSE test5(W,5)
 
-% %FALSE% test6(1,2)
-% %FALSE% test6(W,5)
+%FALSE test6(1,2)
+%FALSE test6(W,5)
 
-% %QUERY% test1(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test1(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test1(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test1(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test2(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test2(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test2(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test2(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test3(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test3(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test3(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test3(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test4(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test4(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test4(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test4(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test5(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test5(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test5(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test5(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test6(W,1)
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %ANSWER% W=1
-% %NO%
+%QUERY test6(W,1)
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%ANSWER W=1
+%NO
 
-% %QUERY% test6(2,W)
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %ANSWER% W=2
-% %NO%
+%QUERY test6(2,W)
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%ANSWER W=2
+%NO
 
-% %QUERY% test1(W,Z)
-% %ANSWER%
+%QUERY test1(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER
 
-% %QUERY% test2(W,Z)
-% %ANSWER%
+%QUERY test2(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER
 
-% %QUERY% test3(W,Z)
-% %ANSWER%
+%QUERY test3(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER
 
-% %QUERY% test4(W,Z)
-% %ANSWER%
+%QUERY test4(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER
 
-% %QUERY% test5(W,Z)
-% %ANSWER%
+%QUERY test5(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER
 
-% %QUERY% test6(W,Z)
-% %ANSWER%
+%QUERY test6(W,Z)
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=1
 % Z=1
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=2
 % Z=2
-% %ANSWER%
-% %ANSWER%
+%ANSWER
+%ANSWER
 % W=3
 % Z=3
-% %ANSWER%
+%ANSWER

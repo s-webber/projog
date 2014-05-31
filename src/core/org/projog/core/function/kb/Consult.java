@@ -6,8 +6,8 @@ import org.projog.core.ProjogSourceReader;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %LINK% prolog-io
+/* TEST
+ %LINK prolog-io
  */
 /**
  * <code>consult(X)</code> - reads clauses and goals from a file.
@@ -22,11 +22,6 @@ public final class Consult extends AbstractSingletonPredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg) {
       String resourceName = getAtomName(arg);
       ProjogSourceReader.parseResource(getKnowledgeBase(), resourceName);

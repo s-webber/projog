@@ -4,31 +4,31 @@ import org.projog.core.CutException;
 import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %QUERY% repeat, !
- % %ANSWER/%
- % %NO%
+/* TEST
+ %QUERY repeat, !
+ %ANSWER/
+ %NO
 
  print_first_sentence(X) :- 
     atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
  
- % %QUERY% print_first_sentence('word1 word2 word3. word4 word5 word6.')
- % %OUTPUT% word1 word2 word3.
- % %ANSWER/%
- % %NO%
+ %QUERY print_first_sentence('word1 word2 word3. word4 word5 word6.')
+ %OUTPUT word1 word2 word3.
+ %ANSWER/
+ %NO
  
  a(x, Y) :- Y = 1, !.
  a(X, Y) :- Y = 2.
 
- % %QUERY% a(x, Y)
- % %ANSWER% Y = 1
- % %NO%
+ %QUERY a(x, Y)
+ %ANSWER Y = 1
+ %NO
 
- % %QUERY% a(y, Y)
- % %ANSWER% Y = 2
+ %QUERY a(y, Y)
+ %ANSWER Y = 2
 
- % %QUERY% a(z, Y)
- % %ANSWER% Y = 2
+ %QUERY a(z, Y)
+ %ANSWER Y = 2
  */
 /**
  * <code>!</code> - the "cut".
@@ -44,12 +44,6 @@ public final class Cut extends AbstractRetryablePredicate {
       return getPredicate();
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public Cut getPredicate() {
       return new Cut();
    }
@@ -59,11 +53,6 @@ public final class Cut extends AbstractRetryablePredicate {
       return evaluate();
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate() {
       if (retried) {
          throw CutException.CUT_EXCEPTION;

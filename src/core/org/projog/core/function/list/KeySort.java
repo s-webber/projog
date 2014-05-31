@@ -12,43 +12,43 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/* SYSTEM TEST
- % %QUERY% keysort([a - 1,b - 3,c - 2], X)
- % %ANSWER% X=[a - 1,b - 3,c - 2]
+/* TEST
+ %QUERY keysort([a - 1,b - 3,c - 2], X)
+ %ANSWER X=[a - 1,b - 3,c - 2]
  
- % %QUERY% keysort([c - 2,a - 1,b - 3], X)
- % %ANSWER% X=[a - 1,b - 3,c - 2]
+ %QUERY keysort([c - 2,a - 1,b - 3], X)
+ %ANSWER X=[a - 1,b - 3,c - 2]
 
- % %TRUE% keysort([c - 2,a - 1,b - 3], [a - 1,b - 3,c - 2])
- % %FALSE% keysort([c - 2,a - 1,b - 3], [c - 2,a - 1,b - 3])
+ %TRUE keysort([c - 2,a - 1,b - 3], [a - 1,b - 3,c - 2])
+ %FALSE keysort([c - 2,a - 1,b - 3], [c - 2,a - 1,b - 3])
 
  % Duplicates are <i>not</i> removed.
- % %QUERY% keysort([a - 1,a - 9,a - 1,z - 1, q - 3, z - 1], X)
- % %ANSWER% X=[a - 1,a - 9,a - 1,q - 3,z - 1,z - 1]
+ %QUERY keysort([a - 1,a - 9,a - 1,z - 1, q - 3, z - 1], X)
+ %ANSWER X=[a - 1,a - 9,a - 1,q - 3,z - 1,z - 1]
 
  % Keys are sorted using the standard ordering of terms.
- % %QUERY% keysort([_ - v,Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure() - v,[list] - v], X)
- % %ANSWER%
+ %QUERY keysort([_ - v,Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure() - v,[list] - v], X)
+ %ANSWER
  % X=[_ - v,Variable - v,1.0 - v,1 - v,atom - v,[] - v,structure() - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
- % %ANSWER%
+ %ANSWER
  
- % %QUERY% keysort([[list] - v,structure() - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v,_ - v], X)
- % %ANSWER%
+ %QUERY keysort([[list] - v,structure() - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v,_ - v], X)
+ %ANSWER
  % X=[_ - v,Variable - v,1.0 - v,1 - v,atom - v,[] - v,structure() - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
- % %ANSWER%
+ %ANSWER
  
  % Both the first and second arguments can contain variables.
- % %QUERY% keysort([c - Q,a - W,b - E],[R - 1,T - 2,Y - 3])
- % %ANSWER%
+ %QUERY keysort([c - Q,a - W,b - E],[R - 1,T - 2,Y - 3])
+ %ANSWER
  % Q=3
  % W=1
  % E=2
  % R=a
  % T=b
  % Y=c
- % %ANSWER%
+ %ANSWER
  */
 /**
  * <code>keysort(X,Y)</code> - sorts a list of key/value pairs.
@@ -73,11 +73,6 @@ public final class KeySort extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(final Term original, final Term result) {
       final List<Term> elements = toJavaUtilList(original);
       assertKeyValuePairs(elements);

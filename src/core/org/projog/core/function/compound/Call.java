@@ -6,38 +6,38 @@ import org.projog.core.Predicate;
 import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %TRUE% call(true)
- % %FALSE% call(fail)
- % %QUERY% X = true, call(X)
- % %ANSWER% X = true
- % %FALSE% X = fail, call(X)
+/* TEST
+ %TRUE call(true)
+ %FALSE call(fail)
+ %QUERY X = true, call(X)
+ %ANSWER X = true
+ %FALSE X = fail, call(X)
 
  test(a).
  test(b).
  test(c).
 
- % %QUERY% X = test(Y), call(X)
- % %ANSWER%
+ %QUERY X = test(Y), call(X)
+ %ANSWER
  % X = test(a)
  % Y = a
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X = test(b)
  % Y = b
- % %ANSWER%
- % %ANSWER%
+ %ANSWER
+ %ANSWER
  % X = test(c)
  % Y = c
- % %ANSWER%
+ %ANSWER
  
  testCall(X) :- call(X).
  
- % %FALSE% testCall(fail)
- % %TRUE% testCall(true)
- % %QUERY% testCall((true ; true))
- % %ANSWER/%
- % %ANSWER/%
+ %FALSE testCall(fail)
+ %TRUE testCall(true)
+ %QUERY testCall((true ; true))
+ %ANSWER/
+ %ANSWER/
  */
 /**
  * <code>call(X)</code> - calls the goal represented by a term.
@@ -65,12 +65,6 @@ public final class Call extends AbstractRetryablePredicate {
       return getPredicate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #getPredicate(Term...)} that avoids the overhead of creating a new {@code Term}
-    * array.
-    * 
-    * @see org.projog.core.PredicateFactory#getPredicate(Term...)
-    */
    public Call getPredicate(Term arg) {
       return new Call(getKnowledgeBase());
    }
@@ -80,11 +74,6 @@ public final class Call extends AbstractRetryablePredicate {
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term t) {
       if (predicateToCall == null) {
          predicateToCall = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);

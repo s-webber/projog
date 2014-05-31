@@ -12,7 +12,7 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
-/* SYSTEM TEST
+/* TEST
  z(r).
  z(t).
  z(y).
@@ -24,37 +24,37 @@ import org.projog.core.term.Variable;
  x(d,b,c).
  x(a,b,c).
 
- % %QUERY% findall(X,x(X,Y,Z),L)
- % %ANSWER%
+ %QUERY findall(X,x(X,Y,Z),L)
+ %ANSWER
  % L=[a,q,q,q,1,w,d,a]
  % X=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE
  % Z=UNINSTANTIATED VARIABLE
- % %ANSWER%
+ %ANSWER
 
- % %QUERY% findall(X,x(X,y,z),L)
- % %ANSWER%
+ %QUERY findall(X,x(X,y,z),L)
+ %ANSWER
  % L=[]
  % X=UNINSTANTIATED VARIABLE
- % %ANSWER%
+ %ANSWER
  
  q(a(W)).
  q(C).
  q(1).
  y(X) :- X = o(T,R), q(T), q(R).
  
- % %QUERY% findall(X,y(X),L)
- % %ANSWER%
+ %QUERY findall(X,y(X),L)
+ %ANSWER
  % L = [o(a(W), a(W)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
  % X=UNINSTANTIATED VARIABLE
- % %ANSWER%
+ %ANSWER
  
- % %QUERY% findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
- % %ANSWER%
+ %QUERY findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
+ %ANSWER
  % L = [o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
  % H=o(a(q), a(z))
  % X=UNINSTANTIATED VARIABLE
- % %ANSWER%(findall(X,y(X),L).
+ %ANSWER(findall(X,y(X),L).
  */
 /**
  * <code>findall(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -68,11 +68,6 @@ public final class FindAll extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1], args[2]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term template, Term goal, Term output) {
       final Predicate predicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), goal);
       final Term[] goalArguments = goal.getArgs();

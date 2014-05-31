@@ -31,11 +31,6 @@ abstract class AbstractAlterSpyPointFunction extends AbstractSingletonPredicate 
       return evaluate(args[0]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term t) {
       switch (t.getType()) {
          case ATOM:

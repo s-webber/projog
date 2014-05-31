@@ -5,18 +5,18 @@ import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
-/* SYSTEM TEST
- % %FALSE% 1=\=1
- % %FALSE% 1.5=\=3.0/2.0
- % %FALSE% 6*6=\=9*4
- % %TRUE% 1=\=2
- % %TRUE% 1+1=\=1-1
- % %FALSE% X=1, Y=1, X=\=Y
- % %QUERY% X=1, Y=2, X=\=Y
- % %ANSWER%
+/* TEST
+ %FALSE 1=\=1
+ %FALSE 1.5=\=3.0/2.0
+ %FALSE 6*6=\=9*4
+ %TRUE 1=\=2
+ %TRUE 1+1=\=1-1
+ %FALSE X=1, Y=1, X=\=Y
+ %QUERY X=1, Y=2, X=\=Y
+ %ANSWER
  % X=1
  % Y=2
- % %ANSWER%
+ %ANSWER
  */
 /**
  * <code>X=\=Y</code> - numeric inequality test.
@@ -30,11 +30,6 @@ public final class NumericInequality extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   /**
-    * Overloaded version of {@link #evaluate(Term...)} that avoids the overhead of creating a new {@code Term} array.
-    * 
-    * @see org.projog.core.Predicate#evaluate(Term...)
-    */
    public boolean evaluate(Term arg1, Term arg2) {
       return NUMERIC_TERM_COMPARATOR.compare(arg1, arg2, getKnowledgeBase()) != 0;
    }

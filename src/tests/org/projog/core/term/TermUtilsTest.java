@@ -15,6 +15,8 @@ import static org.projog.TestUtils.variable;
 import java.util.Set;
 
 import org.junit.Test;
+import org.projog.TestUtils;
+import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
 public class TermUtilsTest {
@@ -194,26 +196,36 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testToInt() {
-      assertEquals(Integer.MAX_VALUE, TermUtils.toInt(integerNumber(Integer.MAX_VALUE)));
-      assertEquals(1, TermUtils.toInt(integerNumber(1)));
-      assertEquals(0, TermUtils.toInt(integerNumber(0)));
-      assertEquals(Integer.MIN_VALUE, TermUtils.toInt(integerNumber(Integer.MIN_VALUE)));
+   public void testIntegerNumberToInt() {
+      KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      assertEquals(Integer.MAX_VALUE, TermUtils.toInt(kb, integerNumber(Integer.MAX_VALUE)));
+      assertEquals(1, TermUtils.toInt(kb, integerNumber(1)));
+      assertEquals(0, TermUtils.toInt(kb, integerNumber(0)));
+      assertEquals(Integer.MIN_VALUE, TermUtils.toInt(kb, integerNumber(Integer.MIN_VALUE)));
+   }
+
+   @Test
+   public void testArithmeticFunctionToInt() {
+      KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
+      assertEquals(21, TermUtils.toInt(kb, arithmeticExpression));
    }
 
    @Test
    public void testToIntExceptions() {
+      KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      assertTestToIntException(kb, atom("test"), "Cannot find calculatable: test");
+      assertTestToIntException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p");
+      assertTestToIntException(kb, doubleNumber(0), "Expected integer but got: DOUBLE with value: 0.0");
+      assertTestToIntException(kb, structure("+", doubleNumber(1.0), doubleNumber(1.0)), "Expected integer but got: DOUBLE with value: 2.0");
+   }
+
+   private void assertTestToIntException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
       try {
-         TermUtils.toInt(atom("test"));
+         TermUtils.toInt(kb, t);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Expected integer but got: ATOM with value: test", e.getMessage());
-      }
-      try {
-         TermUtils.toInt(doubleNumber(0));
-         fail();
-      } catch (ProjogException e) {
-         assertEquals("Expected integer but got: DOUBLE with value: 0.0", e.getMessage());
+         assertEquals(expectedExceptionMessage, e.getMessage());
       }
    }
 

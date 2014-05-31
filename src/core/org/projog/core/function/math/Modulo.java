@@ -15,8 +15,8 @@ import org.projog.core.term.Term;
 public final class Modulo implements Calculatable {
    @Override
    public IntegerNumber calculate(KnowledgeBase kb, Term[] args) {
-      final int numerator = toInt(args[0]);
-      final int divider = toInt(args[1]);
+      final int numerator = toInt(kb, args[0]);
+      final int divider = toInt(kb, args[1]);
       final int modulo = numerator % divider;
       if (modulo == 0 || numerator * divider > 0) {
          return new IntegerNumber(modulo);

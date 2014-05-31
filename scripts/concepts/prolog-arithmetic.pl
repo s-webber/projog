@@ -25,6 +25,9 @@
 % %QUERY% X is 7//2
 % %ANSWER% X=3
 
+% %QUERY% X is 7 * 4 // 2
+% %ANSWER% X=14
+
 % %QUERY% X is 5 mod 3
 % %ANSWER% X=2
 

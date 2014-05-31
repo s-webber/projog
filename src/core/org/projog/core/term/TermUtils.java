@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
 /**
@@ -121,11 +122,12 @@ public final class TermUtils {
     * @return the integer value represented by {@code t}
     * @throws ProjogException if the specified {@link Term} does not represent a term of type {@link TermType#INTEGER}
     */
-   public static int toInt(final Term t) {
-      if (t.getType() == TermType.INTEGER) {
-         return ((Numeric) t.getTerm()).getInt();
+   public static int toInt(final KnowledgeBase kb, final Term t) {
+      final Numeric n = kb.getNumeric(t);
+      if (n.getType() == TermType.INTEGER) {
+         return n.getInt();
       } else {
-         throw new ProjogException("Expected integer but got: " + t.getType() + " with value: " + t);
+         throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
       }
    }
 

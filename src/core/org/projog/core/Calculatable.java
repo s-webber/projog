@@ -8,7 +8,7 @@ import org.projog.core.term.Term;
  * <p>
  * <img src="doc-files/Calculatable.png">
  * 
- * @see org.projog.core.CalculatableFactory
+ * @see org.projog.core.Calculatables
  */
 public interface Calculatable {
    /**

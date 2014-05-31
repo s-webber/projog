@@ -39,7 +39,7 @@ public final class KnowledgeBase {
    private final Operands operands = new Operands();
    private final ProjogProperties projogProperties;
    private final PluginPredicateFactoryFactory pluginPredicateFactoryFactory = new PluginPredicateFactoryFactory();
-   private final CalculatableFactory calculatableFactory = new CalculatableFactory(this);
+   private final Calculatables calculatables = new Calculatables(this);
    private final Write writer = new Write();
 
    /** Used to synchronize access to {@link #userDefinedPredicates} */
@@ -112,11 +112,11 @@ public final class KnowledgeBase {
     * @throws ProjogException if the specified term does not represent an arithmetic expression
     */
    public Numeric getNumeric(Term t) {
-      return calculatableFactory.getNumeric(t);
+      return calculatables.getNumeric(t);
    }
 
    public void addCalculatable(String functionName, Calculatable calculatable) {
-      calculatableFactory.addCalculatable(functionName, calculatable);
+      calculatables.addCalculatable(functionName, calculatable);
    }
 
    /**

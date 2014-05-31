@@ -60,7 +60,7 @@ public class KnowledgeBaseTest {
       assertSame(o, kb.getOperands());
    }
 
-   /** @see CalculatableFactoryTest */
+   /** @see CalculatablesTest */
    @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));

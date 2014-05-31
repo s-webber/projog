@@ -17,28 +17,28 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
-public class CalculatableFactoryTest {
+public class CalculatablesTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
    @Test
    public void testGetNumericIntegerNumber() {
-      CalculatableFactory cf = createCalculatableFactory();
+      Calculatables c = createCalculatables();
       IntegerNumber i = integerNumber(1);
-      assertSame(i, cf.getNumeric(i));
+      assertSame(i, c.getNumeric(i));
    }
 
    @Test
    public void testGetNumericDoubleNumber() {
-      CalculatableFactory cf = createCalculatableFactory();
+      Calculatables c = createCalculatables();
       DoubleNumber d = doubleNumber(17.6);
-      assertSame(d, cf.getNumeric(d));
+      assertSame(d, c.getNumeric(d));
    }
 
    @Test
    public void testGetNumericException() {
-      CalculatableFactory cf = createCalculatableFactory();
+      Calculatables c = createCalculatables();
       try {
-         cf.getNumeric(variable("X"));
+         c.getNumeric(variable("X"));
          fail();
       } catch (ProjogException e) {
          assertEquals("Can't get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
@@ -47,39 +47,39 @@ public class CalculatableFactoryTest {
 
    @Test
    public void testGetNumericPredicate() {
-      CalculatableFactory cf = createCalculatableFactory();
+      Calculatables c = createCalculatables();
       String dummyCalculatableName = "dummy_calculatable";
       int input = 7;
       Structure p = structure(dummyCalculatableName, integerNumber(input));
 
       // try to use calculatable by a name that there is no match for (expect exception)
       try {
-         cf.getNumeric(p);
+         c.getNumeric(p);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find calculatable: dummy_calculatable", e.getMessage());
       }
 
       // add new calculatable
-      cf.addCalculatable(dummyCalculatableName, new DummyCalculatable());
+      c.addCalculatable(dummyCalculatableName, new DummyCalculatable());
 
       // assert that the factory is now using the newly added calculatable
-      Numeric n = cf.getNumeric(p);
+      Numeric n = c.getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(input + 1, n.getInt());
 
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         cf.addCalculatable(dummyCalculatableName, new DummyCalculatable());
+         c.addCalculatable(dummyCalculatableName, new DummyCalculatable());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
       }
    }
 
-   private CalculatableFactory createCalculatableFactory() {
-      return new CalculatableFactory(kb);
+   private Calculatables createCalculatables() {
+      return new Calculatables(kb);
    }
 
    /**

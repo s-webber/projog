@@ -8,19 +8,19 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.TermUtils;
 
 /**
- * Maintains a collection of {@link Calculatable} instance.
+ * Maintains a collection of {@link Calculatable} instances.
  * <p>
  * This class provides a mechanism for "plugging in" or "injecting" implementations of {@link Calculatable} at runtime.
  * This mechanism provides an easy way to configure and extend the arithmetic operations supported by Projog.
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code CalculatableFactory} instance.
  */
-final class CalculatableFactory {
+final class Calculatables {
    private final KnowledgeBase knowledgeBase;
    private final Object lock = new Object();
    private final HashMap<String, Calculatable> calculatables = new HashMap<>();
 
-   CalculatableFactory(KnowledgeBase knowledgeBase) {
+   Calculatables(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
    }
 

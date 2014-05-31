@@ -7,8 +7,11 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Performs subtraction.
+ * <code>-</code> - performs subtraction.
  */
 public final class Subtract extends AbstractTwoArgumentsCalculatable {
    @Override

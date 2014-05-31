@@ -8,8 +8,11 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Performs division.
+ * <code>/</code> - performs division.
  */
 public final class Divide implements Calculatable {
    @Override

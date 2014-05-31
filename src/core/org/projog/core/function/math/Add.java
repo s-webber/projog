@@ -1,7 +1,10 @@
 package org.projog.core.function.math;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Performs addition.
+ * <code>+</code> - performs addition.
  */
 public final class Add extends AbstractTwoArgumentsCalculatable {
    /** Returns the sum of the two arguments */

@@ -7,8 +7,11 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Performs integer division.
+ * <code>//</code> - performs integer division.
  * <p>
  * The result will be rounded towards zero. e.g. <code>7 // 2</code> is rounded down to <code>3</code> while
  * <code>-7 // 2</code> is rounded up to <code>-3</code>

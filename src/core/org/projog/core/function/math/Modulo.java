@@ -7,8 +7,11 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Finds the remainder of division of one number by another.
+ * <code>mod</code> - finds the remainder of division of one number by another.
  * <p>
  * The result has the same sign as the divisor (i.e. second argument).
  */

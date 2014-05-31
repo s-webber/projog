@@ -1,7 +1,10 @@
 package org.projog.core.function.math;
 
+/* TEST
+ %LINK prolog-arithmetic
+ */
 /**
- * Performs multiplication.
+ * <code>*</code> - performs multiplication.
  */
 public final class Multiply extends AbstractTwoArgumentsCalculatable {
    /** Returns the product of the two arguments */

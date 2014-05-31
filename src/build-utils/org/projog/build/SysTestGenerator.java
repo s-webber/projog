@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 
+import org.projog.core.Calculatable;
 import org.projog.core.PredicateFactory;
 
 /**
@@ -28,30 +30,49 @@ public class SysTestGenerator {
       for (File file : directoryContents) {
          if (file.isDirectory()) {
             findAllPredicates(file);
-         } else if (isJavaSourceFileOfPredicateClass(file)) {
+         } else if (isJavaSourceFileOfDocumentedClass(file)) {
             // produce the script file
             produceScriptFileFromJavaFile(file);
          }
       }
    }
 
-   private static boolean isJavaSourceFileOfPredicateClass(File file) {
+   private static boolean isJavaSourceFileOfDocumentedClass(File file) {
       if (!isJavaSource(file)) {
          return false;
       }
       String className = getClassName(file);
       try {
-         System.out.println("SysTest: Checking: " + className);
          Class<?> c = Class.forName(className);
-         if (PredicateFactory.class.isAssignableFrom(c)) {
-            PredicateFactory e = (PredicateFactory) c.newInstance();
-            System.out.println("SysTest: Created: " + e);
+         if (isDocumentable(c)) {
+            c.newInstance();
+            System.out.println("SysTest: Created: " + className);
             return true;
          }
-      } catch (Exception e) {
-         System.out.println("trying to create Predicate: " + className + " caused: " + e);
+      } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+         System.out.println("Exception checking: " + className + " " + e);
       }
       return false;
+   }
+
+   private static boolean isDocumentable(Class<?> c) {
+      return isConcrete(c) && isPublic(c) && (isPredicateFactory(c) || isCalculatable(c));
+   }
+
+   private static boolean isConcrete(Class<?> c) {
+      return !Modifier.isAbstract(c.getModifiers());
+   }
+
+   private static boolean isPublic(Class<?> c) {
+      return Modifier.isPublic(c.getModifiers());
+   }
+
+   private static boolean isPredicateFactory(Class<?> c) {
+      return PredicateFactory.class.isAssignableFrom(c);
+   }
+
+   private static boolean isCalculatable(Class<?> c) {
+      return Calculatable.class.isAssignableFrom(c);
    }
 
    private static boolean isJavaSource(File f) {

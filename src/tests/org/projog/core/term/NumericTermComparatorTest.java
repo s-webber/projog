@@ -117,13 +117,13 @@ public class NumericTermComparatorTest {
          NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), kb);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: test", e.getMessage());
+         assertEquals("Cannot find calculatable: test/-1", e.getMessage());
       }
       try {
          NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, kb);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: ~", e.getMessage());
+         assertEquals("Cannot find calculatable: ~/2", e.getMessage());
       }
    }
 

@@ -112,13 +112,14 @@
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').
-?- pj_add_calculatable('+', 'org.projog.core.function.math.Add').
-?- pj_add_calculatable('-', 'org.projog.core.function.math.Subtract').
-?- pj_add_calculatable('/', 'org.projog.core.function.math.Divide').
-?- pj_add_calculatable('//', 'org.projog.core.function.math.IntegerDivide').
-?- pj_add_calculatable('*', 'org.projog.core.function.math.Multiply').
-?- pj_add_calculatable(mod, 'org.projog.core.function.math.Modulo').
-?- pj_add_calculatable(rem, 'org.projog.core.function.math.Remainder').
+?- pj_add_calculatable('+'/2, 'org.projog.core.function.math.Add').
+?- pj_add_calculatable('/'('-', 1), 'org.projog.core.function.math.Subtract').
+?- pj_add_calculatable('/'('-', 2), 'org.projog.core.function.math.Subtract').
+?- pj_add_calculatable('/'/2, 'org.projog.core.function.math.Divide').
+?- pj_add_calculatable('//'/2, 'org.projog.core.function.math.IntegerDivide').
+?- pj_add_calculatable('*'/2, 'org.projog.core.function.math.Multiply').
+?- pj_add_calculatable(mod/2, 'org.projog.core.function.math.Modulo').
+?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').

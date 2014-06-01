@@ -49,6 +49,7 @@ public class CalculatablesTest {
    public void testGetNumericPredicate() {
       Calculatables c = createCalculatables();
       String dummyCalculatableName = "dummy_calculatable";
+      PredicateKey key = new PredicateKey(dummyCalculatableName, 1);
       int input = 7;
       Structure p = structure(dummyCalculatableName, integerNumber(input));
 
@@ -57,11 +58,11 @@ public class CalculatablesTest {
          c.getNumeric(p);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: dummy_calculatable", e.getMessage());
+         assertEquals("Cannot find calculatable: dummy_calculatable/1", e.getMessage());
       }
 
       // add new calculatable
-      c.addCalculatable(dummyCalculatableName, new DummyCalculatable());
+      c.addCalculatable(key, new DummyCalculatable());
 
       // assert that the factory is now using the newly added calculatable
       Numeric n = c.getNumeric(p);
@@ -71,7 +72,7 @@ public class CalculatablesTest {
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         c.addCalculatable(dummyCalculatableName, new DummyCalculatable());
+         c.addCalculatable(key, new DummyCalculatable());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;

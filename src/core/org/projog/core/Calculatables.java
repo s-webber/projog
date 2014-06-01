@@ -1,6 +1,7 @@
 package org.projog.core;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -18,13 +19,13 @@ import org.projog.core.term.TermUtils;
 final class Calculatables {
    private final KnowledgeBase knowledgeBase;
    private final Object lock = new Object();
-   private final HashMap<String, Calculatable> calculatables = new HashMap<>();
+   private final Map<PredicateKey, Calculatable> calculatables = new HashMap<>();
 
    Calculatables(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
    }
 
-   void addCalculatable(String key, Calculatable calculatable) {
+   void addCalculatable(PredicateKey key, Calculatable calculatable) {
       synchronized (lock) {
          if (calculatables.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
@@ -49,19 +50,23 @@ final class Calculatables {
          case INTEGER:
             return TermUtils.castToNumeric(t);
          case STRUCTURE:
-            Term[] args = t.getArgs();
-            return getCalculatable(t.getName()).calculate(knowledgeBase, args);
+            return calculate(t, t.getArgs());
          case ATOM:
-            return getCalculatable(t.getName()).calculate(knowledgeBase, TermUtils.EMPTY_ARRAY);
+            return calculate(t, TermUtils.EMPTY_ARRAY);
          default:
             throw new ProjogException("Can't get Numeric for term: " + t + " of type: " + type);
       }
    }
 
-   private Calculatable getCalculatable(String name) {
-      Calculatable e = calculatables.get(name);
+   private Numeric calculate(Term term, Term[] args) {
+      return getCalculatable(term).calculate(knowledgeBase, args);
+   }
+
+   private Calculatable getCalculatable(Term term) {
+      PredicateKey key = PredicateKey.createForTerm(term);
+      Calculatable e = calculatables.get(key);
       if (e == null) {
-         throw new ProjogException("Cannot find calculatable: " + name);
+         throw new ProjogException("Cannot find calculatable: " + key);
       }
       return e;
    }

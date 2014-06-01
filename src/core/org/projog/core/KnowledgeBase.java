@@ -47,7 +47,7 @@ public final class KnowledgeBase {
    /**
     * The "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this {@code KnowledgeBase}.
     */
-   private final HashMap<PredicateKey, PredicateFactory> javaPredicates = new HashMap<>();
+   private final Map<PredicateKey, PredicateFactory> javaPredicates = new HashMap<>();
    /**
     * The user-defined predicates (i.e. defined using Prolog syntax) associated with this {@code KnowledgeBase}.
     * <p>
@@ -124,8 +124,8 @@ public final class KnowledgeBase {
    /**
     * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
     */
-   public void addCalculatable(String functionName, Calculatable calculatable) {
-      calculatables.addCalculatable(functionName, calculatable);
+   public void addCalculatable(PredicateKey key, Calculatable calculatable) {
+      calculatables.addCalculatable(key, calculatable);
    }
 
    /**

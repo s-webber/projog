@@ -30,10 +30,10 @@ import org.projog.core.term.Term;
  %ERROR Can't get Numeric for term: _ of type: ANONYMOUS_VARIABLE
 
  %QUERY X is sum(1,2)
- %ERROR Cannot find calculatable: sum
+ %ERROR Cannot find calculatable: sum/2
 
  %QUERY X is ten
- %ERROR Cannot find calculatable: ten
+ %ERROR Cannot find calculatable: ten/-1
 
  %QUERY X is []
  %ERROR Can't get Numeric for term: [] of type: EMPTY_LIST

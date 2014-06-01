@@ -3,15 +3,16 @@ package org.projog.core.function.kb;
 import static org.projog.core.term.TermUtils.getAtomName;
 
 import org.projog.core.Calculatable;
+import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
  %QUERY X is sum(1, 1)
- %ERROR Cannot find calculatable: sum
+ %ERROR Cannot find calculatable: sum/2
  
- %TRUE pj_add_calculatable('sum', 'org.projog.core.function.math.Add')
+ %TRUE pj_add_calculatable(sum/2, 'org.projog.core.function.math.Add')
  
  %QUERY X is sum(1, 1)
  %ANSWER X=2
@@ -19,7 +20,7 @@ import org.projog.core.term.Term;
 /**
 * <code>pj_add_calculatable(X,Y)</code> - defines a Java class as an arithmetic function.
 * <p>
-* <code>X</code> represents the function name.
+* <code>X</code> represents the name and arity of the predicate.
 * <code>Y</code> represents the full class name of an implementation of <code>org.projog.core.Calculatable</code>.
 */
 public class AddCalculatable extends AbstractSingletonPredicate {
@@ -28,8 +29,8 @@ public class AddCalculatable extends AbstractSingletonPredicate {
       return evaluate(args[0], args[1]);
    }
 
-   public boolean evaluate(Term functionName, Term javaClass) {
-      String key = getAtomName(functionName);
+   public boolean evaluate(Term functionNameAndArity, Term javaClass) {
+      PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);
       try {
          Class<?> c = Class.forName(className);
@@ -37,7 +38,7 @@ public class AddCalculatable extends AbstractSingletonPredicate {
          getKnowledgeBase().addCalculatable(key, calculatable);
          return true;
       } catch (Exception e) {
-         throw new ProjogException("Could not register new Calculatable using name: " + key + " and class: " + className, e);
+         throw new ProjogException("Could not register new Calculatable using: " + key + " and class: " + className, e);
       }
    }
 }

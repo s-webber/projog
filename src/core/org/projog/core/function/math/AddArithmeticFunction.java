@@ -20,7 +20,7 @@ import org.projog.core.term.Variable;
  %ANSWER X=9
  
  %QUERY X is squared(3)
- %ERROR Cannot find calculatable: squared
+ %ERROR Cannot find calculatable: squared/1
  
  %TRUE arithmetic_function(squared/1)
  
@@ -40,7 +40,7 @@ public class AddArithmeticFunction extends AbstractSingletonPredicate {
 
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
-      getKnowledgeBase().addCalculatable(key.getName(), new ArithmeticFunction(key));
+      getKnowledgeBase().addCalculatable(key, new ArithmeticFunction(key));
       return true;
    }
 

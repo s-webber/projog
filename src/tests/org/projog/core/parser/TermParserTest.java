@@ -34,6 +34,7 @@ public class TermParserTest {
       testNonVariableTerm(new Atom("'"), "''''");
       testNonVariableTerm(new Atom("Ab'c"), "'Ab''c'");
       testNonVariableTerm(new Atom("A'b''c"), "'A''b''''c'");
+      testNonVariableTerm(new Atom("~"), "~");
    }
 
    @Test
@@ -74,6 +75,7 @@ public class TermParserTest {
       testPredicate("p(1, a, [a,b,c|d])");
       testPredicate("p(1, 'a b c?', [a,b,c|d])");
       testPredicate("p(_Test1, _Test2, _Test3)");
+      testPredicate("~(a,b,c)");
    }
 
    private void testPredicate(String syntax) {

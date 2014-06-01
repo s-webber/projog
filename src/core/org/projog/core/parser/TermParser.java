@@ -163,7 +163,7 @@ class TermParser {
    }
 
    /** Returns an Atom representing a non-alpha-numeric operand name (e.g. {@code :-}). */
-   private Atom getOperandAtom(char startChar) {
+   private Term getOperandAtom(char startChar) {
       StringBuffer sb = new StringBuffer();
       sb.append(startChar);
       int c;
@@ -171,7 +171,7 @@ class TermParser {
          sb.append((char) c);
       }
       parser.rewind();
-      String command = sb.toString();
+      final String command = sb.toString();
       if (".".equals(command)) {
          return PERIOD;
       } else if (isValidParseableElement(command)) {
@@ -180,17 +180,23 @@ class TermParser {
          // track back until find valid operand
          int idx = sb.length();
          while (--idx > 0) {
-            command = sb.substring(0, idx);
-            if (isValidParseableElement(command)) {
+            final String substring = sb.substring(0, idx);
+            if (isValidParseableElement(substring)) {
                for (int i = idx; i < sb.length(); i++) {
                   parser.rewind();
                }
                // considered caching operands but decided not to
-               return new Atom(command);
+               return new Atom(substring);
             }
          }
-         throwParserException("invalid command: " + sb);
-         throw new RuntimeException(); // won't get here as above line throws exception first
+
+         // if we get here then we haven't matched it to an operand - so treat the whole string as a single term
+         if (command.endsWith("(")) {
+            parser.rewind();
+            return getAtomOrStructure(command.substring(0, command.length() - 1));
+         } else {
+            return getAtomOrStructure(command);
+         }
       }
    }
 
@@ -199,7 +205,7 @@ class TermParser {
       // it is non-alphabetic single character that is neither a delimiter nor an operand -
       // but <i>is</i> a valid term in it's own right.
       // TODO is there a way to avoid the following hardcoding of the "!"?
-      // (Are the other cases, other than "!", where this could be a problem in future?)
+      // (Are there other cases, other than "!", where this could be a problem in future?)
       return isDelimiter(commandName) || "!".equals(commandName) || operands.isDefined(commandName);
    }
 

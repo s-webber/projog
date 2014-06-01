@@ -205,6 +205,21 @@ public class SentenceParserTest {
       parseSentence("p(':-'(a, b)).");
    }
 
+   @Test
+   public void testAlphaNumericPredicateName() {
+      String expectedOutput = "is(X, ~(1, 1))";
+      check("X is '~'(1,1)", expectedOutput);
+      check("X is ~(1,1)", expectedOutput);
+   }
+
+   @Test
+   public void testInfixOperatorAsPredicateName() {
+      String expectedOutput = "is(X, +(1, 1))";
+      check("X is '+'(1,1)", expectedOutput);
+      check("X is 1+1", expectedOutput);
+      // TODO check("X is +(1,1)", expectedOutput);
+   }
+
    private void checkEquation(String input, String expected) {
       // apply same extra tests cos is easy to do
       for (int i = 0; i < 2; i++) {
@@ -237,15 +252,15 @@ public class SentenceParserTest {
 
    /**
     * @param input syntax (not including trailing .) to attempt to produce term for
-    * @param expected what toString method of Term should look like
+    * @param expectedOutput what toString method of Term should look like
     */
-   private Term check(String input, String expected) {
+   private Term check(String input, String expectedOutput) {
       error(input);
       try {
          input += ".";
          Term t = parseSentence(input);
-         if (!expected.equals(t.toString())) {
-            throw new Exception("got: " + t + " instead of: " + expected);
+         if (!expectedOutput.equals(t.toString())) {
+            throw new Exception("got: " + t + " instead of: " + expectedOutput);
          }
          return t;
       } catch (Exception e) {

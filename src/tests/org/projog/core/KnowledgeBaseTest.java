@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
@@ -13,8 +14,10 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.function.bool.True;
 import org.projog.core.function.compare.Equal;
+import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Structure;
@@ -149,6 +152,46 @@ public class KnowledgeBaseTest {
    public void testGetPredicateAndGetPredicateFactory_4() {
       Term input = structure("=", atom(), atom(), atom());
       assertGetPredicateFactory(input, UnknownPredicate.class);
+   }
+
+   @Test
+   public void testGetAddPredicateFactory() {
+      PredicateFactory ef = kb.getPredicateFactory(ADD_PREDICATE_KEY);
+      assertSame(AddPredicateFactory.class, ef.getClass());
+      assertTrue(ef instanceof AbstractSingletonPredicate);
+   }
+
+   @Test
+   public void testAddPredicateFactory() {
+      // create PredicateKey and PredicateFactory to add to KnowledgeBase
+      PredicateKey key = new PredicateKey("testAddPredicate", 1);
+      PredicateFactory ef = new PredicateFactory() {
+         @Override
+         public void setKnowledgeBase(KnowledgeBase kb) {
+         }
+
+         @Override
+         public Predicate getPredicate(Term... args) {
+            return null;
+         }
+      };
+
+      // assert not already defined in knowledge base
+      assertSame(UnknownPredicate.class, kb.getPredicateFactory(key).getClass());
+
+      // add
+      kb.addPredicateFactory(key, ef);
+
+      // assert now defined in knowledge base
+      assertSame(ef, kb.getPredicateFactory(key));
+
+      // assert exception thrown if try to re-add
+      try {
+         kb.addPredicateFactory(key, ef);
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Already defined: testAddPredicate/1", e.getMessage());
+      }
    }
 
    private void assertGetPredicateFactory(Term input, Class<?> expected) {

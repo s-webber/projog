@@ -21,13 +21,13 @@ import org.projog.core.term.Term;
  * <p>
  * <img src="doc-files/PredicateFactory.png">
  * 
- * @see org.projog.core.PluginPredicateFactoryFactory
+ * @see org.projog.core.KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)
  */
 public interface PredicateFactory {
    /**
     * Provides a reference to a {@code KnowledgeBase}.
     * <p>
-    * This method will be called by {@link PluginPredicateFactoryFactory#evaluate(Term[])} when this class is registered
+    * This method will be called by {@link KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)} when this class is registered
     * with a {@code KnowledgeBase} - meaning this object will always have access to a {@code KnowledgeBase} by the time
     * it's {@code getPredicate} method is invoked.
     */
@@ -54,14 +54,14 @@ public interface PredicateFactory {
     * For example, {@link org.projog.core.function.flow.Cut} has the following {@code getPredicate} method signatures:
     * 
     * <pre>
-	 * public Cut getPredicate(Term... args)
-	 * public Cut getPredicate()
-	 * </pre>
+    * public Cut getPredicate(Term... args)
+    * public Cut getPredicate()
+    * </pre>
     * rather than the minimum required:
     * 
     * <pre>
-	 * public Predicate getPredicate(Term... args)
-	 * </pre>
+    * public Predicate getPredicate(Term... args)
+    * </pre>
     * <p>
     * <b>Note:</b> The above recommendations are <i>not</i> required for subclasses of
     * {@link org.projog.core.function.AbstractSingletonPredicate}.

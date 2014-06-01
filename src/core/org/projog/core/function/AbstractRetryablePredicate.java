@@ -18,7 +18,6 @@ import org.projog.core.term.Term;
  * @see AbstractSingletonPredicate
  * @see org.projog.core.Predicate#evaluate(Term[])
  * @see org.projog.core.PredicateFactory#getPredicate(Term[])
- * @see org.projog.core.PluginPredicateFactoryFactory
  */
 public abstract class AbstractRetryablePredicate implements Predicate, PredicateFactory {
    private KnowledgeBase knowledgeBase;

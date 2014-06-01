@@ -1,6 +1,7 @@
 package org.projog.core;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -8,6 +9,7 @@ import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.io.Write;
+import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.udp.DynamicUserDefinedPredicateFactory;
@@ -25,11 +27,9 @@ public final class KnowledgeBase {
     * Represents the {@code pj_add_predicate/2} predicate hard-coded in every {@code KnowledgeBase}.
     * <p>
     * The {@code pj_add_predicate/2} predicate allows other implementations of {@link PredicateFactory} to be
-    * "plugged-in" to a {@code KnowledgeBase} at runtime using Prolog syntax. The {@code pj_add_predicate/2} predicate
-    * is implemented by {@link #pluginPredicateFactoryFactory} which provides the functionality for adding new
-    * predicates.
+    * "plugged-in" to a {@code KnowledgeBase} at runtime using Prolog syntax.
     * 
-    * @see PluginPredicateFactoryFactory#evaluate(Term[])
+    * @see AddPredicateFactory#evaluate(Term[])
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 
@@ -38,14 +38,21 @@ public final class KnowledgeBase {
    private final FileHandles fileHandles = new FileHandles();
    private final Operands operands = new Operands();
    private final ProjogProperties projogProperties;
-   private final PluginPredicateFactoryFactory pluginPredicateFactoryFactory = new PluginPredicateFactoryFactory();
+   /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
    private final Write writer = new Write();
 
-   /** Used to synchronize access to {@link #userDefinedPredicates} */
-   private final Object userDefinedPredicatesLock = new Object();
-
-   /** Enforce predictable ordering for when iterated by <code>listing(X)</code>. */
+   /** Used to coordinate access to {@link #javaPredicates} and {@link #userDefinedPredicates} */
+   private final Object predicatesLock = new Object();
+   /**
+    * The "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this {@code KnowledgeBase}.
+    */
+   private final HashMap<PredicateKey, PredicateFactory> javaPredicates = new HashMap<>();
+   /**
+    * The user-defined predicates (i.e. defined using Prolog syntax) associated with this {@code KnowledgeBase}.
+    * <p>
+    * Uses TreeMap to enforce predictable ordering for when iterated (e.g. by <code>listing(X)</code>). 
+    */
    private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<>();
 
    /**
@@ -61,10 +68,9 @@ public final class KnowledgeBase {
    public KnowledgeBase(ProjogProperties projogProperties) {
       this.projogProperties = projogProperties;
 
-      pluginPredicateFactoryFactory.setKnowledgeBase(this);
       writer.setKnowledgeBase(this);
 
-      pluginPredicateFactoryFactory.addPredicateFactory(ADD_PREDICATE_KEY, pluginPredicateFactoryFactory);
+      addPredicateFactory(ADD_PREDICATE_KEY, new AddPredicateFactory());
    }
 
    /**
@@ -115,6 +121,9 @@ public final class KnowledgeBase {
       return calculatables.getNumeric(t);
    }
 
+   /**
+    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
+    */
    public void addCalculatable(String functionName, Calculatable calculatable) {
       calculatables.addCalculatable(functionName, calculatable);
    }
@@ -136,8 +145,9 @@ public final class KnowledgeBase {
     */
    public UserDefinedPredicateFactory createOrReturnUserDefinedPredicate(PredicateKey key) {
       UserDefinedPredicateFactory userDefinedPredicate;
-      synchronized (userDefinedPredicatesLock) {
+      synchronized (predicatesLock) {
          userDefinedPredicate = userDefinedPredicates.get(key);
+
          if (userDefinedPredicate == null) {
             // assume dynamic
             userDefinedPredicate = new DynamicUserDefinedPredicateFactory(this, key);
@@ -157,10 +167,11 @@ public final class KnowledgeBase {
     */
    public void setUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
       PredicateKey key = userDefinedPredicate.getPredicateKey();
-      if (pluginPredicateFactoryFactory.getPredicateFactory(key) != null) {
-         throw new ProjogException("Cannot replace already defined plugin predicate: " + key);
-      }
-      synchronized (userDefinedPredicatesLock) {
+      synchronized (predicatesLock) {
+         if (isExistingJavaPredicate(key)) {
+            throw new ProjogException("Cannot replace already defined plugin predicate: " + key);
+         }
+
          userDefinedPredicates.put(key, userDefinedPredicate);
       }
    }
@@ -183,16 +194,43 @@ public final class KnowledgeBase {
     * {@link UnknownPredicate#UNKNOWN_PREDICATE} is returned.
     */
    public PredicateFactory getPredicateFactory(PredicateKey key) {
-      PredicateFactory PredicateFactory = pluginPredicateFactoryFactory.getPredicateFactory(key);
-      if (PredicateFactory == null) {
-         PredicateFactory = userDefinedPredicates.get(key);
-         if (PredicateFactory == null) {
+      PredicateFactory predicateFactory = javaPredicates.get(key);
+      if (predicateFactory == null) {
+         predicateFactory = userDefinedPredicates.get(key);
+         if (predicateFactory == null) {
             ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
             observable.notifyObservers(event);
             return UnknownPredicate.UNKNOWN_PREDICATE;
          }
       }
-      return PredicateFactory;
+      return predicateFactory;
+   }
+
+   /**
+    * Associates a {@link PredicateFactory} with this {@code KnowledgeBase}.
+    * <p>
+    * This method provides a mechanism for "plugging in" or "injecting" implementations of {@link PredicateFactory} at
+    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including adding
+    * functionality not possible to define in pure Prolog syntax.
+    * </p>
+    */
+   public void addPredicateFactory(PredicateKey key, PredicateFactory pf) {
+      synchronized (predicatesLock) {
+         if (isExistingPredicate(key)) {
+            throw new ProjogException("Already defined: " + key);
+         } else {
+            pf.setKnowledgeBase(this);
+            javaPredicates.put(key, pf);
+         }
+      }
+   }
+
+   private boolean isExistingPredicate(PredicateKey key) {
+      return isExistingJavaPredicate(key) || userDefinedPredicates.containsKey(key);
+   }
+
+   private boolean isExistingJavaPredicate(PredicateKey key) {
+      return javaPredicates.containsKey(key);
    }
 
    /**

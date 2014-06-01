@@ -10,7 +10,7 @@ import org.projog.core.term.Term;
  * {@link org.projog.core.function.AbstractRetryablePredicate}.
  * 
  * @see org.projog.core.PredicateFactory
- * @see org.projog.core.PluginPredicateFactoryFactory
+ * @see org.projog.core.KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)
  */
 public interface Predicate {
    /**

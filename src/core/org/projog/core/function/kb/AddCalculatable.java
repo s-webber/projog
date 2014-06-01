@@ -1,4 +1,4 @@
-package org.projog.core.function.math;
+package org.projog.core.function.kb;
 
 import static org.projog.core.term.TermUtils.getAtomName;
 

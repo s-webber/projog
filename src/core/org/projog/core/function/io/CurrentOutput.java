@@ -14,10 +14,6 @@ import org.projog.core.term.Term;
  */
 public final class CurrentOutput extends org.projog.core.function.AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term argument) {
       return argument.unify(getKnowledgeBase().getFileHandles().getCurrentOutputHandle());
    }

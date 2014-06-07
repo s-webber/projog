@@ -21,10 +21,6 @@ abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
    private Iterator<Entry<Key, List<Term>>> itr;
 
    @Override
-   public final boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public final boolean evaluate(Term template, Term goal, Term bag) {
       if (itr == null) {
          init(template, goal);

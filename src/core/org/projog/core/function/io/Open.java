@@ -23,10 +23,6 @@ public final class Open extends org.projog.core.function.AbstractSingletonPredic
    private static final String WRITE = "write";
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(Term fileNameAtom, Term operationAtom, Term variableToAssignTo) {
       String operation = getAtomName(operationAtom);
       String fileName = getAtomName(fileNameAtom);

@@ -58,10 +58,6 @@ public final class Member extends AbstractRetryablePredicate {
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term element, Term secondArg) {
       while (true) {
          if (couldReEvaluationSucceed()) {

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.projog.core.PredicateKey;
 import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.Term;
 
 /* TEST
  %LINK prolog-debugging
@@ -18,10 +17,6 @@ import org.projog.core.term.Term;
  */
 public final class Debugging extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       SpyPoints spyPoints = getKnowledgeBase().getSpyPoints();
       Map<PredicateKey, SpyPoints.SpyPoint> map = spyPoints.getSpyPoints();

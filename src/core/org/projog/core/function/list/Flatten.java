@@ -53,10 +53,6 @@ import org.projog.core.term.TermType;
  */
 public final class Flatten extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(final Term original, final Term expected) {
       final Term flattenedVersion;
       switch (original.getType()) {

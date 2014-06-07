@@ -191,10 +191,6 @@ public final class Disjunction extends AbstractRetryablePredicate {
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term inputArg1, Term inputArg2) {
       if (currentlyEvaluatedPredicateOrdinal == 0) {
          currentlyEvaluatedPredicateOrdinal = 1;

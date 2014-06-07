@@ -22,10 +22,6 @@ import org.projog.core.term.Term;
  */
 public final class NumericLessThan extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       return NUMERIC_TERM_COMPARATOR.compare(arg1, arg2, getKnowledgeBase()) == -1;
    }

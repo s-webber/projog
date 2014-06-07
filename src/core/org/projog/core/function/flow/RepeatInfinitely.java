@@ -39,10 +39,6 @@ import org.projog.core.term.Term;
  */
 public final class RepeatInfinitely extends AbstractRetryablePredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       return true;
    }

@@ -1,7 +1,6 @@
 package org.projog.core.function.bool;
 
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.Term;
 
 /* TEST
  %FALSE fail
@@ -34,10 +33,6 @@ import org.projog.core.term.Term;
  */
 public final class Fail extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       return false;
    }

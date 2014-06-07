@@ -69,10 +69,6 @@ import org.projog.core.term.Term;
  */
 public final class Subtract extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(final Term original, final Term itemsToRemove, final Term result) {
       final List<Term> originalAsList = ListFactory.toJavaUtilList(original);
       final List<Term> itemsToRemoveAsList = ListFactory.toJavaUtilList(itemsToRemove);

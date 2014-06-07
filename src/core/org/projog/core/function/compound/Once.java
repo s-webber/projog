@@ -19,10 +19,6 @@ import org.projog.core.term.Term;
  */
 public final class Once extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
       return e.evaluate(t.getArgs());

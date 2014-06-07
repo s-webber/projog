@@ -33,10 +33,6 @@ import org.projog.core.term.TermType;
  */
 public final class MemberCheck extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term element, Term list) {
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
          throw new ProjogException("Expected list but got: " + list);

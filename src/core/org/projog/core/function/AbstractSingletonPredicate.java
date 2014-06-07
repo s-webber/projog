@@ -21,7 +21,7 @@ import org.projog.core.term.Term;
  * @see AbstractRetryablePredicate
  * @see org.projog.core.Predicate#evaluate(Term[])
  */
-public abstract class AbstractSingletonPredicate implements Predicate, PredicateFactory {
+public abstract class AbstractSingletonPredicate extends AbstractPredicate implements PredicateFactory {
    private KnowledgeBase knowledgeBase;
 
    @Override

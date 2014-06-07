@@ -19,10 +19,6 @@ import org.projog.core.term.TermComparator;
  */
 public final class TermLessThanOrEqual extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       return TermComparator.TERM_COMPARATOR.compare(arg1, arg2) < 1;
    }

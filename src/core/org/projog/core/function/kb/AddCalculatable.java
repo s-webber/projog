@@ -25,10 +25,6 @@ import org.projog.core.term.Term;
 */
 public class AddCalculatable extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);

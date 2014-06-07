@@ -22,10 +22,6 @@ import org.projog.core.term.Term;
  */
 public final class IsNonVar extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       return !arg.getType().isVariable();
    }

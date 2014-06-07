@@ -57,10 +57,6 @@ import org.projog.core.term.TermUtils;
  */
 public final class Functor extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(Term t, Term f, Term n) {
       switch (t.getType()) {
          case ATOM:

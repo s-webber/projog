@@ -1,6 +1,5 @@
 package org.projog.core.function.debug;
 
-import org.projog.core.term.Term;
 
 /* TEST
  %LINK prolog-debugging
@@ -13,10 +12,6 @@ import org.projog.core.term.Term;
  */
 public final class Trace extends org.projog.core.function.AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       getKnowledgeBase().getSpyPoints().setTraceEnabled(true);
       return true;

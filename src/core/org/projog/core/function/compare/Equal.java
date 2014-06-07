@@ -31,10 +31,6 @@ import org.projog.core.term.Term;
  */
 public final class Equal extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       return arg1.unify(arg2);
    }

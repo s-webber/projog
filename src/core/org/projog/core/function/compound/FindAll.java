@@ -64,10 +64,6 @@ import org.projog.core.term.Variable;
  */
 public final class FindAll extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(Term template, Term goal, Term output) {
       final Predicate predicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), goal);
       final Term[] goalArguments = goal.getArgs();

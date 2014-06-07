@@ -14,10 +14,6 @@ import org.projog.core.term.TermType;
  */
 abstract class AbstractTermSplitFunction extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       if (arg1.getType().isVariable()) {
          return evaluateWithVariableFirstArgument(arg1, arg2);

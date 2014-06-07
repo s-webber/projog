@@ -28,10 +28,6 @@ import org.projog.core.term.Variable;
  */
 public final class Write extends org.projog.core.function.AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       String s = toString(arg);
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(s);

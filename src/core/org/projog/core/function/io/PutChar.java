@@ -18,10 +18,6 @@ import org.projog.core.term.Term;
  */
 public final class PutChar extends org.projog.core.function.AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term argument) {
       String textToOutput = getAtomName(argument);
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(textToOutput);

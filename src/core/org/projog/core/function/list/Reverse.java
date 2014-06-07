@@ -40,10 +40,6 @@ import org.projog.core.term.Term;
  */
 public final class Reverse extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(final Term list1, final Term list2) {
       if (list1.getType() == LIST) {
          return evaluate(list2, reverse(list1));

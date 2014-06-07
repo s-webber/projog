@@ -60,10 +60,6 @@ import org.projog.core.term.TermType;
  */
 public final class Univ extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       TermType argType1 = arg1.getType();
       TermType argType2 = arg2.getType();

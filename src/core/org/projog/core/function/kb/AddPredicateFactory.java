@@ -2,8 +2,6 @@ package org.projog.core.function.kb;
 
 import static org.projog.core.term.TermUtils.getAtomName;
 
-import java.util.Arrays;
-
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
@@ -32,16 +30,16 @@ import org.projog.core.term.Term;
  */
 public final class AddPredicateFactory extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
+   public boolean evaluate(Term arg1, Term arg2) {
       try {
-         PredicateKey key = PredicateKey.createFromNameAndArity(args[0]);
-         String className = getAtomName(args[1]);
+         PredicateKey key = PredicateKey.createFromNameAndArity(arg1);
+         String className = getAtomName(arg2);
          Class<?> c = Class.forName(className);
          PredicateFactory pf = (PredicateFactory) c.newInstance();
          getKnowledgeBase().addPredicateFactory(key, pf);
          return true;
       } catch (Exception e) {
-         throw new ProjogException("Could not register new PredicateFactory using arguments: " + Arrays.toString(args), e);
+         throw new ProjogException("Could not register new PredicateFactory using arguments: " + arg1 + " and " + arg2, e);
       }
    }
 }

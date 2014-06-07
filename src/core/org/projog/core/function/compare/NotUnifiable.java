@@ -25,10 +25,6 @@ import org.projog.core.term.Term;
  */
 public final class NotUnifiable extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       final boolean unifiable = arg1.unify(arg2);
       arg1.backtrack();

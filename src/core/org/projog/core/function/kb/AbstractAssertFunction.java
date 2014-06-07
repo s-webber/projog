@@ -12,10 +12,6 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  */
 abstract class AbstractAssertFunction extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term consequent) {
       PredicateKey key = PredicateKey.createForTerm(consequent);
       KnowledgeBase kb = getKnowledgeBase();

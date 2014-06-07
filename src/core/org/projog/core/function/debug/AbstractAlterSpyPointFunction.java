@@ -27,10 +27,6 @@ abstract class AbstractAlterSpyPointFunction extends AbstractSingletonPredicate 
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term t) {
       switch (t.getType()) {
          case ATOM:

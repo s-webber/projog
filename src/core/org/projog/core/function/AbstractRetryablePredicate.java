@@ -19,7 +19,7 @@ import org.projog.core.term.Term;
  * @see org.projog.core.Predicate#evaluate(Term[])
  * @see org.projog.core.PredicateFactory#getPredicate(Term[])
  */
-public abstract class AbstractRetryablePredicate implements Predicate, PredicateFactory {
+public abstract class AbstractRetryablePredicate extends AbstractPredicate implements PredicateFactory {
    private KnowledgeBase knowledgeBase;
 
    @Override

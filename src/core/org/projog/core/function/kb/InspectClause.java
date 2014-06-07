@@ -56,10 +56,6 @@ public final class InspectClause extends AbstractUserDefinedPredicateInspectionF
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2) {
       return internalEvaluate(arg1, arg2);
    }

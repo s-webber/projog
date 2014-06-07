@@ -59,10 +59,6 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate(Term arg) {
       return evaluate();
    }
@@ -78,6 +74,7 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
     * when it was created, else {@code false}
     * @see org.projog.core.udp.StaticUserDefinedPredicateFactory
     */
+   @Override
    public boolean evaluate() {
       return ctr++ < limit;
    }

@@ -20,10 +20,6 @@ import org.projog.core.term.TermType;
  */
 public final class IsAtomic extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       TermType type = arg.getType();
       return type == TermType.ATOM || type.isNumeric();

@@ -34,10 +34,6 @@ import org.projog.core.term.TermType;
  */
 public final class AtomConcat extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       assertAtomOrVariable(arg1);
       assertAtomOrVariable(arg2);

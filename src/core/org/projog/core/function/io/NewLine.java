@@ -1,6 +1,5 @@
 package org.projog.core.function.io;
 
-import org.projog.core.term.Term;
 
 /* TEST
  %QUERY write('a'), write('b'), nl, write('c')
@@ -21,10 +20,6 @@ import org.projog.core.term.Term;
  */
 public final class NewLine extends org.projog.core.function.AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().println();
       return true;

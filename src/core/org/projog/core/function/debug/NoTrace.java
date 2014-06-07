@@ -1,7 +1,6 @@
 package org.projog.core.function.debug;
 
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.Term;
 
 /* TEST
  %LINK prolog-debugging
@@ -15,10 +14,6 @@ import org.projog.core.term.Term;
  */
 public final class NoTrace extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       getKnowledgeBase().getSpyPoints().setTraceEnabled(false);
       return true;

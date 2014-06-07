@@ -80,10 +80,6 @@ public final class Retract extends AbstractUserDefinedPredicateInspectionFunctio
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       return internalEvaluate(arg, null);
    }

@@ -34,10 +34,6 @@ import org.projog.core.term.Variable;
  */
 public class AddArithmeticFunction extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
       getKnowledgeBase().addCalculatable(key, new ArithmeticFunction(key));

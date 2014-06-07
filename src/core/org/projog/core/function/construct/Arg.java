@@ -31,10 +31,6 @@ import org.projog.core.term.Term;
  */
 public final class Arg extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1], args[2]);
-   }
-
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int argIdx = castToNumeric(arg1).getInt();
       if (arg2.getNumberOfArguments() < argIdx) {

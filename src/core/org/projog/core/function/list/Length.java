@@ -30,10 +30,6 @@ import org.projog.core.term.Term;
  */
 public final class Length extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0], args[1]);
-   }
-
    public boolean evaluate(final Term list, final Term expectedLength) {
       final java.util.List<Term> javaList = ListFactory.toJavaUtilList(list);
       if (javaList != null) {

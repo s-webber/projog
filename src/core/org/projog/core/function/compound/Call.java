@@ -70,10 +70,6 @@ public final class Call extends AbstractRetryablePredicate {
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term t) {
       if (predicateToCall == null) {
          predicateToCall = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);

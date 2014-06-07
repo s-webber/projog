@@ -51,10 +51,6 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  */
 public final class Listing extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate(args[0]);
-   }
-
    public boolean evaluate(Term arg) {
       KnowledgeBase kb = getKnowledgeBase();
       String predicateName = getAtomName(arg);

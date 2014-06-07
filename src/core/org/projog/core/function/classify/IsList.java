@@ -21,22 +21,18 @@ import org.projog.core.term.TermType;
  * </p>
  */
 public final class IsList extends AbstractSingletonPredicate {
-	@Override
-	public boolean evaluate(final Term... args) {
-		return evaluate(args[0]);
-	}
-
-	public boolean evaluate(final Term arg) {
-		switch (arg.getType()) {
-		case EMPTY_LIST:
-			return true;
-		case LIST:
-			Term tail = arg;
-			while ((tail = tail.getArgument(1)).getType() == TermType.LIST) {
-			}
-			return tail.getType() == TermType.EMPTY_LIST;
-		default:
-			return false;
-		}
-	}
+   @Override
+   public boolean evaluate(final Term arg) {
+      switch (arg.getType()) {
+         case EMPTY_LIST:
+            return true;
+         case LIST:
+            Term tail = arg;
+            while ((tail = tail.getArgument(1)).getType() == TermType.LIST) {
+            }
+            return tail.getType() == TermType.EMPTY_LIST;
+         default:
+            return false;
+      }
+   }
 }

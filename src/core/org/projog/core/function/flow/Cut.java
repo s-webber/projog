@@ -49,10 +49,6 @@ public final class Cut extends AbstractRetryablePredicate {
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      return evaluate();
-   }
-
    public boolean evaluate() {
       if (retried) {
          throw CutException.CUT_EXCEPTION;

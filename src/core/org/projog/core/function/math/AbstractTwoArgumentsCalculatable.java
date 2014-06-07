@@ -13,7 +13,7 @@ import org.projog.core.term.TermType;
  */
 abstract class AbstractTwoArgumentsCalculatable implements Calculatable {
    @Override
-   public Numeric calculate(KnowledgeBase kb, Term[] args) {
+   public final Numeric calculate(KnowledgeBase kb, Term[] args) {
       Numeric n1 = kb.getNumeric(args[0]);
       Numeric n2 = kb.getNumeric(args[1]);
       if (containsDouble(n1, n2)) {

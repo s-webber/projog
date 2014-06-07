@@ -1,10 +1,12 @@
 package org.projog.core.function.list;
 
+import static org.projog.core.term.ListFactory.createList;
+import static org.projog.core.term.ListUtils.toJavaUtilList;
+
 import java.util.Iterator;
 import java.util.List;
 
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -70,8 +72,8 @@ import org.projog.core.term.Term;
 public final class SubtractFromList extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(final Term original, final Term itemsToRemove, final Term result) {
-      final List<Term> originalAsList = ListFactory.toJavaUtilList(original);
-      final List<Term> itemsToRemoveAsList = ListFactory.toJavaUtilList(itemsToRemove);
+      final List<Term> originalAsList = toJavaUtilList(original);
+      final List<Term> itemsToRemoveAsList = toJavaUtilList(itemsToRemove);
 
       if (originalAsList == null || itemsToRemoveAsList == null) {
          return false;
@@ -85,7 +87,7 @@ public final class SubtractFromList extends AbstractSingletonPredicate {
          }
       }
 
-      return result.unify(ListFactory.createList(originalAsList));
+      return result.unify(createList(originalAsList));
    }
 
    private boolean shouldBeRemoved(final Term item, final List<Term> itemsToRemoveAsList) {

@@ -1,8 +1,10 @@
 package org.projog.core.function.list;
 
+import static org.projog.core.term.ListFactory.createList;
+import static org.projog.core.term.ListUtils.toJavaUtilList;
+
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -25,10 +27,10 @@ public final class Append extends AbstractSingletonPredicate {
       assertList(prefix);
       assertList(suffix);
 
-      java.util.List<Term> javaList = ListFactory.toJavaUtilList(prefix);
-      javaList.addAll(ListFactory.toJavaUtilList(suffix));
+      java.util.List<Term> javaList = toJavaUtilList(prefix);
+      javaList.addAll(toJavaUtilList(suffix));
 
-      return concatenated.unify(ListFactory.createList(javaList));
+      return concatenated.unify(createList(javaList));
    }
 
    private void assertList(Term t) {

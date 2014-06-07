@@ -1,12 +1,13 @@
 package org.projog.core.function.list;
 
+import static org.projog.core.term.ListFactory.createList;
+import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermType.EMPTY_LIST;
 import static org.projog.core.term.TermType.LIST;
 
 import java.util.Collections;
 
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -53,11 +54,11 @@ public final class Reverse extends AbstractSingletonPredicate {
    }
 
    private boolean evaluate(final Term term, final java.util.List<Term> javaList) {
-      return javaList != null && term.unify(ListFactory.createList(javaList));
+      return javaList != null && term.unify(createList(javaList));
    }
 
    private java.util.List<Term> reverse(Term list) {
-      final java.util.List<Term> javaList = ListFactory.toJavaUtilList(list);
+      final java.util.List<Term> javaList = toJavaUtilList(list);
       if (javaList != null) {
          Collections.reverse(javaList);
       }

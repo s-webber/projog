@@ -1,6 +1,8 @@
 package org.projog.core.function.list;
 
 import static java.util.Collections.sort;
+import static org.projog.core.term.ListFactory.createList;
+import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
 
 import java.util.Comparator;
@@ -8,7 +10,6 @@ import java.util.List;
 
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -71,17 +72,12 @@ public final class KeySort extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(final Term original, final Term result) {
       final List<Term> elements = toJavaUtilList(original);
+      if (elements == null) {
+         throw new ProjogException("Expected first argument to be a fully instantied list but got: " + original);
+      }
       assertKeyValuePairs(elements);
       sort(elements, KEY_VALUE_PAIR_COMPARATOR);
-      return result.unify(ListFactory.createList(elements));
-   }
-
-   private List<Term> toJavaUtilList(final Term t) {
-      final List<Term> elements = ListFactory.toJavaUtilList(t);
-      if (elements == null) {
-         throw new ProjogException("Expected first argument to be a fully instantied list but got: " + t);
-      }
-      return elements;
+      return result.unify(createList(elements));
    }
 
    private boolean assertKeyValuePairs(List<Term> elements) {

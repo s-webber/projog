@@ -1,8 +1,9 @@
 package org.projog.core.function.list;
 
+import static org.projog.core.term.ListUtils.toJavaUtilList;
+
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -31,7 +32,7 @@ import org.projog.core.term.Term;
 public final class Length extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(final Term list, final Term expectedLength) {
-      final java.util.List<Term> javaList = ListFactory.toJavaUtilList(list);
+      final java.util.List<Term> javaList = toJavaUtilList(list);
       if (javaList != null) {
          final IntegerNumber actualLength = new IntegerNumber(javaList.size());
          return expectedLength.unify(actualLength);

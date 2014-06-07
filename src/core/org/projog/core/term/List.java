@@ -11,6 +11,7 @@ import java.util.Map;
  * 
  * @see EmptyList
  * @see ListFactory
+ * @see ListUtils
  */
 public final class List implements Term {
    private final Term head;

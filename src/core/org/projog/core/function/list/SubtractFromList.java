@@ -67,7 +67,7 @@ import org.projog.core.term.Term;
  * <code>subtract(X,Y,Z)</code> removes the elements in the list represented by <code>Y</code> 
  * from the list represented by <code>X</code> and attempts to unify the result with <code>Z</code>.
  */
-public final class Subtract extends AbstractSingletonPredicate {
+public final class SubtractFromList extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(final Term original, final Term itemsToRemove, final Term result) {
       final List<Term> originalAsList = ListFactory.toJavaUtilList(original);

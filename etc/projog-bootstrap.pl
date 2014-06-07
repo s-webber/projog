@@ -106,7 +106,7 @@
 ?- pj_add_predicate(member/2, 'org.projog.core.function.list.Member').
 ?- pj_add_predicate(memberchk/2, 'org.projog.core.function.list.MemberCheck').
 ?- pj_add_predicate(append/3, 'org.projog.core.function.list.Append').
-?- pj_add_predicate(subtract/3, 'org.projog.core.function.list.Subtract').
+?- pj_add_predicate(subtract/3, 'org.projog.core.function.list.SubtractFromList').
 ?- pj_add_predicate(keysort/2, 'org.projog.core.function.list.KeySort').
 ?- pj_add_predicate(flatten/2, 'org.projog.core.function.list.Flatten').
 

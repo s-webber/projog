@@ -10,6 +10,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.projog.core.Calculatable;
 import org.projog.core.PredicateFactory;
@@ -25,34 +29,40 @@ public class SysTestGenerator {
    private static final String SOURCE_INPUT_DIR = "src/core/";
    private static final File COMMANDS_OUTPUT_DIR = new File(SCRIPTS_OUTPUT_DIR, "commands");
 
-   private static void findAllPredicates(File dir) {
+   private static List<File> getDocumentableJavaSourceFiles(File dir) {
+      List<File> result = new ArrayList<File>();
       File[] directoryContents = dir.listFiles();
       for (File file : directoryContents) {
          if (file.isDirectory()) {
-            findAllPredicates(file);
+            // continue directory tree walk
+            result.addAll(getDocumentableJavaSourceFiles(file));
          } else if (isJavaSourceFileOfDocumentedClass(file)) {
-            // produce the script file
-            produceScriptFileFromJavaFile(file);
+            result.add(file);
          }
       }
+      return result;
    }
 
    private static boolean isJavaSourceFileOfDocumentedClass(File file) {
-      if (!isJavaSource(file)) {
-         return false;
-      }
-      String className = getClassName(file);
       try {
+         if (!isJavaSource(file)) {
+            return false;
+         }
+
+         String className = getClassName(file);
          Class<?> c = Class.forName(className);
          if (isDocumentable(c)) {
-            c.newInstance();
-            System.out.println("SysTest: Created: " + className);
+            // confirm the class is instantiatable
+            Object o = c.newInstance();
+            System.out.println("Will produce documentation for: " + o.getClass().getName());
             return true;
+         } else {
+            return false;
          }
       } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-         System.out.println("Exception checking: " + className + " " + e);
+         System.out.println("Not producing documentation for " + file + " - due to: " + e.getStackTrace());
+         return false;
       }
-      return false;
    }
 
    private static boolean isDocumentable(Class<?> c) {
@@ -169,6 +179,14 @@ public class SysTestGenerator {
    }
 
    public static final void main(String[] args) {
-      findAllPredicates(new File(SOURCE_INPUT_DIR));
+      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(new File(SOURCE_INPUT_DIR));
+      Map<String, File> alreadyProcessed = new HashMap<String, File>();
+      for (File f : javaSourceFiles) {
+         File previousEntry = alreadyProcessed.put(f.getName(), f);
+         if (previousEntry != null) {
+            throw new IllegalArgumentException("Two instances of: " + f.getName() + " first: " + previousEntry + " second: " + f);
+         }
+         produceScriptFileFromJavaFile(f);
+      }
    }
 }

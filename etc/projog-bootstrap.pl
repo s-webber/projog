@@ -113,7 +113,7 @@
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').
 ?- pj_add_calculatable('+'/2, 'org.projog.core.function.math.Add').
-?- pj_add_calculatable('/'('-', 1), 'org.projog.core.function.math.Subtract').
+?- pj_add_calculatable('/'('-', 1), 'org.projog.core.function.math.Minus').
 ?- pj_add_calculatable('/'('-', 2), 'org.projog.core.function.math.Subtract').
 ?- pj_add_calculatable('/'/2, 'org.projog.core.function.math.Divide').
 ?- pj_add_calculatable('//'/2, 'org.projog.core.function.math.IntegerDivide').

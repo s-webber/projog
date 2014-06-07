@@ -120,7 +120,7 @@ public class TestUtils {
    }
 
    public static List list(Term... args) {
-      return (List) ListFactory.create(args);
+      return (List) ListFactory.createList(args);
    }
 
    public static IntegerNumber integerNumber() {

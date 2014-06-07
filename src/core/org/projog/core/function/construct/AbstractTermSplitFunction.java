@@ -67,7 +67,7 @@ abstract class AbstractTermSplitFunction extends AbstractSingletonPredicate {
       for (int i = 0; i < numChars; i++) {
          listElements[i] = toTerm(Character.toString(chars[i]));
       }
-      Term l = ListFactory.create(listElements);
+      Term l = ListFactory.createList(listElements);
       return arg2.unify(l);
    }
 

@@ -53,7 +53,7 @@ public final class Reverse extends AbstractSingletonPredicate {
    }
 
    private boolean evaluate(final Term term, final java.util.List<Term> javaList) {
-      return javaList != null && term.unify(ListFactory.create(javaList));
+      return javaList != null && term.unify(ListFactory.createList(javaList));
    }
 
    private java.util.List<Term> reverse(Term list) {

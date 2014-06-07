@@ -57,7 +57,7 @@ public final class Flatten extends AbstractSingletonPredicate {
       final Term flattenedVersion;
       switch (original.getType()) {
          case LIST:
-            flattenedVersion = ListFactory.create(flattenList(original));
+            flattenedVersion = ListFactory.createList(flattenList(original));
             break;
          case EMPTY_LIST:
             flattenedVersion = original;

@@ -85,7 +85,7 @@ public final class Subtract extends AbstractSingletonPredicate {
          }
       }
 
-      return result.unify(ListFactory.create(originalAsList));
+      return result.unify(ListFactory.createList(originalAsList));
    }
 
    private boolean shouldBeRemoved(final Term item, final List<Term> itemsToRemoveAsList) {

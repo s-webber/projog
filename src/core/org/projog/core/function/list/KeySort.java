@@ -73,7 +73,7 @@ public final class KeySort extends AbstractSingletonPredicate {
       final List<Term> elements = toJavaUtilList(original);
       assertKeyValuePairs(elements);
       sort(elements, KEY_VALUE_PAIR_COMPARATOR);
-      return result.unify(ListFactory.create(elements));
+      return result.unify(ListFactory.createList(elements));
    }
 
    private List<Term> toJavaUtilList(final Term t) {

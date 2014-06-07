@@ -83,7 +83,7 @@ public final class FindAll extends AbstractSingletonPredicate {
       do {
          solutions.add(template.copy(new HashMap<Variable, Variable>()));
       } while (hasFoundAnotherSolution(predicate, goalArguments));
-      final Term output = ListFactory.create(solutions);
+      final Term output = ListFactory.createList(solutions);
       output.backtrack();
       return output;
    }

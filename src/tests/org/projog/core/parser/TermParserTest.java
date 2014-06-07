@@ -111,9 +111,9 @@ public class TermParserTest {
    private void testList(String input, Term[] expectedArgs, Term expectedTail) {
       Term expected;
       if (expectedTail == null) {
-         expected = ListFactory.create(expectedArgs);
+         expected = ListFactory.createList(expectedArgs);
       } else {
-         expected = ListFactory.create(expectedArgs, expectedTail);
+         expected = ListFactory.createList(expectedArgs, expectedTail);
       }
       Term actual = parseTerm(input);
       assertSame(TermType.LIST, actual.getType());

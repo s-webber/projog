@@ -21,7 +21,7 @@ public class ListFactoryTest {
    @Test
    public void testCreationWithoutTail() {
       final Term[] args = createArguments();
-      Term l = ListFactory.create(args);
+      Term l = ListFactory.createList(args);
 
       for (Term arg : args) {
          testIsList(l);
@@ -37,7 +37,7 @@ public class ListFactoryTest {
    public void testCreationWithTail() {
       final Term[] args = createArguments();
       final Term tail = new Atom("tail");
-      Term l = ListFactory.create(args, tail);
+      Term l = ListFactory.createList(args, tail);
 
       for (Term arg : args) {
          testIsList(l);
@@ -48,20 +48,20 @@ public class ListFactoryTest {
       assertSame(tail, l);
    }
 
-   /** Check {@link ListFactory#create(Collection)} works the same as {@link ListFactory#create(Term[])} */
+   /** Check {@link ListFactory#createList(Collection)} works the same as {@link ListFactory#createList(Term[])} */
    @Test
    public void testCreationWithJavaCollection() {
       final Term[] args = createArguments();
       final Collection<Term> c = Arrays.asList(args);
-      final Term listFromArray = ListFactory.create(args);
-      final Term listFromCollection = ListFactory.create(c);
+      final Term listFromArray = ListFactory.createList(args);
+      final Term listFromCollection = ListFactory.createList(c);
       assertTrue(listFromCollection.strictEquality(listFromArray));
    }
 
    @Test
    public void testToJavaUtilList() {
       final Term[] arguments = createArguments();
-      final List projogList = (List) ListFactory.create(arguments);
+      final List projogList = (List) ListFactory.createList(arguments);
       final java.util.List<Term> javaUtilList = ListFactory.toJavaUtilList(projogList);
       assertEquals(arguments.length, javaUtilList.size());
       for (int i = 0; i < arguments.length; i++) {
@@ -71,7 +71,7 @@ public class ListFactoryTest {
 
    @Test
    public void testToJavaUtilList_PartialList() {
-      final List projogList = (List) ListFactory.create(createArguments(), atom("tail"));
+      final List projogList = (List) ListFactory.createList(createArguments(), atom("tail"));
       assertNull(ListFactory.toJavaUtilList(projogList));
    }
 

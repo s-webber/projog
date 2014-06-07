@@ -28,7 +28,7 @@ public final class Append extends AbstractSingletonPredicate {
       java.util.List<Term> javaList = ListFactory.toJavaUtilList(prefix);
       javaList.addAll(ListFactory.toJavaUtilList(suffix));
 
-      return concatenated.unify(ListFactory.create(javaList));
+      return concatenated.unify(ListFactory.createList(javaList));
    }
 
    private void assertList(Term t) {

@@ -317,7 +317,7 @@ class TermParser {
             }
          }
       }
-      return ListFactory.create(toArray(args), tail);
+      return ListFactory.createList(toArray(args), tail);
    }
 
    /** Returns a {@code String} consisting of all characters read from the parser up to the next {@code '}. */

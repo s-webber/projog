@@ -115,7 +115,7 @@ final class DefiniteClauseGrammerConvertor {
          terms.add(list.getArgument(0));
          list = list.getArgument(1);
       }
-      return ListFactory.create(terms.toArray(new Term[terms.size()]), newTail);
+      return ListFactory.createList(terms.toArray(new Term[terms.size()]), newTail);
    }
 
    private static Term createNewPredicate(Term original, Term previous, Term next) {

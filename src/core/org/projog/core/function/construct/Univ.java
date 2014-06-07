@@ -112,6 +112,6 @@ public final class Univ extends AbstractSingletonPredicate {
       for (int i = 0; i < numArgs; i++) {
          listArgs[i + 1] = t.getArgument(i);
       }
-      return ListFactory.create(listArgs);
+      return ListFactory.createList(listArgs);
    }
 }

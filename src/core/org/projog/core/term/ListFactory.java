@@ -37,8 +37,8 @@ public final class ListFactory {
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and a empty list as the final tail element
     */
-   public static Term create(final Collection<Term> terms) {
-      return create(terms.toArray(new Term[terms.size()]));
+   public static Term createList(final Collection<Term> terms) {
+      return createList(terms.toArray(new Term[terms.size()]));
    }
 
    /**
@@ -50,8 +50,8 @@ public final class ListFactory {
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and a empty list as the final tail element
     */
-   public static Term create(Term[] terms) {
-      return create(terms, EmptyList.EMPTY_LIST);
+   public static Term createList(Term[] terms) {
+      return createList(terms, EmptyList.EMPTY_LIST);
    }
 
    /**
@@ -63,7 +63,7 @@ public final class ListFactory {
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and the second parameter as the tail element
     */
-   public static Term create(Term[] terms, Term tail) {
+   public static Term createList(Term[] terms, Term tail) {
       int numberOfElements = terms.length;
       if (numberOfElements == 0) {
          return EmptyList.EMPTY_LIST;

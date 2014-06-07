@@ -30,7 +30,7 @@ abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
          template.backtrack();
          Entry<Key, List<Term>> e = itr.next();
          bag.backtrack();
-         bag.unify(ListFactory.create(e.getValue()));
+         bag.unify(ListFactory.createList(e.getValue()));
          for (int i = 0; i < variablesNotInTemplate.size(); i++) {
             Variable v = variablesNotInTemplate.get(i);
             v.backtrack();

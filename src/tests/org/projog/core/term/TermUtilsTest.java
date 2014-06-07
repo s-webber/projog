@@ -159,19 +159,19 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testCastToNumericIntegerNumber() {
+   public void testIntegerNumberCastToNumeric() {
       IntegerNumber i = integerNumber();
       assertSame(i, TermUtils.castToNumeric(i));
    }
 
    @Test
-   public void testCastToNumericDoubleNumber() {
+   public void testDoubleNumberCastToNumeric() {
       DoubleNumber d = doubleNumber();
       assertSame(d, TermUtils.castToNumeric(d));
    }
 
    @Test
-   public void testCastToNumericAtom() {
+   public void testAtomCastToNumeric() {
       try {
          Atom a = atom("1");
          TermUtils.castToNumeric(a);
@@ -182,7 +182,7 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testCastToNumericVariable() {
+   public void testVariableCastToNumeric() {
       Variable v = variable();
       try {
          TermUtils.castToNumeric(v);
@@ -193,6 +193,19 @@ public class TermUtilsTest {
       IntegerNumber i = integerNumber();
       v.unify(i);
       assertSame(i, TermUtils.castToNumeric(v));
+   }
+
+   @Test
+   public void testStructureCastToNumeric() {
+      // test that, even if it represents an arithmetic expression,
+      // a structure causes an exception when passed to castToNumeric
+      Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
+      try {
+         TermUtils.castToNumeric(arithmeticExpression);
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Expected Numeric but got: STRUCTURE with value: *(3, 7)", e.getMessage());
+      }
    }
 
    @Test

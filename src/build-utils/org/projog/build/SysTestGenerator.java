@@ -60,7 +60,7 @@ public class SysTestGenerator {
             return false;
          }
       } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-         System.out.println("Not producing documentation for " + file + " - due to: " + e.getStackTrace());
+         System.out.println("Not producing documentation for " + file + " - due to: " + e.getClass());
          return false;
       }
    }

@@ -17,6 +17,7 @@ import org.projog.core.ProjogSourceReader;
 import org.projog.core.ProjogSystemProperties;
 import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
@@ -114,6 +115,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  */
 public final class Projog {
    private final KnowledgeBase kb;
+   private final TermFormatter tf;
 
    /**
     * Constructs a new {@code Projog} object using {@link ProjogSystemProperties} and the specified {@code Observer}s.
@@ -131,6 +133,7 @@ public final class Projog {
          addObserver(o);
       }
       kb.bootstrap();
+      this.tf = new TermFormatter(kb.getOperands());
    }
 
    /**
@@ -181,10 +184,10 @@ public final class Projog {
     * 
     * @param t the {@code Term} to represent as a string
     * @return a string representation of the specified {@code Term}
-    * @see org.projog.core.function.io.Write#toString(Term)
+    * @see org.projog.core.term.TermFormatter#toString(Term)
     */
    public String toString(Term t) {
-      return kb.toString(t);
+      return tf.toString(t);
    }
 
    /**

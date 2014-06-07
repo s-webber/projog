@@ -9,6 +9,7 @@ import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.LINE_SEPARATOR;
 import static org.projog.TestUtils.atom;
+import static org.projog.TestUtils.write;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,6 +24,7 @@ import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Atom;
+import org.projog.core.term.Term;
 
 /**
  * Tests {@link Projog}.
@@ -235,6 +237,13 @@ public class ProjogTest {
       QueryResult r = s.getResult();
       assertTrue(r.next());
       assertFalse(r.next());
+   }
+
+   @Test
+   public void testTermToString() {
+      Projog p = createProjog();
+      Term inputTerm = TestUtils.parseSentence("?- X is 1 + 1 ; 3 < 5.");
+      assertEquals(write(inputTerm), p.toString(inputTerm));
    }
 
    private void assertProjogStackTraceElement(ProjogStackTraceElement actual, String expectedKey, int expectedClauseIdx, String expectedTerm) {

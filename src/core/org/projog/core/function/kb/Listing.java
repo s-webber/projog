@@ -11,6 +11,7 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
@@ -53,6 +54,7 @@ public final class Listing extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       KnowledgeBase kb = getKnowledgeBase();
+      TermFormatter tf = new TermFormatter(kb.getOperands());
       String predicateName = getAtomName(arg);
       List<PredicateKey> keys = getPredicateKeysByName(getKnowledgeBase(), predicateName);
       for (PredicateKey key : keys) {
@@ -61,7 +63,7 @@ public final class Listing extends AbstractSingletonPredicate {
          Iterator<ClauseModel> implications = userDefinedPredicate.getImplications();
          while (implications.hasNext()) {
             ClauseModel clauseModel = implications.next();
-            String s = kb.toString(clauseModel.getOriginal());
+            String s = tf.toString(clauseModel.getOriginal());
             kb.getFileHandles().getCurrentOutputStream().println(s);
          }
       }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.Operands;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSystemProperties;
@@ -20,6 +21,7 @@ import org.projog.core.term.List;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
@@ -53,7 +55,7 @@ public class TestUtils {
 
    private static final File TEMP_DIR = new File("build");
 
-   private static final KnowledgeBase KNOWLEDGE_BASE = createKnowledgeBase();
+   private static final Operands OPERANDS = createKnowledgeBase().getOperands();
 
    /**
     * Private constructor as all methods are static.
@@ -156,7 +158,7 @@ public class TestUtils {
    }
 
    public static SentenceParser createSentenceParser(String prologSyntax) {
-      return SentenceParser.getInstance(prologSyntax, KNOWLEDGE_BASE.getOperands());
+      return SentenceParser.getInstance(prologSyntax, OPERANDS);
    }
 
    public static Term parseSentence(String prologSyntax) {
@@ -175,12 +177,12 @@ public class TestUtils {
    }
 
    public static String write(Term t) {
-      return KNOWLEDGE_BASE.toString(t);
+      return new TermFormatter(OPERANDS).toString(t);
    }
 
    public static Term[] parseTermsFromFile(File f) {
       try (FileReader fr = new FileReader(f)) {
-         SentenceParser sp = SentenceParser.getInstance(fr, KNOWLEDGE_BASE.getOperands());
+         SentenceParser sp = SentenceParser.getInstance(fr, OPERANDS);
 
          ArrayList<Term> result = new ArrayList<>();
          Term next;

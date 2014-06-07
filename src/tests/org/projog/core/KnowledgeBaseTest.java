@@ -202,11 +202,4 @@ public class KnowledgeBaseTest {
       PredicateFactory ef2 = kb.getPredicateFactory(key);
       assertSame(expected, ef2.getClass());
    }
-
-   @Test
-   public void testTermToString() {
-      String inputSyntax = "X = 1 + 1 , p(1, 7.3, [_,[]|c])";
-      Term inputTerm = TestUtils.parseSentence(inputSyntax + ".");
-      assertEquals(inputSyntax, kb.toString(inputTerm));
-   }
 }

@@ -8,7 +8,6 @@ import java.util.TreeMap;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.event.ProjogEventsObservable;
-import org.projog.core.function.io.Write;
 import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -40,7 +39,6 @@ public final class KnowledgeBase {
    private final ProjogProperties projogProperties;
    /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
-   private final Write writer = new Write();
 
    /** Used to coordinate access to {@link #javaPredicates} and {@link #userDefinedPredicates} */
    private final Object predicatesLock = new Object();
@@ -51,7 +49,7 @@ public final class KnowledgeBase {
    /**
     * The user-defined predicates (i.e. defined using Prolog syntax) associated with this {@code KnowledgeBase}.
     * <p>
-    * Uses TreeMap to enforce predictable ordering for when iterated (e.g. by <code>listing(X)</code>). 
+    * Uses TreeMap to enforce predictable ordering for when iterated (e.g. by <code>listing(X)</code>).
     */
    private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<>();
 
@@ -67,8 +65,6 @@ public final class KnowledgeBase {
     */
    public KnowledgeBase(ProjogProperties projogProperties) {
       this.projogProperties = projogProperties;
-
-      writer.setKnowledgeBase(this);
 
       addPredicateFactory(ADD_PREDICATE_KEY, new AddPredicateFactory());
    }
@@ -210,8 +206,8 @@ public final class KnowledgeBase {
     * Associates a {@link PredicateFactory} with this {@code KnowledgeBase}.
     * <p>
     * This method provides a mechanism for "plugging in" or "injecting" implementations of {@link PredicateFactory} at
-    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including adding
-    * functionality not possible to define in pure Prolog syntax.
+    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
+    * adding functionality not possible to define in pure Prolog syntax.
     * </p>
     */
    public void addPredicateFactory(PredicateKey key, PredicateFactory pf) {
@@ -231,16 +227,5 @@ public final class KnowledgeBase {
 
    private boolean isExistingJavaPredicate(PredicateKey key) {
       return javaPredicates.containsKey(key);
-   }
-
-   /**
-    * Returns a string representation of the specified {@code Term}.
-    * 
-    * @param t the {@code Term} to represent as a string
-    * @return a string representation of the specified {@code Term}
-    * @see org.projog.core.function.io.Write#toString(Term)
-    */
-   public String toString(Term t) {
-      return writer.toString(t);
    }
 }

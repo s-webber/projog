@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 /**
  * Collection of spy points.
@@ -117,6 +118,7 @@ public final class SpyPoints {
             return;
          }
 
+         TermFormatter tf = new TermFormatter(kb.getOperands());
          StringBuilder sb = new StringBuilder();
          sb.append(key.getName());
          if (args != null) {
@@ -125,7 +127,7 @@ public final class SpyPoints {
                if (i != 0) {
                   sb.append(", ");
                }
-               sb.append(kb.toString(args[i]));
+               sb.append(tf.toString(args[i]));
             }
             sb.append(" )");
          }

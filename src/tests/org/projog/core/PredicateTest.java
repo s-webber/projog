@@ -9,11 +9,9 @@ import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,7 +76,6 @@ public class PredicateTest {
       PredicateFactory ef = kb.getPredicateFactory(key);
       Class[] methodParameters = getMethodParameters(key);
       if (!(ef instanceof AbstractSingletonPredicate)) {
-         assertClassImplementsOptimisedGetPredicateMethod(ef, new Class[] {Term[].class});
          assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
       }
       assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);
@@ -99,13 +96,17 @@ public class PredicateTest {
       return s.substring(s.lastIndexOf('.') + 1);
    }
 
-   @SuppressWarnings("rawtypes")
-   private Class[] getMethodParameters(PredicateKey key) {
-      List<Class> args = new ArrayList<>();
-      for (int i = 1; i <= key.getNumArgs(); i++) {
-         args.add(Term.class);
+   private Class<?>[] getMethodParameters(PredicateKey key) {
+      int numberOfArguments = key.getNumArgs();
+      if (numberOfArguments == -1) {
+         // TODO required for when predicate key has num args of -1
+         numberOfArguments = 0;
       }
-      return args.toArray(new Class[args.size()]);
+      Class<?>[] args = new Class[numberOfArguments];
+      for (int i = 0; i < numberOfArguments; i++) {
+         args[i] = Term.class;
+      }
+      return args;
    }
 
    @SuppressWarnings("rawtypes")
@@ -115,7 +116,7 @@ public class PredicateTest {
          Method m = ef.getClass().getDeclaredMethod("getPredicate", methodParameters);
          assertSame(ef.getClass() + "'s getPredicate(" + Arrays.toString(methodParameters) + ") method returns " + m.getReturnType(), ef.getClass(), m.getReturnType());
       } catch (NoSuchMethodException e) {
-         fail(e.toString());
+         fail("Testing getPredicate method of " + ef.getClass() + " with: " + methodParameters.length + " arguments caused: " + e.toString());
       }
    }
 

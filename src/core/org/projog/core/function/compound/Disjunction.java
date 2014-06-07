@@ -180,10 +180,6 @@ public final class Disjunction extends AbstractRetryablePredicate {
    }
 
    @Override
-   public Disjunction getPredicate(Term... args) {
-      return getPredicate(args[0], args[1]);
-   }
-
    public Disjunction getPredicate(Term arg1, Term arg2) {
       Predicate e1 = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), arg1);
       Predicate e2 = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), arg2);

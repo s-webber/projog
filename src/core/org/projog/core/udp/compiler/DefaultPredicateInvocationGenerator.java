@@ -18,11 +18,12 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
 
    @Override
    public void generate(CompiledPredicateWriter g) {
-      Term function = g.currentClause().getCurrentFunction();
-      PredicateFactory ef = g.currentClause().getCurrentPredicateFactory();
-      boolean isRetryable = g.currentClause().isCurrentFunctionMulipleResult();
-      boolean inRetryMethod = g.currentClause().isInRetryMethod();
-      boolean firstInMethod = g.currentClause().isFirstMutlipleResultFunctionInConjunction();
+      final Term function = g.currentClause().getCurrentFunction();
+      final PredicateFactory ef = g.currentClause().getCurrentPredicateFactory();
+      final boolean isRetryable = g.currentClause().isCurrentFunctionMulipleResult();
+      final boolean inRetryMethod = g.currentClause().isInRetryMethod();
+      final boolean firstInMethod = g.currentClause().isFirstMutlipleResultFunctionInConjunction();
+      final int numberOfArguments = function.getNumberOfArguments();
 
       if (isRetryable) {
          if (inRetryMethod == false) {
@@ -32,12 +33,12 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          Set<Variable> variablesInCurrentFunction = g.currentClause().getVariablesInCurrentFunction();
 
          // only has to be unique per clause as can be reused
-         String PredicateVariableName = g.classVariables().getNewMemberPredicateName(g.currentClause(), getPredicateReturnType(ef));
+         String PredicateVariableName = g.classVariables().getNewMemberPredicateName(g.currentClause(), getPredicateReturnType(ef, numberOfArguments));
 
          String functionVariableName = g.classVariables().getPredicateFactoryVariableName(function, g.knowledgeBase());
          g.beginIf(PredicateVariableName + "==null");
          StringBuilder methodArgs = new StringBuilder();
-         for (int i = 0; i < function.getNumberOfArguments(); i++) {
+         for (int i = 0; i < numberOfArguments; i++) {
             if (i != 0) {
                methodArgs.append(", ");
             }
@@ -72,7 +73,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          Set<Variable> variables = g.currentClause().getVariablesInCurrentFunction();
          g.currentClause().addVariablesToBackTrack(variables);
          StringBuilder methodArgs = new StringBuilder();
-         for (int i = 0; i < function.getNumberOfArguments(); i++) {
+         for (int i = 0; i < numberOfArguments; i++) {
             if (i != 0) {
                methodArgs.append(", ");
             }
@@ -90,12 +91,21 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
       }
    }
 
-   private String getPredicateReturnType(PredicateFactory ef) {
+   private String getPredicateReturnType(PredicateFactory ef, int numberOfArguments) {
       try {
-         Method m = ef.getClass().getDeclaredMethod("getPredicate", new Class<?>[] {Term[].class});
+         Method m = ef.getClass().getDeclaredMethod("getPredicate", getMethodParameters(numberOfArguments));
          return m.getReturnType().getName();
       } catch (NoSuchMethodException e) {
          throw new RuntimeException(e);
       }
+   }
+
+   @SuppressWarnings("rawtypes")
+   private Class<?>[] getMethodParameters(int numberOfArguments) {
+      Class<?>[] args = new Class[numberOfArguments];
+      for (int i = 0; i < numberOfArguments; i++) {
+         args[i] = Term.class;
+      }
+      return args;
    }
 }

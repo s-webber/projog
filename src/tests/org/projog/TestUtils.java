@@ -147,6 +147,14 @@ public class TestUtils {
       return new Variable(name);
    }
 
+   public static Term[] createArgs(int numberOfArguments) {
+      Term[] args = new Term[numberOfArguments];
+      for (int i = 0; i < numberOfArguments; i++) {
+         args[i] = atom();
+      }
+      return args;
+   }
+
    public static SentenceParser createSentenceParser(String prologSyntax) {
       return SentenceParser.getInstance(prologSyntax, KNOWLEDGE_BASE.getOperands());
    }

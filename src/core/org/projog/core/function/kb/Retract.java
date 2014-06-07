@@ -71,10 +71,6 @@ public final class Retract extends AbstractUserDefinedPredicateInspectionFunctio
    }
 
    @Override
-   public Retract getPredicate(Term... args) {
-      return getPredicate(args[0]);
-   }
-
    public Retract getPredicate(Term arg) {
       return new Retract(getKnowledgeBase());
    }

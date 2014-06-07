@@ -14,10 +14,6 @@ public class AbstractSingletonPredicateTest {
    @Test
    public void testSimpleImplementation() {
       PredicateFactory pf = new AbstractSingletonPredicate() {
-         @Override
-         public boolean evaluate(Term... args) {
-            return false;
-         }
       };
 
       Predicate p = pf.getPredicate((Term[]) null);

@@ -80,14 +80,6 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
    }
 
    @Override
-   public RepeatSetAmount getPredicate(Term... args) {
-      if (args.length == 1) {
-         return getPredicate(args[0]);
-      } else {
-         return getPredicate();
-      }
-   }
-
    public RepeatSetAmount getPredicate(Term arg) {
       Numeric n = TermUtils.castToNumeric(arg);
       return new RepeatSetAmount(n.getInt());
@@ -103,6 +95,7 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
     * @return copy of this instance
     * @see org.projog.core.udp.StaticUserDefinedPredicateFactory
     */
+   @Override
    public RepeatSetAmount getPredicate() {
       return new RepeatSetAmount(limit);
    }

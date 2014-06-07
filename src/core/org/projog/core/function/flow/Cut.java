@@ -2,7 +2,6 @@ package org.projog.core.function.flow;
 
 import org.projog.core.CutException;
 import org.projog.core.function.AbstractRetryablePredicate;
-import org.projog.core.term.Term;
 
 /* TEST
  %QUERY repeat, !
@@ -40,10 +39,6 @@ public final class Cut extends AbstractRetryablePredicate {
    private boolean retried = false;
 
    @Override
-   public Cut getPredicate(Term... args) {
-      return getPredicate();
-   }
-
    public Cut getPredicate() {
       return new Cut();
    }

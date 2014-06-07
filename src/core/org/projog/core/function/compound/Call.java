@@ -61,10 +61,6 @@ public final class Call extends AbstractRetryablePredicate {
    }
 
    @Override
-   public Call getPredicate(Term... args) {
-      return getPredicate(args[0]);
-   }
-
    public Call getPredicate(Term arg) {
       return new Call(getKnowledgeBase());
    }

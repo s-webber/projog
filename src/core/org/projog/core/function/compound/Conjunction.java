@@ -141,10 +141,6 @@ public final class Conjunction extends AbstractRetryablePredicate {
    }
 
    @Override
-   public Conjunction getPredicate(Term... args) {
-      return getPredicate(args[0], args[1]);
-   }
-
    public Conjunction getPredicate(Term arg1, Term arg2) {
       return new Conjunction(getKnowledgeBase());
    }

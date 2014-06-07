@@ -70,10 +70,6 @@ public final class BagOf extends AbstractCollectionOf {
    }
 
    @Override
-   public BagOf getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
    public BagOf getPredicate(Term template, Term goal, Term bag) {
       return new BagOf(getKnowledgeBase());
    }

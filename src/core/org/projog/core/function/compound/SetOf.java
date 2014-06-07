@@ -73,10 +73,6 @@ public final class SetOf extends AbstractCollectionOf {
    }
 
    @Override
-   public SetOf getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
    public SetOf getPredicate(Term template, Term goal, Term bag) {
       return new SetOf(getKnowledgeBase());
    }

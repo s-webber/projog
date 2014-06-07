@@ -23,6 +23,42 @@ public abstract class AbstractRetryablePredicate extends AbstractPredicate imple
    private KnowledgeBase knowledgeBase;
 
    @Override
+   public Predicate getPredicate(Term... args) {
+      switch (args.length) {
+         case 0:
+            return getPredicate();
+         case 1:
+            return getPredicate(args[0]);
+         case 2:
+            return getPredicate(args[0], args[1]);
+         case 3:
+            return getPredicate(args[0], args[1], args[2]);
+         default:
+            throw createWrongNumberOfArgumentsException(args.length);
+      }
+   }
+
+   protected Predicate getPredicate() {
+      throw createWrongNumberOfArgumentsException(0);
+   }
+
+   protected Predicate getPredicate(Term arg) {
+      throw createWrongNumberOfArgumentsException(1);
+   }
+
+   protected Predicate getPredicate(Term arg1, Term arg2) {
+      throw createWrongNumberOfArgumentsException(2);
+   }
+
+   protected Predicate getPredicate(Term arg1, Term arg2, Term arg3) {
+      throw createWrongNumberOfArgumentsException(3);
+   }
+
+   private IllegalArgumentException createWrongNumberOfArgumentsException(int numberOfArguments) {
+      throw new IllegalArgumentException("The predicate factory: " + getClass() + " does next accept the number of arguments: " + numberOfArguments);
+   }
+
+   @Override
    public final void setKnowledgeBase(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
    }

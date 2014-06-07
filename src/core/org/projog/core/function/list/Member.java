@@ -44,10 +44,6 @@ public final class Member extends AbstractRetryablePredicate {
    private Term list;
 
    @Override
-   public Member getPredicate(Term... args) {
-      return getPredicate(args[0], args[1]);
-   }
-
    public Member getPredicate(Term element, Term list) {
       final Member m = new Member();
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {

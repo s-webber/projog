@@ -47,10 +47,6 @@ public final class InspectClause extends AbstractUserDefinedPredicateInspectionF
    }
 
    @Override
-   public InspectClause getPredicate(Term... args) {
-      return getPredicate(args[0], args[1]);
-   }
-
    public InspectClause getPredicate(Term arg1, Term arg2) {
       return new InspectClause(getKnowledgeBase());
    }

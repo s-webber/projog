@@ -1,7 +1,6 @@
 package org.projog.core.function.flow;
 
 import org.projog.core.function.AbstractRetryablePredicate;
-import org.projog.core.term.Term;
 
 /* TEST
  write_to_file(X) :-
@@ -44,10 +43,6 @@ public final class RepeatInfinitely extends AbstractRetryablePredicate {
    }
 
    @Override
-   public RepeatInfinitely getPredicate(Term... args) {
-      return getPredicate();
-   }
-
    public RepeatInfinitely getPredicate() {
       return this;
    }

@@ -46,7 +46,7 @@ public class SpyPointsTest {
    @Test
    public void testGetDifferentSpyPointWhenPredicateKeysNotEqual() {
       SpyPoints testObject = new SpyPoints(kb);
-      PredicateKey key1 = createKey("test1", -1);
+      PredicateKey key1 = createKey("test1", 0);
       PredicateKey key2 = createKey("test1", 1);
       PredicateKey key3 = createKey("test1", 2);
       PredicateKey key4 = createKey("test2", 2);
@@ -58,7 +58,7 @@ public class SpyPointsTest {
    @Test
    public void testGetSpyPoints() {
       SpyPoints testObject = new SpyPoints(kb);
-      PredicateKey[] keys = {createKey("test1", -1), createKey("test1", 0), createKey("test1", 2), createKey("test2", 2)};
+      PredicateKey[] keys = {createKey("test1", 0), createKey("test1", 2), createKey("test2", 2)};
       SpyPoints.SpyPoint[] spyPoints = new SpyPoints.SpyPoint[keys.length];
 
       assertTrue(testObject.getSpyPoints().isEmpty());

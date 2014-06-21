@@ -33,7 +33,7 @@ import org.projog.core.term.Term;
  %ERROR Cannot find calculatable: sum/2
 
  %QUERY X is ten
- %ERROR Cannot find calculatable: ten/-1
+ %ERROR Cannot find calculatable: ten
 
  %QUERY X is []
  %ERROR Can't get Numeric for term: [] of type: EMPTY_LIST

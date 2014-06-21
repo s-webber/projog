@@ -91,13 +91,13 @@ public class KnowledgeBaseTest {
          kb.createOrReturnUserDefinedPredicate(key);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot replace already defined plugin predicate: true/-1", e.getMessage());
+         assertEquals("Cannot replace already defined plugin predicate: true", e.getMessage());
       }
       try {
          kb.setUserDefinedPredicate(new StaticUserDefinedPredicateFactory(key));
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot replace already defined plugin predicate: true/-1", e.getMessage());
+         assertEquals("Cannot replace already defined plugin predicate: true", e.getMessage());
       }
    }
 

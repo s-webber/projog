@@ -66,4 +66,4 @@ inform(X,Y) :-
 %NO
 
 %QUERY hanoi(x)
-%ERROR Cannot find calculatable: x/-1
+%ERROR Cannot find calculatable: x

@@ -231,7 +231,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    @Override
    public Predicate getPredicate(Term... args) {
-      if (args.length != Math.max(predicateKey.getNumArgs(), 0)) {
+      if (args.length != predicateKey.getNumArgs()) {
          throw new ProjogException("User defined predicate: " + predicateKey + " is being called with the wrong number of arguments: " + args.length + " " + Arrays.toString(args));
       }
       compile();

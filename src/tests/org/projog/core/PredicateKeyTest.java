@@ -19,7 +19,7 @@ public class PredicateKeyTest {
    @Test
    public void testCanCreate() {
       String name = "abc";
-      testCanCreate(atom(name), name, -1);
+      testCanCreate(atom(name), name, 0);
       testCanCreate(structure(name, atom()), name, 1);
       testCanCreate(structure(name, atom(), integerNumber(), doubleNumber()), name, 3);
    }
@@ -40,7 +40,11 @@ public class PredicateKeyTest {
    private void testCreatedKey(PredicateKey k, String name, int numArgs) {
       assertEquals(name, k.getName());
       assertEquals(numArgs, k.getNumArgs());
-      assertEquals(name + "/" + numArgs, k.toString());
+      if (numArgs == 0) {
+         assertEquals(name, k.toString());
+      } else {
+         assertEquals(name + "/" + numArgs, k.toString());
+      }
    }
 
    @Test
@@ -144,6 +148,22 @@ public class PredicateKeyTest {
       assertTrue(k.compareTo(createKey("z", 1)) < 0);
       assertTrue(k.compareTo(createKey("z", 2)) < 0);
       assertTrue(k.compareTo(createKey("z", 3)) < 0);
+   }
+
+   @Test
+   public void testIllegalArgumentException() {
+      try {
+         createKey("x", -1);
+         fail();
+      } catch (IllegalArgumentException e) {
+         // expected
+      }
+      try {
+         createKey("x", Integer.MIN_VALUE);
+         fail();
+      } catch (IllegalArgumentException e) {
+         // expected
+      }
    }
 
    private PredicateKey createKey(String name, int numArgs) {

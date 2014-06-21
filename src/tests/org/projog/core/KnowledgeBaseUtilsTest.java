@@ -39,7 +39,7 @@ public class KnowledgeBaseUtilsTest {
 
       assertTrue(KnowledgeBaseUtils.getPredicateKeysByName(kb, predicateName).isEmpty());
 
-      PredicateKey input[] = {new PredicateKey(predicateName, -1), new PredicateKey(predicateName, 0), new PredicateKey(predicateName, 1), new PredicateKey(predicateName, 2), new PredicateKey(predicateName, 3)};
+      PredicateKey input[] = {new PredicateKey(predicateName, 0), new PredicateKey(predicateName, 1), new PredicateKey(predicateName, 2), new PredicateKey(predicateName, 3)};
 
       for (PredicateKey key : input) {
          kb.createOrReturnUserDefinedPredicate(key);

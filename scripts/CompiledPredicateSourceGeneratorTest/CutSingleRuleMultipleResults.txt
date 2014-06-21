@@ -5,7 +5,7 @@ import org.projog.core.udp.*;
 import org.projog.core.term.*;
 import org.projog.core.*;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
-// testCutSingleRuleMultipleResults/-1
+// testCutSingleRuleMultipleResults
 public final class %CLASS_NAME% implements CompiledPredicate {
    private final boolean initRule0() {
       return true;

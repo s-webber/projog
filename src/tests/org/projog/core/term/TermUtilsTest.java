@@ -227,7 +227,7 @@ public class TermUtilsTest {
    @Test
    public void testToIntExceptions() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertTestToIntException(kb, atom("test"), "Cannot find calculatable: test/-1");
+      assertTestToIntException(kb, atom("test"), "Cannot find calculatable: test");
       assertTestToIntException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p/2");
       assertTestToIntException(kb, doubleNumber(0), "Expected integer but got: DOUBLE with value: 0.0");
       assertTestToIntException(kb, structure("+", doubleNumber(1.0), doubleNumber(1.0)), "Expected integer but got: DOUBLE with value: 2.0");

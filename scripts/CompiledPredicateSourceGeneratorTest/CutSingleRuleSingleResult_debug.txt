@@ -5,7 +5,7 @@ import org.projog.core.udp.*;
 import org.projog.core.term.*;
 import org.projog.core.*;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
-// testCutSingleRuleSingleResult/-1
+// testCutSingleRuleSingleResult
 public final class %CLASS_NAME% implements CompiledPredicate {
    private static final boolean initRule0() {
       if (NUMERIC_TERM_COMPARATOR.compare(INTEGER_1, INTEGER_2, kb)!=-1) {
@@ -18,7 +18,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
       kb = _kb;
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testCutSingleRuleSingleResult", -1));
+      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testCutSingleRuleSingleResult", 0));
    }
    public final boolean evaluate(final Term... args) {
       return staticEvaluate();

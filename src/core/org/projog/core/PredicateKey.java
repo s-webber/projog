@@ -34,7 +34,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
       int numArgs;
       switch (t.getType()) {
          case ATOM:
-            numArgs = -1;
+            numArgs = 0;
             break;
          case STRUCTURE:
             numArgs = t.getArgs().length;
@@ -72,6 +72,9 @@ public final class PredicateKey implements Comparable<PredicateKey> {
    }
 
    public PredicateKey(String name, int numArgs) {
+      if (numArgs < 0) {
+         throw new IllegalArgumentException("Number of arguments: " + numArgs + " is less than 0");
+      }
       this.name = name;
       this.numArgs = numArgs;
    }
@@ -109,7 +112,11 @@ public final class PredicateKey implements Comparable<PredicateKey> {
     */
    @Override
    public String toString() {
-      return name + "/" + numArgs;
+      if (numArgs == 0) {
+         return name;
+      } else {
+         return name + "/" + numArgs;
+      }
    }
 
    /**

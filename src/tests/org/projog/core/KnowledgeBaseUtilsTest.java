@@ -68,13 +68,17 @@ public class KnowledgeBaseUtilsTest {
    }
 
    @Test
-   public void testIsQuestionFunctionCall() {
-      assertTrue(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", atom())));
-      assertTrue(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", structure("=", atom(), atom()))));
+   public void testIsQuestionOrDirectiveFunctionCall() {
+      assertTrue(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure("?-", atom())));
+      assertTrue(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure("?-", structure("=", atom(), atom()))));
+      assertTrue(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(":-", atom())));
+      assertTrue(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(":-", structure("=", atom(), atom()))));
 
-      assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(atom("?-")));
-      assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", atom(), atom())));
-      assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure(":-", atom())));
+      assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(atom("?-")));
+      assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure("?-", atom(), atom())));
+      assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(atom(":-")));
+      assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(":-", atom(), atom())));
+      assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(">=", atom())));
    }
 
    @Test

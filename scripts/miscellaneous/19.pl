@@ -1,4 +1,4 @@
-:- memberoflist(X,[X|Xs]).
+memberoflist(X,[X|Xs]).
 memberoflist(X,[a|Ys]) :- memberoflist(X,Ys).
 
 %TRUE_NO memberoflist(b, [b,c,d,e])

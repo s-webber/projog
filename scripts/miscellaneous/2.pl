@@ -29,11 +29,11 @@
 % C=harry
 %ANSWER
 %NO
-:- female(mary).
-:- mother(john,ann).
-:- mother(mary,ann).
-:- mother(harry,jane).
-:- father(harry,tom).
-:- father(john,fred).
-:- father(mary,fred).
+female(mary).
+mother(john,ann).
+mother(mary,ann).
+mother(harry,jane).
+father(harry,tom).
+father(john,fred).
+father(mary,fred).
 parent(C,M,F) :- mother(C,M),father(C,F).

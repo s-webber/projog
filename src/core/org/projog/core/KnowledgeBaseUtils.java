@@ -52,13 +52,13 @@ public final class KnowledgeBaseUtils {
    }
 
    /**
-    * Returns {@code true} if the specified {@link Term} represents a question, else {@code false}.
+    * Returns {@code true} if the specified {@link Term} represents a question or directive, else {@code false}.
     * <p>
-    * A {@link Term} is judged to represent a question if it is a structure with a functor of
-    * {@link #QUESTION_PREDICATE_NAME} and a single argument.
+    * A {@link Term} is judged to represent a question if it is a structure a single argument
+    * and with a functor {@link #QUESTION_PREDICATE_NAME} or {@link #IMPLICATION_PREDICATE_NAME}.
     */
-   public static boolean isQuestionFunctionCall(Term t) {
-      return t.getType() == TermType.STRUCTURE && QUESTION_PREDICATE_NAME.equals(t.getName()) && t.getNumberOfArguments() == 1;
+   public static boolean isQuestionOrDirectiveFunctionCall(Term t) {
+      return t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 1 && (QUESTION_PREDICATE_NAME.equals(t.getName()) || IMPLICATION_PREDICATE_NAME.equals(t.getName()));
    }
 
    /**

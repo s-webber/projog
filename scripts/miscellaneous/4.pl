@@ -3,7 +3,7 @@
 %QUERY hgjhghj(X)
 %ANSWER X=agh
 %ANSWER X=aghsew
-:- etrert(agh).
-:- etrert(aghsew).
+etrert(agh).
+etrert(aghsew).
 rtyrty(X) :- etrert(X).
 hgjhghj(X) :- rtyrty(X).

@@ -1,6 +1,6 @@
 % Determining if a term is a list.
 
-:- list([]).
+list([]).
 list([X|Xs]) :- list(Xs).
 
 %TRUE list([a,b,c])
@@ -9,7 +9,7 @@ list([X|Xs]) :- list(Xs).
 % Determining is a term is contained in a list.
 % (Note: Projog provides built-in member(X,Y) and memberchk(X,Y) predicates.)
 
-:- list_member(X,[X|Xs]).
+list_member(X,[X|Xs]).
 list_member(X,[Y|Ys]) :- list_member(X,Ys).
 
 %QUERY list_member(X, [a,b,c])
@@ -30,7 +30,7 @@ list_member(X,[Y|Ys]) :- list_member(X,Ys).
 
 % Finding prefixes of a list.
 
-:- prefix([],Ys).
+prefix([],Ys).
 prefix([X|Xs],[X|Ys]) :- prefix(Xs,Ys).
 
 %QUERY prefix(X, [a,b,c,d,e,f])
@@ -55,7 +55,7 @@ prefix([X|Xs],[X|Ys]) :- prefix(Xs,Ys).
 
 % Finding suffixes of a list.
 
-:- suffix(Xs,Xs).
+suffix(Xs,Xs).
 suffix(Xs,[Y|Ys]) :- suffix(Xs,Ys).
 
 %QUERY suffix(X, [a,b,c,d,e,f])
@@ -97,7 +97,7 @@ sublist(Xs,[Y|Ys]) :- sublist(Xs,Ys).
 % Appending two lists.
 % (Note: Projog provides a built-in append(X,Y,Z) predicate.)
 
-:- append_to_list([],Ys,Ys).
+append_to_list([],Ys,Ys).
 append_to_list([X|Xs],Ys,[X|Zs]) :- append_to_list(Xs,Ys,Zs).
 
 %TRUE append_to_list([a,b,c],[d,e,f],[a,b,c,d,e,f])

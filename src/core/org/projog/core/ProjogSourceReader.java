@@ -1,7 +1,7 @@
 package org.projog.core;
 
 import static org.projog.core.KnowledgeBaseUtils.isDynamicFunctionCall;
-import static org.projog.core.KnowledgeBaseUtils.isQuestionFunctionCall;
+import static org.projog.core.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
 
 import java.io.File;
 import java.io.FileReader;
@@ -142,7 +142,7 @@ public final class ProjogSourceReader {
       SentenceParser sp = SentenceParser.getInstance(reader, kb.getOperands());
       Term t;
       while ((t = sp.parseSentence()) != null) {
-         if (isQuestionFunctionCall(t)) {
+         if (isQuestionOrDirectiveFunctionCall(t)) {
             processQuestion(t);
          } else {
             storeParsedTerm(t);

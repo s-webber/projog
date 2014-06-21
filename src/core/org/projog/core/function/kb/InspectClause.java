@@ -4,10 +4,10 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 
 /* TEST
- :- test(a,b).
- :- test(1,2).
- :- test(A,B,C).
- :- test([_|Y],p(1)).
+ test(a,b) :- true.
+ test(1,2) :- true.
+ test(A,B,C) :- true.
+ test([_|Y],p(1)) :- true.
  %QUERY clause(test(X,Y), Z)
  %ANSWER
  % X=a

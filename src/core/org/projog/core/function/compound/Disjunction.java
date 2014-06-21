@@ -33,10 +33,10 @@ import org.projog.core.term.TermUtils;
  %ANSWER/
  %FALSE fail; fail; fail
 
- :- a.
- :- b.
- :- c.
- :- d.
+ a :- true.
+ b :- true.
+ c :- true.
+ d :- true.
  %QUERY a;b;c
  %ANSWER/
  %ANSWER/
@@ -56,17 +56,17 @@ import org.projog.core.term.TermUtils;
  %TRUE x;y;c
  %FALSE x;y;z
 
- :- p2(1).
- :- p2(2).
- :- p2(3).
+ p2(1) :- true.
+ p2(2) :- true.
+ p2(3) :- true.
 
- :- p3(a).
- :- p3(b).
- :- p3(c).
+ p3(a) :- true.
+ p3(b) :- true.
+ p3(c) :- true.
 
- :- p4(1, b, [a,b,c]).
- :- p4(3, c, [1,2,3]).
- :- p4(X, Y, [q,w,e,r,t,y]).
+ p4(1, b, [a,b,c]) :- true.
+ p4(3, c, [1,2,3]) :- true.
+ p4(X, Y, [q,w,e,r,t,y]) :- true.
 
  p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
  

@@ -9,7 +9,7 @@
 % Y=e
 %ANSWER
 %NO
-:- w(q,i).
-:- w(r,i).
-:- w(e,o).
+w(q,i).
+w(r,i).
+w(e,o).
 a(X,T) :- w(X,i), w(T,o).

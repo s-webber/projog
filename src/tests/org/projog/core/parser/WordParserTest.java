@@ -110,6 +110,19 @@ public class WordParserTest {
       assertParse("/*\n\n*\n/\n*/a/*/b*c/d/*e*/f", "a", "f");
    }
 
+   @Test
+   public void testFollowedByTerm() {
+      WordParser wp = create("?- , [ abc )");
+      wp.next();
+      assertFalse(wp.isFollowedByTerm());
+      wp.next();
+      assertTrue(wp.isFollowedByTerm());
+      wp.next();
+      assertTrue(wp.isFollowedByTerm());
+      wp.next();
+      assertFalse(wp.isFollowedByTerm());
+   }
+
    /** @see {@link WordParser#rewind(String)} */
    @Test
    public void testRewindException() {

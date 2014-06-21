@@ -84,7 +84,7 @@ class WordParser {
    boolean isFollowedByTerm() {
       skipWhitespaceAndComments();
       int nextChar = parser.peek();
-      return isListOpenBracket(nextChar) && isDelimiter(nextChar);
+      return isListOpenBracket(nextChar) || !isDelimiter(nextChar);
    }
 
    /** @return {@code true} if there are no more words to be parsed, else {@code false} */

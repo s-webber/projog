@@ -222,7 +222,7 @@ public class SentenceParser {
     */
    private Term getPossiblePrefixArgument(int currentLevel) {
       final String value = popValue();
-      if (operands.prefix(value) && !parser.isFollowedByTerm()) {
+      if (operands.prefix(value) && parser.isFollowedByTerm()) {
          int prefixLevel = operands.getPrefixPriority(value);
          if (prefixLevel > currentLevel) {
             throw newParserException("Invalid prefix: " + value + " level: " + prefixLevel + " greater than current level: " + currentLevel);

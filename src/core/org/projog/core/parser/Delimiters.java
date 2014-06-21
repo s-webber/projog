@@ -10,7 +10,7 @@ class Delimiters {
    private static final char PERIOD = '.';
 
    static boolean isDelimiter(String s) {
-      return s.length() == 1 && isDelimiter(s.charAt(0));
+      return s != null && s.length() == 1 && isDelimiter(s.charAt(0));
    }
 
    static boolean isDelimiter(int c) {
@@ -61,6 +61,6 @@ class Delimiters {
    }
 
    private static boolean isMatch(String input, char expected) {
-      return input.length() == 1 && input.charAt(0) == expected;
+      return input != null && input.length() == 1 && input.charAt(0) == expected;
    }
 }

@@ -12,6 +12,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isArgumentSeperator(","));
       assertFalse(Delimiters.isArgumentSeperator(";"));
       assertFalse(Delimiters.isArgumentSeperator(" "));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -19,6 +20,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isListOpenBracket("["));
       assertFalse(Delimiters.isListOpenBracket("]"));
       assertFalse(Delimiters.isListOpenBracket("("));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -26,6 +28,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isListCloseBracket("]"));
       assertFalse(Delimiters.isListCloseBracket("["));
       assertFalse(Delimiters.isListCloseBracket(")"));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -33,6 +36,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isPredicateOpenBracket("("));
       assertFalse(Delimiters.isPredicateOpenBracket(")"));
       assertFalse(Delimiters.isPredicateOpenBracket("["));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -40,6 +44,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isPredicateCloseBracket(")"));
       assertFalse(Delimiters.isPredicateCloseBracket("("));
       assertFalse(Delimiters.isPredicateCloseBracket("]"));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -47,6 +52,7 @@ public class DelimitersTest {
       assertTrue(Delimiters.isListTail("|"));
       assertFalse(Delimiters.isListTail("["));
       assertFalse(Delimiters.isListTail("]"));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
@@ -54,12 +60,15 @@ public class DelimitersTest {
       assertTrue(Delimiters.isSentenceTerminator("."));
       assertFalse(Delimiters.isSentenceTerminator("..="));
       assertFalse(Delimiters.isSentenceTerminator(","));
+      assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testDelimiter() {
       assertDelimiter(true, '[', ']', '(', ')', '|', ',', '.');
       assertDelimiter(false, '!', '?', '{', '}', ':', ';', '-', 'a', 'A', '1');
+      assertFalse(Delimiters.isDelimiter("..="));
+      assertFalse(Delimiters.isDelimiter(null));
    }
 
    private void assertDelimiter(boolean expectedResult, char... chars) {

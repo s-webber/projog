@@ -139,7 +139,7 @@ public class ProjogTest {
          p.query("X");
          fail();
       } catch (ParserException e) {
-         assertEquals("Unexpected end of stream Line: ?-X", e.getMessage());
+         assertEquals("Unexpected end of stream Line: X", e.getMessage());
       }
    }
 
@@ -242,7 +242,7 @@ public class ProjogTest {
    @Test
    public void testTermToString() {
       Projog p = createProjog();
-      Term inputTerm = TestUtils.parseSentence("?- X is 1 + 1 ; 3 < 5.");
+      Term inputTerm = TestUtils.parseSentence("X is 1 + 1 ; 3 < 5.");
       assertEquals(write(inputTerm), p.toString(inputTerm));
    }
 

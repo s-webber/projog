@@ -1,7 +1,5 @@
 package org.projog.api;
 
-import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,17 +24,15 @@ public final class QueryStatement {
     * Creates a new {@code QueryStatement} representing a query specified by {@code prologQuery}.
     * 
     * @param kb the {@link org.projog.core.KnowledgeBase} to query against
-    * @param prologQuery prolog syntax representing a query (do not prefix with a {@code ?-} as {@code QueryStatement}
-    * will do that itself)
+    * @param prologQuery prolog syntax representing a query (do not prefix with a {@code ?-})
     * @throws ProjogException if an error occurs parsing {@code prologQuery}
     * @see Projog#query(String)
     */
    QueryStatement(KnowledgeBase kb, String prologQuery) {
       try {
-         String questionSyntax = QUESTION_PREDICATE_NAME + prologQuery;
-         SentenceParser sp = SentenceParser.getInstance(questionSyntax, kb.getOperands());
+         SentenceParser sp = SentenceParser.getInstance(prologQuery, kb.getOperands());
 
-         this.parsedInput = sp.parseSentence().getArgument(0);
+         this.parsedInput = sp.parseSentence();
          this.predicateFactory = kb.getPredicateFactory(parsedInput);
          this.variables = sp.getParsedTermVariables();
          this.numVariables = variables.size();

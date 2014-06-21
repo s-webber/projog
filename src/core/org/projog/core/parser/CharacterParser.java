@@ -12,6 +12,8 @@ import java.io.IOException;
  * @see SentenceParser#getInstance(java.io.Reader, org.projog.core.Operands)
  */
 final class CharacterParser {
+   private static final int END_OF_STREAM = -1;
+
    private final BufferedReader br;
    private String currentLine;
    /**
@@ -45,28 +47,24 @@ final class CharacterParser {
     */
    int getNext() {
       try {
-         if (currentLine == null) {
-            currentLine = br.readLine();
-            if (currentLine == null) {
-               return -1;
-            }
-            lineNumber++;
-         }
-
-         if (columnNumber == currentLine.length()) {
-            columnNumber++;
-            return '\n';
-         }
-         while (columnNumber >= currentLine.length()) {
+         // proceed to next line
+         if (currentLine == null || columnNumber > currentLine.length()) {
             String nextLine = br.readLine();
             if (nextLine == null) {
-               return -1;
+               return END_OF_STREAM;
             }
             currentLine = nextLine;
             lineNumber++;
             columnNumber = 0;
          }
-         return currentLine.charAt(columnNumber++);
+
+         // if reached end of a line return the new line character
+         if (columnNumber == currentLine.length()) {
+            columnNumber++;
+            return '\n';
+         } else {
+            return currentLine.charAt(columnNumber++);
+         }
       } catch (IOException e) {
          throw new ParserException("Unexpected exception getting next character", this, e);
       }
@@ -74,9 +72,6 @@ final class CharacterParser {
 
    /**
     * Reads a single character but does not consume it.
-    * <p>
-    * Calls to {@code getNext()} do not cause the parser to move forward one character - meaning that adjacent calls to
-    * {@code peek()} will return the same value.
     * 
     * @return The character read, as an integer in the range 0 to 65535 (<tt>0x00-0xffff</tt>), or -1 if the end of the
     * stream has been reached
@@ -85,25 +80,38 @@ final class CharacterParser {
     */
    int peek() {
       int i = getNext();
-      rewind();
+      if (i != END_OF_STREAM) {
+         rewind();
+      }
       return i;
    }
 
    /**
     * Moves the parser back one character.
-    * <p>
-    * Calls to this method will leave this object in the same state it was before the previous {@link #getNext()} call
-    * on it. i.e. {@code p.getNext();p.rewind();} is the same as {@code peek();}
+    * 
+    * @throws ParserException if attempting to rewind back past the start of the current line
     */
    void rewind() {
-      columnNumber--;
+      rewind(1);
+   }
+
+   /**
+    * Moves the parser back by the specified number of characters.
+    * 
+    * @throws ParserException if attempting to rewind back past the start of the current line
+    */
+   void rewind(int numberOfCharacters) {
+      if (numberOfCharacters > columnNumber) {
+         throw new ParserException("Cannot rewind past start of current line", this);
+      }
+      columnNumber -= numberOfCharacters;
    }
 
    /**
     * Skips the remainder of the line currently being parsed.
     */
    void skipLine() {
-      columnNumber = currentLine.length();
+      columnNumber = currentLine.length() + 1;
    }
 
    /**

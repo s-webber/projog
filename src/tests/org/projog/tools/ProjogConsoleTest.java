@@ -65,7 +65,7 @@ public class ProjogConsoleTest {
    @Test
    public void testInvalidSyntax() throws IOException {
       String input = createInput("X is 1 + 1");
-      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "Unexpected end after: is(X, +(1, 1))", "?-X is 1 + 1", "            ^");
+      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "Unexpected end of stream", "?-X is 1 + 1", "            ^");
       String actual = getOutput(input);
       compare(expected, actual);
    }

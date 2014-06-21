@@ -15,13 +15,14 @@ public class SentenceParserTest {
    @Test
    public void testIncompleteSentences() {
       error(":-");
-      error(":- .");
       error("a :-");
       error("a :- .");
       error(":- X is");
       error(":- X is 1"); // no '.' character at end of sentence
       error(":- X is p(a, b, c)"); // no '.' character at end of sentence
       error(":- X is [a, b, c | d]"); // no '.' character at end of sentence
+      error(":- X = 'hello."); // no closing quote on atom
+      error(":- X = /*hello."); // no closing */ on comment
    }
 
    @Test
@@ -55,7 +56,8 @@ public class SentenceParserTest {
       error(":- X = 1 + 2 + 3 + 4 = 5.");
       error("a ?- b.");
       error("?- a ?- b.");
-      error("?- p(X) :- x(Y), y(X,Y).");
+      // TODO
+      //      error("?- p(X) :- x(Y), y(X,Y).");
       error("?- :- X.");
       error("?- ?- true.");
    }
@@ -101,23 +103,39 @@ public class SentenceParserTest {
    }
 
    @Test
-   public void testBrackets() {
-      Term t1 = parseSentence("?- fail, fail ; true.");
-      assertEquals("?- fail , fail ; true", write(t1));
-      assertEquals("?-(;(,(fail, fail), true))", t1.toString());
+   public void testConjunction() { //TODO
+      assertParse("a, b, c.", "a , b , c", ",(,(a, b), c)");
+   }
 
-      Term t2 = parseSentence("?- fail, (fail;true).");
-      assertEquals("?- fail , (fail ; true)", write(t2));
-      assertEquals("?-(,(fail, ;(fail, true)))", t2.toString());
+   @Test
+   public void testBrackets1() {
+      assertParse("a(b,(c)).", "a(b, c)", "a(b, c)");
+   }
 
-      Term t3 = parseSentence("?- X is 4*(2+3).");
-      assertEquals("?- X is 4 * (2 + 3)", write(t3));
-      assertEquals("?-(is(X, *(4, +(2, 3))))", t3.toString());
+   @Test
+   public void testBrackets2() {
+      assertParse("?- fail, fail ; true.", "?- fail , fail ; true", "?-(;(,(fail, fail), true))");
+      assertParse("?- fail, (fail;true).", "?- fail , (fail ; true)", "?-(,(fail, ;(fail, true)))");
+   }
 
-      // TODO The following is successfully parsed - but I'm not sure if it should.
-      // As "?-" and ":-" both have "fx" associativity *and* the same priority I don't think this is valid syntax.
-      // The only reason the parser currently allows it is because, in this example, the ":-" is in brackets.
-      parseSentence("?- ( p :- A = 1 , B = 2 , C = 3).");
+   @Test
+   public void testBrackets3() {
+      assertParse("?- X is 4*(2+3).", "?- X is 4 * (2 + 3)", "?-(is(X, *(4, +(2, 3))))");
+   }
+
+   @Test
+   public void testBrackets4() {
+      assertParse("?- Y = ( ^^ = @@ ).", "?- Y = (^^ = @@)", "?-(=(Y, =(^^, @@)))");
+   }
+
+   @Test
+   public void testBrackets5() {
+      assertParse("?- X = a(b,(c)).", "?- X = a(b, c)", "?-(=(X, a(b, c)))");
+   }
+
+   @Test
+   public void testBrackets6() {
+      assertParse("X = ( A = 1 , B = 2 , C = 3).", "X = (A = 1 , B = 2 , C = 3)", "=(X, ,(,(=(A, 1), =(B, 2)), =(C, 3)))");
    }
 
    @Test
@@ -135,9 +153,7 @@ public class SentenceParserTest {
 
    @Test
    public void testMixtureOfPrefixInfixAndPostfixOperands() {
-      Term t = parseSentence("a --> { 1 + -2 }.");
-      assertEquals("-->(a, {(}(+(1, -2))))", t.toString());
-      assertEquals("a --> { 1 + -2 }", TestUtils.write(t));
+      assertParse("a --> { 1 + -2 }.", "a --> { 1 + -2 }", "-->(a, {(}(+(1, -2))))");
    }
 
    /**
@@ -198,11 +214,22 @@ public class SentenceParserTest {
 
       // following fails as '\\+' prefix operand has higher precedence than '/' infix operand
       error("?- test('\\+'/1, 'abc').");
-      // following works as explictly specifying '/' as the functor of a structure
+      // following works as explicitly specifying '/' as the functor of a structure
       check("?- test('/'('\\+', 1), 'abc')", "?-(test(/(\\+, 1), abc))");
 
       error("p(a :- b).");
-      parseSentence("p(':-'(a, b)).");
+      check("p(:-(a, b))", "p(:-(a, b))");
+      check("p(':-'(a, b))", "p(:-(a, b))");
+   }
+
+   @Test
+   public void testListAfterPrefixOperator() {
+      assertParse("?- [a,b,c].", "?- [a,b,c]", "?-(.(a, .(b, .(c, []))))");
+   }
+
+   @Test
+   public void testSentenceTerminatorAsAtomName() {
+      assertParse("p(C) :- C=='.'.", "p(C) :- C == .", ":-(p(C), ==(C, .))");
    }
 
    @Test
@@ -217,11 +244,12 @@ public class SentenceParserTest {
       String expectedOutput = "is(X, +(1, 1))";
       check("X is '+'(1,1)", expectedOutput);
       check("X is 1+1", expectedOutput);
-      // TODO check("X is +(1,1)", expectedOutput);
+      check("X is +(1,1)", expectedOutput);
+      check("X = >(+(1,1),-2)", "=(X, >(+(1, 1), -2))");
    }
 
    private void checkEquation(String input, String expected) {
-      // apply same extra tests cos is easy to do
+      // apply same extra tests just because is easy to do
       for (int i = 0; i < 2; i++) {
          check(input, expected);
          check("X is " + input, "is(X, " + expected + ")");
@@ -241,12 +269,12 @@ public class SentenceParserTest {
    private void error(String input) {
       try {
          Term term = parseSentence(input);
-         fail("parsing: " + input + " produced: " + term + " whan expected an exception");
+         fail("parsing: " + input + " produced: " + term + " when expected an exception");
       } catch (ParserException pe) {
          // expected
       } catch (Exception e) {
          e.printStackTrace();
-         fail("parsing: " + input + " produced: " + e + " whan expected a ParserException");
+         fail("parsing: " + input + " produced: " + e + " when expected a ParserException");
       }
    }
 
@@ -266,6 +294,12 @@ public class SentenceParserTest {
       } catch (Exception e) {
          throw new RuntimeException("Exception parsing: " + input + " " + e.getClass() + " " + e.getMessage(), e);
       }
+   }
+
+   private void assertParse(String input, String expectedFormatterOutput, String expectedToString) {
+      Term t = parseSentence(input);
+      assertEquals(expectedFormatterOutput, write(t));
+      assertEquals(expectedToString, t.toString());
    }
 
    private SentenceParser getSentenceParser(String source) {

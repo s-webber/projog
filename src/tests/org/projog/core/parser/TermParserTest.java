@@ -76,12 +76,13 @@ public class TermParserTest {
       testPredicate("p(1, 'a b c?', [a,b,c|d])");
       testPredicate("p(_Test1, _Test2, _Test3)");
       testPredicate("~(a,b,c)");
+      testPredicate(">(a,b,c)");
    }
 
    private void testPredicate(String syntax) {
       Term t = parseTerm(syntax);
       assertNotNull(t);
-      assertTrue("actual " + t.getClass(), t instanceof Structure);
+      assertSame(Structure.class, t.getClass());
    }
 
    @Test

@@ -139,7 +139,7 @@ public class ProjogTest {
          p.query("X");
          fail();
       } catch (ParserException e) {
-         assertEquals("Unexpected end after: X Line: ?-X", e.getMessage());
+         assertEquals("Unexpected end of stream Line: ?-X", e.getMessage());
       }
    }
 

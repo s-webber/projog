@@ -40,8 +40,8 @@ import org.projog.core.term.TermType;
  %QUERY flatten([[a|b],[c,d|e],[f|[]],g|h], X)
  %ANSWER X=[a,b,c,d,e,f,g,h]
  
- %QUERY flatten([p([[a]]),[[[p(p())]],[p([a,b,c])]]], X)
- %ANSWER X=[p([[a]]),p(p()),p([a,b,c])]
+ %QUERY flatten([p([[a]]),[[[p(p(x))]],[p([a,b,c])]]], X)
+ %ANSWER X=[p([[a]]),p(p(x)),p([a,b,c])]
  
  %FALSE flatten([a,b,c], [c,b,a])
  %FALSE flatten([a,b,c], [a,[b],c])

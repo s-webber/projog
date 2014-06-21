@@ -9,7 +9,7 @@ import org.projog.core.term.TermComparator;
  %TRUE b@>=b
  %FALSE b@>=c
  %TRUE b@>=1
- %FALSE b@>=b()
+ %FALSE b@>=b(a)
  */
 /**
  * <code>X@&gt;=Y</code> - term "greater than or equal" test.

@@ -25,19 +25,15 @@ public class TermComparatorTest {
 
    integerNumber(-2), integerNumber(0), integerNumber(1),
 
-   structure("!"),
-
    EmptyList.EMPTY_LIST,
 
-   structure("a"), structure("b"),
-
-   structure("a", atom("b")), structure("b", atom("a")), structure("b", structure("a")),
+   structure("a", atom("b")), structure("b", atom("a")), structure("b", structure("a", atom())),
 
    structure("!", atom("a"), atom("b")),
 
-   list(atom("a"), atom("b")), list(atom("b"), atom("a")), list(atom("b"), atom("a"), atom("b")), list(atom("c"), atom("a")), list(structure("a"), atom("b")),
+   list(atom("a"), atom("b")), list(atom("b"), atom("a")), list(atom("b"), atom("a"), atom("b")), list(atom("c"), atom("a")), list(structure("a", atom()), atom("b")),
 
-   structure("a", atom("a"), atom("b")), structure("a", atom("a"), atom("z")), structure("a", atom("a"), structure("z"))};
+   structure("a", atom("a"), atom("b")), structure("a", atom("a"), atom("z")), structure("a", atom("a"), structure("z", atom()))};
 
    @Test
    public void testCompareTerms() {

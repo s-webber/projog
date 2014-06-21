@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
@@ -35,7 +36,7 @@ public class StructureTest {
          assertSame(args[i], p.getArgument(i));
       }
       assertSame(TermType.STRUCTURE, p.getType());
-      assertEquals("test(test, test(), 1, 1.0, X)", p.toString());
+      assertEquals("test(test, test(test), 1, 1.0, X)", p.toString());
    }
 
    @Test
@@ -60,12 +61,6 @@ public class StructureTest {
       assertNotSame(p1, p2);
       assertEquals(p1.toString(), p2.toString());
       assertStrictEquality(p1, p2, true);
-   }
-
-   @Test
-   public void testCreationEmptyList() {
-      Term t = Structure.createStructure(".", new Term[0]);
-      assertSame(EmptyList.EMPTY_LIST, t);
    }
 
    @Test
@@ -135,12 +130,7 @@ public class StructureTest {
 
    @Test
    public void testSameNamesDifferentArguments() {
-      Structure[] predicates = {
-               structure("test1", new Atom("a"), new Atom("b"), new Atom("c")),
-               structure("test2", new Atom("a"), new Atom("b"), new Atom("d")),
-               structure("test3", new Atom("a"), new Atom("c"), new Atom("b")),
-               structure("test4", new Atom("a"), new Atom("b")),
-               structure("test5", new Term[] {})};
+      Structure[] predicates = {structure("test1", new Atom("a"), new Atom("b"), new Atom("c")), structure("test2", new Atom("a"), new Atom("b"), new Atom("d")), structure("test3", new Atom("a"), new Atom("c"), new Atom("b")), structure("test4", new Atom("a"), new Atom("b"))};
       for (int i = 0; i < predicates.length; i++) {
          for (int j = i; j < predicates.length; j++) {
             if (i == j) {
@@ -155,17 +145,20 @@ public class StructureTest {
 
    @Test
    public void testUnifyWrongType() {
-      Structure p = structure("1", TermUtils.EMPTY_ARRAY);
+      Structure p = structure("1", new Term[] {atom()});
       assertStrictEqualityAndUnify(p, new Atom("1"), false);
       assertStrictEqualityAndUnify(p, new IntegerNumber(1), false);
       assertStrictEqualityAndUnify(p, new DoubleNumber(1), false);
    }
 
    @Test
-   public void testCopyNoArguments() {
-      Structure p = structure("test", TermUtils.EMPTY_ARRAY);
-      Structure copy = p.copy(null);
-      assertTrue(p == copy);
+   public void testNoArguments() {
+      try {
+         Structure p = structure("test", TermUtils.EMPTY_ARRAY);
+         fail();
+      } catch (IllegalArgumentException e) {
+         assertEquals("Cannot create structure with no arguments", e.getMessage());
+      }
    }
 
    @Test

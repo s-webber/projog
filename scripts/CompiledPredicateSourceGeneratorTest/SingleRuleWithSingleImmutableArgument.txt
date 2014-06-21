@@ -304,7 +304,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    private static final Term INTEGER_2 = new IntegerNumber(2);
    private static final Term ATOM_0 = new Atom("q");
    private static final Term INTEGER_3 = new IntegerNumber(3);
-   private static final Term STRUCTURE = Structure.createStructure("z", new Term[]{});
+   private static final Term STRUCTURE = Structure.createStructure("z", new Term[]{new Atom("a")});
    private static final Term INTEGER_4 = new IntegerNumber(4);
    private static final Term INTEGER_5 = new IntegerNumber(5);
    private static final Term INTEGER_6 = new IntegerNumber(6);

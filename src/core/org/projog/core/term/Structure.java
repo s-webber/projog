@@ -21,7 +21,7 @@ public final class Structure implements Term {
     * enforce:
     * <ul>
     * <li>structures with the functor {@code .} and two arguments are created as instances of {@link List}</li>
-    * <li>structures with the functor {@code .} and no arguments reuse {@link EmptyList#EMPTY_LIST}</li>
+    * <li>no structures can be created without any arguments</li>
     * </ul>
     * 
     * @param functor the name of the new term
@@ -29,14 +29,17 @@ public final class Structure implements Term {
     * @return either a new {@link Structure}, a new {@link List} or {@link EmptyList#EMPTY_LIST}
     */
    public static Term createStructure(String functor, Term[] args) {
+      if (args.length == 0) {
+         throw new IllegalArgumentException("Cannot create structure with no arguments");
+      }
+
       if (ListFactory.LIST_PREDICATE_NAME.equals(functor)) {
-         if (args.length == 0) {
-            return EmptyList.EMPTY_LIST;
-         } else if (args.length == 2) {
+         if (args.length == 2) {
             return ListFactory.createList(args[0], args[1]);
          }
          functor = ListFactory.LIST_PREDICATE_NAME;
       }
+
       return new Structure(functor, args, isImmutable(args));
    }
 

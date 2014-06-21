@@ -188,7 +188,7 @@ testNonOptimisedAbstractSingletonEvaluatable(X) :- atom(X), X@<b.
 %TRUE testNonOptimisedAbstractSingletonEvaluatable(a)
 %FALSE testNonOptimisedAbstractSingletonEvaluatable(b)
 %FALSE testNonOptimisedAbstractSingletonEvaluatable(c)
-%FALSE testNonOptimisedAbstractSingletonEvaluatable(a())
+%FALSE testNonOptimisedAbstractSingletonEvaluatable(a(a))
 %FALSE testNonOptimisedAbstractSingletonEvaluatable(X)
 
 testNonOptimisedAbstractRetryableEvaluatable(X) :- repeat(X), repeat(3).
@@ -393,7 +393,7 @@ testSingleRuleWithSingleImmutableArgument(X, RuleNo) :-
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
 	single_rule_with_single_immutable_argument(q), RuleNo=3.
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
-	single_rule_with_single_immutable_argument(z()), RuleNo=4.
+	single_rule_with_single_immutable_argument(z(a)), RuleNo=4.
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
 	single_rule_with_single_immutable_argument(Y), X=Y, RuleNo=5.
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
@@ -409,7 +409,7 @@ testSingleRuleWithSingleImmutableArgument(X, RuleNo) :-
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
 	X=q, single_rule_with_single_immutable_argument(X), RuleNo=11.
 testSingleRuleWithSingleImmutableArgument(X, RuleNo) :- 
-	X=z(), single_rule_with_single_immutable_argument(X), RuleNo=12.
+	X=z(a), single_rule_with_single_immutable_argument(X), RuleNo=12.
 
 %QUERY testSingleRuleWithSingleImmutableArgument(X,RuleNo)
 %ANSWER 
@@ -456,7 +456,7 @@ testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :-
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
 	multiple_rules_with_single_immutable_argument(q), RuleNo=3.
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
-	multiple_rules_with_single_immutable_argument(s()), RuleNo=4.
+	multiple_rules_with_single_immutable_argument(s(a)), RuleNo=4.
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
 	multiple_rules_with_single_immutable_argument(Y), X=Y, RuleNo=5.
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
@@ -476,7 +476,7 @@ testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :-
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
 	X=q, multiple_rules_with_single_immutable_argument(X), RuleNo=13.
 testMultipleRulesWithSingleImmutableArgument(X, RuleNo) :- 
-	X=s(), multiple_rules_with_single_immutable_argument(X), RuleNo=14.
+	X=s(a), multiple_rules_with_single_immutable_argument(X), RuleNo=14.
 
 %QUERY testMultipleRulesWithSingleImmutableArgument(X,RuleNo)
 %ANSWER 

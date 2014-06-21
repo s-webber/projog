@@ -38,9 +38,9 @@ public class TermTest {
 
    doubleNumber(0), doubleNumber(1), doubleNumber(-1), doubleNumber(0.0001), doubleNumber(-0.0001), doubleNumber(Double.MIN_VALUE), doubleNumber(Double.MAX_VALUE),
 
-   structure("abc"), structure("abc", atom()), structure("abc", atom(), atom()), structure("ABC"), structure("ABC", atom()), structure("ABC", atom(), atom()), structure("1"), structure("1", atom()), structure("1", atom(), atom()), structure("[]"),
+   structure("abc", atom()), structure("abc", atom(), atom()), structure("ABC", atom()), structure("ABC", atom(), atom()), structure("1", atom()), structure("1", atom(), atom()),
 
-   list(atom(), atom()), list(atom(), atom(), atom()), list(atom("a"), integerNumber(1), doubleNumber(1), structure("abc")),
+   list(atom(), atom()), list(atom(), atom(), atom()), list(atom("a"), integerNumber(1), doubleNumber(1), structure("abc", atom())),
 
    EmptyList.EMPTY_LIST};
 

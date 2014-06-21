@@ -250,11 +250,11 @@ public class TermUtilsTest {
 
    @Test
    public void testGetAtomNameException() {
-      Structure p = structure("testAtomName");
+      Structure p = structure("testAtomName", atom());
       try {
          assertEquals("testAtomName", TermUtils.getAtomName(p));
       } catch (ProjogException e) {
-         assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName()", e.getMessage());
+         assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
       }
    }
 }

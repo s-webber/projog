@@ -73,7 +73,6 @@ public class KnowledgeBaseUtilsTest {
       assertTrue(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", structure("=", atom(), atom()))));
 
       assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(atom("?-")));
-      assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-")));
       assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure("?-", atom(), atom())));
       assertFalse(KnowledgeBaseUtils.isQuestionFunctionCall(structure(":-", atom())));
    }
@@ -84,7 +83,6 @@ public class KnowledgeBaseUtilsTest {
       assertTrue(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", structure("=", atom(), atom()))));
 
       assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(atom("dynamic")));
-      assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic")));
       assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", atom(), atom())));
       assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure(":-", atom())));
    }

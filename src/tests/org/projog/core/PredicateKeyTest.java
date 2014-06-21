@@ -20,7 +20,7 @@ public class PredicateKeyTest {
    public void testCanCreate() {
       String name = "abc";
       testCanCreate(atom(name), name, -1);
-      testCanCreate(structure(name), name, 0);
+      testCanCreate(structure(name, atom()), name, 1);
       testCanCreate(structure(name, atom(), integerNumber(), doubleNumber()), name, 3);
    }
 
@@ -50,10 +50,9 @@ public class PredicateKeyTest {
       testNotEquals(atom("abc"), atom("abcd"));
 
       // atom versus structure
-      testNotEquals(atom("abc"), structure("abc"));
+      testNotEquals(atom("abc"), structure("abc", atom("abc")));
 
       // structures with different names and/or number of arguments
-      testNotEquals(structure("abc"), structure("abc", atom("a")));
       testNotEquals(structure("abc", atom("a")), structure("xyz", atom("a")));
       testNotEquals(structure("abc", atom("a")), structure("abc", atom("a"), atom("b")));
    }

@@ -9,7 +9,7 @@ import org.projog.core.term.TermComparator;
  %FALSE b@<b
  %TRUE b@<c
  %FALSE b@<1
- %TRUE b@<b()
+ %TRUE b@<b(a)
  */
 /**
  * <code>X@&lt;Y</code> - term "less than" test.

@@ -22,7 +22,6 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
-import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
 
@@ -114,7 +113,7 @@ public class TestUtils {
    }
 
    public static Structure structure() {
-      return structure("test", TermUtils.EMPTY_ARRAY);
+      return structure("test", new Term[] {atom()});
    }
 
    public static Structure structure(String name, Term... args) {

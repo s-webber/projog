@@ -7,7 +7,7 @@ import org.projog.core.term.Term;
  :- test(a,b).
  :- test(1,2).
  :- test(A,B,C).
- :- test(p(),p(1)).
+ :- test([_|Y],p(1)).
  %QUERY clause(test(X,Y), Z)
  %ANSWER
  % X=a
@@ -20,7 +20,7 @@ import org.projog.core.term.Term;
  % Z=true
  %ANSWER
  %ANSWER
- % X=p()
+ % X=[_|Y]
  % Y=p(1)
  % Z=true
  %ANSWER

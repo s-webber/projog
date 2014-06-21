@@ -135,8 +135,11 @@ public class TermParserTest {
    @Test
    public void testEmptyList() {
       assertSame(EmptyList.EMPTY_LIST, parseTerm("[]"));
-      assertSame(EmptyList.EMPTY_LIST, parseTerm(".()"));
-      assertSame(EmptyList.EMPTY_LIST, parseTerm("'.'()"));
+   }
+
+   @Test
+   public void testNoArgumentStructure() {
+      parseInvalid("p()");
    }
 
    @Test

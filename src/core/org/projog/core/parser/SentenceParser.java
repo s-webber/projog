@@ -336,8 +336,7 @@ public class SentenceParser {
       if (isPredicateOpenBracket(value)) {
          popValue(); //skip opening bracket
          if (isPredicateCloseBracket(peekValue())) {
-            popValue(); //skip closing bracket
-            return Structure.createStructure(name, TermUtils.EMPTY_ARRAY);
+            throw newParserException("No arguments specified for structure: " + value);
          }
 
          ArrayList<Term> args = new ArrayList<Term>();

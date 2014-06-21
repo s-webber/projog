@@ -129,7 +129,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          // if single row e.g. "a" then just return instance of True (see Disjunction test for an example) 
          return new True();
       } else {
-         // e.g. a. a. a. or p(). p(). p().
+         // e.g. a. a. a. or p(_). p(_). p(_).
          return new RepeatSetAmount(rows.size());
       }
    }

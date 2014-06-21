@@ -27,7 +27,6 @@ public class ClauseActionFactoryTest {
    @Test
    public void testAlwaysMatchedClauseAction() {
       testAlwaysMatchedClauseAction("test.");
-      testAlwaysMatchedClauseAction("test().");
       testAlwaysMatchedClauseAction("test(_).");
       testAlwaysMatchedClauseAction("test(X).");
       testAlwaysMatchedClauseAction("test(X, Y, _).");
@@ -146,7 +145,7 @@ public class ClauseActionFactoryTest {
    @Test
    public void testSingleFunctionMultiResultClauseAction() {
       int iterations = 3;
-      ClauseAction ca = getClauseAction("test() :- repeat(" + iterations + ").");
+      ClauseAction ca = getClauseAction("test :- repeat(" + iterations + ").");
       assertEquals(SingleFunctionMultiResultClauseAction.class, ca.getClass());
       assertTrue(ca.couldReEvaluationSucceed());
       for (int i = 0; i < iterations; i++) {

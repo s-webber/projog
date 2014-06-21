@@ -60,8 +60,8 @@ x(X, Y) :- q(X), q(Y).
 %ANSWER/
 %ANSWER/
 
-qwerty() :- X=Y, q(X), q(Y).
-%QUERY qwerty()
+qwerty :- X=Y, q(X), q(Y).
+%QUERY qwerty
 %ANSWER/
 %ANSWER/
 %ANSWER/

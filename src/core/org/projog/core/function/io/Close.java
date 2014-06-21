@@ -20,7 +20,7 @@ public final class Close extends org.projog.core.function.AbstractSingletonPredi
          getKnowledgeBase().getFileHandles().close(argument);
          return true;
       } catch (Exception e) {
-         throw new ProjogException("Unable to close strean for: " + argument, e);
+         throw new ProjogException("Unable to close stream for: " + argument, e);
       }
    }
 }

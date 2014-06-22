@@ -118,6 +118,7 @@
 ?- pj_add_calculatable('/'/2, 'org.projog.core.function.math.Divide').
 ?- pj_add_calculatable('//'/2, 'org.projog.core.function.math.IntegerDivide').
 ?- pj_add_calculatable('*'/2, 'org.projog.core.function.math.Multiply').
+?- pj_add_calculatable('**'/2, 'org.projog.core.function.math.Power').
 ?- pj_add_calculatable(mod/2, 'org.projog.core.function.math.Modulo').
 ?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
 
@@ -150,6 +151,7 @@
 ?- op(500, yfx, '+').
 ?- op(500, yfx, '-').
 ?- op(400, yfx, '*').
+?- op(400, yfx, '**').
 ?- op(400, yfx, '//').
 ?- op(400, yfx, 'mod').
 ?- op(400, yfx, 'rem').

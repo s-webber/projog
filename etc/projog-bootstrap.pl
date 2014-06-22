@@ -111,6 +111,7 @@
 ?- pj_add_predicate(keysort/2, 'org.projog.core.function.list.KeySort').
 ?- pj_add_predicate(flatten/2, 'org.projog.core.function.list.Flatten').
 ?- pj_add_predicate(sort/2, 'org.projog.core.function.list.SortAsSet').
+?- pj_add_predicate(msort/2, 'org.projog.core.function.list.Sort').
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').

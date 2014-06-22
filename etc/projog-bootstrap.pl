@@ -110,6 +110,7 @@
 ?- pj_add_predicate(subtract/3, 'org.projog.core.function.list.SubtractFromList').
 ?- pj_add_predicate(keysort/2, 'org.projog.core.function.list.KeySort').
 ?- pj_add_predicate(flatten/2, 'org.projog.core.function.list.Flatten').
+?- pj_add_predicate(sort/2, 'org.projog.core.function.list.SortAsSet').
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').

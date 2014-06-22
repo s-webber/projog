@@ -48,6 +48,40 @@ public class ListUtilsTest {
       assertNull(ListUtils.toJavaUtilList(ANONYMOUS_VARIABLE));
    }
 
+   @Test
+   public void testToSortedJavaUtilList() {
+      Atom z = atom("z");
+      Atom a = atom("a");
+      Atom h = atom("h");
+      Atom q = atom("q");
+      // include multiple 'a's to test duplicates are not removed
+      final List projogList = (List) ListFactory.createList(new Term[] {z, a, a, h, a, q});
+      final java.util.List<Term> javaUtilList = ListUtils.toSortedJavaUtilList(projogList);
+      assertEquals(6, javaUtilList.size());
+      assertSame(a, javaUtilList.get(0));
+      assertSame(a, javaUtilList.get(1));
+      assertSame(a, javaUtilList.get(2));
+      assertSame(h, javaUtilList.get(3));
+      assertSame(q, javaUtilList.get(4));
+      assertSame(z, javaUtilList.get(5));
+   }
+
+   @Test
+   public void testToSortedJavaUtilList_EmptyList() {
+      final java.util.List<Term> javaUtilList = ListUtils.toSortedJavaUtilList(EMPTY_LIST);
+      assertTrue(javaUtilList.isEmpty());
+   }
+
+   @Test
+   public void testToSortedJavaUtilList_EmptyList_NonListArguments() {
+      assertNull(ListUtils.toSortedJavaUtilList(variable()));
+      assertNull(ListUtils.toSortedJavaUtilList(atom()));
+      assertNull(ListUtils.toSortedJavaUtilList(structure()));
+      assertNull(ListUtils.toSortedJavaUtilList(integerNumber()));
+      assertNull(ListUtils.toSortedJavaUtilList(doubleNumber()));
+      assertNull(ListUtils.toSortedJavaUtilList(ANONYMOUS_VARIABLE));
+   }
+
    private Term[] createArguments() {
       return new Term[] {atom(), structure(), integerNumber(), doubleNumber(), variable()};
    }

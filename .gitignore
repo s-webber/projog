@@ -5,19 +5,17 @@
 *.out
 *.bat
 *.sh
-test.pl
+junit*.properties
 
 .classpath
 .project
+.settings
 
-.settings/
-bin/
-build/
-lib/
-target/
-dist/
-scripts/tmp
-scripts/temp
-tmp/
-temp/
-projogGeneratedClasses/
+bin
+build
+lib
+target
+dist
+tmp
+temp
+projogGeneratedClasses

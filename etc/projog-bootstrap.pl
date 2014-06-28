@@ -114,6 +114,7 @@
 ?- pj_add_predicate(msort/2, 'org.projog.core.function.list.Sort').
 ?- pj_add_predicate(delete/3, 'org.projog.core.function.list.Delete').
 ?- pj_add_predicate(subset/2, 'org.projog.core.function.list.Subset').
+?- pj_add_predicate(select/3, 'org.projog.core.function.list.Select').
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').

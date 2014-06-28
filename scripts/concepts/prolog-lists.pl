@@ -251,13 +251,14 @@ delete_from_list([],X,[]).
 %NO
 
 % Select elements from a list.
+% (Note: Projog provides a built-in select(X,Y,Z) predicate.)
 
-select(X,[X|Xs],Xs).
-select(X,[Y|Ys],[Y|Zs]) :- select(X,Ys,Zs).
+select_from_list(X,[X|Xs],Xs).
+select_from_list(X,[Y|Ys],[Y|Zs]) :- select_from_list(X,Ys,Zs).
 
-%TRUE_NO select(b,[a,b,c],[a,c])
-%FALSE select(z,[a,b,c],[a,b,c])
-%QUERY select(z,[z,a,z,z,b,c,z,d,e,f,z],X)
+%TRUE_NO select_from_list(b,[a,b,c],[a,c])
+%FALSE select_from_list(z,[a,b,c],[a,b,c])
+%QUERY select_from_list(z,[z,a,z,z,b,c,z,d,e,f,z],X)
 %ANSWER X=[a,z,z,b,c,z,d,e,f,z]
 %ANSWER X=[z,a,z,b,c,z,d,e,f,z]
 %ANSWER X=[z,a,z,b,c,z,d,e,f,z]
@@ -276,7 +277,7 @@ ordered([X,Y|Ys]) :- X @=< Y, ordered([Y|Ys]).
 
 % Find permuatations of terms in a list.
 
-permutation(Xs,[Z|Zs]) :- select(Z,Xs,Ys), permutation(Ys,Zs).
+permutation(Xs,[Z|Zs]) :- select_from_list(Z,Xs,Ys), permutation(Ys,Zs).
 permutation([],[]).
 
 %QUERY permutation([a,b],X)

@@ -126,6 +126,7 @@
 ?- pj_add_calculatable('**'/2, 'org.projog.core.function.math.Power').
 ?- pj_add_calculatable(mod/2, 'org.projog.core.function.math.Modulo').
 ?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
+?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').

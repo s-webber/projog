@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
@@ -24,7 +25,7 @@ import org.projog.core.term.TermFormatter;
  * 
  * @see #toString(Term)
  */
-public final class Write extends org.projog.core.function.AbstractSingletonPredicate {
+public final class Write extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       print(toString(arg));

@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -15,7 +16,7 @@ import org.projog.core.term.Term;
  * <code>user_input</code>, which specifies that input to come from the keyboard.
  * </p>
  */
-public final class SetInput extends org.projog.core.function.AbstractSingletonPredicate {
+public final class SetInput extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       getKnowledgeBase().getFileHandles().setInput(arg);

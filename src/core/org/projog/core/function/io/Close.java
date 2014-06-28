@@ -1,6 +1,7 @@
 package org.projog.core.function.io;
 
 import org.projog.core.ProjogException;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -13,7 +14,7 @@ import org.projog.core.term.Term;
  * used.
  * </p>
  */
-public final class Close extends org.projog.core.function.AbstractSingletonPredicate {
+public final class Close extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term argument) {
       try {

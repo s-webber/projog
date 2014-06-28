@@ -2,6 +2,7 @@ package org.projog.core.function.io;
 
 import java.io.InputStreamReader;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
 
@@ -17,7 +18,7 @@ import org.projog.core.term.Term;
  * Succeeds only once.
  * </p>
  */
-public final class Read extends org.projog.core.function.AbstractSingletonPredicate {
+public final class Read extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term argument) {
       InputStreamReader isr = new InputStreamReader(getKnowledgeBase().getFileHandles().getCurrentInputStream());

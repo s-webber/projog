@@ -2,6 +2,7 @@ package org.projog.core.function.io;
 
 import static org.projog.core.term.TermUtils.getAtomName;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -16,7 +17,7 @@ import org.projog.core.term.Term;
  * Writes to the current output stream. Succeeds only once and the operation is not undone on backtracking.
  * </p>
  */
-public final class PutChar extends org.projog.core.function.AbstractSingletonPredicate {
+public final class PutChar extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term argument) {
       String textToOutput = getAtomName(argument);

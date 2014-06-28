@@ -3,6 +3,7 @@ package org.projog.core.function.io;
 import static org.projog.core.term.TermUtils.castToNumeric;
 import static org.projog.core.term.TermUtils.getAtomName;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -99,7 +100,7 @@ import org.projog.core.term.Term;
  * (an integer), and <code>Y</code> the associativity specifier. e.g. <code>op(1200,xfx,':-')</code>
  * </p>
  */
-public final class Op extends org.projog.core.function.AbstractSingletonPredicate {
+public final class Op extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int precedence = castToNumeric(arg1).getInt();

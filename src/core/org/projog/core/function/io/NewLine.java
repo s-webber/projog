@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 
 /* TEST
  %QUERY write('a'), write('b'), nl, write('c')
@@ -18,7 +19,7 @@ package org.projog.core.function.io;
  * This goal succeeds only once.
  * </p>
  */
-public final class NewLine extends org.projog.core.function.AbstractSingletonPredicate {
+public final class NewLine extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate() {
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().println();

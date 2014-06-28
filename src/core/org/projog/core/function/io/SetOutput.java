@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -15,7 +16,7 @@ import org.projog.core.term.Term;
  * <code>user_input</code>, which specifies that output is to go to the computer display.
  * </p>
  */
-public final class SetOutput extends org.projog.core.function.AbstractSingletonPredicate {
+public final class SetOutput extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       getKnowledgeBase().getFileHandles().setOutput(arg);

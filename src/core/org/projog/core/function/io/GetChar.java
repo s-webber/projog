@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
@@ -16,7 +17,7 @@ import org.projog.core.term.Term;
  * only once and the operation of moving to the next character is not undone on backtracking.
  * </p>
  */
-public final class GetChar extends org.projog.core.function.AbstractSingletonPredicate {
+public final class GetChar extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term argument) {
       try {

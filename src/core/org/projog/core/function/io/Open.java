@@ -4,6 +4,7 @@ import static org.projog.core.term.TermUtils.getAtomName;
 
 import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -18,7 +19,7 @@ import org.projog.core.term.Term;
  * subsequent commands in order to access the stream.
  * </p>
  */
-public final class Open extends org.projog.core.function.AbstractSingletonPredicate {
+public final class Open extends AbstractSingletonPredicate {
    private static final String READ = "read";
    private static final String WRITE = "write";
 

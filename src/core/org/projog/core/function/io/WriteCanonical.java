@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -21,7 +22,7 @@ import org.projog.core.term.Term;
  * Succeeds only once.
  * </p>
  */
-public final class WriteCanonical extends org.projog.core.function.AbstractSingletonPredicate {
+public final class WriteCanonical extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(arg.toString());

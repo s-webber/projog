@@ -2,106 +2,93 @@ package org.projog.core;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.projog.TestUtils.ADD_CALCULATABLE_KEY;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.parseTermsFromFile;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.function.AbstractRetryablePredicateTest;
 import org.projog.core.term.Term;
 
-public class PredicateTest {
+/**
+ * Tests contents of {@code etc/projog-bootstrap.pl}.
+ * <p>
+ * {@code etc/projog-bootstrap.pl} is used to configure the build-in predicates and arithmetic functions. 
+ */
+public class BootstrapTest {
    private static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
 
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
-   /**
-    * Maintains record of class hierarchy of all PredicateFactory implementations
-    * <p>
-    * key = class name, value = immediate superclass of the class specified by the associated key
-    * <p>
-    * Used to automatically generate input to plantuml to generate uml class diagram.
-    */
-   private final Map<String, String> classStructure = new HashMap<>();
-
    @Test
    public void testBuiltInPredicates() throws Exception {
+      List<Term> terms = getQueriesByKey(ADD_PREDICATE_KEY);
+      assertFalse(terms.isEmpty());
+      for (Term t : terms) {
+         assertBuiltInPredicate(t.getArgument(0));
+      }
+   }
+
+   @Test
+   public void testCalculatables() throws Exception {
+      List<Term> terms = getQueriesByKey(ADD_CALCULATABLE_KEY);
+      assertFalse(terms.isEmpty());
+      for (Term t : terms) {
+         assertCalculatable(t.getArgument(1));
+      }
+   }
+
+   private List<Term> getQueriesByKey(PredicateKey key) {
+      List<Term> result = new ArrayList<Term>();
       Term[] terms = parseTermsFromFile(BOOTSTRAP_FILE);
-      int builtInPredicateCtr = 0;
       for (Term next : terms) {
          if (QUESTION_PREDICATE_NAME.equals(next.getName())) {
-            // 1st argument will be the actual query e.g. for:
-            // ?- pj_add_Predicate(true, 'org.projog.core.function.bool.True').
-            // the 1st argument will be pj_add_Predicate(true, 'org.projog.core.function.bool.True')
             Term t = next.getArgument(0);
-            PredicateKey key = PredicateKey.createForTerm(t);
-            if (key.equals(ADD_PREDICATE_KEY)) {
-               // 1st argument will be name and possibly arity details of built-in Predicate (
-               // e.g. "arg/3" or "true")
-               testBuiltInPredicate(t.getArgument(0));
-               builtInPredicateCtr++;
+            if (key.equals(PredicateKey.createForTerm(t))) {
+               result.add(t);
             }
          }
       }
-      // check we did manage to find some build in Predicates
-      assertFalse(builtInPredicateCtr == 0);
-
-      // produce input required by plantuml to generate uml class diagram
-      Set<String> abstractClasses = new HashSet<>();
-      for (Map.Entry<String, String> e : classStructure.entrySet()) {
-         String key = e.getKey();
-         if (key.startsWith("Abstract")) {
-            abstractClasses.add(key);
-         }
-         System.out.println(e.getValue() + " <|-- " + key);
-      }
-      for (String key : abstractClasses) {
-         System.out.println("abstract " + key);
-      }
+      return result;
    }
 
    @SuppressWarnings("rawtypes")
-   private void testBuiltInPredicate(Term t) throws Exception {
-      PredicateKey key = PredicateKey.createFromNameAndArity(t);
+   private void assertBuiltInPredicate(Term nameAndArity) throws Exception {
+      PredicateKey key = PredicateKey.createFromNameAndArity(nameAndArity);
       PredicateFactory ef = kb.getPredicateFactory(key);
+      assertFinal(ef);
       Class[] methodParameters = getMethodParameters(key);
-      if (!(ef instanceof AbstractSingletonPredicate)) {
+      if (ef instanceof AbstractRetryablePredicateTest) {
          assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
       }
       assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);
-
-      Class c = ef.getClass();
-      do {
-         Class s = c.getSuperclass();
-         if (s == Object.class) {
-            return;
-         }
-         classStructure.put(getName(c), getName(s));
-         c = s;
-      } while (true);
    }
 
-   private String getName(Class<?> c) {
-      String s = c.toString();
-      return s.substring(s.lastIndexOf('.') + 1);
+   private void assertCalculatable(Term className) throws Exception {
+      Class<?> c = Class.forName(className.getName());
+      Object o = c.newInstance();
+      assertTrue(o instanceof Calculatable);
+      assertFinal(o);
+   }
+
+   private void assertFinal(Object o) {
+      Class<? extends Object> c = o.getClass();
+      assertTrue("Not final: " + c, Modifier.isFinal(c.getModifiers()));
    }
 
    private Class<?>[] getMethodParameters(PredicateKey key) {
       int numberOfArguments = key.getNumArgs();
-      if (numberOfArguments == -1) {
-         // TODO required for when predicate key has num args of -1
-         numberOfArguments = 0;
-      }
       Class<?>[] args = new Class[numberOfArguments];
       for (int i = 0; i < numberOfArguments; i++) {
          args[i] = Term.class;

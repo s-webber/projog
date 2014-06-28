@@ -235,17 +235,18 @@ list_length([X|Xs],A) :- list_length(Xs,B), A is B+1.
 %FALSE list_length([a,b,c,d,e,f],5)
 
 % Delete elements from a list.
+% (Note: Projog provides a built-in delete(X,Y,Z) predicate.)
 
-delete([X|Xs],X,Ys) :- delete(Xs,X,Ys).
-delete([X|Xs],Z,[X|Ys]) :- \+ X==Z, delete(Xs, Z, Ys).
-delete([],X,[]).
+delete_from_list([X|Xs],X,Ys) :- delete_from_list(Xs,X,Ys).
+delete_from_list([X|Xs],Z,[X|Ys]) :- \+ X==Z, delete_from_list(Xs, Z, Ys).
+delete_from_list([],X,[]).
 
-%TRUE_NO delete([a,z,c],z,[a,c])
-%QUERY delete([a,z,c],y,X)
+%TRUE_NO delete_from_list([a,z,c],z,[a,c])
+%QUERY delete_from_list([a,z,c],y,X)
 %ANSWER X=[a,z,c]
 %NO
-%TRUE_NO delete([z,a,z,z,b,c,z,d,e,f,z],z,[a,b,c,d,e,f])
-%QUERY delete([z,a,z,z,b,c,z,d,e,f,z],X,[a,b,c,d,e,f])
+%TRUE_NO delete_from_list([z,a,z,z,b,c,z,d,e,f,z],z,[a,b,c,d,e,f])
+%QUERY delete_from_list([z,a,z,z,b,c,z,d,e,f,z],X,[a,b,c,d,e,f])
 %ANSWER X=z
 %NO
 

@@ -128,6 +128,7 @@
 ?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
 ?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
 ?- pj_add_calculatable('/\'/2, 'org.projog.core.function.math.BitwiseAnd').
+?- pj_add_calculatable('>>'/2, 'org.projog.core.function.math.ShiftRight').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').
@@ -163,4 +164,5 @@
 ?- op(400, yfx, 'mod').
 ?- op(400, yfx, 'rem').
 ?- op(400, yfx, '/\').
+?- op(400, yfx, '>>').
 ?- op(200, fy, '-').

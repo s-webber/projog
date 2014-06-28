@@ -32,7 +32,7 @@ import org.projog.core.term.Variable;
  * <p>
  * Allows the predicate defined by <code>X</code> to be used as an arithmetic function.
  */
-public class AddArithmeticFunction extends AbstractSingletonPredicate {
+public final class AddArithmeticFunction extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);

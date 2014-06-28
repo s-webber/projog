@@ -49,7 +49,7 @@ import org.projog.core.term.Term;
  * Note that, unlike <code>sort/2</code>, duplicates are <i>not</i> removed.
  * </p>
  */
-public class Sort extends AbstractSingletonPredicate {
+public final class Sort extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term unsorted, Term sorted) {
       List<Term> elements = toSortedJavaUtilList(unsorted);

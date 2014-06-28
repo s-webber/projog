@@ -23,7 +23,7 @@ import org.projog.core.term.Term;
 * <code>X</code> represents the name and arity of the predicate.
 * <code>Y</code> represents the full class name of an implementation of <code>org.projog.core.Calculatable</code>.
 */
-public class AddCalculatable extends AbstractSingletonPredicate {
+public final class AddCalculatable extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);

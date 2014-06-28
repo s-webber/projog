@@ -1,20 +1,72 @@
 package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.doubleNumber;
 import static org.projog.TestUtils.integerNumber;
+import static org.projog.TestUtils.parseTerm;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
+import static org.projog.TestUtils.write;
 import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 
 import org.junit.Test;
+import org.projog.TestUtils;
 
 public class ListUtilsTest {
+   @Test
+   public void testIsMember_True() {
+      List list = TestUtils.list(atom("x"), atom("y"), atom("z"));
+      assertTrue(ListUtils.isMember(atom("x"), list));
+      assertTrue(ListUtils.isMember(atom("y"), list));
+      assertTrue(ListUtils.isMember(atom("z"), list));
+   }
+
+   @Test
+   public void testIsMember_Failure() {
+      List list = TestUtils.list(atom("x"), atom("y"), atom("z"));
+      assertFalse(ListUtils.isMember(atom("w"), list));
+   }
+
+   @Test
+   public void testIsMember_EmptyList() {
+      assertFalse(ListUtils.isMember(atom(), EMPTY_LIST));
+   }
+
+   @Test
+   public void testIsMember_Variable() {
+      Atom x = atom("x");
+      List list = TestUtils.list(x, atom("y"), atom("z"));
+      Variable v = variable();
+      assertTrue(ListUtils.isMember(v, list));
+      assertSame(x, v.getTerm());
+   }
+
+   @Test
+   public void testIsMember_VariablesAsArgumentsOfStructures() {
+      Term list = parseTerm("[p(a, B, 2),p(q, b, C),p(A, b, 5)]");
+      Term element = parseTerm("p(X,b,5)");
+      assertTrue(ListUtils.isMember(element, list));
+      assertEquals("[p(a, B, 2),p(q, b, 5),p(A, b, 5)]", write(list));
+      assertEquals("p(q, b, 5)", write(element));
+   }
+
+   @Test
+   public void testIsMember_InvalidArgumentList() {
+      try {
+         ListUtils.isMember(atom(), atom("a"));
+         fail();
+      } catch (IllegalArgumentException e) {
+         assertEquals("Expected list but got: a", e.getMessage());
+      }
+   }
+
    @Test
    public void testToJavaUtilList() {
       final Term[] arguments = createArguments();

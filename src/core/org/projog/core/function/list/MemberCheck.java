@@ -1,9 +1,9 @@
 package org.projog.core.function.list;
 
-import org.projog.core.ProjogException;
+import static org.projog.core.term.ListUtils.isMember;
+
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 
 /* TEST
  %TRUE memberchk(a, [a,b,c])
@@ -34,17 +34,6 @@ import org.projog.core.term.TermType;
 public final class MemberCheck extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term element, Term list) {
-      if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
-         throw new ProjogException("Expected list but got: " + list);
-      }
-      while (list.getType() == TermType.LIST) {
-         if (element.unify(list.getArgument(0))) {
-            return true;
-         }
-         element.backtrack();
-         list.backtrack();
-         list = list.getArgument(1);
-      }
-      return false;
+      return isMember(element, list);
    }
 }

@@ -53,10 +53,11 @@ public class ListUtils {
    }
 
    /**
-    * Returns a new {@code java.util.List} containing the sorted contents of the specified {@code org.projog.core.term.List}.
+    * Returns a new {@code java.util.List} containing the sorted contents of the specified
+    * {@code org.projog.core.term.List}.
     * <p>
-    * The elements in the returned list will be ordered using the standard ordering of terms, as implemented by 
-    * {@link TermComparator}.  
+    * The elements in the returned list will be ordered using the standard ordering of terms, as implemented by
+    * {@link TermComparator}.
     * </p>
     * <p>
     * Will return {@code null} if {@code list} is neither of type {@link TermType#LIST} or {@link TermType#EMPTY_LIST},
@@ -71,5 +72,30 @@ public class ListUtils {
          Collections.sort(elements, TERM_COMPARATOR);
       }
       return elements;
+   }
+
+   /**
+    * Checks is a term can be unified with at least one element of a list.
+    * <p>
+    * Iterates through each element of {@code list} attempting to unify with {@code element}. Returns {@code true}
+    * immediately after the first unifiable element is found. If {@code list} contains no elements that can be unified
+    * with {@code element} then {@code false} is returned.
+    * </p>
+    * 
+    * @throws IllegalArgumentException if {@code list} is not of type {@code TermType#LIST} or {@code TermType#EMPTY_LIST}
+    */
+   public static boolean isMember(Term element, Term list) {
+      if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
+         throw new IllegalArgumentException("Expected list but got: " + list);
+      }
+      while (list.getType() == TermType.LIST) {
+         if (element.unify(list.getArgument(0))) {
+            return true;
+         }
+         element.backtrack();
+         list.backtrack();
+         list = list.getArgument(1);
+      }
+      return false;
    }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.function.AbstractRetryablePredicateTest;
+import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
 /**
@@ -69,10 +69,12 @@ public class BootstrapTest {
       PredicateFactory ef = kb.getPredicateFactory(key);
       assertFinal(ef);
       Class[] methodParameters = getMethodParameters(key);
-      if (ef instanceof AbstractRetryablePredicateTest) {
+      if (ef instanceof AbstractRetryablePredicate) {
          assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
       }
-      assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);
+      if (ef instanceof Predicate) {
+         assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);
+      }
    }
 
    private void assertCalculatable(Term className) throws Exception {

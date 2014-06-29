@@ -22,8 +22,8 @@ public final class Divide implements Calculatable {
       if (containsDouble(n1, n2)) {
          return divideDoubles(n1, n2);
       } else {
-         int dividend = n1.getInt();
-         int divisor = n2.getInt();
+         long dividend = n1.getLong();
+         long divisor = n2.getLong();
          if (dividend % divisor == 0) {
             // e.g. 6 / 2 = 3
             return new IntegerNumber(dividend / divisor);

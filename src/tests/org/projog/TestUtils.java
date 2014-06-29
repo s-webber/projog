@@ -128,7 +128,7 @@ public class TestUtils {
       return integerNumber(1);
    }
 
-   public static IntegerNumber integerNumber(int i) {
+   public static IntegerNumber integerNumber(long i) {
       return new IntegerNumber(i);
    }
 

@@ -116,16 +116,32 @@ public final class TermUtils {
    }
 
    /**
-    * Return the integer value represented by the specified term.
+    * Returns the integer value of the {@link Numeric} represented by the specified {@link Term}.
     * 
-    * @param t the term representing an integer value
-    * @return the integer value represented by {@code t}
+    * @param t the term representing a {@link Numeric}
+    * @return the {@code int} value represented by {@code t}
+    * @throws ProjogException if the specified {@link Term} cannot be represented as an {@code int}.
+    */
+   public static int toInt(final Term t) {
+      Numeric n = castToNumeric(t);
+      long l = n.getLong();
+      if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+         throw new ProjogException("Value cannot be cast to an int without losing precision: " + l);
+      }
+      return (int) l;
+   }
+
+   /**
+    * Return the long value represented by the specified term.
+    * 
+    * @param t the term representing a long value
+    * @return the {@code long} value represented by {@code t}
     * @throws ProjogException if the specified {@link Term} does not represent a term of type {@link TermType#INTEGER}
     */
-   public static int toInt(final KnowledgeBase kb, final Term t) {
+   public static long toLong(final KnowledgeBase kb, final Term t) {
       final Numeric n = kb.getNumeric(t);
       if (n.getType() == TermType.INTEGER) {
-         return n.getInt();
+         return n.getLong();
       } else {
          throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
       }

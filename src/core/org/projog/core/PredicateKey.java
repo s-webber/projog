@@ -1,7 +1,7 @@
 package org.projog.core;
 
-import static org.projog.core.term.TermUtils.castToNumeric;
 import static org.projog.core.term.TermUtils.getAtomName;
+import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -63,7 +63,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
       }
 
       String name = getAtomName(t.getArgs()[0]);
-      int arity = castToNumeric(t.getArgs()[1]).getInt();
+      int arity = toInt(t.getArgs()[1]);
       return new PredicateKey(name, arity);
    }
 

@@ -17,7 +17,7 @@ import org.projog.core.term.Term;
  %FALSE 5 is 4+2
  
  %QUERY X is Y
- %ERROR Can't get Numeric for term: Y of type: NAMED_VARIABLE
+ %ERROR Cannot get Numeric for term: Y of type: NAMED_VARIABLE
 
  %QUERY Z=1+1, Y=9-Z, X is Y
  %ANSWER
@@ -27,7 +27,7 @@ import org.projog.core.term.Term;
  %ANSWER
 
  %QUERY X is _
- %ERROR Can't get Numeric for term: _ of type: ANONYMOUS_VARIABLE
+ %ERROR Cannot get Numeric for term: _ of type: ANONYMOUS_VARIABLE
 
  %QUERY X is sum(1,2)
  %ERROR Cannot find calculatable: sum/2
@@ -36,10 +36,10 @@ import org.projog.core.term.Term;
  %ERROR Cannot find calculatable: ten
 
  %QUERY X is []
- %ERROR Can't get Numeric for term: [] of type: EMPTY_LIST
+ %ERROR Cannot get Numeric for term: [] of type: EMPTY_LIST
 
  %QUERY X is [1,2,3]
- %ERROR Can't get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
+ %ERROR Cannot get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
  */
 /**
  * <code>X is Y</code> - evaluate arithmetic expression.

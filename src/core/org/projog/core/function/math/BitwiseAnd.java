@@ -30,7 +30,7 @@ package org.projog.core.function.math;
  */
 public final class BitwiseAnd extends AbstractTwoIntegerArgumentsCalculatable {
    @Override
-   protected int calculateInt(int i1, int i2) {
-      return i1 & i2;
+   protected long calculateLong(long n1, long n2) {
+      return n1 & n2;
    }
 }

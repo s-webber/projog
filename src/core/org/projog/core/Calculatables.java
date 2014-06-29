@@ -54,7 +54,7 @@ final class Calculatables {
          case ATOM:
             return calculate(t, TermUtils.EMPTY_ARRAY);
          default:
-            throw new ProjogException("Can't get Numeric for term: " + t + " of type: " + type);
+            throw new ProjogException("Cannot get Numeric for term: " + t + " of type: " + type);
       }
    }
 

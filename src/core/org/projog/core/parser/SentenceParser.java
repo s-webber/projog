@@ -1,7 +1,7 @@
 package org.projog.core.parser;
 
 import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 import static org.projog.core.parser.Delimiters.isArgumentSeperator;
 import static org.projog.core.parser.Delimiters.isListCloseBracket;
 import static org.projog.core.parser.Delimiters.isListOpenBracket;
@@ -254,7 +254,7 @@ public class SentenceParser {
    private Term createPrefixTerm(String prefixOperandName, Term argument) {
       if ("-".equals(prefixOperandName)) {
          if (argument.getType() == TermType.INTEGER) {
-            return new IntegerNumber(-((Numeric) argument).getInt());
+            return new IntegerNumber(-((Numeric) argument).getLong());
          } else if (argument.getType() == TermType.DOUBLE) {
             return new DoubleNumber(-((Numeric) argument).getDouble());
          }
@@ -312,7 +312,7 @@ public class SentenceParser {
             case SYMBOL:
                return getAtomOrStructure(value);
             case INTEGER:
-               return new IntegerNumber(parseInt(value));
+               return new IntegerNumber(parseLong(value));
             case FLOAT:
                return new DoubleNumber(parseDouble(value));
             case VARIABLE:

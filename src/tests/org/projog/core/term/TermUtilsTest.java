@@ -209,33 +209,33 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testIntegerNumberToInt() {
+   public void testIntegerNumberToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertEquals(Integer.MAX_VALUE, TermUtils.toInt(kb, integerNumber(Integer.MAX_VALUE)));
-      assertEquals(1, TermUtils.toInt(kb, integerNumber(1)));
-      assertEquals(0, TermUtils.toInt(kb, integerNumber(0)));
-      assertEquals(Integer.MIN_VALUE, TermUtils.toInt(kb, integerNumber(Integer.MIN_VALUE)));
+      assertEquals(Integer.MAX_VALUE, TermUtils.toLong(kb, integerNumber(Integer.MAX_VALUE)));
+      assertEquals(1, TermUtils.toLong(kb, integerNumber(1)));
+      assertEquals(0, TermUtils.toLong(kb, integerNumber(0)));
+      assertEquals(Integer.MIN_VALUE, TermUtils.toLong(kb, integerNumber(Integer.MIN_VALUE)));
    }
 
    @Test
-   public void testArithmeticFunctionToInt() {
+   public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
-      assertEquals(21, TermUtils.toInt(kb, arithmeticExpression));
+      assertEquals(21, TermUtils.toLong(kb, arithmeticExpression));
    }
 
    @Test
-   public void testToIntExceptions() {
+   public void testToLongExceptions() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertTestToIntException(kb, atom("test"), "Cannot find calculatable: test");
-      assertTestToIntException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p/2");
-      assertTestToIntException(kb, doubleNumber(0), "Expected integer but got: DOUBLE with value: 0.0");
-      assertTestToIntException(kb, structure("+", doubleNumber(1.0), doubleNumber(1.0)), "Expected integer but got: DOUBLE with value: 2.0");
+      assertTestToLongException(kb, atom("test"), "Cannot find calculatable: test");
+      assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p/2");
+      assertTestToLongException(kb, doubleNumber(0), "Expected integer but got: DOUBLE with value: 0.0");
+      assertTestToLongException(kb, structure("+", doubleNumber(1.0), doubleNumber(1.0)), "Expected integer but got: DOUBLE with value: 2.0");
    }
 
-   private void assertTestToIntException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
+   private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
       try {
-         TermUtils.toInt(kb, t);
+         TermUtils.toLong(kb, t);
          fail();
       } catch (ProjogException e) {
          assertEquals(expectedExceptionMessage, e.getMessage());
@@ -255,6 +255,36 @@ public class TermUtilsTest {
          assertEquals("testAtomName", TermUtils.getAtomName(p));
       } catch (ProjogException e) {
          assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testToInt() {
+      assertToInt(0);
+      assertToInt(1);
+      assertToInt(-1);
+      assertToInt(Integer.MAX_VALUE);
+      assertToInt(Integer.MIN_VALUE);
+   }
+
+   private void assertToInt(long n) {
+      assertEquals(n, TermUtils.toInt(integerNumber(n)));
+   }
+
+   @Test
+   public void testToIntException() {
+      assertToIntException(Integer.MAX_VALUE + 1L);
+      assertToIntException(Integer.MIN_VALUE - 1L);
+      assertToIntException(Long.MAX_VALUE);
+      assertToIntException(Long.MIN_VALUE);
+   }
+
+   private void assertToIntException(long n) {
+      try {
+         TermUtils.toInt(integerNumber(n));
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Value cannot be cast to an int without losing precision: " + n, e.getMessage());
       }
    }
 }

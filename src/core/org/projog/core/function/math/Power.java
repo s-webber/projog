@@ -1,6 +1,5 @@
 package org.projog.core.function.math;
 
-
 /* TEST
  %QUERY X is 2 ** 1
  %ANSWER X = 2
@@ -45,12 +44,12 @@ package org.projog.core.function.math;
  */
 public final class Power extends AbstractTwoArgumentsCalculatable {
    @Override
-   protected double calculateDouble(double d1, double d2) {
-      return Math.pow(d1, d2);
+   protected double calculateDouble(double n1, double n2) {
+      return Math.pow(n1, n2);
    }
 
    @Override
-   protected int calculateInt(int i1, int i2) {
-      return (int) Math.pow(i1, i2);
+   protected long calculateLong(long n1, long n2) {
+      return (long) Math.pow(n1, n2);
    }
 }

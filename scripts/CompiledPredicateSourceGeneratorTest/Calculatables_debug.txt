@@ -43,7 +43,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v2_C = a2;
       final Numeric y0;
       final Numeric y1;
-      if (!v2_A.unify((((y0=kb.getNumeric(v2_B)).getType()==TermType.INTEGER & (y1=kb.getNumeric(v2_C)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getInt()+y1.getInt()):new DoubleNumber(y0.getDouble()+y1.getDouble())))) {
+      if (!v2_A.unify((((y0=kb.getNumeric(v2_B)).getType()==TermType.INTEGER & (y1=kb.getNumeric(v2_C)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()+y1.getLong()):new DoubleNumber(y0.getDouble()+y1.getDouble())))) {
          return false;
       }
       return true;
@@ -57,7 +57,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v3_C = a2;
       final Numeric y2;
       final Numeric y3;
-      if (!v3_A.unify((((y2=kb.getNumeric(v3_B)).getType()==TermType.INTEGER & (y3=kb.getNumeric(v3_C)).getType()==TermType.INTEGER)?new IntegerNumber(y2.getInt()-y3.getInt()):new DoubleNumber(y2.getDouble()-y3.getDouble())))) {
+      if (!v3_A.unify((((y2=kb.getNumeric(v3_B)).getType()==TermType.INTEGER & (y3=kb.getNumeric(v3_C)).getType()==TermType.INTEGER)?new IntegerNumber(y2.getLong()-y3.getLong()):new DoubleNumber(y2.getDouble()-y3.getDouble())))) {
          return false;
       }
       return true;
@@ -71,7 +71,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v4_C = a2;
       final Numeric y4;
       final Numeric y5;
-      if (!v4_A.unify((((y4=kb.getNumeric(v4_B)).getType()==TermType.INTEGER & (y5=kb.getNumeric(v4_C)).getType()==TermType.INTEGER)?new IntegerNumber(y4.getInt()*y5.getInt()):new DoubleNumber(y4.getDouble()*y5.getDouble())))) {
+      if (!v4_A.unify((((y4=kb.getNumeric(v4_B)).getType()==TermType.INTEGER & (y5=kb.getNumeric(v4_C)).getType()==TermType.INTEGER)?new IntegerNumber(y4.getLong()*y5.getLong()):new DoubleNumber(y4.getDouble()*y5.getDouble())))) {
          return false;
       }
       return true;
@@ -98,12 +98,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       Numeric num1 = kb.getNumeric(kb.getNumeric(Structure.createStructure("//", new Term[]{v6_B.getTerm(), v6_C.getTerm()})));
       final Numeric y6;
       final Numeric y7;
-      Numeric num2 = kb.getNumeric((((y6=kb.getNumeric(v6_B)).getType()==TermType.INTEGER & (y7=kb.getNumeric(v6_C)).getType()==TermType.INTEGER)?new IntegerNumber(y6.getInt()*y7.getInt()):new DoubleNumber(y6.getDouble()*y7.getDouble())));
+      Numeric num2 = kb.getNumeric((((y6=kb.getNumeric(v6_B)).getType()==TermType.INTEGER & (y7=kb.getNumeric(v6_C)).getType()==TermType.INTEGER)?new IntegerNumber(y6.getLong()*y7.getLong()):new DoubleNumber(y6.getDouble()*y7.getDouble())));
       final Numeric y8;
       final Numeric y9;
-      Numeric num0 = kb.getNumeric((((y8=kb.getNumeric(num1)).getType()==TermType.INTEGER & (y9=kb.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y8.getInt()+y9.getInt()):new DoubleNumber(y8.getDouble()+y9.getDouble())));
+      Numeric num0 = kb.getNumeric((((y8=kb.getNumeric(num1)).getType()==TermType.INTEGER & (y9=kb.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y8.getLong()+y9.getLong()):new DoubleNumber(y8.getDouble()+y9.getDouble())));
       final Numeric y10;
-      if (!v6_A.unify((((y10=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y10.getInt()-2):new DoubleNumber(y10.getDouble()-2.0)))) {
+      if (!v6_A.unify((((y10=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y10.getLong()-2):new DoubleNumber(y10.getDouble()-2.0)))) {
          return false;
       }
       return true;
@@ -120,14 +120,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       Numeric num1 = kb.getNumeric(kb.getNumeric(Structure.createStructure("//", new Term[]{v7_B.getTerm(), v7_C.getTerm()})));
       final Numeric y11;
       final Numeric y12;
-      Numeric num2 = kb.getNumeric((((y11=kb.getNumeric(v7_B)).getType()==TermType.INTEGER & (y12=kb.getNumeric(v7_C)).getType()==TermType.INTEGER)?new IntegerNumber(y11.getInt()*y12.getInt()):new DoubleNumber(y11.getDouble()*y12.getDouble())));
+      Numeric num2 = kb.getNumeric((((y11=kb.getNumeric(v7_B)).getType()==TermType.INTEGER & (y12=kb.getNumeric(v7_C)).getType()==TermType.INTEGER)?new IntegerNumber(y11.getLong()*y12.getLong()):new DoubleNumber(y11.getDouble()*y12.getDouble())));
       final Numeric y13;
       final Numeric y14;
-      Numeric num0 = kb.getNumeric((((y13=kb.getNumeric(num1)).getType()==TermType.INTEGER & (y14=kb.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y13.getInt()+y14.getInt()):new DoubleNumber(y13.getDouble()+y14.getDouble())));
+      Numeric num0 = kb.getNumeric((((y13=kb.getNumeric(num1)).getType()==TermType.INTEGER & (y14=kb.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y13.getLong()+y14.getLong()):new DoubleNumber(y13.getDouble()+y14.getDouble())));
       Numeric num3 = kb.getNumeric(DOUBLE_2_5);
       final Numeric y15;
       final Numeric y16;
-      if (!v7_Z.unify((((y15=kb.getNumeric(num0)).getType()==TermType.INTEGER & (y16=kb.getNumeric(num3)).getType()==TermType.INTEGER)?new IntegerNumber(y15.getInt()-y16.getInt()):new DoubleNumber(y15.getDouble()-y16.getDouble())))) {
+      if (!v7_Z.unify((((y15=kb.getNumeric(num0)).getType()==TermType.INTEGER & (y16=kb.getNumeric(num3)).getType()==TermType.INTEGER)?new IntegerNumber(y15.getLong()-y16.getLong()):new DoubleNumber(y15.getDouble()-y16.getDouble())))) {
          return false;
       }
       return true;
@@ -142,7 +142,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Numeric y17;
       final Numeric y18;
       final Term v8_Z;
-      v8_Z = (((y17=kb.getNumeric(v8_B)).getType()==TermType.INTEGER & (y18=kb.getNumeric(v8_C)).getType()==TermType.INTEGER)?new IntegerNumber(y17.getInt()+y18.getInt()):new DoubleNumber(y17.getDouble()+y18.getDouble()));
+      v8_Z = (((y17=kb.getNumeric(v8_B)).getType()==TermType.INTEGER & (y18=kb.getNumeric(v8_C)).getType()==TermType.INTEGER)?new IntegerNumber(y17.getLong()+y18.getLong()):new DoubleNumber(y17.getDouble()+y18.getDouble()));
       if (!v8_A.unify(kb.getNumeric(v8_Z))) {
          return false;
       }

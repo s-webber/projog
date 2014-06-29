@@ -41,7 +41,7 @@ public class CalculatablesTest {
          c.getNumeric(variable("X"));
          fail();
       } catch (ProjogException e) {
-         assertEquals("Can't get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
+         assertEquals("Cannot get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
       }
    }
 
@@ -67,7 +67,7 @@ public class CalculatablesTest {
       // assert that the factory is now using the newly added calculatable
       Numeric n = c.getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
-      assertEquals(input + 1, n.getInt());
+      assertEquals(input + 1, n.getLong());
 
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
@@ -92,8 +92,8 @@ public class CalculatablesTest {
        */
       @Override
       public Numeric calculate(KnowledgeBase kb, Term[] args) {
-         int input = TermUtils.castToNumeric(args[0]).getInt();
-         int output = input + 1;
+         long input = TermUtils.castToNumeric(args[0]).getLong();
+         long output = input + 1;
          return new IntegerNumber(output);
       }
    }

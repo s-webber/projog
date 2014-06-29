@@ -11,9 +11,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v0_A = a0;
       v0_B = a1;
       final Numeric y0;
-      Numeric num0 = kb.getNumeric((((y0=kb.getNumeric(v0_B)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getInt()*2):new DoubleNumber(y0.getDouble()*2.0)));
+      Numeric num0 = kb.getNumeric((((y0=kb.getNumeric(v0_B)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()*2):new DoubleNumber(y0.getDouble()*2.0)));
       final Numeric y1;
-      v0_C = (((y1=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y1.getInt()+1):new DoubleNumber(y1.getDouble()+1.0));
+      v0_C = (((y1=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y1.getLong()+1):new DoubleNumber(y1.getDouble()+1.0));
       return true;
    }
    private final boolean retryRule0() {

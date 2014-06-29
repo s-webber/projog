@@ -1,6 +1,7 @@
 package org.projog.core.function.construct;
 
 import static org.projog.core.term.TermUtils.getAtomName;
+import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -9,7 +10,6 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /* TEST
  %QUERY functor(f(a,b,c(Z)),F,N)
@@ -67,7 +67,7 @@ public final class Functor extends AbstractSingletonPredicate {
             return f.unify(new Atom(t.getName())) && n.unify(new IntegerNumber(t.getNumberOfArguments()));
          case ANONYMOUS_VARIABLE:
          case NAMED_VARIABLE:
-            int numArgs = TermUtils.castToNumeric(n).getInt();
+            int numArgs = toInt(n);
             Term[] a = new Term[numArgs];
             for (int i = 0; i < numArgs; i++) {
                a[i] = AnonymousVariable.ANONYMOUS_VARIABLE;

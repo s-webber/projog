@@ -1,12 +1,5 @@
 package org.projog.core.function.math;
 
-import static org.projog.core.term.TermUtils.toInt;
-
-import org.projog.core.Calculatable;
-import org.projog.core.KnowledgeBase;
-import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Term;
-
 /* TEST
  %LINK prolog-arithmetic
  */
@@ -15,12 +8,9 @@ import org.projog.core.term.Term;
  * <p>
  * The result has the same sign as the dividend (i.e. first argument).
  */
-public final class Remainder implements Calculatable {
+public final class Remainder extends AbstractTwoIntegerArgumentsCalculatable {
    @Override
-   public IntegerNumber calculate(KnowledgeBase kb, Term[] args) {
-      final int numerator = toInt(kb, args[0]);
-      final int divider = toInt(kb, args[1]);
-      final int modulo = numerator % divider;
-      return new IntegerNumber(modulo);
+   protected long calculateLong(long numerator, long divider) {
+      return numerator % divider;
    }
 }

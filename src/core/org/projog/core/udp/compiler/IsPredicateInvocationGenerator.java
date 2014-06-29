@@ -94,15 +94,15 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
             s.append(")?");
             s.append("new IntegerNumber(");
             if (arg1.getType().isNumeric()) {
-               s.append(((Numeric) arg1).getInt());
+               s.append(((Numeric) arg1).getLong());
             } else {
-               s.append(arg1TempNumericPlaceholder + ".getInt()");
+               s.append(arg1TempNumericPlaceholder + ".getLong()");
             }
             s.append(op);
             if (arg2.getType().isNumeric()) {
-               s.append(((Numeric) arg2).getInt());
+               s.append(((Numeric) arg2).getLong());
             } else {
-               s.append(arg2TempNumericPlaceholder + ".getInt()");
+               s.append(arg2TempNumericPlaceholder + ".getLong()");
             }
             s.append(")");
             s.append(":");

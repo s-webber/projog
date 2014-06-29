@@ -35,11 +35,11 @@ public class DoubleNumberTest {
    }
 
    @Test
-   public void testGetInt() {
-      assertEquals(0, new DoubleNumber(0).getInt());
-      assertEquals(Integer.MAX_VALUE, new DoubleNumber(Integer.MAX_VALUE).getInt());
-      assertEquals(-7, new DoubleNumber(-7.01).getInt());
-      assertEquals(-1, new DoubleNumber(-1.01).getInt());
+   public void testGetLong() {
+      assertEquals(0, new DoubleNumber(0).getLong());
+      assertEquals(Long.MAX_VALUE, new DoubleNumber(Long.MAX_VALUE).getLong());
+      assertEquals(-7, new DoubleNumber(-7.01).getLong());
+      assertEquals(-1, new DoubleNumber(-1.01).getLong());
    }
 
    @Test

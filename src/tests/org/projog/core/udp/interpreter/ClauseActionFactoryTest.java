@@ -83,7 +83,7 @@ public class ClauseActionFactoryTest {
       Variable y = variable("Y");
       assertTrue(ca.getFree().evaluate(new Term[] {x, y}));
       assertEquals(TermType.INTEGER, y.getType());
-      assertEquals(3, ((IntegerNumber) y.getTerm()).getInt());
+      assertEquals(3, ((IntegerNumber) y.getTerm()).getLong());
 
       assertFalse(ca.getFree().evaluate(new Term[] {integerNumber(4), y}));
    }

@@ -1,7 +1,6 @@
 package org.projog.core.function.flow;
 
 import org.projog.core.function.AbstractRetryablePredicate;
-import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -36,13 +35,13 @@ import org.projog.core.term.TermUtils;
  %FALSE repeat(-1)
 
  %QUERY repeat(X)
- %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
+ %ERROR Cannot get Numeric for term: X of type: NAMED_VARIABLE
 */
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.
  */
 public final class RepeatSetAmount extends AbstractRetryablePredicate {
-   private final int limit;
+   private final long limit;
    private int ctr;
 
    public RepeatSetAmount() {
@@ -54,7 +53,7 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
     * 
     * @param limit the number of times to successfully evaluate
     */
-   public RepeatSetAmount(int limit) {
+   public RepeatSetAmount(long limit) {
       this.limit = limit;
    }
 
@@ -81,8 +80,8 @@ public final class RepeatSetAmount extends AbstractRetryablePredicate {
 
    @Override
    public RepeatSetAmount getPredicate(Term arg) {
-      Numeric n = TermUtils.castToNumeric(arg);
-      return new RepeatSetAmount(n.getInt());
+      long n = TermUtils.toLong(getKnowledgeBase(), arg);
+      return new RepeatSetAmount(n);
    }
 
    /**

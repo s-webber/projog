@@ -3,24 +3,24 @@ package org.projog.core.term;
 import java.util.Map;
 
 /**
- * Represents a value of the primitive type {@code int} as a {@link Term}.
+ * Represents a value of the primitive type {@code long} as a {@link Term}.
  * <p>
  * IntegerNumbers are constant; their values cannot be changed after they are created. IntegerNumbers have no arguments.
  */
 public final class IntegerNumber implements Numeric {
-   private final int value;
+   private final long value;
 
    /**
     * @param value the value this term represents
     */
-   public IntegerNumber(int value) {
+   public IntegerNumber(long value) {
       this.value = value;
    }
 
    /**
-    * Returns a {@code String} representation of the {@code int} this term represents.
+    * Returns a {@code String} representation of the {@code long} this term represents.
     * 
-    * @return a {@code String} representation of the {@code int} this term represents
+    * @return a {@code String} representation of the {@code long} this term represents
     */
    @Override
    public String getName() {
@@ -100,15 +100,15 @@ public final class IntegerNumber implements Numeric {
    }
 
    /**
-    * @return the {@code int} value of this term
+    * @return the {@code long} value of this term
     */
    @Override
-   public int getInt() {
+   public long getLong() {
       return value;
    }
 
    /**
-    * @return the {@code int} value of this term cast to a {@code double}
+    * @return the {@code long} value of this term cast to a {@code double}
     */
    @Override
    public double getDouble() {
@@ -116,10 +116,10 @@ public final class IntegerNumber implements Numeric {
    }
 
    /**
-    * @return a {@code String} representation of the {@code int} this term represents
+    * @return a {@code String} representation of the {@code long} this term represents
     */
    @Override
    public String toString() {
-      return Integer.toString(value);
+      return Long.toString(value);
    }
 }

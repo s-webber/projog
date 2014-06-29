@@ -31,6 +31,28 @@
 %QUERY X is 5 mod 3
 %ANSWER X=2
 
+%QUERY X is 2147483647 + 1
+%ANSWER X=2147483648
+
+%QUERY X is -2147483648 - 1
+%ANSWER X=-2147483649
+
+% The maximum integer value that can be represented is 9223372036854775807
+
+%QUERY X is 9223372036854775806 + 1
+%ANSWER X=9223372036854775807
+
+%QUERY X is 9223372036854775806 + 2
+%ANSWER X=-9223372036854775808
+
+% The minimum integer value that can be represented is -9223372036854775808
+
+%QUERY X is -9223372036854775807 - 1
+%ANSWER X=-9223372036854775808
+
+%QUERY X is -9223372036854775807 - 2
+%ANSWER X=9223372036854775807
+
 % Prolog evaluates numerical expressions using the BODMAS rule to determine the order in which operations are performed.
 
 %QUERY X is 1+2*3
@@ -51,7 +73,7 @@
 % Variables must be instantiated to numerical terms before they can be used in calculations.
 
 %QUERY X is 1 + Y
-%ERROR Can't get Numeric for term: Y of type: NAMED_VARIABLE
+%ERROR Cannot get Numeric for term: Y of type: NAMED_VARIABLE
 
 %QUERY Y = 4, X is 1 + Y
 %ANSWER

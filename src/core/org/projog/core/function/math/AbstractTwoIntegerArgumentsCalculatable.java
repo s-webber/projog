@@ -1,6 +1,6 @@
 package org.projog.core.function.math;
 
-import static org.projog.core.term.TermUtils.toInt;
+import static org.projog.core.term.TermUtils.toLong;
 
 import org.projog.core.Calculatable;
 import org.projog.core.KnowledgeBase;
@@ -15,11 +15,11 @@ import org.projog.core.term.TermType;
 abstract class AbstractTwoIntegerArgumentsCalculatable implements Calculatable {
    @Override
    public final Numeric calculate(KnowledgeBase kb, Term[] args) {
-      final int i1 = toInt(kb, args[0]);
-      final int i2 = toInt(kb, args[1]);
-      return new IntegerNumber(calculateInt(i1, i2));
+      final long i1 = toLong(kb, args[0]);
+      final long i2 = toLong(kb, args[1]);
+      return new IntegerNumber(calculateLong(i1, i2));
    }
 
    /** Returns the result of evaluating an arithmetic expression using the two arguments */
-   protected abstract int calculateInt(int i1, int i2);
+   protected abstract long calculateLong(long n1, long n2);
 }

@@ -1,7 +1,7 @@
 package org.projog.core.function.io;
 
-import static org.projog.core.term.TermUtils.castToNumeric;
 import static org.projog.core.term.TermUtils.getAtomName;
+import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -103,7 +103,7 @@ import org.projog.core.term.Term;
 public final class Op extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
-      int precedence = castToNumeric(arg1).getInt();
+      int precedence = toInt(arg1);
       String associativity = getAtomName(arg2);
       String name = getAtomName(arg3);
       getKnowledgeBase().getOperands().addOperand(name, associativity, precedence);

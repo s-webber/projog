@@ -16,14 +16,14 @@ public class IntegerNumberTest {
    @Test
    public void testGetName() {
       assertEquals("0", new IntegerNumber(0).getName());
-      assertEquals(Integer.toString(Integer.MAX_VALUE), new IntegerNumber(Integer.MAX_VALUE).getName());
+      assertEquals(Long.toString(Long.MAX_VALUE), new IntegerNumber(Long.MAX_VALUE).getName());
       assertEquals("-7", new IntegerNumber(-7).getName());
    }
 
    @Test
    public void testToString() {
       assertEquals("0", new IntegerNumber(0).toString());
-      assertEquals(Integer.toString(Integer.MAX_VALUE), new IntegerNumber(Integer.MAX_VALUE).toString());
+      assertEquals(Long.toString(Long.MAX_VALUE), new IntegerNumber(Long.MAX_VALUE).toString());
       assertEquals("-7", new IntegerNumber(-7).toString());
    }
 
@@ -35,10 +35,10 @@ public class IntegerNumberTest {
    }
 
    @Test
-   public void testGetInt() {
-      assertEquals(0, new IntegerNumber(0).getInt());
-      assertEquals(Integer.MAX_VALUE, new IntegerNumber(Integer.MAX_VALUE).getInt());
-      assertEquals(-7, new IntegerNumber(-7).getInt());
+   public void testGetLong() {
+      assertEquals(0, new IntegerNumber(0).getLong());
+      assertEquals(Long.MAX_VALUE, new IntegerNumber(Long.MAX_VALUE).getLong());
+      assertEquals(-7, new IntegerNumber(-7).getLong());
    }
 
    @Test

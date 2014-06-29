@@ -8,12 +8,12 @@ package org.projog.core.function.math;
  */
 public final class Minus extends AbstractOneArgumentCalculatable {
    @Override
-   protected double calculateDouble(double d) {
-      return -d;
+   protected double calculateDouble(double n) {
+      return -n;
    }
 
    @Override
-   protected int calculateInt(int i) {
-      return -i;
+   protected long calculateLong(long n) {
+      return -n;
    }
 }

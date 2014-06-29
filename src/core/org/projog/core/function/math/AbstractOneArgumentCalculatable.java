@@ -19,14 +19,14 @@ abstract class AbstractOneArgumentCalculatable implements Calculatable {
          double answer = calculateDouble(n.getDouble());
          return new DoubleNumber(answer);
       } else {
-         int answer = calculateInt(n.getInt());
+         long answer = calculateLong(n.getLong());
          return new IntegerNumber(answer);
       }
    }
 
    /** Returns the result of evaluating an arithmetic expression using the specified argument */
-   protected abstract double calculateDouble(double d);
+   protected abstract double calculateDouble(double n);
 
    /** Returns the result of evaluating an arithmetic expression using the specified argument */
-   protected abstract int calculateInt(int i);
+   protected abstract long calculateLong(long n);
 }

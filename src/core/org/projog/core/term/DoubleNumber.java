@@ -100,11 +100,11 @@ public final class DoubleNumber implements Numeric {
    }
 
    /**
-    * @return the {@code double} value of this term cast to an {@code int}
+    * @return the {@code double} value of this term cast to an {@code long}
     */
    @Override
-   public int getInt() {
-      return (int) value;
+   public long getLong() {
+      return (long) value;
    }
 
    /**

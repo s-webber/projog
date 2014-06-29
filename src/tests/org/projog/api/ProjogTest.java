@@ -173,7 +173,7 @@ public class ProjogTest {
          fail();
       } catch (ProjogException e) {
          assertSame(ProjogException.class, e.getClass()); // check it is not a sub-class
-         assertEquals("Can't get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
+         assertEquals("Cannot get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
       }
    }
 

@@ -20,7 +20,7 @@ abstract class AbstractTwoArgumentsCalculatable implements Calculatable {
          double answer = calculateDouble(n1.getDouble(), n2.getDouble());
          return new DoubleNumber(answer);
       } else {
-         int answer = calculateInt(n1.getInt(), n2.getInt());
+         long answer = calculateLong(n1.getLong(), n2.getLong());
          return new IntegerNumber(answer);
       }
    }
@@ -30,8 +30,8 @@ abstract class AbstractTwoArgumentsCalculatable implements Calculatable {
    }
 
    /** Returns the result of evaluating an arithmetic expression using the two arguments */
-   protected abstract double calculateDouble(double d1, double d2);
+   protected abstract double calculateDouble(double n1, double n2);
 
    /** Returns the result of evaluating an arithmetic expression using the two arguments */
-   protected abstract int calculateInt(int i1, int i2);
+   protected abstract long calculateLong(long n1, long n2);
 }

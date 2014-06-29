@@ -134,8 +134,8 @@ public class NumericTermComparatorTest {
    }
 
    private void compare(IntegerNumber t1, IntegerNumber t2) {
-      Integer i1 = t1.getInt();
-      Integer i2 = t2.getInt();
+      Long i1 = t1.getLong();
+      Long i2 = t2.getLong();
       assertEquals(i1.compareTo(i2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
       assertEquals(i2.compareTo(i1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }

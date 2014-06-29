@@ -1,6 +1,6 @@
 package org.projog.core.function.construct;
 
-import static org.projog.core.term.TermUtils.castToNumeric;
+import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -32,7 +32,7 @@ import org.projog.core.term.Term;
 public final class Arg extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
-      int argIdx = castToNumeric(arg1).getInt();
+      int argIdx = toInt(arg1);
       if (arg2.getNumberOfArguments() < argIdx) {
          throw new ProjogException("Cannot get argument at position: " + argIdx + " from: " + arg2);
       }

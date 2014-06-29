@@ -20,6 +20,6 @@ import org.projog.core.term.Term;
 public final class Random implements Calculatable {
    @Override
    public Numeric calculate(KnowledgeBase kb, Term[] args) {
-      return new IntegerNumber((int) (Math.random() * kb.getNumeric(args[0]).getInt()));
+      return new IntegerNumber((long) (Math.random() * kb.getNumeric(args[0]).getLong()));
    }
 }

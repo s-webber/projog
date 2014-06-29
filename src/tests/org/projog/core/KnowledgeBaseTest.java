@@ -69,7 +69,7 @@ public class KnowledgeBaseTest {
       Structure p = structure("-", integerNumber(7), integerNumber(3));
       Numeric n = kb.getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
-      assertEquals(4, n.getInt());
+      assertEquals(4, n.getLong());
    }
 
    @Test

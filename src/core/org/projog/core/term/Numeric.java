@@ -9,11 +9,11 @@ package org.projog.core.term;
  */
 public interface Numeric extends Term {
    /**
-    * Returns the value of this numeric as an {@code int}.
+    * Returns the value of this numeric as a {@code long}.
     * 
-    * @return the value of this numeric as an {@code int}
+    * @return the value of this numeric as a {@code long}
     */
-   int getInt();
+   long getLong();
 
    /**
     * Returns the value of this numeric as a {@code double}.

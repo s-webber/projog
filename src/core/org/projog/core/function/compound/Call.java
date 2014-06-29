@@ -38,6 +38,14 @@ import org.projog.core.term.Term;
  %QUERY testCall((true ; true))
  %ANSWER/
  %ANSWER/
+ 
+ % Note: "time" is a synonym for "call".
+ %TRUE time(true)
+ %FALSE time(fail)
+ %QUERY time(repeat(3))
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
  */
 /**
  * <code>call(X)</code> - calls the goal represented by a term.

@@ -49,6 +49,7 @@
 ?- pj_add_predicate('/'('\+', 1), 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(not/1, 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(call/1, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(time/1, 'org.projog.core.function.compound.Call').
 ?- pj_add_predicate(once/1, 'org.projog.core.function.compound.Once').
 ?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.function.compound.FindAll').

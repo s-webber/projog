@@ -27,6 +27,9 @@
 %TRUE set_input('user_input')
 %TRUE current_input('user_input')
 
+% Note: "seeing" is a synonym for "current_input".
+%TRUE seeing('user_input')
+
 %TRUE set_output('user_output')
 
 % Example of an error when the file to be read does not actually exist.

@@ -120,6 +120,9 @@
 ?- pj_add_predicate(delete/3, 'org.projog.core.function.list.Delete').
 ?- pj_add_predicate(subset/2, 'org.projog.core.function.list.Subset').
 ?- pj_add_predicate(select/3, 'org.projog.core.function.list.Select').
+?- pj_add_predicate(nth0/3, 'org.projog.core.function.list.Nth0').
+?- pj_add_predicate(nth1/3, 'org.projog.core.function.list.Nth1').
+?- pj_add_predicate(nth/3, 'org.projog.core.function.list.Nth1').
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').

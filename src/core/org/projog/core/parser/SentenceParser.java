@@ -26,10 +26,8 @@ import org.projog.core.term.DoubleNumber;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Numeric;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
@@ -42,6 +40,7 @@ import org.projog.core.term.Variable;
  * @see Operands
  */
 public class SentenceParser {
+   private static final String MINUS_SIGN = "-";
    private final WordParser parser;
    private final Operands operands;
    /** A collection of {@code Variable}s this parser currently knows about (key = the variable id). */
@@ -223,10 +222,15 @@ public class SentenceParser {
    private Term getPossiblePrefixArgument(int currentLevel) {
       final String value = popValue();
       if (operands.prefix(value) && parser.isFollowedByTerm()) {
+         if (value.equals(MINUS_SIGN) && isFollowedByNumber()) {
+            return getNegativeNumber();
+         }
+
          int prefixLevel = operands.getPrefixPriority(value);
          if (prefixLevel > currentLevel) {
             throw newParserException("Invalid prefix: " + value + " level: " + prefixLevel + " greater than current level: " + currentLevel);
          }
+
          // The difference between "fy" and "fx" associativity is that a "y" means that the argument
          // can contain operators of <i>the same</i> or lower level of priority
          // while a "x" means that the argument can <i>only</i> contain operators of a lower priority.
@@ -234,6 +238,7 @@ public class SentenceParser {
             // -1 to only parse terms of a lower priority than the current prefix operator.
             prefixLevel--;
          }
+
          Term argument = getTerm(prefixLevel);
          return createPrefixTerm(value, argument);
       } else {
@@ -242,23 +247,19 @@ public class SentenceParser {
       }
    }
 
+   private Term getNegativeNumber() {
+      final String value = "-" + popValue();
+      if (parser.getType() == WordType.INTEGER) {
+         return toIntegerNumber(value);
+      } else {
+         return toDoubleNumber(value);
+      }
+   }
+
    /**
     * Returns a new {@code Term} representing the specified prefix operand and argument.
-    * <p>
-    * In most cases the result returned will be a {@code Structure} consisting of the specified name and argument.
-    * <p>
-    * If the specified prefix operand name is a "{@code -}" and the specified argument is a {@code Numeric} then a new
-    * {@code Numeric} will be returned whose numeric value will be the negation of the numeric value of the specified
-    * argument.
     */
    private Term createPrefixTerm(String prefixOperandName, Term argument) {
-      if ("-".equals(prefixOperandName)) {
-         if (argument.getType() == TermType.INTEGER) {
-            return new IntegerNumber(-((Numeric) argument).getLong());
-         } else if (argument.getType() == TermType.DOUBLE) {
-            return new DoubleNumber(-((Numeric) argument).getDouble());
-         }
-      }
       return Structure.createStructure(prefixOperandName, new Term[] {argument});
    }
 
@@ -312,9 +313,9 @@ public class SentenceParser {
             case SYMBOL:
                return getAtomOrStructure(value);
             case INTEGER:
-               return new IntegerNumber(parseLong(value));
+               return toIntegerNumber(value);
             case FLOAT:
-               return new DoubleNumber(parseDouble(value));
+               return toDoubleNumber(value);
             case VARIABLE:
                return getVariable(value);
             case ANONYMOUS_VARIABLE:
@@ -323,6 +324,14 @@ public class SentenceParser {
                throw new IllegalArgumentException();
          }
       }
+   }
+
+   private IntegerNumber toIntegerNumber(final String value) {
+      return new IntegerNumber(parseLong(value));
+   }
+
+   private DoubleNumber toDoubleNumber(final String value) {
+      return new DoubleNumber(parseDouble(value));
    }
 
    /**
@@ -446,6 +455,13 @@ public class SentenceParser {
       String value = popValue();
       parser.rewind(value);
       return value;
+   }
+
+   private boolean isFollowedByNumber() {
+      String value = popValue();
+      WordType et = parser.getType();
+      parser.rewind(value);
+      return et == WordType.INTEGER || et == WordType.FLOAT;
    }
 
    /**

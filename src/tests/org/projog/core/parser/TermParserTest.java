@@ -39,22 +39,19 @@ public class TermParserTest {
 
    @Test
    public void testIntegerNumbers() {
-      // Note: parser doesn't handle negative numbers
       for (int i = 0; i < 10; i++) {
          testNonVariableTerm(new IntegerNumber(i), Integer.toString(i));
       }
-      testNonVariableTerm(new IntegerNumber(Integer.MAX_VALUE), Integer.toString(Integer.MAX_VALUE));
+      testNonVariableTerm(new IntegerNumber(Long.MAX_VALUE), Long.toString(Long.MAX_VALUE));
+      testNonVariableTerm(new IntegerNumber(Long.MIN_VALUE), Long.toString(Long.MIN_VALUE));
    }
 
    @Test
    public void testDoubleNumbers() {
-      // Note: parser doesn't handle negative numbers
-      for (int i = 0; i < 10; i++) {
-         testNonVariableTerm(new DoubleNumber(i), Double.toString(i));
-      }
-      double[] testData = {3.14, 1.0000001, 0.2};
+      double[] testData = {0, 1, 2, 10, 3.14, 1.0000001, 0.2};
       for (double d : testData) {
          testNonVariableTerm(new DoubleNumber(d), Double.toString(d));
+         testNonVariableTerm(new DoubleNumber(-d), Double.toString(-d));
       }
       testNonVariableTerm(new DoubleNumber(3.4028235E38), "3.4028235E38");
       testNonVariableTerm(new DoubleNumber(3.4028235E38), "3.4028235e38");

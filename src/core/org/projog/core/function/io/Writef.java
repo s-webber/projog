@@ -50,10 +50,10 @@ import org.projog.core.term.TermUtils;
  %OUTPUT 1 + 1 +(1, 1)
  %ANSWER/
  
- %QUERY writef('\%\%%q\\\\\r\n\065',[abc])
+ %QUERY writef('\%\%%q\\\\\r\n\u0048',[abc])
  %OUTPUT
  % %%abc\\
- % A
+ % H
  %OUTPUT
  %ANSWER/
  */
@@ -72,7 +72,7 @@ import org.projog.core.term.TermUtils;
  * <tr><td>\t</td><td>Output a tab character (ASCII code 9).</td></tr>
  * <tr><td>\\</td><td>Output the <code>\</code> character.</td></tr>
  * <tr><td>\%</td><td>Output the <code>%</code> character.</td></tr>
- * <tr><td>\<i>NNN</i></td><td>Output the unicode character represented by the digits <i>NNN</i>.</td></tr>
+ * <tr><td>\\u<i>NNNN</i></td><td>Output the unicode character represented by the hex digits <i>NNNN</i>.</td></tr>
  *
  * <tr><td>%t</td><td>Output the next term - in same format as <code>write/1</code>.</td></tr>
  * <tr><td>%w</td><td>Same as <code>\t</code>.</td></tr>
@@ -237,18 +237,22 @@ public final class Writef extends AbstractSingletonPredicate {
          case '%':
             output = '%';
             break;
+         case 'u':
+            output = parseUnicode(f);
+            break;
          default:
-            // unicode
-            if (!isNumber(next)) {
-               throw new IllegalArgumentException("? " + next);
-            }
-            int n = next - '0';
-            while (n < 100 && isNumber(f.peek())) {
-               n = (n * 10) + (f.pop() - '0');
-            }
-            output = n;
+            throw new IllegalArgumentException("? " + next);
       }
       f.writeChar(output);
+   }
+
+   private int parseUnicode(final Formatter f) {
+      final StringBuilder sb = new StringBuilder();
+      sb.append((char) f.pop());
+      sb.append((char) f.pop());
+      sb.append((char) f.pop());
+      sb.append((char) f.pop());
+      return Integer.parseInt(sb.toString(), 16);
    }
 
    private boolean isNumber(int c) {

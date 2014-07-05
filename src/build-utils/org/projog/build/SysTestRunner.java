@@ -209,13 +209,21 @@ public class SysTestRunner implements Observer {
    private void checkOutput(String expected) {
       byte[] redirectedOutputFileContents = toByteArray(REDIRECTED_OUTPUT_FILE);
       String actual = new String(redirectedOutputFileContents);
-      if (!expected.equals(actual)) {
+      if (!equalExcludingLineTerminators(expected, actual)) {
          if (isInterpretedMode() && isEqualsIgnoringVariableIds(expected, actual)) {
             // when in interpreted mode, don't fail if only differences are variable names
             return;
          }
-         throw new RuntimeException("expected: >\n" + expected + "\n< but got: >\n" + actual + "\n<");
+         throw new RuntimeException("Expected: >\n" + expected + "\n< but got: >\n" + actual + "\n<");
       }
+   }
+
+   private boolean equalExcludingLineTerminators(String expected, String actual) {
+      return makeLineTerminatorsConsistent(expected).equals(makeLineTerminatorsConsistent(actual));
+   }
+
+   private String makeLineTerminatorsConsistent(String expected) {
+      return expected.replace("\r\n", "\n");
    }
 
    /**

@@ -43,6 +43,7 @@
 ?- pj_add_predicate('\='/2, 'org.projog.core.function.compare.NotUnifiable').
 ?- pj_add_predicate(compare/3, 'org.projog.core.function.compare.Compare').
 ?- pj_add_predicate(predsort/3, 'org.projog.core.function.compare.PredSort').
+?- pj_add_predicate(between/3, 'org.projog.core.function.compare.Between').
 
 % compound
 ?- pj_add_predicate(','/2, 'org.projog.core.function.compound.Conjunction').
@@ -55,7 +56,6 @@
 ?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.function.compound.FindAll').
 ?- pj_add_predicate(setof/3, 'org.projog.core.function.compound.SetOf').
-?- pj_add_predicate(between/3, 'org.projog.core.function.compare.Between').
 
 % construct
 ?- pj_add_predicate(functor/3, 'org.projog.core.function.construct.Functor').
@@ -88,6 +88,7 @@
 ?- pj_add_predicate(write/1, 'org.projog.core.function.io.Write').
 ?- pj_add_predicate(write_canonical/1, 'org.projog.core.function.io.WriteCanonical').
 ?- pj_add_predicate(writef/2, 'org.projog.core.function.io.Writef').
+?- pj_add_predicate(writef/1, 'org.projog.core.function.io.Writef').
 
 % kb (knowledge base)
 ?- pj_add_predicate(pj_add_calculatable/2, 'org.projog.core.function.kb.AddCalculatable').

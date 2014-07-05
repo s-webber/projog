@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.term.EmptyList.EMPTY_LIST;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermUtils.toLong;
 
@@ -56,6 +57,14 @@ import org.projog.core.term.TermUtils;
  % H
  %OUTPUT
  %ANSWER/
+ 
+ % Note: calling writef with only 1 argument is the same as calling it with an empty list for the second argument:
+ %QUERY writef('\u0048\u0065\u006C\u006c\u006F', [])
+ %OUTPUT Hello
+ %ANSWER/
+ %QUERY writef('\u0048\u0065\u006C\u006c\u006F')
+ %OUTPUT Hello
+ %ANSWER/ 
  */
 /**
  * <code>writef(X,Y)</code> - writes formatted text to the output stream.
@@ -88,8 +97,16 @@ import org.projog.core.term.TermUtils;
  * <tr><td>%<i>N</i>r</td><td>Write the next term right-aligned in <i>N</i> columns.</td></tr>
  * </table>
  * </p>
+ * <p>
+ * <code>writef(X)</code> produces the same results as <code>writef(X, [])</code>. 
+ * </p>
  */
 public final class Writef extends AbstractSingletonPredicate {
+   @Override
+   public boolean evaluate(Term atom) {
+      return evaluate(atom, EMPTY_LIST);
+   }
+
    @Override
    public boolean evaluate(Term atom, Term list) {
       final String text = TermUtils.getAtomName(atom);

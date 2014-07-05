@@ -42,6 +42,7 @@
 ?- pj_add_predicate('@=<'/2, 'org.projog.core.function.compare.TermLessThanOrEqual').
 ?- pj_add_predicate('\='/2, 'org.projog.core.function.compare.NotUnifiable').
 ?- pj_add_predicate(compare/3, 'org.projog.core.function.compare.Compare').
+?- pj_add_predicate(predsort/3, 'org.projog.core.function.compare.PredSort').
 
 % compound
 ?- pj_add_predicate(','/2, 'org.projog.core.function.compound.Conjunction').

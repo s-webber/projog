@@ -100,8 +100,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0], termArgs[1]);
    }
-   private static final Term INTEGER_2 = new IntegerNumber(2);
-   private static final Term INTEGER_1 = new IntegerNumber(1);
+   private static final Term INTEGER_2 = new IntegerNumber(2L);
+   private static final Term INTEGER_1 = new IntegerNumber(1L);
    private static final Term DOUBLE_1_5 = new DoubleNumber(1.5);
    private static final Term DOUBLE_18_5 = new DoubleNumber(18.5);
    private static KnowledgeBase kb;

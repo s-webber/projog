@@ -42,8 +42,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return this;
    }
-   private static final Term INTEGER_1 = new IntegerNumber(1);
-   private static final Term INTEGER_2 = new IntegerNumber(2);
+   private static final Term INTEGER_1 = new IntegerNumber(1L);
+   private static final Term INTEGER_2 = new IntegerNumber(2L);
    private static KnowledgeBase kb;
    private static SpyPoints.SpyPoint s;
 }

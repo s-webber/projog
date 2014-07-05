@@ -56,7 +56,7 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0]);
    }
-   private static final Term INTEGER_1 = new IntegerNumber(1);
+   private static final Term INTEGER_1 = new IntegerNumber(1L);
    private static KnowledgeBase kb;
    private static SpyPoints.SpyPoint s;
    private final boolean d;

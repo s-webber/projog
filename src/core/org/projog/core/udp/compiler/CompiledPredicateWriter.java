@@ -143,7 +143,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       } else if (t.getType() == TermType.ATOM) {
          return "new Atom(" + encodeName(t) + ")";
       } else if (t.getType() == TermType.INTEGER) {
-         return "new IntegerNumber(" + t.getName() + ")";
+         return "new IntegerNumber(" + t.getName() + "L)";
       } else if (t.getType() == TermType.DOUBLE) {
          return "new DoubleNumber(" + t.getName() + ")";
       } else {
@@ -304,7 +304,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
                addLine("} else {");
             }
          }
-         
+
          beginIf(compiledPredicateVariableName + "==null");
 
          for (Variable v : variablesInCurrentFunction) {

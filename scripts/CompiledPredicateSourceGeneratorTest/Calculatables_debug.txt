@@ -281,9 +281,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0], termArgs[1], termArgs[2]);
    }
-   private static final Term INTEGER_1000 = new IntegerNumber(1000);
+   private static final Term INTEGER_1000 = new IntegerNumber(1000L);
    private static final Term DOUBLE_1_5 = new DoubleNumber(1.5);
-   private static final Term INTEGER_2 = new IntegerNumber(2);
+   private static final Term INTEGER_2 = new IntegerNumber(2L);
    private static final Term DOUBLE_2_5 = new DoubleNumber(2.5);
    private static KnowledgeBase kb;
    private static SpyPoints.SpyPoint s;

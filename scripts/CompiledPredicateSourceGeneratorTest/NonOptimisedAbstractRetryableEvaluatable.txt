@@ -92,7 +92,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0]);
    }
-   private static final Term INTEGER_3 = new IntegerNumber(3);
+   private static final Term INTEGER_3 = new IntegerNumber(3L);
    private static org.projog.core.function.flow.RepeatSetAmount RepeatSetAmount_1;
    private boolean isRetrying;
    private int clauseCtr;

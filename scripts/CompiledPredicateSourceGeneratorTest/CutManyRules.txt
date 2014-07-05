@@ -299,12 +299,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0], termArgs[1], termArgs[2]);
    }
-   private static final Term INTEGER_1 = new IntegerNumber(1);
-   private static final Term INTEGER_5 = new IntegerNumber(5);
-   private static final Term INTEGER_7 = new IntegerNumber(7);
-   private static final Term INTEGER_3 = new IntegerNumber(3);
-   private static final Term INTEGER_2 = new IntegerNumber(2);
-   private static final Term INTEGER_4 = new IntegerNumber(4);
+   private static final Term INTEGER_1 = new IntegerNumber(1L);
+   private static final Term INTEGER_5 = new IntegerNumber(5L);
+   private static final Term INTEGER_7 = new IntegerNumber(7L);
+   private static final Term INTEGER_3 = new IntegerNumber(3L);
+   private static final Term INTEGER_2 = new IntegerNumber(2L);
+   private static final Term INTEGER_4 = new IntegerNumber(4L);
    private static KnowledgeBase kb;
    private static org.projog.core.function.flow.RepeatSetAmount RepeatSetAmount_1;
    private boolean isCut;

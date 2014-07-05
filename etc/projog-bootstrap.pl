@@ -126,6 +126,9 @@
 ?- pj_add_predicate(nth1/3, 'org.projog.core.function.list.Nth1').
 ?- pj_add_predicate(nth/3, 'org.projog.core.function.list.Nth1').
 
+% time
+?- pj_add_predicate(get_time/1, 'org.projog.core.function.time.GetTime').
+
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').
 ?- pj_add_calculatable('+'/2, 'org.projog.core.function.math.Add').

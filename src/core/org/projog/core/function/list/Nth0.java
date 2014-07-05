@@ -21,9 +21,11 @@ package org.projog.core.function.list;
 
  %QUERY nth0(X, [h,e,l,l,o], e)
  %ANSWER X=1
+ %NO
  %QUERY nth0(X, [h,e,l,l,o], l)
  %ANSWER X=2
  %ANSWER X=3
+ %NO
  %FALSE nth0(X, [h,e,l,l,o], z)
 
  %QUERY nth0(X, [h,e,l,l,o], Y)

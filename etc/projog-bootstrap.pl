@@ -86,6 +86,7 @@
 ?- pj_add_predicate(set_output/1, 'org.projog.core.function.io.SetOutput').
 ?- pj_add_predicate(write/1, 'org.projog.core.function.io.Write').
 ?- pj_add_predicate(write_canonical/1, 'org.projog.core.function.io.WriteCanonical').
+?- pj_add_predicate(writef/2, 'org.projog.core.function.io.Writef').
 
 % kb (knowledge base)
 ?- pj_add_predicate(pj_add_calculatable/2, 'org.projog.core.function.kb.AddCalculatable').

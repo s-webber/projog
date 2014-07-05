@@ -128,6 +128,7 @@
 
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.function.time.GetTime').
+?- pj_add_predicate(convert_time/2, 'org.projog.core.function.time.ConvertTime').
 
 % numerical operations
 ?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').

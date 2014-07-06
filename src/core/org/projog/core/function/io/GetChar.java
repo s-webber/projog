@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -38,6 +39,15 @@ import org.projog.core.term.Term;
  %ANSWER/
  %NO
 
+ force_error :-
+    open('get_char_test.tmp', read, Z),
+    set_input(Z),
+    close(Z),
+    print_contents.
+    
+ %QUERY force_error
+ %ERROR Could not read next character from input stream
+
  %LINK prolog-io
  */
 /**
@@ -64,8 +74,7 @@ public final class GetChar extends AbstractSingletonPredicate {
          }
          return argument.unify(next);
       } catch (Exception e) {
-         e.printStackTrace();
-         return false;
+         throw new ProjogException("Could not read next character from input stream", e);
       }
    }
 }

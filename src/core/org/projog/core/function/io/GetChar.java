@@ -9,7 +9,7 @@ import org.projog.core.term.Term;
  write_to_file(X) :-
     open('get_char_test.tmp', write, Z),
     set_output(Z),
-    write(X),
+    writef(X),
     close(Z),
     set_output('user_output').
 
@@ -27,12 +27,18 @@ import org.projog.core.term.Term;
     C=='end_of_file',
     !.
 
- %TRUE write_to_file('abc')
+ %TRUE write_to_file('ab\tc\r\nxyz')
  %QUERY read_from_file
  %OUTPUT 
  % a
  % b
+ % \t
  % c
+ % \r
+ % \n
+ % x
+ % y
+ % z
  % end_of_file
  %
  %OUTPUT
@@ -66,15 +72,29 @@ public final class GetChar extends AbstractSingletonPredicate {
    public boolean evaluate(Term argument) {
       try {
          int c = getKnowledgeBase().getFileHandles().getCurrentInputStream().read();
-         Atom next;
-         if (c == -1) {
-            next = new Atom("end_of_file");
-         } else {
-            next = new Atom(Character.toString((char) c));
-         }
+         Atom next = toAtom(c);
          return argument.unify(next);
       } catch (Exception e) {
          throw new ProjogException("Could not read next character from input stream", e);
+      }
+   }
+
+   private Atom toAtom(int c) {
+      return new Atom(toString(c));
+   }
+
+   private String toString(int c) {
+      switch (c) {
+         case -1:
+            return "end_of_file";
+         case '\n':
+            return "\\n";
+         case '\r':
+            return "\\r";
+         case '\t':
+            return "\\t";
+         default:
+            return Character.toString((char) c);
       }
    }
 }

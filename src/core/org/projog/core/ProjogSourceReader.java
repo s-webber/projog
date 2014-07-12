@@ -1,5 +1,6 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.isDynamicFunctionCall;
 import static org.projog.core.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
@@ -140,7 +141,7 @@ public final class ProjogSourceReader {
    }
 
    private void parseTerms(Reader reader) {
-      SentenceParser sp = SentenceParser.getInstance(reader, kb.getOperands());
+      SentenceParser sp = SentenceParser.getInstance(reader, getOperands(kb));
       Term t;
       while ((t = sp.parseSentence()) != null) {
          if (isQuestionOrDirectiveFunctionCall(t)) {

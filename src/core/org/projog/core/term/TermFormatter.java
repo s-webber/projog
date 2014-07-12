@@ -1,5 +1,8 @@
 package org.projog.core.term;
 
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
+
+import org.projog.core.KnowledgeBase;
 import org.projog.core.Operands;
 
 /**
@@ -11,6 +14,10 @@ import org.projog.core.Operands;
  */
 public class TermFormatter {
    private final Operands operands;
+
+   public TermFormatter(KnowledgeBase kb) {
+      this(getOperands(kb));
+   }
 
    public TermFormatter(Operands operands) {
       this.operands = operands;

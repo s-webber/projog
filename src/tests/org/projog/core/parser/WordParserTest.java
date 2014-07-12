@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.projog.TestUtils.createKnowledgeBase;
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.parser.WordType.ANONYMOUS_VARIABLE;
 import static org.projog.core.parser.WordType.ATOM;
 import static org.projog.core.parser.WordType.FLOAT;
@@ -15,11 +17,10 @@ import static org.projog.core.parser.WordType.VARIABLE;
 import java.io.StringReader;
 
 import org.junit.Test;
-import org.projog.TestUtils;
 import org.projog.core.Operands;
 
 public class WordParserTest {
-   private final Operands operands = TestUtils.createKnowledgeBase().getOperands();
+   private final Operands operands = getOperands(createKnowledgeBase());
 
    @Test
    public void testAtom() {

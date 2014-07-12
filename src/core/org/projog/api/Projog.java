@@ -1,5 +1,6 @@
 package org.projog.api;
 
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 
 import java.io.File;
@@ -135,7 +136,7 @@ public final class Projog {
          addObserver(o);
       }
       kb.bootstrap();
-      this.tf = new TermFormatter(kb.getOperands());
+      this.tf = new TermFormatter(getOperands(kb));
    }
 
    /**

@@ -1,6 +1,7 @@
 package org.projog;
 
 import static org.junit.Assert.assertTrue;
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
 
 import java.io.File;
 import java.io.FileReader;
@@ -54,7 +55,7 @@ public class TestUtils {
 
    private static final File TEMP_DIR = new File("build");
 
-   private static final Operands OPERANDS = createKnowledgeBase().getOperands();
+   private static final Operands OPERANDS = getOperands(createKnowledgeBase());
 
    /**
     * Private constructor as all methods are static.

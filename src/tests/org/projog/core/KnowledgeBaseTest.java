@@ -57,13 +57,6 @@ public class KnowledgeBaseTest {
       assertSame(fh, kb.getFileHandles());
    }
 
-   /** @see OperandsTest */
-   @Test
-   public void testGetOperands() {
-      Operands o = kb.getOperands();
-      assertSame(o, kb.getOperands());
-   }
-
    /** @see CalculatablesTest */
    @Test
    public void testGetNumeric() {

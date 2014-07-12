@@ -37,7 +37,6 @@ public final class KnowledgeBase {
 
    private final SpyPoints spyPoints = new SpyPoints(this);
    private final FileHandles fileHandles = new FileHandles();
-   private final Operands operands = new Operands();
    /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
 
@@ -100,10 +99,6 @@ public final class KnowledgeBase {
 
    public FileHandles getFileHandles() {
       return fileHandles;
-   }
-
-   public Operands getOperands() {
-      return operands;
    }
 
    /**

@@ -1,6 +1,7 @@
 package org.projog.core;
 
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
 import java.util.Collections;
 import java.util.Map;
@@ -120,7 +121,7 @@ public final class SpyPoints {
             return;
          }
 
-         TermFormatter tf = new TermFormatter(kb.getOperands());
+         TermFormatter tf = getTermFormatter(kb);
          StringBuilder sb = new StringBuilder();
          sb.append(key.getName());
          if (args != null) {

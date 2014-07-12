@@ -3,9 +3,9 @@ package org.projog.core.term;
 import static org.junit.Assert.assertEquals;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseSentence;
+import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
 import org.junit.Test;
-import org.projog.core.Operands;
 
 public class TermFormatterTest {
    @Test
@@ -18,7 +18,6 @@ public class TermFormatterTest {
    }
 
    private TermFormatter createFormatter() {
-      Operands operands = createKnowledgeBase().getOperands();
-      return new TermFormatter(operands);
+      return getTermFormatter(createKnowledgeBase());
    }
 }

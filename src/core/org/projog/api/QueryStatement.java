@@ -1,5 +1,7 @@
 package org.projog.api;
 
+import static org.projog.core.KnowledgeBaseUtils.getOperands;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +32,7 @@ public final class QueryStatement {
     */
    QueryStatement(KnowledgeBase kb, String prologQuery) {
       try {
-         SentenceParser sp = SentenceParser.getInstance(prologQuery, kb.getOperands());
+         SentenceParser sp = SentenceParser.getInstance(prologQuery, getOperands(kb));
 
          this.parsedInput = sp.parseSentence();
          this.predicateFactory = kb.getPredicateFactory(parsedInput);

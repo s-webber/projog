@@ -6,6 +6,7 @@ import java.util.List;
 import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermType;
 
 /**
@@ -133,5 +134,13 @@ public final class KnowledgeBaseUtils {
 
    public static ProjogProperties getProjogProperties(KnowledgeBase kb) {
       return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogProperties.class);
+   }
+
+   public static Operands getOperands(KnowledgeBase kb) {
+      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(Operands.class);
+   }
+
+   public static TermFormatter getTermFormatter(KnowledgeBase kb) {
+      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(TermFormatter.class);
    }
 }

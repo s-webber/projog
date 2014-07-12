@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermUtils.toLong;
@@ -69,39 +70,106 @@ import org.projog.core.term.TermUtils;
 /**
  * <code>writef(X,Y)</code> - writes formatted text to the output stream.
  * <p>
- * The first argument is an atom representing the text to be output. The text can contain special character sequences which specify formatting and substitution rules.
+ * The first argument is an atom representing the text to be output. The text can contain special character sequences
+ * which specify formatting and substitution rules.
  * </p>
  * <p>
  * Supported special character sequences are:
  * <table>
- * <tr><th>Sequence</th><th>Action</th></tr>
- * <tr><td>\n</td><td>Output a 'new line' character (ASCII code 10).</td></tr>
- * <tr><td>\l</td><td>Same as <code>\n</code>.</td></tr>
- * <tr><td>\r</td><td>Output a 'carriage return' character (ASCII code 13).</td></tr>
- * <tr><td>\t</td><td>Output a tab character (ASCII code 9).</td></tr>
- * <tr><td>\\</td><td>Output the <code>\</code> character.</td></tr>
- * <tr><td>\%</td><td>Output the <code>%</code> character.</td></tr>
- * <tr><td>\\u<i>NNNN</i></td><td>Output the unicode character represented by the hex digits <i>NNNN</i>.</td></tr>
- *
- * <tr><td>%t</td><td>Output the next term - in same format as <code>write/1</code>.</td></tr>
- * <tr><td>%w</td><td>Same as <code>\t</code>.</td></tr>
- * <tr><td>%q</td><td>Same as <code>\t</code>.</td></tr>
- * <tr><td>%p</td><td>Same as <code>\t</code>.</td></tr>
- * <tr><td>%d</td><td>Output the next term - in same format as <code>write_canonical/1</code>.</td></tr>
- * <tr><td>%f</td><td>Ignored (only included to support compatibility with other Prologs).</td></tr>
- * <tr><td>%s</td><td>Output the elements contained in the list represented by the next term.</td></tr>
- * <tr><td>%n</td><td>Output the character code of the next term.</td></tr>
- * <tr><td>%r</td><td>Write the next term <i>N</i> times, where <i>N</i> is the value of the second term.</td></tr> 
- * <tr><td>%<i>N</i>c</td><td>Write the next term centered in <i>N</i> columns.</td></tr>
- * <tr><td>%<i>N</i>l</td><td>Write the next term left-aligned in <i>N</i> columns.</td></tr>
- * <tr><td>%<i>N</i>r</td><td>Write the next term right-aligned in <i>N</i> columns.</td></tr>
+ * <tr>
+ * <th>Sequence</th>
+ * <th>Action</th>
+ * </tr>
+ * <tr>
+ * <td>\n</td>
+ * <td>Output a 'new line' character (ASCII code 10).</td>
+ * </tr>
+ * <tr>
+ * <td>\l</td>
+ * <td>Same as <code>\n</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>\r</td>
+ * <td>Output a 'carriage return' character (ASCII code 13).</td>
+ * </tr>
+ * <tr>
+ * <td>\t</td>
+ * <td>Output a tab character (ASCII code 9).</td>
+ * </tr>
+ * <tr>
+ * <td>\\</td>
+ * <td>Output the <code>\</code> character.</td>
+ * </tr>
+ * <tr>
+ * <td>\%</td>
+ * <td>Output the <code>%</code> character.</td>
+ * </tr>
+ * <tr>
+ * <td>\\u<i>NNNN</i></td>
+ * <td>Output the unicode character represented by the hex digits <i>NNNN</i>.</td>
+ * </tr>
+ * <tr>
+ * <td>%t</td>
+ * <td>Output the next term - in same format as <code>write/1</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>%w</td>
+ * <td>Same as <code>\t</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>%q</td>
+ * <td>Same as <code>\t</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>%p</td>
+ * <td>Same as <code>\t</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>%d</td>
+ * <td>Output the next term - in same format as <code>write_canonical/1</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>%f</td>
+ * <td>Ignored (only included to support compatibility with other Prologs).</td>
+ * </tr>
+ * <tr>
+ * <td>%s</td>
+ * <td>Output the elements contained in the list represented by the next term.</td>
+ * </tr>
+ * <tr>
+ * <td>%n</td>
+ * <td>Output the character code of the next term.</td>
+ * </tr>
+ * <tr>
+ * <td>%r</td>
+ * <td>Write the next term <i>N</i> times, where <i>N</i> is the value of the second term.</td>
+ * </tr>
+ * <tr>
+ * <td>%<i>N</i>c</td>
+ * <td>Write the next term centered in <i>N</i> columns.</td>
+ * </tr>
+ * <tr>
+ * <td>%<i>N</i>l</td>
+ * <td>Write the next term left-aligned in <i>N</i> columns.</td>
+ * </tr>
+ * <tr>
+ * <td>%<i>N</i>r</td>
+ * <td>Write the next term right-aligned in <i>N</i> columns.</td>
+ * </tr>
  * </table>
  * </p>
  * <p>
- * <code>writef(X)</code> produces the same results as <code>writef(X, [])</code>. 
+ * <code>writef(X)</code> produces the same results as <code>writef(X, [])</code>.
  * </p>
  */
 public final class Writef extends AbstractSingletonPredicate {
+   private TermFormatter termFormatter;
+
+   @Override
+   protected void init() {
+      termFormatter = getTermFormatter(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term atom) {
       return evaluate(atom, EMPTY_LIST);
@@ -122,7 +190,7 @@ public final class Writef extends AbstractSingletonPredicate {
    }
 
    private StringBuilder format(final String text, final List<Term> args) {
-      final Formatter f = new Formatter(text, args, termFormatter());
+      final Formatter f = new Formatter(text, args, termFormatter);
       while (f.hasMore()) {
          final int c = f.pop();
          if (c == '%') {
@@ -134,10 +202,6 @@ public final class Writef extends AbstractSingletonPredicate {
          }
       }
       return f.output;
-   }
-
-   private TermFormatter termFormatter() {
-      return new TermFormatter(getKnowledgeBase().getOperands());
    }
 
    private void parsePercentEscapeSequence(final Formatter f) {

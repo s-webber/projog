@@ -17,6 +17,7 @@ import org.projog.TestUtils;
 import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.bool.True;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 public class KnowledgeBaseUtilsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
@@ -184,5 +185,31 @@ public class KnowledgeBaseUtilsTest {
       assertNotSame(o1, o2);
       assertSame(o1, KnowledgeBaseUtils.getProjogProperties(kb1));
       assertSame(o2, KnowledgeBaseUtils.getProjogProperties(kb2));
+   }
+
+   @Test
+   public void testGetOperands() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      Operands o1 = KnowledgeBaseUtils.getOperands(kb1);
+      Operands o2 = KnowledgeBaseUtils.getOperands(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getOperands(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getOperands(kb2));
+   }
+
+   @Test
+   public void testGetTermFormatter() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      TermFormatter o1 = KnowledgeBaseUtils.getTermFormatter(kb1);
+      TermFormatter o2 = KnowledgeBaseUtils.getTermFormatter(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getTermFormatter(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getTermFormatter(kb2));
    }
 }

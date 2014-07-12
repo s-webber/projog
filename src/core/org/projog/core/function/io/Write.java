@@ -1,5 +1,7 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
+
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
@@ -26,6 +28,13 @@ import org.projog.core.term.TermFormatter;
  * @see #toString(Term)
  */
 public final class Write extends AbstractSingletonPredicate {
+   private TermFormatter termFormatter;
+
+   @Override
+   protected void init() {
+      termFormatter = getTermFormatter(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term arg) {
       print(toString(arg));
@@ -33,7 +42,7 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    private String toString(Term t) {
-      return new TermFormatter(getKnowledgeBase().getOperands()).toString(t);
+      return termFormatter.toString(t);
    }
 
    private void print(String s) {

@@ -19,7 +19,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testNonOptimisedAbstractSingletonEvaluatable", 1));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testNonOptimisedAbstractSingletonEvaluatable", 1));
       IsAtom_1 = (org.projog.core.function.classify.IsAtom)_kb.getPredicateFactory(new PredicateKey("atom", 1));
       TermLessThan_2 = (org.projog.core.function.compare.TermLessThan)_kb.getPredicateFactory(new PredicateKey("@<", 2));
    }

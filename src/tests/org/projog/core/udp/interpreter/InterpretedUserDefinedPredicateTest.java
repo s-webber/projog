@@ -5,6 +5,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.variable;
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.projog.core.term.Variable;
 public class InterpretedUserDefinedPredicateTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
    private final PredicateKey key = PredicateKey.createForTerm(atom("test"));
-   private final SpyPoints.SpyPoint spyPoint = kb.getSpyPoints().getSpyPoint(key);
+   private final SpyPoints.SpyPoint spyPoint = getSpyPoints(kb).getSpyPoint(key);
    private final DummyClauseAction singleResultA = new DummyClauseAction(atom("a"));
    private final DummyClauseAction singleResultB = new DummyClauseAction(atom("b"));
    private final DummyClauseAction singleResultC = new DummyClauseAction(atom("c"));

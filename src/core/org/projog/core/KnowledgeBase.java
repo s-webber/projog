@@ -35,7 +35,6 @@ public final class KnowledgeBase {
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 
-   private final SpyPoints spyPoints = new SpyPoints(this);
    private final FileHandles fileHandles = new FileHandles();
    /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
@@ -91,10 +90,6 @@ public final class KnowledgeBase {
    public void bootstrap() {
       String bootstrapScript = getProjogProperties(this).getBootstrapScript();
       ProjogSourceReader.parseResource(this, bootstrapScript);
-   }
-
-   public SpyPoints getSpyPoints() {
-      return spyPoints;
    }
 
    public FileHandles getFileHandles() {

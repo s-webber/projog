@@ -1,6 +1,7 @@
 package org.projog.core.udp;
 
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -221,7 +222,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private SpyPoints.SpyPoint getSpyPoint() {
       if (getProperties().isSpyPointsEnabled()) {
-         return kb.getSpyPoints().getSpyPoint(predicateKey);
+         return getSpyPoints(kb).getSpyPoint(predicateKey);
       } else {
          return null;
       }

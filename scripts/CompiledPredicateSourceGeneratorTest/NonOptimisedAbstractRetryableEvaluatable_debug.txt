@@ -51,7 +51,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       } while (true);
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testNonOptimisedAbstractRetryableEvaluatable", 1));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testNonOptimisedAbstractRetryableEvaluatable", 1));
       d = false;
       RepeatSetAmount_1 = (org.projog.core.function.flow.RepeatSetAmount)_kb.getPredicateFactory(new PredicateKey("repeat", 1));
    }

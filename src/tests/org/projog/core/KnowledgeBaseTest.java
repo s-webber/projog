@@ -43,13 +43,6 @@ public class KnowledgeBaseTest {
       assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
    }
 
-   /** @see SpyPointsTest */
-   @Test
-   public void testGetSpyPoints() {
-      SpyPoints sp = kb.getSpyPoints();
-      assertSame(sp, kb.getSpyPoints());
-   }
-
    /** @see FileHandlesTest */
    @Test
    public void testGetFileHandles() {

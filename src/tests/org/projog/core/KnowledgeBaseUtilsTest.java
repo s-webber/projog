@@ -212,4 +212,17 @@ public class KnowledgeBaseUtilsTest {
       assertSame(o1, KnowledgeBaseUtils.getTermFormatter(kb1));
       assertSame(o2, KnowledgeBaseUtils.getTermFormatter(kb2));
    }
+
+   @Test
+   public void testGetSpyPoints() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      SpyPoints o1 = KnowledgeBaseUtils.getSpyPoints(kb1);
+      SpyPoints o2 = KnowledgeBaseUtils.getSpyPoints(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getSpyPoints(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getSpyPoints(kb2));
+   }
 }

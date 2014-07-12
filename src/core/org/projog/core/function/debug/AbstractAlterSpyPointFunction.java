@@ -1,6 +1,7 @@
 package org.projog.core.function.debug;
 
 import static org.projog.core.KnowledgeBaseUtils.getPredicateKeysByName;
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.List;
 
@@ -15,6 +16,12 @@ import org.projog.core.term.Term;
  */
 abstract class AbstractAlterSpyPointFunction extends AbstractSingletonPredicate {
    private final boolean valueToSetSpyPointTo;
+   private SpyPoints spyPoints;
+
+   @Override
+   protected void init() {
+      spyPoints = getSpyPoints(getKnowledgeBase());
+   }
 
    /**
     * The {@code valueToSetSpyPointTo} parameter specifies whether spy points matched by the {@link #evaluate(Term)}
@@ -50,7 +57,6 @@ abstract class AbstractAlterSpyPointFunction extends AbstractSingletonPredicate 
    }
 
    private void setSpyPoint(PredicateKey key) {
-      SpyPoints spyPoints = getKnowledgeBase().getSpyPoints();
       spyPoints.setSpyPoint(key, valueToSetSpyPointTo);
    }
 }

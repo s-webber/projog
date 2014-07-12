@@ -25,7 +25,7 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
       kb = _kb;
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testSimpleNonTailRecursive", 1));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testSimpleNonTailRecursive", 1));
       d = false;
    }
    %CLASS_NAME%(final Term in0) {

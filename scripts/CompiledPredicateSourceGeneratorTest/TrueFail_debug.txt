@@ -46,7 +46,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testTrueFail", 1));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testTrueFail", 1));
       d = false;
    }
    %CLASS_NAME%(final Term in0) {

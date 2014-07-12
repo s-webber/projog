@@ -1,5 +1,8 @@
 package org.projog.core.function.debug;
 
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
+
+import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
 
 /* TEST
@@ -13,9 +16,16 @@ import org.projog.core.function.AbstractSingletonPredicate;
  * </p>
  */
 public final class NoTrace extends AbstractSingletonPredicate {
+   private SpyPoints spyPoints;
+
+   @Override
+   protected void init() {
+      spyPoints = getSpyPoints(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate() {
-      getKnowledgeBase().getSpyPoints().setTraceEnabled(false);
+      spyPoints.setTraceEnabled(false);
       return true;
    }
 }

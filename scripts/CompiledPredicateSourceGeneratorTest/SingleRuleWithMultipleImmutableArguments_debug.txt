@@ -398,7 +398,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testSingleRuleWithMultipleImmutableArguments", 4));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testSingleRuleWithMultipleImmutableArguments", 4));
       d = false;
       CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3 = (org.projog.core.udp.SingleRuleWithMultipleImmutableArgumentsPredicate)((StaticUserDefinedPredicateFactory)_kb.getPredicateFactory(new PredicateKey("single_rule_with_multiple_immutable_arguments", 3))).getActualPredicateFactory();
    }

@@ -1,5 +1,7 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseResources.getKnowledgeBaseResources;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,18 +131,22 @@ public final class KnowledgeBaseUtils {
    }
 
    public static ProjogEventsObservable getProjogEventsObservable(KnowledgeBase kb) {
-      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogEventsObservable.class);
+      return getKnowledgeBaseResources(kb).getResource(ProjogEventsObservable.class);
    }
 
    public static ProjogProperties getProjogProperties(KnowledgeBase kb) {
-      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogProperties.class);
+      return getKnowledgeBaseResources(kb).getResource(ProjogProperties.class);
    }
 
    public static Operands getOperands(KnowledgeBase kb) {
-      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(Operands.class);
+      return getKnowledgeBaseResources(kb).getResource(Operands.class);
    }
 
    public static TermFormatter getTermFormatter(KnowledgeBase kb) {
-      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(TermFormatter.class);
+      return getKnowledgeBaseResources(kb).getResource(TermFormatter.class);
+   }
+
+   public static SpyPoints getSpyPoints(KnowledgeBase kb) {
+      return getKnowledgeBaseResources(kb).getResource(SpyPoints.class);
    }
 }

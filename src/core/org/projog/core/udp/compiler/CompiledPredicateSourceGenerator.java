@@ -179,7 +179,7 @@ final class CompiledPredicateSourceGenerator {
          w.assign("kb", "_kb");
       }
       if (isSpyPointsEnabled()) {
-         w.assign(SPYPOINT, "_kb.getSpyPoints().getSpyPoint(" + getKeyGeneration(factMetaData().getPredicateKey()) + ")");
+         w.assign(SPYPOINT, "KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(" + getKeyGeneration(factMetaData().getPredicateKey()) + ")");
          if (factMetaData().isSingleResultPredicate() == false) {
             w.assign(DEBUG_ENABLED, "false"); // value will never be used - just set to something as is "final"
          }

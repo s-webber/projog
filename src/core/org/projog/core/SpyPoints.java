@@ -30,7 +30,7 @@ public final class SpyPoints {
    private final KnowledgeBase kb;
    private boolean traceEnabled;
 
-   SpyPoints(KnowledgeBase kb) {
+   public SpyPoints(KnowledgeBase kb) {
       this.kb = kb;
    }
 

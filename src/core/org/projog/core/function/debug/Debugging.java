@@ -1,5 +1,7 @@
 package org.projog.core.function.debug;
 
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
+
 import java.util.Map;
 
 import org.projog.core.PredicateKey;
@@ -16,9 +18,15 @@ import org.projog.core.function.AbstractSingletonPredicate;
  * </p>
  */
 public final class Debugging extends AbstractSingletonPredicate {
+   private SpyPoints spyPoints;
+
+   @Override
+   protected void init() {
+      spyPoints = getSpyPoints(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate() {
-      SpyPoints spyPoints = getKnowledgeBase().getSpyPoints();
       Map<PredicateKey, SpyPoints.SpyPoint> map = spyPoints.getSpyPoints();
       for (Map.Entry<PredicateKey, SpyPoints.SpyPoint> e : map.entrySet()) {
          if (e.getValue().isEnabled()) {

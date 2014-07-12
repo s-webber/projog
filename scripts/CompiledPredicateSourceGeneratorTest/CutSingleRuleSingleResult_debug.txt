@@ -18,7 +18,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
       kb = _kb;
-      s = _kb.getSpyPoints().getSpyPoint(new PredicateKey("testCutSingleRuleSingleResult", 0));
+      s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testCutSingleRuleSingleResult", 0));
    }
    public final boolean evaluate(final Term... args) {
       return staticEvaluate();

@@ -3,6 +3,7 @@ package org.projog.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -54,8 +55,8 @@ public final class KnowledgeBaseUtils {
    /**
     * Returns {@code true} if the specified {@link Term} represents a question or directive, else {@code false}.
     * <p>
-    * A {@link Term} is judged to represent a question if it is a structure a single argument
-    * and with a functor {@link #QUESTION_PREDICATE_NAME} or {@link #IMPLICATION_PREDICATE_NAME}.
+    * A {@link Term} is judged to represent a question if it is a structure a single argument and with a functor
+    * {@link #QUESTION_PREDICATE_NAME} or {@link #IMPLICATION_PREDICATE_NAME}.
     */
    public static boolean isQuestionOrDirectiveFunctionCall(Term t) {
       return t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 1 && (QUESTION_PREDICATE_NAME.equals(t.getName()) || IMPLICATION_PREDICATE_NAME.equals(t.getName()));
@@ -124,5 +125,9 @@ public final class KnowledgeBaseUtils {
    public static boolean isConjunction(Term t) {
       // is relying on assumption that conjunctions are only, and always, represented by a comma
       return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getArgs().length == 2;
+   }
+
+   public static ProjogEventsObservable getProjogEventsObservable(KnowledgeBase kb) {
+      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogEventsObservable.class);
    }
 }

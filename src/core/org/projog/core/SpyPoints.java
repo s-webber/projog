@@ -1,5 +1,7 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
@@ -132,7 +134,7 @@ public final class SpyPoints {
             sb.append(" )");
          }
          ProjogEvent event = new ProjogEvent(type, sb.toString(), source);
-         kb.getProjogEventsObservable().notifyObservers(event);
+         getProjogEventsObservable(kb).notifyObservers(event);
       }
    }
 }

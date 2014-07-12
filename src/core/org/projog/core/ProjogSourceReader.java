@@ -1,5 +1,6 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.isDynamicFunctionCall;
 import static org.projog.core.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
 
@@ -114,12 +115,12 @@ public final class ProjogSourceReader {
 
    private static void notifyReadingFromFileSystem(KnowledgeBase kb, File file) {
       ProjogEvent event = new ProjogEvent(ProjogEventType.INFO, "Reading prolog source in: " + file + " from file system", ProjogSourceReader.class);
-      kb.getProjogEventsObservable().notifyObservers(event);
+      getProjogEventsObservable(kb).notifyObservers(event);
    }
 
    private static void notifyReadingFromClasspath(KnowledgeBase kb, String resourceName) {
       ProjogEvent event = new ProjogEvent(ProjogEventType.INFO, "Reading prolog source in: " + resourceName + " from classpath", ProjogSourceReader.class);
-      kb.getProjogEventsObservable().notifyObservers(event);
+      getProjogEventsObservable(kb).notifyObservers(event);
    }
 
    private ProjogSourceReader(KnowledgeBase kb) {

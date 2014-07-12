@@ -1,5 +1,7 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,6 @@ import java.util.TreeMap;
 
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
-import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -32,7 +33,6 @@ public final class KnowledgeBase {
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 
-   private final ProjogEventsObservable observable = new ProjogEventsObservable();
    private final SpyPoints spyPoints = new SpyPoints(this);
    private final FileHandles fileHandles = new FileHandles();
    private final Operands operands = new Operands();
@@ -92,10 +92,6 @@ public final class KnowledgeBase {
    public void bootstrap() {
       String bootstrapScript = projogProperties.getBootstrapScript();
       ProjogSourceReader.parseResource(this, bootstrapScript);
-   }
-
-   public ProjogEventsObservable getProjogEventsObservable() {
-      return observable;
    }
 
    public SpyPoints getSpyPoints() {
@@ -244,7 +240,7 @@ public final class KnowledgeBase {
 
    private PredicateFactory unknownPredicate(PredicateKey key) {
       ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
-      observable.notifyObservers(event);
+      getProjogEventsObservable(this).notifyObservers(event);
       return UnknownPredicate.UNKNOWN_PREDICATE;
    }
 

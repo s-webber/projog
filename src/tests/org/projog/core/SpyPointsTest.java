@@ -10,6 +10,7 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +167,7 @@ public class SpyPointsTest {
             events.add(arg);
          }
       };
-      kb.getProjogEventsObservable().addObserver(observer);
+      getProjogEventsObservable(kb).addObserver(observer);
 
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey key = createKey("test", 2);

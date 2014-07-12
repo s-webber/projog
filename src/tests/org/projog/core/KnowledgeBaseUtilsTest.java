@@ -2,6 +2,8 @@ package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
@@ -12,6 +14,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.event.ProjogEventsObservable;
 import org.projog.core.function.bool.True;
 import org.projog.core.term.Term;
 
@@ -155,5 +158,18 @@ public class KnowledgeBaseUtilsTest {
       Term[] conjunctions = KnowledgeBaseUtils.toArrayOfConjunctions(t);
       assertEquals(1, conjunctions.length);
       assertSame(t, conjunctions[0]);
+   }
+
+   @Test
+   public void testGetProjogEventsObservable() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      ProjogEventsObservable o1 = KnowledgeBaseUtils.getProjogEventsObservable(kb1);
+      ProjogEventsObservable o2 = KnowledgeBaseUtils.getProjogEventsObservable(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getProjogEventsObservable(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getProjogEventsObservable(kb2));
    }
 }

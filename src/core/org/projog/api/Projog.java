@@ -1,5 +1,7 @@
 package org.projog.api;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+
 import java.io.File;
 import java.io.PrintStream;
 import java.io.Reader;
@@ -176,7 +178,7 @@ public final class Projog {
     * @param observer an observer to be added
     */
    public void addObserver(Observer observer) {
-      kb.getProjogEventsObservable().addObserver(observer);
+      getProjogEventsObservable(kb).addObserver(observer);
    }
 
    /**

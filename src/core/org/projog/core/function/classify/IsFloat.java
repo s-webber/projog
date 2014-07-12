@@ -29,6 +29,6 @@ import org.projog.core.term.TermType;
 public final class IsFloat extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
-      return arg.getType() == TermType.DOUBLE;
+      return arg.getType() == TermType.FRACTION;
    }
 }

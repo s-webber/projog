@@ -3,7 +3,7 @@ package org.projog.core.term;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
@@ -21,7 +21,7 @@ public class TermComparatorTest {
     */
    private static final Term[] TERMS_ORDERED_IN_LOWEST_PRECEDENCE = {variable("A"),
 
-   doubleNumber(-2.1), doubleNumber(-1.9), doubleNumber(0), doubleNumber(1),
+   decimalFraction(-2.1), decimalFraction(-1.9), decimalFraction(0), decimalFraction(1),
 
    integerNumber(-2), integerNumber(0), integerNumber(1),
 

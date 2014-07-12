@@ -3,7 +3,7 @@ package org.projog.core.term;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
@@ -19,10 +19,10 @@ public class NumericTermComparatorTest {
 
    @Test
    public void testCompareDecimalValues() {
-      compare(doubleNumber(2.1), integerNumber(2));
-      compare(doubleNumber(2.1), doubleNumber(2.1));
-      compare(doubleNumber(2.1), doubleNumber(2.11));
-      compare(doubleNumber(2.1), doubleNumber(-2.1));
+      compare(decimalFraction(2.1), integerNumber(2));
+      compare(decimalFraction(2.1), decimalFraction(2.1));
+      compare(decimalFraction(2.1), decimalFraction(2.11));
+      compare(decimalFraction(2.1), decimalFraction(-2.1));
    }
 
    @Test
@@ -129,8 +129,8 @@ public class NumericTermComparatorTest {
 
    private void compare(int i1, int i2) {
       compare(integerNumber(i1), integerNumber(i2));
-      compare(doubleNumber(i1), doubleNumber(i2));
-      compare(doubleNumber(i1), integerNumber(i2));
+      compare(decimalFraction(i1), decimalFraction(i2));
+      compare(decimalFraction(i1), integerNumber(i2));
    }
 
    private void compare(IntegerNumber t1, IntegerNumber t2) {
@@ -140,14 +140,14 @@ public class NumericTermComparatorTest {
       assertEquals(i2.compareTo(i1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }
 
-   private void compare(DoubleNumber t1, DoubleNumber t2) {
+   private void compare(DecimalFraction t1, DecimalFraction t2) {
       Double d1 = t1.getDouble();
       Double d2 = t2.getDouble();
       assertEquals(d1.compareTo(d2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
       assertEquals(d2.compareTo(d1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }
 
-   private void compare(DoubleNumber t1, IntegerNumber t2) {
+   private void compare(DecimalFraction t1, IntegerNumber t2) {
       Double d1 = t1.getDouble();
       Double d2 = t2.getDouble();
       assertEquals(d1 + " " + d2, d1.compareTo(d2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));

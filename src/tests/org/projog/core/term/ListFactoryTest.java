@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
@@ -56,7 +56,7 @@ public class ListFactoryTest {
    }
 
    private Term[] createArguments() {
-      return new Term[] {atom(), structure(), integerNumber(), doubleNumber(), variable()};
+      return new Term[] {atom(), structure(), integerNumber(), decimalFraction(), variable()};
    }
 
    private void testIsList(Term l) {

@@ -58,7 +58,7 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
          String op = ops.get(t.getName());
          Term arg1 = t.getArgument(0);
          Term arg2 = t.getArgument(1);
-         boolean isResultDouble = arg1.getType() == TermType.DOUBLE || arg2.getType() == TermType.DOUBLE;
+         boolean isResultDouble = arg1.getType() == TermType.FRACTION || arg2.getType() == TermType.FRACTION;
          String string1;
          if (arg1.getType().isVariable() == false && arg1.getType().isNumeric() == false) {
             string1 = "num" + g.currentClause().getNextNumericIndex();
@@ -107,7 +107,7 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
             s.append(")");
             s.append(":");
          }
-         s.append("new DoubleNumber(");
+         s.append("new DecimalFraction(");
          if (arg1.getType().isNumeric()) {
             s.append(((Numeric) arg1).getDouble());
          } else {

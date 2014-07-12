@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
@@ -24,7 +24,7 @@ import org.junit.Test;
  * 
  * @see AtomTest
  * @see AnonymousVariableTest
- * @see DoubleNumberTest
+ * @see DecimalFractionTest
  * @see EmptyListTest
  * @see IntegerNumberTest
  * @see ListTest
@@ -36,11 +36,11 @@ public class TermTest {
 
    integerNumber(0), integerNumber(1), integerNumber(-1), integerNumber(Integer.MIN_VALUE), integerNumber(Integer.MAX_VALUE),
 
-   doubleNumber(0), doubleNumber(1), doubleNumber(-1), doubleNumber(0.0001), doubleNumber(-0.0001), doubleNumber(Double.MIN_VALUE), doubleNumber(Double.MAX_VALUE),
+   decimalFraction(0), decimalFraction(1), decimalFraction(-1), decimalFraction(0.0001), decimalFraction(-0.0001), decimalFraction(Double.MIN_VALUE), decimalFraction(Double.MAX_VALUE),
 
    structure("abc", atom()), structure("abc", atom(), atom()), structure("ABC", atom()), structure("ABC", atom(), atom()), structure("1", atom()), structure("1", atom(), atom()),
 
-   list(atom(), atom()), list(atom(), atom(), atom()), list(atom("a"), integerNumber(1), doubleNumber(1), structure("abc", atom())),
+   list(atom(), atom()), list(atom(), atom(), atom()), list(atom("a"), integerNumber(1), decimalFraction(1), structure("abc", atom())),
 
    EmptyList.EMPTY_LIST};
 

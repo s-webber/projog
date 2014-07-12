@@ -2,7 +2,7 @@ package org.projog.core.function.math;
 
 import org.projog.core.Calculatable;
 import org.projog.core.KnowledgeBase;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -15,9 +15,9 @@ abstract class AbstractOneArgumentCalculatable implements Calculatable {
    @Override
    public final Numeric calculate(KnowledgeBase kb, Term[] args) {
       Numeric n = kb.getNumeric(args[0]);
-      if (n.getType() == TermType.DOUBLE) {
+      if (n.getType() == TermType.FRACTION) {
          double answer = calculateDouble(n.getDouble());
-         return new DoubleNumber(answer);
+         return new DecimalFraction(answer);
       } else {
          long answer = calculateLong(n.getLong());
          return new IntegerNumber(answer);

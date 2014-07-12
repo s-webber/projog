@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.parseSentence;
@@ -27,7 +27,7 @@ import org.junit.Test;
 public class StructureTest {
    @Test
    public void testCreationWithArguments() {
-      Term[] args = {atom(), structure(), integerNumber(), doubleNumber(), variable()};
+      Term[] args = {atom(), structure(), integerNumber(), decimalFraction(), variable()};
       Structure p = structure("test", args);
       assertEquals("test", p.getName());
       assertArrayEquals(args, p.getArgs());
@@ -41,7 +41,7 @@ public class StructureTest {
 
    @Test
    public void testGetValueNoVariables() {
-      Structure p = structure("p", atom(), structure("p", atom()), list(integerNumber(), doubleNumber()));
+      Structure p = structure("p", atom(), structure("p", atom()), list(integerNumber(), decimalFraction()));
       Structure p2 = p.getTerm();
       assertSame(p, p2);
    }
@@ -55,7 +55,7 @@ public class StructureTest {
    @Test
    public void testGetValueAssignedVariable() {
       Variable x = variable("X");
-      Structure p1 = structure("p", atom(), structure("p", atom(), x, integerNumber()), list(integerNumber(), doubleNumber()));
+      Structure p1 = structure("p", atom(), structure("p", atom(), x, integerNumber()), list(integerNumber(), decimalFraction()));
       x.unify(atom());
       Structure p2 = p1.getTerm();
       assertNotSame(p1, p2);
@@ -120,7 +120,7 @@ public class StructureTest {
 
    @Test
    public void testUnifyDifferentNamesSameArguments() {
-      Term[] args = {atom(), integerNumber(), doubleNumber()};
+      Term[] args = {atom(), integerNumber(), decimalFraction()};
       Structure p1 = structure("test1", args);
       Structure p2 = structure("test2", args);
       Structure p3 = structure("test", args);
@@ -148,7 +148,7 @@ public class StructureTest {
       Structure p = structure("1", new Term[] {atom()});
       assertStrictEqualityAndUnify(p, new Atom("1"), false);
       assertStrictEqualityAndUnify(p, new IntegerNumber(1), false);
-      assertStrictEqualityAndUnify(p, new DoubleNumber(1), false);
+      assertStrictEqualityAndUnify(p, new DecimalFraction(1), false);
    }
 
    @Test
@@ -163,14 +163,14 @@ public class StructureTest {
 
    @Test
    public void testCopyWithoutVariablesOrNestedArguments() {
-      Structure p = structure("test", atom(), integerNumber(), doubleNumber());
+      Structure p = structure("test", atom(), integerNumber(), decimalFraction());
       Structure copy = p.copy(null);
       assertSame(p, copy);
    }
 
    @Test
    public void testCopyWithVariables() {
-      Structure p = structure("test", atom(), integerNumber(), doubleNumber(), variable());
+      Structure p = structure("test", atom(), integerNumber(), decimalFraction(), variable());
       Structure copy = p.copy(new HashMap<Variable, Variable>());
       assertNotSame(p, copy);
       assertEquals("test", copy.getName());
@@ -220,7 +220,7 @@ public class StructureTest {
    public void testIsImmutable() {
       Variable v = variable("X");
       Atom a = atom("test");
-      Structure p1 = structure("p", atom(), structure("p", atom(), v, integerNumber()), list(integerNumber(), doubleNumber()));
+      Structure p1 = structure("p", atom(), structure("p", atom(), v, integerNumber()), list(integerNumber(), decimalFraction()));
       assertFalse(p1.isImmutable());
       v.unify(a);
       Structure p2 = p1.copy(null);

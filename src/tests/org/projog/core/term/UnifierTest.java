@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
@@ -51,7 +51,7 @@ public class UnifierTest {
    }
 
    private Term[] createListOfImmutableArguments() {
-      return new Term[] {atom("a"), integerNumber(1), doubleNumber(1.5), structure("p", atom("x"), atom("y"))};
+      return new Term[] {atom("a"), integerNumber(1), decimalFraction(1.5), structure("p", atom("x"), atom("y"))};
    }
 
    /** [X] unified with [a] */

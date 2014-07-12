@@ -3,14 +3,14 @@ package org.projog.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Structure;
@@ -28,9 +28,9 @@ public class CalculatablesTest {
    }
 
    @Test
-   public void testGetNumericDoubleNumber() {
+   public void testGetNumericDecimalFraction() {
       Calculatables c = createCalculatables();
-      DoubleNumber d = doubleNumber(17.6);
+      DecimalFraction d = decimalFraction(17.6);
       assertSame(d, c.getNumeric(d));
    }
 

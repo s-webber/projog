@@ -46,7 +46,7 @@ final class Calculatables {
    Numeric getNumeric(Term t) {
       TermType type = t.getType();
       switch (type) {
-         case DOUBLE:
+         case FRACTION:
          case INTEGER:
             return TermUtils.castToNumeric(t);
          case STRUCTURE:

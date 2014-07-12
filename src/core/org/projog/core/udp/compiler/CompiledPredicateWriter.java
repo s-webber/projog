@@ -144,8 +144,8 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          return "new Atom(" + encodeName(t) + ")";
       } else if (t.getType() == TermType.INTEGER) {
          return "new IntegerNumber(" + t.getName() + "L)";
-      } else if (t.getType() == TermType.DOUBLE) {
-         return "new DoubleNumber(" + t.getName() + ")";
+      } else if (t.getType() == TermType.FRACTION) {
+         return "new DecimalFraction(" + t.getName() + ")";
       } else {
          throw new RuntimeException("unknown " + t.getType() + " " + t);
       }

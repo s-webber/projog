@@ -10,8 +10,8 @@ public enum TermType {
    ANONYMOUS_VARIABLE(false, false, true, 1),
    /** @see Variable */
    NAMED_VARIABLE(false, false, true, 2),
-   /** @see DoubleNumber */
-   DOUBLE(false, true, false, 3),
+   /** @see DecimalFraction */
+   FRACTION(false, true, false, 3),
    /** @see IntegerNumber */
    INTEGER(false, true, false, 4),
    /** @see Atom */

@@ -2,7 +2,7 @@ package org.projog.core.function.math;
 
 import org.projog.core.Calculatable;
 import org.projog.core.KnowledgeBase;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -19,8 +19,8 @@ public final class Divide implements Calculatable {
    public Numeric calculate(KnowledgeBase kb, Term[] args) {
       Numeric n1 = kb.getNumeric(args[0]);
       Numeric n2 = kb.getNumeric(args[1]);
-      if (containsDouble(n1, n2)) {
-         return divideDoubles(n1, n2);
+      if (containsFraction(n1, n2)) {
+         return divideFractions(n1, n2);
       } else {
          long dividend = n1.getLong();
          long divisor = n2.getLong();
@@ -29,16 +29,16 @@ public final class Divide implements Calculatable {
             return new IntegerNumber(dividend / divisor);
          } else {
             // e.g. 7 / 2 = 3.5
-            return divideDoubles(n1, n2);
+            return divideFractions(n1, n2);
          }
       }
    }
 
-   private static boolean containsDouble(Numeric n1, Numeric n2) {
-      return n1.getType() == TermType.DOUBLE || n2.getType() == TermType.DOUBLE;
+   private static boolean containsFraction(Numeric n1, Numeric n2) {
+      return n1.getType() == TermType.FRACTION || n2.getType() == TermType.FRACTION;
    }
 
-   private DoubleNumber divideDoubles(Numeric n1, Numeric n2) {
-      return new DoubleNumber(n1.getDouble() / n2.getDouble());
+   private DecimalFraction divideFractions(Numeric n1, Numeric n2) {
+      return new DecimalFraction(n1.getDouble() / n2.getDouble());
    }
 }

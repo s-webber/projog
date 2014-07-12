@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
@@ -21,7 +21,7 @@ public class PredicateKeyTest {
       String name = "abc";
       testCanCreate(atom(name), name, 0);
       testCanCreate(structure(name, atom()), name, 1);
-      testCanCreate(structure(name, atom(), integerNumber(), doubleNumber()), name, 3);
+      testCanCreate(structure(name, atom(), integerNumber(), decimalFraction()), name, 3);
    }
 
    private void testCanCreate(Term t, String name, int numArgs) {
@@ -71,7 +71,7 @@ public class PredicateKeyTest {
    public void testEquals() {
       // structures with same name and number of arguments
       Term t1 = structure("abc", atom("a"), atom("b"), atom("c"));
-      Term t2 = structure("abc", integerNumber(), doubleNumber(), variable());
+      Term t2 = structure("abc", integerNumber(), decimalFraction(), variable());
       PredicateKey k1 = PredicateKey.createForTerm(t1);
       PredicateKey k2 = PredicateKey.createForTerm(t2);
       testEquals(k1, k2);
@@ -95,7 +95,7 @@ public class PredicateKeyTest {
    @Test
    public void testCannotCreateForTerm() {
       testCannotCreateForTerm(integerNumber());
-      testCannotCreateForTerm(doubleNumber());
+      testCannotCreateForTerm(decimalFraction());
       testCannotCreateForTerm(variable());
       testCannotCreateForTerm(EmptyList.EMPTY_LIST);
       testCannotCreateForTerm(list(atom(), atom()));

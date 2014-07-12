@@ -6,7 +6,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
@@ -150,7 +150,7 @@ public class TermUtilsTest {
       Variable y = variable("Y");
       Variable z = variable("Z");
       Variable[] variables = {q, r, s, t, v, w, x, y, z};
-      Structure input = structure("p1", x, v, AnonymousVariable.ANONYMOUS_VARIABLE, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, doubleNumber(1.5), w), list(s, y, integerNumber(7), r, t), z);
+      Structure input = structure("p1", x, v, AnonymousVariable.ANONYMOUS_VARIABLE, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t), z);
       Set<Variable> result = TermUtils.getAllVariablesInTerm(input);
       assertEquals(variables.length, result.size());
       for (Variable variable2 : variables) {
@@ -165,8 +165,8 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testDoubleNumberCastToNumeric() {
-      DoubleNumber d = doubleNumber();
+   public void testDecimalFractionCastToNumeric() {
+      DecimalFraction d = decimalFraction();
       assertSame(d, TermUtils.castToNumeric(d));
    }
 
@@ -229,8 +229,8 @@ public class TermUtilsTest {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       assertTestToLongException(kb, atom("test"), "Cannot find calculatable: test");
       assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p/2");
-      assertTestToLongException(kb, doubleNumber(0), "Expected integer but got: DOUBLE with value: 0.0");
-      assertTestToLongException(kb, structure("+", doubleNumber(1.0), doubleNumber(1.0)), "Expected integer but got: DOUBLE with value: 2.0");
+      assertTestToLongException(kb, decimalFraction(0), "Expected integer but got: FRACTION with value: 0.0");
+      assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected integer but got: FRACTION with value: 2.0");
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {

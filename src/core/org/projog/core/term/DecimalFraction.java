@@ -5,15 +5,15 @@ import java.util.Map;
 /**
  * Represents a value of the primitive type {@code double} as a {@link Term}.
  * <p>
- * DoubleNumbers are constant; their values cannot be changed after they are created. DoubleNumbers have no arguments.
+ * DecimalFractions are constant; their values cannot be changed after they are created. DecimalFractions have no arguments.
  */
-public final class DoubleNumber implements Numeric {
+public final class DecimalFraction implements Numeric {
    private final double value;
 
    /**
     * @param value the value this term represents
     */
-   public DoubleNumber(double value) {
+   public DecimalFraction(double value) {
       this.value = value;
    }
 
@@ -46,13 +46,13 @@ public final class DoubleNumber implements Numeric {
    }
 
    /**
-    * Returns {@link TermType#DOUBLE}.
+    * Returns {@link TermType#FRACTION}.
     * 
-    * @return {@link TermType#DOUBLE}
+    * @return {@link TermType#FRACTION}
     */
    @Override
    public TermType getType() {
-      return TermType.DOUBLE;
+      return TermType.FRACTION;
    }
 
    @Override
@@ -61,20 +61,20 @@ public final class DoubleNumber implements Numeric {
    }
 
    @Override
-   public DoubleNumber copy(Map<Variable, Variable> sharedVariables) {
+   public DecimalFraction copy(Map<Variable, Variable> sharedVariables) {
       return this;
    }
 
    @Override
-   public DoubleNumber getTerm() {
+   public DecimalFraction getTerm() {
       return this;
    }
 
    @Override
    public boolean unify(Term t) {
       TermType tType = t.getType();
-      if (tType == TermType.DOUBLE) {
-         return value == ((DoubleNumber) t.getTerm()).value;
+      if (tType == TermType.FRACTION) {
+         return value == ((DecimalFraction) t.getTerm()).value;
       } else if (tType.isVariable()) {
          return t.unify(this);
       } else {
@@ -86,12 +86,12 @@ public final class DoubleNumber implements Numeric {
     * Performs a strict comparison of this term to the specified term.
     * 
     * @param t the term to compare this term against
-    * @return {@code true} if the given term represents a {@link TermType#DOUBLE} with a value equal to the value of
-    * this {@code DoubleNumber}
+    * @return {@code true} if the given term represents a {@link TermType#FRACTION} with a value equal to the value of
+    * this {@code DecimalFraction}
     */
    @Override
    public boolean strictEquality(Term t) {
-      return t.getType() == TermType.DOUBLE && value == ((DoubleNumber) t.getTerm()).value;
+      return t.getType() == TermType.FRACTION && value == ((DecimalFraction) t.getTerm()).value;
    }
 
    @Override

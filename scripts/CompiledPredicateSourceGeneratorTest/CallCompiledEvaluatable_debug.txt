@@ -11,9 +11,9 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v0_A = a0;
       v0_B = a1;
       final Numeric y0;
-      Numeric num0 = kb.getNumeric((((y0=kb.getNumeric(v0_B)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()*2):new DoubleNumber(y0.getDouble()*2.0)));
+      Numeric num0 = kb.getNumeric((((y0=kb.getNumeric(v0_B)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()*2):new DecimalFraction(y0.getDouble()*2.0)));
       final Numeric y1;
-      v0_C = (((y1=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y1.getLong()+1):new DoubleNumber(y1.getDouble()+1.0));
+      v0_C = (((y1=kb.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y1.getLong()+1):new DecimalFraction(y1.getDouble()+1.0));
       return true;
    }
    private final boolean retryRule0() {
@@ -37,13 +37,13 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             v0_B = v0_B.getTerm();
             _2 = v0_C;
             v0_C = v0_C.getTerm();
-            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, DOUBLE_1_5, kb)!=1) {
+            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, FRACTION_1_5, kb)!=1) {
                v0_A.backtrack();
                v0_B.backtrack();
                v0_C.backtrack();
                break mainloop;
             }
-            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, DOUBLE_18_5, kb)>0) {
+            if (NUMERIC_TERM_COMPARATOR.compare(v0_A, FRACTION_18_5, kb)>0) {
                v0_A.backtrack();
                v0_B.backtrack();
                v0_C.backtrack();
@@ -125,8 +125,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    }
    private static final Term INTEGER_2 = new IntegerNumber(2L);
    private static final Term INTEGER_1 = new IntegerNumber(1L);
-   private static final Term DOUBLE_1_5 = new DoubleNumber(1.5);
-   private static final Term DOUBLE_18_5 = new DoubleNumber(18.5);
+   private static final Term FRACTION_1_5 = new DecimalFraction(1.5);
+   private static final Term FRACTION_18_5 = new DecimalFraction(18.5);
    private static KnowledgeBase kb;
    private static SpyPoints.SpyPoint s;
    private final boolean d;

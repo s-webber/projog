@@ -10,7 +10,7 @@ import static org.projog.TestUtils.parseTerm;
 import org.junit.Test;
 import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Atom;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
@@ -47,19 +47,19 @@ public class TermParserTest {
    }
 
    @Test
-   public void testDoubleNumbers() {
+   public void testDecimalFractions() {
       double[] testData = {0, 1, 2, 10, 3.14, 1.0000001, 0.2};
       for (double d : testData) {
-         testNonVariableTerm(new DoubleNumber(d), Double.toString(d));
-         testNonVariableTerm(new DoubleNumber(-d), Double.toString(-d));
+         testNonVariableTerm(new DecimalFraction(d), Double.toString(d));
+         testNonVariableTerm(new DecimalFraction(-d), Double.toString(-d));
       }
-      testNonVariableTerm(new DoubleNumber(3.4028235E38), "3.4028235E38");
-      testNonVariableTerm(new DoubleNumber(3.4028235E38), "3.4028235e38");
-      testNonVariableTerm(new DoubleNumber(340.28235), "3.4028235E2");
+      testNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235E38");
+      testNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235e38");
+      testNonVariableTerm(new DecimalFraction(340.28235), "3.4028235E2");
    }
 
    @Test
-   public void testInvalidDoubleNumbers() {
+   public void testInvalidDecimalFractions() {
       // must have extra digits after the 'e' or 'E'
       parseInvalid("3.403e");
       parseInvalid("3.403E");

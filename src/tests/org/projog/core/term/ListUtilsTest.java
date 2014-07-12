@@ -7,7 +7,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.parseTerm;
 import static org.projog.TestUtils.structure;
@@ -96,7 +96,7 @@ public class ListUtilsTest {
       assertNull(ListUtils.toJavaUtilList(atom()));
       assertNull(ListUtils.toJavaUtilList(structure()));
       assertNull(ListUtils.toJavaUtilList(integerNumber()));
-      assertNull(ListUtils.toJavaUtilList(doubleNumber()));
+      assertNull(ListUtils.toJavaUtilList(decimalFraction()));
       assertNull(ListUtils.toJavaUtilList(ANONYMOUS_VARIABLE));
    }
 
@@ -130,11 +130,11 @@ public class ListUtilsTest {
       assertNull(ListUtils.toSortedJavaUtilList(atom()));
       assertNull(ListUtils.toSortedJavaUtilList(structure()));
       assertNull(ListUtils.toSortedJavaUtilList(integerNumber()));
-      assertNull(ListUtils.toSortedJavaUtilList(doubleNumber()));
+      assertNull(ListUtils.toSortedJavaUtilList(decimalFraction()));
       assertNull(ListUtils.toSortedJavaUtilList(ANONYMOUS_VARIABLE));
    }
 
    private Term[] createArguments() {
-      return new Term[] {atom(), structure(), integerNumber(), doubleNumber(), variable()};
+      return new Term[] {atom(), structure(), integerNumber(), decimalFraction(), variable()};
    }
 }

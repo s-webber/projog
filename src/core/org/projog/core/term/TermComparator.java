@@ -70,7 +70,7 @@ public final class TermComparator implements Comparator<Term> {
          return type1.getPrecedence() > type2.getPrecedence() ? 1 : -1;
       } else {
          switch (type1) {
-            case DOUBLE:
+            case FRACTION:
             case INTEGER:
                return NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(v1, v2);
             case ATOM:

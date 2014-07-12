@@ -15,7 +15,7 @@ import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSystemProperties;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Atom;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
 import org.projog.core.term.ListFactory;
@@ -132,12 +132,12 @@ public class TestUtils {
       return new IntegerNumber(i);
    }
 
-   public static DoubleNumber doubleNumber() {
-      return doubleNumber(1.0);
+   public static DecimalFraction decimalFraction() {
+      return decimalFraction(1.0);
    }
 
-   public static DoubleNumber doubleNumber(double d) {
-      return new DoubleNumber(d);
+   public static DecimalFraction decimalFraction(double d) {
+      return new DecimalFraction(d);
    }
 
    public static Variable variable() {

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.doubleNumber;
+import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
@@ -211,7 +211,7 @@ public class ListTest {
    public void testIsImmutable() {
       Variable v = variable("X");
       Atom a = atom("test");
-      List l1 = list(atom(), structure("p", atom(), v, integerNumber()), list(integerNumber(), doubleNumber()));
+      List l1 = list(atom(), structure("p", atom(), v, integerNumber()), list(integerNumber(), decimalFraction()));
       assertFalse(l1.isImmutable());
       v.unify(a);
       List l2 = l1.copy(null);

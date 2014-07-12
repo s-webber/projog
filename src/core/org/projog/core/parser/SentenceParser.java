@@ -22,7 +22,7 @@ import java.util.Set;
 import org.projog.core.Operands;
 import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Atom;
-import org.projog.core.term.DoubleNumber;
+import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.ListFactory;
@@ -252,7 +252,7 @@ public class SentenceParser {
       if (parser.getType() == WordType.INTEGER) {
          return toIntegerNumber(value);
       } else {
-         return toDoubleNumber(value);
+         return toDecimalFraction(value);
       }
    }
 
@@ -315,7 +315,7 @@ public class SentenceParser {
             case INTEGER:
                return toIntegerNumber(value);
             case FLOAT:
-               return toDoubleNumber(value);
+               return toDecimalFraction(value);
             case VARIABLE:
                return getVariable(value);
             case ANONYMOUS_VARIABLE:
@@ -330,8 +330,8 @@ public class SentenceParser {
       return new IntegerNumber(parseLong(value));
    }
 
-   private DoubleNumber toDoubleNumber(final String value) {
-      return new DoubleNumber(parseDouble(value));
+   private DecimalFraction toDecimalFraction(final String value) {
+      return new DecimalFraction(parseDouble(value));
    }
 
    /**

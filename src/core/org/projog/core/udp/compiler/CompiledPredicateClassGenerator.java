@@ -1,5 +1,7 @@
 package org.projog.core.udp.compiler;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -47,7 +49,7 @@ public final class CompiledPredicateClassGenerator {
 
    /** Returns the root directory to store generated source files */
    private static File getDynamicContentDir(KnowledgeBase kb) {
-      File f = new File(kb.getProjogProperties().getRuntimeCompilationOutputDirectory());
+      File f = new File(getProjogProperties(kb).getRuntimeCompilationOutputDirectory());
       if (!f.exists()) {
          throw new RuntimeException("Directory required to store classes generated at runtime does not exist: " + f.getAbsolutePath());
       }

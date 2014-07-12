@@ -172,4 +172,17 @@ public class KnowledgeBaseUtilsTest {
       assertSame(o1, KnowledgeBaseUtils.getProjogEventsObservable(kb1));
       assertSame(o2, KnowledgeBaseUtils.getProjogEventsObservable(kb2));
    }
+
+   @Test
+   public void testGetProjogProperties() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      ProjogProperties o1 = KnowledgeBaseUtils.getProjogProperties(kb1);
+      ProjogProperties o2 = KnowledgeBaseUtils.getProjogProperties(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getProjogProperties(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getProjogProperties(kb2));
+   }
 }

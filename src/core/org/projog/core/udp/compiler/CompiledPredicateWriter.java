@@ -1,5 +1,6 @@
 package org.projog.core.udp.compiler;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils.encodeName;
 import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils.getNewListSyntax;
 import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils.getNewVariableSyntax;
@@ -626,6 +627,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    }
 
    boolean isSpyPointsEnabled() {
-      return kb.getProjogProperties().isSpyPointsEnabled();
+      return getProjogProperties(kb).isSpyPointsEnabled();
    }
 }

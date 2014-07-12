@@ -130,4 +130,8 @@ public final class KnowledgeBaseUtils {
    public static ProjogEventsObservable getProjogEventsObservable(KnowledgeBase kb) {
       return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogEventsObservable.class);
    }
+
+   public static ProjogProperties getProjogProperties(KnowledgeBase kb) {
+      return KnowledgeBaseResources.getKnowledgeBaseResources(kb).getResource(ProjogProperties.class);
+   }
 }

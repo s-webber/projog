@@ -1,5 +1,7 @@
 package org.projog.core.udp;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
+
 import java.util.Iterator;
 
 import org.projog.core.KnowledgeBase;
@@ -34,7 +36,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    public DynamicUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
       this.kb = kb;
       this.predicateKey = predicateKey;
-      if (kb.getProjogProperties().isSpyPointsEnabled()) {
+      if (getProjogProperties(kb).isSpyPointsEnabled()) {
          this.spyPoint = kb.getSpyPoints().getSpyPoint(predicateKey);
       } else {
          this.spyPoint = null;

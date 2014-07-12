@@ -1,5 +1,7 @@
 package org.projog.core.udp;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -226,7 +228,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private ProjogProperties getProperties() {
-      return kb.getProjogProperties();
+      return getProjogProperties(kb);
    }
 
    @Override

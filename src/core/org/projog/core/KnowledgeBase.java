@@ -1,6 +1,8 @@
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseResources.getKnowledgeBaseResources;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +38,6 @@ public final class KnowledgeBase {
    private final SpyPoints spyPoints = new SpyPoints(this);
    private final FileHandles fileHandles = new FileHandles();
    private final Operands operands = new Operands();
-   private final ProjogProperties projogProperties;
    /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
 
@@ -73,9 +74,8 @@ public final class KnowledgeBase {
     * Constructs a new {@code KnowledgeBase} object using the specified {@link ProjogProperties}
     */
    public KnowledgeBase(ProjogProperties projogProperties) {
-      this.projogProperties = projogProperties;
-
       addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
+      getKnowledgeBaseResources(this).addResource(ProjogProperties.class, projogProperties);
    }
 
    /**
@@ -90,7 +90,7 @@ public final class KnowledgeBase {
     * @link ProjogSourceReader#parseResource(KnowledgeBase, String)
     */
    public void bootstrap() {
-      String bootstrapScript = projogProperties.getBootstrapScript();
+      String bootstrapScript = getProjogProperties(this).getBootstrapScript();
       ProjogSourceReader.parseResource(this, bootstrapScript);
    }
 
@@ -104,10 +104,6 @@ public final class KnowledgeBase {
 
    public Operands getOperands() {
       return operands;
-   }
-
-   public ProjogProperties getProjogProperties() {
-      return projogProperties;
    }
 
    /**

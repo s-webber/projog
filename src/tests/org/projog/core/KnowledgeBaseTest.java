@@ -9,6 +9,7 @@ import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
+import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Map;
 
@@ -32,14 +33,14 @@ public class KnowledgeBaseTest {
    @Test
    public void testDefaultProjogProperties() {
       KnowledgeBase kb = new KnowledgeBase();
-      assertSame(ProjogSystemProperties.class, kb.getProjogProperties().getClass());
+      assertSame(ProjogSystemProperties.class, getProjogProperties(kb).getClass());
    }
 
    /** Check that {@link ProjogProperties} is configurable. */
    @Test
    public void testConfiguredProjogProperties() {
       KnowledgeBase kb = new KnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
-      assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, kb.getProjogProperties());
+      assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
    }
 
    /** @see SpyPointsTest */

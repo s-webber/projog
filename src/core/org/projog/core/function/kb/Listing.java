@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.projog.core.FileHandles;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -65,19 +64,29 @@ public final class Listing extends AbstractSingletonPredicate {
 
    @Override
    public boolean evaluate(Term arg) {
-      KnowledgeBase kb = getKnowledgeBase();
       String predicateName = getAtomName(arg);
       List<PredicateKey> keys = getPredicateKeysByName(getKnowledgeBase(), predicateName);
       for (PredicateKey key : keys) {
-         Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getKnowledgeBase().getUserDefinedPredicates();
-         UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
-         Iterator<ClauseModel> implications = userDefinedPredicate.getImplications();
-         while (implications.hasNext()) {
-            ClauseModel clauseModel = implications.next();
-            String s = termFormatter.toString(clauseModel.getOriginal());
-            fileHandles.getCurrentOutputStream().println(s);
-         }
+         listClauses(key);
       }
       return true;
+   }
+
+   private void listClauses(PredicateKey key) {
+      Iterator<ClauseModel> implications = getClauses(key);
+      while (implications.hasNext()) {
+         listClause(implications.next());
+      }
+   }
+
+   private Iterator<ClauseModel> getClauses(PredicateKey key) {
+      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getKnowledgeBase().getUserDefinedPredicates();
+      UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
+      return userDefinedPredicate.getImplications();
+   }
+
+   private void listClause(ClauseModel clauseModel) {
+      String s = termFormatter.toString(clauseModel.getOriginal());
+      fileHandles.getCurrentOutputStream().println(s);
    }
 }

@@ -1,7 +1,9 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
+import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
@@ -29,10 +31,12 @@ import org.projog.core.term.TermFormatter;
  */
 public final class Write extends AbstractSingletonPredicate {
    private TermFormatter termFormatter;
+   private FileHandles fileHandles;
 
    @Override
    protected void init() {
       termFormatter = getTermFormatter(getKnowledgeBase());
+      fileHandles = getFileHandles(getKnowledgeBase());
    }
 
    @Override
@@ -46,6 +50,6 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    private void print(String s) {
-      getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(s);
+      fileHandles.getCurrentOutputStream().print(s);
    }
 }

@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
@@ -7,6 +8,7 @@ import static org.projog.core.term.TermUtils.toLong;
 
 import java.util.List;
 
+import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
@@ -164,10 +166,12 @@ import org.projog.core.term.TermUtils;
  */
 public final class Writef extends AbstractSingletonPredicate {
    private TermFormatter termFormatter;
+   private FileHandles fileHandles;
 
    @Override
    protected void init() {
       termFormatter = getTermFormatter(getKnowledgeBase());
+      fileHandles = getFileHandles(getKnowledgeBase());
    }
 
    @Override
@@ -341,7 +345,7 @@ public final class Writef extends AbstractSingletonPredicate {
    }
 
    private void print(final StringBuilder sb) {
-      getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(sb);
+      fileHandles.getCurrentOutputStream().print(sb);
    }
 
    private static class Formatter {

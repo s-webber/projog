@@ -1,5 +1,8 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
+
+import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -14,8 +17,15 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class CurrentInput extends AbstractSingletonPredicate {
+   private FileHandles fileHandles;
+
+   @Override
+   protected void init() {
+      fileHandles = getFileHandles(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term argument) {
-      return argument.unify(getKnowledgeBase().getFileHandles().getCurrentInputHandle());
+      return argument.unify(fileHandles.getCurrentInputHandle());
    }
 }

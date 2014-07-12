@@ -1,5 +1,8 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
+
+import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -15,10 +18,17 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Close extends AbstractSingletonPredicate {
+   private FileHandles fileHandles;
+
+   @Override
+   protected void init() {
+      fileHandles = getFileHandles(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term argument) {
       try {
-         getKnowledgeBase().getFileHandles().close(argument);
+         fileHandles.close(argument);
          return true;
       } catch (Exception e) {
          throw new ProjogException("Unable to close stream for: " + argument, e);

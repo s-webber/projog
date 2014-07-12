@@ -1,5 +1,8 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
+
+import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
@@ -63,15 +66,22 @@ import org.projog.core.term.Term;
  * only once and the operation of moving to the next character is not undone on backtracking.
  * </p>
  * <p>
- * If there are no more characters to read from the current input stream (i.e. if the end of the stream has been reached) 
- * then an attempt is made to unify <code>X</code> with an atom with the value <code>end_of_file</code>.
+ * If there are no more characters to read from the current input stream (i.e. if the end of the stream has been
+ * reached) then an attempt is made to unify <code>X</code> with an atom with the value <code>end_of_file</code>.
  * </p>
  */
 public final class GetChar extends AbstractSingletonPredicate {
+   private FileHandles fileHandles;
+
+   @Override
+   protected void init() {
+      fileHandles = getFileHandles(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term argument) {
       try {
-         int c = getKnowledgeBase().getFileHandles().getCurrentInputStream().read();
+         int c = fileHandles.getCurrentInputStream().read();
          Atom next = toAtom(c);
          return argument.unify(next);
       } catch (Exception e) {

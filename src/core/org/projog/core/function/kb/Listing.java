@@ -1,5 +1,6 @@
 package org.projog.core.function.kb;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getPredicateKeysByName;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.TermUtils.getAtomName;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.projog.core.FileHandles;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -53,10 +55,12 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  */
 public final class Listing extends AbstractSingletonPredicate {
    private TermFormatter termFormatter;
+   private FileHandles fileHandles;
 
    @Override
    protected void init() {
       termFormatter = getTermFormatter(getKnowledgeBase());
+      fileHandles = getFileHandles(getKnowledgeBase());
    }
 
    @Override
@@ -71,7 +75,7 @@ public final class Listing extends AbstractSingletonPredicate {
          while (implications.hasNext()) {
             ClauseModel clauseModel = implications.next();
             String s = termFormatter.toString(clauseModel.getOriginal());
-            kb.getFileHandles().getCurrentOutputStream().println(s);
+            fileHandles.getCurrentOutputStream().println(s);
          }
       }
       return true;

@@ -225,4 +225,17 @@ public class KnowledgeBaseUtilsTest {
       assertSame(o1, KnowledgeBaseUtils.getSpyPoints(kb1));
       assertSame(o2, KnowledgeBaseUtils.getSpyPoints(kb2));
    }
+
+   @Test
+   public void testGetFileHandles() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      FileHandles o1 = KnowledgeBaseUtils.getFileHandles(kb1);
+      FileHandles o2 = KnowledgeBaseUtils.getFileHandles(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getFileHandles(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getFileHandles(kb2));
+   }
 }

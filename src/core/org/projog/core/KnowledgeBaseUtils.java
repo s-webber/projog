@@ -149,4 +149,8 @@ public final class KnowledgeBaseUtils {
    public static SpyPoints getSpyPoints(KnowledgeBase kb) {
       return getKnowledgeBaseResources(kb).getResource(SpyPoints.class);
    }
+
+   public static FileHandles getFileHandles(KnowledgeBase kb) {
+      return getKnowledgeBaseResources(kb).getResource(FileHandles.class);
+   }
 }

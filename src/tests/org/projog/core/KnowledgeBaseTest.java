@@ -43,13 +43,6 @@ public class KnowledgeBaseTest {
       assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
    }
 
-   /** @see FileHandlesTest */
-   @Test
-   public void testGetFileHandles() {
-      FileHandles fh = kb.getFileHandles();
-      assertSame(fh, kb.getFileHandles());
-   }
-
    /** @see CalculatablesTest */
    @Test
    public void testGetNumeric() {

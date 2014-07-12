@@ -1,7 +1,9 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.term.TermUtils.getAtomName;
 
+import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -18,10 +20,17 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class PutChar extends AbstractSingletonPredicate {
+   private FileHandles fileHandles;
+
+   @Override
+   protected void init() {
+      fileHandles = getFileHandles(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term argument) {
       String textToOutput = getAtomName(argument);
-      getKnowledgeBase().getFileHandles().getCurrentOutputStream().print(textToOutput);
+      fileHandles.getCurrentOutputStream().print(textToOutput);
       return true;
    }
 }

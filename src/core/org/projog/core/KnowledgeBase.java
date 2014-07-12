@@ -105,6 +105,17 @@ public final class KnowledgeBase {
 
    /**
     * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
+    * 
+    * @param calculatableClassName The class name of the {@code Calculatable} to be associated with {@code key}.
+    */
+   public void addCalculatable(PredicateKey key, String calculatableClassName) {
+      calculatables.addCalculatable(key, calculatableClassName);
+   }
+
+   /**
+    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
+    * 
+    * @param calculatableClassName The instance of {@code Calculatable} to be associated with {@code key}.
     */
    public void addCalculatable(PredicateKey key, Calculatable calculatable) {
       calculatables.addCalculatable(key, calculatable);

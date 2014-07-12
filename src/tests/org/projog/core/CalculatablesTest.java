@@ -19,6 +19,10 @@ import org.projog.core.term.TermUtils;
 
 public class CalculatablesTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
+   private final String dummyCalculatableName = "dummy_calculatable";
+   private final PredicateKey dummyCalculatableKey = new PredicateKey(dummyCalculatableName, 1);
+   private final int dummyTermArgument = 7;
+   private final Structure dummyTerm = structure(dummyCalculatableName, integerNumber(dummyTermArgument));
 
    @Test
    public void testGetNumericIntegerNumber() {
@@ -48,34 +52,82 @@ public class CalculatablesTest {
    @Test
    public void testGetNumericPredicate() {
       Calculatables c = createCalculatables();
-      String dummyCalculatableName = "dummy_calculatable";
-      PredicateKey key = new PredicateKey(dummyCalculatableName, 1);
-      int input = 7;
-      Structure p = structure(dummyCalculatableName, integerNumber(input));
 
       // try to use calculatable by a name that there is no match for (expect exception)
       try {
-         c.getNumeric(p);
+         c.getNumeric(dummyTerm);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find calculatable: dummy_calculatable/1", e.getMessage());
       }
 
       // add new calculatable
-      c.addCalculatable(key, new DummyCalculatable());
+      c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
 
       // assert that the factory is now using the newly added calculatable
-      Numeric n = c.getNumeric(p);
+      Numeric n = c.getNumeric(dummyTerm);
       assertSame(IntegerNumber.class, n.getClass());
-      assertEquals(input + 1, n.getLong());
+      assertEquals(dummyTermArgument + 1, n.getLong());
+   }
+
+   @Test
+   public void testAddExistingCalculatableName() {
+      Calculatables c = createCalculatables();
+
+      // add new calculatable class name
+      c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
 
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         c.addCalculatable(key, new DummyCalculatable());
+         c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
+      }
+      try {
+         c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+         fail("could re-add calculatable named: " + dummyCalculatableName);
+      } catch (ProjogException e) {
+         // expected;
+      }
+   }
+
+   @Test
+   public void testAddExistingCalculatableInstance() {
+      Calculatables c = createCalculatables();
+
+      // add new calculatable instance
+      c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+
+      // attempt to add calculatable again 
+      // (should fail now a calculatable with the same name already exists in the factoty)
+      try {
+         c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
+         fail("could re-add calculatable named: " + dummyCalculatableName);
+      } catch (ProjogException e) {
+         // expected;
+      }
+      try {
+         c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+         fail("could re-add calculatable named: " + dummyCalculatableName);
+      } catch (ProjogException e) {
+         // expected;
+      }
+   }
+
+   @Test
+   public void testAddCalculatableError() {
+      Calculatables c = createCalculatables();
+
+      // add new calculatable with invalid name
+      c.addCalculatable(dummyCalculatableKey, "an invalid class name");
+      try {
+         c.getNumeric(dummyTerm);
+         fail();
+      } catch (RuntimeException e) {
+         // expected as specified class name is invalid
+         assertEquals("Could not create new Calculatable", e.getMessage());
       }
    }
 

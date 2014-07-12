@@ -19,7 +19,8 @@ import org.projog.core.term.TermUtils;
 final class Calculatables {
    private final KnowledgeBase knowledgeBase;
    private final Object lock = new Object();
-   private final Map<PredicateKey, Calculatable> calculatables = new HashMap<>();
+   private final Map<PredicateKey, String> calculatableClassNames = new HashMap<>();
+   private final Map<PredicateKey, Calculatable> calculatableInstances = new HashMap<>();
 
    Calculatables(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
@@ -27,10 +28,21 @@ final class Calculatables {
 
    void addCalculatable(PredicateKey key, Calculatable calculatable) {
       synchronized (lock) {
-         if (calculatables.containsKey(key)) {
+         if (calculatableClassNames.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
          } else {
-            calculatables.put(key, calculatable);
+            calculatableClassNames.put(key, calculatable.getClass().getName());
+            calculatableInstances.put(key, calculatable);
+         }
+      }
+   }
+
+   void addCalculatable(PredicateKey key, String calculatableClassName) {
+      synchronized (lock) {
+         if (calculatableClassNames.containsKey(key)) {
+            throw new ProjogException("Already defined calculatable: " + key);
+         } else {
+            calculatableClassNames.put(key, calculatableClassName);
          }
       }
    }
@@ -64,10 +76,33 @@ final class Calculatables {
 
    private Calculatable getCalculatable(Term term) {
       PredicateKey key = PredicateKey.createForTerm(term);
-      Calculatable e = calculatables.get(key);
-      if (e == null) {
+      Calculatable e = calculatableInstances.get(key);
+      if (e != null) {
+         return e;
+      } else if (calculatableClassNames.containsKey(key)) {
+         return instantiateCalculatable(key);
+      } else {
          throw new ProjogException("Cannot find calculatable: " + key);
       }
-      return e;
+   }
+
+   private Calculatable instantiateCalculatable(PredicateKey key) {
+      synchronized (lock) {
+         Calculatable calculatable = calculatableInstances.get(key);
+         if (calculatable == null) {
+            calculatable = instantiateCalculatable(calculatableClassNames.get(key));
+            calculatableInstances.put(key, calculatable);
+         }
+         return calculatable;
+      }
+   }
+
+   private Calculatable instantiateCalculatable(String className) {
+      try {
+         Class<?> c = Class.forName(className);
+         return (Calculatable) c.newInstance();
+      } catch (Exception e) {
+         throw new RuntimeException("Could not create new Calculatable", e);
+      }
    }
 }

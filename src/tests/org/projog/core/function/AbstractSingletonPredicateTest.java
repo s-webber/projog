@@ -25,4 +25,25 @@ public class AbstractSingletonPredicateTest {
       pf.setKnowledgeBase(kb);
       assertSame(kb, ((AbstractSingletonPredicate) pf).getKnowledgeBase());
    }
+
+   /**
+    * Check {@code AbstractSingletonPredicate#setKnowledgeBase(KnowledgeBase)} invokes
+    * {@code AbstractSingletonPredicate#init()} after setting the knowledge base.
+    */
+   @Test
+   public void testInit() {
+      class TestPredicate extends AbstractSingletonPredicate {
+         KnowledgeBase x;
+
+         @Override
+         protected void init() {
+            x = getKnowledgeBase();
+         }
+      };
+      TestPredicate pf = new TestPredicate();
+      KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      pf.setKnowledgeBase(kb);
+      assertSame(kb, pf.x);
+      assertSame(kb, ((AbstractSingletonPredicate) pf).getKnowledgeBase());
+   }
 }

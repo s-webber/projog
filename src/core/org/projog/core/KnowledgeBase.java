@@ -40,12 +40,21 @@ public final class KnowledgeBase {
    /** The arithmetic functions associated with this {@code KnowledgeBase}. */
    private final Calculatables calculatables = new Calculatables(this);
 
-   /** Used to coordinate access to {@link #javaPredicates} and {@link #userDefinedPredicates} */
+   /**
+    * Used to coordinate access to {@link javaPredicateClassNames}, {@link #javaPredicateInstances} and
+    * {@link #userDefinedPredicates}
+    */
    private final Object predicatesLock = new Object();
    /**
-    * The "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this {@code KnowledgeBase}.
+    * The class names of "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this
+    * {@code KnowledgeBase}.
     */
-   private final Map<PredicateKey, PredicateFactory> javaPredicates = new HashMap<>();
+   private final Map<PredicateKey, String> javaPredicateClassNames = new HashMap<>();
+   /**
+    * The instances of "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this
+    * {@code KnowledgeBase}.
+    */
+   private final Map<PredicateKey, PredicateFactory> javaPredicateInstances = new HashMap<>();
    /**
     * The user-defined predicates (i.e. defined using Prolog syntax) associated with this {@code KnowledgeBase}.
     * <p>
@@ -66,7 +75,7 @@ public final class KnowledgeBase {
    public KnowledgeBase(ProjogProperties projogProperties) {
       this.projogProperties = projogProperties;
 
-      addPredicateFactory(ADD_PREDICATE_KEY, new AddPredicateFactory());
+      addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
    }
 
    /**
@@ -190,16 +199,53 @@ public final class KnowledgeBase {
     * {@link UnknownPredicate#UNKNOWN_PREDICATE} is returned.
     */
    public PredicateFactory getPredicateFactory(PredicateKey key) {
-      PredicateFactory predicateFactory = javaPredicates.get(key);
-      if (predicateFactory == null) {
-         predicateFactory = userDefinedPredicates.get(key);
-         if (predicateFactory == null) {
-            ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
-            observable.notifyObservers(event);
-            return UnknownPredicate.UNKNOWN_PREDICATE;
+      PredicateFactory predicateFactory = getExistingPredicateFactory(key);
+      if (predicateFactory != null) {
+         return predicateFactory;
+      } else if (javaPredicateClassNames.containsKey(key)) {
+         return instantiatePredicateFactory(key);
+      } else {
+         return unknownPredicate(key);
+      }
+   }
+
+   private PredicateFactory getExistingPredicateFactory(PredicateKey key) {
+      PredicateFactory predicateFactory = javaPredicateInstances.get(key);
+      if (predicateFactory != null) {
+         return predicateFactory;
+      } else {
+         return userDefinedPredicates.get(key);
+      }
+   }
+
+   private PredicateFactory instantiatePredicateFactory(PredicateKey key) {
+      synchronized (predicatesLock) {
+         PredicateFactory predicateFactory = getExistingPredicateFactory(key);
+         if (predicateFactory != null) {
+            return predicateFactory;
+         } else {
+            predicateFactory = instantiatePredicateFactory(javaPredicateClassNames.get(key));
+            javaPredicateInstances.put(key, predicateFactory);
+            return predicateFactory;
          }
       }
-      return predicateFactory;
+   }
+
+   private PredicateFactory instantiatePredicateFactory(String className) {
+      try {
+         Class<?> c = Class.forName(className);
+         PredicateFactory predicateFactory = (PredicateFactory) c.newInstance();
+         predicateFactory.setKnowledgeBase(this);
+         return predicateFactory;
+      } catch (Exception e) {
+         throw new RuntimeException("Could not create new PredicateFactory", e);
+      }
+   }
+
+   private PredicateFactory unknownPredicate(PredicateKey key) {
+      ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
+      observable.notifyObservers(event);
+      return UnknownPredicate.UNKNOWN_PREDICATE;
    }
 
    /**
@@ -210,13 +256,12 @@ public final class KnowledgeBase {
     * adding functionality not possible to define in pure Prolog syntax.
     * </p>
     */
-   public void addPredicateFactory(PredicateKey key, PredicateFactory pf) {
+   public void addPredicateFactory(PredicateKey key, String className) {
       synchronized (predicatesLock) {
          if (isExistingPredicate(key)) {
             throw new ProjogException("Already defined: " + key);
          } else {
-            pf.setKnowledgeBase(this);
-            javaPredicates.put(key, pf);
+            javaPredicateClassNames.put(key, className);
          }
       }
    }
@@ -226,6 +271,6 @@ public final class KnowledgeBase {
    }
 
    private boolean isExistingJavaPredicate(PredicateKey key) {
-      return javaPredicates.containsKey(key);
+      return javaPredicateClassNames.containsKey(key);
    }
 }

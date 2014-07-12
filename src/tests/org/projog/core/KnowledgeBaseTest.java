@@ -163,34 +163,52 @@ public class KnowledgeBaseTest {
 
    @Test
    public void testAddPredicateFactory() {
-      // create PredicateKey and PredicateFactory to add to KnowledgeBase
-      PredicateKey key = new PredicateKey("testAddPredicate", 1);
-      PredicateFactory ef = new PredicateFactory() {
-         @Override
-         public void setKnowledgeBase(KnowledgeBase kb) {
-         }
-
-         @Override
-         public Predicate getPredicate(Term... args) {
-            return null;
-         }
-      };
+      // create PredicateKey to add to KnowledgeBase
+      PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
 
       // assert not already defined in knowledge base
       assertSame(UnknownPredicate.class, kb.getPredicateFactory(key).getClass());
 
       // add
-      kb.addPredicateFactory(key, ef);
+      kb.addPredicateFactory(key, True.class.getName());
 
       // assert now defined in knowledge base
-      assertSame(ef, kb.getPredicateFactory(key));
+      assertSame(True.class, kb.getPredicateFactory(key).getClass());
+      // assert, once defined, the same instance is returned each time
+      assertSame(kb.getPredicateFactory(key), kb.getPredicateFactory(key));
 
       // assert exception thrown if try to re-add
       try {
-         kb.addPredicateFactory(key, ef);
+         kb.addPredicateFactory(key, True.class.getName());
          fail();
       } catch (ProjogException e) {
-         assertEquals("Already defined: testAddPredicate/1", e.getMessage());
+         assertEquals("Already defined: testAddPredicateFactory/1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testAddPredicateFactory_NoPublicConstructor() {
+      PredicateKey key = new PredicateKey("testAddPredicateFactoryError", 1);
+      kb.addPredicateFactory(key, java.lang.Integer.class.getName());
+      try {
+         kb.getPredicateFactory(key);
+         fail();
+      } catch (RuntimeException e) {
+         // expected as Integer has no public constructor (and is also not a PredicateFactory)
+         assertEquals("Could not create new PredicateFactory", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testAddPredicateFactory_InvalidClassName() {
+      PredicateKey key = new PredicateKey("testAddPredicateFactoryError", 1);
+      kb.addPredicateFactory(key, "an invalid class name");
+      try {
+         kb.getPredicateFactory(key);
+         fail();
+      } catch (RuntimeException e) {
+         // expected as specified class name is invalid
+         assertEquals("Could not create new PredicateFactory", e.getMessage());
       }
    }
 

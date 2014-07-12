@@ -2,9 +2,7 @@ package org.projog.core.function.kb;
 
 import static org.projog.core.term.TermUtils.getAtomName;
 
-import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
-import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -19,11 +17,12 @@ import org.projog.core.term.Term;
  %FALSE xyz(fail)
  */
 /**
- * <code>pj_add_predicate(X,Y)</code> - defines a Java class as an built-in predicate.
+ * <code>pj_add_predicate(X,Y)</code> - defines a Java class as a built-in predicate.
  * <p>
- * <code>X</code> represents the name and arity of the predicate.
- * <code>Y</code> represents the full class name of an implementation of <code>org.projog.core.PredicateFactory</code>.
+ * <code>X</code> represents the name and arity of the predicate. <code>Y</code> represents the full class name of an
+ * implementation of <code>org.projog.core.PredicateFactory</code>.
  * </p>
+ * <p>
  * This predicate provides an easy way to configure and extend the functionality of Projog - including adding
  * functionality not possible to define in pure Prolog syntax.
  * </p>
@@ -31,15 +30,9 @@ import org.projog.core.term.Term;
 public final class AddPredicateFactory extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      try {
-         PredicateKey key = PredicateKey.createFromNameAndArity(arg1);
-         String className = getAtomName(arg2);
-         Class<?> c = Class.forName(className);
-         PredicateFactory pf = (PredicateFactory) c.newInstance();
-         getKnowledgeBase().addPredicateFactory(key, pf);
-         return true;
-      } catch (Exception e) {
-         throw new ProjogException("Could not register new PredicateFactory using arguments: " + arg1 + " and " + arg2, e);
-      }
+      PredicateKey key = PredicateKey.createFromNameAndArity(arg1);
+      String className = getAtomName(arg2);
+      getKnowledgeBase().addPredicateFactory(key, className);
+      return true;
    }
 }

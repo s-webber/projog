@@ -1,32 +1,29 @@
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
-import static org.projog.core.term.TermUtils.toLong;
+import static org.projog.core.term.TermType.INTEGER;
 
-import org.projog.core.Calculatable;
-import org.projog.core.Calculatables;
-import org.projog.core.KnowledgeBase;
+import org.projog.core.ProjogException;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
-import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /**
  * A template for {@code Calculatable}s that accept two arguments of type {@link TermType#INTEGER}.
  */
-abstract class AbstractTwoIntegerArgumentsCalculatable implements Calculatable {
-   private Calculatables calculatables;
-
+abstract class AbstractTwoIntegerArgumentsCalculatable extends AbstractCalculatable {
    @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      calculatables = getCalculatables(kb);
+   public final Numeric calculate(Numeric n1, Numeric n2) {
+      final long i1 = toLong(n1);
+      final long i2 = toLong(n2);
+      return new IntegerNumber(calculateLong(i1, i2));
    }
 
-   @Override
-   public final Numeric calculate(Term[] args) {
-      final long i1 = toLong(calculatables, args[0]);
-      final long i2 = toLong(calculatables, args[1]);
-      return new IntegerNumber(calculateLong(i1, i2));
+   private long toLong(Numeric n) {
+      if (n.getType() == INTEGER) {
+         return n.getLong();
+      } else {
+         throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
+      }
    }
 
    /** Returns the result of evaluating an arithmetic expression using the two arguments */

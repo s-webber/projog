@@ -130,7 +130,11 @@ public class StructureTest {
 
    @Test
    public void testSameNamesDifferentArguments() {
-      Structure[] predicates = {structure("test1", new Atom("a"), new Atom("b"), new Atom("c")), structure("test2", new Atom("a"), new Atom("b"), new Atom("d")), structure("test3", new Atom("a"), new Atom("c"), new Atom("b")), structure("test4", new Atom("a"), new Atom("b"))};
+      Structure[] predicates = {
+               structure("test1", new Atom("a"), new Atom("b"), new Atom("c")),
+               structure("test2", new Atom("a"), new Atom("b"), new Atom("d")),
+               structure("test3", new Atom("a"), new Atom("c"), new Atom("b")),
+               structure("test4", new Atom("a"), new Atom("b"))};
       for (int i = 0; i < predicates.length; i++) {
          for (int j = i; j < predicates.length; j++) {
             if (i == j) {

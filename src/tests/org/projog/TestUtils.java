@@ -150,9 +150,13 @@ public class TestUtils {
    }
 
    public static Term[] createArgs(int numberOfArguments) {
+      return createArgs(numberOfArguments, atom());
+   }
+
+   public static Term[] createArgs(int numberOfArguments, Term term) {
       Term[] args = new Term[numberOfArguments];
       for (int i = 0; i < numberOfArguments; i++) {
-         args[i] = atom();
+         args[i] = term;
       }
       return args;
    }

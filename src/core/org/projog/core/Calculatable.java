@@ -17,7 +17,7 @@ public interface Calculatable {
     * @param args the arguments to use in the calculation
     * @return the result of the calculation using the specified arguments
     */
-   Numeric calculate(Term[] args);
+   Numeric calculate(Term... args);
 
    /**
     * Provides a reference to a {@code KnowledgeBase}.

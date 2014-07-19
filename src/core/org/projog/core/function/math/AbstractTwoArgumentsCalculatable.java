@@ -1,31 +1,16 @@
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
-
-import org.projog.core.Calculatable;
-import org.projog.core.Calculatables;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
-import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /**
  * A template for {@code Calculatable}s that accept two arguments.
  */
-abstract class AbstractTwoArgumentsCalculatable implements Calculatable {
-   private Calculatables calculatables;
-
+abstract class AbstractTwoArgumentsCalculatable extends AbstractCalculatable {
    @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      calculatables = getCalculatables(kb);
-   }
-
-   @Override
-   public final Numeric calculate(Term[] args) {
-      Numeric n1 = calculatables.getNumeric(args[0]);
-      Numeric n2 = calculatables.getNumeric(args[1]);
+   public final Numeric calculate(Numeric n1, Numeric n2) {
       if (containsFraction(n1, n2)) {
          double answer = calculateDouble(n1.getDouble(), n2.getDouble());
          return new DecimalFraction(answer);

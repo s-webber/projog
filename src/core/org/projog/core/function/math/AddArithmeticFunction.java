@@ -66,7 +66,7 @@ public final class AddArithmeticFunction extends AbstractSingletonPredicate {
       }
 
       @Override
-      public Numeric calculate(Term[] args) {
+      public Numeric calculate(Term... args) {
          final PredicateFactory pf = kb.getPredicateFactory(key);
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);

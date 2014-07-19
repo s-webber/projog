@@ -17,5 +17,13 @@ public interface Calculatable {
     * @param args the arguments to use in the calculation
     * @return the result of the calculation using the specified arguments
     */
-   Numeric calculate(KnowledgeBase kb, Term[] args);
+   Numeric calculate(Term[] args);
+
+   /**
+    * Provides a reference to a {@code KnowledgeBase}.
+    * <p>
+    * Meaning this object will always have access to a {@code KnowledgeBase} by the time it's {@code calculate} method
+    * is invoked.
+    */
+   void setKnowledgeBase(KnowledgeBase kb);
 }

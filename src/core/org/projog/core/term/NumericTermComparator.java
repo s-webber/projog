@@ -2,6 +2,7 @@ package org.projog.core.term;
 
 import java.util.Comparator;
 
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
@@ -41,9 +42,9 @@ public final class NumericTermComparator implements Comparator<Term> {
     * @see #compare(Term, Term)
     * @see org.projog.core.KnowledgeBase#getNumeric(Term)
     */
-   public int compare(Term t1, Term t2, KnowledgeBase kb) {
-      Numeric n1 = kb.getNumeric(t1);
-      Numeric n2 = kb.getNumeric(t2);
+   public int compare(Term t1, Term t2, Calculatables calculatables) {
+      Numeric n1 = calculatables.getNumeric(t1);
+      Numeric n2 = calculatables.getNumeric(t2);
       return compare(n1, n2);
    }
 

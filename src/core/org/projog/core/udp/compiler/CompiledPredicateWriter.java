@@ -48,6 +48,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    private ClauseMetaData currentClause;
    private boolean inStaticRecursiveMethodBlock;
    private boolean needsKnowledgeBaseStaticVariable;
+   private boolean needsCalculatablesStaticVariable;
 
    CompiledPredicateWriter(KnowledgeBase kb, List<ClauseModel> copyImplications) {
       this.kb = kb;
@@ -77,6 +78,14 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
 
    void setNeedsKnowledgeBaseStaticVariable(boolean needsKnowledgeBaseStaticVariable) {
       this.needsKnowledgeBaseStaticVariable = needsKnowledgeBaseStaticVariable;
+   }
+
+   public boolean isNeedsCalculatablesStaticVariable() {
+      return needsCalculatablesStaticVariable;
+   }
+
+   void setNeedsCalculatablesStaticVariable(boolean needsCalculatablesStaticVariable) {
+      this.needsCalculatablesStaticVariable = needsCalculatablesStaticVariable;
    }
 
    String className() {

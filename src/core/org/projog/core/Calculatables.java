@@ -16,17 +16,22 @@ import org.projog.core.term.TermUtils;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code CalculatableFactory} instance.
  */
-final class Calculatables {
-   private final KnowledgeBase knowledgeBase;
+public final class Calculatables {
+   private final KnowledgeBase kb;
    private final Object lock = new Object();
    private final Map<PredicateKey, String> calculatableClassNames = new HashMap<>();
    private final Map<PredicateKey, Calculatable> calculatableInstances = new HashMap<>();
 
-   Calculatables(KnowledgeBase knowledgeBase) {
-      this.knowledgeBase = knowledgeBase;
+   public Calculatables(KnowledgeBase kb) {
+      this.kb = kb;
    }
 
-   void addCalculatable(PredicateKey key, Calculatable calculatable) {
+   /**
+    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
+    * 
+    * @param calculatableClassName The instance of {@code Calculatable} to be associated with {@code key}.
+    */
+   public void addCalculatable(PredicateKey key, Calculatable calculatable) {
       synchronized (lock) {
          if (calculatableClassNames.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
@@ -37,7 +42,12 @@ final class Calculatables {
       }
    }
 
-   void addCalculatable(PredicateKey key, String calculatableClassName) {
+   /**
+    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
+    * 
+    * @param calculatableClassName The class name of the {@code Calculatable} to be associated with {@code key}.
+    */
+   public void addCalculatable(PredicateKey key, String calculatableClassName) {
       synchronized (lock) {
          if (calculatableClassNames.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
@@ -55,7 +65,7 @@ final class Calculatables {
     * @return the result of evaluating the specified arithmetic expression
     * @throws ProjogException if the specified term does not represent an arithmetic expression
     */
-   Numeric getNumeric(Term t) {
+   public Numeric getNumeric(Term t) {
       TermType type = t.getType();
       switch (type) {
          case FRACTION:
@@ -71,7 +81,7 @@ final class Calculatables {
    }
 
    private Numeric calculate(Term term, Term[] args) {
-      return getCalculatable(term).calculate(knowledgeBase, args);
+      return getCalculatable(term).calculate(args);
    }
 
    private Calculatable getCalculatable(Term term) {
@@ -91,6 +101,7 @@ final class Calculatables {
          Calculatable calculatable = calculatableInstances.get(key);
          if (calculatable == null) {
             calculatable = instantiateCalculatable(calculatableClassNames.get(key));
+            calculatable.setKnowledgeBase(kb);
             calculatableInstances.put(key, calculatable);
          }
          return calculatable;

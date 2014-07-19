@@ -1,6 +1,9 @@
 package org.projog.core.function.math;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
 import org.projog.core.Calculatable;
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
@@ -18,8 +21,16 @@ import org.projog.core.term.Term;
  * <code>random(X)</code> Evaluate to a random integer i for which 0 =< i < X.
  */
 public final class Random implements Calculatable {
+   private Calculatables calculatables;
+
    @Override
-   public Numeric calculate(KnowledgeBase kb, Term[] args) {
-      return new IntegerNumber((long) (Math.random() * kb.getNumeric(args[0]).getLong()));
+   public void setKnowledgeBase(KnowledgeBase kb) {
+      calculatables = getCalculatables(kb);
+   }
+
+   @Override
+   public Numeric calculate(Term[] args) {
+      long max = calculatables.getNumeric(args[0]).getLong();
+      return new IntegerNumber((long) (Math.random() * max));
    }
 }

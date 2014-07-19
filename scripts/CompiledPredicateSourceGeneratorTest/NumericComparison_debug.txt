@@ -14,10 +14,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v0_B = a1;
       final Term v0_C;
       v0_C = a2;
-      if (NUMERIC_TERM_COMPARATOR.compare(v0_A, v0_B, kb)!=1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v0_A, v0_B, c)!=1) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v0_A, v0_C, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v0_A, v0_C, c)!=-1) {
          return false;
       }
       return true;
@@ -29,10 +29,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v1_B = a1;
       final Term v1_C;
       v1_C = a2;
-      if (NUMERIC_TERM_COMPARATOR.compare(v1_A, v1_B, kb)<0) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_A, v1_B, c)<0) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v1_A, v1_C, kb)>0) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_A, v1_C, c)>0) {
          return false;
       }
       return true;
@@ -44,16 +44,16 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       v2_B = a1;
       final Term v2_C;
       v2_C = a2;
-      if (NUMERIC_TERM_COMPARATOR.compare(v2_A, v2_B, kb)!=0) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v2_A, v2_B, c)!=0) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v2_A, v2_C, kb)==0) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v2_A, v2_C, c)==0) {
          return false;
       }
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      kb = _kb;
+      c = KnowledgeBaseUtils.getCalculatables(_kb);
       s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testNumericComparison", 3));
       d = false;
    }
@@ -131,7 +131,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final Predicate getPredicate(final Term... termArgs) {
       return new %CLASS_NAME%(termArgs[0], termArgs[1], termArgs[2]);
    }
-   private static KnowledgeBase kb;
+   private static Calculatables c;
    private static SpyPoints.SpyPoint s;
    private final boolean d;
    private int clauseCtr;

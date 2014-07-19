@@ -1,7 +1,9 @@
 package org.projog.core.function.compare;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
+import org.projog.core.Calculatables;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -25,8 +27,15 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class NumericInequality extends AbstractSingletonPredicate {
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      return NUMERIC_TERM_COMPARATOR.compare(arg1, arg2, getKnowledgeBase()) != 0;
+      return NUMERIC_TERM_COMPARATOR.compare(arg1, arg2, calculatables) != 0;
    }
 }

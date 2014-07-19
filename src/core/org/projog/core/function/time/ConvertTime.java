@@ -1,9 +1,12 @@
 package org.projog.core.function.time;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.projog.core.Calculatables;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -24,6 +27,13 @@ import org.projog.core.term.Term;
  * <code>convert_time(X,Y)</code> - converts a timestamp to a textual representation.
  */
 public final class ConvertTime extends AbstractSingletonPredicate {
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term timestamp, Term text) {
       Date d = createDate(timestamp);
@@ -32,7 +42,7 @@ public final class ConvertTime extends AbstractSingletonPredicate {
    }
 
    private Date createDate(Term timestamp) {
-      return new Date(getKnowledgeBase().getNumeric(timestamp).getLong());
+      return new Date(calculatables.getNumeric(timestamp).getLong());
    }
 
    private Atom createAtom(Date d) {

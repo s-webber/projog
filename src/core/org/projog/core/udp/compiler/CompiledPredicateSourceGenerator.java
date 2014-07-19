@@ -103,6 +103,10 @@ final class CompiledPredicateSourceGenerator {
          w.writeStatement("private static KnowledgeBase kb");
       }
 
+      if (w.isNeedsCalculatablesStaticVariable()) {
+         w.writeStatement("private static Calculatables c");
+      }
+
       for (CompiledPredicateVariables.PredicateFactoryStaticVariable v : classVariables().getRequiredPredicateFactories()) {
          String variableName = v.variableName;
          PredicateFactory ef = v.PredicateFactory;
@@ -178,6 +182,10 @@ final class CompiledPredicateSourceGenerator {
       if (w.isNeedsKnowledgeBaseStaticVariable()) {
          w.assign("kb", "_kb");
       }
+      if (w.isNeedsCalculatablesStaticVariable()) {
+         w.assign("c", "KnowledgeBaseUtils.getCalculatables(_kb)");
+      }
+
       if (isSpyPointsEnabled()) {
          w.assign(SPYPOINT, "KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(" + getKeyGeneration(factMetaData().getPredicateKey()) + ")");
          if (factMetaData().isSingleResultPredicate() == false) {

@@ -1,8 +1,11 @@
 package org.projog.core.function.math;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
 import java.util.Arrays;
 
 import org.projog.core.Calculatable;
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -33,24 +36,37 @@ import org.projog.core.term.Variable;
  * Allows the predicate defined by <code>X</code> to be used as an arithmetic function.
  */
 public final class AddArithmeticFunction extends AbstractSingletonPredicate {
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
-      getKnowledgeBase().addCalculatable(key, new ArithmeticFunction(key));
+      calculatables.addCalculatable(key, createCalculatable(key));
       return true;
    }
 
+   private ArithmeticFunction createCalculatable(final PredicateKey key) {
+      return new ArithmeticFunction(getKnowledgeBase(), key);
+   }
+
    private static class ArithmeticFunction implements Calculatable {
+      final KnowledgeBase kb;
       final int numArgs;
       final PredicateKey key;
 
-      ArithmeticFunction(PredicateKey originalKey) {
+      ArithmeticFunction(KnowledgeBase kb, PredicateKey originalKey) {
+         this.kb = kb;
          this.numArgs = originalKey.getNumArgs();
          this.key = new PredicateKey(originalKey.getName(), numArgs + 1);
       }
 
       @Override
-      public Numeric calculate(KnowledgeBase kb, Term[] args) {
+      public Numeric calculate(Term[] args) {
          final PredicateFactory pf = kb.getPredicateFactory(key);
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);
@@ -69,6 +85,11 @@ public final class AddArithmeticFunction extends AbstractSingletonPredicate {
          }
          argsPlusResult[numArgs] = result;
          return argsPlusResult;
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         // do nothing (KnowledgeBase set in constructor)
       }
    }
 }

@@ -1,8 +1,11 @@
 package org.projog.core.function.kb;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import org.projog.core.Calculatables;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
@@ -34,15 +37,19 @@ import org.projog.core.term.Term;
 /**
  * <code>flag(X,Y,Z)</code> - associates a key with a value.
  * <p>
- * The first argument must be an atom or structure.
- * The name and arity of the first argument is used to construct the key.
- * The second argument is the value currently associated with the key.
- * If there is not currently a value associated with the key then it will default to 0.
- * The third argument is the new value to associate with the key.
- * The third argument must be a numeric value.
+ * The first argument must be an atom or structure. The name and arity of the first argument is used to construct the
+ * key. The second argument is the value currently associated with the key. If there is not currently a value associated
+ * with the key then it will default to 0. The third argument is the new value to associate with the key. The third
+ * argument must be a numeric value.
  */
 public final class Flag extends AbstractSingletonPredicate {
    private final Map<PredicateKey, Numeric> flags = new HashMap<>();
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
 
    @Override
    public boolean evaluate(Term key, Term oldValue, Term newValue) {
@@ -69,6 +76,6 @@ public final class Flag extends AbstractSingletonPredicate {
    }
 
    private void put(PredicateKey pk, Term value) {
-      flags.put(pk, getKnowledgeBase().getNumeric(value));
+      flags.put(pk, calculatables.getNumeric(value));
    }
 }

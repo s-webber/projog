@@ -1,7 +1,9 @@
 package org.projog.core.function.kb;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.term.TermUtils.getAtomName;
 
+import org.projog.core.Calculatables;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -22,11 +24,18 @@ import org.projog.core.term.Term;
  * implementation of <code>org.projog.core.Calculatable</code>.
  */
 public final class AddCalculatable extends AbstractSingletonPredicate {
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);
-      getKnowledgeBase().addCalculatable(key, className);
+      calculatables.addCalculatable(key, className);
       return true;
    }
 }

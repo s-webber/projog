@@ -1,6 +1,9 @@
 package org.projog.core.function.math;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
 import org.projog.core.Calculatable;
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
@@ -12,9 +15,16 @@ import org.projog.core.term.TermType;
  * A template for {@code Calculatable}s that accept exactly one argument.
  */
 abstract class AbstractOneArgumentCalculatable implements Calculatable {
+   private Calculatables calculatables;
+
    @Override
-   public final Numeric calculate(KnowledgeBase kb, Term[] args) {
-      Numeric n = kb.getNumeric(args[0]);
+   public void setKnowledgeBase(KnowledgeBase kb) {
+      calculatables = getCalculatables(kb);
+   }
+
+   @Override
+   public final Numeric calculate(Term[] args) {
+      Numeric n = calculatables.getNumeric(args[0]);
       if (n.getType() == TermType.FRACTION) {
          double answer = calculateDouble(n.getDouble());
          return new DecimalFraction(answer);

@@ -7,15 +7,18 @@ import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
 public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
+   private final Calculatables calculatables = getCalculatables(kb);
 
    @Test
    public void testCompareDecimalValues() {
@@ -107,20 +110,20 @@ public class NumericTermComparatorTest {
       }
 
       // test compare(Term, Term) evaluates structures representing arithmetic expressions
-      assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, kb));
-      assertEquals(-1, NUMERIC_TERM_COMPARATOR.compare(subtraction, addition, kb));
-      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(addition, addition, kb));
+      assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, calculatables));
+      assertEquals(-1, NUMERIC_TERM_COMPARATOR.compare(subtraction, addition, calculatables));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(addition, addition, calculatables));
 
       // test compare(Term, Term, KnowledgeBase) throws a ProjogException if
       // a structure can not be evaluated as an arithmetic expression
       try {
-         NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), kb);
+         NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), calculatables);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find calculatable: test", e.getMessage());
       }
       try {
-         NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, kb);
+         NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, calculatables);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find calculatable: ~/2", e.getMessage());
@@ -157,7 +160,7 @@ public class NumericTermComparatorTest {
    private void compare(String s1, String s2, KnowledgeBase kb, int expected) {
       Term t1 = TestUtils.parseSentence(s1 + ".");
       Term t2 = TestUtils.parseSentence(s2 + ".");
-      assertEquals(expected, NUMERIC_TERM_COMPARATOR.compare(t1, t2, kb));
-      assertEquals(0 - expected, NUMERIC_TERM_COMPARATOR.compare(t2, t1, kb));
+      assertEquals(expected, NUMERIC_TERM_COMPARATOR.compare(t1, t2, calculatables));
+      assertEquals(0 - expected, NUMERIC_TERM_COMPARATOR.compare(t2, t1, calculatables));
    }
 }

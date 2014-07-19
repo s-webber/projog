@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.projog.core.KnowledgeBase;
+import org.projog.core.Calculatables;
 import org.projog.core.ProjogException;
 
 /**
@@ -138,8 +138,8 @@ public final class TermUtils {
     * @return the {@code long} value represented by {@code t}
     * @throws ProjogException if the specified {@link Term} does not represent a term of type {@link TermType#INTEGER}
     */
-   public static long toLong(final KnowledgeBase kb, final Term t) {
-      final Numeric n = kb.getNumeric(t);
+   public static long toLong(final Calculatables calculatables, final Term t) {
+      final Numeric n = calculatables.getNumeric(t);
       if (n.getType() == TermType.INTEGER) {
          return n.getLong();
       } else {

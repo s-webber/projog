@@ -1,5 +1,6 @@
 package org.projog.core.function.io;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
@@ -8,7 +9,9 @@ import static org.projog.core.term.TermUtils.toLong;
 
 import java.util.List;
 
+import org.projog.core.Calculatables;
 import org.projog.core.FileHandles;
+import org.projog.core.KnowledgeBase;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
@@ -167,11 +170,14 @@ import org.projog.core.term.TermUtils;
 public final class Writef extends AbstractSingletonPredicate {
    private TermFormatter termFormatter;
    private FileHandles fileHandles;
+   private Calculatables calculatables;
 
    @Override
    protected void init() {
-      termFormatter = getTermFormatter(getKnowledgeBase());
-      fileHandles = getFileHandles(getKnowledgeBase());
+      KnowledgeBase knowledgeBase = getKnowledgeBase();
+      termFormatter = getTermFormatter(knowledgeBase);
+      fileHandles = getFileHandles(knowledgeBase);
+      calculatables = getCalculatables(knowledgeBase);
    }
 
    @Override
@@ -225,11 +231,11 @@ public final class Writef extends AbstractSingletonPredicate {
             output = f.format(arg);
             break;
          case 'n':
-            long charCode = toLong(getKnowledgeBase(), arg);
+            long charCode = toLong(calculatables, arg);
             output = Character.toString((char) charCode);
             break;
          case 'r':
-            long timesToRepeat = toLong(getKnowledgeBase(), f.nextArg());
+            long timesToRepeat = toLong(calculatables, f.nextArg());
             output = repeat(f.format(arg), timesToRepeat);
             break;
          case 's':

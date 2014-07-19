@@ -8,16 +8,16 @@ import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR
 // testCutSingleRuleSingleResult
 public final class %CLASS_NAME% implements CompiledPredicate {
    private static final boolean initRule0() {
-      if (NUMERIC_TERM_COMPARATOR.compare(INTEGER_1, INTEGER_2, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(INTEGER_1, INTEGER_2, c)!=-1) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(INTEGER_2, INTEGER_1, kb)!=1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(INTEGER_2, INTEGER_1, c)!=1) {
          return false;
       }
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      kb = _kb;
+      c = KnowledgeBaseUtils.getCalculatables(_kb);
       s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testCutSingleRuleSingleResult", 0));
    }
    public final boolean evaluate(final Term... args) {
@@ -44,6 +44,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    }
    private static final Term INTEGER_1 = new IntegerNumber(1L);
    private static final Term INTEGER_2 = new IntegerNumber(2L);
-   private static KnowledgeBase kb;
+   private static Calculatables c;
    private static SpyPoints.SpyPoint s;
 }

@@ -1,8 +1,10 @@
 package org.projog.core.function.compare;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 import static org.projog.core.term.TermUtils.toLong;
 
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -53,16 +55,18 @@ import org.projog.core.term.Term;
 /**
  * <code>between(X,Y,Z)</code> - checks if a number is within a specified range.
  * <p>
- * <code>between(X,Y,Z)</code> succeeds if the integer numeric value represented by <code>Z</code> is greater than or equal to the integer numeric value represented by <code>X</code>
- * and is less than or equal to the integer numeric value represented by <code>Y</code>.
+ * <code>between(X,Y,Z)</code> succeeds if the integer numeric value represented by <code>Z</code> is greater than or
+ * equal to the integer numeric value represented by <code>X</code> and is less than or equal to the integer numeric
+ * value represented by <code>Y</code>.
  * </p>
  * <p>
- * If <code>Z</code> is an uninstantiated variable then <code>Z</code> will be successively unified with all integer values in the range from <code>X</code> to </code>Y</code>.
+ * If <code>Z</code> is an uninstantiated variable then <code>Z</code> will be successively unified with all integer
+ * values in the range from <code>X</code> to </code>Y</code>.
  * </p>
  */
 public final class Between implements PredicateFactory {
-   private final Singleton singleton = new Singleton();
-   private KnowledgeBase kb;
+   private Singleton singleton;
+   private Calculatables calculatables;
 
    @Override
    public Predicate getPredicate(Term... args) {
@@ -71,7 +75,7 @@ public final class Between implements PredicateFactory {
 
    public Predicate getPredicate(Term low, Term high, Term middle) {
       if (middle.getType().isVariable()) {
-         return new Retryable(toLong(kb, low), toLong(kb, high));
+         return new Retryable(toLong(calculatables, low), toLong(calculatables, high));
       } else {
          return singleton;
       }
@@ -79,15 +83,21 @@ public final class Between implements PredicateFactory {
 
    @Override
    public void setKnowledgeBase(KnowledgeBase kb) {
-      this.kb = kb;
-      singleton.setKnowledgeBase(kb);
+      calculatables = getCalculatables(kb);
+      singleton = new Singleton(calculatables);
    }
 
    private static class Singleton extends AbstractSingletonPredicate {
+      final Calculatables calculatables;
+
+      Singleton(Calculatables calculatables) {
+         this.calculatables = calculatables;
+      }
+
       @Override
       protected boolean evaluate(Term low, Term high, Term middle) {
          final KnowledgeBase kb = getKnowledgeBase();
-         return NUMERIC_TERM_COMPARATOR.compare(low, middle, kb) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, kb) < 1;
+         return NUMERIC_TERM_COMPARATOR.compare(low, middle, calculatables) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, calculatables) < 1;
       }
    };
 

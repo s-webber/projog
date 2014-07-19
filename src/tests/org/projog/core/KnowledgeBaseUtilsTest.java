@@ -238,4 +238,17 @@ public class KnowledgeBaseUtilsTest {
       assertSame(o1, KnowledgeBaseUtils.getFileHandles(kb1));
       assertSame(o2, KnowledgeBaseUtils.getFileHandles(kb2));
    }
+
+   @Test
+   public void testCalculatables() {
+      KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
+      KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
+      Calculatables o1 = KnowledgeBaseUtils.getCalculatables(kb1);
+      Calculatables o2 = KnowledgeBaseUtils.getCalculatables(kb2);
+      assertNotNull(o1);
+      assertNotNull(o2);
+      assertNotSame(o1, o2);
+      assertSame(o1, KnowledgeBaseUtils.getCalculatables(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getCalculatables(kb2));
+   }
 }

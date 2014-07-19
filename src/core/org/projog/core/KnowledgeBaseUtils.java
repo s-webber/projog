@@ -153,4 +153,8 @@ public final class KnowledgeBaseUtils {
    public static FileHandles getFileHandles(KnowledgeBase kb) {
       return getKnowledgeBaseResources(kb).getResource(FileHandles.class);
    }
+
+   public static Calculatables getCalculatables(KnowledgeBase kb) {
+      return getKnowledgeBaseResources(kb).getResource(Calculatables.class);
+   }
 }

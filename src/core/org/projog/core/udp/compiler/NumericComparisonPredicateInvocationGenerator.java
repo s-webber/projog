@@ -9,8 +9,8 @@ abstract class NumericComparisonPredicateInvocationGenerator implements Predicat
    protected void ouputNumericComparison(CompiledPredicateWriter g, String logic) {
       Term function = g.currentClause().getCurrentFunction();
       String args = g.outputCreateTermStatement(function.getArgument(0), true) + ", " + g.outputCreateTermStatement(function.getArgument(1), true);
-      g.setNeedsKnowledgeBaseStaticVariable(true);
-      String eval = "NUMERIC_TERM_COMPARATOR.compare(" + args + ", kb)" + logic;
+      g.setNeedsCalculatablesStaticVariable(true);
+      String eval = "NUMERIC_TERM_COMPARATOR.compare(" + args + ", c)" + logic;
       // NOTE: no need to backtrack args in numeric term comparator evaluation (as no assignments made)
       // (so no need to to update currentClause.variablesToBackTrack)
       g.outputIfTrueThenBreak(eval);

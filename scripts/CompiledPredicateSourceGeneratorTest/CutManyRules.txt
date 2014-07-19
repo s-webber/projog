@@ -17,10 +17,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       if (!v0_RuleNo.unify(INTEGER_1)) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v0_X, INTEGER_5, kb)!=1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v0_X, INTEGER_5, c)!=1) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v0_Y, INTEGER_7, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v0_Y, INTEGER_7, c)!=-1) {
          isCut = true;
          return false;
       }
@@ -58,10 +58,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       if (!v1_RuleNo.unify(INTEGER_2)) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v1_X, INTEGER_3, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_X, INTEGER_3, c)!=-1) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v1_Y, INTEGER_7, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_Y, INTEGER_7, c)!=-1) {
          isCut = true;
          return false;
       }
@@ -125,10 +125,10 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       if (!v3_RuleNo.unify(INTEGER_4)) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v3_X, INTEGER_3, kb)!=1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v3_X, INTEGER_3, c)!=1) {
          return false;
       }
-      if (NUMERIC_TERM_COMPARATOR.compare(v3_Y, INTEGER_7, kb)!=-1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v3_Y, INTEGER_7, c)!=-1) {
          isCut = true;
          return false;
       }
@@ -188,7 +188,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       } while (true);
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      kb = _kb;
+      c = KnowledgeBaseUtils.getCalculatables(_kb);
       RepeatSetAmount_1 = (org.projog.core.function.flow.RepeatSetAmount)_kb.getPredicateFactory(new PredicateKey("repeat", 1));
    }
    %CLASS_NAME%(final Term in0, final Term in1, final Term in2) {
@@ -305,7 +305,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    private static final Term INTEGER_3 = new IntegerNumber(3L);
    private static final Term INTEGER_2 = new IntegerNumber(2L);
    private static final Term INTEGER_4 = new IntegerNumber(4L);
-   private static KnowledgeBase kb;
+   private static Calculatables c;
    private static org.projog.core.function.flow.RepeatSetAmount RepeatSetAmount_1;
    private boolean isCut;
    private boolean isRetrying;

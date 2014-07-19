@@ -11,11 +11,13 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 
 import java.util.Set;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.Calculatables;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
@@ -211,17 +213,19 @@ public class TermUtilsTest {
    @Test
    public void testIntegerNumberToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertEquals(Integer.MAX_VALUE, TermUtils.toLong(kb, integerNumber(Integer.MAX_VALUE)));
-      assertEquals(1, TermUtils.toLong(kb, integerNumber(1)));
-      assertEquals(0, TermUtils.toLong(kb, integerNumber(0)));
-      assertEquals(Integer.MIN_VALUE, TermUtils.toLong(kb, integerNumber(Integer.MIN_VALUE)));
+      Calculatables calculatables = getCalculatables(kb);
+      assertEquals(Integer.MAX_VALUE, TermUtils.toLong(calculatables, integerNumber(Integer.MAX_VALUE)));
+      assertEquals(1, TermUtils.toLong(calculatables, integerNumber(1)));
+      assertEquals(0, TermUtils.toLong(calculatables, integerNumber(0)));
+      assertEquals(Integer.MIN_VALUE, TermUtils.toLong(calculatables, integerNumber(Integer.MIN_VALUE)));
    }
 
    @Test
    public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      Calculatables calculatables = getCalculatables(kb);
       Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
-      assertEquals(21, TermUtils.toLong(kb, arithmeticExpression));
+      assertEquals(21, TermUtils.toLong(calculatables, arithmeticExpression));
    }
 
    @Test
@@ -234,8 +238,9 @@ public class TermUtilsTest {
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
+      Calculatables calculatables = getCalculatables(kb);
       try {
-         TermUtils.toLong(kb, t);
+         TermUtils.toLong(calculatables, t);
          fail();
       } catch (ProjogException e) {
          assertEquals(expectedExceptionMessage, e.getMessage());

@@ -1,5 +1,6 @@
 package org.projog.core.udp.compiler;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils.getUnifyStatement;
 
 import java.util.HashMap;
@@ -53,7 +54,7 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
    // TODO method too long - refactor
    private String getCalculatableExpression(CompiledPredicateWriter g, Term t) {
       if (t.isImmutable()) {
-         return g.outputCreateTermStatement(g.knowledgeBase().getNumeric(t), true);
+         return g.outputCreateTermStatement(getNumeric(g, t), true);
       } else if (t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 2 && ops.containsKey(t.getName())) {
          String op = ops.get(t.getName());
          Term arg1 = t.getArgument(0);
@@ -129,8 +130,12 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
       }
    }
 
+   private Numeric getNumeric(CompiledPredicateWriter g, Term t) {
+      return getCalculatables(g.knowledgeBase()).getNumeric(t);
+   }
+
    private static String getNumeric(final String variableId, final CompiledPredicateWriter g) {
-      g.setNeedsKnowledgeBaseStaticVariable(true);
-      return "kb.getNumeric(" + variableId + ")";
+      g.setNeedsCalculatablesStaticVariable(true);
+      return "c.getNumeric(" + variableId + ")";
    }
 }

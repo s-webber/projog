@@ -14,17 +14,17 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
    private final boolean initRule1() {
       final Term v1_N;
       v1_N = a0;
-      if (NUMERIC_TERM_COMPARATOR.compare(v1_N, INTEGER_1, kb)!=1) {
+      if (NUMERIC_TERM_COMPARATOR.compare(v1_N, INTEGER_1, c)!=1) {
          return false;
       }
       final Numeric y0;
       final Term v1_N1;
-      v1_N1 = (((y0=kb.getNumeric(v1_N)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()-1):new DecimalFraction(y0.getDouble()-1.0));
+      v1_N1 = (((y0=c.getNumeric(v1_N)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()-1):new DecimalFraction(y0.getDouble()-1.0));
       a0 = v1_N1.getTerm();
       return true;
    }
    public %CLASS_NAME%(final KnowledgeBase _kb) {
-      kb = _kb;
+      c = KnowledgeBaseUtils.getCalculatables(_kb);
       s = KnowledgeBaseUtils.getSpyPoints(_kb).getSpyPoint(new PredicateKey("testSimpleNonTailRecursive", 1));
       d = false;
    }
@@ -57,7 +57,7 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
       return new %CLASS_NAME%(termArgs[0]);
    }
    private static final Term INTEGER_1 = new IntegerNumber(1L);
-   private static KnowledgeBase kb;
+   private static Calculatables c;
    private static SpyPoints.SpyPoint s;
    private final boolean d;
    public final boolean[] isSingleResultIfArgumentImmutable() {

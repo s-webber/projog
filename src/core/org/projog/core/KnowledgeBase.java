@@ -12,7 +12,6 @@ import java.util.TreeMap;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.function.kb.AddPredicateFactory;
-import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
@@ -34,9 +33,6 @@ public final class KnowledgeBase {
     * @see AddPredicateFactory#evaluate(Term[])
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
-
-   /** The arithmetic functions associated with this {@code KnowledgeBase}. */
-   private final Calculatables calculatables = new Calculatables(this);
 
    /**
     * Used to coordinate access to {@link javaPredicateClassNames}, {@link #javaPredicateInstances} and
@@ -89,36 +85,6 @@ public final class KnowledgeBase {
    public void bootstrap() {
       String bootstrapScript = getProjogProperties(this).getBootstrapScript();
       ProjogSourceReader.parseResource(this, bootstrapScript);
-   }
-
-   /**
-    * Returns the result of evaluating the specified arithmetic expression.
-    * 
-    * @param t a {@code Term} that can be evaluated as an arithmetic expression (e.g. a {@code Structure} of the form
-    * {@code +(1,2)} or a {@code Numeric})
-    * @return the result of evaluating the specified arithmetic expression
-    * @throws ProjogException if the specified term does not represent an arithmetic expression
-    */
-   public Numeric getNumeric(Term t) {
-      return calculatables.getNumeric(t);
-   }
-
-   /**
-    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
-    * 
-    * @param calculatableClassName The class name of the {@code Calculatable} to be associated with {@code key}.
-    */
-   public void addCalculatable(PredicateKey key, String calculatableClassName) {
-      calculatables.addCalculatable(key, calculatableClassName);
-   }
-
-   /**
-    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
-    * 
-    * @param calculatableClassName The instance of {@code Calculatable} to be associated with {@code key}.
-    */
-   public void addCalculatable(PredicateKey key, Calculatable calculatable) {
-      calculatables.addCalculatable(key, calculatable);
    }
 
    /**

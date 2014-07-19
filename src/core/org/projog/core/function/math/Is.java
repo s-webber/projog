@@ -1,5 +1,8 @@
 package org.projog.core.function.math;
 
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+
+import org.projog.core.Calculatables;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -49,9 +52,16 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Is extends AbstractSingletonPredicate {
+   private Calculatables calculatables;
+
+   @Override
+   public void init() {
+      calculatables = getCalculatables(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      Numeric n = getKnowledgeBase().getNumeric(arg2);
+      Numeric n = calculatables.getNumeric(arg2);
       return arg1.unify(n);
    }
 }

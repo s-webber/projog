@@ -9,6 +9,7 @@ import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
+import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
 
 public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
+   private final Calculatables calculatables = getCalculatables(kb);
 
    /** Check that {@link ProjogSystemProperties} is used by default. */
    @Test
@@ -47,7 +49,7 @@ public class KnowledgeBaseTest {
    @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));
-      Numeric n = kb.getNumeric(p);
+      Numeric n = calculatables.getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(4, n.getLong());
    }

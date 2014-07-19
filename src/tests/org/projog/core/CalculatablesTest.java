@@ -139,14 +139,25 @@ public class CalculatablesTest {
     * Calculatable used to test that new calculatables can be added to the factory.
     */
    public static class DummyCalculatable implements Calculatable {
+      KnowledgeBase kb;
+
       /**
        * @return an IntegerNumber with a value of the first input argument + 1
        */
       @Override
-      public Numeric calculate(KnowledgeBase kb, Term[] args) {
+      public Numeric calculate(Term[] args) {
+         if (kb == null) {
+            // setKnowledgeBase should be called by Calculatables when it creates an instance of this class
+            throw new RuntimeException("KnowledgeBase not set on " + this);
+         }
          long input = TermUtils.castToNumeric(args[0]).getLong();
          long output = input + 1;
          return new IntegerNumber(output);
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         this.kb = kb;
       }
    }
 }

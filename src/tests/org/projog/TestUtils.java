@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Operands;
@@ -155,9 +156,7 @@ public class TestUtils {
 
    public static Term[] createArgs(int numberOfArguments, Term term) {
       Term[] args = new Term[numberOfArguments];
-      for (int i = 0; i < numberOfArguments; i++) {
-         args[i] = term;
-      }
+      Arrays.fill(args, term);
       return args;
    }
 

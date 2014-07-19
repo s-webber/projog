@@ -17,6 +17,16 @@ import org.projog.core.term.Term;
 
 public class FileHandlesTest {
    @Test
+   public void testUserInputHandle() {
+      assertEquals("user_input", FileHandles.USER_INPUT_HANDLE.getName());
+   }
+
+   @Test
+   public void testUserOutputHandle() {
+      assertEquals("user_output", FileHandles.USER_OUTPUT_HANDLE.getName());
+   }
+
+   @Test
    public void testDefaultInputStream() {
       FileHandles fh = new FileHandles();
       assertSame(System.in, fh.getCurrentInputStream());
@@ -71,11 +81,26 @@ public class FileHandlesTest {
    @Test
    public void testWriteAndRead() throws IOException {
       FileHandles fh = new FileHandles();
-      String filename = "build/filehandlestest.tmp";
+      String filename = createFileName("testWriteAndRead");
       String contentsToWrite = "test";
       write(fh, filename, contentsToWrite);
       String contentsRead = read(fh, filename);
       assertEquals(contentsToWrite, contentsRead);
+   }
+
+   @Test
+   public void testIsHandle() throws IOException {
+      FileHandles fh = new FileHandles();
+      String filename = createFileName("testIsHandle");
+      Term handle = openOutput(fh, filename);
+      assertTrue(fh.isHandle(handle.getName()));
+      fh.close(handle);
+      assertFalse(fh.isHandle(handle.getName()));
+   }
+
+   private String createFileName(String name) {
+      String filename = "build/" + getClass().getName() + "_" + name + ".tmp";
+      return filename;
    }
 
    private void write(FileHandles fh, String filename, String contents) throws IOException {

@@ -36,3 +36,27 @@
 
 %QUERY open('directory_that_doesnt_exist/some_file.xyz','read',Z)
 %ERROR Unable to open input for: directory_that_doesnt_exist/some_file.xyz
+
+% "see/1" is a convenient way, with a single statement, to both open an input stream and set it as the current input stream. 
+%TRUE see('io_test.tmp')
+ 
+%QUERY get_char(X)
+%ANSWER X=a
+
+%QUERY current_input(X)
+%ANSWER X=io_test.tmp_input_handle
+
+% "seen" is a convenient way, with a single statement, to both close the current input stream and set user_input as the current input stream.
+%TRUE seen
+
+%QUERY current_input(X)
+%ANSWER X=user_input
+
+% If the argument of "see/1" is a file handle, rather than a filename, then the current input stream is set to the stream represented by the handle.
+%QUERY open('io_test.tmp', read, W), see(W), current_input(X), get_char(Y), seen, current_input(Z)
+%ANSWER
+% W=io_test.tmp_input_handle
+% X=io_test.tmp_input_handle
+% Y=a
+% Z=user_input
+%ANSWER

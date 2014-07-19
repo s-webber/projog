@@ -22,6 +22,9 @@ import org.projog.core.term.Term;
  * @see org.projog.core.KnowledgeBase#getFileHandles()
  */
 public final class FileHandles {
+   public static final Atom USER_OUTPUT_HANDLE = new Atom("user_output");
+   public static final Atom USER_INPUT_HANDLE = new Atom("user_input");
+
    private final Object LOCK = new Object();
    private final Map<String, InputStream> inputHandles = new HashMap<>();
    private final Map<String, PrintStream> outputHandles = new HashMap<>();
@@ -35,8 +38,8 @@ public final class FileHandles {
    private PrintStream out;
 
    FileHandles() {
-      Atom userInputHandle = new Atom("user_input");
-      Atom userOutputHandle = new Atom("user_output");
+      Atom userInputHandle = USER_INPUT_HANDLE;
+      Atom userOutputHandle = USER_OUTPUT_HANDLE;
       inputHandles.put(userInputHandle.getName(), System.in);
       outputHandles.put(userOutputHandle.getName(), System.out);
       setInput(userInputHandle);
@@ -91,7 +94,7 @@ public final class FileHandles {
             currentInputHandle = handle;
             in = inputHandles.get(handleName);
          } else {
-            throw new ProjogException("cannot find file handle with name:" + handleName);
+            throw new ProjogException("cannot find file input handle with name:" + handleName);
          }
       }
    }
@@ -108,7 +111,7 @@ public final class FileHandles {
             currentOutputHandle = handle;
             out = outputHandles.get(handleName);
          } else {
-            throw new ProjogException("cannot find file handle with name:" + handleName);
+            throw new ProjogException("cannot find file output handle with name:" + handleName);
          }
       }
    }
@@ -177,5 +180,9 @@ public final class FileHandles {
             return;
          }
       }
+   }
+
+   public boolean isHandle(String handle) {
+      return inputHandles.containsKey(handle) || outputHandles.containsKey(handle);
    }
 }

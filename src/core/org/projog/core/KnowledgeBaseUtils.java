@@ -1,6 +1,6 @@
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseResources.getKnowledgeBaseResources;
+import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,30 +131,30 @@ public final class KnowledgeBaseUtils {
    }
 
    public static ProjogEventsObservable getProjogEventsObservable(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(ProjogEventsObservable.class);
+      return getServiceLocator(kb).getInstance(ProjogEventsObservable.class);
    }
 
    public static ProjogProperties getProjogProperties(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(ProjogProperties.class);
+      return getServiceLocator(kb).getInstance(ProjogProperties.class);
    }
 
    public static Operands getOperands(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(Operands.class);
+      return getServiceLocator(kb).getInstance(Operands.class);
    }
 
    public static TermFormatter getTermFormatter(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(TermFormatter.class);
+      return getServiceLocator(kb).getInstance(TermFormatter.class);
    }
 
    public static SpyPoints getSpyPoints(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(SpyPoints.class);
+      return getServiceLocator(kb).getInstance(SpyPoints.class);
    }
 
    public static FileHandles getFileHandles(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(FileHandles.class);
+      return getServiceLocator(kb).getInstance(FileHandles.class);
    }
 
    public static Calculatables getCalculatables(KnowledgeBase kb) {
-      return getKnowledgeBaseResources(kb).getResource(Calculatables.class);
+      return getServiceLocator(kb).getInstance(Calculatables.class);
    }
 }

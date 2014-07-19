@@ -1,6 +1,6 @@
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseResources.getKnowledgeBaseResources;
+import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
@@ -68,7 +68,7 @@ public final class KnowledgeBase {
     */
    public KnowledgeBase(ProjogProperties projogProperties) {
       addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
-      getKnowledgeBaseResources(this).addResource(ProjogProperties.class, projogProperties);
+      getServiceLocator(this).addInstance(ProjogProperties.class, projogProperties);
    }
 
    /**

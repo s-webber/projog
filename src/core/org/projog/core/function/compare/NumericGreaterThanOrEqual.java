@@ -1,10 +1,5 @@
 package org.projog.core.function.compare;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
-import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
-
-import org.projog.core.Calculatables;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -22,16 +17,9 @@ import org.projog.core.term.Term;
  * Succeeds when the number argument <code>X</code> is greater than or equal to the number argument <code>Y</code>.
  * </p>
  */
-public final class NumericGreaterThanOrEqual extends AbstractSingletonPredicate {
-   private Calculatables calculatables;
-
-   @Override
-   public void init() {
-      calculatables = getCalculatables(getKnowledgeBase());
-   }
-
+public final class NumericGreaterThanOrEqual extends AbstractNumericComparisonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      return NUMERIC_TERM_COMPARATOR.compare(arg1, arg2, calculatables) > -1;
+      return compare(arg1, arg2) > -1;
    }
 }

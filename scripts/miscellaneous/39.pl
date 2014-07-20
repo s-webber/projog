@@ -8,3 +8,24 @@
 %TRUE consult('build/39test')
 
 %TRUE test
+
+% test ensure_loaded is a synonym for consult
+
+%TRUE ensure_loaded('build/39test')
+
+%QUERY test
+%ANSWER/
+%ANSWER/
+
+%TRUE ensure_loaded('build/39test.pl')
+
+%QUERY test
+%ANSWER/
+%ANSWER/
+%ANSWER/
+
+%QUERY ensure_loaded('build/doesntexist')
+%ERROR Could not read prolog source from resource: build/doesntexist.pl
+
+%QUERY ensure_loaded('build/39test.pro')
+%ERROR Could not read prolog source from resource: build/39test.pro

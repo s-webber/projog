@@ -101,6 +101,7 @@
 ?- pj_add_predicate(retract/1, 'org.projog.core.function.kb.Retract').
 ?- pj_add_predicate(retractall/1, 'org.projog.core.function.kb.RetractAll').
 ?- pj_add_predicate(consult/1, 'org.projog.core.function.kb.Consult').
+?- pj_add_predicate(ensure_loaded/1, 'org.projog.core.function.kb.Consult').
 ?- pj_add_predicate(flag/3, 'org.projog.core.function.kb.Flag').
 
 % db (recorded database)

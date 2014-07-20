@@ -27,6 +27,8 @@ public class TermComparatorTest {
 
    EmptyList.EMPTY_LIST,
 
+   atom("a"), atom("z"),
+
    structure("a", atom("b")), structure("b", atom("a")), structure("b", structure("a", atom())),
 
    structure("!", atom("a"), atom("b")),

@@ -30,13 +30,13 @@ import org.projog.core.term.TermType;
  % Keys are sorted using the standard ordering of terms.
  %QUERY keysort([_ - v,Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure(a) - v,[list] - v], X)
  %ANSWER
- % X=[_ - v,Variable - v,1.0 - v,1 - v,atom - v,[] - v,structure(a) - v,[list] - v]
+ % X=[_ - v,Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
  %ANSWER
  
  %QUERY keysort([[list] - v,structure(a) - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v,_ - v], X)
  %ANSWER
- % X=[_ - v,Variable - v,1.0 - v,1 - v,atom - v,[] - v,structure(a) - v,[list] - v]
+ % X=[_ - v,Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
  %ANSWER
  
@@ -54,11 +54,10 @@ import org.projog.core.term.TermType;
 /**
  * <code>keysort(X,Y)</code> - sorts a list of key/value pairs.
  * <p>
- * Sorts the list <code>X</code>, containing <i>key/value pairs</i>, and attempts to unify the result with <code>Y</code>.
- * Key/value pairs are compound terms with a functor of <code>-</code> and two arguments. 
- * The first argument is the <i>key</i> and the second argument is the <i>value</i>. 
- * It is the key of the key/value pairs that is used to sort the elements contained in <code>X</code>.
- * (Note: duplicates are <i>not</i> removed.)
+ * Sorts the list <code>X</code>, containing <i>key/value pairs</i>, and attempts to unify the result with
+ * <code>Y</code>. Key/value pairs are compound terms with a functor of <code>-</code> and two arguments. The first
+ * argument is the <i>key</i> and the second argument is the <i>value</i>. It is the key of the key/value pairs that is
+ * used to sort the elements contained in <code>X</code>. (Note: duplicates are <i>not</i> removed.)
  */
 public final class KeySort extends AbstractSingletonPredicate {
    private static final String KEY_VALUE_PAIR_FUNCTOR = "-";

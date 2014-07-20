@@ -22,10 +22,10 @@ public class TermTypeTest {
 
    @Test
    public void testIsStructure() {
-      assertTrue(TermType.EMPTY_LIST.isStructure());
       assertTrue(TermType.LIST.isStructure());
       assertTrue(TermType.STRUCTURE.isStructure());
 
+      assertFalse(TermType.EMPTY_LIST.isStructure());
       assertFalse(TermType.FRACTION.isStructure());
       assertFalse(TermType.INTEGER.isStructure());
       assertFalse(TermType.ATOM.isStructure());
@@ -52,10 +52,10 @@ public class TermTypeTest {
       assertEquals(2, TermType.NAMED_VARIABLE.getPrecedence());
       assertEquals(3, TermType.FRACTION.getPrecedence());
       assertEquals(4, TermType.INTEGER.getPrecedence());
-      assertEquals(5, TermType.ATOM.getPrecedence());
+      assertEquals(5, TermType.EMPTY_LIST.getPrecedence());
+      assertEquals(6, TermType.ATOM.getPrecedence());
       // all compound structures share the same precedence
-      assertEquals(6, TermType.STRUCTURE.getPrecedence());
-      assertEquals(6, TermType.EMPTY_LIST.getPrecedence());
-      assertEquals(6, TermType.LIST.getPrecedence());
+      assertEquals(7, TermType.STRUCTURE.getPrecedence());
+      assertEquals(7, TermType.LIST.getPrecedence());
    }
 }

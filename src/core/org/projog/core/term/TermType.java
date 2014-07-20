@@ -14,14 +14,14 @@ public enum TermType {
    FRACTION(false, true, false, 3),
    /** @see IntegerNumber */
    INTEGER(false, true, false, 4),
-   /** @see Atom */
-   ATOM(false, false, false, 5),
-   /** @see Structure */
-   STRUCTURE(true, false, false, 6),
    /** @see EmptyList */
-   EMPTY_LIST(true, false, false, 6),
+   EMPTY_LIST(false, false, false, 5),
+   /** @see Atom */
+   ATOM(false, false, false, 6),
+   /** @see Structure */
+   STRUCTURE(true, false, false, 7),
    /** @see List */
-   LIST(true, false, false, 6);
+   LIST(true, false, false, 7);
 
    private final boolean isStructure;
    private final boolean isNumeric;

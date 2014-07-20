@@ -7,7 +7,7 @@ import org.projog.core.term.Term;
  %TRUE compound(a(b,c))
  %TRUE compound(1+1)
  %TRUE compound([a,b,c])
- %TRUE compound([])
+ %FALSE compound([])
  %FALSE compound(abc)
  %FALSE compound(1)
  %FALSE compound(1.5)

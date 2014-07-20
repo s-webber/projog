@@ -53,6 +53,9 @@ import org.projog.core.term.Term;
  %ANSWER
  
  %FALSE p(X,Y,Z)
+ 
+ %QUERY retract(X)
+ %ERROR Expected an atom or a predicate but got a NAMED_VARIABLE with value: X
  */
 /**
  * <code>retract(X)</code> - remove clauses from the knowledge base.

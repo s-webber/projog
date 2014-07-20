@@ -103,6 +103,12 @@
 ?- pj_add_predicate(consult/1, 'org.projog.core.function.kb.Consult').
 ?- pj_add_predicate(flag/3, 'org.projog.core.function.kb.Flag').
 
+% db (recorded database)
+?- pj_add_predicate(recorded/2, 'org.projog.core.function.db.Recorded').
+?- pj_add_predicate(recorded/3, 'org.projog.core.function.db.Recorded').
+?- pj_add_predicate(recordz/2, 'org.projog.core.function.db.Recordz').
+?- pj_add_predicate(recordz/3, 'org.projog.core.function.db.Recordz').
+ 
 % math
 ?- pj_add_predicate(is/2, 'org.projog.core.function.math.Is').
 

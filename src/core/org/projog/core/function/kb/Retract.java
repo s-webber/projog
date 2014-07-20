@@ -54,6 +54,7 @@ import org.projog.core.term.Term;
  
  %FALSE p(X,Y,Z)
  
+ % Argument must be suitably instantiated that the predicate of the clause can be determined.
  %QUERY retract(X)
  %ERROR Expected an atom or a predicate but got a NAMED_VARIABLE with value: X
  */

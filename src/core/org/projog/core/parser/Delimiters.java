@@ -1,5 +1,7 @@
 package org.projog.core.parser;
 
+import static org.projog.core.parser.WordType.SYMBOL;
+
 class Delimiters {
    private static final char ARGUMENT_SEPARATOR = ',';
    private static final char PREDICATE_OPENING_BRACKET = '(';
@@ -28,39 +30,39 @@ class Delimiters {
       }
    }
 
-   static boolean isPredicateOpenBracket(String value) {
-      return isMatch(value, PREDICATE_OPENING_BRACKET);
-   }
-
-   static boolean isPredicateCloseBracket(String value) {
-      return isMatch(value, PREDICATE_CLOSING_BRACKET);
-   }
-
-   static boolean isListOpenBracket(String value) {
-      return isMatch(value, LIST_OPENING_BRACKET);
-   }
-
    static boolean isListOpenBracket(int c) {
       return c == LIST_OPENING_BRACKET;
    }
 
-   static boolean isListCloseBracket(String value) {
-      return isMatch(value, LIST_CLOSING_BRACKET);
+   static boolean isPredicateOpenBracket(Word word) {
+      return isMatch(word, PREDICATE_OPENING_BRACKET);
    }
 
-   static boolean isListTail(String value) {
-      return isMatch(value, LIST_TAIL);
+   static boolean isPredicateCloseBracket(Word word) {
+      return isMatch(word, PREDICATE_CLOSING_BRACKET);
    }
 
-   static boolean isArgumentSeperator(String value) {
-      return isMatch(value, ARGUMENT_SEPARATOR);
+   static boolean isListOpenBracket(Word word) {
+      return isMatch(word, LIST_OPENING_BRACKET);
    }
 
-   static boolean isSentenceTerminator(String value) {
-      return isMatch(value, PERIOD);
+   static boolean isListCloseBracket(Word word) {
+      return isMatch(word, LIST_CLOSING_BRACKET);
    }
 
-   private static boolean isMatch(String input, char expected) {
-      return input != null && input.length() == 1 && input.charAt(0) == expected;
+   static boolean isListTail(Word word) {
+      return isMatch(word, LIST_TAIL);
+   }
+
+   static boolean isArgumentSeperator(Word word) {
+      return isMatch(word, ARGUMENT_SEPARATOR);
+   }
+
+   static boolean isSentenceTerminator(Word word) {
+      return isMatch(word, PERIOD);
+   }
+
+   private static boolean isMatch(Word word, char expected) {
+      return word != null && word.type == SYMBOL && word.value != null && word.value.length() == 1 && word.value.charAt(0) == expected;
    }
 }

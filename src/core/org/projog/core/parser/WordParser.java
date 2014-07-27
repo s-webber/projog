@@ -20,7 +20,7 @@ import java.io.Reader;
 
 import org.projog.core.Operands;
 
-/** 
+/**
  * Parses an input stream into discrete 'words' that are used to represent Prolog queries and rules.
  * 
  * @see SentenceParser
@@ -28,8 +28,7 @@ import org.projog.core.Operands;
 class WordParser {
    private final CharacterParser parser;
    private final Operands operands;
-   private String value;
-   private WordType type;
+   private Word word;
    private boolean rewound;
 
    WordParser(Reader reader, Operands operands) {
@@ -41,7 +40,8 @@ class WordParser {
    /**
     * Move the parser forward one word.
     * 
-    * @throws ParserException if there are no more words to parse (i.e. parser has reached the end of the underlying input stream)
+    * @throws ParserException if there are no more words to parse (i.e. parser has reached the end of the underlying
+    * input stream)
     */
    void next() {
       if (rewound) {
@@ -70,14 +70,9 @@ class WordParser {
       }
    }
 
-   /** The value that was parsed as a result of the last call to {@link #next()} */
-   String getValue() {
-      return value;
-   }
-
-   /** The type of the value parsed as a result of the last call to {@link #next()} */
-   WordType getType() {
-      return type;
+   /** The word that was parsed as a result of the last call to {@link #next()} */
+   Word getWord() {
+      return word;
    }
 
    /** Does the next value to be parsed represent a term (rather than a delimiter) */
@@ -94,16 +89,18 @@ class WordParser {
    }
 
    /**
-    * Rewinds the parser (i.e. "pushes-back" the last parsed word). 
+    * Rewinds the parser (i.e. "pushes-back" the last parsed word).
     * <p>
     * The last parsed value will remain after the next call to {@link #next()}
     * 
     * @param value the value to rewind
-    * @throws IllegalArgumentException if already in a rewound state (i.e. have already called {@link WordParser#rewind(String)} since the last call to {@link #next()}), or {@code value} is not equal to {@link #getValue()} 
+    * @throws IllegalArgumentException if already in a rewound state (i.e. have already called
+    * {@link WordParser#rewind(String)} since the last call to {@link #next()}), or {@code value} is not equal to
+    * {@link #getValue()}
     */
-   void rewind(String value) {
-      if (rewound || value == null || !value.equals(this.value)) {
-         throw new IllegalArgumentException("Rewound = " + rewound + " this.value = " + this.value + " value = " + value);
+   void rewind(Word value) {
+      if (word != value) {
+         throw new IllegalArgumentException();
       }
       rewound = true;
    }
@@ -244,12 +241,16 @@ class WordParser {
          }
       }
 
-      if (length > 1 && isDelimiter(sb.charAt(length - 1))) {
-         parser.rewind();
-         setValue(sb.toString().substring(0, length - 1), SYMBOL);
-      } else {
-         setValue(sb, SYMBOL);
+      for (int i = 1; i < length; i++) {
+         final String substring = sb.substring(i);
+         if (isValidParseableElement(substring) || isDelimiter(sb.charAt(i))) {
+            parser.rewind(length - i);
+            setValue(sb.substring(0, i), SYMBOL);
+            return;
+         }
       }
+
+      setValue(sb, SYMBOL);
    }
 
    private void skipWhitespace() {
@@ -310,7 +311,6 @@ class WordParser {
    }
 
    private void setValue(String value, WordType type) {
-      this.value = value;
-      this.type = type;
+      this.word = new Word(value, type);
    }
 }

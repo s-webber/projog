@@ -1,6 +1,12 @@
 package org.projog.core.parser;
 
-/** @see WordParser#getType() */
+/** @see WordParser */
 enum WordType {
-   ATOM, QUOTED_ATOM, INTEGER, FLOAT, SYMBOL, VARIABLE, ANONYMOUS_VARIABLE
+   ATOM,
+   QUOTED_ATOM,
+   INTEGER,
+   FLOAT,
+   SYMBOL,
+   VARIABLE,
+   ANONYMOUS_VARIABLE
 }

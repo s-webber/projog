@@ -9,58 +9,65 @@ import org.junit.Test;
 public class DelimitersTest {
    @Test
    public void testArgumentSeperator() {
-      assertTrue(Delimiters.isArgumentSeperator(","));
-      assertFalse(Delimiters.isArgumentSeperator(";"));
-      assertFalse(Delimiters.isArgumentSeperator(" "));
+      assertTrue(Delimiters.isArgumentSeperator(symbol(",")));
+      assertFalse(Delimiters.isArgumentSeperator(atom(",")));
+      assertFalse(Delimiters.isArgumentSeperator(symbol(";")));
+      assertFalse(Delimiters.isArgumentSeperator(symbol(" ")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testListOpenBracket() {
-      assertTrue(Delimiters.isListOpenBracket("["));
-      assertFalse(Delimiters.isListOpenBracket("]"));
-      assertFalse(Delimiters.isListOpenBracket("("));
+      assertTrue(Delimiters.isListOpenBracket(symbol("[")));
+      assertFalse(Delimiters.isListOpenBracket(atom("[")));
+      assertFalse(Delimiters.isListOpenBracket(symbol("]")));
+      assertFalse(Delimiters.isListOpenBracket(symbol("(")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testListCloseBracket() {
-      assertTrue(Delimiters.isListCloseBracket("]"));
-      assertFalse(Delimiters.isListCloseBracket("["));
-      assertFalse(Delimiters.isListCloseBracket(")"));
+      assertTrue(Delimiters.isListCloseBracket(symbol("]")));
+      assertFalse(Delimiters.isListCloseBracket(atom("]")));
+      assertFalse(Delimiters.isListCloseBracket(symbol("[")));
+      assertFalse(Delimiters.isListCloseBracket(symbol(")")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testPredicateOpenBracket() {
-      assertTrue(Delimiters.isPredicateOpenBracket("("));
-      assertFalse(Delimiters.isPredicateOpenBracket(")"));
-      assertFalse(Delimiters.isPredicateOpenBracket("["));
+      assertTrue(Delimiters.isPredicateOpenBracket(symbol("(")));
+      assertFalse(Delimiters.isPredicateOpenBracket(atom("(")));
+      assertFalse(Delimiters.isPredicateOpenBracket(symbol(")")));
+      assertFalse(Delimiters.isPredicateOpenBracket(symbol("[")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testPredicateCloseBracket() {
-      assertTrue(Delimiters.isPredicateCloseBracket(")"));
-      assertFalse(Delimiters.isPredicateCloseBracket("("));
-      assertFalse(Delimiters.isPredicateCloseBracket("]"));
+      assertTrue(Delimiters.isPredicateCloseBracket(symbol(")")));
+      assertFalse(Delimiters.isPredicateCloseBracket(atom(")")));
+      assertFalse(Delimiters.isPredicateCloseBracket(symbol("(")));
+      assertFalse(Delimiters.isPredicateCloseBracket(symbol("]")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testListTail() {
-      assertTrue(Delimiters.isListTail("|"));
-      assertFalse(Delimiters.isListTail("["));
-      assertFalse(Delimiters.isListTail("]"));
+      assertTrue(Delimiters.isListTail(symbol("|")));
+      assertFalse(Delimiters.isListTail(atom("|")));
+      assertFalse(Delimiters.isListTail(symbol("[")));
+      assertFalse(Delimiters.isListTail(symbol("]")));
       assertFalse(Delimiters.isArgumentSeperator(null));
    }
 
    @Test
    public void testSentenceTerminator() {
-      assertTrue(Delimiters.isSentenceTerminator("."));
-      assertFalse(Delimiters.isSentenceTerminator("..="));
-      assertFalse(Delimiters.isSentenceTerminator(","));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertTrue(Delimiters.isSentenceTerminator(symbol(".")));
+      assertFalse(Delimiters.isSentenceTerminator(atom(".")));
+      assertFalse(Delimiters.isSentenceTerminator(symbol("..=")));
+      assertFalse(Delimiters.isSentenceTerminator(symbol(",")));
+      assertFalse(Delimiters.isArgumentSeperator(symbol(null)));
    }
 
    @Test
@@ -76,5 +83,13 @@ public class DelimitersTest {
          assertEquals(expectedResult, Delimiters.isDelimiter(c));
          assertEquals(expectedResult, Delimiters.isDelimiter(Character.toString(c)));
       }
+   }
+
+   private Word symbol(String value) {
+      return new Word(value, WordType.SYMBOL);
+   }
+
+   private Word atom(String value) {
+      return new Word(value, WordType.ATOM);
    }
 }

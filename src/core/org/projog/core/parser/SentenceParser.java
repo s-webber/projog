@@ -91,9 +91,9 @@ public class SentenceParser {
          return null;
       }
 
-      String trailingText = popValue();
-      if (!isSentenceTerminator(trailingText)) {
-         throw newParserException("Expected . after: " + t + " but got: " + trailingText);
+      Word trailingWord = popValue();
+      if (!isSentenceTerminator(trailingWord)) {
+         throw newParserException("Expected . after: " + t + " but got: " + trailingWord);
       }
 
       return t;
@@ -160,10 +160,12 @@ public class SentenceParser {
     * @param maxLevel the maximum priority/precedence/level of operands to parse - if an operand represented by the next
     * term retrieved by this method has a higher priority then it is ignored for now ({@code currentTerm} is returned
     * "as-is"}.
-    * @param {@code true} if this method is being called by another method, {@code false} if it is being called recursively by itself.
+    * @param {@code true} if this method is being called by another method, {@code false} if it is being called
+    * recursively by itself.
     */
    private Term getTerm(final Term currentTerm, final int currentLevel, final int maxLevel, final boolean isFirst) {
-      final String next = popValue();
+      final Word nextWord = popValue();
+      final String next = nextWord.value;
       if (operands.postfix(next) && operands.getPostfixPriority(next) <= currentLevel) {
          Term postfixTerm = addPostfixOperand(next, currentTerm);
          return getTerm(postfixTerm, currentLevel, maxLevel, false);
@@ -171,13 +173,13 @@ public class SentenceParser {
          // could be '.' if end of sentence 
          // or ',', '|', ']' or ')' if parsing list or predicate
          // or could be an error
-         parser.rewind(next);
+         parser.rewind(nextWord);
          return currentTerm;
       }
 
       final int level = operands.getInfixPriority(next);
       if (level > maxLevel) {
-         parser.rewind(next);
+         parser.rewind(nextWord);
          return currentTerm;
       }
 
@@ -220,7 +222,8 @@ public class SentenceParser {
     * be thrown if does).
     */
    private Term getPossiblePrefixArgument(int currentLevel) {
-      final String value = popValue();
+      final Word word = popValue();
+      final String value = word.value;
       if (operands.prefix(value) && parser.isFollowedByTerm()) {
          if (value.equals(MINUS_SIGN) && isFollowedByNumber()) {
             return getNegativeNumber();
@@ -242,14 +245,15 @@ public class SentenceParser {
          Term argument = getTerm(prefixLevel);
          return createPrefixTerm(value, argument);
       } else {
-         parser.rewind(value);
+         parser.rewind(word);
          return getDiscreteTerm();
       }
    }
 
    private Term getNegativeNumber() {
-      final String value = "-" + popValue();
-      if (parser.getType() == WordType.INTEGER) {
+      final Word word = popValue();
+      final String value = "-" + word.value;
+      if (word.type == WordType.INTEGER) {
          return toIntegerNumber(value);
       } else {
          return toDecimalFraction(value);
@@ -301,23 +305,23 @@ public class SentenceParser {
    }
 
    private Term getDiscreteTerm() {
-      final String value = popValue();
-      if (isListOpenBracket(value)) {
+      final Word word = popValue();
+      if (isListOpenBracket(word)) {
          return parseList();
-      } else if (isPredicateOpenBracket(value)) {
+      } else if (isPredicateOpenBracket(word)) {
          return getTermInBrackets();
       } else {
-         switch (parser.getType()) {
+         switch (word.type) {
             case ATOM:
             case QUOTED_ATOM:
             case SYMBOL:
-               return getAtomOrStructure(value);
+               return getAtomOrStructure(word.value);
             case INTEGER:
-               return toIntegerNumber(value);
+               return toIntegerNumber(word.value);
             case FLOAT:
-               return toDecimalFraction(value);
+               return toDecimalFraction(word.value);
             case VARIABLE:
-               return getVariable(value);
+               return getVariable(word.value);
             case ANONYMOUS_VARIABLE:
                return AnonymousVariable.ANONYMOUS_VARIABLE;
             default:
@@ -341,8 +345,8 @@ public class SentenceParser {
     * a newly created {@code Atom} is returned.
     */
    private Term getAtomOrStructure(String name) {
-      String value = parser.isEndOfStream() ? null : peekValue();
-      if (isPredicateOpenBracket(value)) {
+      Word word = parser.isEndOfStream() ? null : peekValue();
+      if (isPredicateOpenBracket(word)) {
          popValue(); //skip opening bracket
          if (isPredicateCloseBracket(peekValue())) {
             throw newParserException("No arguments specified for structure: " + name);
@@ -354,13 +358,13 @@ public class SentenceParser {
          args.add(t);
 
          do {
-            value = popValue();
-            if (isPredicateCloseBracket(value)) {
+            word = popValue();
+            if (isPredicateCloseBracket(word)) {
                return Structure.createStructure(name, toArray(args));
-            } else if (isArgumentSeperator(value)) {
+            } else if (isArgumentSeperator(word)) {
                args.add(getCommaSeparatedArgument());
             } else {
-               throw newParserException("While parsing arguments of " + name + " expected ) or , but got: " + value);
+               throw newParserException("While parsing arguments of " + name + " expected ) or , but got: " + word);
             }
          } while (true);
       } else {
@@ -389,26 +393,26 @@ public class SentenceParser {
       Term tail = EmptyList.EMPTY_LIST;
 
       while (true) {
-         String value = popValue();
-         if (isListCloseBracket(value)) {
+         Word word = popValue();
+         if (isListCloseBracket(word)) {
             break;
          }
-         parser.rewind(parser.getValue());
+         parser.rewind(word);
          Term arg = getCommaSeparatedArgument();
          args.add(arg);
 
-         value = popValue(); // | ] or ,
-         if (isListCloseBracket(value)) {
+         word = popValue(); // | ] or ,
+         if (isListCloseBracket(word)) {
             break;
-         } else if (isListTail(value)) {
+         } else if (isListTail(word)) {
             tail = getCommaSeparatedArgument();
-            value = popValue();
-            if (!isListCloseBracket(value)) {
-               throw newParserException("Expected ] to mark end of list after tail but got: " + value);
+            word = popValue();
+            if (!isListCloseBracket(word)) {
+               throw newParserException("Expected ] to mark end of list after tail but got: " + word);
             }
             break;
-         } else if (!isArgumentSeperator(value)) {
-            throw newParserException("While parsing list expected ] | or , but got: " + value);
+         } else if (!isArgumentSeperator(word)) {
+            throw newParserException("While parsing list expected ] | or , but got: " + word);
          }
       }
       return ListFactory.createList(toArray(args), tail);
@@ -439,28 +443,28 @@ public class SentenceParser {
       // considering the priority of any surrounding terms outside the brackets)
       // we call getArgument with the highest possible priority.
       Term t = getTerm(Integer.MAX_VALUE);
-      final String next = popValue();
-      if (!isPredicateCloseBracket(next)) {
-         throw newParserException("Expected ) but got: " + next);
+      final Word word = popValue();
+      if (!isPredicateCloseBracket(word)) {
+         throw newParserException("Expected ) but got: " + word + " after " + t);
       }
       return t;
    }
 
-   private String popValue() {
+   private Word popValue() {
       parser.next();
-      return parser.getValue();
+      return parser.getWord();
    }
 
-   private String peekValue() {
-      String value = popValue();
-      parser.rewind(value);
-      return value;
+   private Word peekValue() {
+      Word word = popValue();
+      parser.rewind(word);
+      return word;
    }
 
    private boolean isFollowedByNumber() {
-      String value = popValue();
-      WordType et = parser.getType();
-      parser.rewind(value);
+      Word word = popValue();
+      WordType et = word.type;
+      parser.rewind(word);
       return et == WordType.INTEGER || et == WordType.FLOAT;
    }
 

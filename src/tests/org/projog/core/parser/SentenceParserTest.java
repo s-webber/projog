@@ -139,6 +139,26 @@ public class SentenceParserTest {
    }
 
    @Test
+   public void testParsingBrackets7() {
+      assertParse("X = (!).", "X = !", "=(X, !)");
+   }
+
+   @Test
+   public void testParsingBrackets8() {
+      assertParse("X = (a, !).", "X = (a , !)", "=(X, ,(a, !))");
+   }
+
+   @Test
+   public void testParsingBrackets9() {
+      assertParse("X = (a, !; b).", "X = (a , ! ; b)", "=(X, ;(,(a, !), b))");
+   }
+
+   @Test
+   public void testParsingBrackets10() {
+      assertParse("X = [a,'('|Y].", "X = [a,(|Y]", "=(X, .(a, .((, Y)))");
+   }
+
+   @Test
    public void testExtraTextAfterFullStop() {
       SentenceParser sp = getSentenceParser("?- consult(\'bench.pl\'). jkhkj");
       Term t = sp.parseSentence();

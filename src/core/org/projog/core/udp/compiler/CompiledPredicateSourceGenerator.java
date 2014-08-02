@@ -667,9 +667,10 @@ final class CompiledPredicateSourceGenerator {
             if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
                w.assign(w.getVariableId(argument.getArgument(0)), getNewVariableSyntax(argument.getArgument(0)));
             }
-            w.assign("final List tmpList", placeholderList);
-            w.writeStatement(placeholderVariableId + ".setTail(tmpList)");
-            w.assign(placeholderVariableId, "tmpList");
+            String tmpId = getNewTempoaryVariableName();
+            w.assign("final List " + tmpId, placeholderList);
+            w.writeStatement(placeholderVariableId + ".setTail(" + tmpId + ")");
+            w.assign(placeholderVariableId, tmpId);
             if (currentClause().isIgnorableVariable(argument.getArgument(1)) == false) {
                w.assign(w.getVariableId(argument.getArgument(1)), "null");
             }
@@ -694,20 +695,12 @@ final class CompiledPredicateSourceGenerator {
                w.assign(w.getVariableId(v), getNewVariableSyntax(v));
             }
          }
-         if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
-            classVariables().addAssignedVariable(w.getVariableId(argument.getArgument(0)));
-            w.assign(w.getVariableId(argument.getArgument(0)), variableNameToCompareTo + ".getArgument(0)");
-         } else {
-            w.assign("final Term tmpHead", variableNameToCompareTo + ".getArgument(0)");
-            outputMatchConsequentArgument(argument.getArgument(0), "tmpHead", -1);
-         }
-         if (newlyDeclaredVariables.contains(argument.getArgument(1))) {
-            classVariables().addAssignedVariable(w.getVariableId(argument.getArgument(1)));
-            w.assign(w.getVariableId(argument.getArgument(1)), variableNameToCompareTo + ".getArgument(1)");
-         } else {
-            w.assign("final Term tmpTail", variableNameToCompareTo + ".getArgument(1)");
-            outputMatchConsequentArgument(argument.getArgument(1), "tmpTail", -1);
-         }
+
+         // check head
+         assignArgument(argument, variableNameToCompareTo, newlyDeclaredVariables, 0);
+         // check tail
+         assignArgument(argument, variableNameToCompareTo, newlyDeclaredVariables, 1);
+
          if (tailRecursiveArgumentIdx == -1) {
             w.elseIf(variableNameToCompareTo + ".getType()==TermType.NAMED_VARIABLE");
             // variable will of been declared above in if (out of scope of this else)
@@ -725,6 +718,28 @@ final class CompiledPredicateSourceGenerator {
          String value = w.outputCreateTermStatement(argument, true);
          writeIfConsequentArgumentUnificationFailsReturnFalse(value, variableNameToCompareTo);
       }
+   }
+
+   private void assignArgument(Term argument, String variableNameToCompareTo, Set<Variable> newlyDeclaredVariables, int argumentIdx) {
+      final String getArgumentMethod = ".getArgument(" + argumentIdx + ")";
+      if (newlyDeclaredVariables.contains(argument.getArgument(argumentIdx))) {
+         classVariables().addAssignedVariable(w.getVariableId(argument.getArgument(argumentIdx)));
+         w.assign(w.getVariableId(argument.getArgument(argumentIdx)), variableNameToCompareTo + getArgumentMethod);
+      } else {
+         String tmpId = getNewTempoaryVariableName();
+         w.classVariables().addAssignedVariable(tmpId);
+         w.assign("final Term " + tmpId, variableNameToCompareTo + getArgumentMethod);
+         outputMatchConsequentArgument(argument.getArgument(argumentIdx), tmpId, -1);
+      }
+   }
+
+   private String getNewTempoaryVariableName() {
+      int ctr = 0;
+      String tmpId;
+      do {
+         tmpId = "t" + (ctr++);
+      } while (w.classVariables().isDeclaredVariable(tmpId));
+      return tmpId;
    }
 
    private Set<Variable> declareArgumentVariabledNotAlreadyDeclared(Term argument) {

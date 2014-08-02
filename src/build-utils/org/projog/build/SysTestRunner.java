@@ -89,6 +89,7 @@ public class SysTestRunner implements Observer {
 
    private void checkScript(File f) {
       try {
+         out.println("Checking script: " + f.getPath());
          consultFile(f);
          List<SysTestQuery> queries = SysTestParser.getQueries(f);
          checkQueries(f, queries);

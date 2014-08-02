@@ -663,7 +663,7 @@ final class CompiledPredicateSourceGenerator {
             }
             String placeholderList = getNewListSyntax(newListHead, CompiledPredicateWriter.EMPTY_LIST_SYNTAX);
 
-            w.beginIf(variableNameToCompareTo + "==" + PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx);
+            w.beginIf(variableNameToCompareTo + "==" + placeholderVariableId);
             if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
                w.assign(w.getVariableId(argument.getArgument(0)), getNewVariableSyntax(argument.getArgument(0)));
             }
@@ -671,9 +671,7 @@ final class CompiledPredicateSourceGenerator {
             w.assign("final List " + tmpId, placeholderList);
             w.writeStatement(placeholderVariableId + ".setTail(" + tmpId + ")");
             w.assign(placeholderVariableId, tmpId);
-            if (currentClause().isIgnorableVariable(argument.getArgument(1)) == false) {
-               w.assign(w.getVariableId(argument.getArgument(1)), "null");
-            }
+            assignNullToVariableIfRequired(argument.getArgument(1), newlyDeclaredVariables);
 
             w.elseIf(variableNameToCompareTo + ".getType()==TermType.NAMED_VARIABLE");
             if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
@@ -681,9 +679,7 @@ final class CompiledPredicateSourceGenerator {
             }
             w.assign(placeholderVariableId, placeholderList);
             writeIfConsequentArgumentUnificationFailsReturnFalse(placeholderVariableId, variableNameToCompareTo);
-            if (currentClause().isIgnorableVariable(argument.getArgument(1)) == false) {
-               w.assign(w.getVariableId(argument.getArgument(1)), "null");
-            }
+            assignNullToVariableIfRequired(argument.getArgument(1), newlyDeclaredVariables);
 
             w.elseIf(variableNameToCompareTo + ".getType()==TermType.LIST");
          } else {
@@ -717,6 +713,12 @@ final class CompiledPredicateSourceGenerator {
       } else {
          String value = w.outputCreateTermStatement(argument, true);
          writeIfConsequentArgumentUnificationFailsReturnFalse(value, variableNameToCompareTo);
+      }
+   }
+
+   private void assignNullToVariableIfRequired(Term argument, Set<Variable> newlyDeclaredVariables) {
+      if (argument.getType() == TermType.NAMED_VARIABLE && !currentClause().isIgnorableVariable(argument)) {
+         w.assign(w.getVariableId(argument), null);
       }
    }
 

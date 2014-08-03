@@ -254,7 +254,7 @@ final class ClauseMetaData {
 
       boolean b = false;
       for (int i = conjunctionIndex - 1; i > -1; i--) {
-         if (predicateFactories[i].getClass() == Cut.class) {
+         if (isCut(i)) {
             return true;
          }
          if (isConjunctionMulipleResult[i]) {
@@ -266,6 +266,10 @@ final class ClauseMetaData {
          }
       }
       return false;
+   }
+
+   private boolean isCut(int idx) {
+      return predicateFactories[idx] != null && predicateFactories[idx].getClass() == Cut.class;
    }
 
    boolean isAfterLastMulipleResultConjuction() {

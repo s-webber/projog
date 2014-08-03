@@ -110,7 +110,7 @@ final class CompiledPredicateSourceGenerator {
       for (CompiledPredicateVariables.PredicateFactoryStaticVariable v : classVariables().getRequiredPredicateFactories()) {
          String variableName = v.variableName;
          PredicateFactory ef = v.PredicateFactory;
-         w.writeStatement("private static " + ef.getClass().getName() + " " + variableName);
+         w.writeStatement("private static " + getClassName(ef) + " " + variableName);
       }
    }
 
@@ -199,7 +199,7 @@ final class CompiledPredicateSourceGenerator {
          if (v.isCompiledPredicate) {
             getSyntax = "((StaticUserDefinedPredicateFactory)" + getSyntax + ").getActualPredicateFactory()";
          }
-         String castType = ef.getClass().getName();
+         String castType = getClassName(ef);
          w.assign(v.variableName, "(" + castType + ")" + getSyntax);
       }
       if (factMetaData().isPossibleSingleResultRecursiveFunction()) {
@@ -933,6 +933,11 @@ final class CompiledPredicateSourceGenerator {
          }
       }
       return sb;
+   }
+
+   private String getClassName(PredicateFactory ef) {
+      // replace $ with . so inner classes work
+      return ef.getClass().getName().replace('$', '.');
    }
 
    private String className() {

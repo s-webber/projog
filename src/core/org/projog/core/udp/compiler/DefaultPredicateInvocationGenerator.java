@@ -92,12 +92,20 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
    }
 
    private String getPredicateReturnType(PredicateFactory ef, int numberOfArguments) {
+      Class<? extends PredicateFactory> predicateFactoryClass = ef.getClass();
+      Method m;
       try {
-         Method m = ef.getClass().getDeclaredMethod("getPredicate", getMethodParameters(numberOfArguments));
-         return m.getReturnType().getName();
+         // if an overloaded version of the getPredicate method exists, with the exact number of required arguments, then use that
+         m = predicateFactoryClass.getDeclaredMethod("getPredicate", getMethodParameters(numberOfArguments));
       } catch (NoSuchMethodException e) {
-         throw new RuntimeException(e);
+         try {
+            // default to using the overridden varargs version of the getPredicate method (as defined by PredicateFactory) 
+            m = predicateFactoryClass.getDeclaredMethod("getPredicate", Term[].class);
+         } catch (NoSuchMethodException e2) {
+            throw new RuntimeException("No getPredicate(Term[]) method declared for: " + predicateFactoryClass, e2);
+         }
       }
+      return m.getReturnType().getName();
    }
 
    @SuppressWarnings("rawtypes")

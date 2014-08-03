@@ -283,7 +283,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    /**
     * @see StaticUserDefinedPredicateFactory#getImplications
     */
-   private static class ImplicationsIterator implements Iterator<ClauseModel> {
+   private static final class ImplicationsIterator implements Iterator<ClauseModel> {
       private final Iterator<ClauseModel> iterator;
 
       ImplicationsIterator(List<ClauseModel> implications) {
@@ -310,19 +310,19 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private static class InterpretedUserDefinedPredicatePredicateFactory implements PredicateFactory {
+   public static final class InterpretedUserDefinedPredicatePredicateFactory implements PredicateFactory {
       private final PredicateKey key;
       private final List<ClauseAction> rows;
       private final SpyPoints.SpyPoint spyPoint;
 
-      InterpretedUserDefinedPredicatePredicateFactory(PredicateKey key, SpyPoints.SpyPoint spyPoint, List<ClauseAction> rows) {
+      private InterpretedUserDefinedPredicatePredicateFactory(PredicateKey key, SpyPoints.SpyPoint spyPoint, List<ClauseAction> rows) {
          this.key = key;
          this.spyPoint = spyPoint;
          this.rows = rows;
       }
 
       @Override
-      public Predicate getPredicate(Term... args) {
+      public InterpretedUserDefinedPredicate getPredicate(Term... args) {
          return new InterpretedUserDefinedPredicate(key, spyPoint, rows.iterator());
       }
 

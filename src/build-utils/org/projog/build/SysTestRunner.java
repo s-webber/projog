@@ -96,7 +96,7 @@ public class SysTestRunner implements Observer {
       } catch (Exception e) {
          String msg = "Error checking systest script: " + f.getPath() + " " + e;
          out.println(msg);
-         e.printStackTrace();
+         e.printStackTrace(out);
          errorMessages.append(f.getName() + " " + msg + "\n");
          errorCtr++;
       }
@@ -113,8 +113,16 @@ public class SysTestRunner implements Observer {
          try {
             checkQuery(query);
          } catch (Exception e) {
-            e.printStackTrace();
-            out.println("\n***********************\n\n" + "Exception caught executing: " + query.getQueryStr() + " from: " + f.getPath() + "\nclass: " + e.getClass() + "\nmessage: " + e.getMessage());
+            e.printStackTrace(out);
+            out.println("\n***********************\n\n"
+                        + "Exception caught executing: "
+                        + query.getQueryStr()
+                        + " from: "
+                        + f.getPath()
+                        + "\nclass: "
+                        + e.getClass()
+                        + "\nmessage: "
+                        + e.getMessage());
             errorMessages.append(f.getName() + " " + query.getQueryStr() + " " + e.getClass() + " " + e.getMessage() + "\n");
             errorCtr++;
          }

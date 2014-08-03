@@ -26,7 +26,9 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
          p0.setTail(t0);
          p0 = t0;
          v1_Xs = null;
-      } else if (a0.getType()==TermType.NAMED_VARIABLE) {
+      }
+	  else 
+      if (a0.getType()==TermType.NAMED_VARIABLE) {
          v1_X = new Variable("X");
          p0 = ListFactory.createList(v1_X, EmptyList.EMPTY_LIST);
          if (!p0.unify(a0)) {
@@ -101,7 +103,9 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
             p0.setTail(t0);
             p0 = t0;
             v1_Xs = null;
-         } else if (a0.getType()==TermType.NAMED_VARIABLE) {
+         }
+         else
+         if (a0.getType()==TermType.NAMED_VARIABLE) {
             v1_X = new Variable("X");
             p0 = ListFactory.createList(v1_X, EmptyList.EMPTY_LIST);
             if (!p0.unify(a0)) {

@@ -638,4 +638,8 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    boolean isSpyPointsEnabled() {
       return getProjogProperties(kb).isSpyPointsEnabled();
    }
+
+   boolean isAssigned(String id) {
+      return classVariables.isAssignedVariable(id);
+   }
 }

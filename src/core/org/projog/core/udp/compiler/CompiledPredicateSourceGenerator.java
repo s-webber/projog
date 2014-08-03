@@ -638,8 +638,15 @@ final class CompiledPredicateSourceGenerator {
       Set<Variable> newlyDeclaredVariables = declareArgumentVariabledNotAlreadyDeclared(argument);
 
       if (tailRecursiveArgumentIdx != -1 && currentClause().getClauseIndex() == 0) {
+         String outputCreateTermStatement = null;
+         if (argument.getType() == TermType.NAMED_VARIABLE) {
+            outputCreateTermStatement = w.outputCreateTermStatement(argument, true);
+         }
          w.beginIf(variableNameToCompareTo + "==" + PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx);
-         w.writeStatement(PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx + ".setTail(" + w.outputCreateTermStatement(argument, true) + ")");
+         if (argument.getType() != TermType.NAMED_VARIABLE) {
+            outputCreateTermStatement = w.outputCreateTermStatement(argument, true);
+         }
+         w.writeStatement(PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx + ".setTail(" + outputCreateTermStatement + ")");
          w.endBlock();
 
          if (currentClause().isIgnorableVariable(argument)) {
@@ -663,17 +670,25 @@ final class CompiledPredicateSourceGenerator {
             }
             String placeholderList = getNewListSyntax(newListHead, CompiledPredicateWriter.EMPTY_LIST_SYNTAX);
 
-            w.beginIf(variableNameToCompareTo + "==" + placeholderVariableId);
-            if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
-               w.assign(w.getVariableId(argument.getArgument(0)), getNewVariableSyntax(argument.getArgument(0)));
-            }
-            String tmpId = getNewTempoaryVariableName();
-            w.assign("final List " + tmpId, placeholderList);
-            w.writeStatement(placeholderVariableId + ".setTail(" + tmpId + ")");
-            w.assign(placeholderVariableId, tmpId);
-            assignNullToVariableIfRequired(argument.getArgument(1), newlyDeclaredVariables);
+            if (currentClause().getClauseIndex() == 1) {
+               w.beginIf(variableNameToCompareTo + "==" + placeholderVariableId);
+               if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
+                  String variableId = w.getVariableId(argument.getArgument(0));
+                  if (!w.isAssigned(variableId)) {
+                     w.assign(variableId, getNewVariableSyntax(argument.getArgument(0)));
+                  }
+               }
+               String tmpId = getNewTempoaryVariableName();
+               w.assign("final List " + tmpId, placeholderList);
+               w.writeStatement(placeholderVariableId + ".setTail(" + tmpId + ")");
+               w.assign(placeholderVariableId, tmpId);
+               assignNullToVariableIfRequired(argument.getArgument(1), newlyDeclaredVariables);
 
-            w.elseIf(variableNameToCompareTo + ".getType()==TermType.NAMED_VARIABLE");
+               w.endBlock();
+               w.addLine("else");
+            }
+
+            w.beginIf(variableNameToCompareTo + ".getType()==TermType.NAMED_VARIABLE");
             if (newlyDeclaredVariables.contains(argument.getArgument(0))) {
                w.assign(w.getVariableId(argument.getArgument(0)), getNewVariableSyntax(argument.getArgument(0)));
             }
@@ -687,8 +702,11 @@ final class CompiledPredicateSourceGenerator {
          }
          for (Variable v : newlyDeclaredVariables) {
             if (argument.getArgument(0) != v && argument.getArgument(1) != v) {
-               classVariables().addAssignedVariable(w.getVariableId(v));
-               w.assign(w.getVariableId(v), getNewVariableSyntax(v));
+               String variableId = w.getVariableId(v);
+               if (!w.isAssigned(variableId)) {
+                  classVariables().addAssignedVariable(variableId);
+                  w.assign(variableId, getNewVariableSyntax(v));
+               }
             }
          }
 

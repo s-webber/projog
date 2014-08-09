@@ -390,12 +390,9 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
 
          String arg1 = outputCreateTermStatement(t1, true);
          beginIf(arg1 + ".getType()==TermType.LIST");
-         if (t2.getArgument(0).getTerm() != AnonymousVariable.ANONYMOUS_VARIABLE) {
-            assign(getVariableId(t2.getArgument(0)), arg1 + ".getArgument(0).getTerm()");
-         }
-         if (t2.getArgument(1).getTerm() != AnonymousVariable.ANONYMOUS_VARIABLE) {
-            assign(getVariableId(t2.getArgument(1)), arg1 + ".getArgument(1).getTerm()");
-         }
+         outputAssignOfUnifyListElement(t2, arg1, 0, onBreakCallback);
+         outputAssignOfUnifyListElement(t2, arg1, 1, onBreakCallback);
+
          elseIf(arg1 + ".getType()==TermType.NAMED_VARIABLE");
          String arg2 = outputCreateTermStatement(t2, true);
          beginIf("!" + getUnifyStatement(arg1, arg2));
@@ -420,6 +417,23 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          String arg1 = outputCreateTermStatement(t1, true);
          String arg2 = outputCreateTermStatement(t2, true);
          outputIfFailThenBreak(getUnifyStatement(arg1, arg2), onBreakCallback);
+      }
+   }
+
+   private void outputAssignOfUnifyListElement(Term list, String listId, int elementId, Runnable onBreakCallback) {
+      if (list.getArgument(elementId).getTerm() == AnonymousVariable.ANONYMOUS_VARIABLE) {
+         return;
+      }
+
+      String variableId = getVariableId(list.getArgument(elementId));
+      String element = listId + ".getArgument(" + elementId + ").getTerm()";
+      if (isAssigned(variableId)) {
+         beginIf("!" + getUnifyStatement(variableId, element));
+         onBreakCallback.run();
+         outputBacktrackAndExitClauseEvaluation();
+         endBlock();
+      } else {
+         assign(variableId, element);
       }
    }
 

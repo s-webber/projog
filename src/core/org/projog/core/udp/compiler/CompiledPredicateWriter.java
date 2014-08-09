@@ -375,10 +375,10 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       // compare "t1" to "t2"
       if (t1.getType() == TermType.ANONYMOUS_VARIABLE || t2.getType() == TermType.ANONYMOUS_VARIABLE) {
          // anonymous always unify with variables everything - so no need to check
-      } else if (isNoMoreThanTwoElementList(t2) && isNoMoreThanTwoElementList(t1)) {
+      } else if (isNoMoreThanTwoElementList(t1) && isNoMoreThanTwoElementList(t2)) {
          outputEqualsEvaluation(t1.getArgument(0), t2.getArgument(0), onBreakCallback);
          outputEqualsEvaluation(t1.getArgument(1), t2.getArgument(1), onBreakCallback);
-      } else if (isNoMoreThanTwoElementList(t2) && t1.getType() == TermType.NAMED_VARIABLE) {
+      } else if (t1.getType() == TermType.NAMED_VARIABLE && isListOfTwoVariables(t2)) {
          Set<Variable> variables = TermUtils.getAllVariablesInTerm(t1);
          variables.addAll(TermUtils.getAllVariablesInTerm(t2));
          Set<Variable> newlyDeclaredVariables = new HashSet<>();
@@ -421,6 +421,10 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          String arg2 = outputCreateTermStatement(t2, true);
          outputIfFailThenBreak(getUnifyStatement(arg1, arg2), onBreakCallback);
       }
+   }
+
+   private boolean isListOfTwoVariables(Term t) {
+      return t.getType() == TermType.LIST && t.getArgument(0).getType().isVariable() && t.getArgument(1).getType().isVariable();
    }
 
    final Map<String, String> assignTempVariablesBackToTerm() {

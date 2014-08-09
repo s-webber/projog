@@ -77,7 +77,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
             if (i != 0) {
                methodArgs.append(", ");
             }
-            methodArgs.append(g.outputCreateTermStatement(function.getArgument(i), true));
+            methodArgs.append(g.outputCreateTermStatement(function.getArgument(i), true) + ".getTerm()");
          }
          String functionVariableName = g.classVariables().getPredicateFactoryVariableName(function, g.knowledgeBase());
          final String eval;

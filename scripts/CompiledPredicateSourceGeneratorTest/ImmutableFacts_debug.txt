@@ -119,7 +119,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _10 = v0_Z;
             v0_Z = v0_Z.getTerm();
             conjunctionCtr = 1;
-            if (!IsAtom_1.evaluate(v0_W)) {
+            if (!IsAtom_1.evaluate(v0_W.getTerm())) {
                v0_W.backtrack();
                break mainloop;
             }
@@ -250,16 +250,16 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3_0.spyPoint.isEnabled()) {
                CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3_0.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3_0, new Term[]{v0_X, v0_Y, v0_Z});
             }
-            if (!IsAtom_1.evaluate(v0_X)) {
+            if (!IsAtom_1.evaluate(v0_X.getTerm())) {
                v0_X.backtrack();
                break mainloop;
             }
-            if (!IsAtom_1.evaluate(v0_Y)) {
+            if (!IsAtom_1.evaluate(v0_Y.getTerm())) {
                v0_X.backtrack();
                v0_Y.backtrack();
                break mainloop;
             }
-            if (!IsAtom_1.evaluate(v0_Z)) {
+            if (!IsAtom_1.evaluate(v0_Z.getTerm())) {
                v0_X.backtrack();
                v0_Y.backtrack();
                v0_Z.backtrack();

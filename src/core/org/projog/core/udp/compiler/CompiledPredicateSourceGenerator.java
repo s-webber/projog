@@ -635,17 +635,17 @@ final class CompiledPredicateSourceGenerator {
          return;
       }
 
-      Set<Variable> newlyDeclaredVariables = declareArgumentVariabledNotAlreadyDeclared(argument);
+      final Set<Variable> newlyDeclaredVariables = declareArgumentVariabledNotAlreadyDeclared(argument);
 
-      if (tailRecursiveArgumentIdx != -1 && currentClause().getClauseIndex() == 0) {
+      final boolean isTailRecursivePredicate = tailRecursiveArgumentIdx != -1;
+      final boolean isFirstClauseOfTailRecursivePredicate = isTailRecursivePredicate && currentClause().getClauseIndex() == 0;
+      if (isFirstClauseOfTailRecursivePredicate) {
          String outputCreateTermStatement = null;
-         if (argument.getType() == TermType.NAMED_VARIABLE) {
-            outputCreateTermStatement = w.outputCreateTermStatement(argument, true);
-         }
          w.beginIf(variableNameToCompareTo + "==" + PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx);
-         if (argument.getType() != TermType.NAMED_VARIABLE) {
-            outputCreateTermStatement = w.outputCreateTermStatement(argument, true);
-         }
+
+         Set<String> tmp = classVariables().getAssignedVariables();
+         outputCreateTermStatement = w.outputCreateTermStatement(argument, true);
+         classVariables().setAssignedVariables(tmp);
          w.writeStatement(PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx + ".setTail(" + outputCreateTermStatement + ")");
          w.endBlock();
 
@@ -654,13 +654,13 @@ final class CompiledPredicateSourceGenerator {
             return;
          }
 
-         w.addLine("else");
+         w.addLine("else {");
       }
 
       if (argument.getType() == TermType.NAMED_VARIABLE) {
          outputMatchVariableConsequentArgument(argument, variableNameToCompareTo);
       } else if (isNoMoreThanTwoElementList(argument)) {
-         if (tailRecursiveArgumentIdx != -1) {
+         if (isTailRecursivePredicate) {
             String placeholderVariableId = PLACEHOLDER_PREFIX + tailRecursiveArgumentIdx;
             String newListHead;
             if (argument.getArgument(0).getType() == TermType.NAMED_VARIABLE) {
@@ -715,7 +715,7 @@ final class CompiledPredicateSourceGenerator {
          // check tail
          assignArgument(argument, variableNameToCompareTo, newlyDeclaredVariables, 1);
 
-         if (tailRecursiveArgumentIdx == -1) {
+         if (!isTailRecursivePredicate) {
             w.elseIf(variableNameToCompareTo + ".getType()==TermType.NAMED_VARIABLE");
             // variable will of been declared above in if (out of scope of this else)
             for (Variable v : newlyDeclaredVariables) {
@@ -732,10 +732,14 @@ final class CompiledPredicateSourceGenerator {
          String value = w.outputCreateTermStatement(argument, true);
          writeIfConsequentArgumentUnificationFailsReturnFalse(value, variableNameToCompareTo);
       }
+
+      if (isFirstClauseOfTailRecursivePredicate) {
+         w.endBlock();
+      }
    }
 
    private void assignNullToVariableIfRequired(Term argument, Set<Variable> newlyDeclaredVariables) {
-      if (argument.getType() == TermType.NAMED_VARIABLE && !currentClause().isIgnorableVariable(argument)) {
+      if (argument.getType() == TermType.NAMED_VARIABLE && !currentClause().isIgnorableVariable(argument) && !classVariables().isAssignedVariable(w.getVariableId(argument))) {
          w.assign(w.getVariableId(argument), null);
       }
    }

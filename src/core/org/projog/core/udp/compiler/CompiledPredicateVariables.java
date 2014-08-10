@@ -58,6 +58,15 @@ final class CompiledPredicateVariables {
       assignedVariables.clear();
    }
 
+   Set<String> getAssignedVariables() {
+      return new HashSet<>(assignedVariables);
+   }
+
+   void setAssignedVariables(Set<String> assignedVariables) {
+      clearAssignedVariables();
+      this.assignedVariables.addAll(assignedVariables);
+   }
+
    boolean addDeclaredVariable(String variableId) {
       return declaredVariables.add(variableId);
    }

@@ -11,9 +11,10 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
       if (a0==p0) {
          p0.setTail(EmptyList.EMPTY_LIST);
       }
-      else
-      if (!EmptyList.EMPTY_LIST.unify(a0)) {
-         return false;
+      else {
+         if (!EmptyList.EMPTY_LIST.unify(a0)) {
+            return false;
+         }
       }
       return true;
    }
@@ -86,9 +87,10 @@ public final class %CLASS_NAME% extends CompiledTailRecursivePredicate {
       if (a0==p0) {
          p0.setTail(EmptyList.EMPTY_LIST);
       }
-      else
-      if (!EmptyList.EMPTY_LIST.unify(a0)) {
-         return false;
+      else {
+         if (!EmptyList.EMPTY_LIST.unify(a0)) {
+            return false;
+         }
       }
       return true;
    }

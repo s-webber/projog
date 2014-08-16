@@ -38,6 +38,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private final List<ClauseModel> implications;
    private KnowledgeBase kb;
    private PredicateFactory compiledPredicateFactory;
+   private int setCompiledPredicateFactoryInvocationCtr;
 
    public StaticUserDefinedPredicateFactory(PredicateKey predicateKey) {
       this.predicateKey = predicateKey;
@@ -89,6 +90,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private void setCompiledPredicateFactory() {
+      setCompiledPredicateFactoryInvocationCtr++;
       final List<ClauseAction> rows = createClauseActionsFromClauseModels();
 
       if (isAllAlwaysMatchedClauseActions(rows)) {
@@ -177,16 +179,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private PredicateFactory createPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions) {
       List<ClauseModel> clauseModels = getCopyOfImplications();
 
-      if (getProperties().isRuntimeCompilationEnabled() && isPredicateSuitableForCompilation(clauseModels)) {
-         return CompiledPredicateClassGenerator.generateCompiledPredicate(kb, clauseModels);
+      if (isPredicateSuitableForCompilation(clauseModels)) {
+         return createCompiledPredicateFactoryFromClauseActions(clauseModels);
+      } else {
+         return createInterpretedPredicateFactoryFromClauseActions(clauseActions, clauseModels);
       }
-
-      TailRecursivePredicateMetaData tailRecursiveMetaData = TailRecursivePredicateMetaData.create(kb, clauseModels);
-      if (tailRecursiveMetaData != null) {
-         return new InterpretedTailRecursivePredicateFactory(kb, tailRecursiveMetaData);
-      }
-
-      return new InterpretedUserDefinedPredicatePredicateFactory(predicateKey, getSpyPoint(), clauseActions);
    }
 
    private List<ClauseModel> getCopyOfImplications() {
@@ -198,6 +195,37 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private boolean isPredicateSuitableForCompilation(List<ClauseModel> clauseModels) {
+      if (isInterpretedMode()) {
+         return false;
+      } else if (isCyclic()) {
+         return false;
+      } else {
+         return areClausesSuitableForCompilation(clauseModels);
+      }
+   }
+
+   private boolean isInterpretedMode() {
+      return !getProperties().isRuntimeCompilationEnabled();
+   }
+
+   /**
+    * Return {@code true} if this predicate calls a predicate that in turns calls this predicate.
+    * <p>
+    * For example, in the following script both {@code a} and {@code b} are cyclic, but {@code c} is not.
+    * 
+    * <pre>
+    * a(Z) :- b(Z).
+    * 
+    * b(Z) :- a(Z).
+    * 
+    * c(Z) :- b(Z).
+    * </pre>
+    */
+   private boolean isCyclic() {
+      return setCompiledPredicateFactoryInvocationCtr > 1;
+   }
+
+   private boolean areClausesSuitableForCompilation(List<ClauseModel> clauseModels) {
       for (ClauseModel cm : clauseModels) {
          Term antecedant = cm.getAntecedant();
          if (!isTermSuitableForCompilation(antecedant)) {
@@ -208,16 +236,24 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private boolean isTermSuitableForCompilation(Term antecedant) {
-      if (antecedant.getType().isVariable()) {
-         return false;
-      } else if (KnowledgeBaseUtils.isConjunction(antecedant)) {
-         for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
-            if (t.getType().isVariable()) {
-               return false;
-            }
+      for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
+         if (t.getType().isVariable()) {
+            return false;
          }
       }
       return true;
+   }
+
+   private PredicateFactory createCompiledPredicateFactoryFromClauseActions(List<ClauseModel> clauseModels) {
+      return CompiledPredicateClassGenerator.generateCompiledPredicate(kb, clauseModels);
+   }
+
+   private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions, List<ClauseModel> clauseModels) {
+      TailRecursivePredicateMetaData tailRecursiveMetaData = TailRecursivePredicateMetaData.create(kb, clauseModels);
+      if (tailRecursiveMetaData != null) {
+         return new InterpretedTailRecursivePredicateFactory(kb, tailRecursiveMetaData);
+      }
+      return new InterpretedUserDefinedPredicatePredicateFactory(predicateKey, getSpyPoint(), clauseActions);
    }
 
    private SpyPoints.SpyPoint getSpyPoint() {

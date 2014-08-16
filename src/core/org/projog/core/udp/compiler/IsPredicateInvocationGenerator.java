@@ -107,6 +107,13 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
             }
             s.append(")");
             s.append(":");
+         } else {
+            if (arg1.getType().isNumeric() == false) {
+               arg1TempNumericPlaceholder = getNumeric(string1, g);
+            }
+            if (arg2.getType().isNumeric() == false) {
+               arg2TempNumericPlaceholder = getNumeric(string2, g);
+            }
          }
          s.append("new DecimalFraction(");
          if (arg1.getType().isNumeric()) {

@@ -26,6 +26,7 @@
 ?- pj_add_predicate(float/1, 'org.projog.core.function.classify.IsFloat').
 ?- pj_add_predicate(compound/1, 'org.projog.core.function.classify.IsCompound').
 ?- pj_add_predicate(is_list/1, 'org.projog.core.function.classify.IsList').
+?- pj_add_predicate(char_type/2, 'org.projog.core.function.classify.CharType').
 
 % compare
 ?- pj_add_predicate('='/2, 'org.projog.core.function.compare.Equal').

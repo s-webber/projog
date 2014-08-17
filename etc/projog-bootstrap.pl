@@ -159,6 +159,7 @@
 ?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
 ?- pj_add_calculatable('/\'/2, 'org.projog.core.function.math.BitwiseAnd').
 ?- pj_add_calculatable('>>'/2, 'org.projog.core.function.math.ShiftRight').
+?- pj_add_calculatable(max/2, 'org.projog.core.function.math.Max').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').

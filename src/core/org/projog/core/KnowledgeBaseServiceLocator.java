@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Associates arbitrary objects with a {@code KnowledgeBase}.
@@ -13,7 +14,7 @@ import java.util.Map;
  * associated with one, and only one, {@code KnowledgeBase}.
  */
 public class KnowledgeBaseServiceLocator {
-   private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new HashMap<>();
+   private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new WeakHashMap<>();
 
    /**
     * Returns the {@code KnowledgeBaseServiceLocator} associated with the specified {@code KnowledgeBase}.

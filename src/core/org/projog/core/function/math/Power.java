@@ -40,7 +40,7 @@ package org.projog.core.function.math;
  %ANSWER X = 0.25
  */
 /**
- * <code>**</code> calculates the result of the first argument raised to the power of the second argument.
+ * <code>**</code> - calculates the result of the first argument raised to the power of the second argument.
  */
 public final class Power extends AbstractTwoArgumentsCalculatable {
    @Override

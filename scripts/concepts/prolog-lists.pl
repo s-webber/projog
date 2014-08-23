@@ -1,4 +1,5 @@
 % Determining if a term is a list.
+% (Note: Projog provides a built-in is_list(X) predicate.)
 
 list([]).
 list([X|Xs]) :- list(Xs).

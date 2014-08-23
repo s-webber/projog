@@ -99,8 +99,7 @@ public class FileHandlesTest {
    }
 
    private String createFileName(String name) {
-      String filename = "build/" + getClass().getName() + "_" + name + ".tmp";
-      return filename;
+      return "build/" + getClass().getName() + "_" + name + ".tmp";
    }
 
    private void write(FileHandles fh, String filename, String contents) throws IOException {

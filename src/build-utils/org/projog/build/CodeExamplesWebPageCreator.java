@@ -167,7 +167,7 @@ class CodeExamplesWebPageCreator {
 
    private void printComment(SysTestComment comment) throws IOException {
       String text = comment.comment;
-      println("<span class=\"comment\">" + text + "</span>");
+      println("<p><span class=\"comment\">" + text + "</span></p>");
    }
 
    private void printLink(SysTestLink link) throws IOException {

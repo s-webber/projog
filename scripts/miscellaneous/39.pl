@@ -1,15 +1,16 @@
-% test consult adds ".pl" to resource if no file extension provided
-
 %QUERY open('build/39test.pl', write, Z), set_output(Z), write('?- asserta(test).'), close(Z)
 %ANSWER Z=build/39test.pl_output_handle
 
 %FALSE test
 
-%TRUE consult('build/39test')
+%QUERY consult('build/39test')
+%ERROR Could not read prolog source from resource: build/39test
+
+%TRUE consult('build/39test.pl')
 
 %TRUE test
 
-% test ensure_loaded is a synonym for consult
+% test ensure_loaded adds ".pl" to resource if no file extension provided
 
 %TRUE ensure_loaded('build/39test')
 
@@ -20,7 +21,6 @@
 %TRUE ensure_loaded('build/39test.pl')
 
 %QUERY test
-%ANSWER/
 %ANSWER/
 %ANSWER/
 

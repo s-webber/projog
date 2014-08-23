@@ -19,17 +19,7 @@ import org.projog.core.term.Term;
 public final class Consult extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg) {
-      String resourceName = getResourceName(arg);
-      ProjogSourceReader.parseResource(getKnowledgeBase(), resourceName);
+      ProjogSourceReader.parseResource(getKnowledgeBase(), getAtomName(arg));
       return true;
-   }
-
-   private String getResourceName(Term arg) {
-      String resourceName = getAtomName(arg);
-      if (resourceName.indexOf('.') == -1) {
-         return resourceName + ".pl";
-      } else {
-         return resourceName;
-      }
    }
 }

@@ -20,7 +20,6 @@ import org.projog.api.QueryStatement;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogSystemProperties;
 import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -82,14 +81,13 @@ public class SysTestRunner implements Observer {
       for (File script : scripts) {
          // create new Projog each time so rules added from previous scripts
          // don't interfere with results of the script about to be checked
-         projog = new Projog(SYSTEM_PROPERTIES);
+         projog = new Projog(SYSTEM_PROPERTIES, this);
          checkScript(script);
       }
    }
 
    private void checkScript(File f) {
       try {
-         out.println("Checking script: " + f.getPath());
          consultFile(f);
          List<SysTestQuery> queries = SysTestParser.getQueries(f);
          checkQueries(f, queries);
@@ -103,26 +101,17 @@ public class SysTestRunner implements Observer {
    }
 
    private void consultFile(File script) {
-      debug("consulting: " + script);
+      out.println("Checking script: " + script.getPath());
       projog.consultFile(script);
    }
 
    private void checkQueries(File f, List<SysTestQuery> queries) {
-      projog.addObserver(this);
       for (SysTestQuery query : queries) {
          try {
             checkQuery(query);
          } catch (Exception e) {
             e.printStackTrace(out);
-            out.println("\n***********************\n\n"
-                        + "Exception caught executing: "
-                        + query.getQueryStr()
-                        + " from: "
-                        + f.getPath()
-                        + "\nclass: "
-                        + e.getClass()
-                        + "\nmessage: "
-                        + e.getMessage());
+            out.println("\n***********************\n\n" + "Exception caught executing: " + query.getQueryStr() + " from: " + f.getPath() + "\nclass: " + e.getClass() + "\nmessage: " + e.getMessage());
             errorMessages.append(f.getName() + " " + query.getQueryStr() + " " + e.getClass() + " " + e.getMessage() + "\n");
             errorCtr++;
          }
@@ -188,7 +177,7 @@ public class SysTestRunner implements Observer {
          }
       }
       if (parsedQuery && itr.hasNext()) {
-         throw new RuntimeException("Less answers than expected");
+         throw new RuntimeException("Less answers than expected for: " + query.getQueryStr());
       }
    }
 
@@ -331,14 +320,19 @@ public class SysTestRunner implements Observer {
    @Override
    public void update(Observable o, Object arg) {
       ProjogEvent event = (ProjogEvent) arg;
-      if (event.getType() == ProjogEventType.WARN || event.getType() == ProjogEventType.INFO) {
-         // currently system tests do not include expectation about WARN or INFO events -
-         // so ignore any generated at runtime
-         return;
+      // currently system tests do not include expectations about WARN or INFO events - so don't check them
+      switch (event.getType()) {
+         case WARN:
+            // log to console
+            out.println(event.getType() + " " + event.getMessage());
+            break;
+         case INFO:
+            // ignore
+            break;
+         default:
+            String message = generateLogMessageForEvent(event);
+            writeLogMessage(message);
       }
-
-      String message = generateLogMessageForEvent(event);
-      writeLogMessage(message);
    }
 
    /**
@@ -376,6 +370,19 @@ public class SysTestRunner implements Observer {
       }
    }
 
+   private static void logMemory() {
+      Runtime r = Runtime.getRuntime();
+      logMemory(r);
+      r.gc();
+      logMemory(r);
+   }
+
+   private static void logMemory(Runtime r) {
+      long totalMemory = r.totalMemory();
+      long freeMemory = r.freeMemory();
+      out.println("Max memory: " + r.maxMemory() + " Total memory: " + totalMemory + " Free memory: " + freeMemory + " Used memory: " + (totalMemory - freeMemory));
+   }
+
    public static final void main(String[] args) throws Exception {
       long start = System.currentTimeMillis();
 
@@ -397,6 +404,7 @@ public class SysTestRunner implements Observer {
       st.checkScripts(scripts);
 
       out.println("\nCompleted: " + st.numQueries + " queries from: " + scripts.size() + " files in: " + (System.currentTimeMillis() - start) + "ms");
+      logMemory();
       if (st.errorCtr != 0) {
          out.println("\n\n\n ***** Failed: " + st.errorCtr + " tests!!! *****\n\n\n");
          out.println(st.errorMessages);

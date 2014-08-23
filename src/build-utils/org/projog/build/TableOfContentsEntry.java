@@ -48,10 +48,18 @@ class TableOfContentsEntry {
    }
 
    boolean isHeader() {
-      return fileName == null;
+      return !isDescription() && fileName == null;
    }
 
    boolean isSubSection() {
-      return index.indexOf('.') != index.lastIndexOf('.');
+      return !isDescription() && index.indexOf('.') != index.lastIndexOf('.');
+   }
+
+   boolean isDescription() {
+      return index == null;
+   }
+
+   boolean isLink() {
+      return !isHeader() && !isDescription();
    }
 }

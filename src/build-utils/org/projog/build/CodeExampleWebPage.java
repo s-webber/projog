@@ -22,7 +22,8 @@ class CodeExampleWebPage {
 
    private static File getHtmlFile(File scriptFile) {
       String nameMinusExtension = getFileNameMinusExtension(scriptFile);
-      String htmlFileName = nameMinusExtension + HTML_FILE_EXTENSION;
+      String nameMinusPackage = nameMinusExtension.substring(nameMinusExtension.lastIndexOf('.') + 1);
+      String htmlFileName = nameMinusPackage + HTML_FILE_EXTENSION;
       return new File(DOCS_OUTPUT_DIR, htmlFileName);
    }
 
@@ -34,7 +35,7 @@ class CodeExampleWebPage {
 
    private static String getFileNameMinusExtension(File file) {
       String fileName = file.getName();
-      int dotPos = fileName.indexOf('.');
+      int dotPos = fileName.lastIndexOf('.');
       return fileName.substring(0, dotPos);
    }
 

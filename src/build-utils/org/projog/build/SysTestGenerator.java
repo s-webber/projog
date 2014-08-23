@@ -1,6 +1,9 @@
 package org.projog.build;
 
+import static org.projog.build.BuildUtilsConstants.PROLOG_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
+import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
+import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
 
 import java.io.BufferedReader;
@@ -26,7 +29,6 @@ import org.projog.core.PredicateFactory;
  * prolog syntax contained in the "{@code SYSTEM TEST}" comment at the top of the class.
  */
 public class SysTestGenerator {
-   private static final String SOURCE_INPUT_DIR = "src/core/";
    private static final File COMMANDS_OUTPUT_DIR = new File(SCRIPTS_OUTPUT_DIR, "commands");
 
    private static List<File> getDocumentableJavaSourceFiles(File dir) {
@@ -92,7 +94,7 @@ public class SysTestGenerator {
    private static String getClassName(File javaFile) {
       String filePath = javaFile.getPath();
       String filePathMinusExtension = removeFileExtension(filePath);
-      String filePathMinusSourceDirectoryAndFileExtension = filePath.substring(SOURCE_INPUT_DIR.length(), filePathMinusExtension.length());
+      String filePathMinusSourceDirectoryAndFileExtension = filePath.substring(SOURCE_INPUT_DIR_NAME.length(), filePathMinusExtension.length());
       return filePathMinusSourceDirectoryAndFileExtension.replace(File.separatorChar, '.');
    }
 
@@ -124,8 +126,7 @@ public class SysTestGenerator {
    }
 
    private static void writeScriptFile(File javaFile, BufferedReader br) {
-      String scriptName = replaceFileExtension(javaFile.getName(), ".pl");
-      File scriptFile = new File(COMMANDS_OUTPUT_DIR, scriptName);
+      File scriptFile = getOutputFile(javaFile, PROLOG_FILE_EXTENSION);
 
       try (FileWriter fw = new FileWriter(scriptFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
@@ -144,8 +145,7 @@ public class SysTestGenerator {
     * Comments can then be reused to construct user manual documentation.
     */
    private static void writeTextFile(File javaFile, BufferedReader br) {
-      String textFileName = replaceFileExtension(javaFile.getName(), TEXT_FILE_EXTENSION);
-      File textFile = new File(COMMANDS_OUTPUT_DIR, textFileName);
+      File textFile = getOutputFile(javaFile, TEXT_FILE_EXTENSION);
 
       try (FileWriter fw = new FileWriter(textFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
@@ -154,8 +154,8 @@ public class SysTestGenerator {
             if (line.startsWith("*")) {
                line = line.substring(1).trim();
             }
-            // ignore ant @see annotations present in input Javadoc 
-            if (!line.startsWith("@see")) {
+            // ignore any annotations present in input Javadoc 
+            if (!isAnnotation(line)) {
                bw.write(line);
                bw.newLine();
             }
@@ -163,6 +163,19 @@ public class SysTestGenerator {
       } catch (IOException e) {
          throw new RuntimeException("Could not produce: " + textFile + " due to: " + e, e);
       }
+   }
+
+   private static boolean isAnnotation(String line) {
+      return line.startsWith("@");
+   }
+
+   private static File getOutputFile(File javaSourceFile, String extension) {
+      return new File(COMMANDS_OUTPUT_DIR, toScriptName(javaSourceFile, extension));
+   }
+
+   private static String toScriptName(File javaFile, String extension) {
+      String nameIncludingPackageStructure = javaFile.getPath().substring(SOURCE_INPUT_DIR_NAME.length()).replace(File.separatorChar, '.');
+      return replaceFileExtension(nameIncludingPackageStructure, extension);
    }
 
    private static String replaceFileExtension(String fileName, String newExtension) {
@@ -179,7 +192,7 @@ public class SysTestGenerator {
    }
 
    public static final void main(String[] args) {
-      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(new File(SOURCE_INPUT_DIR));
+      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(SOURCE_INPUT_DIR);
       Map<String, File> alreadyProcessed = new HashMap<String, File>();
       for (File f : javaSourceFiles) {
          File previousEntry = alreadyProcessed.put(f.getName(), f);

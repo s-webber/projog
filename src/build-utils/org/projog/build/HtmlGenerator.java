@@ -5,6 +5,8 @@ import static org.projog.build.BuildUtilsConstants.FOOTER_HTML;
 import static org.projog.build.BuildUtilsConstants.HEADER_HTML;
 import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.MANUAL_HTML;
+import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
+import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.STATIC_PAGES_LIST;
 import static org.projog.build.BuildUtilsConstants.WEB_SRC_DIR;
 
@@ -15,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,11 +61,11 @@ public class HtmlGenerator {
       hg.generate("applications");
       List<CodeExampleWebPage> indexOfGeneratedPages = hg.generate("commands");
 
-      TableOfContentsReader tocReader = new TableOfContentsReader(indexOfGeneratedPages);
+      TableOfContentsReader tocReader = new TableOfContentsReader(indexOfGeneratedPages, getPackageDescriptions(SOURCE_INPUT_DIR));
       List<TableOfContentsEntry> entries = tocReader.getEntries();
       produceTableOfContents(entries);
       for (TableOfContentsEntry entry : entries) {
-         if (!entry.isHeader()) {
+         if (entry.isLink()) {
             addPreviousAndNextLinks(entry);
          }
       }
@@ -84,6 +88,44 @@ public class HtmlGenerator {
          String filename = (String) entry.getKey();
          String title = (String) entry.getValue();
          addHeadersAndFooters(title, new File(WEB_SRC_DIR, filename));
+      }
+   }
+
+   private static Map<String, String> getPackageDescriptions(File dir) {
+      HashMap<String, String> packageDescriptions = new HashMap<String, String>();
+      for (File f : dir.listFiles()) {
+         if (f.isDirectory()) {
+            packageDescriptions.putAll(getPackageDescriptions(f));
+         } else if ("package-info.java".equals(f.getName())) {
+            String packageName = f.getParent().substring(SOURCE_INPUT_DIR_NAME.length()).replace(File.separatorChar, '.');
+            packageDescriptions.put(packageName, parsePackageInfo(f));
+         }
+      }
+      return packageDescriptions;
+   }
+
+   /** Parses javadoc from the specified {@code package-info.java} file. */
+   private static String parsePackageInfo(File packageInfo) {
+      try {
+         List<String> lines = Files.readAllLines(packageInfo.toPath());
+         String firstLine = lines.get(0).trim();
+         String secondLine = lines.get(1).trim();
+         String thirdLine = lines.get(2).trim();
+
+         if (!"/**".equals(firstLine)) {
+            throw new RuntimeException();
+         }
+         if (!secondLine.startsWith("* Predicates") || !secondLine.endsWith(".")) {
+            throw new RuntimeException();
+         }
+         if (!"*/".equals(thirdLine)) {
+            throw new RuntimeException();
+         }
+
+         // strip leading '* ' and replace trailing '.' with ':'
+         return secondLine.substring(2, secondLine.length() - 1) + ':';
+      } catch (Exception e) {
+         throw new RuntimeException("Exception reading: " + packageInfo, e);
       }
    }
 
@@ -110,6 +152,8 @@ public class HtmlGenerator {
    private static void printTableOfContentsEntry(BufferedWriter bw, TableOfContentsEntry next) throws IOException {
       if (next.isHeader()) {
          bw.write(next.getIndex() + " " + next.getTitle() + "<br>" + LINE_BREAK);
+      } else if (next.isDescription()) {
+         bw.write("&nbsp;<i>" + next.getTitle() + "</i><br>" + LINE_BREAK);
       } else {
          if (next.isSubSection()) {
             bw.write("&nbsp;&nbsp;&nbsp; ");

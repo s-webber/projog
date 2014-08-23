@@ -62,6 +62,7 @@ div.code {
 	background-color: #eeeeee;
 	width: 100%; 
 	line-height: 100%;
+	padding: 5px;
 	overflow: auto;
 }
 span.manual {

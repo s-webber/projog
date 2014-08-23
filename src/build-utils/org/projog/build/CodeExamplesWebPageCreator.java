@@ -150,6 +150,7 @@ class CodeExamplesWebPageCreator {
          htmlBreak();
          programOutput(query.getExpectedExceptionMessage());
       } else if (query.isContinuesUntilFails()) {
+         programOutput(query.getExpectedOutput());
          htmlBreak();
          programOutput("no");
       }

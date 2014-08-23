@@ -1,11 +1,8 @@
 package org.projog.build;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -34,14 +31,10 @@ class BuildUtilsConstants {
     * @return contents of file
     */
    static byte[] toByteArray(File f) {
-      try (FileInputStream fis = new FileInputStream(f); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-         int next;
-         while ((next = fis.read()) != -1) {
-            baos.write(next);
-         }
-         return baos.toByteArray();
+      try {
+         return Files.readAllBytes(f.toPath());
       } catch (Exception e) {
-         throw new RuntimeException(e);
+         throw new RuntimeException("could not read file: " + f, e);
       }
    }
 
@@ -52,18 +45,10 @@ class BuildUtilsConstants {
     * @return list of lines contained in specified file
     */
    static List<String> readFile(File f) {
-      List<String> result = new ArrayList<>();
-      try (FileReader fr = new FileReader(f); BufferedReader br = new BufferedReader(fr)) {
-         String next;
-         while ((next = br.readLine()) != null) {
-            result.add(next);
-         }
-         if (result.isEmpty()) {
-            throw new Exception("File is empty");
-         }
+      try {
+         return Files.readAllLines(f.toPath(), Charset.defaultCharset());
       } catch (Exception e) {
          throw new RuntimeException("could not read text file: " + f, e);
       }
-      return result;
    }
 }

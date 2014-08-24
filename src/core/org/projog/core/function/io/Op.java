@@ -89,10 +89,10 @@ import org.projog.core.term.Term;
  % Examples of how an "x" in an associativity (i.e. "fx" or "xf") means that the argument can contain operators of only a lower level of priority than the operator represented by "f".
  
  %QUERY X = a xfExample xfExample
- %ERROR Invalid postfix: xfExample 500 and term: xfExample(a) 500 Line:  X = a xfExample xfExample.
+ %ERROR Invalid postfix: xfExample 500 and term: xfExample(a) 500 Line: X = a xfExample xfExample.
 
  %QUERY X = fxExample fxExample a
- %ERROR Invalid prefix: fxExample level: 650 greater than current level: 649 Line:  X = fxExample fxExample a.
+ %ERROR Invalid prefix: fxExample level: 650 greater than current level: 649 Line: X = fxExample fxExample a.
  */
 /**
  * <code>op(X,Y,Z)</code>

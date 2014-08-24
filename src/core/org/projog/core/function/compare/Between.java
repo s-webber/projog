@@ -96,7 +96,6 @@ public final class Between implements PredicateFactory {
 
       @Override
       protected boolean evaluate(Term low, Term high, Term middle) {
-         final KnowledgeBase kb = getKnowledgeBase();
          return NUMERIC_TERM_COMPARATOR.compare(low, middle, calculatables) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, calculatables) < 1;
       }
    };

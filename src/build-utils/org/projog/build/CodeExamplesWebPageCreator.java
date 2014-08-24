@@ -127,7 +127,7 @@ class CodeExamplesWebPageCreator {
 
    private void printQuery(SysTestQuery query) throws IOException {
       String question = query.getQueryStr() + ".";
-      programOutput(QUESTION_PREDICATE_NAME);
+      programOutput(QUESTION_PREDICATE_NAME + " ");
       userInput(question);
       htmlBreak();
 

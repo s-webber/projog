@@ -84,12 +84,22 @@
 		</javac>
 	</target>
 
-	<target name="compile" depends="compile.core,compile.jar,compile.build-utils,compile.tests"
+	<target name="compile.build-utils-tests" depends="get-junit">
+		<mkdir dir="build/classes/build-utils-tests"/>
+		<path id="classpath.compile.build-utils-tests">
+			<pathelement location="${junit-jar}"/>
+			<pathelement location="build/classes/build-utils"/>
+		</path>
+		<javac srcdir="src/build-utils-tests" destdir="build/classes/build-utils-tests" debug="on" includeantruntime="false">
+			<classpath refid="classpath.compile.build-utils-tests"/>
+		</javac>
+	</target>
+
+	<target name="compile" depends="compile.core,compile.jar,compile.tests,compile.build-utils,compile.build-utils-tests"
 	        description="compiles all classes and produces jar of core code"/>
 
 <!-- UNIT TEST -->
-	<target name="unit-test" depends="compile"
-	        description="runs junit tests">
+	<target name="unit-test.core">
 		<mkdir dir="${dynamicContentDir}"/>
 		<junit haltonfailure="on" fork="yes" dir=".">
 			<formatter type="plain" usefile="false"/>
@@ -110,6 +120,23 @@
 			</batchtest>
 		</junit>
 	</target>
+
+	<target name="unit-test.build-utils">
+		<junit haltonfailure="on" fork="yes" dir=".">
+			<formatter type="plain" usefile="false"/>
+			<classpath location="${junit-jar}"/>
+			<classpath location="${hamcrest-jar}"/>
+			<classpath location="build/classes/build-utils"/>
+			<classpath location="build/classes/build-utils-tests"/>			
+			<batchtest fork="yes" todir=".">
+				<fileset dir="src/build-utils-tests">
+					<include name="**/*Test.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="unit-test" depends="compile,unit-test.core,unit-test.build-utils" description="runs junit tests"/>
 
 <!-- SYSTEM TESTS -->
 	<target name="sys-test.generate">

@@ -143,7 +143,6 @@ import java.util.List;
  * <img src="doc-files/SysTestParser.png">
  */
 class SysTestParser {
-   private static final String LINE_SEPARATOR = System.getProperty("line.separator");
    private static final String COMMENT_CHARACTER = "%";
    private static final String TRUE_TAG = "%TRUE";
    private static final String TRUE_NO_TAG = "%TRUE_NO";
@@ -186,11 +185,9 @@ class SysTestParser {
       }
    }
 
-   private final File testScript;
    private final BufferedReader br;
 
    SysTestParser(File testScript) throws FileNotFoundException {
-      this.testScript = testScript;
       FileReader fr = new FileReader(testScript);
       br = new BufferedReader(fr);
    }
@@ -232,14 +229,15 @@ class SysTestParser {
             query.setContinuesUntilFails(true);
          } else if (nextLine != null && nextLine.startsWith(EXCEPTION_TAG)) {
             String expectedExceptionMessage = readLinesUntilNextTag(nextLine, EXCEPTION_TAG);
-            br.readLine();
             query.setExpectedExceptionMessage(expectedExceptionMessage);
          } else {
             reset();
          }
          return query;
-      } else if (line.startsWith(COMMENT_CHARACTER)) {
-         return new SysTestComment(line.substring(1));
+      } else if (isStandardComment(line)) {
+         return new SysTestComment(line.substring(1).trim());
+      } else if (isMarkupComment(line)) {
+         throw new IllegalArgumentException("Unknown sys-test markup: " + line);
       } else {
          return new SysTestCode(line);
       }
@@ -283,28 +281,33 @@ class SysTestParser {
       if (line.startsWith(ANSWER_NO_VARIABLES_TAG)) {
          // query succeeds but no variables to check
          return answer;
-      } else if (line.startsWith(ANSWER_TAG)) {
+      } else if (line.trim().equals(ANSWER_TAG)) {
          // query succeeds with variables to check
-         line = getText(line);
-         boolean finished = line.trim().length() > 0;
-         do {
-            if (!finished) {
-               line = br.readLine();
-            }
-            if (line.startsWith(ANSWER_TAG)) {
-               finished = true;
-            } else {
-               int equalsPos = line.indexOf('=');
-               String variableId = line.substring(1, equalsPos).trim();
-               String expectedValue = line.substring(equalsPos + 1).trim();
-               answer.addAssignment(variableId, expectedValue);
-            }
-         } while (!finished);
+         addAssignments(answer);
+         return answer;
+      } else if (line.startsWith(ANSWER_TAG)) {
+         // query succeeds with single variable to check
+         addAssignment(answer, line);
          return answer;
       } else {
          reset();
          return null;
       }
+   }
+
+   private void addAssignments(SysTestAnswer answer) throws IOException {
+      String next;
+      while (!(next = br.readLine()).startsWith(ANSWER_TAG)) {
+         addAssignment(answer, next);
+      }
+   }
+
+   private void addAssignment(SysTestAnswer answer, String line) {
+      String assignmentStatement = getText(line);
+      int equalsPos = assignmentStatement.indexOf('=');
+      String variableId = assignmentStatement.substring(0, equalsPos).trim();
+      String expectedValue = assignmentStatement.substring(equalsPos + 1).trim();
+      answer.addAssignment(variableId, expectedValue);
    }
 
    private String readLinesUntilNextTag(String line, String tagName) throws IOException {
@@ -316,7 +319,7 @@ class SysTestParser {
             line = line.trim().substring(1).trim();
             boolean addNewLine = (first && line.length() == 0) || !first;
             if (addNewLine) {
-               sb.append(LINE_SEPARATOR);
+               sb.append(System.lineSeparator());
             }
             sb.append(line);
             first = false;
@@ -324,6 +327,27 @@ class SysTestParser {
          expectedOutput = sb.toString();
       }
       return expectedOutput;
+   }
+
+   /**
+    * Returns {@code true} if {@code line} represents a "standard" comment.
+    * <p>
+    * In this context, a "standard" comment is a comment used to provide descriptive human readable messages - rather
+    * than "mark-up" comments used to specify system tests. Standard comments are identified by having whitespace
+    * directly after the {@code %} comment character.
+    */
+   private boolean isStandardComment(final String line) {
+      return line.startsWith(COMMENT_CHARACTER) && line.length() > 1 && Character.isWhitespace(line.charAt(1));
+   }
+
+   /**
+    * Returns {@code true} if {@code line} represents a "mark-up" comment.
+    * <p>
+    * In this context, a "mark-up" comment is a comment used to provide specify system tests. Mark-up comments are
+    * identified by having no whitespace directly after the {@code %} comment character.
+    */
+   private boolean isMarkupComment(final String line) {
+      return line.startsWith(COMMENT_CHARACTER) && !isStandardComment(line) && !line.trim().equals(COMMENT_CHARACTER);
    }
 
    /**
@@ -338,7 +362,7 @@ class SysTestParser {
       if (spacePos == -1) {
          return "";
       } else {
-         return line.substring(spacePos);
+         return line.substring(spacePos + 1).trim();
       }
    }
 

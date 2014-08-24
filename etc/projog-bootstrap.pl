@@ -97,6 +97,7 @@
 ?- pj_add_predicate(pj_add_calculatable/2, 'org.projog.core.function.kb.AddCalculatable').
 ?- pj_add_predicate(asserta/1, 'org.projog.core.function.kb.AssertA').
 ?- pj_add_predicate(assertz/1, 'org.projog.core.function.kb.AssertZ').
+?- pj_add_predicate(assert/1, 'org.projog.core.function.kb.AssertZ').
 ?- pj_add_predicate(clause/2, 'org.projog.core.function.kb.InspectClause').
 ?- pj_add_predicate(listing/1, 'org.projog.core.function.kb.Listing').
 ?- pj_add_predicate(retract/1, 'org.projog.core.function.kb.Retract').

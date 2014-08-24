@@ -15,6 +15,14 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER X=1
  %ANSWER X=2
  %ANSWER X=3
+ 
+  % Note: "assert" is a synonym for "assertz".
+  %FALSE z(X)
+  %TRUE assert(z(a)), assert(z(b)), assert(z(c))
+  %QUERY z(X)
+  %ANSWER X=a
+  %ANSWER X=b
+  %ANSWER X=c
  */
 /**
  * <code>assertz(X)</code> - adds a clause to the end of the knowledge base.

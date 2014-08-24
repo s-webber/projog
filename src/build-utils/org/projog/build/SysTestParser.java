@@ -235,7 +235,7 @@ class SysTestParser {
          }
          return query;
       } else if (isStandardComment(line)) {
-         return new SysTestComment(line.substring(1).trim());
+         return new SysTestComment(getComment(line));
       } else if (isMarkupComment(line)) {
          throw new IllegalArgumentException("Unknown sys-test markup: " + line);
       } else {
@@ -327,6 +327,19 @@ class SysTestParser {
          expectedOutput = sb.toString();
       }
       return expectedOutput;
+   }
+
+   private String getComment(final String line) throws IOException {
+      StringBuilder comment = new StringBuilder(line.substring(1).trim());
+      mark();
+      String next;
+      while ((next = br.readLine()) != null && isStandardComment(next)) {
+         comment.append(" ");
+         comment.append(next.substring(1).trim());
+         mark();
+      }
+      reset();
+      return comment.toString().trim();
    }
 
    /**

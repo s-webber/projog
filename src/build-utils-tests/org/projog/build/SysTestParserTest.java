@@ -155,8 +155,7 @@ public class SysTestParserTest {
    public void testCombinations() throws IOException {
       SysTestParser parser = parse("% hello", "% world", "%TRUE true", "a line of code", "another line of code", "%LINK xyz", "final line of code", "% end");
 
-      assertComment("hello", parser);
-      assertComment("world", parser);
+      assertComment("hello world", parser);
       assertQueryString("true", parser);
       assertCode("a line of code", parser);
       assertCode("another line of code", parser);

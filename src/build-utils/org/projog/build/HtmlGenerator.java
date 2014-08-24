@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -107,7 +106,7 @@ public class HtmlGenerator {
    /** Parses javadoc from the specified {@code package-info.java} file. */
    private static String parsePackageInfo(File packageInfo) {
       try {
-         List<String> lines = Files.readAllLines(packageInfo.toPath());
+         List<String> lines = BuildUtilsConstants.readFile(packageInfo);
          String firstLine = lines.get(0).trim();
          String secondLine = lines.get(1).trim();
          String thirdLine = lines.get(2).trim();

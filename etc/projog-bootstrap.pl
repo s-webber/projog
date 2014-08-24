@@ -80,6 +80,8 @@
 ?- pj_add_predicate(seeing/1, 'org.projog.core.function.io.CurrentInput').
 ?- pj_add_predicate(see/1, 'org.projog.core.function.io.See').
 ?- pj_add_predicate(seen, 'org.projog.core.function.io.Seen').
+?- pj_add_predicate(tell/1, 'org.projog.core.function.io.Tell').
+?- pj_add_predicate(told, 'org.projog.core.function.io.Told').
 ?- pj_add_predicate(current_output/1, 'org.projog.core.function.io.CurrentOutput').
 ?- pj_add_predicate(get_char/1, 'org.projog.core.function.io.GetChar').
 ?- pj_add_predicate(nl, 'org.projog.core.function.io.NewLine').

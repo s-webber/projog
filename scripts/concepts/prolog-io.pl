@@ -60,3 +60,8 @@
 % Y=a
 % Z=user_input
 %ANSWER
+
+% "tell/1" is a convenient way, with a single statement, to both open an output stream and set it as the current output stream. 
+% "told" is a convenient way, with a single statement, to both close the current output stream and set user_output as the current output stream.
+%QUERY tell('io_test.tmp'), put_char(x), told, see('io_test.tmp'), get_char(Y), seen
+%ANSWER Y=x

@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <project name="projog" default="test">
-
 	<property name="core-jar" value="build/lib/projog-core.jar"/>
 	<property name="lib" value="lib"/>
 	<property name="junit-jar" value="${lib}/junit-4.11.jar"/>
@@ -69,6 +68,7 @@
 			<pathelement location="${core-jar}"/>
 		</path>
 		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false">
+            <compilerarg value="-Xlint"/>
 			<classpath refid="classpath.compile.build-utils"/>
 		</javac>
 	</target>
@@ -80,6 +80,7 @@
 			<pathelement location="${core-jar}"/>
 		</path>
 		<javac srcdir="src/tests" destdir="build/classes/tests" debug="on" includeantruntime="false">
+            <compilerarg value="-Xlint"/>
 			<classpath refid="classpath.compile.tests"/>
 		</javac>
 	</target>
@@ -91,6 +92,7 @@
 			<pathelement location="build/classes/build-utils"/>
 		</path>
 		<javac srcdir="src/build-utils-tests" destdir="build/classes/build-utils-tests" debug="on" includeantruntime="false">
+            <compilerarg value="-Xlint"/>
 			<classpath refid="classpath.compile.build-utils-tests"/>
 		</javac>
 	</target>

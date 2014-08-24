@@ -138,7 +138,8 @@
 		</junit>
 	</target>
 
-	<target name="unit-test" depends="compile,unit-test.core,unit-test.build-utils" description="runs junit tests"/>
+	<target name="unit-test" depends="compile,unit-test.core,unit-test.build-utils" 
+		    description="runs junit tests"/>
 
 <!-- SYSTEM TESTS -->
 	<target name="sys-test.generate">
@@ -228,11 +229,9 @@
 	</target>
 
 <!-- RELEASE -->
-	<target name="release-setup" depends="clean,compile,unit-test,sys-test,web,javadoc"/>
-
-	<target name="release-bin" depends="release-setup"
+	<target name="release-bin" depends="clean,compile,unit-test,sys-test,web,javadoc"
 	        description="builds release candidate as zip containing jar, html documentation and batch files">
-		<zip destfile="build/projog-bin-${filename.timestamp}.zip">
+		<zip destfile="build/projog-bin.zip">
 			<fileset dir="etc">
 				<include name="projog-console*.bat"/>
 				<include name="README.txt"/>
@@ -248,16 +247,13 @@
 		</zip>
 	</target>
 
-	<target name="release-web" depends="release-setup"
+	<target name="release-web" depends="release-bin"
 	        description="builds zip of web content for projog.org">
 		<zip destfile="build/projog-web-${filename.timestamp}.zip">
 			<fileset dir="build/docs">
 				<include name="**"/>
 			</fileset>
+			<zipfileset dir="build" includes="projog-bin.zip" prefix="downloads"/>
 		</zip>
 	</target>
-
-	<target name="release-all" depends="release-bin,release-web"
-	        description="builds zip of web content and zip of binary release"/>
-
 </project>

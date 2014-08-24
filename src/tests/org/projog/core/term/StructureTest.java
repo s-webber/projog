@@ -131,10 +131,10 @@ public class StructureTest {
    @Test
    public void testSameNamesDifferentArguments() {
       Structure[] predicates = {
-               structure("test1", new Atom("a"), new Atom("b"), new Atom("c")),
-               structure("test2", new Atom("a"), new Atom("b"), new Atom("d")),
-               structure("test3", new Atom("a"), new Atom("c"), new Atom("b")),
-               structure("test4", new Atom("a"), new Atom("b"))};
+                  structure("test1", new Atom("a"), new Atom("b"), new Atom("c")),
+                  structure("test2", new Atom("a"), new Atom("b"), new Atom("d")),
+                  structure("test3", new Atom("a"), new Atom("c"), new Atom("b")),
+                  structure("test4", new Atom("a"), new Atom("b"))};
       for (int i = 0; i < predicates.length; i++) {
          for (int j = i; j < predicates.length; j++) {
             if (i == j) {
@@ -158,7 +158,7 @@ public class StructureTest {
    @Test
    public void testNoArguments() {
       try {
-         Structure p = structure("test", TermUtils.EMPTY_ARRAY);
+         structure("test", TermUtils.EMPTY_ARRAY);
          fail();
       } catch (IllegalArgumentException e) {
          assertEquals("Cannot create structure with no arguments", e.getMessage());

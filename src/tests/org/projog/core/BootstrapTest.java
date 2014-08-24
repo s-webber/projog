@@ -24,7 +24,7 @@ import org.projog.core.term.Term;
 /**
  * Tests contents of {@code etc/projog-bootstrap.pl}.
  * <p>
- * {@code etc/projog-bootstrap.pl} is used to configure the build-in predicates and arithmetic functions. 
+ * {@code etc/projog-bootstrap.pl} is used to configure the build-in predicates and arithmetic functions.
  */
 public class BootstrapTest {
    private static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
@@ -89,6 +89,7 @@ public class BootstrapTest {
       assertTrue("Not final: " + c, Modifier.isFinal(c.getModifiers()));
    }
 
+   @SuppressWarnings("rawtypes")
    private Class<?>[] getMethodParameters(PredicateKey key) {
       int numberOfArguments = key.getNumArgs();
       Class<?>[] args = new Class[numberOfArguments];

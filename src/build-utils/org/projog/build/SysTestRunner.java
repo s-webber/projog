@@ -111,7 +111,15 @@ public class SysTestRunner implements Observer {
             checkQuery(query);
          } catch (Exception e) {
             e.printStackTrace(out);
-            out.println("\n***********************\n\n" + "Exception caught executing: " + query.getQueryStr() + " from: " + f.getPath() + "\nclass: " + e.getClass() + "\nmessage: " + e.getMessage());
+            out.println("\n***********************\n\n"
+                        + "Exception caught executing: "
+                        + query.getQueryStr()
+                        + " from: "
+                        + f.getPath()
+                        + "\nclass: "
+                        + e.getClass()
+                        + "\nmessage: "
+                        + e.getMessage());
             errorMessages.append(f.getName() + " " + query.getQueryStr() + " " + e.getClass() + " " + e.getMessage() + "\n");
             errorCtr++;
          }
@@ -169,7 +177,7 @@ public class SysTestRunner implements Observer {
          String actual = pe.getMessage();
          String expected = query.getExpectedExceptionMessage();
          if (actual.equals(expected) == false) {
-            throw new RuntimeException("Expected: " + expected + " but got: " + actual);
+            throw new RuntimeException("Expected: >" + expected + "< but got: >" + actual + "<");
          }
       } finally {
          if (parsedQuery) {

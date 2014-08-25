@@ -141,8 +141,10 @@
 ?- pj_add_predicate(nth/3, 'org.projog.core.function.list.Nth1').
 ?- pj_add_predicate(maplist/2, 'org.projog.core.function.list.MapList').
 ?- pj_add_predicate(checklist/2, 'org.projog.core.function.list.MapList').
-?- pj_add_predicate(include/3, 'org.projog.core.function.list.MapList').
-?- pj_add_predicate(sublist/3, 'org.projog.core.function.list.MapList').
+?- pj_add_predicate(maplist/3, 'org.projog.core.function.list.MapList').
+?- pj_add_predicate(checklist/3, 'org.projog.core.function.list.MapList').
+?- pj_add_predicate(include/3, 'org.projog.core.function.list.SubList').
+?- pj_add_predicate(sublist/3, 'org.projog.core.function.list.SubList').
  
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.function.time.GetTime').

@@ -1,15 +1,12 @@
 package org.projog.core.function.list;
 
-import static org.projog.core.term.ListFactory.createList;
+import static org.projog.core.term.ListFactory.createListOfLength;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
-
-import java.util.ArrayList;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
-import org.projog.core.term.Variable;
 
 /* TEST
  %QUERY length([],X)
@@ -51,14 +48,6 @@ public final class Length extends AbstractSingletonPredicate {
       } else {
          return checkLength(list, expectedLength);
       }
-   }
-
-   private Term createListOfLength(final int length) {
-      final java.util.List<Term> javaList = new ArrayList<Term>();
-      for (int i = 0; i < length; i++) {
-         javaList.add(new Variable("E" + i));
-      }
-      return createList(javaList);
    }
 
    private boolean checkLength(final Term list, final Term expectedLength) {

@@ -1,5 +1,6 @@
 package org.projog.core.term;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -82,5 +83,14 @@ public final class ListFactory {
 
    private static List createList(Term head, Term tail, boolean isImmutable) {
       return new List(head, tail, isImmutable);
+   }
+
+   /** Returns a new list of the specified length where is each element is a variable. */
+   public static Term createListOfLength(final int length) {
+      final java.util.List<Term> javaList = new ArrayList<Term>();
+      for (int i = 0; i < length; i++) {
+         javaList.add(new Variable("E" + i));
+      }
+      return createList(javaList);
    }
 }

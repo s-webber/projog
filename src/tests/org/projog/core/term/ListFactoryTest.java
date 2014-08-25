@@ -55,6 +55,30 @@ public class ListFactoryTest {
       assertTrue(listFromCollection.strictEquality(listFromArray));
    }
 
+   @Test
+   public void testCreateListOfLengthZero() {
+      assertSame(EmptyList.EMPTY_LIST, ListFactory.createListOfLength(0));
+   }
+
+   @Test
+   public void testCreateListOfLengthOne() {
+      Term t = ListFactory.createListOfLength(1);
+      assertSame(List.class, t.getClass());
+      assertTrue(t.getArgument(0).getType().isVariable());
+      assertSame(EmptyList.EMPTY_LIST, t.getArgument(1));
+      assertEquals(".(E0, [])", t.toString());
+   }
+
+   @Test
+   public void testCreateListOfLengthThree() {
+      Term t = ListFactory.createListOfLength(3);
+      assertSame(List.class, t.getClass());
+      assertSame(List.class, t.getClass());
+      assertTrue(t.getArgument(0).getType().isVariable());
+      assertSame(List.class, t.getArgument(1).getClass());
+      assertEquals(".(E0, .(E1, .(E2, [])))", t.toString());
+   }
+
    private Term[] createArguments() {
       return new Term[] {atom(), structure(), integerNumber(), decimalFraction(), variable()};
    }

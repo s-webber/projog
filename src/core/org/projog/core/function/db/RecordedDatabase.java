@@ -36,9 +36,9 @@ public class RecordedDatabase {
     * @param value the value to store
     * @return reference for the newly added value
     */
-   IntegerNumber add(PredicateKey key, Term value) {
+   IntegerNumber add(PredicateKey key, Term value, boolean addLast) {
       Chain chain = getOrCreateChain(key);
-      Link link = createLink(chain, value);
+      Link link = createLink(chain, value, addLast);
       return link.reference;
    }
 
@@ -53,6 +53,15 @@ public class RecordedDatabase {
       } else {
          return new ChainIterator(chain);
       }
+   }
+
+   /**
+    * @param reference the reference of the term to remove
+    * @return {@code true} if a term was removed else {@code false} (i.e. if there was no term associated with the
+    * specified {@code reference})
+    */
+   boolean erase(Long reference) {
+      return removeReference(reference);
    }
 
    private Chain getOrCreateChain(PredicateKey key) {
@@ -76,11 +85,10 @@ public class RecordedDatabase {
       return chain;
    }
 
-   private Link createLink(Chain chain, Term value) {
+   private Link createLink(Chain chain, Term value, boolean addLast) {
       IntegerNumber reference = createReference();
       Link link = new Link(chain, reference, value);
-      addLinkToChain(link);
-      references.put(reference.getLong(), link);
+      addReference(reference, link, addLast);
       return link;
    }
 
@@ -100,15 +108,51 @@ public class RecordedDatabase {
       return new IntegerNumber(referenceCtr.getAndIncrement());
    }
 
-   private void addLinkToChain(Link link) {
-      Chain c = link.chain;
-      synchronized (c) {
+   private void addReference(IntegerNumber reference, Link link, boolean addLast) {
+      synchronized (references) {
+         references.put(reference.getLong(), link);
+
+         Chain c = link.chain;
          if (c.last == null) {
             c.first = c.last = link;
-         } else {
+         } else if (addLast) {
             c.last.next = link;
+            link.previous = c.last;
             c.last = link;
+         } else {
+            c.first.previous = link;
+            link.next = c.first;
+            c.first = link;
          }
+      }
+   }
+
+   private boolean removeReference(Long reference) {
+      synchronized (references) {
+         Link link = references.remove(reference);
+
+         if (link == null) {
+            return false;
+         }
+
+         final Chain c = link.chain;
+         final Link next = link.next;
+         final Link previous = link.previous;
+         if (next != null) {
+            next.previous = previous;
+         }
+         if (previous != null) {
+            previous.next = next;
+         }
+         if (link == c.last) {
+            c.last = previous;
+         }
+         if (link == c.first) {
+            c.first = next;
+         }
+         link.deleted = true;
+
+         return true;
       }
    }
 
@@ -207,6 +251,7 @@ public class RecordedDatabase {
       final Chain chain;
       final IntegerNumber reference;
       final Term value;
+      Link previous;
       Link next;
       boolean deleted;
 

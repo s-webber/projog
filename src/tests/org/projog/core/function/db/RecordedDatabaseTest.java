@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.junit.Test;
 import org.projog.core.PredicateKey;
 import org.projog.core.term.Atom;
+import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 
 public class RecordedDatabaseTest {
@@ -22,9 +23,11 @@ public class RecordedDatabaseTest {
       PredicateKey key = new PredicateKey("a", 1);
       Atom value = new Atom("test");
 
-      assertEquals(0L, d.add(key, value).getLong());
-      assertEquals(1L, d.add(key, value).getLong());
-      assertEquals(2L, d.add(key, value).getLong());
+      assertEquals(0L, d.add(key, value, true).getLong());
+      assertEquals(1L, d.add(key, value, true).getLong());
+      assertEquals(2L, d.add(key, value, false).getLong());
+      assertEquals(3L, d.add(key, value, false).getLong());
+      assertEquals(4L, d.add(key, value, true).getLong());
    }
 
    @Test
@@ -40,15 +43,115 @@ public class RecordedDatabaseTest {
    @Test
    public void testGetAll_SingleElement() {
       RecordedDatabase d = new RecordedDatabase();
+
       PredicateKey key = new PredicateKey("a", 1);
       Atom value = new Atom("test");
-      Term reference = d.add(key, value);
+      Term reference = d.add(key, value, true);
 
       Iterator<Record> itr = d.getAll();
 
       assertNext(itr, key, reference, value);
 
       assertNoMoreElements(itr);
+   }
+
+   @Test
+   public void testGetAll_MultipleElementsAddLast() {
+      RecordedDatabase d = new RecordedDatabase();
+
+      PredicateKey key = new PredicateKey("a", 1);
+      Atom value1 = new Atom("test1");
+      Atom value2 = new Atom("test2");
+      Atom value3 = new Atom("test3");
+      IntegerNumber reference1 = d.add(key, value1, true);
+      IntegerNumber reference2 = d.add(key, value2, true);
+      IntegerNumber reference3 = d.add(key, value3, true);
+
+      Iterator<Record> itr = d.getAll();
+
+      assertNext(itr, key, reference1, value1);
+      assertNext(itr, key, reference2, value2);
+      assertNext(itr, key, reference3, value3);
+
+      assertNoMoreElements(itr);
+   }
+
+   @Test
+   public void testGetAll_MultipleElementsAddFirst() {
+      RecordedDatabase d = new RecordedDatabase();
+
+      PredicateKey key = new PredicateKey("a", 1);
+      Atom value1 = new Atom("test1");
+      Atom value2 = new Atom("test2");
+      Atom value3 = new Atom("test3");
+      IntegerNumber reference1 = d.add(key, value1, false);
+      IntegerNumber reference2 = d.add(key, value2, false);
+      IntegerNumber reference3 = d.add(key, value3, false);
+
+      Iterator<Record> itr = d.getAll();
+
+      assertNext(itr, key, reference3, value3);
+      assertNext(itr, key, reference2, value2);
+      assertNext(itr, key, reference1, value1);
+
+      assertNoMoreElements(itr);
+   }
+
+   @Test
+   public void testGetAll_MultipleElementsAddFirstAndLast() {
+      RecordedDatabase d = new RecordedDatabase();
+
+      PredicateKey key = new PredicateKey("a", 1);
+      Atom value1 = new Atom("test1");
+      Atom value2 = new Atom("test2");
+      Atom value3 = new Atom("test3");
+      IntegerNumber reference1 = d.add(key, value1, true);
+      IntegerNumber reference2 = d.add(key, value2, false);
+      IntegerNumber reference3 = d.add(key, value3, true);
+
+      Iterator<Record> itr = d.getAll();
+
+      assertNext(itr, key, reference2, value2);
+      assertNext(itr, key, reference1, value1);
+      assertNext(itr, key, reference3, value3);
+
+      assertNoMoreElements(itr);
+   }
+
+   @Test
+   public void testErase() {
+      RecordedDatabase d = new RecordedDatabase();
+
+      PredicateKey key = new PredicateKey("a", 1);
+      Atom value1 = new Atom("test1");
+      Atom value2 = new Atom("test2");
+      Atom value3 = new Atom("test3");
+      IntegerNumber reference1 = d.add(key, value1, true);
+      IntegerNumber reference2 = d.add(key, value2, true);
+      IntegerNumber reference3 = d.add(key, value3, true);
+
+      assertTrue(d.erase(reference2.getLong()));
+      Iterator<Record> itr = d.getAll();
+      assertNext(itr, key, reference1, value1);
+      assertNext(itr, key, reference3, value3);
+      assertNoMoreElements(itr);
+
+      assertFalse(d.erase(reference2.getLong()));
+      itr = d.getAll();
+      assertNext(itr, key, reference1, value1);
+      assertNext(itr, key, reference3, value3);
+      assertNoMoreElements(itr);
+
+      assertTrue(d.erase(reference1.getLong()));
+      itr = d.getAll();
+      assertNext(itr, key, reference3, value3);
+      assertNoMoreElements(itr);
+
+      assertTrue(d.erase(reference3.getLong()));
+      itr = d.getAll();
+      assertNoMoreElements(itr);
+
+      assertFalse(d.erase(reference3.getLong()));
    }
 
    @Test
@@ -59,9 +162,9 @@ public class RecordedDatabaseTest {
       Atom value1 = new Atom("test1");
       Atom value2 = new Atom("test2");
       Atom value3 = new Atom("test3");
-      Term reference1 = d.add(key1, value1);
-      Term reference2 = d.add(key2, value2);
-      Term reference3 = d.add(key1, value3);
+      IntegerNumber reference1 = d.add(key1, value1, true);
+      IntegerNumber reference2 = d.add(key2, value2, true);
+      IntegerNumber reference3 = d.add(key1, value3, true);
 
       Iterator<Record> itr = d.getAll();
 
@@ -88,7 +191,7 @@ public class RecordedDatabaseTest {
       RecordedDatabase d = new RecordedDatabase();
       PredicateKey key = new PredicateKey("a", 1);
       Atom value = new Atom("test");
-      Term reference = d.add(key, value);
+      IntegerNumber reference = d.add(key, value, true);
 
       Iterator<Record> itr = d.getChain(key);
 
@@ -105,9 +208,9 @@ public class RecordedDatabaseTest {
       Atom value1 = new Atom("test1");
       Atom value2 = new Atom("test2");
       Atom value3 = new Atom("test3");
-      Term reference1 = d.add(key1, value1);
-      Term reference2 = d.add(key2, value2);
-      Term reference3 = d.add(key1, value3);
+      IntegerNumber reference1 = d.add(key1, value1, true);
+      IntegerNumber reference2 = d.add(key2, value2, true);
+      IntegerNumber reference3 = d.add(key1, value3, true);
 
       Iterator<Record> itr1 = d.getChain(key1);
       Iterator<Record> itr2 = d.getChain(key2);

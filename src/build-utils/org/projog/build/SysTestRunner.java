@@ -2,7 +2,7 @@ package org.projog.build;
 
 import static java.lang.System.out;
 import static org.projog.build.BuildUtilsConstants.PROLOG_FILE_EXTENSION;
-import static org.projog.build.BuildUtilsConstants.toByteArray;
+import static org.projog.build.BuildUtilsConstants.readAllBytes;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -213,7 +213,7 @@ public class SysTestRunner implements Observer {
    }
 
    private void checkOutput(String expected) {
-      byte[] redirectedOutputFileContents = toByteArray(REDIRECTED_OUTPUT_FILE);
+      byte[] redirectedOutputFileContents = readAllBytes(REDIRECTED_OUTPUT_FILE);
       String actual = new String(redirectedOutputFileContents);
       if (!equalExcludingLineTerminators(expected, actual)) {
          if (isInterpretedMode() && isEqualsIgnoringVariableIds(expected, actual)) {

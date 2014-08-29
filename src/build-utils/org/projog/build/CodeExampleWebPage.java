@@ -3,7 +3,7 @@ package org.projog.build;
 import static org.projog.build.BuildUtilsConstants.DOCS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
-import static org.projog.build.BuildUtilsConstants.readFile;
+import static org.projog.build.BuildUtilsConstants.readAllLines;
 
 import java.io.File;
 import java.util.List;
@@ -15,7 +15,7 @@ class CodeExampleWebPage {
    static CodeExampleWebPage create(File prologSourceFile) {
       File htmlFile = getHtmlFile(prologSourceFile);
       File textFile = getTextFile(prologSourceFile);
-      List<String> textFileContents = readFile(textFile);
+      List<String> textFileContents = readAllLines(textFile);
       String title = textFileContents.remove(0);
       return new CodeExampleWebPage(title, textFileContents, prologSourceFile, htmlFile);
    }

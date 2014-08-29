@@ -106,7 +106,7 @@ public class HtmlGenerator {
    /** Parses javadoc from the specified {@code package-info.java} file. */
    private static String parsePackageInfo(File packageInfo) {
       try {
-         List<String> lines = BuildUtilsConstants.readFile(packageInfo);
+         List<String> lines = BuildUtilsConstants.readAllLines(packageInfo);
          String firstLine = lines.get(0).trim();
          String secondLine = lines.get(1).trim();
          String thirdLine = lines.get(2).trim();

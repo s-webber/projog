@@ -3,7 +3,7 @@ package org.projog.build;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.MANUAL_TEMPLATE;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
-import static org.projog.build.BuildUtilsConstants.readFile;
+import static org.projog.build.BuildUtilsConstants.readAllLines;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ class TableOfContentsReader {
    }
 
    private static List<String> readTableOfContents() {
-      return readFile(MANUAL_TEMPLATE);
+      return readAllLines(MANUAL_TEMPLATE);
    }
 
    List<TableOfContentsEntry> getEntries() {

@@ -31,7 +31,7 @@ class BuildUtilsConstants {
     * @param f file to read
     * @return contents of file
     */
-   static byte[] toByteArray(File f) {
+   static byte[] readAllBytes(File f) {
       try {
          return Files.readAllBytes(f.toPath());
       } catch (Exception e) {
@@ -45,7 +45,7 @@ class BuildUtilsConstants {
     * @param f text file to read
     * @return list of lines contained in specified file
     */
-   static List<String> readFile(File f) {
+   static List<String> readAllLines(File f) {
       try {
          return Files.readAllLines(f.toPath(), Charset.defaultCharset());
       } catch (Exception e) {

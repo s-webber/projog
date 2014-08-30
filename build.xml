@@ -62,17 +62,6 @@
 		</jar>
 	</target>
 
-	<target name="compile.build-utils">
-		<mkdir dir="build/classes/build-utils"/>
-		<path id="classpath.compile.build-utils">
-			<pathelement location="${core-jar}"/>
-		</path>
-		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false">
-            <compilerarg value="-Xlint"/>
-			<classpath refid="classpath.compile.build-utils"/>
-		</javac>
-	</target>
-
 	<target name="compile.tests" depends="get-junit">
 		<mkdir dir="build/classes/core-tests"/>
 		<path id="classpath.compile.tests">
@@ -82,6 +71,18 @@
 		<javac srcdir="src/core-tests" destdir="build/classes/core-tests" debug="on" includeantruntime="false">
             <compilerarg value="-Xlint"/>
 			<classpath refid="classpath.compile.tests"/>
+		</javac>
+	</target>
+
+	<target name="compile.build-utils">
+		<mkdir dir="build/classes/build-utils"/>
+		<path id="classpath.compile.build-utils">
+			<pathelement location="${core-jar}"/>
+			<pathelement location="build/classes/core-tests"/>
+		</path>
+		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false">
+            <compilerarg value="-Xlint"/>
+			<classpath refid="classpath.compile.build-utils"/>
 		</javac>
 	</target>
 
@@ -200,10 +201,11 @@
 				<include name="robots.txt"/>
 			</fileset>
 		</copy>
-		<java classname="org.projog.build.HtmlGenerator" failonerror="true">
+		<java classname="org.projog.build.HtmlGenerator" failonerror="true" fork="true">
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>
+				<pathelement location="build/classes/core-tests"/>
 			</classpath>
 		</java>
 	</target>

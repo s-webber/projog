@@ -10,6 +10,7 @@ import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.STATIC_PAGES_LIST;
 import static org.projog.build.BuildUtilsConstants.WEB_SRC_DIR;
 import static org.projog.build.BuildUtilsConstants.readAllLines;
+import static org.projog.build.BuiltInPredicatesIndexPage.produceBuiltInPredicatesIndexPage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -63,6 +64,7 @@ public class HtmlGenerator {
 
       TableOfContentsReader tocReader = new TableOfContentsReader(indexOfGeneratedPages, getPackageDescriptions());
       List<TableOfContentsEntry> entries = tocReader.getEntries();
+      produceBuiltInPredicatesIndexPage();
       produceTableOfContents(entries);
       addPreviousAndNextLinks(entries);
    }
@@ -225,7 +227,7 @@ public class HtmlGenerator {
       addHeadersAndFooters(input.getName(), title, readTextFile(input));
    }
 
-   private static void addHeadersAndFooters(String filename, String title, StringBuffer content) {
+   private static void addHeadersAndFooters(String filename, String title, CharSequence content) {
       try (FileWriter fw = new FileWriter(new File(DOCS_OUTPUT_DIR, filename))) {
          fw.write(HEADER_BEFORE_TITLE);
          fw.write(removeHtmlMarkup(title));

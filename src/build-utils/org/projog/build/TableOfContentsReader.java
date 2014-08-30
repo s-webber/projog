@@ -1,5 +1,6 @@
 package org.projog.build;
 
+import static org.projog.build.BuildUtilsConstants.COMMANDS_INDEX_FILE;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.MANUAL_TEMPLATE;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
@@ -74,6 +75,7 @@ class TableOfContentsReader {
             // end of file
             return null;
          }
+
          String next = contents.remove(0).trim();
          if (isSectionHeader(next)) {
             return getSectionHeader(next);
@@ -83,6 +85,7 @@ class TableOfContentsReader {
             return getSubSectionItem(next);
          } else if (isCommandsSection(next)) {
             isInCommandsSection = true;
+            return entryFactory.createSubSectionItem("Index of Built-in Predicates", COMMANDS_INDEX_FILE.getName());
          }
          // else move on to next line
       }

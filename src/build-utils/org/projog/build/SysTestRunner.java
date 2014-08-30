@@ -1,6 +1,7 @@
 package org.projog.build;
 
 import static java.lang.System.out;
+import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.isPrologScript;
 import static org.projog.build.BuildUtilsConstants.readAllBytes;
 import static org.projog.build.BuildUtilsConstants.toUnixLineEndings;
@@ -423,7 +424,7 @@ public class SysTestRunner implements Observer {
 
       String arg;
       if (args.length == 0) {
-         arg = "build/scripts";
+         arg = SCRIPTS_OUTPUT_DIR.getPath();
          out.println();
          out.println("As no arguments provided, defaulting to running all system tests in " + arg);
          out.println();

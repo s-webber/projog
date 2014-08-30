@@ -1,0 +1,22 @@
+Debugging Prolog Programs
+<p>
+Prolog provides a debugging facility for examining the exact steps that are taken during an attempt to evaluate a goal.
+Once debugging is enabled the user is notified of four kinds of events:
+<ul>
+<li><i>CALL</i> - the event type generated when an attempt is first made to evaluate a goal.</li>
+<li><i>REDO</i> - the event type generated when an attempt is made to re-evaluate a goal.</li>
+<li><i>EXIT</i> - the event type generated when an attempt to evaluate a goal succeeds.</li>
+<li><i>FAIL</i> - the event type generated when all attempts to evaluate a goal have failed.</li>
+</ul>
+</p>
+<p>
+The Prolog commands available to control debugging are: 
+ <code><a href="Trace.html">trace</a></code>,
+ <code><a href="NoTrace.html">notrace</a></code>,
+ <code><a href="Spy.html">spy</a></code>,
+ <code><a href="NoSpy.html">nospy</a></code>,
+ <code><a href="NoDebug.html">nodebug</a></code> and
+ <code><a href="Debugging.html">debugging</a></code>.
+</p>
+
+

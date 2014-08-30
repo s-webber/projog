@@ -1,0 +1,109 @@
+package org.projog.content_generated_at_runtime;
+import org.projog.core.udp.compiler.*;
+import org.projog.core.udp.interpreter.*;
+import org.projog.core.udp.*;
+import org.projog.core.term.*;
+import org.projog.core.*;
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+// testTrueFail/1
+public final class %CLASS_NAME% implements CompiledPredicate {
+   private final boolean initRule0() {
+      final Term v0_X;
+      v0_X = a0;
+      if (!v0_X.unify(ATOM)) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule1() {
+      final Term v1_X;
+      v1_X = a0;
+      if (!v1_X.unify(ATOM_0)) {
+         return false;
+      }
+      if (true) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule2() {
+      final Term v2_X;
+      v2_X = a0;
+      if (true) {
+         return false;
+      }
+      if (!v2_X.unify(ATOM_1)) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule3() {
+      final Term v3_X;
+      v3_X = a0;
+      if (!v3_X.unify(ATOM_2)) {
+         return false;
+      }
+      return true;
+   }
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
+   }
+   %CLASS_NAME%(final Term in0) {
+      a0 = in0.getTerm();
+   }
+   private final void backtrack() {
+      a0.backtrack();
+   }
+   public final boolean evaluate(final Term... args) {
+      switch (clauseCtr) {
+         case 0:
+         if (initRule0()) {
+            clauseCtr = 1;
+            return true;
+         }
+         case 1:
+         backtrack();
+         if (initRule1()) {
+            clauseCtr = 2;
+            return true;
+         }
+         case 2:
+         backtrack();
+         if (initRule2()) {
+            clauseCtr = 3;
+            return true;
+         }
+         case 3:
+         backtrack();
+         if (initRule3()) {
+            clauseCtr = 4;
+            return true;
+         }
+      }
+      clauseCtr = 4;
+      backtrack();
+      // Fail 1
+      return false;
+   }
+   public final boolean isRetryable() {
+      return true;
+   }
+   public final boolean couldReEvaluationSucceed() {
+      if (clauseCtr<4) {
+         return true;
+      }
+      return false;
+   }
+   public final void setKnowledgeBase(KnowledgeBase kb) {
+      throw new RuntimeException();
+   }
+   public final Predicate getPredicate(final Term... termArgs) {
+      return new %CLASS_NAME%(termArgs[0]);
+   }
+   private static final Term ATOM = new Atom("rule1");
+   private static final Term ATOM_0 = new Atom("rule2");
+   private static final Term ATOM_1 = new Atom("rule3");
+   private static final Term ATOM_2 = new Atom("rule4");
+   private int clauseCtr;
+   private int conjunctionCtr;
+   private Term a0;
+}

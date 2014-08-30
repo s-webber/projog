@@ -1,0 +1,79 @@
+Prolog Terms, Clauses and Queries
+
+<h3>Terms</h3>
+<p>
+Prolog programs are constructed from terms. A term is either a <i>constant</i>, a <i>structure</i> or a <i>variable</i>.
+</p>
+
+<h4>Constants</h4>
+<p>
+Constants represent a specific object or relationship.
+There are two kinds of constants - <i>atoms</i> and <i>numbers</i>.
+</p>
+<p>
+An alpha-numeric atom consists of a lower case letter followed by zero or more alphabetic characters, digits or underscores (<code>_</code>).
+A quoted atom is any sequence of characters enclosed in single quotes (<code>'</code>).
+Examples of valid Prolog syntax for defining atoms are: <code>a</code>, <code>a_b</code>, <code>'a b'</code>, <code>'1'</code> and <code>'@=&lt;'</code>.
+</p>
+<p>
+Examples of valid Prolog syntax for defining numbers are: <code>0</code>, <code>143650</code>, <code>-1</code>, <code>785.00234</code>, <code>-2.4e89</code> and <code>657E89</code>.
+</p>
+
+<h4>Structures</h4>
+<p>
+Structures, also known as <i>compound terms</i>, consist of a <i>functor</i> (name) and a number of <i>arguments</i> (other terms). 
+The number of arguments a structure has is known as its <i>arity</i>.
+A structure is defined in Prolog by specifying its functor followed by its arguments separated by commas and enclosed in round brackets.
+Examples of valid Prolog syntax for defining structures are: <code>p()</code>, <code>p(a)</code> and <code>p(X, a, q(1,2))</code>.
+</p>
+<p>
+A special type of structure is the <a href="prolog-lists.html">list</a>.
+</p>
+
+<h4>Variables</h4>
+<p>
+Variables represent a term we do not yet know. 
+When the term the variable represents is unknown the variable is <i>uninstantiated</i>.
+When the term the variable represents is known the variable is <i>instantiated</i>.
+Variables have names beginning with a capital letter. 
+Examples of valid Prolog syntax for defining variables are: <code>X</code>, <code>ABC</code>, <code>Name</code> and <code>Date_of_Birth</code>.
+</p>
+<p>
+A special type of variable is the <i>anonymous variable</i>.
+An anonymous variable is useful when a variable is required but its name will never be used.
+An anonymous variable starts with an underscore.
+Examples of valid Prolog syntax for specifying an anonymous variables are: <code>_</code> and <code>_zYz123</code>.
+</p>
+
+<h3>Clauses</h3>
+<p>
+Clauses are the structural elements of a program.
+A Prolog programmer develops a program by writing a collection of clauses in a text file.
+The programmer then uses the <code><a href="Consult.html">consult</a></code> command, 
+specifying the name of the text file, to load the clauses into the Prolog environment.
+</p>
+<p>
+The are two types of clauses - <i>facts</i> and <i>rules</i>.
+</p>
+<h4>Facts</h4>
+<p>
+A fact is an atom or structure followed by a full stop.
+Examples of valid Prolog syntax for defining facts are: <code>cold.</code>, <code>male(homer).</code> and <code>father(homer,bart).</code>.
+</p>
+
+<h4>Rules</h4>
+<p>
+A rule consists of a <i>head</i> and a <i>body</i>. 
+The head and body are separated by a <code>:-</code> and followed by full stop.
+If the body of a clause is true then the head of the clause is true.
+Examples of valid Prolog syntax for defining rules are: <code>bigger(X,Y) :- X > Y.</code> and <code>parents(F,M,C) :- father(F,C), mother(M,C).</code>
+</p>
+
+<h3>Queries</h3>
+<p>
+Queries allow us to ask questions of the Prolog environment.
+The Prolog environment will try to answer the query by using the facts and rules that have been loaded into it.
+Prolog queries start with a <code>?-</code> and end with a full stop.
+When using the console there is no need to type in the <code>?-</code> as it is automatically added for you.
+Examples of valid Prolog syntax for specifying a query are: <code>?- 1 < 2.</code> and <code>?- father(F,C).</code>
+</p>

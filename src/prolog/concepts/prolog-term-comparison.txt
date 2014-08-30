@@ -1,0 +1,31 @@
+Prolog Term Comparison
+<p>
+Prolog provides commands for comparing terms.
+The criteria for deciding the order of terms is as follows:
+<ul>
+<li>All uninstantiated variables are less than all decimal numbers;
+all decimal numbers are less than all whole numbers; all whole numbers are less than all atoms;
+all atoms are less than all structures (including lists).</li>
+<li>Comparison of two integer or two decimal numbers is done numerically (the term with the larger numeric value is considered the greatest).</li>
+<li>Comparison of two atoms is done by comparing the text values 
+they represent lexicographically.</li>
+<li>One structure is less than another if it has a lower arity (number of arguments). 
+If two structures have the same arity then they are ordered by comparing their functors (names) 
+lexicographically. If two structures have 
+the same arity and functor then they are ordered by comparing their arguments in order. 
+The first corresponding arguments that differ determines the order of the two structures.</li> 
+</ul>
+</p>
+<p>
+The Prolog term comparison operators are: 
+ <code><a href="Equal.html">=</a></code>,
+ <code><a href="StrictEquality.html">==</a></code>,
+ <code><a href="TermLessThan.html">@&lt;</a></code>,
+ <code><a href="TermGreaterThan.html">@&gt;</a></code>,
+ <code><a href="TermGreaterThanOrEqual.html">@&gt;=</a></code> and
+ <code><a href="TermLessThanOrEqual.html">@=&lt;</a></code>.
+</p>
+<p>
+Prolog also has <a href="prolog-arithmetic.html">numeric comparison operators</a> 
+which specifically deal with numerical comparison. 
+</p>

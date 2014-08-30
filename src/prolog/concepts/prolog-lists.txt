@@ -1,0 +1,25 @@
+Prolog List Data Structure
+<p>
+A list is an ordered sequence of elements that can have any length. Lists are a common data structure in computer programming.
+</p>
+<p>
+In Prolog, lists are represented as a tree consisting of structures that have no arguments, 
+an <i>empty list</i>, or two arguments: a <i>head</i> and a <i>tail</i>.
+The head is a used to store a particular term in the list and the tail is recursively the rest of the list.
+The end of a list is customarily represented as a tail that is set to an empty list.
+</p>
+<p>
+The data structure used to represent lists in Prolog has a functor (name) of "<code>.</code>".
+Thus, a list with the single element <code>a</code> can be represented as: <code>.(a, .())</code> and 
+a list with elements <code>a</code>, <code>b</code> and <code>c</code> can be represented as: <code>.(a, .(b, .(c, .())))</code>.
+Prolog also supports a more concise syntax for writing lists. 
+<i>List notation</i> consists of elements of the list separated by commas, and the whole list enclosed in square brackets.
+Thus, a list with the single element <code>a</code> can be represented as: <code>[a]</code> and 
+a list with elements <code>a</code>, <code>b</code> and <code>c</code> can be represented as: <code>[a, b, c]</code>.
+An empty list can be represented by a opening square bracket followed by a closing square bracket: <code>[]</code>.
+</p>
+<p>
+It is common for Prolog programs to manipulate lists by splitting them into a head and a tail.
+The <code>|</code> character has a special meaning in Prolog syntax to separate the head and tail of a list.
+Thus the Prolog syntax <code>[X|Y]</code> represents a list with head <code>X</code> and tail <code>Y</code>.
+</p>

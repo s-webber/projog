@@ -12,11 +12,11 @@ Projog provides an implementation of the Prolog programming language for the Jav
 * `build.xml` - Ant build script.
 * `etc` - Extra resources that get included in a release.
 * `lib` - Jar files required by the build process.
-* `scripts` - Prolog scripts used for system-testing and documentation.
 * `src/build-utils` - Java source code use by the build process for system-testing and website content generation.
 * `src/build-utils-test` - JUnit tests for `src/build-utils`.
 * `src/core` - Core Projog Java source code, including inference engine, built-in predicates and console application.
 * `src/core-tests` - JUnit tests for `src/code`.
+* `src/prolog` - Prolog scripts used for system-testing and documentation.
 * `web` - Used to construct content of http://www.projog.org/
 
 [![Build Status](https://travis-ci.org/webber-s/projog.png?branch=master)](https://travis-ci.org/webber-s/projog)

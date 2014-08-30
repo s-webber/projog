@@ -1,0 +1,250 @@
+package org.projog.content_generated_at_runtime;
+import org.projog.core.udp.compiler.*;
+import org.projog.core.udp.interpreter.*;
+import org.projog.core.udp.*;
+import org.projog.core.term.*;
+import org.projog.core.*;
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+// testCalculatables/3
+public final class %CLASS_NAME% implements CompiledPredicate {
+   private final boolean initRule0() {
+      final Term v0_A;
+      v0_A = a0;
+      final Term v0_B;
+      final Term v0_C;
+      if (!v0_A.unify(INTEGER_1000)) {
+         return false;
+      }
+      final Term v0_Z;
+      v0_Z = INTEGER_1000;
+      if (!v0_A.unify(c.getNumeric(v0_Z))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule1() {
+      final Term v1_A;
+      v1_A = a0;
+      final Term v1_B;
+      final Term v1_C;
+      final Term v1_Y;
+      v1_Y = FRACTION_1_5;
+      if (!v1_A.unify(c.getNumeric(v1_Y))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule2() {
+      final Term v2_A;
+      v2_A = a0;
+      final Term v2_B;
+      v2_B = a1;
+      final Term v2_C;
+      v2_C = a2;
+      final Numeric y0;
+      final Numeric y1;
+      if (!v2_A.unify((((y0=c.getNumeric(v2_B)).getType()==TermType.INTEGER & (y1=c.getNumeric(v2_C)).getType()==TermType.INTEGER)?new IntegerNumber(y0.getLong()+y1.getLong()):new DecimalFraction(y0.getDouble()+y1.getDouble())))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule3() {
+      final Term v3_A;
+      v3_A = a0;
+      final Term v3_B;
+      v3_B = a1;
+      final Term v3_C;
+      v3_C = a2;
+      final Numeric y2;
+      final Numeric y3;
+      if (!v3_A.unify((((y2=c.getNumeric(v3_B)).getType()==TermType.INTEGER & (y3=c.getNumeric(v3_C)).getType()==TermType.INTEGER)?new IntegerNumber(y2.getLong()-y3.getLong()):new DecimalFraction(y2.getDouble()-y3.getDouble())))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule4() {
+      final Term v4_A;
+      v4_A = a0;
+      final Term v4_B;
+      v4_B = a1;
+      final Term v4_C;
+      v4_C = a2;
+      final Numeric y4;
+      final Numeric y5;
+      if (!v4_A.unify((((y4=c.getNumeric(v4_B)).getType()==TermType.INTEGER & (y5=c.getNumeric(v4_C)).getType()==TermType.INTEGER)?new IntegerNumber(y4.getLong()*y5.getLong()):new DecimalFraction(y4.getDouble()*y5.getDouble())))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule5() {
+      final Term v5_A;
+      v5_A = a0;
+      final Term v5_B;
+      v5_B = a1;
+      final Term v5_C;
+      v5_C = a2;
+      if (!v5_A.unify(c.getNumeric(Structure.createStructure("//", new Term[]{v5_B.getTerm(), v5_C.getTerm()})))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule6() {
+      final Term v6_A;
+      v6_A = a0;
+      final Term v6_B;
+      v6_B = a1;
+      final Term v6_C;
+      v6_C = a2;
+      Numeric num1 = c.getNumeric(c.getNumeric(Structure.createStructure("//", new Term[]{v6_B.getTerm(), v6_C.getTerm()})));
+      final Numeric y6;
+      final Numeric y7;
+      Numeric num2 = c.getNumeric((((y6=c.getNumeric(v6_B)).getType()==TermType.INTEGER & (y7=c.getNumeric(v6_C)).getType()==TermType.INTEGER)?new IntegerNumber(y6.getLong()*y7.getLong()):new DecimalFraction(y6.getDouble()*y7.getDouble())));
+      final Numeric y8;
+      final Numeric y9;
+      Numeric num0 = c.getNumeric((((y8=c.getNumeric(num1)).getType()==TermType.INTEGER & (y9=c.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y8.getLong()+y9.getLong()):new DecimalFraction(y8.getDouble()+y9.getDouble())));
+      final Numeric y10;
+      if (!v6_A.unify((((y10=c.getNumeric(num0)).getType()==TermType.INTEGER)?new IntegerNumber(y10.getLong()-2):new DecimalFraction(y10.getDouble()-2.0)))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule7() {
+      final Term v7_A;
+      v7_A = a0;
+      final Term v7_B;
+      v7_B = a1;
+      final Term v7_C;
+      v7_C = a2;
+      final Term v7_Z;
+      v7_Z = v7_A;
+      Numeric num1 = c.getNumeric(c.getNumeric(Structure.createStructure("//", new Term[]{v7_B.getTerm(), v7_C.getTerm()})));
+      final Numeric y11;
+      final Numeric y12;
+      Numeric num2 = c.getNumeric((((y11=c.getNumeric(v7_B)).getType()==TermType.INTEGER & (y12=c.getNumeric(v7_C)).getType()==TermType.INTEGER)?new IntegerNumber(y11.getLong()*y12.getLong()):new DecimalFraction(y11.getDouble()*y12.getDouble())));
+      final Numeric y13;
+      final Numeric y14;
+      Numeric num0 = c.getNumeric((((y13=c.getNumeric(num1)).getType()==TermType.INTEGER & (y14=c.getNumeric(num2)).getType()==TermType.INTEGER)?new IntegerNumber(y13.getLong()+y14.getLong()):new DecimalFraction(y13.getDouble()+y14.getDouble())));
+      Numeric num3 = c.getNumeric(FRACTION_2_5);
+      final Numeric y15;
+      final Numeric y16;
+      if (!v7_Z.unify((((y15=c.getNumeric(num0)).getType()==TermType.INTEGER & (y16=c.getNumeric(num3)).getType()==TermType.INTEGER)?new IntegerNumber(y15.getLong()-y16.getLong()):new DecimalFraction(y15.getDouble()-y16.getDouble())))) {
+         return false;
+      }
+      return true;
+   }
+   private final boolean initRule8() {
+      final Term v8_A;
+      v8_A = a0;
+      final Term v8_B;
+      v8_B = a1;
+      final Term v8_C;
+      v8_C = a2;
+      final Numeric y17;
+      final Numeric y18;
+      final Term v8_Z;
+      v8_Z = (((y17=c.getNumeric(v8_B)).getType()==TermType.INTEGER & (y18=c.getNumeric(v8_C)).getType()==TermType.INTEGER)?new IntegerNumber(y17.getLong()+y18.getLong()):new DecimalFraction(y17.getDouble()+y18.getDouble()));
+      if (!v8_A.unify(c.getNumeric(v8_Z))) {
+         return false;
+      }
+      return true;
+   }
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
+      c = KnowledgeBaseUtils.getCalculatables(_kb);
+   }
+   %CLASS_NAME%(final Term in0, final Term in1, final Term in2) {
+      a0 = in0.getTerm();
+      a1 = in1.getTerm();
+      a2 = in2.getTerm();
+   }
+   private final void backtrack() {
+      a0.backtrack();
+      a1.backtrack();
+      a2.backtrack();
+   }
+   public final boolean evaluate(final Term... args) {
+      switch (clauseCtr) {
+         case 0:
+         if (initRule0()) {
+            clauseCtr = 1;
+            return true;
+         }
+         case 1:
+         backtrack();
+         if (initRule1()) {
+            clauseCtr = 2;
+            return true;
+         }
+         case 2:
+         backtrack();
+         if (initRule2()) {
+            clauseCtr = 3;
+            return true;
+         }
+         case 3:
+         backtrack();
+         if (initRule3()) {
+            clauseCtr = 4;
+            return true;
+         }
+         case 4:
+         backtrack();
+         if (initRule4()) {
+            clauseCtr = 5;
+            return true;
+         }
+         case 5:
+         backtrack();
+         if (initRule5()) {
+            clauseCtr = 6;
+            return true;
+         }
+         case 6:
+         backtrack();
+         if (initRule6()) {
+            clauseCtr = 7;
+            return true;
+         }
+         case 7:
+         backtrack();
+         if (initRule7()) {
+            clauseCtr = 8;
+            return true;
+         }
+         case 8:
+         backtrack();
+         if (initRule8()) {
+            clauseCtr = 9;
+            return true;
+         }
+      }
+      clauseCtr = 9;
+      backtrack();
+      // Fail 1
+      return false;
+   }
+   public final boolean isRetryable() {
+      return true;
+   }
+   public final boolean couldReEvaluationSucceed() {
+      if (clauseCtr<9) {
+         return true;
+      }
+      return false;
+   }
+   public final void setKnowledgeBase(KnowledgeBase kb) {
+      throw new RuntimeException();
+   }
+   public final Predicate getPredicate(final Term... termArgs) {
+      return new %CLASS_NAME%(termArgs[0], termArgs[1], termArgs[2]);
+   }
+   private static final Term INTEGER_1000 = new IntegerNumber(1000L);
+   private static final Term FRACTION_1_5 = new DecimalFraction(1.5);
+   private static final Term INTEGER_2 = new IntegerNumber(2L);
+   private static final Term FRACTION_2_5 = new DecimalFraction(2.5);
+   private static Calculatables c;
+   private int clauseCtr;
+   private int conjunctionCtr;
+   private Term a0;
+   private Term a1;
+   private Term a2;
+}

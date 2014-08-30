@@ -50,7 +50,7 @@ public class CompiledPredicateSourceGeneratorTest {
    /**
     * Directory containing expected values.
     */
-   private final File RESOURCE_DIR = new File("scripts/CompiledPredicateSourceGeneratorTest");
+   private final File RESOURCE_DIR = new File("src/prolog/CompiledPredicateSourceGeneratorTest");
    /**
     * File containing Prolog syntax that is used to generate the Java source examined by this test case.
     */

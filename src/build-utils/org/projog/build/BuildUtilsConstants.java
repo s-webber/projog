@@ -15,6 +15,7 @@ class BuildUtilsConstants {
    static final File SCRIPTS_OUTPUT_DIR = new File(BUILD_DIR, "prolog");
    static final File MANUAL_TEMPLATE = new File(WEB_SRC_DIR, "manual.txt");
    static final File STATIC_PAGES_LIST = new File(WEB_SRC_DIR, "static_pages.properties");
+   static final File COMMANDS_INDEX_FILE = new File(DOCS_OUTPUT_DIR, "prolog-predicates.html");
    static final String SOURCE_INPUT_DIR_NAME = "src/core/";
    static final File SOURCE_INPUT_DIR = new File(SOURCE_INPUT_DIR_NAME);
    static final String LINE_BREAK = "\n";
@@ -88,5 +89,9 @@ class BuildUtilsConstants {
    /** Replaces all Windows-style {@code CR+LF} (i.e. {@code \r\n}) line endings with {@code LF} (i.e. {@code \n}). */
    static String toUnixLineEndings(String expected) {
       return expected.replace("\r\n", "\n");
+   }
+
+   static String htmlEncode(String input) {
+      return input.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("  ", "&nbsp;&nbsp;").replace(LINE_BREAK, "<br>" + LINE_BREAK);
    }
 }

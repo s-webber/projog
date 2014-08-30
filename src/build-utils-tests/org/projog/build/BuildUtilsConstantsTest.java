@@ -25,7 +25,15 @@ public class BuildUtilsConstantsTest {
 
    @Test
    public void testConcatLines() {
-      String actual = BuildUtilsConstants.concatLines(Arrays.asList("Lorem ipsum", "", " dolor ", "sit amet,", "\tconsectetur adipiscing elit"));
+      final String actual = BuildUtilsConstants.concatLines(Arrays.asList("Lorem ipsum", "", " dolor ", "sit amet,", "\tconsectetur adipiscing elit"));
       assertEquals("Lorem ipsum\n\n dolor \nsit amet,\n\tconsectetur adipiscing elit\n", actual);
+   }
+
+   @Test
+   public void testHtmlEncode() {
+      final String input = "a>b<c&d&amp;e&gt;f&lt;g  h    i\nj";
+      final String expected = "a&gt;b&lt;c&amp;d&amp;amp;e&amp;gt;f&amp;lt;g&nbsp;&nbsp;h&nbsp;&nbsp;&nbsp;&nbsp;i<br>\nj";
+      final String actual = BuildUtilsConstants.htmlEncode(input);
+      assertEquals(expected, actual);
    }
 }

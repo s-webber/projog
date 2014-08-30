@@ -3,6 +3,7 @@ package org.projog.build;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
+import static org.projog.build.BuildUtilsConstants.htmlEncode;
 import static org.projog.build.BuildUtilsConstants.isPrologScript;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
@@ -98,7 +99,7 @@ class CodeExamplesWebPageCreator {
                   htmlBreak(pw);
                }
 
-               pw.print(encode(code));
+               pw.print(htmlEncode(code));
                htmlBreak(pw);
                lastLineWasBlank = false;
             } else if (inCodeSection) {
@@ -170,18 +171,14 @@ class CodeExamplesWebPageCreator {
 
    private void userInput(PrintWriter pw, String userInput) throws IOException {
       pw.print("<span class=\"input\">");
-      pw.print(encode(userInput));
+      pw.print(htmlEncode(userInput));
       pw.print("</span>");
    }
 
    private void programOutput(PrintWriter pw, String programOutput) throws IOException {
       pw.print("<span class=\"output\">");
-      pw.print(encode(programOutput));
+      pw.print(htmlEncode(programOutput));
       pw.print("</span>");
-   }
-
-   private String encode(String input) {
-      return input.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("  ", "&nbsp;&nbsp;").replace(LINE_BREAK, "<br>" + LINE_BREAK);
    }
 
    private void tableTop(PrintWriter pw) throws IOException {

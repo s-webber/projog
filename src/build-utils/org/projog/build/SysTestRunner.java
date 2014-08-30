@@ -8,6 +8,7 @@ import static org.projog.build.BuildUtilsConstants.toUnixLineEndings;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +67,10 @@ public class SysTestRunner implements Observer {
       } else {
          scripts.add(f);
       }
+
+      // sort to ensure scripts files are always run in a predictable order
+      Collections.sort(scripts);
+
       return scripts;
    }
 

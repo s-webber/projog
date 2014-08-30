@@ -232,9 +232,14 @@
 <!-- RELEASE -->
 	<target name="release-bin" depends="clean,compile,unit-test,sys-test,web,javadoc"
 	        description="builds release candidate as zip containing jar, html documentation and batch files">
+		<copy todir="build/etc">
+			<fileset dir="etc"/>
+		</copy>
+		<fixcrlf srcdir="build/etc" includes="*.sh" eol="lf" eof="remove" />
 		<zip destfile="build/projog-bin.zip">
-			<fileset dir="etc">
+			<fileset dir="build/etc">
 				<include name="projog-console*.bat"/>
+				<include name="projog-console*.sh"/>
 				<include name="README.txt"/>
 				<include name="towers-of-hanoi-example.pl"/>
 			</fileset>

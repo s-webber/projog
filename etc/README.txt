@@ -9,9 +9,9 @@ To access the manual please view the "manual.html" file in the "docs" directory.
 
 You need to have the JDK installed and present in the PATH in order to launch the projog console.
 
-To launch the projog console, from the command line, "cd" to the unzipped directory and run the "projog-console.bat" batch script (TODO: add .sh version).
+To launch the projog console, from the command line, "cd" to the unzipped directory and run the "projog-console.sh" or "projog-console.bat" script.
 
-You can optionally provide names of files, containing Prolog syntax, as arguments to "projog-console.bat" and they will be interpreted when the console starts.
+You can optionally provide names of files, containing Prolog syntax, as arguments to "projog-console.sh"/"projog-console.bat" and they will be interpreted when the console starts.
 
 e.g.:
 
@@ -20,7 +20,7 @@ java version "1.6.0_16"
 Java(TM) SE Runtime Environment (build 1.6.0_16-b01)
 Java HotSpot(TM) Client VM (build 14.2-b01, mixed mode, sharing)
 
-projog-bin> projog-console.bat towers-of-hanoi-example.pl
+projog-bin> projog-console.sh towers-of-hanoi-example.pl
 
 [14577460] INFO Reading prolog source in: projog-bootstrap.pl from classpath
 Projog Console
@@ -45,5 +45,3 @@ Z = -2
 yes (0 ms)
 
 ?- quit.
-
-

@@ -74,12 +74,12 @@
 	</target>
 
 	<target name="compile.tests" depends="get-junit">
-		<mkdir dir="build/classes/tests"/>
+		<mkdir dir="build/classes/core-tests"/>
 		<path id="classpath.compile.tests">
 			<pathelement location="${junit-jar}"/>
 			<pathelement location="${core-jar}"/>
 		</path>
-		<javac srcdir="src/tests" destdir="build/classes/tests" debug="on" includeantruntime="false">
+		<javac srcdir="src/core-tests" destdir="build/classes/core-tests" debug="on" includeantruntime="false">
             <compilerarg value="-Xlint"/>
 			<classpath refid="classpath.compile.tests"/>
 		</javac>
@@ -108,7 +108,7 @@
 			<classpath location="${junit-jar}"/>
 			<classpath location="${hamcrest-jar}"/>
 			<classpath location="${core-jar}"/>
-			<classpath location="build/classes/tests"/>
+			<classpath location="build/classes/core-tests"/>
 			<!--
 			${dynamicContentDir} is used by StaticUserDefinedPredicateFactoryTest
 			and CompiledPredicateSourceGeneratorTest
@@ -116,7 +116,7 @@
 			-->
 			<classpath location="${dynamicContentDir}"/>
 			<batchtest fork="yes" todir=".">
-				<fileset dir="src/tests">
+				<fileset dir="src/core-tests">
 					<include name="**/*Test.java"/>
 				</fileset>
 			</batchtest>

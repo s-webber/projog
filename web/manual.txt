@@ -10,7 +10,7 @@
 - concepts/prolog-term-comparison.pl
 - concepts/prolog-io.pl
 - concepts/prolog-debugging.pl
-+ Prolog Commands
++ Prolog Built-in Predicates
 [COMMANDS]
 + Prolog Applications
 - applications/towers-of-hanoi.pl

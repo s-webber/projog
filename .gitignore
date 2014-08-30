@@ -3,19 +3,18 @@
 *.zip
 *.tmp
 *.out
-*.bat
-*.sh
 junit*.properties
+/*.bat
+/*.sh
 
 .classpath
 .project
 .settings
 
-bin
-build
-lib
-target
-dist
-tmp
-temp
-projogGeneratedClasses
+/bin
+/build
+/lib
+/tmp
+/scripts/tmp
+/temp
+/projogGeneratedClasses

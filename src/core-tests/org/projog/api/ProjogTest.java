@@ -1,5 +1,6 @@
 package org.projog.api;
 
+import static java.lang.System.lineSeparator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -7,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
-import static org.projog.TestUtils.LINE_SEPARATOR;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.write;
 
@@ -218,11 +218,11 @@ public class ProjogTest {
          // Generate expected stack trace.
          StringBuilder expectedResult = new StringBuilder();
          expectedResult.append("z/3 rule 3 z(A, B, C) :- open(A, read, Z)");
-         expectedResult.append(LINE_SEPARATOR);
+         expectedResult.append(lineSeparator());
          expectedResult.append("y/1 rule 1 y(A) :- Q is 4 + 5 , z(A, A, Q)");
-         expectedResult.append(LINE_SEPARATOR);
+         expectedResult.append(lineSeparator());
          expectedResult.append("x/1 rule 2 x(A) :- y(A)");
-         expectedResult.append(LINE_SEPARATOR);
+         expectedResult.append(lineSeparator());
 
          // Confirm contents of stack trace
          assertEquals(expectedResult.toString(), bos.toString());

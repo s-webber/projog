@@ -31,9 +31,9 @@ import org.projog.core.udp.ClauseModel;
  * Helper methods for performing unit tests.
  */
 public class TestUtils {
-   public static final String LINE_SEPARATOR = System.lineSeparator();
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
    public static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_calculatable", 2);
+   public static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
    public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogSystemProperties() {
       @Override
       public boolean isRuntimeCompilationEnabled() {

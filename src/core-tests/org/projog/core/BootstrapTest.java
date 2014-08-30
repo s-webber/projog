@@ -6,10 +6,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.ADD_CALCULATABLE_KEY;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
+import static org.projog.TestUtils.BOOTSTRAP_FILE;
 import static org.projog.TestUtils.parseTermsFromFile;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -27,8 +27,6 @@ import org.projog.core.term.Term;
  * {@code etc/projog-bootstrap.pl} is used to configure the build-in predicates and arithmetic functions.
  */
 public class BootstrapTest {
-   private static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
-
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
    @Test

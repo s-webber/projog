@@ -1,14 +1,18 @@
 package org.projog.build;
 
 /**
- * Represents an entry in {@code manual.txt}.
+ * Represents a line of the {@code manual.html} page of the website.
+ * <p>
+ * Each {@code TableOfContentsEntry} represents a header, description or link contained in <a
+ * href="http://projog.org/manual.html">manual.html<a>.
+ * </p>
  */
 class TableOfContentsEntry {
    /** The name to display in the link. */
    private final String title;
    /** Position in documentation hierarchy (e.g. 2.3) */
    private final String index;
-   /** The actual HTML file. */
+   /** The file name the entry should link to. */
    private final String fileName;
    private TableOfContentsEntry previous;
    private TableOfContentsEntry next;

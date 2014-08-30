@@ -1,0 +1,25 @@
+org.projog.abc.Qwerty.pl 1=2 class java.lang.RuntimeException isExhausted was: false but query.isContinuesUntilFails was: false
+org.projog.abc.Qwerty.pl 4>2 class java.lang.RuntimeException More answers than expected
+org.projog.abc.Qwerty.pl \+ true class java.lang.RuntimeException Less answers than expected for: \+ true
+org.projog.qwe.Fghjkl.pl X is a class java.lang.RuntimeException Expected: >Cannot find calculatable: z< but got: >Cannot find calculatable: a<
+org.projog.qwe.Fghjkl.pl X is a class java.lang.RuntimeException Expected: >null< but got: >Cannot find calculatable: a<
+org.projog.qwe.Xyz.pl X is 1+1 class java.lang.RuntimeException X (2) assigned to: 2 not: 3 [X=3]
+org.projog.qwe.Xyz.pl X is 1+1, Y=3 class java.lang.RuntimeException Different number of variables than expected. Actual: [X, Y] Expected: [X=2]
+org.projog.qwe.Xyz.pl X is 1+1, Y=3, Z=4 class java.lang.RuntimeException Different number of variables than expected. Actual: [X, Y, Z] Expected: [W=2, X=2, Y=3, Z=4]
+org.projog.qwe.Xyz.pl X=3, repeat(X) class java.lang.RuntimeException More answers than expected
+org.projog.qwe.Xyz.pl Z=3, repeat(Z) class java.lang.RuntimeException Less answers than expected for: Z=3, repeat(Z)
+org.projog.xyz.Abc.pl write(hello) class java.lang.RuntimeException Expected: >
+hi
+< but got: >
+hello
+<
+org.projog.xyz.Abc.pl write(hello), nl, write(world), nl class java.lang.RuntimeException Expected: >
+hello
+earth
+
+< but got: >
+hello
+world
+
+<
+org.projog.xyz.Abc.pl z(Z), write(here), write(Z), Y is Z*2 class java.lang.RuntimeException Expected: >null< but got: >Cannot find calculatable: q<

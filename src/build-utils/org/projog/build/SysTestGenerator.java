@@ -27,6 +27,10 @@ import org.projog.core.PredicateFactory;
  * The contents of the files are extracted from the comments in the {@code .java} file of the {@code PredicateFactory}.
  * The {@code .txt} file contains the contents of the javadoc comment of the class. The {@code .pl} file contains the
  * prolog syntax contained in the "{@code SYSTEM TEST}" comment at the top of the class.
+ * </p>
+ * <p>
+ * Designed to be run as a stand-alone single-threaded console application.
+ * </p>
  */
 public class SysTestGenerator {
    private static final File COMMANDS_OUTPUT_DIR = new File(SCRIPTS_OUTPUT_DIR, "commands");

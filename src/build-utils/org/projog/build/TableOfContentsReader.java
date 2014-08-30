@@ -7,23 +7,22 @@ import static org.projog.build.BuildUtilsConstants.readAllLines;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Reads {@link BuildUtilsConstants#MANUAL_TEMPLATE}.
+ * Reads {@link BuildUtilsConstants#MANUAL_TEMPLATE} to determine the {@code TableOfContentsEntry} instances required to
+ * construct <a href="http://projog.org/manual.html">manual.html<a>.
  */
 class TableOfContentsReader {
-   private final IndexCtr indexCtr;
-   private final CommandsIterator commandsIterator;
+   private final TableOfContentsEntryFactory entryFactory;
+   private final CommandSectionIterator commandSectionIterator;
    private final List<String> contents;
    private boolean isInCommandsSection;
 
    TableOfContentsReader(List<CodeExampleWebPage> indexOfGeneratedPages, Map<String, String> packageDescriptions) {
-      this.indexCtr = new IndexCtr();
-      this.commandsIterator = new CommandsIterator(indexOfGeneratedPages, packageDescriptions, indexCtr);
+      this.entryFactory = new TableOfContentsEntryFactory();
+      this.commandSectionIterator = new CommandSectionIterator(indexOfGeneratedPages, packageDescriptions, entryFactory);
       this.contents = readTableOfContents();
    }
 
@@ -64,8 +63,8 @@ class TableOfContentsReader {
    private TableOfContentsEntry getNext() {
       while (true) {
          if (isInCommandsSection) {
-            if (commandsIterator.hasNext()) {
-               return commandsIterator.next();
+            if (commandSectionIterator.hasNext()) {
+               return commandSectionIterator.next();
             } else {
                isInCommandsSection = false;
             }
@@ -107,15 +106,15 @@ class TableOfContentsReader {
 
    private TableOfContentsEntry getSectionHeader(String line) {
       String title = line.substring(2);
-      return indexCtr.createSectionHeader(title);
+      return entryFactory.createSectionHeader(title);
    }
 
    private TableOfContentsEntry getSectionItem(String line) {
-      return indexCtr.createSectionItem(getTitleFromLine(line), getHtmlFileNameFromLine(line));
+      return entryFactory.createSectionItem(getTitleFromLine(line), getHtmlFileNameFromLine(line));
    }
 
    private TableOfContentsEntry getSubSectionItem(String line) {
-      return indexCtr.createSubSectionItem(getTitleFromLine(line), getHtmlFileNameFromLine(line));
+      return entryFactory.createSubSectionItem(getTitleFromLine(line), getHtmlFileNameFromLine(line));
    }
 
    /**
@@ -179,107 +178,5 @@ class TableOfContentsReader {
          return page.getTitle();
       }
       return line.substring(spacePos + 1);
-   }
-
-   private static class IndexCtr {
-      int sectionNumber;
-      int subSectionNumber;
-
-      TableOfContentsEntry createSectionHeader(String title) {
-         incrementSectionNumber();
-         return createEntry(title, null);
-      }
-
-      TableOfContentsEntry createSectionItem(String title, String htmlFileName) {
-         incrementSectionNumber();
-         return createEntry(title, htmlFileName);
-      }
-
-      TableOfContentsEntry createSubSectionItem(String title, String htmlFileName) {
-         incrementSubSectionNumber();
-         return createEntry(title, htmlFileName);
-      }
-
-      private void incrementSectionNumber() {
-         sectionNumber++;
-         subSectionNumber = 0;
-      }
-
-      private void incrementSubSectionNumber() {
-         subSectionNumber++;
-      }
-
-      private TableOfContentsEntry createEntry(String title, String fileName) {
-         return new TableOfContentsEntry(title, fileName, getIndex());
-      }
-
-      private String getIndex() {
-         String index = sectionNumber + ".";
-         if (subSectionNumber != 0) {
-            index += subSectionNumber + ".";
-         }
-         return index;
-      }
-   }
-
-   private static class CommandsIterator {
-      private final List<CodeExampleWebPage> indexOfGeneratedPages;
-      private final Map<String, String> packageDescriptions;
-      private final IndexCtr indexCtr;
-      private String previousPackage = null;
-
-      CommandsIterator(List<CodeExampleWebPage> indexOfGeneratedPages, Map<String, String> packageDescriptions, IndexCtr indexCtr) {
-         this.indexOfGeneratedPages = sort(indexOfGeneratedPages);
-         this.packageDescriptions = packageDescriptions;
-         this.indexCtr = indexCtr;
-      }
-
-      private List<CodeExampleWebPage> sort(List<CodeExampleWebPage> unsortedIndexOfGeneratedPages) {
-         List<CodeExampleWebPage> sortedVersion = new ArrayList<>(unsortedIndexOfGeneratedPages);
-         // sort alphabetically so classes are grouped by their packages
-         Collections.sort(sortedVersion, new Comparator<CodeExampleWebPage>() {
-            @Override
-            public int compare(CodeExampleWebPage o1, CodeExampleWebPage o2) {
-               return compare(o1.getPrologSourceFile(), o2.getPrologSourceFile());
-            }
-
-            private int compare(File f1, File f2) {
-               return f1.getName().compareTo(f2.getName());
-            }
-         });
-         return sortedVersion;
-      }
-
-      boolean hasNext() {
-         return !indexOfGeneratedPages.isEmpty();
-      }
-
-      TableOfContentsEntry next() {
-         CodeExampleWebPage p = indexOfGeneratedPages.get(0);
-         String currentPackage = getPackageName(p);
-         if (currentPackage.equals(previousPackage)) {
-            indexOfGeneratedPages.remove(0);
-            return indexCtr.createSubSectionItem(p.getTitle(), p.getHtmlFileName());
-         } else {
-            previousPackage = currentPackage;
-            return new TableOfContentsEntry(getPackageDescription(currentPackage), null, null);
-         }
-      }
-
-      private String getPackageName(CodeExampleWebPage p) {
-         File f = p.getPrologSourceFile();
-         String name = f.getName();
-         // last . will be before extension, penultimate dot will be before class name
-         int packageEndPos = name.lastIndexOf('.', name.lastIndexOf('.') - 1);
-         return name.substring(0, packageEndPos);
-      }
-
-      private String getPackageDescription(String packageName) {
-         String description = packageDescriptions.get(packageName);
-         if (description == null) {
-            throw new RuntimeException("Cannot find description for: " + packageName);
-         }
-         return description;
-      }
    }
 }

@@ -9,6 +9,7 @@ import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.STATIC_PAGES_LIST;
 import static org.projog.build.BuildUtilsConstants.WEB_SRC_DIR;
+import static org.projog.build.BuildUtilsConstants.readAllLines;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,12 +42,7 @@ public class HtmlGenerator {
    }
 
    public static void main(final String[] args) throws Exception {
-      try {
-         generateHtml();
-      } catch (Exception e) {
-         e.printStackTrace();
-         throw e;
-      }
+      generateHtml();
    }
 
    /**
@@ -63,11 +59,7 @@ public class HtmlGenerator {
       TableOfContentsReader tocReader = new TableOfContentsReader(indexOfGeneratedPages, getPackageDescriptions(SOURCE_INPUT_DIR));
       List<TableOfContentsEntry> entries = tocReader.getEntries();
       produceTableOfContents(entries);
-      for (TableOfContentsEntry entry : entries) {
-         if (entry.isLink()) {
-            addPreviousAndNextLinks(entry);
-         }
-      }
+      addPreviousAndNextLinks(entries);
    }
 
    /**
@@ -106,7 +98,7 @@ public class HtmlGenerator {
    /** Parses javadoc from the specified {@code package-info.java} file. */
    private static String parsePackageInfo(File packageInfo) {
       try {
-         List<String> lines = BuildUtilsConstants.readAllLines(packageInfo);
+         List<String> lines = readAllLines(packageInfo);
          String firstLine = lines.get(0).trim();
          String secondLine = lines.get(1).trim();
          String thirdLine = lines.get(2).trim();
@@ -167,10 +159,14 @@ public class HtmlGenerator {
       }
    }
 
-   /**
-    * Keeps track of sequence of pages in documentation so can add previous and next links to the top of pages for easy
-    * navigation.
-    */
+   private static void addPreviousAndNextLinks(List<TableOfContentsEntry> entries) {
+      for (TableOfContentsEntry entry : entries) {
+         if (entry.isLink()) {
+            addPreviousAndNextLinks(entry);
+         }
+      }
+   }
+
    private static void addPreviousAndNextLinks(TableOfContentsEntry entry) {
       StringBuffer linksHtml = new StringBuffer();
       linksHtml.append(LINE_BREAK);
@@ -223,7 +219,6 @@ public class HtmlGenerator {
          fw.write(content.toString());
          fw.write(FOOTER);
       } catch (Exception e) {
-         e.printStackTrace();
          throw new RuntimeException(e);
       }
    }
@@ -242,7 +237,6 @@ public class HtmlGenerator {
          return contents;
       } catch (Exception e) {
          System.out.println("CANNOT READ: " + f.getAbsolutePath());
-         e.printStackTrace();
          throw new RuntimeException(e);
       }
    }

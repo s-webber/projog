@@ -2,6 +2,7 @@ package org.projog.build;
 
 import static org.projog.build.BuildUtilsConstants.DOCS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
+import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.readAllLines;
 
@@ -17,7 +18,8 @@ class CodeExampleWebPage {
       File textFile = getTextFile(prologSourceFile);
       List<String> textFileContents = readAllLines(textFile);
       String title = textFileContents.remove(0);
-      return new CodeExampleWebPage(title, textFileContents, prologSourceFile, htmlFile);
+      String description = toString(textFileContents);
+      return new CodeExampleWebPage(title, description, prologSourceFile, htmlFile);
    }
 
    private static File getHtmlFile(File scriptFile) {
@@ -39,12 +41,21 @@ class CodeExampleWebPage {
       return fileName.substring(0, dotPos);
    }
 
+   private static String toString(List<String> lines) {
+      StringBuilder sb = new StringBuilder();
+      for (String line : lines) {
+         sb.append(line);
+         sb.append(LINE_BREAK);
+      }
+      return sb.toString();
+   }
+
    private final String title;
-   private final List<String> description;
+   private final String description;
    private final File prologSourceFile;
    private final File htmlFile;
 
-   private CodeExampleWebPage(String title, List<String> description, File prologSourceFile, File htmlFile) {
+   private CodeExampleWebPage(String title, String description, File prologSourceFile, File htmlFile) {
       this.title = title;
       this.description = description;
       this.prologSourceFile = prologSourceFile;
@@ -55,7 +66,7 @@ class CodeExampleWebPage {
       return title;
    }
 
-   List<String> getDescription() {
+   String getDescription() {
       return description;
    }
 

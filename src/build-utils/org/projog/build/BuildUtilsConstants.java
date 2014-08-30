@@ -17,13 +17,18 @@ class BuildUtilsConstants {
    static final File STATIC_PAGES_LIST = new File(WEB_SRC_DIR, "static_pages.properties");
    static final String SOURCE_INPUT_DIR_NAME = "src/core/";
    static final File SOURCE_INPUT_DIR = new File(SOURCE_INPUT_DIR_NAME);
-   static final String LINE_BREAK = "\r\n";
+   static final String LINE_BREAK = "\n";
    static final String HTML_FILE_EXTENSION = ".html";
    static final String PROLOG_FILE_EXTENSION = ".pl";
    static final String TEXT_FILE_EXTENSION = ".txt";
    static final String MANUAL_HTML = "manual" + HTML_FILE_EXTENSION;
    static final String HEADER_HTML = "header" + HTML_FILE_EXTENSION;
    static final String FOOTER_HTML = "footer" + HTML_FILE_EXTENSION;
+
+   /** Returns {@code true} if the the specified file has a prolog file extension. */
+   static boolean isPrologScript(File f) {
+      return f.getName().endsWith(PROLOG_FILE_EXTENSION);
+   }
 
    /**
     * Returns the contents of the specified file as a byte array.
@@ -40,6 +45,33 @@ class BuildUtilsConstants {
    }
 
    /**
+    * Returns the contents of the specified file as a {@code String}.
+    * <p>
+    * Note: Carriage returns will be represented by {@code #LINE_BREAK} rather than the underlying carriage return style
+    * used in the actual file.
+    * 
+    * @param f text file to read
+    * @return list of lines contained in specified file
+    */
+   static String readText(File f) {
+      return concatLines(readAllLines(f));
+   }
+
+   /**
+    * Combines the specified list into a single {@code String}.
+    * <p>
+    * Each line will be followed by {@code #LINE_BREAK}.
+    */
+   static String concatLines(List<String> lines) {
+      StringBuilder sb = new StringBuilder();
+      for (String line : lines) {
+         sb.append(line);
+         sb.append(LINE_BREAK);
+      }
+      return sb.toString();
+   }
+
+   /**
     * Returns list of lines contained in specified text file.
     * 
     * @param f text file to read
@@ -51,5 +83,10 @@ class BuildUtilsConstants {
       } catch (Exception e) {
          throw new RuntimeException("could not read text file: " + f, e);
       }
+   }
+
+   /** Replaces all Windows-style {@code CR+LF} (i.e. {@code \r\n}) line endings with {@code LF} (i.e. {@code \n}). */
+   static String toUnixLineEndings(String expected) {
+      return expected.replace("\r\n", "\n");
    }
 }

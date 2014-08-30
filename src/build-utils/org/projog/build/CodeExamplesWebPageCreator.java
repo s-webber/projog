@@ -3,13 +3,13 @@ package org.projog.build;
 import static org.projog.build.BuildUtilsConstants.HTML_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
+import static org.projog.build.BuildUtilsConstants.isPrologScript;
 import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +23,13 @@ import java.util.Map;
  * @see SysTestParser
  */
 class CodeExamplesWebPageCreator {
-   private FileWriter fw;
-   private BufferedWriter bw;
-
    List<CodeExampleWebPage> generate(String directoryName) throws Exception {
       // build/scripts gets populated by sys-test task of build script
       File scriptsDir = new File(SCRIPTS_OUTPUT_DIR, directoryName);
-      File[] scriptFiles = scriptsDir.listFiles(new FilenameFilter() {
+      File[] scriptFiles = scriptsDir.listFiles(new FileFilter() {
          @Override
-         public boolean accept(File dir, String name) {
-            return name.endsWith(".pl");
+         public boolean accept(File f) {
+            return isPrologScript(f);
          }
       });
       List<CodeExampleWebPage> indexOfGeneratedPages = new ArrayList<>();
@@ -47,19 +44,14 @@ class CodeExamplesWebPageCreator {
 
    private void generateSection(CodeExampleWebPage page) throws IOException {
       File htmlFile = page.getHtmlFile();
-      fw = new FileWriter(htmlFile);
-      bw = new BufferedWriter(fw);
-      List<String> textFileContents = page.getDescription();
-      for (String s : textFileContents) {
-         println(s);
+      try (PrintWriter pw = new PrintWriter(htmlFile)) {
+         pw.print(page.getDescription());
+         generateExample(pw, page.getPrologSourceFile());
       }
-      generateExample(page.getPrologSourceFile());
-      bw.close();
-      fw.close();
    }
 
-   private void generateExample(File scriptFile) throws IOException {
-      println("<h3>Examples</h3><div class=\"example-content\">" + LINE_BREAK);
+   private void generateExample(PrintWriter pw, File scriptFile) throws IOException {
+      pw.println("<h3>Examples</h3><div class=\"example-content\">" + LINE_BREAK);
 
       SysTestParser sysTestParser = new SysTestParser(scriptFile);
       boolean inCodeSection = false;
@@ -71,150 +63,136 @@ class CodeExamplesWebPageCreator {
             if (!inQuerySection) {
                if (inCodeSection) {
                   inCodeSection = false;
-                  tableBottom();
-                  htmlBreak();
+                  tableBottom(pw);
+                  htmlBreak(pw);
                }
                inQuerySection = true;
-               tableTop();
+               tableTop(pw);
             } else {
-               htmlBreak();
-               htmlBreak();
+               htmlBreak(pw);
+               htmlBreak(pw);
             }
 
-            printQuery((SysTestQuery) content);
+            printQuery(pw, (SysTestQuery) content);
          } else if (content instanceof SysTestComment) {
             if (inCodeSection || inQuerySection) {
-               tableBottom();
+               tableBottom(pw);
             }
             inCodeSection = false;
             inQuerySection = false;
 
-            printComment((SysTestComment) content);
+            printComment(pw, (SysTestComment) content);
          } else if (content instanceof SysTestCode) {
             String code = ((SysTestCode) content).code;
             // ignore leading blank lines at top of code section
             if (code.trim().length() > 0) {
                if (!inCodeSection) {
                   if (inQuerySection) {
-                     tableBottom();
-                     htmlBreak();
+                     tableBottom(pw);
+                     htmlBreak(pw);
                      inQuerySection = false;
                   }
-                  tableTop();
+                  tableTop(pw);
                   inCodeSection = true;
                } else if (lastLineWasBlank) {
-                  htmlBreak();
+                  htmlBreak(pw);
                }
 
-               print(encode(code));
-               htmlBreak();
+               pw.print(encode(code));
+               htmlBreak(pw);
                lastLineWasBlank = false;
             } else if (inCodeSection) {
                lastLineWasBlank = true;
             }
          } else if (content instanceof SysTestLink) {
-            printLink((SysTestLink) content);
+            printLink(pw, (SysTestLink) content);
          } else {
             throw new RuntimeException("don't know about SysTestContent: " + content);
          }
       }
       if (inCodeSection || inQuerySection) {
-         tableBottom();
+         tableBottom(pw);
       }
 
-      println("</div>");
+      pw.println("</div>");
    }
 
-   private void printQuery(SysTestQuery query) throws IOException {
+   private void printQuery(PrintWriter pw, SysTestQuery query) throws IOException {
       String question = query.getQueryStr() + ".";
-      programOutput(QUESTION_PREDICATE_NAME + " ");
-      userInput(question);
-      htmlBreak();
+      programOutput(pw, QUESTION_PREDICATE_NAME + " ");
+      userInput(pw, question);
+      htmlBreak(pw);
 
       // iterate through answers, printing variable assignments and system output
       List<SysTestAnswer> answers = query.getAnswers();
       SysTestAnswer lastAnswer = answers.isEmpty() ? null : answers.get(answers.size() - 1);
       for (SysTestAnswer answer : answers) {
-         programOutput(answer.getExpectedOutput());
-         printVariables(answer);
-         htmlBreak();
-         programOutput("yes");
+         programOutput(pw, answer.getExpectedOutput());
+         printVariables(pw, answer);
+         htmlBreak(pw);
+         programOutput(pw, "yes");
          if (query.isContinuesUntilFails() || answer != lastAnswer) {
-            userInput(";");
-            htmlBreak();
+            userInput(pw, ";");
+            htmlBreak(pw);
          }
       }
 
       // if required, output any exception or failed evaluation
       if (query.getExpectedExceptionMessage() != null) {
-         htmlBreak();
-         programOutput(query.getExpectedExceptionMessage());
+         htmlBreak(pw);
+         programOutput(pw, query.getExpectedExceptionMessage());
       } else if (query.isContinuesUntilFails()) {
-         programOutput(query.getExpectedOutput());
-         htmlBreak();
-         programOutput("no");
+         programOutput(pw, query.getExpectedOutput());
+         htmlBreak(pw);
+         programOutput(pw, "no");
       }
    }
 
-   private void printVariables(SysTestAnswer answer) throws IOException {
+   private void printVariables(PrintWriter pw, SysTestAnswer answer) throws IOException {
       for (Map.Entry<String, String> assignment : answer.getAssignments()) {
          String variable = assignment.getKey();
          String term = assignment.getValue();
-         programOutput(variable + " = " + term);
-         htmlBreak();
+         programOutput(pw, variable + " = " + term);
+         htmlBreak(pw);
       }
    }
 
-   private void printComment(SysTestComment comment) throws IOException {
+   private void printComment(PrintWriter pw, SysTestComment comment) throws IOException {
       String text = comment.comment;
-      println("<p><span class=\"comment\">" + text + "</span></p>");
+      pw.println("<p><span class=\"comment\">" + text + "</span></p>");
    }
 
-   private void printLink(SysTestLink link) throws IOException {
+   private void printLink(PrintWriter pw, SysTestLink link) throws IOException {
       String target = link.target;
       String title = TableOfContentsReader.getTitleForTarget(target);
-      println("See <a href=\"" + target + HTML_FILE_EXTENSION + "\">" + title + "</a>");
+      pw.println("See <a href=\"" + target + HTML_FILE_EXTENSION + "\">" + title + "</a>");
    }
 
-   private void userInput(String userInput) throws IOException {
-      print("<span class=\"input\">");
-      print(encode(userInput));
-      print("</span>");
+   private void userInput(PrintWriter pw, String userInput) throws IOException {
+      pw.print("<span class=\"input\">");
+      pw.print(encode(userInput));
+      pw.print("</span>");
    }
 
-   private void programOutput(String programOutput) throws IOException {
-      print("<span class=\"output\">");
-      print(encode(programOutput));
-      print("</span>");
+   private void programOutput(PrintWriter pw, String programOutput) throws IOException {
+      pw.print("<span class=\"output\">");
+      pw.print(encode(programOutput));
+      pw.print("</span>");
    }
 
    private String encode(String input) {
       return input.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("  ", "&nbsp;&nbsp;").replace(LINE_BREAK, "<br>" + LINE_BREAK);
    }
 
-   private void tableTop() throws IOException {
-      println("<div class=\"code\"><code>");
+   private void tableTop(PrintWriter pw) throws IOException {
+      pw.println("<div class=\"code\"><code>");
    }
 
-   private void tableBottom() throws IOException {
-      println("</code></div>");
+   private void tableBottom(PrintWriter pw) throws IOException {
+      pw.println("</code></div>");
    }
 
-   private void println(String l) throws IOException {
-      print(l);
-      carriageReturn();
-   }
-
-   private void print(String l) throws IOException {
-      bw.write(l);
-   }
-
-   private void carriageReturn() throws IOException {
-      bw.newLine();
-   }
-
-   private void htmlBreak() throws IOException {
-      print("<br>");
-      carriageReturn();
+   private void htmlBreak(PrintWriter pw) throws IOException {
+      pw.println("<br>");
    }
 }

@@ -1,0 +1,34 @@
+%QUERY X is 1+1
+%ANSWER X=2
+
+%QUERY X is 1+1
+%ANSWER X=3
+
+%QUERY X is 4-1
+%ANSWER X=3
+
+%QUERY X is 1+1, Y=3
+%ANSWER X=2
+
+%QUERY X is 1+1, Y=3, Z=4
+%ANSWER 
+% W=2
+% X=2
+% Y=3
+% Z=4
+%ANSWER 
+
+%QUERY X=3, repeat(X)
+%ANSWER X=3
+%ANSWER X=3
+
+%QUERY Y=3, repeat(Y)
+%ANSWER Y=3
+%ANSWER Y=3
+%ANSWER Y=3
+
+%QUERY Z=3, repeat(Z)
+%ANSWER Z=3
+%ANSWER Z=3
+%ANSWER Z=3
+%ANSWER Z=3

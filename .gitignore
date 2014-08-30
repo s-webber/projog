@@ -15,6 +15,6 @@ junit*.properties
 /build
 /lib
 /tmp
-/scripts/tmp
+/src/prolog/tmp
 /temp
 /projogGeneratedClasses

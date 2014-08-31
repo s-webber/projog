@@ -2,10 +2,10 @@ package org.projog.build;
 
 import static org.projog.build.BuildUtilsConstants.DOCS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.FOOTER_HTML;
+import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE;
 import static org.projog.build.BuildUtilsConstants.HEADER_HTML;
 import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.MANUAL_HTML;
-import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.STATIC_PAGES_LIST;
 import static org.projog.build.BuildUtilsConstants.WEB_SRC_DIR;
@@ -35,7 +35,6 @@ import java.util.Properties;
  * </p>
  */
 public class HtmlGenerator {
-   private static final File FUNCTION_PACKAGE = new File(SOURCE_INPUT_DIR, "org/projog/core/function");
    private static final String FOOTER = readTextFile(new File(WEB_SRC_DIR, FOOTER_HTML)).toString();
    private static final String HEADER_BEFORE_TITLE;
    private static final String HEADER_AFTER_TITLE;

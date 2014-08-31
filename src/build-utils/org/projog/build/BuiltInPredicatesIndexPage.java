@@ -147,10 +147,25 @@ class BuiltInPredicatesIndexPage {
 
    private static void printCommand(PrintWriter w, BuiltIn b) {
       w.print("| <a href=\"");
-      w.print(b.predicateFactory.substring(b.predicateFactory.lastIndexOf('.') + 1));
-      w.print(".html\">");
+      w.print(getTarget(b.predicateFactory));
+      w.print("\">");
       w.print(htmlEncode(b.key.toString()));
       w.println("</a>");
+   }
+
+   /**
+    * Returns the target of a link.
+    * <p>
+    * Target will be the class name (minus the package) plus a ".html" extension.
+    * 
+    * @param input e.g.: {@code org.projog.Xyz} or {@code org.projog.Xyz/getInstance}
+    * @return e.g.: {@code Xyz.html}
+    */
+   private static String getTarget(String input) {
+      int dotPos = input.lastIndexOf('.');
+      int slashPos = input.indexOf('/', dotPos);
+      int endPos = slashPos == -1 ? input.length() : slashPos;
+      return input.substring(dotPos + 1, endPos) + ".html";
    }
 
    private static class BuiltIn implements Comparable<BuiltIn> {

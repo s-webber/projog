@@ -1,8 +1,8 @@
 package org.projog.build;
 
+import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE;
 import static org.projog.build.BuildUtilsConstants.PROLOG_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
-import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
 
@@ -22,11 +22,14 @@ import org.projog.core.Calculatable;
 import org.projog.core.PredicateFactory;
 
 /**
- * Produces {@code .txt} and {@code .pl} files for every subclass of {@code PredicateFactory}.
+ * Produces {@code .txt} and {@code .pl} files for implementaions of {@code PredicateFactory}.
+ * <p>
+ * Looks for java source files in {@link BuildUtilsConstants#FUNCTION_PACKAGE} and its subdirectories.
+ * </p>
  * <p>
  * The contents of the files are extracted from the comments in the {@code .java} file of the {@code PredicateFactory}.
  * The {@code .txt} file contains the contents of the javadoc comment of the class. The {@code .pl} file contains the
- * prolog syntax contained in the "{@code SYSTEM TEST}" comment at the top of the class.
+ * prolog syntax contained in the "{@code TEST}" comment at the top of the class.
  * </p>
  * <p>
  * Designed to be run as a stand-alone single-threaded console application.
@@ -35,40 +38,26 @@ import org.projog.core.PredicateFactory;
 public class SysTestGenerator {
    private static final File COMMANDS_OUTPUT_DIR = new File(SCRIPTS_OUTPUT_DIR, "commands");
 
-   private static List<File> getDocumentableJavaSourceFiles(File dir) {
+   private static List<File> getDocumentableJavaSourceFiles(File dir) throws ClassNotFoundException {
       List<File> result = new ArrayList<File>();
-      File[] directoryContents = dir.listFiles();
-      for (File file : directoryContents) {
-         if (file.isDirectory()) {
-            // continue directory tree walk
-            result.addAll(getDocumentableJavaSourceFiles(file));
-         } else if (isJavaSourceFileOfDocumentedClass(file)) {
-            result.add(file);
+      for (File f : dir.listFiles()) {
+         if (f.isDirectory()) {
+            result.addAll(getDocumentableJavaSourceFiles(f));
+         } else if (isJavaSourceFileOfDocumentedClass(f)) {
+            result.add(f);
          }
       }
       return result;
    }
 
-   private static boolean isJavaSourceFileOfDocumentedClass(File file) {
-      try {
-         if (!isJavaSource(file)) {
-            return false;
-         }
-
-         String className = getClassName(file);
-         Class<?> c = Class.forName(className);
-         if (isDocumentable(c)) {
-            // confirm the class is instantiatable
-            Object o = c.newInstance();
-            System.out.println("Will produce documentation for: " + o.getClass().getName());
-            return true;
-         } else {
-            return false;
-         }
-      } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-         System.out.println("Not producing documentation for " + file + " - due to: " + e.getClass());
+   private static boolean isJavaSourceFileOfDocumentedClass(File file) throws ClassNotFoundException {
+      if (!isJavaSource(file)) {
          return false;
       }
+
+      String className = getClassName(file);
+      Class<?> c = Class.forName(className);
+      return isDocumentable(c);
    }
 
    private static boolean isDocumentable(Class<?> c) {
@@ -195,8 +184,8 @@ public class SysTestGenerator {
       }
    }
 
-   public static final void main(String[] args) {
-      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(SOURCE_INPUT_DIR);
+   public static final void main(String[] args) throws Exception {
+      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(FUNCTION_PACKAGE);
       Map<String, File> alreadyProcessed = new HashMap<String, File>();
       for (File f : javaSourceFiles) {
          File previousEntry = alreadyProcessed.put(f.getName(), f);

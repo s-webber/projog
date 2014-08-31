@@ -18,6 +18,7 @@ class BuildUtilsConstants {
    static final File COMMANDS_INDEX_FILE = new File(DOCS_OUTPUT_DIR, "prolog-predicates.html");
    static final String SOURCE_INPUT_DIR_NAME = "src/core/";
    static final File SOURCE_INPUT_DIR = new File(SOURCE_INPUT_DIR_NAME);
+   static final File FUNCTION_PACKAGE = new File(SOURCE_INPUT_DIR, "org/projog/core/function");
    static final String LINE_BREAK = "\n";
    static final String HTML_FILE_EXTENSION = ".html";
    static final String PROLOG_FILE_EXTENSION = ".pl";

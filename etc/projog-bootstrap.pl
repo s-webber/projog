@@ -69,10 +69,10 @@
 % debug
 ?- pj_add_predicate(debugging, 'org.projog.core.function.debug.Debugging').
 ?- pj_add_predicate(nodebug, 'org.projog.core.function.debug.NoDebug').
-?- pj_add_predicate(nospy/1, 'org.projog.core.function.debug.NoSpy').
-?- pj_add_predicate(notrace, 'org.projog.core.function.debug.NoTrace').
-?- pj_add_predicate(spy/1, 'org.projog.core.function.debug.Spy').
 ?- pj_add_predicate(trace, 'org.projog.core.function.debug.Trace').
+?- pj_add_predicate(notrace, 'org.projog.core.function.debug.NoTrace').
+?- pj_add_predicate(spy/1, 'org.projog.core.function.debug.AlterSpyPoint/spy').
+?- pj_add_predicate(nospy/1, 'org.projog.core.function.debug.AlterSpyPoint/noSpy').
 
 % io
 ?- pj_add_predicate(close/1, 'org.projog.core.function.io.Close').

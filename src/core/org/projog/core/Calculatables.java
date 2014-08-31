@@ -1,5 +1,7 @@
 package org.projog.core;
 
+import static org.projog.core.CoreUtils.instantiate;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,10 +112,9 @@ public final class Calculatables {
 
    private Calculatable instantiateCalculatable(String className) {
       try {
-         Class<?> c = Class.forName(className);
-         return (Calculatable) c.newInstance();
+         return instantiate(className);
       } catch (Exception e) {
-         throw new RuntimeException("Could not create new Calculatable", e);
+         throw new RuntimeException("Could not create new Calculatable using: " + className, e);
       }
    }
 }

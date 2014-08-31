@@ -62,7 +62,7 @@ public class CalculatablesTest {
       }
 
       // add new calculatable
-      c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
+      c.addCalculatable(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
 
       // assert that the factory is now using the newly added calculatable
       Numeric n = c.getNumeric(dummyTerm);
@@ -75,18 +75,18 @@ public class CalculatablesTest {
       Calculatables c = createCalculatables();
 
       // add new calculatable class name
-      c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
+      c.addCalculatable(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
 
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
+         c.addCalculatable(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
       }
       try {
-         c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+         c.addCalculatable(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
@@ -98,18 +98,18 @@ public class CalculatablesTest {
       Calculatables c = createCalculatables();
 
       // add new calculatable instance
-      c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+      c.addCalculatable(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
 
       // attempt to add calculatable again 
       // (should fail now a calculatable with the same name already exists in the factoty)
       try {
-         c.addCalculatable(dummyCalculatableKey, DummyCalculatable.class.getName());
+         c.addCalculatable(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
       }
       try {
-         c.addCalculatable(dummyCalculatableKey, new DummyCalculatable());
+         c.addCalculatable(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
          fail("could re-add calculatable named: " + dummyCalculatableName);
       } catch (ProjogException e) {
          // expected;
@@ -127,18 +127,27 @@ public class CalculatablesTest {
          fail();
       } catch (RuntimeException e) {
          // expected as specified class name is invalid
-         assertEquals("Could not create new Calculatable", e.getMessage());
+         assertEquals("Could not create new Calculatable using: an invalid class name", e.getMessage());
       }
+   }
+
+   /** Test using a static method to add a calculatable that does not have a public no arg constructor. */
+   @Test
+   public void testAddCalculatableUsingStaticMethod() {
+      final Calculatables c = createCalculatables();
+      final String className = DummyCalculatableNoPublicConstructor.class.getName();
+      c.addCalculatable(dummyCalculatableKey, className + "/getInstance");
+      Numeric n = c.getNumeric(dummyTerm);
+      assertSame(IntegerNumber.class, n.getClass());
+      assertEquals(dummyTermArgument * 3, n.getLong());
    }
 
    private Calculatables createCalculatables() {
       return new Calculatables(kb);
    }
 
-   /**
-    * Calculatable used to test that new calculatables can be added to the factory.
-    */
-   public static class DummyCalculatable implements Calculatable {
+   /** Calculatable used to test that new calculatables can be added to the factory. */
+   public static class DummyCalculatableDefaultConstructor implements Calculatable {
       KnowledgeBase kb;
 
       /**
@@ -152,6 +161,38 @@ public class CalculatablesTest {
          }
          long input = TermUtils.castToNumeric(args[0]).getLong();
          long output = input + 1;
+         return new IntegerNumber(output);
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         this.kb = kb;
+      }
+   }
+
+   /** Calculatable used to test that new calculatables can be created using a static method. */
+   public static class DummyCalculatableNoPublicConstructor implements Calculatable {
+      KnowledgeBase kb;
+
+      public static DummyCalculatableNoPublicConstructor getInstance() {
+         return new DummyCalculatableNoPublicConstructor();
+      }
+
+      private DummyCalculatableNoPublicConstructor() {
+         // private as want to test creation using getInstance static method
+      }
+
+      /**
+       * @return an IntegerNumber with a value of the first input argument + 1
+       */
+      @Override
+      public Numeric calculate(Term... args) {
+         if (kb == null) {
+            // setKnowledgeBase should be called by Calculatables when it creates an instance of this class
+            throw new RuntimeException("KnowledgeBase not set on " + this);
+         }
+         long input = TermUtils.castToNumeric(args[0]).getLong();
+         long output = input * 3;
          return new IntegerNumber(output);
       }
 

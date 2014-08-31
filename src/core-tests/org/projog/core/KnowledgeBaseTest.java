@@ -169,20 +169,7 @@ public class KnowledgeBaseTest {
    }
 
    @Test
-   public void testAddPredicateFactory_NoPublicConstructor() {
-      PredicateKey key = new PredicateKey("testAddPredicateFactoryError", 1);
-      kb.addPredicateFactory(key, java.lang.Integer.class.getName());
-      try {
-         kb.getPredicateFactory(key);
-         fail();
-      } catch (RuntimeException e) {
-         // expected as Integer has no public constructor (and is also not a PredicateFactory)
-         assertEquals("Could not create new PredicateFactory", e.getMessage());
-      }
-   }
-
-   @Test
-   public void testAddPredicateFactory_InvalidClassName() {
+   public void testAddPredicateFactoryClassNotFound() {
       PredicateKey key = new PredicateKey("testAddPredicateFactoryError", 1);
       kb.addPredicateFactory(key, "an invalid class name");
       try {
@@ -190,8 +177,34 @@ public class KnowledgeBaseTest {
          fail();
       } catch (RuntimeException e) {
          // expected as specified class name is invalid
-         assertEquals("Could not create new PredicateFactory", e.getMessage());
+         assertEquals("Could not create new PredicateFactory using: an invalid class name", e.getMessage());
+         assertSame(ClassNotFoundException.class, e.getCause().getClass());
       }
+   }
+
+   /** Test attempting to add a predicate factory that does not have a public no arg constructor. */
+   @Test
+   public void testAddPredicateFactoryIllegalAccess() {
+      final PredicateKey key = new PredicateKey("testAddPredicateFactoryError", 1);
+      final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
+      kb.addPredicateFactory(key, DummyPredicateFactoryNoPublicConstructor.class.getName());
+      try {
+         kb.getPredicateFactory(key);
+         fail();
+      } catch (RuntimeException e) {
+         // expected as Integer has no public constructor (and is also not a PredicateFactory)
+         assertEquals("Could not create new PredicateFactory using: " + className, e.getMessage());
+         assertSame(IllegalAccessException.class, e.getCause().getClass());
+      }
+   }
+
+   /** Test using a static method to add a predicate factory that does not have a public no arg constructor. */
+   @Test
+   public void testAddPredicateFactoryUsingStaticMethod() {
+      final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
+      final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
+      kb.addPredicateFactory(key, className + "/getInstance");
+      assertSame(DummyPredicateFactoryNoPublicConstructor.class, kb.getPredicateFactory(key).getClass());
    }
 
    private void assertGetPredicateFactory(Term input, Class<?> expected) {
@@ -201,5 +214,24 @@ public class KnowledgeBaseTest {
       PredicateKey key = PredicateKey.createForTerm(input);
       PredicateFactory ef2 = kb.getPredicateFactory(key);
       assertSame(expected, ef2.getClass());
+   }
+
+   public static class DummyPredicateFactoryNoPublicConstructor implements PredicateFactory {
+      public static DummyPredicateFactoryNoPublicConstructor getInstance() {
+         return new DummyPredicateFactoryNoPublicConstructor();
+      }
+
+      private DummyPredicateFactoryNoPublicConstructor() {
+         // private as want to test creation using getInstance static method
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+      }
+
+      @Override
+      public Predicate getPredicate(Term... args) {
+         return null;
+      }
    }
 }

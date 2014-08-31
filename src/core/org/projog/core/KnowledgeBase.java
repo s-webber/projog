@@ -1,5 +1,6 @@
 package org.projog.core;
 
+import static org.projog.core.CoreUtils.instantiate;
 import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
@@ -187,12 +188,11 @@ public final class KnowledgeBase {
 
    private PredicateFactory instantiatePredicateFactory(String className) {
       try {
-         Class<?> c = Class.forName(className);
-         PredicateFactory predicateFactory = (PredicateFactory) c.newInstance();
+         PredicateFactory predicateFactory = instantiate(className);
          predicateFactory.setKnowledgeBase(this);
          return predicateFactory;
       } catch (Exception e) {
-         throw new RuntimeException("Could not create new PredicateFactory", e);
+         throw new RuntimeException("Could not create new PredicateFactory using: " + className, e);
       }
    }
 

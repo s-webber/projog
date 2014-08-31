@@ -66,9 +66,9 @@ import org.projog.core.term.Term;
 public final class RetractAll extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term t) {
-      Retract predicateFactory = new Retract();
+      Inspect predicateFactory = Inspect.retract();
       predicateFactory.setKnowledgeBase(getKnowledgeBase());
-      Retract predicate = predicateFactory.getPredicate(t);
+      Inspect predicate = predicateFactory.getPredicate(t);
       while (predicate.evaluate(t)) {
          // keep evaluating
       }

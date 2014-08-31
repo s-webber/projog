@@ -112,10 +112,10 @@
 ?- pj_add_predicate(erase/1, 'org.projog.core.function.db.Erase').
 ?- pj_add_predicate(recorded/2, 'org.projog.core.function.db.Recorded').
 ?- pj_add_predicate(recorded/3, 'org.projog.core.function.db.Recorded').
-?- pj_add_predicate(recorda/2, 'org.projog.core.function.db.Recorda').
-?- pj_add_predicate(recorda/3, 'org.projog.core.function.db.Recorda').
-?- pj_add_predicate(recordz/2, 'org.projog.core.function.db.Recordz').
-?- pj_add_predicate(recordz/3, 'org.projog.core.function.db.Recordz').
+?- pj_add_predicate(recorda/2, 'org.projog.core.function.db.InsertRecord/recordA').
+?- pj_add_predicate(recorda/3, 'org.projog.core.function.db.InsertRecord/recordA').
+?- pj_add_predicate(recordz/2, 'org.projog.core.function.db.InsertRecord/recordZ').
+?- pj_add_predicate(recordz/3, 'org.projog.core.function.db.InsertRecord/recordZ').
  
 % math
 ?- pj_add_predicate(is/2, 'org.projog.core.function.math.Is').

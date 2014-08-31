@@ -256,6 +256,7 @@
 				<include name="**"/>
 			</fileset>
 			<zipfileset dir="build" includes="projog-bin.zip" prefix="downloads"/>
+			<zipfileset dir="build/lib" includes="projog-core.jar" prefix="downloads"/>
 		</zip>
 	</target>
 </project>

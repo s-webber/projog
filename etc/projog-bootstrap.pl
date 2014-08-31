@@ -139,9 +139,9 @@
 ?- pj_add_predicate(delete/3, 'org.projog.core.function.list.Delete').
 ?- pj_add_predicate(subset/2, 'org.projog.core.function.list.Subset').
 ?- pj_add_predicate(select/3, 'org.projog.core.function.list.Select').
-?- pj_add_predicate(nth0/3, 'org.projog.core.function.list.Nth0').
-?- pj_add_predicate(nth1/3, 'org.projog.core.function.list.Nth1').
-?- pj_add_predicate(nth/3, 'org.projog.core.function.list.Nth1').
+?- pj_add_predicate(nth0/3, 'org.projog.core.function.list.Nth/nth0').
+?- pj_add_predicate(nth1/3, 'org.projog.core.function.list.Nth/nth1').
+?- pj_add_predicate(nth/3, 'org.projog.core.function.list.Nth/nth1').
 ?- pj_add_predicate(maplist/2, 'org.projog.core.function.list.MapList').
 ?- pj_add_predicate(checklist/2, 'org.projog.core.function.list.MapList').
 ?- pj_add_predicate(maplist/3, 'org.projog.core.function.list.MapList').

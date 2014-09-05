@@ -12,10 +12,11 @@ import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.projog.core.PredicateKey;
@@ -23,6 +24,26 @@ import org.projog.core.term.Term;
 
 /** Generates HTML page listing alphabetically ordered index of all built-in predicates. */
 class BuiltInPredicatesIndexPage {
+   /**
+    * A {@code Comparator} for {@code Character} that handles {@code null} values.
+    * <p>
+    * {@code null} values are considered to be less than all other values.
+    */
+   private static final Comparator<Character> NULLABLE_CHARACTER_COMPARATOR = new Comparator<Character>() {
+      @Override
+      public int compare(Character o1, Character o2) {
+         if (o1 == o2) {
+            return 0;
+         } else if (o1 == null) {
+            return -1;
+         } else if (o2 == null) {
+            return 1;
+         } else {
+            return o1.compareTo(o2);
+         }
+      }
+   };
+
    static void produceBuiltInPredicatesIndexPage() throws Exception {
       List<Term> terms = getCommands();
       List<BuiltIn> builtIns = new ArrayList<>();
@@ -66,7 +87,9 @@ class BuiltInPredicatesIndexPage {
    }
 
    private static Map<Character, TreeSet<BuiltIn>> groupByFirstCharacter(List<BuiltIn> args) {
-      Map<Character, TreeSet<BuiltIn>> index = new HashMap<>();
+      // Can't use default TreeMap constructor as we want to be able to use null as a key.
+      // (As we use null to group <i>all</i> non-alphanumeric characters.)
+      Map<Character, TreeSet<BuiltIn>> index = new TreeMap<>(NULLABLE_CHARACTER_COMPARATOR);
       for (BuiltIn s : args) {
          TreeSet<BuiltIn> byLetter = getSetForString(index, s);
          byLetter.add(s);

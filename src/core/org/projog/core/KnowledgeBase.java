@@ -209,13 +209,16 @@ public final class KnowledgeBase {
     * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
     * adding functionality not possible to define in pure Prolog syntax.
     * </p>
+    * 
+    * @param key The name and arity to associate the {@link PredicateFactory} with.
+    * @param predicateFactoryClassName The name of a class that implements {@link PredicateFactory}.
     */
-   public void addPredicateFactory(PredicateKey key, String className) {
+   public void addPredicateFactory(PredicateKey key, String predicateFactoryClassName) {
       synchronized (predicatesLock) {
          if (isExistingPredicate(key)) {
             throw new ProjogException("Already defined: " + key);
          } else {
-            javaPredicateClassNames.put(key, className);
+            javaPredicateClassNames.put(key, predicateFactoryClassName);
          }
       }
    }

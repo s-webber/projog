@@ -1,5 +1,6 @@
 package org.projog.core;
 
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /**
@@ -21,15 +22,15 @@ import org.projog.core.term.Term;
  * <p>
  * <img src="doc-files/PredicateFactory.png">
  * 
- * @see org.projog.core.KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)
+ * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
  */
 public interface PredicateFactory {
    /**
     * Provides a reference to a {@code KnowledgeBase}.
     * <p>
-    * This method will be called by {@link KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)} when this class is registered
-    * with a {@code KnowledgeBase} - meaning this object will always have access to a {@code KnowledgeBase} by the time
-    * it's {@code getPredicate} method is invoked.
+    * This method will be called by {@link KnowledgeBase#addPredicateFactory(PredicateKey, String)} when this class is
+    * registered with a {@code KnowledgeBase} - meaning this object will always have access to a {@code KnowledgeBase}
+    * by the time it's {@code getPredicate} method is invoked.
     */
    void setKnowledgeBase(KnowledgeBase kb);
 
@@ -45,26 +46,12 @@ public interface PredicateFactory {
     * java code generated at runtime for user defined predicates will be able to use the overloaded method rather than
     * the varargs version and thus avoid the unnecessary overhead of creating a new {@code Term} array for each method
     * invocation.
-    * <p>
-    * <b>Note:</b> It is recommended that the return type of implementations of {@code getPredicate} should be as
-    * specific as possible (rather than {@code Predicate}). The reason why this is recommended is so that java code
-    * generated at runtime for user defined predicates has as specific information as possible about the predicates it
-    * invokes.
-    * <p>
-    * For example, {@link org.projog.core.function.flow.Cut} has the following {@code getPredicate} method signatures:
-    * 
-    * <pre>
-    * public Cut getPredicate(Term... args)
-    * public Cut getPredicate()
-    * </pre>
-    * rather than the minimum required:
-    * 
-    * <pre>
-    * public Predicate getPredicate(Term... args)
-    * </pre>
+    * </p>
     * <p>
     * <b>Note:</b> The above recommendations are <i>not</i> required for subclasses of
-    * {@link org.projog.core.function.AbstractSingletonPredicate}.
+    * {@link AbstractSingletonPredicate}. (As the compiler is aware that
+    * {@link AbstractSingletonPredicate#getPredicate(Term...)} always returns {@code this}.
+    * </p>
     * 
     * @param args the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal

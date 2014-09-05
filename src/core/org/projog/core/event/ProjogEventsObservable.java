@@ -3,6 +3,9 @@ package org.projog.core.event;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+
 /**
  * Controls the registering and notification of observers of a {@link org.projog.core.KnowledgeBase}.
  * <p>
@@ -10,7 +13,7 @@ import java.util.Observer;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ProjogEventsObservable} instance.
  * 
- * @see org.projog.core.KnowledgeBase#getProjogEventsObservable()
+ * @see KnowledgeBaseUtils#getProjogEventsObservable(KnowledgeBase)
  */
 public class ProjogEventsObservable {
    private final Observable observable = new Observable() {

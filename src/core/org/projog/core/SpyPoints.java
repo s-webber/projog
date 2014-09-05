@@ -22,7 +22,7 @@ import org.projog.core.term.TermFormatter;
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code SpyPoints} instance.
  * </p>
  * 
- * @see org.projog.core.KnowledgeBase#getSpyPoints()
+ * @see KnowledgeBaseUtils#getSpyPoints(KnowledgeBase)
  */
 public final class SpyPoints {
    private final Object lock = new Object();

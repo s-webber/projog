@@ -3,7 +3,8 @@ package org.projog.core.function;
 import org.projog.core.Predicate;
 import org.projog.core.term.Term;
 
-public abstract class AbstractPredicate implements Predicate {
+/** A skeletal implementation of {@link Predicate} */
+abstract class AbstractPredicate implements Predicate {
    @Override
    public boolean evaluate(Term... args) {
       switch (args.length) {

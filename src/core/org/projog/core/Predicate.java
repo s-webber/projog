@@ -9,8 +9,8 @@ import org.projog.core.term.Term;
  * {@link org.projog.core.function.AbstractSingletonPredicate} or
  * {@link org.projog.core.function.AbstractRetryablePredicate}.
  * 
- * @see org.projog.core.PredicateFactory
- * @see org.projog.core.KnowledgeBase#addPredicateFactory(PredicateKey, PredicateFactory)
+ * @see PredicateFactory
+ * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
  */
 public interface Predicate {
    /**

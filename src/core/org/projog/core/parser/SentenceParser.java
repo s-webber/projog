@@ -122,10 +122,9 @@ public class SentenceParser {
     * Returns collection of {@link Variable} instances created by this {@code SentenceParser}.
     * <p>
     * Returns all {@link Variable}s created by this {@code SentenceParser} either since it was created or since the last
-    * execution of {@link #clearSharedVariables()}.
+    * execution of {@link #parseTerm()}.
     * 
     * @return collection of {@link Variable} instances created by this {@code SentenceParser}
-    * @see #clearSharedVariables()
     */
    @SuppressWarnings("unchecked")
    public Map<String, Variable> getParsedTermVariables() {

@@ -19,11 +19,14 @@ import org.projog.core.term.Term;
  * <p>
  * 
  * @see AbstractRetryablePredicate
- * @see org.projog.core.Predicate#evaluate(Term[])
+ * @see Predicate#evaluate(Term[])
  */
 public abstract class AbstractSingletonPredicate extends AbstractPredicate implements PredicateFactory {
    private KnowledgeBase knowledgeBase;
 
+   /**
+    * Returns {@code this}.
+    */
    @Override
    public final Predicate getPredicate(Term... args) {
       return this;
@@ -38,9 +41,9 @@ public abstract class AbstractSingletonPredicate extends AbstractPredicate imple
    /**
     * This method is called by {@link #setKnowledgeBase(KnowledgeBase)}.
     * <p>
-    * Can be overridden by subclasses to perform initialisation before any calls to {@code {@link #evaluate(Term...)}
-    * are made. As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
-    * overridden versions will be able to access the {@code KnowledgeBase} using {@link getKnowledgeBase()}.
+    * Can be overridden by subclasses to perform initialisation before any calls to {@link #evaluate(Term...)} are made.
+    * As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
+    * overridden versions will be able to access the {@code KnowledgeBase} using {@link #getKnowledgeBase()}.
     */
    protected void init() {
    }

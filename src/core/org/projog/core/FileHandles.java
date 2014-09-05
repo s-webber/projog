@@ -19,7 +19,7 @@ import org.projog.core.term.Term;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code FileHandles} instance.
  * 
- * @see org.projog.core.KnowledgeBase#getFileHandles()
+ * @see KnowledgeBaseUtils#getFileHandles(KnowledgeBase)
  */
 public final class FileHandles {
    public static final Atom USER_OUTPUT_HANDLE = new Atom("user_output");

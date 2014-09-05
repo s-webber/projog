@@ -7,7 +7,7 @@ package org.projog.core;
  * <p>
  * <img src="doc-files/ProjogProperties.png">
  * 
- * @see org.projog.core.KnowledgeBase#getProjogProperties()
+ * @see KnowledgeBaseUtils#getProjogProperties(KnowledgeBase)
  */
 public interface ProjogProperties {
    /**

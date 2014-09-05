@@ -31,7 +31,7 @@ public final class Calculatables {
    /**
     * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
     * 
-    * @param calculatableClassName The instance of {@code Calculatable} to be associated with {@code key}.
+    * @param calculatable The instance of {@code Calculatable} to be associated with {@code key}.
     */
    public void addCalculatable(PredicateKey key, Calculatable calculatable) {
       synchronized (lock) {

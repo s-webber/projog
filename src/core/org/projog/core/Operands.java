@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code Operands} instance.
  * 
- * @see org.projog.core.KnowledgeBase#getOperands()
+ * @see KnowledgeBaseUtils#getOperands(KnowledgeBase)
  */
 public final class Operands {
    private final Object LOCK = new Object();

@@ -16,9 +16,9 @@ You can optionally provide names of files, containing Prolog syntax, as argument
 e.g.:
 
 projog-bin> java -version
-java version "1.6.0_16"
-Java(TM) SE Runtime Environment (build 1.6.0_16-b01)
-Java HotSpot(TM) Client VM (build 14.2-b01, mixed mode, sharing)
+java version "1.7.0_45"
+Java(TM) SE Runtime Environment (build 1.7.0_45-b18)
+Java HotSpot(TM) Client VM (build 24.45-b08, mixed mode, sharing)
 
 projog-bin> projog-console.sh towers-of-hanoi-example.pl
 

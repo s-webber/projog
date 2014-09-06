@@ -28,7 +28,7 @@ import org.projog.core.Operands;
 class WordParser {
    private final CharacterParser parser;
    private final Operands operands;
-   private Word word;
+   private Word lastParsedWord;
    private boolean rewound;
 
    WordParser(Reader reader, Operands operands) {
@@ -37,55 +37,50 @@ class WordParser {
       this.operands = operands;
    }
 
+   /** @return {@code true} if there are more words to be parsed, else {@code false} */
+   boolean hasNext() {
+      if (rewound) {
+         return true;
+      } else {
+         skipWhitespaceAndComments();
+         return !isEndOfStream(parser.peek());
+      }
+   }
+
    /**
-    * Move the parser forward one word.
+    * Parse and return the next {@code Word}.
     * 
+    * @return the word that was parsed as a result of this call
     * @throws ParserException if there are no more words to parse (i.e. parser has reached the end of the underlying
     * input stream)
     */
-   void next() {
+   Word next() {
       if (rewound) {
          rewound = false;
-         return;
+      } else {
+         lastParsedWord = parseWord();
       }
+      return lastParsedWord;
+   }
 
+   private Word parseWord() {
       skipWhitespaceAndComments();
-
       final int c = parser.getNext();
-
       if (isEndOfStream(c)) {
          throw newParserException("Unexpected end of stream");
       } else if (isUpperCase(c)) {
-         setText(c, VARIABLE);
+         return parseText(c, VARIABLE);
       } else if (isAnonymousVariable(c)) {
-         setText(c, ANONYMOUS_VARIABLE);
+         return parseText(c, ANONYMOUS_VARIABLE);
       } else if (isLowerCase(c)) {
-         setText(c, ATOM);
+         return parseText(c, ATOM);
       } else if (isQuote(c)) {
-         setQuotedText();
+         return parseQuotedText();
       } else if (isDigit(c)) {
-         setNumber(c);
+         return parseNumber(c);
       } else {
-         setSymbol(c);
+         return parseSymbol(c);
       }
-   }
-
-   /** The word that was parsed as a result of the last call to {@link #next()} */
-   Word getWord() {
-      return word;
-   }
-
-   /** Does the next value to be parsed represent a term (rather than a delimiter) */
-   boolean isFollowedByTerm() {
-      skipWhitespaceAndComments();
-      int nextChar = parser.peek();
-      return isListOpenBracket(nextChar) || !isDelimiter(nextChar);
-   }
-
-   /** @return {@code true} if there are no more words to be parsed, else {@code false} */
-   boolean isEndOfStream() {
-      skipWhitespaceAndComments();
-      return isEndOfStream(parser.peek());
    }
 
    /**
@@ -99,10 +94,17 @@ class WordParser {
     * {@link #getValue()}
     */
    void rewind(Word value) {
-      if (word != value) {
+      if (lastParsedWord != value) {
          throw new IllegalArgumentException();
       }
       rewound = true;
+   }
+
+   /** Does the next value to be parsed represent a term (rather than a delimiter) */
+   boolean isFollowedByTerm() {
+      skipWhitespaceAndComments();
+      int nextChar = parser.peek();
+      return isListOpenBracket(nextChar) || !isDelimiter(nextChar);
    }
 
    /** Returns a new {@link ParserException} with the specified message. */
@@ -129,7 +131,7 @@ class WordParser {
    }
 
    /** @param c the first, already parsed, character of the word. */
-   private void setText(int c, WordType t) {
+   private Word parseText(int c, WordType t) {
       StringBuilder sb = new StringBuilder();
 
       do {
@@ -138,7 +140,7 @@ class WordParser {
       } while (isValidForAtom(c));
       parser.rewind();
 
-      setValue(sb, t);
+      return createWord(sb, t);
    }
 
    /**
@@ -147,7 +149,7 @@ class WordParser {
     * If an atom's name is enclosed in quotes (i.e. {@code '}) then it may contain any character.
     * </p>
     */
-   private void setQuotedText() {
+   private Word parseQuotedText() {
       StringBuilder sb = new StringBuilder();
       do {
          int c = parser.getNext();
@@ -161,8 +163,7 @@ class WordParser {
             if (!isQuote(c)) {
                // found closing '
                parser.rewind();
-               setValue(sb, QUOTED_ATOM);
-               return;
+               return createWord(sb, QUOTED_ATOM);
             }
          } else if (isEndOfStream(c)) {
             throw newParserException("No closing ' on quoted string");
@@ -176,7 +177,7 @@ class WordParser {
     * <p>
     * Deals with numbers of the form {@code 3.4028235E38}.
     */
-   private void setNumber(final int startChar) {
+   private Word parseNumber(final int startChar) {
       StringBuilder sb = new StringBuilder();
 
       boolean keepGoing = true;
@@ -214,10 +215,10 @@ class WordParser {
          throw newParserException("expected digit after e");
       }
 
-      setValue(sb, readDecimalPoint ? FLOAT : INTEGER);
+      return createWord(sb, readDecimalPoint ? FLOAT : INTEGER);
    }
 
-   private void setSymbol(int c) {
+   private Word parseSymbol(int c) {
       StringBuilder sb = new StringBuilder();
       do {
          sb.append((char) c);
@@ -226,8 +227,7 @@ class WordParser {
       parser.rewind();
 
       if (isValidParseableElement(sb.toString())) {
-         setValue(sb, SYMBOL);
-         return;
+         return createWord(sb, SYMBOL);
       }
 
       int length = sb.length();
@@ -236,8 +236,7 @@ class WordParser {
          final String substring = sb.substring(0, idx);
          if (isValidParseableElement(substring)) {
             parser.rewind(length - idx);
-            setValue(substring, SYMBOL);
-            return;
+            return createWord(substring, SYMBOL);
          }
       }
 
@@ -245,12 +244,11 @@ class WordParser {
          final String substring = sb.substring(i);
          if (isValidParseableElement(substring) || isDelimiter(sb.charAt(i))) {
             parser.rewind(length - i);
-            setValue(sb.substring(0, i), SYMBOL);
-            return;
+            return createWord(sb.substring(0, i), SYMBOL);
          }
       }
 
-      setValue(sb, SYMBOL);
+      return createWord(sb, SYMBOL);
    }
 
    private void skipWhitespace() {
@@ -306,11 +304,11 @@ class WordParser {
       return isDelimiter(commandName) || operands.isDefined(commandName);
    }
 
-   private void setValue(StringBuilder value, WordType type) {
-      setValue(value.toString(), type);
+   private Word createWord(StringBuilder value, WordType type) {
+      return createWord(value.toString(), type);
    }
 
-   private void setValue(String value, WordType type) {
-      this.word = new Word(value, type);
+   private Word createWord(String value, WordType type) {
+      return new Word(value, type);
    }
 }

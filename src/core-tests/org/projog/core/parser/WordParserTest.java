@@ -79,10 +79,10 @@ public class WordParserTest {
 
    @Test
    public void testEmptyInput() {
-      assertTrue(create("").isEndOfStream());
-      assertTrue(create("\t \r\n   ").isEndOfStream());
-      assertTrue(create("%abcde").isEndOfStream()); // single line comment
-      assertTrue(create("/* hgjh\nghj*/").isEndOfStream()); // multi line comment
+      assertFalse(create("").hasNext());
+      assertFalse(create("\t \r\n   ").hasNext());
+      assertFalse(create("%abcde").hasNext()); // single line comment
+      assertFalse(create("/* hgjh\nghj*/").hasNext()); // multi line comment
    }
 
    @Test
@@ -115,7 +115,7 @@ public class WordParserTest {
    @Test
    public void testWhitespaceAndComments() {
       WordParser p = create("/* comment */\t % comment\n % comment\r\n\n");
-      assertTrue(p.isEndOfStream());
+      assertFalse(p.hasNext());
    }
 
    @Test
@@ -140,36 +140,31 @@ public class WordParserTest {
    @Test
    public void testRewindException() {
       WordParser wp = create("a b c");
-      wp.next();
-      wp.next();
-      assertEquals("b", wp.getWord().value);
-      wp.rewind(wp.getWord());
-      wp.next();
-      assertEquals("b", wp.getWord().value);
-      wp.rewind(wp.getWord());
+      assertEquals("a", wp.next().value);
+      Word b = wp.next();
+      assertEquals("b", b.value);
+      wp.rewind(b);
+      assertSame(b, wp.next());
+      wp.rewind(b);
 
       // check that can only rewind one word
       assertRewindException(wp, "b");
       assertRewindException(wp, "a");
 
-      assertEquals("b", wp.getWord().value);
-      wp.next();
-      assertEquals("b", wp.getWord().value);
-      wp.next();
-      assertEquals("c", wp.getWord().value);
+      assertEquals("b", wp.next().value);
+      Word c = wp.next();
+      assertEquals("c", c.value);
 
       // check that the value specified in call to rewind has to be the last value parsed
       assertRewindException(wp, "b");
       assertRewindException(wp, null);
       assertRewindException(wp, "z");
 
-      wp.rewind(wp.getWord());
-      assertEquals("c", wp.getWord().value);
-      wp.next();
-      assertEquals("c", wp.getWord().value);
-      assertTrue(wp.isEndOfStream());
-      assertEquals("c", wp.getWord().value);
-      wp.rewind(wp.getWord());
+      wp.rewind(c);
+      assertSame(c, wp.next());
+      assertFalse(wp.hasNext());
+      wp.rewind(c);
+      assertTrue(wp.hasNext());
 
       // check that can only rewind one word
       assertRewindException(wp, "c");
@@ -190,23 +185,22 @@ public class WordParserTest {
 
    private void assertWordType(String syntax, String value, WordType type) {
       WordParser p = create(syntax);
-      assertFalse(p.isEndOfStream());
-      p.next();
-      assertEquals(value, p.getWord().value);
-      assertSame(type, p.getWord().type);
-      assertTrue(p.isEndOfStream());
+      assertTrue(p.hasNext());
+      Word word = p.next();
+      assertEquals(value, word.value);
+      assertSame(type, word.type);
+      assertFalse(p.hasNext());
    }
 
    private void assertParse(String sentence, String... words) {
       WordParser p = create(sentence);
       for (String w : words) {
-         p.next();
-         assertEquals(w, p.getWord().value);
-         p.rewind(p.getWord());
-         p.next();
-         assertEquals(w, p.getWord().value);
+         Word next = p.next();
+         assertEquals(w, next.value);
+         p.rewind(next);
+         assertSame(next, p.next());
       }
-      assertTrue(p.isEndOfStream());
+      assertFalse(p.hasNext());
       try {
          p.next();
          fail();

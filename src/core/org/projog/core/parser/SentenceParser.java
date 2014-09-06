@@ -108,14 +108,14 @@ public class SentenceParser {
     * @see SentenceParser#parseSentence()
     */
    public Term parseTerm() {
-      if (parser.isEndOfStream()) {
+      if (parser.hasNext()) {
+         parsedInfixTerms.clear();
+         variables.clear();
+
+         return getTerm(Integer.MAX_VALUE);
+      } else {
          return null;
       }
-
-      parsedInfixTerms.clear();
-      variables.clear();
-
-      return getTerm(Integer.MAX_VALUE);
    }
 
    /**
@@ -136,10 +136,10 @@ public class SentenceParser {
     */
    private Term getTerm(int maxLevel) {
       final Term firstArg = getPossiblePrefixArgument(maxLevel);
-      if (parser.isEndOfStream()) {
-         return firstArg;
-      } else {
+      if (parser.hasNext()) {
          return getTerm(firstArg, maxLevel, maxLevel, true);
+      } else {
+         return firstArg;
       }
    }
 
@@ -344,7 +344,7 @@ public class SentenceParser {
     * a newly created {@code Atom} is returned.
     */
    private Term getAtomOrStructure(String name) {
-      Word word = parser.isEndOfStream() ? null : peekValue();
+      Word word = parser.hasNext() ? peekValue() : null;
       if (isPredicateOpenBracket(word)) {
          popValue(); //skip opening bracket
          if (isPredicateCloseBracket(peekValue())) {
@@ -450,8 +450,7 @@ public class SentenceParser {
    }
 
    private Word popValue() {
-      parser.next();
-      return parser.getWord();
+      return parser.next();
    }
 
    private Word peekValue() {

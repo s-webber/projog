@@ -1,6 +1,6 @@
 package org.projog.core.parser;
 
-/** @see WordParser#getWord() */
+/** @see WordParser#next() */
 class Word {
    final String value;
    final WordType type;

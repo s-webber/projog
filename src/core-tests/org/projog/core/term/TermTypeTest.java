@@ -16,7 +16,6 @@ public class TermTypeTest {
       assertFalse(TermType.EMPTY_LIST.isNumeric());
       assertFalse(TermType.LIST.isNumeric());
       assertFalse(TermType.STRUCTURE.isNumeric());
-      assertFalse(TermType.ANONYMOUS_VARIABLE.isNumeric());
       assertFalse(TermType.NAMED_VARIABLE.isNumeric());
    }
 
@@ -29,13 +28,11 @@ public class TermTypeTest {
       assertFalse(TermType.FRACTION.isStructure());
       assertFalse(TermType.INTEGER.isStructure());
       assertFalse(TermType.ATOM.isStructure());
-      assertFalse(TermType.ANONYMOUS_VARIABLE.isStructure());
       assertFalse(TermType.NAMED_VARIABLE.isStructure());
    }
 
    @Test
    public void testIsVariable() {
-      assertTrue(TermType.ANONYMOUS_VARIABLE.isVariable());
       assertTrue(TermType.NAMED_VARIABLE.isVariable());
 
       assertFalse(TermType.FRACTION.isVariable());
@@ -48,14 +45,13 @@ public class TermTypeTest {
 
    @Test
    public void testGetPrecedence() {
-      assertEquals(1, TermType.ANONYMOUS_VARIABLE.getPrecedence());
-      assertEquals(2, TermType.NAMED_VARIABLE.getPrecedence());
-      assertEquals(3, TermType.FRACTION.getPrecedence());
-      assertEquals(4, TermType.INTEGER.getPrecedence());
-      assertEquals(5, TermType.EMPTY_LIST.getPrecedence());
-      assertEquals(6, TermType.ATOM.getPrecedence());
+      assertEquals(1, TermType.NAMED_VARIABLE.getPrecedence());
+      assertEquals(2, TermType.FRACTION.getPrecedence());
+      assertEquals(3, TermType.INTEGER.getPrecedence());
+      assertEquals(4, TermType.EMPTY_LIST.getPrecedence());
+      assertEquals(5, TermType.ATOM.getPrecedence());
       // all compound structures share the same precedence
-      assertEquals(7, TermType.STRUCTURE.getPrecedence());
-      assertEquals(7, TermType.LIST.getPrecedence());
+      assertEquals(6, TermType.STRUCTURE.getPrecedence());
+      assertEquals(6, TermType.LIST.getPrecedence());
    }
 }

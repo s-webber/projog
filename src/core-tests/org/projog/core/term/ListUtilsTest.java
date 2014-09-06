@@ -13,8 +13,8 @@ import static org.projog.TestUtils.parseTerm;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 import static org.projog.TestUtils.write;
-import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
@@ -97,7 +97,7 @@ public class ListUtilsTest {
       assertNull(ListUtils.toJavaUtilList(structure()));
       assertNull(ListUtils.toJavaUtilList(integerNumber()));
       assertNull(ListUtils.toJavaUtilList(decimalFraction()));
-      assertNull(ListUtils.toJavaUtilList(ANONYMOUS_VARIABLE));
+      assertNull(ListUtils.toJavaUtilList(createAnonymousVariable()));
    }
 
    @Test
@@ -131,7 +131,7 @@ public class ListUtilsTest {
       assertNull(ListUtils.toSortedJavaUtilList(structure()));
       assertNull(ListUtils.toSortedJavaUtilList(integerNumber()));
       assertNull(ListUtils.toSortedJavaUtilList(decimalFraction()));
-      assertNull(ListUtils.toSortedJavaUtilList(ANONYMOUS_VARIABLE));
+      assertNull(ListUtils.toSortedJavaUtilList(createAnonymousVariable()));
    }
 
    private Term[] createArguments() {

@@ -28,15 +28,15 @@ import org.projog.core.term.TermType;
  %ANSWER X=[a - 1,a - 9,a - 1,q - 3,z - 1,z - 1]
 
  % Keys are sorted using the standard ordering of terms.
- %QUERY keysort([_ - v,Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure(a) - v,[list] - v], X)
+ %QUERY keysort([Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure(a) - v,[list] - v], X)
  %ANSWER
- % X=[_ - v,Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
+ % X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
  %ANSWER
  
- %QUERY keysort([[list] - v,structure(a) - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v,_ - v], X)
+ %QUERY keysort([[list] - v,structure(a) - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v], X)
  %ANSWER
- % X=[_ - v,Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
+ % X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
  % Variable=UNINSTANTIATED VARIABLE 
  %ANSWER
  

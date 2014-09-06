@@ -4,6 +4,7 @@ import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -44,6 +45,7 @@ final class CompiledPredicateVariables {
    private final Set<String> memberTerms = new LinkedHashSet<>();
    private final Set<String> declaredVariables = new HashSet<>();
    private final Set<String> assignedVariables = new HashSet<>();
+   private final Map<Variable, String> anonymousVariableIds = new HashMap<Variable, String>();
 
    private int tempTermCtr;
    private int tempNumericCtr;
@@ -188,7 +190,33 @@ final class CompiledPredicateVariables {
    }
 
    String getVariableId(ClauseMetaData clauseMetaData, Variable variable) {
-      return VARIABLE_PREFIX + clauseMetaData.getClauseIndex() + "_" + variable.getId();
+      String id;
+      if (isAnonymousVariable(variable)) {
+         id = getAnonymousVariableId(variable);
+      } else {
+         id = variable.getId();
+      }
+      return VARIABLE_PREFIX + clauseMetaData.getClauseIndex() + "_" + id;
+   }
+
+   private boolean isAnonymousVariable(Variable v) {
+      return v.getId().startsWith("_");
+   }
+
+   /**
+    * Returns a unique variable name for the specified anonymous variable instance.
+    * <p>
+    * Anonymous variables may have the same name (normally {@code _}) - but they need to be treated as separate
+    * instances (so we prefix the result to return with a number to make it unique).
+    */
+   private String getAnonymousVariableId(Variable variable) {
+      if (anonymousVariableIds.containsKey(variable)) {
+         return anonymousVariableIds.get(variable);
+      } else {
+         String id = anonymousVariableIds.size() + variable.getId();
+         anonymousVariableIds.put(variable, id);
+         return id;
+      }
    }
 
    List<MemberVariable> getVariablesToDeclare() {

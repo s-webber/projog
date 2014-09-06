@@ -148,38 +148,6 @@ public class UnifierTest {
       assertSame(b, consequent[0]);
    }
 
-   /** [_] unified with [a] */
-   @Test
-   public void testAnonymousVariableInInput() {
-      Term[] input = {AnonymousVariable.ANONYMOUS_VARIABLE};
-      Atom a = atom();
-      Term[] consequent = {a};
-      assertPreMatch(input, consequent);
-      assertSame(AnonymousVariable.ANONYMOUS_VARIABLE, input[0]);
-      assertSame(a, consequent[0]);
-   }
-
-   /** [a] unified with [_] */
-   @Test
-   public void testAnonymousVariableInOutput() {
-      Atom a = atom();
-      Term[] input = {a};
-      Term[] consequent = {AnonymousVariable.ANONYMOUS_VARIABLE};
-      assertPreMatch(input, consequent);
-      assertSame(a, input[0]);
-      assertSame(AnonymousVariable.ANONYMOUS_VARIABLE, consequent[0]);
-   }
-
-   /** [_] unified with [_] */
-   @Test
-   public void testAnonymousVariableInBothInputAndOutput() {
-      Term[] input = {AnonymousVariable.ANONYMOUS_VARIABLE};
-      Term[] consequent = {AnonymousVariable.ANONYMOUS_VARIABLE};
-      assertPreMatch(input, consequent);
-      assertSame(AnonymousVariable.ANONYMOUS_VARIABLE, input[0]);
-      assertSame(AnonymousVariable.ANONYMOUS_VARIABLE, consequent[0]);
-   }
-
    /** [a, X] unified with [Y, b] */
    @Test
    public void testPrematch_1() {

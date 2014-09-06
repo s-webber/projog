@@ -1,7 +1,7 @@
 package org.projog.core.function.db;
 
 import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
-import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.util.Iterator;
 
@@ -34,7 +34,7 @@ public final class Recorded extends AbstractRetryablePredicate {
 
    @Override
    public Recorded getPredicate(Term key, Term value) {
-      return getPredicate(key, value, ANONYMOUS_VARIABLE);
+      return getPredicate(key, value, createAnonymousVariable());
    }
 
    @Override
@@ -55,7 +55,7 @@ public final class Recorded extends AbstractRetryablePredicate {
 
    @Override
    public boolean evaluate(Term key, Term value) {
-      return evaluate(key, value, ANONYMOUS_VARIABLE);
+      return evaluate(key, value, createAnonymousVariable());
    }
 
    @Override

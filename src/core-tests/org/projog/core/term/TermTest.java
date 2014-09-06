@@ -9,6 +9,7 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,17 +33,47 @@ import org.junit.Test;
  * @see VariableTest
  */
 public class TermTest {
-   private static final Term[] IMMUTABLE_TERMS = {atom("a"), atom("b"), atom("c"), atom("A"), atom("B"), atom("C"), atom("abc"), atom("ABC"), atom("AbC"), atom("0"), atom("1"), atom("-1"), atom("[]"),
+   private static final Term[] IMMUTABLE_TERMS = {
+               atom("a"),
+               atom("b"),
+               atom("c"),
+               atom("A"),
+               atom("B"),
+               atom("C"),
+               atom("abc"),
+               atom("ABC"),
+               atom("AbC"),
+               atom("0"),
+               atom("1"),
+               atom("-1"),
+               atom("[]"),
 
-   integerNumber(0), integerNumber(1), integerNumber(-1), integerNumber(Integer.MIN_VALUE), integerNumber(Integer.MAX_VALUE),
+               integerNumber(0),
+               integerNumber(1),
+               integerNumber(-1),
+               integerNumber(Integer.MIN_VALUE),
+               integerNumber(Integer.MAX_VALUE),
 
-   decimalFraction(0), decimalFraction(1), decimalFraction(-1), decimalFraction(0.0001), decimalFraction(-0.0001), decimalFraction(Double.MIN_VALUE), decimalFraction(Double.MAX_VALUE),
+               decimalFraction(0),
+               decimalFraction(1),
+               decimalFraction(-1),
+               decimalFraction(0.0001),
+               decimalFraction(-0.0001),
+               decimalFraction(Double.MIN_VALUE),
+               decimalFraction(Double.MAX_VALUE),
 
-   structure("abc", atom()), structure("abc", atom(), atom()), structure("ABC", atom()), structure("ABC", atom(), atom()), structure("1", atom()), structure("1", atom(), atom()),
+               structure("abc", atom()),
+               structure("abc", atom(), atom()),
+               structure("ABC", atom()),
+               structure("ABC", atom(), atom()),
+               structure("1", atom()),
+               structure("1", atom(), atom()),
 
-   list(atom(), atom()), list(atom(), atom(), atom()), list(atom("a"), integerNumber(1), decimalFraction(1), structure("abc", atom())),
+               list(atom(), atom()),
+               list(atom(), atom(), atom()),
+               list(atom("a"), integerNumber(1), decimalFraction(1), structure("abc", atom())),
 
-   EmptyList.EMPTY_LIST};
+               EmptyList.EMPTY_LIST};
 
    /** check both unify and strictEquality methods against various immutable Terms */
    @Test
@@ -147,8 +178,8 @@ public class TermTest {
    @Test
    public void testUnifyAndStrictEqualityWithAnonymousVariable() {
       for (Term t : IMMUTABLE_TERMS) {
-         assertUnify(t, AnonymousVariable.ANONYMOUS_VARIABLE, true);
-         assertStrictEquality(t, AnonymousVariable.ANONYMOUS_VARIABLE, false);
+         assertUnify(t, createAnonymousVariable(), true);
+         assertStrictEquality(t, createAnonymousVariable(), false);
       }
    }
 

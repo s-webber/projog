@@ -68,24 +68,25 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                v0_X = _8;
                v0_Y = _9;
                v0_Z = _10;
+               v0_0_ = _11;
                _6.backtrack();
             } else {
                _6 = v0_W.getTerm();
             }
             if (inlinedCtr1==0) {
                if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-                  CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, AnonymousVariable.ANONYMOUS_VARIABLE, v0_W});
+                  CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, v0_0_, v0_W});
                }
             } else {
                if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-                  CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logRedo(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, AnonymousVariable.ANONYMOUS_VARIABLE, v0_W});
+                  CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logRedo(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, v0_0_, v0_W});
                }
             }
             do {
                if (inlinedCtr1>2) {
                   inlinedCtr1 = 0;
                   if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-                     CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, AnonymousVariable.ANONYMOUS_VARIABLE, v0_W});
+                     CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, v0_0_, v0_W});
                   }
                   conjunctionCtr = 0;
                   break mainloop;
@@ -95,17 +96,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   _6.backtrack();
                }
                else
-               if (AnonymousVariable.ANONYMOUS_VARIABLE.unify(datainlinedCtr1[1])==false) {
-                  _6.backtrack();
-               }
-               else
                if (_6.unify(datainlinedCtr1[2])==false) {
                   _6.backtrack();
                }
                else
                {
+                  v0_0_ = datainlinedCtr1[1];
                   if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-                     CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, AnonymousVariable.ANONYMOUS_VARIABLE, v0_W});
+                     CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v0_W, v0_0_, v0_W});
                   }
                   break;
                }
@@ -118,6 +116,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             v0_Y = v0_Y.getTerm();
             _10 = v0_Z;
             v0_Z = v0_Z.getTerm();
+            _11 = v0_0_;
+            v0_0_ = v0_0_.getTerm();
             conjunctionCtr = 1;
             if (!IsAtom_1.evaluate(v0_W.getTerm())) {
                v0_W.backtrack();
@@ -125,13 +125,13 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 2:
             if (inlinedCtr2!=0) {
-               v0_W = _12;
-               v0_X = _13;
-               v0_Y = _14;
-               v0_Z = _15;
-               _11.backtrack();
+               v0_W = _13;
+               v0_X = _14;
+               v0_Y = _15;
+               v0_Z = _16;
+               _12.backtrack();
             } else {
-               _11 = v0_Y.getTerm();
+               _12 = v0_Y.getTerm();
             }
             if (inlinedCtr2==0) {
                if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
@@ -152,22 +152,22 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   conjunctionCtr = 1;
                   break mainloop;
                }
-               if (_11.unify(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr2++])) {
+               if (_12.unify(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr2++])) {
                   if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
                      CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{v0_Y});
                   }
                   break;
                } else {
-                  _11.backtrack();
+                  _12.backtrack();
                }
             } while (true);
-            _12 = v0_W;
+            _13 = v0_W;
             v0_W = v0_W.getTerm();
-            _13 = v0_X;
+            _14 = v0_X;
             v0_X = v0_X.getTerm();
-            _14 = v0_Y;
+            _15 = v0_Y;
             v0_Y = v0_Y.getTerm();
-            _15 = v0_Z;
+            _16 = v0_Z;
             v0_Z = v0_Z.getTerm();
             conjunctionCtr = 2;
             if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1_0.spyPoint.isEnabled()) {
@@ -185,12 +185,12 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 3:
             if (inlinedCtr3!=0) {
-               v0_X = _17;
-               v0_Y = _18;
-               v0_Z = _19;
-               _16.backtrack();
+               v0_X = _18;
+               v0_Y = _19;
+               v0_Z = _20;
+               _17.backtrack();
             } else {
-               _16 = v0_Z.getTerm();
+               _17 = v0_Z.getTerm();
             }
             if (inlinedCtr3==0) {
                if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
@@ -210,20 +210,20 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   conjunctionCtr = 2;
                   break mainloop;
                }
-               if (_16.unify(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr3++])) {
+               if (_17.unify(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr3++])) {
                   if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
                      CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{v0_Z});
                   }
                   break;
                } else {
-                  _16.backtrack();
+                  _17.backtrack();
                }
             } while (true);
-            _17 = v0_X;
+            _18 = v0_X;
             v0_X = v0_X.getTerm();
-            _18 = v0_Y;
+            _19 = v0_Y;
             v0_Y = v0_Y.getTerm();
-            _19 = v0_Z;
+            _20 = v0_Z;
             v0_Z = v0_Z.getTerm();
             conjunctionCtr = 3;
             if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3_0.spyPoint.isEnabled()) {
@@ -267,16 +267,16 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             case 4:
             if (inlinedCtr4!=0) {
-               v0_X = _23;
-               v0_Y = _24;
-               v0_Z = _25;
-               _20.backtrack();
+               v0_X = _24;
+               v0_Y = _25;
+               v0_Z = _26;
                _21.backtrack();
                _22.backtrack();
+               _23.backtrack();
             } else {
-               _20 = v0_X.getTerm();
-               _21 = v0_Y.getTerm();
-               _22 = v0_Z.getTerm();
+               _21 = v0_X.getTerm();
+               _22 = v0_Y.getTerm();
+               _23 = v0_Z.getTerm();
             }
             if (inlinedCtr4==0) {
                if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
@@ -300,19 +300,19 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break mainloop;
                }
                final Term[] datainlinedCtr4 = CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.data[inlinedCtr4++];
-               if (_20.unify(datainlinedCtr4[0])==false) {
-                  _20.backtrack();
-               }
-               else
-               if (_21.unify(datainlinedCtr4[1])==false) {
-                  _20.backtrack();
+               if (_21.unify(datainlinedCtr4[0])==false) {
                   _21.backtrack();
                }
                else
-               if (_22.unify(datainlinedCtr4[2])==false) {
-                  _20.backtrack();
+               if (_22.unify(datainlinedCtr4[1])==false) {
                   _21.backtrack();
                   _22.backtrack();
+               }
+               else
+               if (_23.unify(datainlinedCtr4[2])==false) {
+                  _21.backtrack();
+                  _22.backtrack();
+                  _23.backtrack();
                }
                else
                {
@@ -322,11 +322,11 @@ public final class %CLASS_NAME% implements CompiledPredicate {
                   break;
                }
             } while (true);
-            _23 = v0_X;
+            _24 = v0_X;
             v0_X = v0_X.getTerm();
-            _24 = v0_Y;
+            _25 = v0_Y;
             v0_Y = v0_Y.getTerm();
-            _25 = v0_Z;
+            _26 = v0_Z;
             v0_Z = v0_Z.getTerm();
             conjunctionCtr = 4;
             return true;
@@ -437,6 +437,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    private Term a3;
    private Term v0_X;
    private Term v0_W;
+   private Term v0_0_;
    private Term v0_Y;
    private Term v0_Z;
    private Term _0;
@@ -465,6 +466,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    private Term _23;
    private Term _24;
    private Term _25;
+   private Term _26;
    private int inlinedCtr0;
    private int inlinedCtr1;
    private int inlinedCtr2;

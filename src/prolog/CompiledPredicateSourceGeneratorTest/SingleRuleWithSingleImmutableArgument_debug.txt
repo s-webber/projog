@@ -102,7 +102,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Term v4_RuleNo;
       v4_RuleNo = a1;
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{new Variable("_")});
       }
       // SingleRuleWithSingleImmutableArgumentPredicateGenerator
       final Term v4_Y;
@@ -124,7 +124,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Term v5_RuleNo;
       v5_RuleNo = a1;
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1, new Term[]{new Variable("_")});
       }
       // SingleRuleWithSingleImmutableArgumentPredicateGenerator
       final Term v5_Y;

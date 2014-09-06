@@ -626,15 +626,8 @@ final class CompiledPredicateSourceGenerator {
       }
    }
 
-   /**
-    * @param tailRecursiveArgumentIdx -1 if not
-    */
+   /** @param tailRecursiveArgumentIdx index of the tail recursive argument, or -1 if not tail recursive */
    private void outputMatchConsequentArgument(Term argument, String variableNameToCompareTo, int tailRecursiveArgumentIdx) {
-      if (argument.getType() == TermType.ANONYMOUS_VARIABLE) {
-         // no need to unify "variableNameToCompareTo" with an anonymous variable
-         return;
-      }
-
       final Set<Variable> newlyDeclaredVariables = declareArgumentVariabledNotAlreadyDeclared(argument);
 
       final boolean isTailRecursivePredicate = tailRecursiveArgumentIdx != -1;

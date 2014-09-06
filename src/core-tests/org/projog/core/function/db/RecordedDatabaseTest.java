@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -15,6 +15,7 @@ import org.projog.core.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 public class RecordedDatabaseTest {
    @Test
@@ -234,8 +235,12 @@ public class RecordedDatabaseTest {
    private void assertKey(PredicateKey key, Term term) {
       int numberOfArguments = key.getNumArgs();
       assertEquals(numberOfArguments, term.getNumberOfArguments());
+      HashSet<Term> uniqueTerms = new HashSet<>();
       for (int i = 0; i < numberOfArguments; i++) {
-         assertSame(ANONYMOUS_VARIABLE, term.getArgument(i));
+         Term a = term.getArgument(i);
+         assertTrue(uniqueTerms.add(a));
+         assertSame(TermType.NAMED_VARIABLE, a.getType());
+         assertEquals("_", a.toString());
       }
    }
 

@@ -64,13 +64,19 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class RetractAll extends AbstractSingletonPredicate {
+   private Inspect retractPredicateFactory;
+
+   @Override
+   protected void init() {
+      retractPredicateFactory = Inspect.retract();
+      retractPredicateFactory.setKnowledgeBase(getKnowledgeBase());
+   }
+
    @Override
    public boolean evaluate(Term t) {
-      Inspect predicateFactory = Inspect.retract();
-      predicateFactory.setKnowledgeBase(getKnowledgeBase());
-      Inspect predicate = predicateFactory.getPredicate(t);
-      while (predicate.evaluate(t)) {
-         // keep evaluating
+      Inspect p = retractPredicateFactory.getPredicate(t);
+      while (p.evaluate(t)) {
+         t.backtrack();
       }
       return true;
    }

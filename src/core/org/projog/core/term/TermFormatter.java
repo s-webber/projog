@@ -72,9 +72,6 @@ public class TermFormatter {
          case NAMED_VARIABLE:
             sb.append(((Variable) t).getId());
             break;
-         case ANONYMOUS_VARIABLE:
-            sb.append("_");
-            break;
          default:
             sb.append(t.toString());
       }

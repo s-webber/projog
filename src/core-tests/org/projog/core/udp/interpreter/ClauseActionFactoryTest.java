@@ -42,11 +42,11 @@ public class ClauseActionFactoryTest {
    /** @see ImmutableArgumentsClauseAction */
    @Test
    public void testImmutableArgumentsClauseAction() {
-      ClauseAction ca = getClauseAction("test(a, 1, 1.2, p(a, b, c), _).");
+      ClauseAction ca = getClauseAction("test(a, 1, 1.2, p(a, b, c), []).");
       assertEquals(ImmutableArgumentsClauseAction.class, ca.getClass());
-      testNonRetryableClauseActionSuccess(ca, "test(a, 1, 1.2, p(a, b, c), _)", "test(a, 1, 1.2, p(a, b, c), _)");
-      testNonRetryableClauseActionSuccess(ca, "test(X, 1, 1.2, p(X, b, c), z)", "test(a, 1, 1.2, p(a, b, c), z)");
-      testNonRetryableClauseActionFailure(ca, "test(a, 1, 1.22, p(a, b, c), _)");
+      testNonRetryableClauseActionSuccess(ca, "test(a, 1, 1.2, p(a, b, c), [])", "test(a, 1, 1.2, p(a, b, c), [])");
+      testNonRetryableClauseActionSuccess(ca, "test(X, 1, 1.2, p(X, b, c), [])", "test(a, 1, 1.2, p(a, b, c), [])");
+      testNonRetryableClauseActionFailure(ca, "test(a, 1, 1.22, p(a, b, c), [])");
    }
 
    /** @see MutableArgumentsClauseAction */

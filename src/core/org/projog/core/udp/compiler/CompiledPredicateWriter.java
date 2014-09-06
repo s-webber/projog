@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.projog.core.KnowledgeBase;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -36,7 +35,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    // and the system tests (which check actual behaviour) should give confidence when refactoring. 
 
    static final String EMPTY_LIST_SYNTAX = "EmptyList.EMPTY_LIST";
-   static final String ANONYMOUS_VARIABLE_SYNTAX = "AnonymousVariable.ANONYMOUS_VARIABLE";
    static final String MAIN_LOOP_LABEL = "mainloop";
 
    private static final AtomicInteger ctr = new AtomicInteger();
@@ -110,9 +108,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    }
 
    String outputCreateTermStatement(Term t, boolean reuseImmutableTerms) {
-      if (t == AnonymousVariable.ANONYMOUS_VARIABLE) {
-         return ANONYMOUS_VARIABLE_SYNTAX;
-      } else if (t == EmptyList.EMPTY_LIST) {
+      if (t == EmptyList.EMPTY_LIST) {
          return EMPTY_LIST_SYNTAX;
       } else if (reuseImmutableTerms && t.isImmutable()) {
          String immutableTermVariableName = classVariables.getTermVariableName(t);
@@ -373,9 +369,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       }
 
       // compare "t1" to "t2"
-      if (t1.getType() == TermType.ANONYMOUS_VARIABLE || t2.getType() == TermType.ANONYMOUS_VARIABLE) {
-         // anonymous always unify with variables everything - so no need to check
-      } else if (isNoMoreThanTwoElementList(t1) && isNoMoreThanTwoElementList(t2)) {
+      if (isNoMoreThanTwoElementList(t1) && isNoMoreThanTwoElementList(t2)) {
          outputEqualsEvaluation(t1.getArgument(0), t2.getArgument(0), onBreakCallback);
          outputEqualsEvaluation(t1.getArgument(1), t2.getArgument(1), onBreakCallback);
       } else if (t1.getType() == TermType.NAMED_VARIABLE && isListOfTwoVariables(t2)) {
@@ -421,10 +415,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    }
 
    private void outputAssignOfUnifyListElement(Term list, String listId, int elementId, Runnable onBreakCallback) {
-      if (list.getArgument(elementId).getTerm() == AnonymousVariable.ANONYMOUS_VARIABLE) {
-         return;
-      }
-
       String variableId = getVariableId(list.getArgument(elementId));
       String element = listId + ".getArgument(" + elementId + ").getTerm()";
       if (isAssigned(variableId)) {
@@ -638,7 +628,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       if (arg.getType() == TermType.NAMED_VARIABLE) {
          String variableId = getVariableId(arg);
          if (classVariables.isMemberVariable(variableId) == false && classVariables.isAssignedVariable(variableId) == false) {
-            return ANONYMOUS_VARIABLE_SYNTAX;
+            return "new Variable(\"_\")";
          } else if (classVariables.isAssignedVariable(variableId) == false) {
             return variableId;
          } else {

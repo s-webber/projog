@@ -2,6 +2,7 @@ package org.projog.api;
 
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -18,7 +19,6 @@ import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSourceReader;
 import org.projog.core.ProjogSystemProperties;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
@@ -257,7 +257,7 @@ public final class Projog {
       UserDefinedPredicateFactory pf = (UserDefinedPredicateFactory) ef;
       ClauseModel cm = pf.getClauseModel(ruleIdx);
       // ClauseModel might be null for dynamic predicates where it has been retracted
-      Term term = cm == null ? AnonymousVariable.ANONYMOUS_VARIABLE : cm.getOriginal();
+      Term term = cm == null ? createAnonymousVariable() : cm.getOriginal();
       return new ProjogStackTraceElement(key, ruleIdx, term);
    }
 

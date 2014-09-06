@@ -160,4 +160,8 @@ public final class TermUtils {
       }
       return t.getName();
    }
+
+   public static Variable createAnonymousVariable() {
+      return new Variable("_");
+   }
 }

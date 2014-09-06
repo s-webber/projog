@@ -1,9 +1,6 @@
 package org.projog.core.function.db;
 
-import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -13,9 +10,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.projog.core.PredicateKey;
-import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 /**
@@ -77,7 +72,7 @@ public class RecordedDatabase {
       synchronized (chains) {
          chain = chains.get(key);
          if (chain == null) {
-            chain = new Chain(createTermFromKey(key));
+            chain = new Chain(key);
             chains.put(key, chain);
             keys.add(key);
          }
@@ -90,18 +85,6 @@ public class RecordedDatabase {
       Link link = new Link(chain, reference, value);
       addReference(reference, link, addLast);
       return link;
-   }
-
-   private Term createTermFromKey(PredicateKey key) {
-      String name = key.getName();
-      int numArgs = key.getNumArgs();
-      if (numArgs == 0) {
-         return new Atom(name);
-      } else {
-         Term[] args = new Term[numArgs];
-         Arrays.fill(args, ANONYMOUS_VARIABLE);
-         return Structure.createStructure(name, args);
-      }
    }
 
    private IntegerNumber createReference() {
@@ -238,11 +221,11 @@ public class RecordedDatabase {
    }
 
    private static class Chain {
-      final Term key;
+      final PredicateKey key;
       Link first;
       Link last;
 
-      Chain(Term key) {
+      Chain(PredicateKey key) {
          this.key = key;
       }
    }

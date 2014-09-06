@@ -6,22 +6,20 @@ package org.projog.core.term;
  * @see Term#getType()
  */
 public enum TermType {
-   /** @see AnonymousVariable */
-   ANONYMOUS_VARIABLE(false, false, true, 1),
    /** @see Variable */
-   NAMED_VARIABLE(false, false, true, 2),
+   NAMED_VARIABLE(false, false, true, 1),
    /** @see DecimalFraction */
-   FRACTION(false, true, false, 3),
+   FRACTION(false, true, false, 2),
    /** @see IntegerNumber */
-   INTEGER(false, true, false, 4),
+   INTEGER(false, true, false, 3),
    /** @see EmptyList */
-   EMPTY_LIST(false, false, false, 5),
+   EMPTY_LIST(false, false, false, 4),
    /** @see Atom */
-   ATOM(false, false, false, 6),
+   ATOM(false, false, false, 5),
    /** @see Structure */
-   STRUCTURE(true, false, false, 7),
+   STRUCTURE(true, false, false, 6),
    /** @see List */
-   LIST(true, false, false, 7);
+   LIST(true, false, false, 6);
 
    private final boolean isStructure;
    private final boolean isNumeric;

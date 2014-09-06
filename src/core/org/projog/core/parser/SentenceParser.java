@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.projog.core.Operands;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
@@ -322,7 +321,7 @@ public class SentenceParser {
             case VARIABLE:
                return getVariable(token.value);
             case ANONYMOUS_VARIABLE:
-               return AnonymousVariable.ANONYMOUS_VARIABLE;
+               return getAnonymousVariable(token.value);
             default:
                throw new IllegalArgumentException();
          }
@@ -384,6 +383,10 @@ public class SentenceParser {
          variables.put(id, v);
       }
       return v;
+   }
+
+   private Variable getAnonymousVariable(String id) {
+      return new Variable(id);
    }
 
    /** Returns a newly created {@code List} with elements read from the parser. */

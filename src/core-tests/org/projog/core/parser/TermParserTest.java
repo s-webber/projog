@@ -8,7 +8,6 @@ import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseTerm;
 
 import org.junit.Test;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
@@ -165,9 +164,9 @@ public class TermParserTest {
 
    @Test
    public void testAnonymousVariable() {
-      testVariableTerm(AnonymousVariable.ANONYMOUS_VARIABLE, "_");
-      testVariableTerm(AnonymousVariable.ANONYMOUS_VARIABLE, "_123");
-      testVariableTerm(AnonymousVariable.ANONYMOUS_VARIABLE, "_Test");
+      testVariableTerm(new Variable("_"), "_");
+      testVariableTerm(new Variable("_123"), "_123");
+      testVariableTerm(new Variable("_Test"), "_Test");
    }
 
    private void testNonVariableTerm(Term expected, String input) {

@@ -17,7 +17,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Term v0_RuleNo;
       v0_RuleNo = a3;
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{new Variable("_"), new Variable("_"), new Variable("_")});
       }
       final Term v0_A;
       v0_A = ATOM;
@@ -52,7 +52,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Term v1_RuleNo;
       v1_RuleNo = a3;
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{new Variable("_"), new Variable("_"), new Variable("_")});
       }
       final Term v1_A;
       v1_A = ATOM;
@@ -87,22 +87,24 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       final Term v2_RuleNo;
       v2_RuleNo = a3;
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, v2_Y, ATOM_1});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logCall(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{new Variable("_"), v2_Y, ATOM_1});
       }
+      final Term v2_0_;
+      v2_0_ = ATOM;
       if (!v2_Y.unify(ATOM_0)) {
          if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-            CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, v2_Y, ATOM_1});
+            CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v2_0_, v2_Y, ATOM_1});
          }
          return false;
       }
       if (!ATOM_1.unify(ATOM_1)) {
          if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-            CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, v2_Y, ATOM_1});
+            CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logFail(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v2_0_, v2_Y, ATOM_1});
          }
          return false;
       }
       if (CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.isEnabled()) {
-         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{AnonymousVariable.ANONYMOUS_VARIABLE, v2_Y, ATOM_1});
+         CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3.spyPoint.logExit(CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3, new Term[]{v2_0_, v2_Y, ATOM_1});
       }
       if (!v2_X.unify(ATOM)) {
          return false;

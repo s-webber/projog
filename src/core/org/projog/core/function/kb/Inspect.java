@@ -165,10 +165,7 @@ public final class Inspect extends AbstractRetryablePredicate {
          }
          implications = userDefinedPredicate.getImplications();
       } else {
-         clauseHead.backtrack();
-         if (clauseBody != null) {
-            clauseBody.backtrack();
-         }
+         backtrack(clauseHead, clauseBody);
       }
 
       while (implications.hasNext()) {
@@ -178,22 +175,24 @@ public final class Inspect extends AbstractRetryablePredicate {
                implications.remove();
             }
             return true;
+         } else {
+            backtrack(clauseHead, clauseBody);
          }
       }
       return false;
    }
 
+   private void backtrack(Term clauseHead, Term clauseBody) {
+      clauseHead.backtrack();
+      if (clauseBody != null) {
+         clauseBody.backtrack();
+      }
+   }
+
    private boolean unifiable(Term clauseHead, Term clauseBody, ClauseModel clauseModel) {
       Term consequent = clauseModel.getConsequent();
       Term antecedant = clauseModel.getAntecedant();
-      if (clauseHead.unify(consequent)) {
-         if (clauseBody == null || clauseBody.unify(antecedant)) {
-            return true;
-         } else {
-            clauseHead.backtrack();
-         }
-      }
-      return false;
+      return clauseHead.unify(consequent) && (clauseBody == null || clauseBody.unify(antecedant));
    }
 
    @Override

@@ -2,6 +2,7 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -151,12 +152,14 @@ public class TermUtilsTest {
       Variable x = variable("X");
       Variable y = variable("Y");
       Variable z = variable("Z");
-      Variable[] variables = {q, r, s, t, v, w, x, y, z};
-      Structure input = structure("p1", x, v, AnonymousVariable.ANONYMOUS_VARIABLE, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t), z);
+      Variable anon = TermUtils.createAnonymousVariable();
+      Variable[] variables = {q, r, s, t, v, w, x, y, z, anon};
+      Structure input = structure("p1", x, v, anon, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t),
+                  z);
       Set<Variable> result = TermUtils.getAllVariablesInTerm(input);
       assertEquals(variables.length, result.size());
-      for (Variable variable2 : variables) {
-         assertTrue(result.contains(variable2));
+      for (Variable variable : variables) {
+         assertTrue(result.contains(variable));
       }
    }
 
@@ -261,6 +264,15 @@ public class TermUtilsTest {
       } catch (ProjogException e) {
          assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
       }
+   }
+
+   @Test
+   public void testCreateAnonymousVariable() {
+      Term anon = TermUtils.createAnonymousVariable();
+      assertSame(Variable.class, anon.getClass());
+      assertSame(TermType.NAMED_VARIABLE, anon.getType());
+      assertEquals("_", anon.toString());
+      assertNotSame(anon, TermUtils.createAnonymousVariable());
    }
 
    @Test

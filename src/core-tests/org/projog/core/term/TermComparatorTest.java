@@ -89,18 +89,6 @@ public class TermComparatorTest {
       testEqual(z, a);
    }
 
-   @Test
-   public void testAnonymousVariableComparedToSelf() {
-      testEqual(AnonymousVariable.ANONYMOUS_VARIABLE, AnonymousVariable.ANONYMOUS_VARIABLE);
-   }
-
-   @Test
-   public void testAnonymousVariableComparedToRest() {
-      for (Term t : TERMS_ORDERED_IN_LOWEST_PRECEDENCE) {
-         testIsGreater(t, AnonymousVariable.ANONYMOUS_VARIABLE);
-      }
-   }
-
    private void testNotEqual(Term t1, Term t2) {
       assertTrue(t1 + " " + t2, TERM_COMPARATOR.compare(t1, t2) != 0);
       assertTrue(t2 + " " + t1, TERM_COMPARATOR.compare(t2, t1) != 0);

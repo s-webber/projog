@@ -73,7 +73,10 @@ public class CompiledPredicateSourceGeneratorTest {
       addSingletonCompiledPredicate("singleton_compiled_Predicate/3");
       addRetryableCompiledPredicate("retryable_compiled_Predicate/3");
       addMultipleRulesWithSingleImmutableArgumentPredicate("multiple_rules_with_single_immutable_argument/1", new String[] {"s", "d", "a"});
-      addMultipleRulesWithMulipleImmutableArgumentPredicate("multiple_rules_with_multiple_immutable_arguments/3", new String[][] { {"q", "w", "e"}, {"a", "s", "d"}, {"z", "x", "z"}});
+      addMultipleRulesWithMulipleImmutableArgumentPredicate("multiple_rules_with_multiple_immutable_arguments/3", new String[][] {
+                  {"q", "w", "e"},
+                  {"a", "s", "d"},
+                  {"z", "x", "z"}});
       addSingleRulesWithSingleImmutableArgumentPredicate("single_rule_with_single_immutable_argument/1", "z");
       addSingleRulesWithMulipleImmutableArgumentPredicate("single_rule_with_multiple_immutable_arguments/3", new String[] {"a", "s", "d"});
       addUserDefinedPredicate("testCalculatables/3");
@@ -230,7 +233,10 @@ public class CompiledPredicateSourceGeneratorTest {
       assertExists(actual);
 
       int lineCtr = 0;
-      try (FileReader fr1 = new FileReader(expected); FileReader fr2 = new FileReader(actual); BufferedReader br1 = new BufferedReader(fr1); BufferedReader br2 = new BufferedReader(fr2)) {
+      try (FileReader fr1 = new FileReader(expected);
+                  FileReader fr2 = new FileReader(actual);
+                  BufferedReader br1 = new BufferedReader(fr1);
+                  BufferedReader br2 = new BufferedReader(fr2)) {
          String name1 = expected.getName();
          String name2 = actual.getName();
 

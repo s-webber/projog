@@ -1,7 +1,7 @@
 package org.projog.core.function.db;
 
 import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
-import static org.projog.core.term.AnonymousVariable.ANONYMOUS_VARIABLE;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -81,7 +81,7 @@ public final class InsertRecord extends AbstractSingletonPredicate {
 
    @Override
    public boolean evaluate(Term key, Term value) {
-      return evaluate(key, value, ANONYMOUS_VARIABLE);
+      return evaluate(key, value, createAnonymousVariable());
    }
 
    @Override

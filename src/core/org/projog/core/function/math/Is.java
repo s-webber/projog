@@ -30,7 +30,7 @@ import org.projog.core.term.Term;
  %ANSWER
 
  %QUERY X is _
- %ERROR Cannot get Numeric for term: _ of type: ANONYMOUS_VARIABLE
+ %ERROR Cannot get Numeric for term: _ of type: NAMED_VARIABLE
 
  %QUERY X is sum(1,2)
  %ERROR Cannot find calculatable: sum/2

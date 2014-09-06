@@ -11,6 +11,7 @@ import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
 
@@ -188,7 +188,7 @@ public class SpyPointsTest {
       sp.logCall(this, new Term[] {atom("z")});
       sp.logExit(this, new Term[] {list(atom("a"), variable("X"))});
       sp.logFail(this, new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))});
-      sp.logRedo(this, new Term[] {AnonymousVariable.ANONYMOUS_VARIABLE});
+      sp.logRedo(this, new Term[] {createAnonymousVariable()});
       assertEquals(4, events.size());
       assertProjogEvent(events.get(0), ProjogEventType.CALL, "test( z )");
       assertProjogEvent(events.get(1), ProjogEventType.EXIT, "test( [a,X] )");

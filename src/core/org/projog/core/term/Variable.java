@@ -11,8 +11,6 @@ import java.util.Map;
  * calls to {@link #unify(Term)} and becomes uninstantiated again by calls to {@link #backtrack()}.
  * <p>
  * <img src="doc-files/Variable.png">
- * 
- * @see AnonymousVariable
  */
 public final class Variable implements Term {
    /**
@@ -94,13 +92,9 @@ public final class Variable implements Term {
    @Override
    public boolean unify(Term t) {
       if (value == null) {
-         if (this == t) {
-            return true;
+         if (this != t) {
+            value = t;
          }
-         if (t == AnonymousVariable.ANONYMOUS_VARIABLE) {
-            return true;
-         }
-         value = t;
          return true;
       } else {
          return getValue().unify(t.getTerm());

@@ -10,7 +10,6 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.function.bool.True;
 import org.projog.core.function.flow.Cut;
-import org.projog.core.term.AnonymousVariable;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.udp.ClauseModel;
@@ -59,9 +58,7 @@ public final class ClauseActionFactory {
       boolean hasSharedVariables = false;
       Set<Term> variables = new HashSet<>();
       for (Term t : consequent.getArgs()) {
-         if (t == AnonymousVariable.ANONYMOUS_VARIABLE) {
-            // nothing to do
-         } else if (t.getType() == TermType.NAMED_VARIABLE) {
+         if (t.getType() == TermType.NAMED_VARIABLE) {
             hasVariables = true;
             if (!variables.add(t)) {
                hasSharedVariables = true;

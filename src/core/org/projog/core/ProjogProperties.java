@@ -4,8 +4,6 @@ package org.projog.core;
  * Collection of configuration properties.
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single {@code ProjogProperties} instance.
- * <p>
- * <img src="doc-files/ProjogProperties.png">
  * 
  * @see KnowledgeBaseUtils#getProjogProperties(KnowledgeBase)
  */

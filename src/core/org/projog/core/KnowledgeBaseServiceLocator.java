@@ -12,6 +12,10 @@ import java.util.WeakHashMap;
  * Provides a way to implement a one-to-one relationship between a {@code KnowledgeBase} and its services. i.e. A
  * {@code KnowledgeBase} can be associated with one, and only one, {@code SpyPoints} - and a {@code SpyPoints} can be
  * associated with one, and only one, {@code KnowledgeBase}.
+ * </p>
+ * <p>
+ * <img src="doc-files/KnowledgeBaseServiceLocator.png">
+ * </p>
  */
 public class KnowledgeBaseServiceLocator {
    private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new WeakHashMap<>();

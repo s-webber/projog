@@ -20,7 +20,9 @@ import org.projog.core.term.Term;
  * {@link org.projog.core.function.AbstractSingletonPredicate} or
  * {@link org.projog.core.function.AbstractRetryablePredicate}.
  * <p>
- * <img src="doc-files/PredicateFactory.png">
+ * <p>
+ * <a href="doc-files/PredicateFactory.png">View Class Diagram</a>
+ * </p>
  * 
  * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
  */

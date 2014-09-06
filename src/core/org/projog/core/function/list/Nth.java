@@ -143,7 +143,7 @@ public final class Nth implements PredicateFactory {
    }
 
    public Predicate getPredicate(Term index, Term list, Term element) {
-      if (index.getType().isVariable()) { // TODO or anon var _
+      if (index.getType().isVariable()) {
          return new Retryable(toJavaUtilList(list));
       } else {
          return singleton;
@@ -163,7 +163,7 @@ public final class Nth implements PredicateFactory {
             return false;
          }
 
-         int i = toInt(index); // TODO accept 1+1
+         int i = toInt(index);
          int idx = i - startingIdx;
          if (isValidIndex(l, idx)) {
             return element.unify(l.get(idx));

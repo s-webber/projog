@@ -56,8 +56,6 @@ public class SentenceParserTest {
       error(":- X = 1 + 2 + 3 + 4 = 5.");
       error("a ?- b.");
       error("?- a ?- b.");
-      // TODO
-      //      error("?- p(X) :- x(Y), y(X,Y).");
       error("?- :- X.");
       error("?- ?- true.");
    }
@@ -103,7 +101,7 @@ public class SentenceParserTest {
    }
 
    @Test
-   public void testConjunction() { //TODO
+   public void testConjunction() {
       assertParse("a, b, c.", "a , b , c", ",(,(a, b), c)");
    }
 

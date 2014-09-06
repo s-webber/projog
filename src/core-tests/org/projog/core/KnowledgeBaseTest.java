@@ -76,7 +76,7 @@ public class KnowledgeBaseTest {
          assertEquals("Cannot replace already defined plugin predicate: true", e.getMessage());
       }
       try {
-         kb.setUserDefinedPredicate(new StaticUserDefinedPredicateFactory(key));
+         kb.addUserDefinedPredicate(new StaticUserDefinedPredicateFactory(key));
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot replace already defined plugin predicate: true", e.getMessage());
@@ -97,7 +97,7 @@ public class KnowledgeBaseTest {
       assertEquals(1, kb.getUserDefinedPredicates().size());
 
       UserDefinedPredicateFactory udp2 = new StaticUserDefinedPredicateFactory(key1);
-      kb.setUserDefinedPredicate(udp2);
+      kb.addUserDefinedPredicate(udp2);
       assertEquals(1, kb.getUserDefinedPredicates().size());
       assertSame(udp2, kb.createOrReturnUserDefinedPredicate(key1));
       assertEquals(1, kb.getUserDefinedPredicates().size());

@@ -207,7 +207,7 @@ public final class ProjogSourceReader {
 
    private void addUserDefinedPredicatesToKnowledgeBase() {
       for (UserDefinedPredicateFactory userDefinedPredicate : userDefinedPredicates.values()) {
-         kb.setUserDefinedPredicate(userDefinedPredicate);
+         kb.addUserDefinedPredicate(userDefinedPredicate);
       }
       for (UserDefinedPredicateFactory userDefinedPredicate : userDefinedPredicates.values()) {
          if (userDefinedPredicate instanceof StaticUserDefinedPredicateFactory) {

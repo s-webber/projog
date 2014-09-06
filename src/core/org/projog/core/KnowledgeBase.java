@@ -111,7 +111,7 @@ public final class KnowledgeBase {
          if (userDefinedPredicate == null) {
             // assume dynamic
             userDefinedPredicate = new DynamicUserDefinedPredicateFactory(this, key);
-            setUserDefinedPredicate(userDefinedPredicate);
+            addUserDefinedPredicate(userDefinedPredicate);
          }
       }
       return userDefinedPredicate;
@@ -125,7 +125,7 @@ public final class KnowledgeBase {
     * @throws ProjogException if the {@code PredicateKey} of the specified {@code UserDefinedPredicateFactory}
     * represents an existing "plugin" predicate
     */
-   public void setUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
+   public void addUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
       PredicateKey key = userDefinedPredicate.getPredicateKey();
       synchronized (predicatesLock) {
          if (isExistingJavaPredicate(key)) {

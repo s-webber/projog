@@ -356,8 +356,8 @@ public class CompiledPredicateSourceGeneratorTest {
       Term t = TestUtils.parseSentence(keySyntax + ".");
       PredicateKey key = PredicateKey.createFromNameAndArity(t);
       DummyUserDefinedPredicateFactory cp = new DummyUserDefinedPredicateFactory(key, ef);
-      debugEnabledKnowledgeBase.setUserDefinedPredicate(cp);
-      debugDisabledKnowledgeBase.setUserDefinedPredicate(cp);
+      debugEnabledKnowledgeBase.addUserDefinedPredicate(cp);
+      debugDisabledKnowledgeBase.addUserDefinedPredicate(cp);
    }
 
    private class DummyUserDefinedPredicateFactory extends StaticUserDefinedPredicateFactory {

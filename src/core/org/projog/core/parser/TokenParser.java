@@ -7,13 +7,13 @@ import static java.lang.Character.isUpperCase;
 import static java.lang.Character.isWhitespace;
 import static org.projog.core.parser.Delimiters.isDelimiter;
 import static org.projog.core.parser.Delimiters.isListOpenBracket;
-import static org.projog.core.parser.WordType.ANONYMOUS_VARIABLE;
-import static org.projog.core.parser.WordType.ATOM;
-import static org.projog.core.parser.WordType.FLOAT;
-import static org.projog.core.parser.WordType.INTEGER;
-import static org.projog.core.parser.WordType.QUOTED_ATOM;
-import static org.projog.core.parser.WordType.SYMBOL;
-import static org.projog.core.parser.WordType.VARIABLE;
+import static org.projog.core.parser.TokenType.ANONYMOUS_VARIABLE;
+import static org.projog.core.parser.TokenType.ATOM;
+import static org.projog.core.parser.TokenType.FLOAT;
+import static org.projog.core.parser.TokenType.INTEGER;
+import static org.projog.core.parser.TokenType.QUOTED_ATOM;
+import static org.projog.core.parser.TokenType.SYMBOL;
+import static org.projog.core.parser.TokenType.VARIABLE;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -21,23 +21,23 @@ import java.io.Reader;
 import org.projog.core.Operands;
 
 /**
- * Parses an input stream into discrete 'words' that are used to represent Prolog queries and rules.
+ * Parses an input stream into discrete 'tokens' that are used to represent Prolog queries and rules.
  * 
  * @see SentenceParser
  */
-class WordParser {
+class TokenParser {
    private final CharacterParser parser;
    private final Operands operands;
-   private Word lastParsedWord;
+   private Token lastParsedToken;
    private boolean rewound;
 
-   WordParser(Reader reader, Operands operands) {
+   TokenParser(Reader reader, Operands operands) {
       BufferedReader br = new BufferedReader(reader);
       this.parser = new CharacterParser(br);
       this.operands = operands;
    }
 
-   /** @return {@code true} if there are more words to be parsed, else {@code false} */
+   /** @return {@code true} if there are more tokens to be parsed, else {@code false} */
    boolean hasNext() {
       if (rewound) {
          return true;
@@ -48,22 +48,22 @@ class WordParser {
    }
 
    /**
-    * Parse and return the next {@code Word}.
+    * Parse and return the next {@code Token}.
     * 
-    * @return the word that was parsed as a result of this call
-    * @throws ParserException if there are no more words to parse (i.e. parser has reached the end of the underlying
+    * @return the token that was parsed as a result of this call
+    * @throws ParserException if there are no more tokens to parse (i.e. parser has reached the end of the underlying
     * input stream)
     */
-   Word next() {
+   Token next() {
       if (rewound) {
          rewound = false;
       } else {
-         lastParsedWord = parseWord();
+         lastParsedToken = parseToken();
       }
-      return lastParsedWord;
+      return lastParsedToken;
    }
 
-   private Word parseWord() {
+   private Token parseToken() {
       skipWhitespaceAndComments();
       final int c = parser.getNext();
       if (isEndOfStream(c)) {
@@ -84,17 +84,17 @@ class WordParser {
    }
 
    /**
-    * Rewinds the parser (i.e. "pushes-back" the last parsed word).
+    * Rewinds the parser (i.e. "pushes-back" the last parsed token).
     * <p>
     * The last parsed value will remain after the next call to {@link #next()}
     * 
     * @param value the value to rewind
     * @throws IllegalArgumentException if already in a rewound state (i.e. have already called
-    * {@link WordParser#rewind(String)} since the last call to {@link #next()}), or {@code value} is not equal to
+    * {@link TokenParser#rewind(String)} since the last call to {@link #next()}), or {@code value} is not equal to
     * {@link #getValue()}
     */
-   void rewind(Word value) {
-      if (lastParsedWord != value) {
+   void rewind(Token value) {
+      if (lastParsedToken != value) {
          throw new IllegalArgumentException();
       }
       rewound = true;
@@ -130,8 +130,8 @@ class WordParser {
       }
    }
 
-   /** @param c the first, already parsed, character of the word. */
-   private Word parseText(int c, WordType t) {
+   /** @param c the first, already parsed, character of the token. */
+   private Token parseText(int c, TokenType t) {
       StringBuilder sb = new StringBuilder();
 
       do {
@@ -140,7 +140,7 @@ class WordParser {
       } while (isValidForAtom(c));
       parser.rewind();
 
-      return createWord(sb, t);
+      return createToken(sb, t);
    }
 
    /**
@@ -149,7 +149,7 @@ class WordParser {
     * If an atom's name is enclosed in quotes (i.e. {@code '}) then it may contain any character.
     * </p>
     */
-   private Word parseQuotedText() {
+   private Token parseQuotedText() {
       StringBuilder sb = new StringBuilder();
       do {
          int c = parser.getNext();
@@ -163,7 +163,7 @@ class WordParser {
             if (!isQuote(c)) {
                // found closing '
                parser.rewind();
-               return createWord(sb, QUOTED_ATOM);
+               return createToken(sb, QUOTED_ATOM);
             }
          } else if (isEndOfStream(c)) {
             throw newParserException("No closing ' on quoted string");
@@ -177,7 +177,7 @@ class WordParser {
     * <p>
     * Deals with numbers of the form {@code 3.4028235E38}.
     */
-   private Word parseNumber(final int startChar) {
+   private Token parseNumber(final int startChar) {
       StringBuilder sb = new StringBuilder();
 
       boolean keepGoing = true;
@@ -215,10 +215,10 @@ class WordParser {
          throw newParserException("expected digit after e");
       }
 
-      return createWord(sb, readDecimalPoint ? FLOAT : INTEGER);
+      return createToken(sb, readDecimalPoint ? FLOAT : INTEGER);
    }
 
-   private Word parseSymbol(int c) {
+   private Token parseSymbol(int c) {
       StringBuilder sb = new StringBuilder();
       do {
          sb.append((char) c);
@@ -227,7 +227,7 @@ class WordParser {
       parser.rewind();
 
       if (isValidParseableElement(sb.toString())) {
-         return createWord(sb, SYMBOL);
+         return createToken(sb, SYMBOL);
       }
 
       int length = sb.length();
@@ -236,7 +236,7 @@ class WordParser {
          final String substring = sb.substring(0, idx);
          if (isValidParseableElement(substring)) {
             parser.rewind(length - idx);
-            return createWord(substring, SYMBOL);
+            return createToken(substring, SYMBOL);
          }
       }
 
@@ -244,11 +244,11 @@ class WordParser {
          final String substring = sb.substring(i);
          if (isValidParseableElement(substring) || isDelimiter(sb.charAt(i))) {
             parser.rewind(length - i);
-            return createWord(sb.substring(0, i), SYMBOL);
+            return createToken(sb.substring(0, i), SYMBOL);
          }
       }
 
-      return createWord(sb, SYMBOL);
+      return createToken(sb, SYMBOL);
    }
 
    private void skipWhitespace() {
@@ -304,11 +304,11 @@ class WordParser {
       return isDelimiter(commandName) || operands.isDefined(commandName);
    }
 
-   private Word createWord(StringBuilder value, WordType type) {
-      return createWord(value.toString(), type);
+   private Token createToken(StringBuilder value, TokenType type) {
+      return createToken(value.toString(), type);
    }
 
-   private Word createWord(String value, WordType type) {
-      return new Word(value, type);
+   private Token createToken(String value, TokenType type) {
+      return new Token(value, type);
    }
 }

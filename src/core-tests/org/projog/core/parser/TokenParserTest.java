@@ -7,74 +7,74 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.parser.WordType.ANONYMOUS_VARIABLE;
-import static org.projog.core.parser.WordType.ATOM;
-import static org.projog.core.parser.WordType.FLOAT;
-import static org.projog.core.parser.WordType.INTEGER;
-import static org.projog.core.parser.WordType.QUOTED_ATOM;
-import static org.projog.core.parser.WordType.VARIABLE;
+import static org.projog.core.parser.TokenType.ANONYMOUS_VARIABLE;
+import static org.projog.core.parser.TokenType.ATOM;
+import static org.projog.core.parser.TokenType.FLOAT;
+import static org.projog.core.parser.TokenType.INTEGER;
+import static org.projog.core.parser.TokenType.QUOTED_ATOM;
+import static org.projog.core.parser.TokenType.VARIABLE;
 
 import java.io.StringReader;
 
 import org.junit.Test;
 import org.projog.core.Operands;
 
-public class WordParserTest {
+public class TokenParserTest {
    private final Operands operands = getOperands(createKnowledgeBase());
 
    @Test
    public void testAtom() {
-      assertWordType("a", ATOM);
-      assertWordType("ab", ATOM);
-      assertWordType("aB", ATOM);
-      assertWordType("a1", ATOM);
-      assertWordType("a_", ATOM);
-      assertWordType("a_2bY", ATOM);
+      assertTokenType("a", ATOM);
+      assertTokenType("ab", ATOM);
+      assertTokenType("aB", ATOM);
+      assertTokenType("a1", ATOM);
+      assertTokenType("a_", ATOM);
+      assertTokenType("a_2bY", ATOM);
    }
 
    @Test
    public void testQuotedAtom() {
-      assertWordType("'abcdefg'", "abcdefg", QUOTED_ATOM);
-      assertWordType("''", "", QUOTED_ATOM);
-      assertWordType("''''", "'", QUOTED_ATOM);
-      assertWordType("''''''''''", "''''", QUOTED_ATOM);
-      assertWordType("'q 1 \" 0.5 | '' @#~'", "q 1 \" 0.5 | ' @#~", QUOTED_ATOM);
+      assertTokenType("'abcdefg'", "abcdefg", QUOTED_ATOM);
+      assertTokenType("''", "", QUOTED_ATOM);
+      assertTokenType("''''", "'", QUOTED_ATOM);
+      assertTokenType("''''''''''", "''''", QUOTED_ATOM);
+      assertTokenType("'q 1 \" 0.5 | '' @#~'", "q 1 \" 0.5 | ' @#~", QUOTED_ATOM);
    }
 
    @Test
    public void testVariable() {
-      assertWordType("X", VARIABLE);
-      assertWordType("XY", VARIABLE);
-      assertWordType("Xy", VARIABLE);
-      assertWordType("X1", VARIABLE);
-      assertWordType("X_", VARIABLE);
-      assertWordType("X_7hU", VARIABLE);
+      assertTokenType("X", VARIABLE);
+      assertTokenType("XY", VARIABLE);
+      assertTokenType("Xy", VARIABLE);
+      assertTokenType("X1", VARIABLE);
+      assertTokenType("X_", VARIABLE);
+      assertTokenType("X_7hU", VARIABLE);
    }
 
    @Test
    public void testAnonymousVariable() {
-      assertWordType("_", ANONYMOUS_VARIABLE);
-      assertWordType("__", ANONYMOUS_VARIABLE);
-      assertWordType("_X", ANONYMOUS_VARIABLE);
-      assertWordType("_x", ANONYMOUS_VARIABLE);
-      assertWordType("_2", ANONYMOUS_VARIABLE);
-      assertWordType("_X_2a", ANONYMOUS_VARIABLE);
+      assertTokenType("_", ANONYMOUS_VARIABLE);
+      assertTokenType("__", ANONYMOUS_VARIABLE);
+      assertTokenType("_X", ANONYMOUS_VARIABLE);
+      assertTokenType("_x", ANONYMOUS_VARIABLE);
+      assertTokenType("_2", ANONYMOUS_VARIABLE);
+      assertTokenType("_X_2a", ANONYMOUS_VARIABLE);
    }
 
    @Test
    public void testInteger() {
-      assertWordType("0", INTEGER);
-      assertWordType("1", INTEGER);
-      assertWordType("6465456456", INTEGER);
+      assertTokenType("0", INTEGER);
+      assertTokenType("1", INTEGER);
+      assertTokenType("6465456456", INTEGER);
    }
 
    @Test
    public void testFloat() {
-      assertWordType("0.0", FLOAT);
-      assertWordType("0.1", FLOAT);
-      assertWordType("768.567567", FLOAT);
-      assertWordType("3.4028235E38", FLOAT);
-      assertWordType("3.4028235e38", FLOAT);
+      assertTokenType("0.0", FLOAT);
+      assertTokenType("0.1", FLOAT);
+      assertTokenType("768.567567", FLOAT);
+      assertTokenType("3.4028235E38", FLOAT);
+      assertTokenType("3.4028235e38", FLOAT);
    }
 
    @Test
@@ -114,7 +114,7 @@ public class WordParserTest {
 
    @Test
    public void testWhitespaceAndComments() {
-      WordParser p = create("/* comment */\t % comment\n % comment\r\n\n");
+      TokenParser p = create("/* comment */\t % comment\n % comment\r\n\n");
       assertFalse(p.hasNext());
    }
 
@@ -125,92 +125,92 @@ public class WordParserTest {
 
    @Test
    public void testFollowedByTerm() {
-      WordParser wp = create("?- , [ abc )");
-      wp.next();
-      assertFalse(wp.isFollowedByTerm());
-      wp.next();
-      assertTrue(wp.isFollowedByTerm());
-      wp.next();
-      assertTrue(wp.isFollowedByTerm());
-      wp.next();
-      assertFalse(wp.isFollowedByTerm());
+      TokenParser tp = create("?- , [ abc )");
+      tp.next();
+      assertFalse(tp.isFollowedByTerm());
+      tp.next();
+      assertTrue(tp.isFollowedByTerm());
+      tp.next();
+      assertTrue(tp.isFollowedByTerm());
+      tp.next();
+      assertFalse(tp.isFollowedByTerm());
    }
 
-   /** @see {@link WordParser#rewind(String)} */
+   /** @see {@link TokenParser#rewind(String)} */
    @Test
    public void testRewindException() {
-      WordParser wp = create("a b c");
-      assertEquals("a", wp.next().value);
-      Word b = wp.next();
+      TokenParser tp = create("a b c");
+      assertEquals("a", tp.next().value);
+      Token b = tp.next();
       assertEquals("b", b.value);
-      wp.rewind(b);
-      assertSame(b, wp.next());
-      wp.rewind(b);
+      tp.rewind(b);
+      assertSame(b, tp.next());
+      tp.rewind(b);
 
-      // check that can only rewind one word
-      assertRewindException(wp, "b");
-      assertRewindException(wp, "a");
+      // check that can only rewind one token
+      assertRewindException(tp, "b");
+      assertRewindException(tp, "a");
 
-      assertEquals("b", wp.next().value);
-      Word c = wp.next();
+      assertEquals("b", tp.next().value);
+      Token c = tp.next();
       assertEquals("c", c.value);
 
       // check that the value specified in call to rewind has to be the last value parsed
-      assertRewindException(wp, "b");
-      assertRewindException(wp, null);
-      assertRewindException(wp, "z");
+      assertRewindException(tp, "b");
+      assertRewindException(tp, null);
+      assertRewindException(tp, "z");
 
-      wp.rewind(c);
-      assertSame(c, wp.next());
-      assertFalse(wp.hasNext());
-      wp.rewind(c);
-      assertTrue(wp.hasNext());
+      tp.rewind(c);
+      assertSame(c, tp.next());
+      assertFalse(tp.hasNext());
+      tp.rewind(c);
+      assertTrue(tp.hasNext());
 
-      // check that can only rewind one word
-      assertRewindException(wp, "c");
+      // check that can only rewind one token
+      assertRewindException(tp, "c");
    }
 
-   private void assertRewindException(WordParser wp, String value) {
+   private void assertRewindException(TokenParser tp, String value) {
       try {
-         wp.rewind(new Word(value, WordType.ATOM));
+         tp.rewind(new Token(value, TokenType.ATOM));
          fail();
       } catch (IllegalArgumentException e) {
          // expected
       }
    }
 
-   private void assertWordType(String syntax, WordType type) {
-      assertWordType(syntax, syntax, type);
+   private void assertTokenType(String syntax, TokenType type) {
+      assertTokenType(syntax, syntax, type);
    }
 
-   private void assertWordType(String syntax, String value, WordType type) {
-      WordParser p = create(syntax);
+   private void assertTokenType(String syntax, String value, TokenType type) {
+      TokenParser p = create(syntax);
       assertTrue(p.hasNext());
-      Word word = p.next();
-      assertEquals(value, word.value);
-      assertSame(type, word.type);
+      Token token = p.next();
+      assertEquals(value, token.value);
+      assertSame(type, token.type);
       assertFalse(p.hasNext());
    }
 
-   private void assertParse(String sentence, String... words) {
-      WordParser p = create(sentence);
-      for (String w : words) {
-         Word next = p.next();
+   private void assertParse(String sentence, String... tokens) {
+      TokenParser tp = create(sentence);
+      for (String w : tokens) {
+         Token next = tp.next();
          assertEquals(w, next.value);
-         p.rewind(next);
-         assertSame(next, p.next());
+         tp.rewind(next);
+         assertSame(next, tp.next());
       }
-      assertFalse(p.hasNext());
+      assertFalse(tp.hasNext());
       try {
-         p.next();
+         tp.next();
          fail();
       } catch (ParserException e) {
          assertEquals("Unexpected end of stream Line: " + e.getLine(), e.getMessage());
       }
    }
 
-   private WordParser create(String syntax) {
+   private TokenParser create(String syntax) {
       StringReader sr = new StringReader(syntax);
-      return new WordParser(sr, operands);
+      return new TokenParser(sr, operands);
    }
 }

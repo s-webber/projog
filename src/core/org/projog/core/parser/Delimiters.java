@@ -1,6 +1,6 @@
 package org.projog.core.parser;
 
-import static org.projog.core.parser.WordType.SYMBOL;
+import static org.projog.core.parser.TokenType.SYMBOL;
 
 class Delimiters {
    private static final char ARGUMENT_SEPARATOR = ',';
@@ -34,35 +34,35 @@ class Delimiters {
       return c == LIST_OPENING_BRACKET;
    }
 
-   static boolean isPredicateOpenBracket(Word word) {
-      return isMatch(word, PREDICATE_OPENING_BRACKET);
+   static boolean isPredicateOpenBracket(Token token) {
+      return isMatch(token, PREDICATE_OPENING_BRACKET);
    }
 
-   static boolean isPredicateCloseBracket(Word word) {
-      return isMatch(word, PREDICATE_CLOSING_BRACKET);
+   static boolean isPredicateCloseBracket(Token token) {
+      return isMatch(token, PREDICATE_CLOSING_BRACKET);
    }
 
-   static boolean isListOpenBracket(Word word) {
-      return isMatch(word, LIST_OPENING_BRACKET);
+   static boolean isListOpenBracket(Token token) {
+      return isMatch(token, LIST_OPENING_BRACKET);
    }
 
-   static boolean isListCloseBracket(Word word) {
-      return isMatch(word, LIST_CLOSING_BRACKET);
+   static boolean isListCloseBracket(Token token) {
+      return isMatch(token, LIST_CLOSING_BRACKET);
    }
 
-   static boolean isListTail(Word word) {
-      return isMatch(word, LIST_TAIL);
+   static boolean isListTail(Token token) {
+      return isMatch(token, LIST_TAIL);
    }
 
-   static boolean isArgumentSeperator(Word word) {
-      return isMatch(word, ARGUMENT_SEPARATOR);
+   static boolean isArgumentSeperator(Token token) {
+      return isMatch(token, ARGUMENT_SEPARATOR);
    }
 
-   static boolean isSentenceTerminator(Word word) {
-      return isMatch(word, PERIOD);
+   static boolean isSentenceTerminator(Token token) {
+      return isMatch(token, PERIOD);
    }
 
-   private static boolean isMatch(Word word, char expected) {
-      return word != null && word.type == SYMBOL && word.value != null && word.value.length() == 1 && word.value.charAt(0) == expected;
+   private static boolean isMatch(Token token, char expected) {
+      return token != null && token.type == SYMBOL && token.value != null && token.value.length() == 1 && token.value.charAt(0) == expected;
    }
 }

@@ -1,11 +1,11 @@
 package org.projog.core.parser;
 
-/** @see WordParser#next() */
-class Word {
+/** @see TokenParser#next() */
+class Token {
    final String value;
-   final WordType type;
+   final TokenType type;
 
-   Word(String value, WordType type) {
+   Token(String value, TokenType type) {
       this.value = value;
       this.type = type;
    }

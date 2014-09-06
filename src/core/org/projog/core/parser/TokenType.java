@@ -1,7 +1,7 @@
 package org.projog.core.parser;
 
-/** @see WordParser */
-enum WordType {
+/** @see TokenParser */
+enum TokenType {
    ATOM,
    QUOTED_ATOM,
    INTEGER,

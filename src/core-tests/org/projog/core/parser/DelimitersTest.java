@@ -85,11 +85,11 @@ public class DelimitersTest {
       }
    }
 
-   private Word symbol(String value) {
-      return new Word(value, WordType.SYMBOL);
+   private Token symbol(String value) {
+      return new Token(value, TokenType.SYMBOL);
    }
 
-   private Word atom(String value) {
-      return new Word(value, WordType.ATOM);
+   private Token atom(String value) {
+      return new Token(value, TokenType.ATOM);
    }
 }

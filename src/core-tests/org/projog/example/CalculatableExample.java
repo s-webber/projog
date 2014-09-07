@@ -17,6 +17,6 @@ public class CalculatableExample implements Calculatable {
    public Numeric calculate(Term... args) {
       Numeric input = castToNumeric(args[0]);
       long rounded = Math.round(input.getDouble());
-      return new IntegerNumber((int) rounded);
+      return new IntegerNumber(rounded);
    }
 }

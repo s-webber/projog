@@ -20,10 +20,13 @@ import org.projog.core.term.TermUtils;<br>
 <br>
 public class CalculatableExample implements Calculatable {<br>
 &nbsp;&nbsp;&nbsp;@Override<br>
-&nbsp;&nbsp;&nbsp;public Numeric calculate(KnowledgeBase kb, Term[] args) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Numeric input = TermUtils.castToNumeric(args[0]);<br>
+&nbsp;&nbsp;&nbsp;public void setKnowledgeBase(KnowledgeBase kb) {<br>
+&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;@Override<br>
+&nbsp;&nbsp;&nbsp;public Numeric calculate(Term... args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Numeric input = castToNumeric(args[0]);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long rounded = Math.round(input.getDouble());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new IntegerNumber((int) rounded);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new IntegerNumber(rounded);<br>
 &nbsp;&nbsp;&nbsp;}<br>
 }</code></div>
 
@@ -33,7 +36,7 @@ Example of integrating <code>org.projog.example.CalculatableExample</code> into 
 
 <div class="code">
 <pre>
-?- pj_add_calculatable('round', 'org.projog.example.CalculatableExample').
+?- pj_add_calculatable(round/1, 'org.projog.example.CalculatableExample').
 
 yes
 
@@ -53,3 +56,10 @@ X = 109
 yes
 </pre>
 </div>
+
+<h3>See Also</h3>
+<ul>
+<li><a href="AddArithmeticFunction.html">arithmetic_function/1</li>
+<li><a href="AddCalculatable.html">pj_add_calculatable/2</li>
+</ul>
+

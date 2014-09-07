@@ -3,11 +3,11 @@ As well as interacting with Projog using the console application it is also poss
 The steps required for applications to interact with Projog are as follows:
 <ul>
 <li>Create a new <a href="javadoc/org/projog/api/Projog.html" title="class in org.projog.api"><code>Projog</code></a> instance.</li>
-<li>Load in clauses and facts using <a href="javadoc/org/projog/api/Projog.html#consultFile(java.io.File)"><code>Projog.consultFile(File)</code></a> or <a href="javadoc/org/projog/api/Projog.html#consultReader(java.io.Reader)"><code>Projog.consultReader(Reader)</code></a>.</li>
-<li>Create a <a href="javadoc/org/projog/api/QueryStatement.html" title="class in org.projog.api"><code>QueryStatement</code></a> by using <a href="javadoc/org/projog/api/Projog.html#query(java.lang.String)"><code>Projog.query(String)</code></a>.</li>
-<li>Create a <a href="javadoc/org/projog/api/QueryResult.html" title="class in org.projog.api"><code>QueryResult</code></a> by using <a href="javadoc/org/projog/api/QueryStatement.html#getResult()"><code>QueryStatement.getResult()</code></a>.</li>
-<li>Iterate through all possible solutions to the query by using <a href="javadoc/org/projog/api/QueryResult.html#next()"><code>QueryResult.next()</code></a>.</li>
-<li>For each solution get the <a href="javadoc/org/projog/core/term/Term.html" title="interface in org.projog.core.term"><code>Term</code></a> instantiated to a <a href="javadoc/org/projog/core/term/Variable.html" title="class in org.projog.core.term"><code>Variable</code></a> in the query by calling <a href="javadoc/org/projog/api/QueryResult.html#getTerm(java.lang.String)"><code>QueryResult.getTerm(String)</code></a>.</li>
+<li>Load in clauses and facts using <a href="javadoc/org/projog/api/Projog.html#consultFile-java.io.File-"><code>Projog.consultFile(File)</code></a> or <a href="javadoc/org/projog/api/Projog.html#consultReader-java.io.Reader-"><code>Projog.consultReader(Reader)</code></a>.</li>
+<li>Create a <a href="javadoc/org/projog/api/QueryStatement.html" title="class in org.projog.api"><code>QueryStatement</code></a> by using <a href="javadoc/org/projog/api/Projog.html#query-java.lang.String-"><code>Projog.query(String)</code></a>.</li>
+<li>Create a <a href="javadoc/org/projog/api/QueryResult.html" title="class in org.projog.api"><code>QueryResult</code></a> by using <a href="javadoc/org/projog/api/QueryStatement.html#getResult--"><code>QueryStatement.getResult()</code></a>.</li>
+<li>Iterate through all possible solutions to the query by using <a href="javadoc/org/projog/api/QueryResult.html#next--"><code>QueryResult.next()</code></a>.</li>
+<li>For each solution get the <a href="javadoc/org/projog/core/term/Term.html" title="interface in org.projog.core.term"><code>Term</code></a> instantiated to a <a href="javadoc/org/projog/core/term/Variable.html" title="class in org.projog.core.term"><code>Variable</code></a> in the query by calling <a href="javadoc/org/projog/api/QueryResult.html#getTerm-java.lang.String-"><code>QueryResult.getTerm(String)</code></a>.</li>
 </ul>
 </p>
 

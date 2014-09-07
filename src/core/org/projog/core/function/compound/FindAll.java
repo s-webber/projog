@@ -51,10 +51,17 @@ import org.projog.core.term.Variable;
  
  %QUERY findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
  %ANSWER
- % L = [o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
+ % L=[o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
  % H=o(a(q), a(z))
  % X=UNINSTANTIATED VARIABLE
- %ANSWER(findall(X,y(X),L).
+ %ANSWER
+ 
+ %QUERY findall(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
+ %ANSWER
+ % L=[9,4,9]
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ %ANSWER
  */
 /**
  * <code>findall(X,P,L)</code> - find all solutions that satisfy the goal.

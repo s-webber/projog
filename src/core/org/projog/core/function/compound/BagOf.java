@@ -50,6 +50,18 @@ import org.projog.core.term.Term;
  %ANSWER
  
  %FALSE bagof(X,x(X,y,z),L)
+ 
+ %QUERY bagof(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
+ %ANSWER
+ % L=[9,9]
+ % X=3
+ % Y=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % L=[4]
+ % X=2
+ % Y=UNINSTANTIATED VARIABLE
+ %ANSWER
  */
 /**
  * <code>bagof(X,P,L)</code> - find all solutions that satisfy the goal.

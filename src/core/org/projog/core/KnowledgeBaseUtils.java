@@ -36,6 +36,38 @@ public final class KnowledgeBaseUtils {
    }
 
    /**
+    * Constructs a new {@code KnowledgeBase} object using {@link ProjogSystemProperties}
+    */
+   public static KnowledgeBase createKnowledgeBase() {
+      return createKnowledgeBase(new ProjogSystemProperties());
+   }
+
+   /**
+    * Constructs a new {@code KnowledgeBase} object using the specified {@link ProjogProperties}
+    */
+   public static KnowledgeBase createKnowledgeBase(ProjogProperties projogProperties) {
+      KnowledgeBase kb = new KnowledgeBase();
+      getServiceLocator(kb).addInstance(ProjogProperties.class, projogProperties);
+      return kb;
+   }
+
+   /**
+    * Consults the {@link ProjogProperties#getBootstrapScript()} for the {@code KnowledgeBase}.
+    * <p>
+    * This is a way to configure a new {@code KnowledgeBase} (i.e. plugging in {@link Calculatable} and
+    * {@link PredicateFactory} instances).
+    * <p>
+    * When using {@link ProjogSystemProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
+    * {@code projog-core.jar}).
+    * 
+    * @link ProjogSourceReader#parseResource(KnowledgeBase, String)
+    */
+   public static void bootstrap(KnowledgeBase kb) {
+      String bootstrapScript = getProjogProperties(kb).getBootstrapScript();
+      ProjogSourceReader.parseResource(kb, bootstrapScript);
+   }
+
+   /**
     * Returns list of all user defined predicates with the specified name.
     */
    public static List<PredicateKey> getPredicateKeysByName(KnowledgeBase kb, String predicateName) {

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Observer;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
@@ -131,11 +132,11 @@ public final class Projog {
     * Constructs a new {@code Projog} object with the specified {@code ProjogProperties} and {@code Observer}s.
     */
    public Projog(ProjogProperties projogProperties, Observer... observers) {
-      this.kb = new KnowledgeBase(projogProperties);
+      this.kb = KnowledgeBaseUtils.createKnowledgeBase(projogProperties);
       for (Observer o : observers) {
          addObserver(o);
       }
-      kb.bootstrap();
+      KnowledgeBaseUtils.bootstrap(kb);
       this.tf = new TermFormatter(getOperands(kb));
    }
 

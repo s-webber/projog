@@ -1,9 +1,7 @@
 package org.projog.core;
 
 import static org.projog.core.CoreUtils.instantiate;
-import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
-import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,34 +56,11 @@ public final class KnowledgeBase {
    private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<>();
 
    /**
-    * Constructs a new {@code KnowledgeBase} object using {@link ProjogSystemProperties}
+    * @see KnowledgeBaseUtils#createKnowledgeBase()
+    * @see KnowledgeBaseUtils#createKnowledgeBase(ProjogProperties)
     */
-   public KnowledgeBase() {
-      this(new ProjogSystemProperties());
-   }
-
-   /**
-    * Constructs a new {@code KnowledgeBase} object using the specified {@link ProjogProperties}
-    */
-   public KnowledgeBase(ProjogProperties projogProperties) {
+   KnowledgeBase() {
       addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
-      getServiceLocator(this).addInstance(ProjogProperties.class, projogProperties);
-   }
-
-   /**
-    * Consults the {@link ProjogProperties#getBootstrapScript()} for this object.
-    * <p>
-    * This is a way to configure a new {@code KnowledgeBase} (i.e. plugging in {@link Calculatable} and
-    * {@link PredicateFactory} instances).
-    * <p>
-    * When using {@link ProjogSystemProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
-    * {@code projog-core.jar}).
-    * 
-    * @link ProjogSourceReader#parseResource(KnowledgeBase, String)
-    */
-   public void bootstrap() {
-      String bootstrapScript = getProjogProperties(this).getBootstrapScript();
-      ProjogSourceReader.parseResource(this, bootstrapScript);
    }
 
    /**

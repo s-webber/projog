@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Operands;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogProperties;
@@ -86,8 +87,8 @@ public class TestUtils {
 
    public static KnowledgeBase createKnowledgeBase() {
       try {
-         KnowledgeBase kb = new KnowledgeBase();
-         kb.bootstrap();
+         KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+         KnowledgeBaseUtils.bootstrap(kb);
          return kb;
       } catch (Throwable t) {
          t.printStackTrace();
@@ -97,8 +98,8 @@ public class TestUtils {
 
    public static KnowledgeBase createKnowledgeBase(ProjogProperties projogProperties) {
       try {
-         KnowledgeBase kb = new KnowledgeBase(projogProperties);
-         kb.bootstrap();
+         KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(projogProperties);
+         KnowledgeBaseUtils.bootstrap(kb);
          return kb;
       } catch (Throwable t) {
          t.printStackTrace();

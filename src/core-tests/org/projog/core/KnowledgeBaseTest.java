@@ -34,14 +34,14 @@ public class KnowledgeBaseTest {
    /** Check that {@link ProjogSystemProperties} is used by default. */
    @Test
    public void testDefaultProjogProperties() {
-      KnowledgeBase kb = new KnowledgeBase();
+      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
       assertSame(ProjogSystemProperties.class, getProjogProperties(kb).getClass());
    }
 
    /** Check that {@link ProjogProperties} is configurable. */
    @Test
    public void testConfiguredProjogProperties() {
-      KnowledgeBase kb = new KnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
+      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
       assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
    }
 

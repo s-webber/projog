@@ -15,11 +15,14 @@ package org.projog.core;
  * runtime should be stored. This property is only used if running in "compiled mode". The directory also needs to be
  * included in the Java classpath of the application being executed. Defaults to <code>projogGeneratedClasses</code>.</li>
  * </ul>
+ * </p>
  * Example of setting system properties when launching Java:
  * 
  * <pre>
  * java -Dprojog.spypoints=false -Dprojog.compile=true -Dprojog.generatedClasses=projogGeneratedClasses -cp projogGeneratedClasses;lib/projog-core.jar org.projog.example.ProjogExample
  * </pre>
+ * 
+ * </p>
  */
 public class ProjogSystemProperties implements ProjogProperties {
    private static final String DEFAULT_BOOTSTRAP_SCRIPT = "projog-bootstrap.pl";

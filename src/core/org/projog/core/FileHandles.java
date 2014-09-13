@@ -25,7 +25,7 @@ public final class FileHandles {
    public static final Atom USER_OUTPUT_HANDLE = new Atom("user_output");
    public static final Atom USER_INPUT_HANDLE = new Atom("user_input");
 
-   private final Object LOCK = new Object();
+   private final Object lock = new Object();
    private final Map<String, InputStream> inputHandles = new HashMap<>();
    private final Map<String, PrintStream> outputHandles = new HashMap<>();
 
@@ -89,7 +89,7 @@ public final class FileHandles {
     */
    public void setInput(Term handle) {
       String handleName = getAtomName(handle);
-      synchronized (LOCK) {
+      synchronized (lock) {
          if (inputHandles.containsKey(handleName)) {
             currentInputHandle = handle;
             in = inputHandles.get(handleName);
@@ -106,7 +106,7 @@ public final class FileHandles {
     */
    public void setOutput(Term handle) {
       String handleName = getAtomName(handle);
-      synchronized (LOCK) {
+      synchronized (lock) {
          if (outputHandles.containsKey(handleName)) {
             currentOutputHandle = handle;
             out = outputHandles.get(handleName);
@@ -126,7 +126,7 @@ public final class FileHandles {
     */
    public Atom openInput(String fileName) throws IOException {
       String handleName = fileName + "_input_handle";
-      synchronized (LOCK) {
+      synchronized (lock) {
          if (inputHandles.containsKey(handleName)) {
             throw new ProjogException("Can not open input for: " + fileName + " as it is already open");
          } else {
@@ -147,7 +147,7 @@ public final class FileHandles {
     */
    public Atom openOutput(String fileName) throws IOException {
       String handleName = fileName + "_output_handle";
-      synchronized (LOCK) {
+      synchronized (lock) {
          if (outputHandles.containsKey(handleName)) {
             throw new ProjogException("Can not open output for: " + fileName + " as it is already open");
          } else {
@@ -166,7 +166,7 @@ public final class FileHandles {
     */
    public void close(Term handle) throws IOException {
       String handleName = getAtomName(handle);
-      synchronized (LOCK) {
+      synchronized (lock) {
          PrintStream ps = outputHandles.get(handleName);
          if (ps != null) {
             outputHandles.remove(handleName);

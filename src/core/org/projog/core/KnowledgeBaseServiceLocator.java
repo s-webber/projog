@@ -134,6 +134,13 @@ public class KnowledgeBaseServiceLocator {
       }
    }
 
+   /**
+    * Returns a new instance of the specified class.
+    * <p>
+    * If the class has a constructor that takes a KnowledgeBase as its single argument then an attempt is made to use
+    * that to construct the new instance - else an attempt is made to construct a new instance using the no-arg
+    * constructor.
+    */
    private Object newInstance(Class<?> c) {
       try {
          Constructor<?> constructor = getKnowledgeBaseArgumentConstructor(c);

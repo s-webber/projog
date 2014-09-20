@@ -42,9 +42,41 @@ public class SentenceParser {
    private static final String MINUS_SIGN = "-";
    private final TokenParser parser;
    private final Operands operands;
-   /** A collection of {@code Variable}s this parser currently knows about (key = the variable id). */
+   /**
+    * A collection of {@code Variable}s this parser currently knows about (key = the variable name).
+    * <p>
+    * The reason this information needs to be stored is so that each instance of the same variable name, in a single
+    * sentence, refers to the same {@code Variable} instance.
+    * <p>
+    * e.g. During the parsing of the sentence <code>Y is 2, X is Y * 2.</code> two {@code Variable} instances need to be
+    * created - one for the variable name <code>X</code> and one that is shared between both references to the variable
+    * name <code>Y</code>.
+    */
    private final HashMap<String, Variable> variables = new HashMap<>();
+   /**
+    * Terms created, during the parsing of the current sentence, that were represented using infix notation.
+    * <p>
+    * Example of infix notation: <code>X = 1</code> where the predicate name <code>=</code> is positioned between its
+    * two arguments <code>X</code> and <code>1</code>.
+    * <p>
+    * The reason these need to be kept a record of is, when the sentence has been fully read, the individual terms can
+    * be reordered to conform to operator precedence.
+    * <p>
+    * e.g. <code>1+2/3</code> will get ordered like: <code>+(1, /(2, 3))</code> while <code>1/2+3</code> will be ordered
+    * like: <code>+(/(1, 2), 3)</code>.
+    */
    private final Set<Term> parsedInfixTerms = new HashSet<>();
+   /**
+    * Terms created, during the parsing of the current sentence, that were enclosed in brackets.
+    * <p>
+    * The reason this information needs to be stored is so that the parser knows to <i>not</i> reorder these terms as
+    * part of the reordering of infix terms that occurs once the sentence is fully read. i.e. Using brackets to
+    * explicitly define the ordering of terms overrules the default operator precedence of infix terms.
+    * <p>
+    * e.g. Although <code>1/2+3</code> will be ordered like: <code>+(/(1, 2), 3)</code>, <code>1/(2+3)</code> (i.e.
+    * where <code>2+3</code> is enclosed in brackets) will be ordered like: <code>/(1, +(2, 3))</code>.
+    */
+   private final Set<Term> bracketedTerms = new HashSet<>();
 
    /**
     * Returns a new {@code SentenceParser} will parse the specified {@code String} using the specified {@code Operands}.
@@ -108,13 +140,17 @@ public class SentenceParser {
     */
    public Term parseTerm() {
       if (parser.hasNext()) {
-         parsedInfixTerms.clear();
-         variables.clear();
-
+         resetState();
          return getTerm(Integer.MAX_VALUE);
       } else {
          return null;
       }
+   }
+
+   private void resetState() {
+      parsedInfixTerms.clear();
+      variables.clear();
+      bracketedTerms.clear();
    }
 
    /**
@@ -191,6 +227,9 @@ public class SentenceParser {
          // keep going until find right level to add this term to
          Term t = currentTerm;
          while (isParsedInfixTerms(t.getArgs()[1]) && getInfixLevel(t.getArgs()[1]) > level) {
+            if (bracketedTerms.contains(t.getArgs()[1])) {
+               break;
+            }
             t = t.getArgs()[1];
          }
          Term predicate = Structure.createStructure(next, new Term[] {t.getArgs()[1], secondArg});
@@ -449,6 +488,7 @@ public class SentenceParser {
       if (!isPredicateCloseBracket(token)) {
          throw newParserException("Expected ) but got: " + token + " after " + t);
       }
+      bracketedTerms.add(t);
       return t;
    }
 

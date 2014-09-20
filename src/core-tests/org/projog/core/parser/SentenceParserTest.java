@@ -62,6 +62,8 @@ public class SentenceParserTest {
 
    @Test
    public void testEquationPrecedence() {
+      checkEquation("(((1+2)-3)*4)/5", "/(*(-(+(1, 2), 3), 4), 5)");
+
       checkEquation("1+2-3*4/5", "-(+(1, 2), /(*(3, 4), 5))");
       checkEquation("1+2-3/4*5", "-(+(1, 2), *(/(3, 4), 5))");
       checkEquation("1+2/3-4*5", "-(+(1, /(2, 3)), *(4, 5))");
@@ -154,6 +156,16 @@ public class SentenceParserTest {
    @Test
    public void testParsingBrackets10() {
       assertParse("X = [a,'('|Y].", "X = [a,(|Y]", "=(X, .(a, .((, Y)))");
+   }
+
+   @Test
+   public void testParsingBrackets11() {
+      assertParse("a :- (b, c ; e), f.", "a :- b , c ; e , f", ":-(a, ,(;(,(b, c), e), f))");
+   }
+
+   @Test
+   public void testParsingBrackets12() {
+      assertParse("a :- z, (b, c ; e), f.", "a :- z , (b , c ; e) , f", ":-(a, ,(,(z, ;(,(b, c), e)), f))");
    }
 
    @Test
@@ -267,20 +279,19 @@ public class SentenceParserTest {
    }
 
    private void checkEquation(String input, String expected) {
-      // apply same extra tests just because is easy to do
-      for (int i = 0; i < 2; i++) {
-         check(input, expected);
-         check("X is " + input, "is(X, " + expected + ")");
-         String conjunction = "X is " + input + ", Y is " + input + ", Z is " + input;
-         String expectedConjunctionResult = ",(,(is(X, " + expected + "), is(Y, " + expected + ")), is(Z, " + expected + "))";
-         check(conjunction, expectedConjunctionResult);
-         check("?- " + conjunction, "?-(" + expectedConjunctionResult + ")");
-         check("test(X, Y, Z) :- " + conjunction, ":-(test(X, Y, Z), " + expectedConjunctionResult + ")");
+      check(input, expected);
 
-         for (int n = 0; n < 10; n++) {
-            input = input.replace("" + n, "p(" + n + ")");
-            expected = expected.replace("" + n, "p(" + n + ")");
-         }
+      // apply same extra tests just because is easy to do...
+      check("X is " + input, "is(X, " + expected + ")");
+      String conjunction = "X is " + input + ", Y is " + input + ", Z is " + input;
+      String expectedConjunctionResult = ",(,(is(X, " + expected + "), is(Y, " + expected + ")), is(Z, " + expected + "))";
+      check(conjunction, expectedConjunctionResult);
+      check("?- " + conjunction, "?-(" + expectedConjunctionResult + ")");
+      check("test(X, Y, Z) :- " + conjunction, ":-(test(X, Y, Z), " + expectedConjunctionResult + ")");
+
+      for (int n = 0; n < 10; n++) {
+         input = input.replace("" + n, "p(" + n + ")");
+         expected = expected.replace("" + n, "p(" + n + ")");
       }
    }
 

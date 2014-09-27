@@ -16,8 +16,6 @@ import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.SpyPoints;
-import org.projog.core.function.bool.True;
-import org.projog.core.function.flow.RepeatSetAmount;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
 import org.projog.core.udp.interpreter.AlwaysMatchedClauseAction;
@@ -131,11 +129,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private PredicateFactory createPredicateFactoryFromAlwaysMatchedClauseActions(List<ClauseAction> rows) {
       if (rows.size() == 1) {
-         // if single row e.g. "a" then just return instance of True (see Disjunction test for an example) 
-         return new True();
+         // e.g. "a." or "p(_)."
+         return SingleRuleAlwaysTruePredicate.SINGLETON;
       } else {
-         // e.g. a. a. a. or p(_). p(_). p(_).
-         return new RepeatSetAmount(rows.size());
+         // e.g. "a. a. a." or "p(_). p(_). p(_)."
+         return new MultipleRulesAlwaysTruePredicate(rows.size());
       }
    }
 

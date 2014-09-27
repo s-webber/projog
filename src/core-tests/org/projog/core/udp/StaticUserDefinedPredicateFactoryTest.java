@@ -8,10 +8,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
-import org.projog.core.function.bool.True;
-import org.projog.core.function.flow.RepeatSetAmount;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicate;
 import org.projog.core.udp.compiler.CompiledTailRecursivePredicate;
@@ -35,7 +34,10 @@ public class StaticUserDefinedPredicateFactoryTest {
    @Test
    public void testTrue() {
       PredicateFactory pf = getActualPredicateFactory(toTerms("p."));
-      assertSame(True.class, pf.getClass());
+      assertSame(SingleRuleAlwaysTruePredicate.class, pf.getClass());
+      Predicate p = pf.getPredicate();
+      assertTrue(p.evaluate());
+      assertFalse(p.isRetryable());
    }
 
    @Test
@@ -43,11 +45,14 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term[] clauses = toTerms("p.", "p.", "p.");
       int expectedSuccessfulEvaluations = clauses.length;
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(RepeatSetAmount.class, pf.getClass());
-      RepeatSetAmount p = ((RepeatSetAmount) pf).getPredicate();
+      assertSame(MultipleRulesAlwaysTruePredicate.class, pf.getClass());
+      Predicate p = pf.getPredicate();
+      assertTrue(p.isRetryable());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
+         assertTrue(p.couldReEvaluationSucceed());
          assertTrue(p.evaluate());
       }
+      assertFalse(p.couldReEvaluationSucceed());
       assertFalse(p.evaluate());
    }
 

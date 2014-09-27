@@ -14,8 +14,7 @@ import org.projog.core.term.TermUtils;
  * p(a,b,c).
  * p(x,y,z).
  * p(1,2,3).
- * 
- * <pre>
+ * </pre>
  * 
  * @see SingleRuleWithSingleImmutableArgumentPredicate
  * @see SingleRuleWithMultipleImmutableArgumentsPredicate

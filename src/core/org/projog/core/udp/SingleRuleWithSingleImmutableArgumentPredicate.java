@@ -10,8 +10,7 @@ import org.projog.core.term.Term;
  * 
  * <pre>
  * p(a).
- * 
- * <pre>
+ * </pre>
  * 
  * @see SingleRuleWithMultipleImmutableArgumentsPredicate
  * @see MultipleRulesWithSingleImmutableArgumentPredicate

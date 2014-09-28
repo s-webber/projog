@@ -6,7 +6,7 @@
 % This file is included in the projog-core.jar that contains the projog class files.
 % This file can be overridden by providing another file named "projog-bootstrap.pl" 
 % in the root directory where the console is launched, or in the classpath before the projog-core.jar.
-% See http://www.projog.org/javadoc/org/projog/core/KnowledgeBase.html#bootstrap()
+% See http://www.projog.org/javadoc/org/projog/core/KnowledgeBaseUtils.html#bootstrap(org.projog.core.KnowledgeBase)
 
 '?-'( pj_add_predicate('/'(op, 3), 'org.projog.core.function.io.Op') ).
 '?-'( op(1200, fx, '?-') ).

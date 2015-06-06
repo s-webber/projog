@@ -18,7 +18,7 @@ Projog provides an implementation of the Prolog programming language for the Jav
 * `src/prolog` - Prolog scripts used for system-testing and documentation.
 * `web` - Used to construct content of http://www.projog.org/
 
-[![Build Status](https://travis-ci.org/webber-s/projog.png?branch=master)](https://travis-ci.org/webber-s/projog)
+[![Build Status](https://travis-ci.org/s-webber/projog.png?branch=master)](https://travis-ci.org/s-webber/projog)
 
 --------------------------------------
 

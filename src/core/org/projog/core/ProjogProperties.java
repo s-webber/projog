@@ -44,10 +44,10 @@ public interface ProjogProperties {
    String getRuntimeCompilationOutputDirectory();
 
    /**
-    * Returns the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap()}.
+    * Returns the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap(KnowledgeBase)}.
     * 
-    * @return the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap()}
-    * @see KnowledgeBaseUtils#bootstrap()
+    * @return the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap(KnowledgeBase)}
+    * @see KnowledgeBaseUtils#bootstrap(KnowledgeBase)
     */
    String getBootstrapScript();
 }

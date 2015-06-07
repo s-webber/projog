@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2014 S. Webber
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.projog.build;
 
 import static org.projog.build.BuildUtilsConstants.COMMANDS_INDEX_FILE;
@@ -129,17 +144,13 @@ class TableOfContentsReader {
     * <b>Example 1</b> - {@code line} lists the prolog file the web page is constructed from:
     * </p>
     * 
-    * <pre>
-	 * - concepts/prolog-debugging.pl
-	 * </pre>
+    * e.g.: <code>- concepts/prolog-debugging.pl</code>
     * <p>
     * or <b>Example 2</b> - {@code line} lists file name (minus extension) of the page followed by the displayed name of
     * the page:
     * </p>
     * 
-    * <pre>
-	 * * getting_started Getting Started
-	 * </pre>
+    * e.g.: <code>getting_started Getting Started</code>
     */
    private static String getHtmlFileNameFromLine(String line) {
       int spacePos = line.indexOf(' ', 3);
@@ -160,17 +171,13 @@ class TableOfContentsReader {
     * <b>Example 1</b> - {@code line} lists the prolog file the web page is constructed from:
     * </p>
     * 
-    * <pre>
-	 * - concepts/prolog-debugging.pl
-	 * </pre>
+    * e.g.: <code>- concepts/prolog-debugging.pl</code>
     * <p>
     * or <b>Example 2</b> - {@code line} lists file name (minus extension) of the page followed by the displayed name of
     * the page:
     * </p>
     * 
-    * <pre>
-	 * * getting_started Getting Started
-	 * </pre>
+    * e.g.: <code>getting_started Getting Started</code>
     */
    private static String getTitleFromLine(String line) {
       int spacePos = line.indexOf(' ', 3);

@@ -1,0 +1,37 @@
+@startuml ClauseAction.png
+hide members
+
+interface ClauseAction {
++getFree()
++evaluate(Term[])
++isRetryable()
+}
+
+abstract AbstractFactClauseAction {
+#getConsequentArgs()
+}
+ClauseAction <|-right- AbstractFactClauseAction
+AbstractFactClauseAction <|-up- AlwaysMatchedClauseAction
+AbstractFactClauseAction <|-right- ImmutableArgumentsClauseAction
+AbstractFactClauseAction <|-down- MutableArgumentsClauseAction
+
+abstract AbstractMultiAnswerClauseAction {
+#evaluateAntecedant(Map<Variable, Variable>)
+#reEvaluateAntecedant()
+}
+ClauseAction <|-up- AbstractMultiAnswerClauseAction
+AbstractMultiAnswerClauseAction <|-left- CutClauseAction
+AbstractMultiAnswerClauseAction <|-up- SingleFunctionMultiResultClauseAction
+
+abstract AbstractSingleAnswerClauseAction {
+#evaluateAntecedant(Map<Variable, Variable>)
+}
+ClauseAction <|-down- AbstractSingleAnswerClauseAction
+AbstractSingleAnswerClauseAction <|-left- MultiFunctionSingleResultClauseAction
+AbstractSingleAnswerClauseAction <|-down- SingleFunctionSingleResultClauseAction
+
+show ClauseAction method
+show AbstractFactClauseAction method
+show AbstractMultiAnswerClauseAction method
+show AbstractSingleAnswerClauseAction method
+@enduml

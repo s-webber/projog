@@ -1,0 +1,72 @@
+@startuml ProjogSourceReader.png
+hide members
+
+package "java.io" #DDDDDD {
+class BufferedReader
+}
+
+interface Term
+enum TokenType
+TokenType : ATOM
+TokenType : QUOTED_ATOM
+TokenType : INTEGER
+TokenType : FLOAT
+TokenType : SYMBOL
+TokenType : VARIABLE
+TokenType : ANONYMOUS_VARIABLE
+
+class ProjogSourceReader {
++parseFile(KnowledgeBase, File)
++parseResource(KnowledgeBase, String)
++parseReader(KnowledgeBase, Reader)
+}
+
+class SentenceParser{
++getInstance(String, Operands)
++getInstance(Reader, Operands)
++getParsedTermVariables()
++parseSentence()
++parseTerm()
+}
+
+class TokenParser{
+~next()
+~hasNext()
+~rewind(Token)
+}
+
+class CharacterParser{
+~getNext()
+~peek()
+~rewind()
+~skipLine()
+~getLine()
+~getLineNumber()
+~getColumnNumber()
+}
+
+class ParserException {
++getLine()
++getLineNumber()
++getColumnNumber()
++getDescription(PrintStream)
+}
+
+ProjogSourceReader ..> SentenceParser
+SentenceParser..> TokenParser
+TokenParser .left.> Token
+Token o-left- TokenType
+SentenceParser .left.> Term
+TokenParser ..> ParserException
+ParserException o-- CharacterParser
+TokenParser o-right- CharacterParser
+CharacterParser o-right- BufferedReader
+
+show ProjogSourceReader method
+show SentenceParser method
+show TokenParser method
+show CharacterParser method
+show ParserException method
+show TokenType fields
+
+@enduml

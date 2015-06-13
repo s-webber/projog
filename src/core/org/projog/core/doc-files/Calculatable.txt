@@ -1,0 +1,57 @@
+@startuml Calculatable.png
+hide members
+
+Calculatables o-right- Calculatable
+
+interface Calculatable {
++calculate(Term...)
+}
+
+abstract AbstractCalculatable {
+#calculate(Numeric)
+#calculate(Numeric, Numeric) 
+}
+
+abstract AbstractOneArgumentCalculatable {
+#calculateDouble(double)
+#calculateLong(long)
+}
+
+abstract AbstractTwoArgumentsCalculatable {
+#calculateDouble(double, double)
+#calculateLong(long, long)
+}
+
+abstract AbstractTwoIntegerArgumentsCalculatable {
+#calculateLong(long, long)
+}
+
+Calculatable <|-- AbstractCalculatable
+
+AbstractCalculatable <|-- AbstractOneArgumentCalculatable
+AbstractCalculatable <|-- AbstractTwoArgumentsCalculatable
+AbstractCalculatable <|-- AbstractTwoIntegerArgumentsCalculatable
+
+AbstractCalculatable <|-- Divide
+AbstractCalculatable <|-- Random
+AbstractCalculatable <|-- Max
+
+AbstractOneArgumentCalculatable <|-- Abs
+AbstractOneArgumentCalculatable <|-- Minus
+
+AbstractTwoArgumentsCalculatable <|-- Add
+AbstractTwoArgumentsCalculatable <|-- Multiply
+AbstractTwoArgumentsCalculatable <|-- Subtract
+
+AbstractTwoIntegerArgumentsCalculatable <|-- BitwiseAnd
+AbstractTwoIntegerArgumentsCalculatable <|-- IntegerDivide
+AbstractTwoIntegerArgumentsCalculatable <|-- Modulo
+AbstractTwoIntegerArgumentsCalculatable <|-- Remainder
+AbstractTwoIntegerArgumentsCalculatable <|-- ShiftRight
+
+show Calculatable method
+show AbstractCalculatable method
+show AbstractOneArgumentCalculatable method
+show AbstractTwoArgumentsCalculatable method
+show AbstractTwoIntegerArgumentsCalculatable method
+@enduml

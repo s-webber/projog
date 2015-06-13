@@ -1,0 +1,26 @@
+@startuml KnowledgeBaseServiceLocator.png
+hide members
+
+class KnowledgeBaseServiceLocator {
++getServiceLocator(KnowledgeBase) {static} 
++addInstance(Class, Object)
++getInstance(Class)
++getInstance(Class, Class)
+}
+
+interface ProjogProperties
+
+KnowledgeBaseServiceLocator o-left- ProjogEventsObservable
+KnowledgeBaseServiceLocator o-up- SpyPoints
+KnowledgeBaseServiceLocator o-up- Operands
+KnowledgeBaseServiceLocator o-- ProjogProperties
+KnowledgeBaseServiceLocator o-- Calculatables
+KnowledgeBaseServiceLocator o-up- TermFormatter
+KnowledgeBaseServiceLocator o-right- FileHandles
+
+interface Calculatable
+Calculatables o-right- Calculatable
+
+show KnowledgeBaseServiceLocator method
+
+@enduml

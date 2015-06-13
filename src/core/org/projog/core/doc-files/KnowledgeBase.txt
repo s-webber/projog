@@ -1,0 +1,18 @@
+@startuml KnowledgeBase.png
+hide members
+
+interface UserDefinedPredicateFactory
+interface PredicateFactory
+
+class KnowledgeBase {
++addPredicateFactory(PredicateKey, String)
++getPredicateFactory(PedicateKey)
++addUserDefinedPredicate(UserDefinedPredicateFactory)
++createOrReturnUserDefinedPredicate()
++getUserDefinedPredicates()
+}
+
+KnowledgeBase o-down- UserDefinedPredicateFactory
+KnowledgeBase o-down- PredicateFactory
+
+@enduml

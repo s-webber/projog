@@ -1,0 +1,35 @@
+@startuml Projog.png
+hide members
+
+class Projog {
++consultFile(File)
++consultReader(Reader)
++query(String)
++addObserver(Observer)
++toString(Term)
++printProjogStackTrace(Throwable)
++printProjogStackTrace(Throwable, PrintStream)
++getStackTrace(Throwable)
+}
+
+class QueryStatement {
++getResult()
+}
+
+class QueryResult {
++next()
++isExhausted()
++setTerm(String, Term)
++getTerm(String)
++getVariableIds()
+}
+
+Projog o-right- KnowledgeBase
+Projog ..> ProjogSourceReader
+Projog ..> QueryStatement
+QueryStatement ..> QueryResult
+
+show Projog method
+show QueryStatement method
+show QueryResult method
+@enduml

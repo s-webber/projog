@@ -1,0 +1,34 @@
+@startuml Term.png
+hide members
+
+interface Term {
++getName()
++getArgs()
++getNumberOfArguments()
++getArgument(int)
++getType()
++copy(Map<Variable, Variable>)
++getTerm()
++unify(Term)
++strictEquality(Term)
++backtrack()
++isImmutable()
+}
+
+interface Numeric {
++getDouble()
++getLong()
+}
+
+Term <|-up- Atom
+Term <|-- EmptyList
+Term <|-- List
+Term <|-down- Structure
+Term <|-left- Variable
+Term <|-right- Numeric
+Numeric <|-up- DecimalFraction
+Numeric <|-down- IntegerNumber
+
+show Term method
+show Numeric method
+@enduml

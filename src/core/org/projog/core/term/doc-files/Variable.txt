@@ -1,0 +1,8 @@
+@startuml Variable.png
+hide members
+
+interface Term
+
+Variable o-right- Term
+
+@enduml

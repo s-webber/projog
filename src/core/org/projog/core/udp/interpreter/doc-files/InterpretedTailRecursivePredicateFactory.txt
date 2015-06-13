@@ -1,0 +1,16 @@
+@startuml InterpretedTailRecursivePredicateFactory.png
+hide members
+
+interface PredicateFactory {
++getPredicate(Term...)
+}
+interface Predicate {
+}
+
+PredicateFactory <|-- InterpretedTailRecursivePredicateFactory
+Predicate <|-- InterpretedTailRecursivePredicate
+
+InterpretedTailRecursivePredicateFactory .right.> InterpretedTailRecursivePredicate
+
+show PredicateFactory method
+@enduml

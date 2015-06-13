@@ -1,0 +1,28 @@
+@startuml ProjogConsole.png
+hide members
+
+package "java.util" #DDDDDD {
+interface Observer
+class Observable
+}
+
+enum ProjogEventType
+ProjogEventType : CALL
+ProjogEventType : REDO
+ProjogEventType : EXIT
+ProjogEventType : FAIL
+ProjogEventType : WARN
+ProjogEventType : INFO
+
+Observer <|-left- ProjogConsole
+ProjogConsole o-- Projog
+Projog o-- KnowledgeBase
+Projog ..> ProjogSourceReader
+KnowledgeBase o-- ProjogEventsObservable
+ProjogEventsObservable o-left- Observable
+Observable .up.> Observer
+ProjogEventsObservable ..> ProjogEvent
+ProjogEvent o-right- ProjogEventType
+
+show ProjogEventType fields
+@enduml

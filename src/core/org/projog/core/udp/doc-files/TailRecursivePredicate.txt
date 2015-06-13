@@ -1,0 +1,19 @@
+@startuml TailRecursivePredicate.png
+hide members
+
+abstract TailRecursivePredicate {
++evaluate(Term...)
+#matchFirstRule()
+#matchSecondRule()
+#backtrack()
+}
+class InterpretedTailRecursivePredicate
+abstract CompiledTailRecursivePredicate
+
+TailRecursivePredicate <|-- InterpretedTailRecursivePredicate
+TailRecursivePredicate <|-- CompiledTailRecursivePredicate
+
+note bottom of CompiledTailRecursivePredicate : concrete subclasses are generated at runtime
+
+show TailRecursivePredicate method
+@enduml

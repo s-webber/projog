@@ -12,6 +12,7 @@
 	-->
 	<property name="dynamicContentDir" value="projogGeneratedClasses"/>
 	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
+	<property name="zipPrefixDir" value="projog-0.1.0"/>
 
 	<tstamp>
 		<format property="manifest.timestamp" pattern="yyyy-MM-dd HH:mm"/>
@@ -233,19 +234,19 @@
 		</copy>
 		<fixcrlf srcdir="build/etc" includes="*.sh" eol="lf" eof="remove" />
 		<zip destfile="build/projog-bin.zip">
-			<fileset dir="build/etc">
+			<zipfileset dir="build/etc" prefix="${zipPrefixDir}">
 				<include name="projog-console*.bat"/>
 				<include name="projog-console*.sh"/>
 				<include name="README.txt"/>
 				<include name="towers-of-hanoi-example.pl"/>
-			</fileset>
-			<fileset dir="build">
+			</zipfileset>
+			<zipfileset dir="build" prefix="${zipPrefixDir}">
 				<include name="docs/*.html"/>
 				<include name="docs/*.css"/>
 				<include name="docs/javadoc/**"/>
 				<include name="${lib}/**"/>
-			</fileset>
-			<fileset dir="." includes="LICENSE"/>
+			</zipfileset>
+			<zipfileset dir="." includes="LICENSE" prefix="${zipPrefixDir}"/>
 		</zip>
 	</target>
 

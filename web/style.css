@@ -3,17 +3,52 @@ body {
 	color: black;
 	font-family: arial, geneva, helvetica, sans-serif;
 	font-size: 95%;
+    margin: 0 auto;
 }
+
+/* top and bottom menu links */
+a.menu:link {
+    color: white;
+    text-decoration: none;
+}
+a.menu:visited {
+    color: white;
+    text-decoration: none;
+}
+a.menu:hover {
+    color: yellow;
+    text-decoration: underline;
+}
+a.menu:active {
+    color: yellow;
+    text-decoration: underline;
+}
+
+/* Top menu */
+div.top{background-color:black;color: white;border: 1px solid black; padding: 5px;}
+a.pjmenu{font-weight: bold;}
+a.topmenu{display: block;width: 140px; test-align: right}
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+li.menu {
+    float: left;
+}
+.left{
+    float: left;
+}
+.right {
+    float: right;
+    text-align: center;
+}
+
+
+
 li {
 	margin-bottom: 0.5em;
-}
-li.top-menu {
-	display: inline;
-	list-style-type: none;
-	padding-right: 60px;
-}
-ul.top-menu {
-	display: inline;
 }
 h2 {
 	font-weight: bold;

@@ -25,6 +25,25 @@ $ chmod u+x projog-console.sh
 $ ./projog-console.sh
 ```
 
+When the console has started you can enter the following command:
+
+```
+W=X, X=1+1, Y is W, Z is -W.
+```
+
+Which should generate the following response:
+
+```
+W = 1 + 1
+X = 1 + 1
+Y = 2
+Z = -2
+
+yes
+```
+
+To exit the console type `quit.`
+
 ## Directory structure
 
 * `build.xml` - Ant build script.

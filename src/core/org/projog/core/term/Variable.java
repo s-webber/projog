@@ -22,7 +22,7 @@ import java.util.Map;
  * <p>
  * A {@code Variable} can be either instantiated (representing another single {@link Term}) or uninstantiated (not
  * representing any other {@link Term}). {@code Variable}s are not constants. What {@link Term}, if any, a
- * {@code Variable} is instantiated with can vary during it's life time. A {@code Variable} becomes instantiated by
+ * {@code Variable} is instantiated with can vary during its life time. A {@code Variable} becomes instantiated by
  * calls to {@link #unify(Term)} and becomes uninstantiated again by calls to {@link #backtrack()}.
  * <p>
  * <img src="doc-files/Variable.png">

@@ -70,7 +70,7 @@ public final class Structure implements Term {
    /**
     * Private constructor to force use of {@link #createStructure(String, Term[])}
     * 
-    * @param immutable is this structure immutable (i.e. are all it's arguments known to be immutable)?
+    * @param immutable is this structure immutable (i.e. are all its arguments known to be immutable)?
     */
    private Structure(String functor, Term[] args, boolean immutable) {
       this.functor = functor;
@@ -236,7 +236,7 @@ public final class Structure implements Term {
    /**
     * Returns a {@code String} representation of this term.
     * <p>
-    * The value returned will consist of the structure's functor followed be a comma separated list of it's arguments
+    * The value returned will consist of the structure's functor followed be a comma separated list of its arguments
     * enclosed in brackets.
     * <p>
     * Example: {@code functor(arg1, arg2, arg3)}

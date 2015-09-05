@@ -39,7 +39,7 @@ public interface ProjogProperties {
     * Returns {@code true} if user defined predicates should be compiled at runtime.
     * <p>
     * Projog is able to convert user defined predicates specified using Prolog syntax into native Java code. Converting
-    * Prolog syntax into Java code offers optimised performance. The generation of the Java code and it's compilation
+    * Prolog syntax into Java code offers optimised performance. The generation of the Java code and its compilation
     * happens at runtime as new clauses are consulted. If runtime compilation is disabled then Projog operates in
     * "interpreted" mode - this will impact performance but avoid the need of compiling Java code at runtime.
     * 

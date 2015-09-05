@@ -47,7 +47,7 @@ public interface PredicateFactory {
     * <p>
     * This method will be called by {@link KnowledgeBase#addPredicateFactory(PredicateKey, String)} when this class is
     * registered with a {@code KnowledgeBase} - meaning this object will always have access to a {@code KnowledgeBase}
-    * by the time it's {@code getPredicate} method is invoked.
+    * by the time its {@code getPredicate} method is invoked.
     */
    void setKnowledgeBase(KnowledgeBase kb);
 

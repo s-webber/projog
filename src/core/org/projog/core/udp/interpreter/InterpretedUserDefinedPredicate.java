@@ -53,7 +53,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
     * The process for evaluating a user defined predicate is as follows:
     * <ul>
     * <li>Iterates through every clause of the user defined predicate.</li>
-    * <li>For each clause it attempts to unify the arguments in it's head (consequent) with the arguments in the query (
+    * <li>For each clause it attempts to unify the arguments in its head (consequent) with the arguments in the query (
     * {@code queryArgs}).</li>
     * <li>If the head of the clause can be unified with the query then an attempt is made to evaluate the body
     * (antecedant) of the clause.</li>

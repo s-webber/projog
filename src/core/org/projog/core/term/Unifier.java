@@ -29,7 +29,7 @@ public final class Unifier {
    /**
     * Unifies the arguments in the head (consequent) of a clause with a query.
     * <p>
-    * When Prolog attempts to answer a query it searches it's knowledge base for all rules with the same functor and
+    * When Prolog attempts to answer a query it searches its knowledge base for all rules with the same functor and
     * arity. For each rule founds it attempts to unify the arguments in the query with the arguments in the head
     * (consequent) of the rule. Only if the query and rule's head can be unified can it attempt to evaluate the body
     * (antecedant) of the rule to determine if the rule is true.

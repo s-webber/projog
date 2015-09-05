@@ -42,7 +42,7 @@ import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 final class ClauseMetaData {
    // TODO consider ways to improve this class through refactoring
    // In common with some other classes in org.projog.core.udp.compiler,
-   // this class is large and it's intentions not always immediately obvious.
+   // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
    // and the system tests (which check actual behaviour) should give confidence when refactoring. 
 

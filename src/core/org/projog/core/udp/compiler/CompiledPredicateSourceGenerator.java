@@ -46,7 +46,7 @@ import org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate;
 final class CompiledPredicateSourceGenerator {
    // TODO consider ways to improve this class through refactoring
    // In common with some other classes in org.projog.core.udp.compiler,
-   // this class is large and it's intentions not always immediately obvious.
+   // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
    // and the system tests (which check actual behaviour) should give confidence when refactoring. 
 
@@ -272,7 +272,7 @@ final class CompiledPredicateSourceGenerator {
    /**
     * Constructs a {@code backtrack()} method.
     * <p>
-    * Has to be {@code protected} if a tail recursive function so it can be used by it's
+    * Has to be {@code protected} if a tail recursive function so it can be used by its
     * {@link org.projog.core.udp.TailRecursivePredicate} superclass.
     */
    private void outputBacktrackMethod() {

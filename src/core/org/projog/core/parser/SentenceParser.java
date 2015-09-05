@@ -485,7 +485,7 @@ public class SentenceParser {
       // as we only want to continue parsing terms that have a lower priority level than that.
       // The reason this is slightly complicated is because of the overloaded use of a comma in Prolog -  
       // as well as acting as a delimiter in a sequence of arguments for a list or structure,
-      // a comma is also a predicate in it's own right (as a conjunction).
+      // a comma is also a predicate in its own right (as a conjunction).
       if (operands.infix(",")) {
          return getTerm(operands.getInfixPriority(",") - 1);
       } else {

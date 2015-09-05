@@ -26,7 +26,7 @@ import org.projog.core.term.Term;
  * Provides a skeletal implementation of {@link PredicateFactory} and {@link Predicate}. As {@link #isRetryable()}
  * always returns {@code true} {@link Predicate#evaluate(org.projog.core.term.Term...)} may be invoked on a
  * {@code code AbstractRetryablePredicate} multiple times for the same query. If a {@code AbstractRetryablePredicate}
- * need to preserve state between calls to {@link Predicate#evaluate(org.projog.core.term.Term...)} then it's
+ * need to preserve state between calls to {@link Predicate#evaluate(org.projog.core.term.Term...)} then its
  * implementation of {@link PredicateFactory#getPredicate(org.projog.core.term.Term...)} should return a new instance
  * each time.
  * 

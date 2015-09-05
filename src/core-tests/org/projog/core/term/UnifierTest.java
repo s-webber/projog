@@ -226,7 +226,7 @@ public class UnifierTest {
       assertSame(inputArg2, consequent[1]);
 
       // predicate that is first argument of consquent should now have an atom as 
-      // it's single argument rather than a variable
+      // its single argument rather than a variable
       assertSame(inputArg2, consequent[0].getArgument(0));
 
       // predicate that is first argument of input should still be a variable 

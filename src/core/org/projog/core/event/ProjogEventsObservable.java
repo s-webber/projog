@@ -24,7 +24,7 @@ import org.projog.core.KnowledgeBaseUtils;
 /**
  * Controls the registering and notification of observers of a {@link org.projog.core.KnowledgeBase}.
  * <p>
- * Each {@code ProjogEventsObservable} has it's own internal {@code java.util.Observable} that it delegates to.
+ * Each {@code ProjogEventsObservable} has its own internal {@code java.util.Observable} that it delegates to.
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ProjogEventsObservable} instance.
  * 

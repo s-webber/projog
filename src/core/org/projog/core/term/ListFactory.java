@@ -61,7 +61,7 @@ public final class ListFactory {
    /**
     * Returns a new {@link List} with the specified terms and a empty list as the final tail element.
     * <p>
-    * By having a {@code List} with a {@code List} as it's tail it is possible to represent an ordered sequence of the
+    * By having a {@code List} with a {@code List} as its tail it is possible to represent an ordered sequence of the
     * specified terms.
     * 
     * @param terms contents of the list
@@ -74,7 +74,7 @@ public final class ListFactory {
    /**
     * Returns a new {@link List} with the specified terms and the second parameter as the tail element.
     * <p>
-    * By having a {@code List} with a {@code List} as it's tail it is possible to represent an ordered sequence of the
+    * By having a {@code List} with a {@code List} as its tail it is possible to represent an ordered sequence of the
     * specified terms.
     * 
     * @param terms contents of the list

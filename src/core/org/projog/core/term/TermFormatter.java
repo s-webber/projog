@@ -42,7 +42,7 @@ public class TermFormatter {
     * Returns a string representation of the specified {@code Term}.
     * <p>
     * This method does take account of current operator declarations - thus an infix operator will be printed out
-    * between it's arguments. This method represents lists as a comma separated sequence of elements enclosed in square
+    * between its arguments. This method represents lists as a comma separated sequence of elements enclosed in square
     * brackets.
     * <p>
     * For example:

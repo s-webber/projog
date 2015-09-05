@@ -221,18 +221,18 @@ public final class Operands {
 
    private static enum Location {
       /**
-       * An operator that is positioned directly <i>before</i> it's single argument.
+       * An operator that is positioned directly <i>before</i> its single argument.
        * <p>
-       * e.g. {@code - X} where {@code -} is the operator (negation) and {@code X} is it's argument.
+       * e.g. {@code - X} where {@code -} is the operator (negation) and {@code X} is its argument.
        */
       PREFIX,
       /**
-       * An operator that is positioned <i>between</i> it's two argument.
+       * An operator that is positioned <i>between</i> its two arguments.
        * <p>
        * e.g. {@code X = 3} where {@code =} is the operator with the arguments {@code X} and {@code 3}.
        */
       INFIX,
-      /** An operator that is positioned directly <i>after</i> it's single argument. */
+      /** An operator that is positioned directly <i>after</i> its single argument. */
       POSTFIX
    }
 }

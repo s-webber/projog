@@ -21,7 +21,7 @@ import java.util.Map;
  * Represents a data structure with two {@link Term}s - a head and a tail.
  * <p>
  * The head and tail can be any {@link Term}s - including other {@code List}s. By having a {@code List} with a
- * {@code List} as it's tail it is possible to represent an ordered sequence of {@link Term}s of any length. The end of
+ * {@code List} as its tail it is possible to represent an ordered sequence of {@link Term}s of any length. The end of
  * an ordered sequence of {@link Term}s is normally represented as a tail having the value of an {@link EmptyList}.
  * 
  * @see EmptyList

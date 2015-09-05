@@ -31,7 +31,7 @@ public final class CutException extends RuntimeException {
     * <p>
     * Reuse a single instance to avoid the stack trace generation overhead of creating a new exception each time. The
     * {@code CutException} is specifically used for control flow in
-    * {@link org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate#evaluate(Term[])} and it's stack trace is
+    * {@link org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate#evaluate(Term[])} and its stack trace is
     * not required.
     */
    public static final CutException CUT_EXCEPTION = new CutException();

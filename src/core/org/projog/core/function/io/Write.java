@@ -35,7 +35,7 @@ import org.projog.core.term.TermFormatter;
  * <code>write(X)</code> - writes a term to the output stream.
  * <p>
  * Writes the term <code>X</code> to the current output stream. <code>write</code> takes account of current operator
- * declarations - thus an infix operator will be printed out between it's arguments. <code>write</code> represents lists
+ * declarations - thus an infix operator will be printed out between its arguments. <code>write</code> represents lists
  * as a comma separated sequence of elements enclosed in square brackets.
  * </p>
  * <p>

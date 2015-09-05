@@ -133,7 +133,7 @@ public class BootstrapTest {
             assertSame(boolean.class, m.getReturnType());
             success = true;
          } catch (NoSuchMethodException e) {
-            // if we can't find a matching method in the class then try it's superclass
+            // if we can't find a matching method in the class then try its superclass
             c = c.getSuperclass();
          }
       }

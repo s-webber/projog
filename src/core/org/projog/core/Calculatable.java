@@ -37,7 +37,7 @@ public interface Calculatable {
    /**
     * Provides a reference to a {@code KnowledgeBase}.
     * <p>
-    * Meaning this object will always have access to a {@code KnowledgeBase} by the time it's {@code calculate} method
+    * Meaning this object will always have access to a {@code KnowledgeBase} by the time its {@code calculate} method
     * is invoked.
     */
    void setKnowledgeBase(KnowledgeBase kb);

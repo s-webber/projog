@@ -48,14 +48,14 @@ public final class ProjogStackTraceElement {
    }
 
    /**
-    * Returns the position of the clause within it's user defined predicate.
+    * Returns the position of the clause within its user defined predicate.
     * <p>
     * e.g. If {@code getClauseIdx()} returns 0 then the clause represented by this object is the first clause in the
     * user defined function represented by {@link #getPredicateKey()}. If {@code getRuleIdx()} returns 9 then the clause
     * represented by this object is the tenth clause in the user defined function represented by
     * {@link #getPredicateKey()}.
     * 
-    * @return the position of the clause within it's user defined predicate (starting at 0)
+    * @return the position of the clause within its user defined predicate (starting at 0)
     */
    public int getClauseIdx() {
       return clauseIdx;

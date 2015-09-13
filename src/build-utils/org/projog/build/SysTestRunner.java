@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -178,10 +178,10 @@ public class SysTestRunner implements Observer {
          }
          if (isExhausted == query.isContinuesUntilFails()) {
             if (isInterpretedMode() && query.isContinuesUntilFails() == false) {
-               // The interpreted mode is not as good as the compiled mode as determining that a
-               // query definitely fail when an next attempt to evaluate it is made.
-               // Therefore, only when running in interpreted mode, do not fail just because
-               // the query was executed, and failed, once more then the tests suggested it should. 
+               // The "interpreted" mode is not as good as the "compiled" mode at determining that a
+               // query will definitely fail when the next attempt to evaluate it is made.
+               // Therefore, only when running in "interpreted" mode, do not fail just because
+               // the query was executed, and failed, one more time than the tests suggested it should.
             } else {
                throw new RuntimeException("isExhausted was: " + isExhausted + " but query.isContinuesUntilFails was: " + query.isContinuesUntilFails());
             }
@@ -256,9 +256,13 @@ public class SysTestRunner implements Observer {
     * Example: this method will consider the following two lines to be equal as it is the variable name ( <code>X</code>
     * and <code>A</code>) that are different:
     * 
-    * <pre>[2] CALL testCalculatables( X, 3, 7 )</pre>
+    * <pre>
+    * [2] CALL testCalculatables( X, 3, 7 )
+    * </pre>
     * 
-    * <pre>[2] CALL testCalculatables( A, 3, 7 )</pre>
+    * <pre>
+    * [2] CALL testCalculatables( A, 3, 7 )
+    * </pre>
     * </p>
     * 
     * @param expected the expected output specified by a system test

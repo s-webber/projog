@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -91,8 +91,8 @@ public final class TermComparator implements Comparator<Term> {
             case ATOM:
                return t1.getName().compareTo(t2.getName());
             case NAMED_VARIABLE:
-               // NOTE: uses Object's hashCode which is not guaranteed
-               // so may get different results in different jvms
+               // NOTE: uses Object's hashCode which is not guaranteed,
+               // so may get different results in different JVMs
                return v1.hashCode() > v2.hashCode() ? 1 : -1;
             default:
                throw new ProjogException("Unknown TermType: " + type1);

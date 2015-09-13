@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 package org.projog.build;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -40,16 +41,22 @@ import java.util.List;
  * <li>Test that that the query <code>?- test().</code> succeeds once and no attempt will be made to find an alternative
  * solution:
  * 
- * <pre>%TRUE test1()</pre>
+ * <pre>
+ * %TRUE test1()
+ * </pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> succeeds once and will fail when an attempt is made to find an
  * alternative solution:
  * 
- * <pre>%TRUE_NO test1()</pre>
+ * <pre>
+ * %TRUE_NO test1()
+ * </pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will fail on the first attempt to evaluate it:
  * 
- * <pre>%FALSE test1()</pre>
+ * <pre>
+ * %FALSE test1()
+ * </pre>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and there will be no attempt to
  * evaluate it for a fourth time:
@@ -122,17 +129,17 @@ import java.util.List;
  * 
  * <pre>
  * %QUERY repeat(3), write('hello world'), nl
- * %OUTPUT 
+ * %OUTPUT
  * % hello world
  * %
  * %OUTPUT
- * %ANSWER/ 
- * %OUTPUT 
+ * %ANSWER/
+ * %OUTPUT
  * % hello world
  * %
  * %OUTPUT
- * %ANSWER/ 
- * %OUTPUT 
+ * %ANSWER/
+ * %OUTPUT
  * % hello world
  * %
  * %OUTPUT
@@ -151,13 +158,15 @@ import java.util.List;
  * <li>The following would be ignored when running the system tests but would be used when constructing the web based
  * documentation to include a link to <code>test.html</code>:
  * 
- * <pre>%LINK test</pre>
+ * <pre>
+ * %LINK test
+ * </pre>
  * </li>
  * </ol>
  * </p>
  * <img src="doc-files/SysTestParser.png">
  */
-class SysTestParser {
+class SysTestParser implements Closeable {
    private static final String COMMENT_CHARACTER = "%";
    private static final String TRUE_TAG = "%TRUE";
    private static final String TRUE_NO_TAG = "%TRUE_NO";
@@ -175,10 +184,8 @@ class SysTestParser {
     */
    static List<SysTestQuery> getQueries(File testScript) {
       boolean hasLinks = false;
-      SysTestParser p = null;
-      try {
+      try (SysTestParser p = new SysTestParser(testScript)) {
          List<SysTestQuery> queries = new ArrayList<>();
-         p = new SysTestParser(testScript);
          SysTestContent c;
          while ((c = p.getNext()) != null) {
             if (c instanceof SysTestQuery) {
@@ -193,10 +200,6 @@ class SysTestParser {
          return queries;
       } catch (IOException e) {
          throw new RuntimeException("Exception parsing test script: " + testScript, e);
-      } finally {
-         if (p != null) {
-            p.close();
-         }
       }
    }
 
@@ -227,28 +230,7 @@ class SysTestParser {
          query.setContinuesUntilFails(true);
          return query;
       } else if (line.startsWith(QUERY_TAG)) {
-         String queryStr = getText(line);
-         SysTestQuery query = new SysTestQuery(queryStr);
-         query.getAnswers().addAll(getAnswers());
-         mark();
-         String nextLine = br.readLine();
-         if (nextLine != null && nextLine.startsWith(OUTPUT_TAG)) {
-            String expectedOutput = readLinesUntilNextTag(nextLine, OUTPUT_TAG);
-            query.setExpectedOutput(expectedOutput);
-            query.setContinuesUntilFails(true);
-
-            mark();
-            nextLine = br.readLine();
-         }
-         if (nextLine != null && nextLine.startsWith(NO_TAG)) {
-            query.setContinuesUntilFails(true);
-         } else if (nextLine != null && nextLine.startsWith(EXCEPTION_TAG)) {
-            String expectedExceptionMessage = readLinesUntilNextTag(nextLine, EXCEPTION_TAG);
-            query.setExpectedExceptionMessage(expectedExceptionMessage);
-         } else {
-            reset();
-         }
-         return query;
+         return getQuery(line);
       } else if (isStandardComment(line)) {
          return new SysTestComment(getComment(line));
       } else if (isMarkupComment(line)) {
@@ -264,6 +246,31 @@ class SysTestParser {
       // single correct answer with no assignments
       queryWithSingleCorrectAnswer.getAnswers().add(new SysTestAnswer());
       return queryWithSingleCorrectAnswer;
+   }
+
+   private SysTestQuery getQuery(final String line) throws IOException {
+      String queryStr = getText(line);
+      SysTestQuery query = new SysTestQuery(queryStr);
+      query.getAnswers().addAll(getAnswers());
+      mark();
+      String nextLine = br.readLine();
+      if (nextLine != null && nextLine.startsWith(OUTPUT_TAG)) {
+         String expectedOutput = readLinesUntilNextTag(nextLine, OUTPUT_TAG);
+         query.setExpectedOutput(expectedOutput);
+         query.setContinuesUntilFails(true);
+
+         mark();
+         nextLine = br.readLine();
+      }
+      if (nextLine != null && nextLine.startsWith(NO_TAG)) {
+         query.setContinuesUntilFails(true);
+      } else if (nextLine != null && nextLine.startsWith(EXCEPTION_TAG)) {
+         String expectedExceptionMessage = readLinesUntilNextTag(nextLine, EXCEPTION_TAG);
+         query.setExpectedExceptionMessage(expectedExceptionMessage);
+      } else {
+         reset();
+      }
+      return query;
    }
 
    private List<SysTestAnswer> getAnswers() throws IOException {
@@ -403,7 +410,8 @@ class SysTestParser {
       br.mark(0);
    }
 
-   void close() {
+   @Override
+   public void close() {
       try {
          if (br != null) {
             br.close();

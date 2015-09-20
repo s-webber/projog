@@ -45,7 +45,7 @@ final class CompiledPredicateVariables {
    static final String TEMP_NUMERIC_PREFIX = "y";
 
    private static final String TEMP_PREFIX = "_";
-   private static final String VARIABLE_PREFIX = "v";
+   private static final String MEMBER_VARIABLE_PREFIX = "v";
    private static final String TERM_PREFIX = "t";
    private static final String COMPILED_PREDICATE_PREFIX = "c";
    private static final String BOOLEAN_PREFIX = "b";
@@ -211,7 +211,7 @@ final class CompiledPredicateVariables {
       } else {
          id = variable.getId();
       }
-      return VARIABLE_PREFIX + clauseMetaData.getClauseIndex() + "_" + id;
+      return MEMBER_VARIABLE_PREFIX + clauseMetaData.getClauseIndex() + "_" + id;
    }
 
    private boolean isAnonymousVariable(Variable v) {

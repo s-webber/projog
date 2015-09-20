@@ -312,7 +312,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       }
       clauseCtr = 9;
       backtrack();
-      // Fail 1
       return false;
    }
    public final boolean isRetryable() {

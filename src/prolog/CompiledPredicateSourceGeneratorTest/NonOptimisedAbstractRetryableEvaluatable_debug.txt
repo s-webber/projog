@@ -91,7 +91,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             return true;
          }
       }
-      // Fail 1
       if (d) {
          s.logFail(this, new Term[]{a0});
       }

@@ -107,7 +107,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       }
       clauseCtr = 4;
       backtrack();
-      // Fail 1
       if (d) {
          s.logFail(this, new Term[]{a0});
       }

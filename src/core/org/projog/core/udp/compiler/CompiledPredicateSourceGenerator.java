@@ -474,7 +474,6 @@ final class CompiledPredicateSourceGenerator {
       } else {
          outputMultipleClausesEvaluateBlock(clauses);
       }
-      w.comment("Fail 1");
       logFail();
       w.returnFalse();
       w.endBlock();

@@ -40,14 +40,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _2 = v0_RuleNo;
             v0_RuleNo = v0_RuleNo.getTerm();
             if (!v0_RuleNo.unify(INTEGER_1)) {
-               v0_RuleNo.backtrack();
+               if (v0_RuleNo!=null) v0_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v0_RuleNo.backtrack();
+            if (v0_RuleNo!=null) v0_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -113,14 +113,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             v1_RuleNo = v1_RuleNo.getTerm();
             conjunctionCtr = 2;
             if (!v1_RuleNo.unify(INTEGER_2)) {
-               v1_RuleNo.backtrack();
+               if (v1_RuleNo!=null) v1_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 3;
             return true;
             case 3:
             conjunctionCtr = 2;
-            v1_RuleNo.backtrack();
+            if (v1_RuleNo!=null) v1_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -150,14 +150,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _6 = v2_RuleNo;
             v2_RuleNo = v2_RuleNo.getTerm();
             if (!v2_RuleNo.unify(INTEGER_3)) {
-               v2_RuleNo.backtrack();
+               if (v2_RuleNo!=null) v2_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v2_RuleNo.backtrack();
+            if (v2_RuleNo!=null) v2_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -187,14 +187,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _7 = v3_RuleNo;
             v3_RuleNo = v3_RuleNo.getTerm();
             if (!v3_RuleNo.unify(INTEGER_4)) {
-               v3_RuleNo.backtrack();
+               if (v3_RuleNo!=null) v3_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v3_RuleNo.backtrack();
+            if (v3_RuleNo!=null) v3_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -214,23 +214,23 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             v4_Y = CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr6++];
             if (!v4_Y.unify(v4_X)) {
-               v4_X.backtrack();
-               v4_Y.backtrack();
+               if (v4_X!=null) v4_X.backtrack();
+               if (v4_Y!=null) v4_Y.backtrack();
                break mainloop;
             }
             if (!v4_RuleNo.unify(INTEGER_5)) {
-               v4_X.backtrack();
-               v4_Y.backtrack();
-               v4_RuleNo.backtrack();
+               if (v4_X!=null) v4_X.backtrack();
+               if (v4_Y!=null) v4_Y.backtrack();
+               if (v4_RuleNo!=null) v4_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v4_X.backtrack();
-            v4_Y.backtrack();
-            v4_RuleNo.backtrack();
+            if (v4_X!=null) v4_X.backtrack();
+            if (v4_Y!=null) v4_Y.backtrack();
+            if (v4_RuleNo!=null) v4_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -250,23 +250,23 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             }
             v5_Y = CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1.data[inlinedCtr7++];
             if (!v5_X.unify(v5_Y)) {
-               v5_Y.backtrack();
-               v5_X.backtrack();
+               if (v5_Y!=null) v5_Y.backtrack();
+               if (v5_X!=null) v5_X.backtrack();
                break mainloop;
             }
             if (!v5_RuleNo.unify(INTEGER_6)) {
-               v5_Y.backtrack();
-               v5_X.backtrack();
-               v5_RuleNo.backtrack();
+               if (v5_Y!=null) v5_Y.backtrack();
+               if (v5_X!=null) v5_X.backtrack();
+               if (v5_RuleNo!=null) v5_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v5_Y.backtrack();
-            v5_X.backtrack();
-            v5_RuleNo.backtrack();
+            if (v5_Y!=null) v5_Y.backtrack();
+            if (v5_X!=null) v5_X.backtrack();
+            if (v5_RuleNo!=null) v5_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -305,14 +305,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _10 = v6_Y;
             v6_Y = v6_Y.getTerm();
             if (!v6_RuleNo.unify(INTEGER_7)) {
-               v6_RuleNo.backtrack();
+               if (v6_RuleNo!=null) v6_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v6_RuleNo.backtrack();
+            if (v6_RuleNo!=null) v6_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -356,14 +356,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _13 = v7_Y;
             v7_Y = v7_Y.getTerm();
             if (!v7_RuleNo.unify(INTEGER_8)) {
-               v7_RuleNo.backtrack();
+               if (v7_RuleNo!=null) v7_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v7_RuleNo.backtrack();
+            if (v7_RuleNo!=null) v7_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -425,14 +425,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             v8_RuleNo = v8_RuleNo.getTerm();
             conjunctionCtr = 1;
             if (!v8_RuleNo.unify(INTEGER_9)) {
-               v8_RuleNo.backtrack();
+               if (v8_RuleNo!=null) v8_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 2;
             return true;
             case 2:
             conjunctionCtr = 1;
-            v8_RuleNo.backtrack();
+            if (v8_RuleNo!=null) v8_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -472,14 +472,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _22 = v9_RuleNo;
             v9_RuleNo = v9_RuleNo.getTerm();
             if (!v9_RuleNo.unify(INTEGER_10)) {
-               v9_RuleNo.backtrack();
+               if (v9_RuleNo!=null) v9_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v9_RuleNo.backtrack();
+            if (v9_RuleNo!=null) v9_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -519,14 +519,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _25 = v10_RuleNo;
             v10_RuleNo = v10_RuleNo.getTerm();
             if (!v10_RuleNo.unify(INTEGER_11)) {
-               v10_RuleNo.backtrack();
+               if (v10_RuleNo!=null) v10_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v10_RuleNo.backtrack();
+            if (v10_RuleNo!=null) v10_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -566,14 +566,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _28 = v11_RuleNo;
             v11_RuleNo = v11_RuleNo.getTerm();
             if (!v11_RuleNo.unify(INTEGER_12)) {
-               v11_RuleNo.backtrack();
+               if (v11_RuleNo!=null) v11_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v11_RuleNo.backtrack();
+            if (v11_RuleNo!=null) v11_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -613,14 +613,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _31 = v12_RuleNo;
             v12_RuleNo = v12_RuleNo.getTerm();
             if (!v12_RuleNo.unify(INTEGER_13)) {
-               v12_RuleNo.backtrack();
+               if (v12_RuleNo!=null) v12_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v12_RuleNo.backtrack();
+            if (v12_RuleNo!=null) v12_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -660,14 +660,14 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _34 = v13_RuleNo;
             v13_RuleNo = v13_RuleNo.getTerm();
             if (!v13_RuleNo.unify(INTEGER_14)) {
-               v13_RuleNo.backtrack();
+               if (v13_RuleNo!=null) v13_RuleNo.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v13_RuleNo.backtrack();
+            if (v13_RuleNo!=null) v13_RuleNo.backtrack();
          }
       } while (true);
    }
@@ -881,7 +881,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       }
       clauseCtr = 14;
       backtrack();
-      // Fail 1
       return false;
    }
    public final boolean isRetryable() {

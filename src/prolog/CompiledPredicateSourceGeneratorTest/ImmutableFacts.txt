@@ -6,7 +6,7 @@ import org.projog.core.term.*;
 import org.projog.core.*;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 // testImmutableFacts/4
-public final class CompiledPredicate11 implements CompiledPredicate {
+public final class %CLASS_NAME% implements CompiledPredicate {
    private final boolean initRule0() {
       v0_W = a0;
       v0_X = a1;
@@ -90,7 +90,7 @@ public final class CompiledPredicate11 implements CompiledPredicate {
             v0_0_ = v0_0_.getTerm();
             conjunctionCtr = 1;
             if (!IsAtom_1.evaluate(v0_W.getTerm())) {
-               v0_W.backtrack();
+               if (v0_W!=null) v0_W.backtrack();
                break mainloop;
             }
             case 2:
@@ -106,7 +106,7 @@ public final class CompiledPredicate11 implements CompiledPredicate {
             do {
                if (inlinedCtr2>2) {
                   inlinedCtr2 = 0;
-                  v0_W.backtrack();
+                  if (v0_W!=null) v0_W.backtrack();
                   conjunctionCtr = 1;
                   break mainloop;
                }
@@ -167,18 +167,18 @@ public final class CompiledPredicate11 implements CompiledPredicate {
                break mainloop;
             }
             if (!IsAtom_1.evaluate(v0_X.getTerm())) {
-               v0_X.backtrack();
+               if (v0_X!=null) v0_X.backtrack();
                break mainloop;
             }
             if (!IsAtom_1.evaluate(v0_Y.getTerm())) {
-               v0_X.backtrack();
-               v0_Y.backtrack();
+               if (v0_X!=null) v0_X.backtrack();
+               if (v0_Y!=null) v0_Y.backtrack();
                break mainloop;
             }
             if (!IsAtom_1.evaluate(v0_Z.getTerm())) {
-               v0_X.backtrack();
-               v0_Y.backtrack();
-               v0_Z.backtrack();
+               if (v0_X!=null) v0_X.backtrack();
+               if (v0_Y!=null) v0_Y.backtrack();
+               if (v0_Z!=null) v0_Z.backtrack();
                break mainloop;
             }
             case 4:
@@ -197,9 +197,9 @@ public final class CompiledPredicate11 implements CompiledPredicate {
             do {
                if (inlinedCtr4>2) {
                   inlinedCtr4 = 0;
-                  v0_X.backtrack();
-                  v0_Y.backtrack();
-                  v0_Z.backtrack();
+                  if (v0_X!=null) v0_X.backtrack();
+                  if (v0_Y!=null) v0_Y.backtrack();
+                  if (v0_Z!=null) v0_Z.backtrack();
                   conjunctionCtr = 3;
                   break mainloop;
                }
@@ -234,12 +234,12 @@ public final class CompiledPredicate11 implements CompiledPredicate {
          }
       } while (true);
    }
-   public CompiledPredicate11(final KnowledgeBase _kb) {
+   public %CLASS_NAME%(final KnowledgeBase _kb) {
       CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_1 = (org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate)((StaticUserDefinedPredicateFactory)_kb.getPredicateFactory(new PredicateKey("multiple_rules_with_single_immutable_argument", 1))).getActualPredicateFactory();
       CompiledPredicateSourceGeneratorTest$DummyUserDefinedPredicateFactory_3 = (org.projog.core.udp.MultipleRulesWithMultipleImmutableArgumentsPredicate)((StaticUserDefinedPredicateFactory)_kb.getPredicateFactory(new PredicateKey("multiple_rules_with_multiple_immutable_arguments", 3))).getActualPredicateFactory();
       IsAtom_1 = (org.projog.core.function.classify.IsAtom)_kb.getPredicateFactory(new PredicateKey("atom", 1));
    }
-   CompiledPredicate11(final Term in0, final Term in1, final Term in2, final Term in3) {
+   %CLASS_NAME%(final Term in0, final Term in1, final Term in2, final Term in3) {
       a0 = in0.getTerm();
       a1 = in1.getTerm();
       a2 = in2.getTerm();
@@ -263,7 +263,6 @@ public final class CompiledPredicate11 implements CompiledPredicate {
             return true;
          }
       }
-      // Fail 1
       return false;
    }
    public final boolean isRetryable() {
@@ -291,7 +290,7 @@ public final class CompiledPredicate11 implements CompiledPredicate {
       throw new RuntimeException();
    }
    public final Predicate getPredicate(final Term... termArgs) {
-      return new CompiledPredicate11(termArgs[0], termArgs[1], termArgs[2], termArgs[3]);
+      return new %CLASS_NAME%(termArgs[0], termArgs[1], termArgs[2], termArgs[3]);
    }
    private static final Term ATOM = new Atom("z");
    private static final Term ATOM_0 = new Atom("a");

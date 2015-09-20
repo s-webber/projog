@@ -655,7 +655,13 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    }
 
    void outputBacktrack(String variableId) {
-      writeStatement(variableId + ".backtrack()");
+      String statement = variableId + ".backtrack()";
+      if (classVariables.isMemberVariable(variableId)) {
+         // if we are attempting to backtrack a member variable then, the way the compiler is currently written,
+         // we cannot be sure it has even been assigned yet - so need to include a null check
+         statement = "if (" + variableId + "!=null) " + statement;
+      }
+      writeStatement(statement);
    }
 
    boolean isSpyPointsEnabled() {

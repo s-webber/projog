@@ -38,24 +38,24 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             _2 = v0_C;
             v0_C = v0_C.getTerm();
             if (NUMERIC_TERM_COMPARATOR.compare(v0_A, FRACTION_1_5, c)!=1) {
-               v0_A.backtrack();
-               v0_B.backtrack();
-               v0_C.backtrack();
+               if (v0_A!=null) v0_A.backtrack();
+               if (v0_B!=null) v0_B.backtrack();
+               if (v0_C!=null) v0_C.backtrack();
                break mainloop;
             }
             if (NUMERIC_TERM_COMPARATOR.compare(v0_A, FRACTION_18_5, c)>0) {
-               v0_A.backtrack();
-               v0_B.backtrack();
-               v0_C.backtrack();
+               if (v0_A!=null) v0_A.backtrack();
+               if (v0_B!=null) v0_B.backtrack();
+               if (v0_C!=null) v0_C.backtrack();
                break mainloop;
             }
             conjunctionCtr = 1;
             return true;
             case 1:
             conjunctionCtr = 0;
-            v0_A.backtrack();
-            v0_B.backtrack();
-            v0_C.backtrack();
+            if (v0_A!=null) v0_A.backtrack();
+            if (v0_B!=null) v0_B.backtrack();
+            if (v0_C!=null) v0_C.backtrack();
          }
       } while (true);
    }
@@ -82,7 +82,6 @@ public final class %CLASS_NAME% implements CompiledPredicate {
             return true;
          }
       }
-      // Fail 1
       return false;
    }
    public final boolean isRetryable() {

@@ -76,7 +76,7 @@ import org.projog.core.term.Term;
  * </p>
  * <p>
  * If <code>Z</code> is an uninstantiated variable then <code>Z</code> will be successively unified with all integer
- * values in the range from <code>X</code> to </code>Y</code>.
+ * values in the range from <code>X</code> to <code>Y</code>.
  * </p>
  */
 public final class Between implements PredicateFactory {

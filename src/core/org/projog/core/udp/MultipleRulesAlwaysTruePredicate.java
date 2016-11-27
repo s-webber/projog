@@ -33,6 +33,7 @@ import org.projog.core.term.Term;
  * Note: Similar to {@link org.projog.core.function.flow.RepeatSetAmount} - but implemented as a separate class rather
  * than reused as {@code RepeatSetAmount} only works with one argument but {@code MulitpleRulesAlwaysTruePredicate}
  * works with any number of arguments.
+ * </p>
  */
 public final class MultipleRulesAlwaysTruePredicate extends AbstractRetryablePredicate {
    private final int limit;

@@ -39,13 +39,12 @@ import org.projog.core.term.Variable;
  %TRUE predsort(compare, [], [])
  */
 /**
- * <code>predsort(X,Y,Z)</code> - sorts a list using the specifed predicate.
+ * <code>predsort(X,Y,Z)</code> - sorts a list using the specified predicate.
  * <p>
  * Sorts the list represented by <code>Y</code> using the predicate represented by <code>X</code> - and attempts to unify the result with <code>Z</code>.
  * The predicate represented by <code>X</code> must indicate whether the second argument is equal, less than or greater than the third argument -  
  * by unifying the first argument with an atom which has the value <code>=</code>, <code>&lt;</code> or <code>&gt;</code>. 
  * </p>
- * </
  */
 public final class PredSort extends AbstractSingletonPredicate {
    @Override

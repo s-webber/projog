@@ -75,7 +75,7 @@ public final class KnowledgeBaseUtils {
     * When using {@link ProjogSystemProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
     * {@code projog-core.jar}).
     * 
-    * @link ProjogSourceReader#parseResource(KnowledgeBase, String)
+    * @see ProjogSourceReader#parseResource(KnowledgeBase, String)
     */
    public static void bootstrap(KnowledgeBase kb) {
       String bootstrapScript = getProjogProperties(kb).getBootstrapScript();

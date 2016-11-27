@@ -137,7 +137,7 @@ import org.projog.core.term.TermType;
  * <code>atom_concat(X, Y, Z)</code> - concatenates atom names.
  * <p>
  * <code>atom_concat(X, Y, Z)</code> succeeds if the name of atom <code>Z</code> matches the concatenation of the names
- * of atoms <code>X<code> and <code>Y</code>.
+ * of atoms <code>X</code> and <code>Y</code>.
  * </p>
  */
 public final class AtomConcat implements PredicateFactory {

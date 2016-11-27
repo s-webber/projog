@@ -73,7 +73,7 @@ public class KnowledgeBaseServiceLocator {
     * Adds the specified {@code instance} with the specified {@code referenceType} as its key.
     * 
     * @throws IllegalArgumentException If {@code instance} is not an instance of {@code ReferenceType}.
-    * @throws IlegalStateException If there is already a service associated with {@code referenceType}.
+    * @throws IllegalStateException If there is already a service associated with {@code referenceType}.
     */
    public void addInstance(Class<?> referenceType, Object instance) {
       assertInstanceOf(referenceType, instance);

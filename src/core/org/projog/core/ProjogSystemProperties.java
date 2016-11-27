@@ -31,6 +31,7 @@ package org.projog.core;
  * included in the Java classpath of the application being executed. Defaults to <code>projogGeneratedClasses</code>.</li>
  * </ul>
  * </p>
+ * <p>
  * Example of setting system properties when launching Java:
  * 
  * <pre>

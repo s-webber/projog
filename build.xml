@@ -13,6 +13,7 @@
 	<property name="dynamicContentDir" value="projogGeneratedClasses"/>
 	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
 	<property name="zipPrefixDir" value="projog-0.1.0"/>
+	<property name="javac-target" value="1.7"/>
 
 	<tstamp>
 		<format property="manifest.timestamp" pattern="yyyy-MM-dd HH:mm"/>
@@ -41,8 +42,8 @@
 	<target name="compile.core">
 		<!-- compile to classes -->
 		<mkdir dir="build/classes/core"/>
-		<javac srcdir="src/core" destdir="build/classes/core" debug="on" includeantruntime="false">
-			<compilerarg value="-Xlint"/>
+		<javac srcdir="src/core" destdir="build/classes/core" debug="on" includeantruntime="false" source="${javac-target}" target="${javac-target}">
+			<compilerarg value="-Xlint:-options"/>
 		</javac>
 	</target>
 
@@ -51,8 +52,8 @@
 		<mkdir dir="build/lib"/>
 		<jar destfile="${core-jar}">
 			<manifest>
-			    <attribute name="Main-Class" value="${mainClass}"/>
-			    <attribute name="Build-Timestamp" value="${manifest.timestamp}"/>
+				<attribute name="Main-Class" value="${mainClass}"/>
+				<attribute name="Build-Timestamp" value="${manifest.timestamp}"/>
 			</manifest>
 			<fileset dir="etc">
 				<include name="projog-bootstrap.pl"/>
@@ -69,8 +70,8 @@
 			<pathelement location="${junit-jar}"/>
 			<pathelement location="${core-jar}"/>
 		</path>
-		<javac srcdir="src/core-tests" destdir="build/classes/core-tests" debug="on" includeantruntime="false">
-            <compilerarg value="-Xlint"/>
+		<javac srcdir="src/core-tests" destdir="build/classes/core-tests" debug="on" includeantruntime="false" source="${javac-target}" target="${javac-target}">
+			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="classpath.compile.tests"/>
 		</javac>
 	</target>
@@ -81,8 +82,8 @@
 			<pathelement location="${core-jar}"/>
 			<pathelement location="build/classes/core-tests"/>
 		</path>
-		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false">
-            <compilerarg value="-Xlint"/>
+		<javac srcdir="src/build-utils" destdir="build/classes/build-utils" debug="on" includeantruntime="false" source="${javac-target}" target="${javac-target}">
+			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="classpath.compile.build-utils"/>
 		</javac>
 	</target>
@@ -93,8 +94,8 @@
 			<pathelement location="${junit-jar}"/>
 			<pathelement location="build/classes/build-utils"/>
 		</path>
-		<javac srcdir="src/build-utils-tests" destdir="build/classes/build-utils-tests" debug="on" includeantruntime="false">
-            <compilerarg value="-Xlint"/>
+		<javac srcdir="src/build-utils-tests" destdir="build/classes/build-utils-tests" debug="on" includeantruntime="false" source="${javac-target}" target="${javac-target}">
+			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="classpath.compile.build-utils-tests"/>
 		</javac>
 	</target>
@@ -132,7 +133,7 @@
 			<classpath location="${hamcrest-jar}"/>
 			<classpath location="${core-jar}"/>
 			<classpath location="build/classes/build-utils"/>
-			<classpath location="build/classes/build-utils-tests"/>			
+			<classpath location="build/classes/build-utils-tests"/>
 			<batchtest fork="yes" todir=".">
 				<fileset dir="src/build-utils-tests">
 					<include name="**/*Test.java"/>
@@ -141,7 +142,7 @@
 		</junit>
 	</target>
 
-	<target name="unit-test" depends="compile,unit-test.core,unit-test.build-utils" 
+	<target name="unit-test" depends="compile,unit-test.core,unit-test.build-utils"
 		    description="runs junit tests"/>
 
 <!-- SYSTEM TESTS -->
@@ -153,7 +154,7 @@
 				<pathelement location="build/classes/build-utils"/>
 			</classpath>
 		</java>
-		
+
 		<!-- Copy example prolog scripts to where SysTestRunner will look for them. -->
 		<copy todir="build/prolog">
 			<fileset dir="src/prolog"/>

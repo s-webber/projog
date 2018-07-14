@@ -82,11 +82,11 @@ final class JavaSourceCompiler {
       Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(javaFileObjects);
 
       String[] compileOptions = new String[] {"-d", dynamicContentDir.getPath()};
-      Iterable<String> compilationOptionss = Arrays.asList(compileOptions);
+      Iterable<String> compilationOptions = Arrays.asList(compileOptions);
 
       DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-      CompilationTask compilerTask = compiler.getTask(null, stdFileManager, diagnostics, compilationOptionss, null, compilationUnits);
+      CompilationTask compilerTask = compiler.getTask(null, stdFileManager, diagnostics, compilationOptions, null, compilationUnits);
 
       // Invoke call on compilerTask to invoke compilation.
       boolean status = compilerTask.call();

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
-import org.projog.core.ProjogSystemProperties;
+import org.projog.core.ProjogDefaultProperties;
 import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -58,7 +58,7 @@ import org.projog.core.udp.StaticUserDefinedPredicateFactory;
  * <p>
  * NOTE: For these tests to work you need to have "projogGeneratedClasses" in the classpath as that will be the output
  * directory for bytecode generated at runtime.
- * 
+ *
  * @see org.projog.TestUtils#COMPILATION_ENABLED_PROPERTIES
  */
 public class CompiledPredicateSourceGeneratorTest {
@@ -79,7 +79,7 @@ public class CompiledPredicateSourceGeneratorTest {
 
    public CompiledPredicateSourceGeneratorTest() {
       debugEnabledKnowledgeBase = TestUtils.createKnowledgeBase();
-      debugDisabledKnowledgeBase = TestUtils.createKnowledgeBase(new ProjogSystemProperties() {
+      debugDisabledKnowledgeBase = TestUtils.createKnowledgeBase(new ProjogDefaultProperties() {
          @Override
          public boolean isSpyPointsEnabled() {
             return false;
@@ -228,7 +228,7 @@ public class CompiledPredicateSourceGeneratorTest {
 
    /**
     * Translate the specified clauses into Java syntax.
-    * 
+    *
     * @param implications the Prolog clauses to convert
     * @return newly created file containing Java source code
     */

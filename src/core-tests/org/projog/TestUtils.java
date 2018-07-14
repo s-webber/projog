@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,8 +29,8 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Operands;
 import org.projog.core.PredicateKey;
+import org.projog.core.ProjogDefaultProperties;
 import org.projog.core.ProjogProperties;
-import org.projog.core.ProjogSystemProperties;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
@@ -50,13 +50,13 @@ public class TestUtils {
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
    public static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_calculatable", 2);
    public static final File BOOTSTRAP_FILE = new File("etc/projog-bootstrap.pl");
-   public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogSystemProperties() {
+   public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogDefaultProperties() {
       @Override
       public boolean isRuntimeCompilationEnabled() {
          return false;
       }
    };
-   public static final ProjogProperties COMPILATION_ENABLED_PROPERTIES = new ProjogSystemProperties() {
+   public static final ProjogProperties COMPILATION_ENABLED_PROPERTIES = new ProjogDefaultProperties() {
       @Override
       public boolean isRuntimeCompilationEnabled() {
          return true;

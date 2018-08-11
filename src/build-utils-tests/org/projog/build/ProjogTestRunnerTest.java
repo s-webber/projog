@@ -26,7 +26,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-public class SysTestRunnerTest {
+public class ProjogTestRunnerTest {
    @Test
    public void test() {
       final String expectedErrorMessages = getExpectedErrorMessages();
@@ -34,7 +34,7 @@ public class SysTestRunnerTest {
       final int expectedQueryCount = 23;
       final int expectedErrorCount = 13;
 
-      SysTestRunner.Result r = SysTestRunner.test(TEST_RESOURCES_DIR);
+      ProjogTestRunner.Result r = ProjogTestRunner.test(TEST_RESOURCES_DIR);
       assertEquals(expectedScriptsCount, r.getScriptsCount());
       assertEquals(expectedQueryCount, r.getQueryCount());
       assertEquals(expectedErrorCount, r.getErrorCount());
@@ -55,6 +55,6 @@ public class SysTestRunnerTest {
    }
 
    private String getExpectedErrorMessages() {
-      return readText(new File(TEST_RESOURCES_DIR, "SysTestRunnerTest_ExpectedErrors.txt"));
+      return readText(new File(TEST_RESOURCES_DIR, "ProjogTestRunnerTest_ExpectedErrors.txt"));
    }
 }

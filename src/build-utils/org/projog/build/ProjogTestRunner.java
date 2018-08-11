@@ -50,11 +50,11 @@ import org.projog.core.term.TermType;
  *
  * @see SysTestParser
  */
-public final class SysTestRunner implements Observer {
+public final class ProjogTestRunner implements Observer {
    private static final boolean DEBUG = false;
    private static final ProjogSystemProperties SYSTEM_PROPERTIES = new ProjogSystemProperties();
 
-   private final File redirectedOutputFile = new File("SysTestRunnerOutput_" + hashCode() + ".tmp");
+   private final File redirectedOutputFile = new File("ProjogTestRunnerOutput_" + hashCode() + ".tmp");
    private final Map<Object, Integer> spypointSourceIds = new HashMap<>();
    private Projog projog;
    private Result stats;
@@ -62,7 +62,7 @@ public final class SysTestRunner implements Observer {
    /**
     * @see #checkScripts(List)
     */
-   private SysTestRunner() {
+   private ProjogTestRunner() {
    }
 
    private static List<File> getScriptsToRun(File f) {
@@ -95,7 +95,7 @@ public final class SysTestRunner implements Observer {
    }
 
    private static Result checkScripts(List<File> scripts) {
-      return new SysTestRunner()._checkScripts(scripts);
+      return new ProjogTestRunner()._checkScripts(scripts);
    }
 
    private Result _checkScripts(List<File> scripts) {

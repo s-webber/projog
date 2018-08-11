@@ -43,11 +43,11 @@ import org.projog.core.PredicateFactory;
  * The {@code .txt} file contains the contents of the Javadoc comment of the class. The {@code .pl} file contains the
  * Prolog syntax contained in the "{@code TEST}" comment at the top of the class.
  */
-public final class SysTestGenerator {
+public final class ProjogTestGenerator {
    private final String packageName;
    private final File outputDirectory;
 
-   private SysTestGenerator(String packageName, File outputDirectory) {
+   private ProjogTestGenerator(String packageName, File outputDirectory) {
       this.packageName = packageName;
       this.outputDirectory = outputDirectory;
    }
@@ -188,15 +188,15 @@ public final class SysTestGenerator {
    }
 
    public static void generate(File rootJavaDirectory, String packageName, File outputDirectory) {
-      SysTestGenerator sysTestGenerator = new SysTestGenerator(packageName, outputDirectory);
-      List<File> javaSourceFiles = sysTestGenerator.getDocumentableJavaSourceFiles(new File(rootJavaDirectory, packageName.replace('.', File.separatorChar)));
+      ProjogTestGenerator generator = new ProjogTestGenerator(packageName, outputDirectory);
+      List<File> javaSourceFiles = generator.getDocumentableJavaSourceFiles(new File(rootJavaDirectory, packageName.replace('.', File.separatorChar)));
       Map<String, File> alreadyProcessed = new HashMap<String, File>();
       for (File f : javaSourceFiles) {
          File previousEntry = alreadyProcessed.put(f.getName(), f);
          if (previousEntry != null) {
             throw new IllegalArgumentException("Two instances of: " + f.getName() + " first: " + previousEntry + " second: " + f);
          }
-         sysTestGenerator.produceScriptFileFromJavaFile(f);
+         generator.produceScriptFileFromJavaFile(f);
       }
    }
 

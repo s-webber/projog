@@ -135,22 +135,22 @@
 
 <!-- SYSTEM TESTS -->
 	<target name="sys-test.generate">
-		<!-- Extract prolog code from comments in java source code into seperate files for use by SysTestRunner. -->
-		<java classname="org.projog.build.SysTestGenerator" failonerror="true">
+		<!-- Extract prolog code from comments in java source code into seperate files for use by ProjogTestRunner. -->
+		<java classname="org.projog.build.ProjogTestGenerator" failonerror="true">
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>
 			</classpath>
 		</java>
 
-		<!-- Copy example prolog scripts to where SysTestRunner will look for them. -->
+		<!-- Copy example prolog scripts to where ProjogTestRunner will look for them. -->
 		<copy todir="build/prolog">
 			<fileset dir="src/prolog"/>
 		</copy>
 	</target>
 
 	<target name="sys-test.run.interpreted">
-		<java classname="org.projog.build.SysTestRunner" failonerror="true" fork="true">
+		<java classname="org.projog.build.ProjogTestRunner" failonerror="true" fork="true">
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>
@@ -161,7 +161,7 @@
 	</target>
 
 	<target name="sys-test.run.compiled">
-		<java classname="org.projog.build.SysTestRunner" failonerror="true" fork="true">
+		<java classname="org.projog.build.ProjogTestRunner" failonerror="true" fork="true">
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>

@@ -16,7 +16,7 @@ SysTestQuery o-- SysTestAnswer
 
 SysTestParser ..> SysTestContent
 
-SysTestRunner o-- SysTestParser
+ProjogTestRunner o-- SysTestParser
 CodeExamplesWebPageCreator o-- SysTestParser
 
 show SysTestParser method

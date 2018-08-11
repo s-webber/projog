@@ -16,7 +16,6 @@
 package org.projog.core.udp.compiler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public final class JavaSourceCompiler {
       }
 
       @Override
-      public JavaFileObject getJavaFileForOutput(Location location, String className, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
+      public JavaFileObject getJavaFileForOutput(Location location, String className, JavaFileObject.Kind kind, FileObject sibling) {
          ClassJavaFileObject classFile = new ClassJavaFileObject(className, kind);
          if (!classFiles.containsKey(className)) {
             classFiles.put(className, classFile);
@@ -135,7 +134,7 @@ public final class JavaSourceCompiler {
       }
 
       @Override
-      public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+      public CharSequence getCharContent(boolean ignoreEncodingErrors) {
          return sourceCode;
       }
    }
@@ -150,7 +149,7 @@ public final class JavaSourceCompiler {
       }
 
       @Override
-      public OutputStream openOutputStream() throws IOException {
+      public OutputStream openOutputStream() {
          return outputStream;
       }
    }

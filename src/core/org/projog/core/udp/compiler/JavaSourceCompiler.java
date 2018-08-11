@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,17 +15,23 @@
  */
 package org.projog.core.udp.compiler;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.OutputStream;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -34,102 +40,118 @@ import javax.tools.ToolProvider;
 import org.projog.core.ProjogException;
 
 /** Compiles Java source code into bytecode. */
-final class JavaSourceCompiler {
+public final class JavaSourceCompiler {
+   private final Object lock = new Object();
+   private final JavaCompiler compiler;
+   private final SimpleJavaFileManager fileManager;
+   private final CompiledClassLoader classLoader = new CompiledClassLoader();
+   /** Java source code generated at runtime. */
+   private final List<SourceJavaFileObject> sourceFiles = new ArrayList<>();
+   /** Java class files generated at runtime. Key = class name. */
+   private final Map<String, ClassJavaFileObject> classFiles = new HashMap<>();
+
+   public JavaSourceCompiler() {
+      compiler = ToolProvider.getSystemJavaCompiler();
+      StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, Locale.ENGLISH, null);
+      fileManager = new SimpleJavaFileManager(standardFileManager);
+   }
+
    /**
     * Compiles the specified java source code and returns the resulting Class object.
-    * <p>
-    * The class file generated as the output of the compilation process is stored in the specified directory. <b>Note
-    * that an exception will be thrown if the output directory specified by the {@code dynamicContentDir} parameter is
-    * not included in the application's classpath.<b>
-    * 
-    * @param dynamicContentDir directory to store generated .class file
+    *
     * @param className class name to compile
     * @param sourceCode java source code to compile
     * @return the newly compiled class
     * @throws ProjogException
     */
-   static Class<?> compileClass(File dynamicContentDir, String className, String sourceCode) {
-      String classpath = System.getProperty("java.class.path");
-      assertClasspathContainsDirectory(classpath, dynamicContentDir);
-      try {
-         compile(dynamicContentDir, className, sourceCode);
-         return load(className);
-      } catch (Exception e) {
-         throw new ProjogException("Cannot compile: " + className + " using classpath: " + classpath, e);
+   Class<?> compileClass(String className, String sourceCode) {
+      synchronized (lock) {
+         try {
+            return compile(className, sourceCode);
+         } catch (Exception e) {
+            throw new ProjogException("Cannot compile: " + className + " source: " + sourceCode, e);
+         }
       }
    }
 
-   /**
-    * Throws a ProjogException if the specified directory does not exist in the specified classpath.
-    * <p>
-    * The directory where generated class files will be stored needs to be present in the application's classpath in
-    * order for the class to be found when we try to load it.
-    */
-   private static final void assertClasspathContainsDirectory(String classpath, File dynamicContentDir) {
-      if (classpath.indexOf(dynamicContentDir.getName()) == -1) {
-         throw new ProjogException("The directory: " + dynamicContentDir.getAbsolutePath() + " is not in the java classpath: " + classpath);
-      }
-   }
-
-   private static final void compile(File dynamicContentDir, String className, String sourceCode) {
-      SimpleJavaFileObject fileObject = new DynamicJavaSourceCodeObject(className, sourceCode);
-      JavaFileObject javaFileObjects[] = new JavaFileObject[] {fileObject};
-
-      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-
-      StandardJavaFileManager stdFileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
-
-      Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(javaFileObjects);
-
-      String[] compileOptions = new String[] {"-d", dynamicContentDir.getPath()};
-      Iterable<String> compilationOptions = Arrays.asList(compileOptions);
-
+   private Class<?> compile(String className, String sourceCode) throws ClassNotFoundException {
       DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+      sourceFiles.add(new SourceJavaFileObject(className, sourceCode));
+      CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, null, null, sourceFiles);
 
-      CompilationTask compilerTask = compiler.getTask(null, stdFileManager, diagnostics, compilationOptions, null, compilationUnits);
-
-      // Invoke call on compilerTask to invoke compilation.
-      boolean status = compilerTask.call();
-
+      boolean status = compilationTask.call(); // invoke compilation
       if (!status) {
          // If compilation error occurs then throw exception with as much information as possible
          StringBuilder reasons = new StringBuilder();
          for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
             reasons.append(" Error on line " + diagnostic.getLineNumber() + " in " + diagnostic);
          }
-         throw new ProjogException("Failed compiling using java.class.path value of: " + System.getProperty("java.class.path") + reasons);
+         throw new ProjogException("Failed compilation of " + className + reasons);
       }
-      try {
-         stdFileManager.close();
-      } catch (IOException e) {
-         e.printStackTrace();
+
+      return classLoader.loadClass(className);
+   }
+
+   private class SimpleJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
+      SimpleJavaFileManager(JavaFileManager fileManager) {
+         super(fileManager);
+      }
+
+      @Override
+      public JavaFileObject getJavaFileForOutput(Location location, String className, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
+         ClassJavaFileObject classFile = new ClassJavaFileObject(className, kind);
+         if (!classFiles.containsKey(className)) {
+            classFiles.put(className, classFile);
+         }
+         return classFile;
       }
    }
 
-   private static Class<?> load(String className) throws ClassNotFoundException, MalformedURLException {
-      return ClassLoader.getSystemClassLoader().loadClass(className);
+   private class CompiledClassLoader extends ClassLoader {
+      @Override
+      protected Class<?> findClass(String name) throws ClassNotFoundException {
+         ClassJavaFileObject classFile = classFiles.get(name);
+
+         if (classFile == null) {
+            return super.findClass(name);
+         }
+
+         if (classFile.compiledClass == null) {
+            byte[] bytes = classFile.outputStream.toByteArray();
+            Class<?> compiledClass = super.defineClass(name, bytes, 0, bytes.length);
+            classFile.compiledClass = compiledClass;
+            classFile.outputStream = null;
+         }
+         return classFile.compiledClass;
+      }
    }
 
-   private static class DynamicJavaSourceCodeObject extends SimpleJavaFileObject {
-      // Based on article at:
-      // http://accordess.com/wpblog/2011/03/06/an-overview-of-java-compilation-api-jsr-199/
-      // Generating Java classes dynamically through Java compiler API
-      private final String sourceCode;
+   private static class SourceJavaFileObject extends SimpleJavaFileObject {
+      final String sourceCode;
 
-      /**
-       * Converts the name to an URI, as that is the format expected by JavaFileObject
-       * 
-       * @param name fully qualified name given to the class file
-       * @param code the source code string
-       */
-      protected DynamicJavaSourceCodeObject(String name, String code) {
-         super(URI.create("string:///" + name.replaceAll("\\.", "/") + Kind.SOURCE.extension), Kind.SOURCE);
-         this.sourceCode = code;
+      SourceJavaFileObject(String className, String sourceCode) {
+         super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+         this.sourceCode = sourceCode;
       }
 
       @Override
       public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
          return sourceCode;
+      }
+   }
+
+   private static class ClassJavaFileObject extends SimpleJavaFileObject {
+      ByteArrayOutputStream outputStream;
+      Class<?> compiledClass;
+
+      ClassJavaFileObject(String className, Kind kind) {
+         super(URI.create("mem:///" + className.replace('.', '/') + kind.extension), kind);
+         outputStream = new ByteArrayOutputStream();
+      }
+
+      @Override
+      public OutputStream openOutputStream() throws IOException {
+         return outputStream;
       }
    }
 }

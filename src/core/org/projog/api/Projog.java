@@ -106,9 +106,9 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * Compiling {@code ProjogExample.java}:
  * 
  * <pre>javac -cp projog-core.jar;. ProjogExample.java</pre>
- * Running {@code ProjogExample} (the directory {@code projogGeneratedClasses} must already exist):
+ * Running {@code ProjogExample}:
  * 
- * <pre>java -cp projog-core.jar;projogGeneratedClasses;. ProjogExample</pre>
+ * <pre>java -cp projog-core.jar;. ProjogExample</pre>
  * Output of running {@code ProjogExample}:
  * 
  * <pre>

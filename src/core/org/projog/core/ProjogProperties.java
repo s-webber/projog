@@ -35,13 +35,6 @@ public interface ProjogProperties {
    String DEFAULT_BOOTSTRAP_SCRIPT = "projog-bootstrap.pl";
 
    /**
-    * The name of the directory to store class files of code generated at runtime.
-    *
-    * @see #getRuntimeCompilationOutputDirectory()
-    */
-   String DEFAULT_RUNTIME_COMPILATION_OUTPUT_DIRECTORY = "projogGeneratedClasses";
-
-   /**
     * Returns {@code true} if the use of spy points is enabled.
     * <p>
     * If spy points are enabled then it will be possible to get information about the sequence of goals being evaluated
@@ -62,19 +55,8 @@ public interface ProjogProperties {
     * "interpreted" mode - this will impact performance but avoid the need of compiling Java code at runtime.
     *
     * @return {@code true} if user defined predicates should be compiled at runtime
-    * @see #getRuntimeCompilationOutputDirectory()
     */
    boolean isRuntimeCompilationEnabled();
-
-   /**
-    * Returns the directory to store class files of code generated at runtime.
-    * <p>
-    * This value is only used if runtime compilation is enabled. The directory must be in the application's classpath.
-    *
-    * @return the directory to store class files of code generated at runtime
-    * @see #isRuntimeCompilationEnabled()
-    */
-   String getRuntimeCompilationOutputDirectory();
 
    /**
     * Returns the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap(KnowledgeBase)}.

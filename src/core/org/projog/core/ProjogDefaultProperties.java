@@ -40,12 +40,6 @@ public class ProjogDefaultProperties implements ProjogProperties {
       return true;
    }
 
-   /** Returns {link #DEFAULT_RUNTIME_COMPILATION_OUTPUT_DIRECTORY} */
-   @Override
-   public String getRuntimeCompilationOutputDirectory() {
-      return DEFAULT_RUNTIME_COMPILATION_OUTPUT_DIRECTORY;
-   }
-
    /** Returns {@link #DEFAULT_BOOTSTRAP_SCRIPT} */
    @Override
    public String getBootstrapScript() {

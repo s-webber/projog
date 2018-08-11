@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,6 @@
 package org.projog.core.udp.compiler;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,13 +137,15 @@ class JavaSourceWriter {
       return packageStructure + "." + className;
    }
 
-   File save(File sourceDirectory) {
-      File sourceFile = getSourceFile(sourceDirectory);
-      writeSourceToFile(sourceFile);
-      return sourceFile;
+   void beginSwitch(String variable) {
+      addLine("switch (" + variable + ") {");
    }
 
-   private File getSourceFile(File sourceDirectory) {
+   void beginCase(int constant) {
+      addLine("case " + constant + ":");
+   }
+
+   File getSourceFile(File sourceDirectory) {
       File parentDir = sourceDirectory;
       for (String packageName : packageStructure.split("\\.")) {
          parentDir = new File(parentDir, packageName);
@@ -156,51 +156,11 @@ class JavaSourceWriter {
       return new File(parentDir, className + ".java");
    }
 
-   private void writeSourceToFile(File sourceFile) {
-      PrintWriter pw = null;
-      try {
-         pw = new PrintWriter(sourceFile);
-         writeSource(pw);
-      } catch (IOException e) {
-         throw new RuntimeException("Exception writing source to: " + sourceFile, e);
-      } finally {
-         try {
-            pw.close();
-         } catch (Exception e) {
-         }
-      }
-
-   }
-
-   void beginSwitch(String variable) {
-      addLine("switch (" + variable + ") {");
-   }
-
-   void beginCase(int constant) {
-      addLine("case " + constant + ":");
-   }
-
-   void writeSource(PrintWriter writer) {
-      int tabCtr = 0;
+   String getSource() {
+      StringBuilder sb = new StringBuilder();
       for (String line : lines) {
-         if (line.indexOf('}') != -1) {
-            if ((line.indexOf('{') == -1 || (line.indexOf('}') < line.indexOf('{')))) {
-               tabCtr--;
-            }
-         }
-
-         writeIndents(writer, tabCtr);
-         writer.println(line);
-
-         if (line.lastIndexOf('{') > line.lastIndexOf('}')) {
-            tabCtr++;
-         }
+         sb.append(line).append(System.lineSeparator());
       }
-   }
-
-   private void writeIndents(PrintWriter writer, int numTabs) {
-      for (int i = 0; i < numTabs; i++) {
-         writer.print("   ");
-      }
+      return sb.toString();
    }
 }

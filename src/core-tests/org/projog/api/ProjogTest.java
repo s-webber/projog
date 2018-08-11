@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.write;
@@ -36,7 +35,6 @@ import java.io.StringReader;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
-import org.projog.core.ProjogProperties;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -192,13 +190,7 @@ public class ProjogTest {
       }
    }
 
-   /**
-    * Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with.
-    * <p>
-    * NOTE: as this test actually compiles the Prolog syntax into Java bytecode at runtime, you will need the directory
-    * specified by the {@link ProjogProperties#getRuntimeCompilationOutputDirectory} method implemented by
-    * {@link TestUtils#COMPILATION_ENABLED_PROPERTIES} on the classpath for this test to work.
-    */
+   /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
    @Test
    public void testIOExceptionWhileEvaluatingQueries() {
       Projog p = new Projog(COMPILATION_ENABLED_PROPERTIES);
@@ -276,13 +268,8 @@ public class ProjogTest {
 
    /** Returns a new {@link Projog} instance that has been populated with rules from {@link #createTestScript()}. */
    private Projog createProjog() {
-      File f = createTestScript();
-      // Note: using COMPILATION_DISABLED_PROPERTIES as else 
-      // code will try to generate Java bytecode at runtime as part of completing
-      // tests and that will fail unless classpath contains classes output directory -
-      // so disable it as we are not interested in compilation as part of these tests.
-      Projog p = new Projog(COMPILATION_DISABLED_PROPERTIES);
-      p.consultFile(f);
+      Projog p = new Projog(COMPILATION_ENABLED_PROPERTIES);
+      p.consultFile(createTestScript());
       return p;
    }
 

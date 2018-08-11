@@ -61,13 +61,6 @@ public class TestUtils {
       public boolean isRuntimeCompilationEnabled() {
          return true;
       }
-
-      @Override
-      public String getRuntimeCompilationOutputDirectory() {
-         String dir = "projogGeneratedClasses";
-         new File(dir).mkdirs();
-         return dir;
-      }
    };
 
    private static final File TEMP_DIR = new File("build");

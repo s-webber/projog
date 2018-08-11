@@ -23,9 +23,11 @@ import static org.projog.core.KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,9 +57,6 @@ import org.projog.core.udp.StaticUserDefinedPredicateFactory;
  * <p>
  * Compares the Java source generated as a result of processing CompiledPredicateSourceGeneratorTest.pl against the
  * expected java source contained in the scripts directory.
- * <p>
- * NOTE: For these tests to work you need to have "projogGeneratedClasses" in the classpath as that will be the output
- * directory for bytecode generated at runtime.
  *
  * @see org.projog.TestUtils#COMPILATION_ENABLED_PROPERTIES
  */
@@ -88,10 +87,8 @@ public class CompiledPredicateSourceGeneratorTest {
       addSingletonCompiledPredicate("singleton_compiled_Predicate/3");
       addRetryableCompiledPredicate("retryable_compiled_Predicate/3");
       addMultipleRulesWithSingleImmutableArgumentPredicate("multiple_rules_with_single_immutable_argument/1", new String[] {"s", "d", "a"});
-      addMultipleRulesWithMulipleImmutableArgumentPredicate("multiple_rules_with_multiple_immutable_arguments/3", new String[][] {
-                  {"q", "w", "e"},
-                  {"a", "s", "d"},
-                  {"z", "x", "z"}});
+      addMultipleRulesWithMulipleImmutableArgumentPredicate("multiple_rules_with_multiple_immutable_arguments/3",
+                  new String[][] {{"q", "w", "e"}, {"a", "s", "d"}, {"z", "x", "z"}});
       addSingleRulesWithSingleImmutableArgumentPredicate("single_rule_with_single_immutable_argument/1", "z");
       addSingleRulesWithMulipleImmutableArgumentPredicate("single_rule_with_multiple_immutable_arguments/3", new String[] {"a", "s", "d"});
       addUserDefinedPredicate("testCalculatables/3");
@@ -240,7 +237,13 @@ public class CompiledPredicateSourceGeneratorTest {
       // the system tests verify that it works as expected.
       new CompiledPredicateSourceGenerator(writer).generateSource();
       outputDir.mkdirs();
-      return writer.save(outputDir);
+      File sourceFile = writer.getSourceFile(outputDir);
+      try (PrintWriter pw = new PrintWriter(sourceFile)) {
+         pw.print(writer.getSource());
+      } catch (FileNotFoundException e) {
+         throw new RuntimeException(e);
+      }
+      return sourceFile;
    }
 
    private static void assertContentsMatch(File expected, File actual) {

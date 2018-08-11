@@ -29,11 +29,6 @@ public class ProjogDefaultPropertiesTest {
    }
 
    @Test
-   public void testGetRuntimeCompilationOutputDirectory() {
-      assertEquals("projogGeneratedClasses", properties.getRuntimeCompilationOutputDirectory());
-   }
-
-   @Test
    public void testIsRuntimeCompilationEnabled() {
       assertTrue(properties.isRuntimeCompilationEnabled());
    }

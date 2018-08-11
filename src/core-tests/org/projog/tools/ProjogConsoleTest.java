@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@ package org.projog.tools;
 
 import static java.lang.System.lineSeparator;
 import static org.junit.Assert.assertEquals;
-import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.writeToTempFile;
 
 import java.io.ByteArrayInputStream;
@@ -27,23 +26,17 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ProjogConsoleTest {
    private static final String ERROR_MESSAGE = "Invalid. Enter ; to continue or q to quit. ";
    private static final String PROMPT = "?- ";
-   private static final String EXPECTED_HEADER = concatenate("[31966667] INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "www.projog.org", "");
-   private static final String EXPECTED_FOOTER = "" + lineSeparator() + PROMPT;
+   private static final String EXPECTED_HEADER = concatenate("[31966667] INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "www.projog.org",
+               "");
+   private static final String EXPECTED_FOOTER = lineSeparator() + PROMPT;
    private static final String QUIT_COMMAND = concatenate("quit.");
    private static final String YES = "yes (0 ms)";
    private static final String NO = "no (0 ms)";
-
-   @BeforeClass
-   public static void setUp() {
-      // this will ensure the required output directory exists when the tests are run
-      COMPILATION_ENABLED_PROPERTIES.getRuntimeCompilationOutputDirectory();
-   }
 
    @Test
    public void testTrue() throws IOException {
@@ -100,7 +93,9 @@ public class ProjogConsoleTest {
       File tempFile = createFileToConsult("test(a).", "test(b).", "test(c).");
       String path = tempFile.getPath();
       String input = createInput("consult('" + path + "').", "trace.", "test(X).", ";", ";");
-      String expected = createExpectedOutput(PROMPT + "[THREAD-ID] INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "", PROMPT + "[THREAD-ID] CALL test( X )", "[THREAD-ID] EXIT test( a )", "", "X = a", "", YES + "[THREAD-ID] REDO test( a )", "[THREAD-ID] EXIT test( b )", "", "X = b", "", YES + "[THREAD-ID] REDO test( b )", "[THREAD-ID] EXIT test( c )", "", "X = c", "", YES);
+      String expected = createExpectedOutput(PROMPT + "[THREAD-ID] INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "",
+                  PROMPT + "[THREAD-ID] CALL test( X )", "[THREAD-ID] EXIT test( a )", "", "X = a", "", YES + "[THREAD-ID] REDO test( a )", "[THREAD-ID] EXIT test( b )", "",
+                  "X = b", "", YES + "[THREAD-ID] REDO test( b )", "[THREAD-ID] EXIT test( c )", "", "X = c", "", YES);
       String actual = getOutput(input);
       compare(expected, actual);
    }

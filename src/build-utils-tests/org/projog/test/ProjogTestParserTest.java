@@ -1,26 +1,25 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.build.BuildUtilsConstants.BUILD_DIR;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,12 +28,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class SysTestParserTest {
+public class ProjogTestParserTest {
    @Test
    public void testTrue() throws IOException {
-      SysTestQuery query = parseSingleItem("%TRUE X = 9");
+      ProjogTestQuery query = parseSingleItem("%TRUE X = 9");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertNull(query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertFalse(query.isContinuesUntilFails());
@@ -43,9 +42,9 @@ public class SysTestParserTest {
 
    @Test
    public void testTrueNo() throws IOException {
-      SysTestQuery query = parseSingleItem("%TRUE_NO X = 9");
+      ProjogTestQuery query = parseSingleItem("%TRUE_NO X = 9");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertNull(query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertTrue(query.isContinuesUntilFails());
@@ -54,9 +53,9 @@ public class SysTestParserTest {
 
    @Test
    public void testFalse() throws IOException {
-      SysTestQuery query = parseSingleItem("%FALSE p(x,y,z) >= [X|Y]");
+      ProjogTestQuery query = parseSingleItem("%FALSE p(x,y,z) >= [X|Y]");
 
-      assertEquals("p(x,y,z) >= [X|Y]", query.getQueryStr());
+      assertEquals("p(x,y,z) >= [X|Y]", query.getPrologQuery());
       assertNull(query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertTrue(query.isContinuesUntilFails());
@@ -65,9 +64,9 @@ public class SysTestParserTest {
 
    @Test
    public void testAnswersNoVariables() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%ANSWER/");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%ANSWER/");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertNull(query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertFalse(query.isContinuesUntilFails());
@@ -76,9 +75,9 @@ public class SysTestParserTest {
 
    @Test
    public void testAnswersNoVariablesContinueUntilFails() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%NO");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ANSWER/", "%ANSWER/", "%NO");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertNull(query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertTrue(query.isContinuesUntilFails());
@@ -87,16 +86,16 @@ public class SysTestParserTest {
 
    @Test
    public void testLink() throws IOException {
-      SysTestLink link = parseSingleItem("%LINK prolog-test.pl");
+      ProjogTestLink link = parseSingleItem("%LINK prolog-test.pl");
 
       assertLink("prolog-test.pl", link);
    }
 
    @Test
    public void testException() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ERROR error text");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ERROR error text");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertEquals("error text", query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertFalse(query.isContinuesUntilFails());
@@ -105,9 +104,9 @@ public class SysTestParserTest {
 
    @Test
    public void testErrorOnRetry() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ERROR exception on retry");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER/", "%ERROR exception on retry");
 
-      assertEquals("X = 9", query.getQueryStr());
+      assertEquals("X = 9", query.getPrologQuery());
       assertEquals("exception on retry", query.getExpectedExceptionMessage());
       assertEquals("", query.getExpectedOutput());
       assertFalse(query.isContinuesUntilFails());
@@ -116,11 +115,11 @@ public class SysTestParserTest {
 
    @Test
    public void testMultipleVariableAssignment() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER", "% X=4", "% Y=[X|Y]", "%ANSWER");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER", "% X=4", "% Y=[X|Y]", "%ANSWER");
 
-      List<SysTestAnswer> answers = query.getAnswers();
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(1, answers.size());
-      SysTestAnswer answer = answers.get(0);
+      ProjogTestAnswer answer = answers.get(0);
       assertEquals("", answer.getExpectedOutput());
       assertEquals(2, answer.getAssignments().size());
       assertAssignment(answer, "X", "4");
@@ -129,9 +128,9 @@ public class SysTestParserTest {
 
    @Test
    public void testSingleVariableAssignment() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER X=453", "%ANSWER X=[X|Y]");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%ANSWER X=453", "%ANSWER X=[X|Y]");
 
-      List<SysTestAnswer> answers = query.getAnswers();
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(2, answers.size());
       assertSingleAssignment(answers.get(0), "X", "453");
       assertSingleAssignment(answers.get(1), "X", "[X|Y]");
@@ -139,27 +138,27 @@ public class SysTestParserTest {
 
    @Test
    public void testSingleLineOutput() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT example of single line output", "%ANSWER/");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT example of single line output", "%ANSWER/");
 
-      List<SysTestAnswer> answers = query.getAnswers();
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(1, answers.size());
       assertEquals("example of single line output", answers.get(0).getExpectedOutput());
    }
 
    @Test
    public void testMultiLineOutput() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT", "% example of", "% multi line output", "%OUTPUT", "%ANSWER/");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT", "% example of", "% multi line output", "%OUTPUT", "%ANSWER/");
 
-      List<SysTestAnswer> answers = query.getAnswers();
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(1, answers.size());
       assertEquals("example of" + System.lineSeparator() + "multi line output", answers.get(0).getExpectedOutput());
    }
 
    @Test
    public void testOutputAndError() throws IOException {
-      SysTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT output from first attempt", "%ANSWER/", "%OUTPUT output from retry", "%ERROR an error message");
+      ProjogTestQuery query = parseSingleItem("%QUERY X = 9", "%OUTPUT output from first attempt", "%ANSWER/", "%OUTPUT output from retry", "%ERROR an error message");
 
-      List<SysTestAnswer> answers = query.getAnswers();
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(1, answers.size());
       assertEquals("output from first attempt", answers.get(0).getExpectedOutput());
       assertEquals("output from retry", query.getExpectedOutput());
@@ -168,7 +167,7 @@ public class SysTestParserTest {
 
    @Test
    public void testCombinations() throws IOException {
-      SysTestParser parser = parse("% hello", "% world", "%TRUE true", "a line of code", "another line of code", "%LINK xyz", "final line of code", "% end");
+      ProjogTestParser parser = parse("% hello", "% world", "%TRUE true", "a line of code", "another line of code", "%LINK xyz", "final line of code", "% end");
 
       assertComment("hello world", parser);
       assertQueryString("true", parser);
@@ -182,7 +181,7 @@ public class SysTestParserTest {
 
    @Test
    public void testUnknownMarkup() throws IOException {
-      SysTestParser p = parse("%FAIL");
+      ProjogTestParser p = parse("%FAIL");
 
       try {
          p.getNext();
@@ -197,12 +196,12 @@ public class SysTestParserTest {
       File scriptFile = createScriptFile("% a comment", "some code.", "%TRUE query 1", "%FALSE query 2", "% another comment", "%TRUE_NO query 3", "%QUERY query 4", "ANSWER/",
                   "%LINK xyz.pl");
 
-      List<SysTestQuery> contents = SysTestParser.getQueries(scriptFile);
+      List<ProjogTestQuery> contents = ProjogTestParser.getQueries(scriptFile);
       assertEquals(4, contents.size());
-      assertEquals("query 1", contents.get(0).getQueryStr());
-      assertEquals("query 2", contents.get(1).getQueryStr());
-      assertEquals("query 3", contents.get(2).getQueryStr());
-      assertEquals("query 4", contents.get(3).getQueryStr());
+      assertEquals("query 1", contents.get(0).getPrologQuery());
+      assertEquals("query 2", contents.get(1).getPrologQuery());
+      assertEquals("query 3", contents.get(2).getPrologQuery());
+      assertEquals("query 4", contents.get(3).getPrologQuery());
    }
 
    @Test
@@ -210,7 +209,7 @@ public class SysTestParserTest {
       File scriptFile = createScriptFile("% a comment", "some code.");
 
       try {
-         SysTestParser.getQueries(scriptFile);
+         ProjogTestParser.getQueries(scriptFile);
          fail();
       } catch (RuntimeException e) {
          assertEquals("could not find any tests or links in: " + scriptFile, e.getMessage());
@@ -218,20 +217,20 @@ public class SysTestParserTest {
    }
 
    @SuppressWarnings("unchecked")
-   private <T extends SysTestContent> T parseSingleItem(String... lines) throws IOException {
-      SysTestParser parser = parse(lines);
-      SysTestContent content = parser.getNext();
+   private <T extends ProjogTestContent> T parseSingleItem(String... lines) throws IOException {
+      ProjogTestParser parser = parse(lines);
+      ProjogTestContent content = parser.getNext();
       assertNull(parser.getNext());
       return (T) content;
    }
 
-   private SysTestParser parse(String... lines) throws IOException {
+   private ProjogTestParser parse(String... lines) throws IOException {
       File testScript = createScriptFile(lines);
-      return new SysTestParser(testScript);
+      return new ProjogTestParser(testScript);
    }
 
    private File createScriptFile(String... lines) throws IOException {
-      File f = File.createTempFile("SysTestParserTest", ".tmp", BUILD_DIR);
+      File f = File.createTempFile("ProjogTestParserTest", ".tmp", new File("build"));
       try (PrintWriter pw = new PrintWriter(f)) {
          for (String line : lines) {
             pw.println(line);
@@ -241,52 +240,52 @@ public class SysTestParserTest {
       return f;
    }
 
-   private void assertComment(String expected, SysTestParser parser) throws IOException {
-      SysTestComment comment = (SysTestComment) parser.getNext();
-      assertEquals(expected, comment.comment);
+   private void assertComment(String expected, ProjogTestParser parser) throws IOException {
+      ProjogTestComment comment = (ProjogTestComment) parser.getNext();
+      assertEquals(expected, comment.getComment());
    }
 
-   private void assertLink(String expected, SysTestParser parser) throws IOException {
-      SysTestLink link = (SysTestLink) parser.getNext();
+   private void assertLink(String expected, ProjogTestParser parser) throws IOException {
+      ProjogTestLink link = (ProjogTestLink) parser.getNext();
       assertLink(expected, link);
    }
 
-   private void assertLink(String expected, SysTestLink link) {
-      assertEquals(expected, link.target);
+   private void assertLink(String expected, ProjogTestLink link) {
+      assertEquals(expected, link.getTarget());
    }
 
-   private void assertSingleAssignment(SysTestAnswer answer, String id, String value) {
+   private void assertSingleAssignment(ProjogTestAnswer answer, String id, String value) {
       assertEquals(1, answer.getAssignments().size());
       assertAssignment(answer, id, value);
    }
 
-   private void assertAssignment(SysTestAnswer answer, String id, String value) {
+   private void assertAssignment(ProjogTestAnswer answer, String id, String value) {
       assertEquals(value, answer.getAssignedValue(id));
    }
 
-   private void assertCode(String expected, SysTestParser parser) throws IOException {
-      SysTestCode code = (SysTestCode) parser.getNext();
-      assertEquals(code.code, expected);
+   private void assertCode(String expected, ProjogTestParser parser) throws IOException {
+      ProjogTestCode code = (ProjogTestCode) parser.getNext();
+      assertEquals(code.getPrologCode(), expected);
    }
 
-   private void assertQueryString(String expectedQueryString, SysTestParser parser) throws IOException {
-      SysTestQuery query = (SysTestQuery) parser.getNext();
-      assertEquals(expectedQueryString, query.getQueryStr());
+   private void assertQueryString(String expectedQueryString, ProjogTestParser parser) throws IOException {
+      ProjogTestQuery query = (ProjogTestQuery) parser.getNext();
+      assertEquals(expectedQueryString, query.getPrologQuery());
    }
 
-   private void assertSingleEmptyAnswer(SysTestQuery query) {
+   private void assertSingleEmptyAnswer(ProjogTestQuery query) {
       assertEmptyAnswers(query, 1);
    }
 
-   private void assertEmptyAnswers(SysTestQuery query, int numAnswers) {
-      List<SysTestAnswer> answers = query.getAnswers();
+   private void assertEmptyAnswers(ProjogTestQuery query, int numAnswers) {
+      List<ProjogTestAnswer> answers = query.getAnswers();
       assertEquals(numAnswers, answers.size());
-      for (SysTestAnswer answer : answers) {
+      for (ProjogTestAnswer answer : answers) {
          assertEmptyAnswer(answer);
       }
    }
 
-   private void assertEmptyAnswer(SysTestAnswer answer) {
+   private void assertEmptyAnswer(ProjogTestAnswer answer) {
       assertEquals("", answer.getExpectedOutput());
       assertEquals(0, answer.getAssignmentsCount());
       assertTrue(answer.getAssignments().isEmpty());

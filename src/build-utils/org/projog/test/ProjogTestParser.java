@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parses system test files to produce {@link SysTestContent} objects.
+ * Parses system test files to produce {@link ProjogTestContent} objects.
  * <p>
  * System test files contain both standard Prolog syntax plus extra detail contained in comments which specify queries
  * and their expected results. The system tests have two purposes:
@@ -39,56 +39,38 @@ import java.util.List;
  * Examples of how system tests can be specified using comments (i.e. lines prefixed with a <code>%</code>) are:
  * <ol>
  * <li>Test that that the query <code>?- test().</code> succeeds once and no attempt will be made to find an alternative
- * solution:
- * 
- * <pre>
+ * solution: <pre>
  * %TRUE test1()
- * </pre>
- * </li>
+ * </pre></li>
  * <li>Test that that the query <code>?- test().</code> succeeds once and will fail when an attempt is made to find an
- * alternative solution:
- * 
- * <pre>
+ * alternative solution: <pre>
  * %TRUE_NO test1()
- * </pre>
- * </li>
- * <li>Test that that the query <code>?- test().</code> will fail on the first attempt to evaluate it:
- * 
- * <pre>
+ * </pre></li>
+ * <li>Test that that the query <code>?- test().</code> will fail on the first attempt to evaluate it: <pre>
  * %FALSE test1()
- * </pre>
- * </li>
+ * </pre></li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and there will be no attempt to
- * evaluate it for a fourth time:
- * 
- * <pre>
+ * evaluate it for a fourth time: <pre>
  * %QUERY test()
  * %ANSWER/
  * %ANSWER/
  * %ANSWER/
- * </pre>
- * </li>
+ * </pre></li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and will fail when an attempt is made
- * to evaluate it for a fourth time:
- * 
- * <pre>
+ * to evaluate it for a fourth time: <pre>
  * %QUERY test()
  * %ANSWER/
  * %ANSWER/
  * %ANSWER/
  * %NO
- * </pre>
- * </li>
+ * </pre></li>
  * <li>Test that that the query <code>?- test(X).</code> will succeed three times and there will be no attempt to
- * evaluate it for a fourth time, specifying expectations about variable unification:
- * 
- * <pre>
+ * evaluate it for a fourth time, specifying expectations about variable unification: <pre>
  * %QUERY test(X)
  * %ANSWER X=a
  * %ANSWER X=b
  * %ANSWER X=c
- * </pre>
- * The test contains the following expectations about variable unification:
+ * </pre> The test contains the following expectations about variable unification:
  * <ul>
  * <li>After the first attempt the variable <code>X</code> will be instantiated to <code>a</code>.</li>
  * <li>After the second attempt the variable <code>X</code> will be instantiated to <code>b</code>.</li>
@@ -96,9 +78,7 @@ import java.util.List;
  * </ul>
  * </li>
  * <li>Test that that the query <code>?- test(X,Y).</code> will succeed three times and will fail when an attempt is
- * made to evaluate it for a fourth time, specifying expectations about variable unification:
- * 
- * <pre>
+ * made to evaluate it for a fourth time, specifying expectations about variable unification: <pre>
  * %QUERY test(X,Y)
  * %ANSWER
  * X=a
@@ -113,8 +93,7 @@ import java.util.List;
  * Y=3
  * %ANSWER
  * %NO
- * </pre>
- * The test contains the following expectations about variable unification:
+ * </pre> The test contains the following expectations about variable unification:
  * <ul>
  * <li>After the first attempt the variable <code>X</code> will be instantiated to <code>a</code> and the variable
  * <code>Y</code> will be instantiated to <code>1</code>.</li>
@@ -125,9 +104,7 @@ import java.util.List;
  * </ul>
  * </li>
  * <li>Test that that the query <code>?- test().</code> will succeed three times and there will be no attempt to
- * evaluate it for a fourth time, specifying expectations about what should be written to standard output:
- * 
- * <pre>
+ * evaluate it for a fourth time, specifying expectations about what should be written to standard output: <pre>
  * %QUERY repeat(3), write('hello world'), nl
  * %OUTPUT
  * % hello world
@@ -144,29 +121,22 @@ import java.util.List;
  * %
  * %OUTPUT
  * %ANSWER/
- * </pre>
- * The test contains expectations that every evaluation will cause the text <code>hello world</code> and a new-line
- * character to be written to the standard output stream.</li>
+ * </pre> The test contains expectations that every evaluation will cause the text <code>hello world</code> and a
+ * new-line character to be written to the standard output stream.</li>
  * <li>Test that while evaluating the query <code>?- repeat(X).</code> an exception will be thrown with a particular
- * message:
- * 
- * <pre>
+ * message: <pre>
  * %QUERY repeat(X)
  * %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
- * </pre>
- * </li>
+ * </pre></li>
  * <li>The following would be ignored when running the system tests but would be used when constructing the web based
- * documentation to include a link to <code>test.html</code>:
- * 
- * <pre>
+ * documentation to include a link to <code>test.html</code>: <pre>
  * %LINK test
- * </pre>
- * </li>
+ * </pre></li>
  * </ol>
  * </p>
- * <img src="doc-files/SysTestParser.png">
+ * <img src="doc-files/ProjogTestParser.png">
  */
-class SysTestParser implements Closeable {
+public final class ProjogTestParser implements Closeable {
    private static final String COMMENT_CHARACTER = "%";
    private static final String TRUE_TAG = "%TRUE";
    private static final String TRUE_NO_TAG = "%TRUE_NO";
@@ -182,15 +152,15 @@ class SysTestParser implements Closeable {
    /**
     * @throws RuntimeException if script has no tests and no links
     */
-   static List<SysTestQuery> getQueries(File testScript) {
+   static List<ProjogTestQuery> getQueries(File testScript) {
       boolean hasLinks = false;
-      try (SysTestParser p = new SysTestParser(testScript)) {
-         List<SysTestQuery> queries = new ArrayList<>();
-         SysTestContent c;
+      try (ProjogTestParser p = new ProjogTestParser(testScript)) {
+         List<ProjogTestQuery> queries = new ArrayList<>();
+         ProjogTestContent c;
          while ((c = p.getNext()) != null) {
-            if (c instanceof SysTestQuery) {
-               queries.add((SysTestQuery) c);
-            } else if (c instanceof SysTestLink) {
+            if (c instanceof ProjogTestQuery) {
+               queries.add((ProjogTestQuery) c);
+            } else if (c instanceof ProjogTestLink) {
                hasLinks = true;
             }
          }
@@ -205,20 +175,20 @@ class SysTestParser implements Closeable {
 
    private final BufferedReader br;
 
-   SysTestParser(File testScript) throws FileNotFoundException {
+   public ProjogTestParser(File testScript) throws FileNotFoundException {
       FileReader fr = new FileReader(testScript);
       br = new BufferedReader(fr);
    }
 
-   SysTestContent getNext() throws IOException {
+   public ProjogTestContent getNext() throws IOException {
       final String line = br.readLine();
       if (line == null) {
          // end of file
          return null;
       } else if (line.startsWith(LINK_TAG)) {
-         return new SysTestLink(getText(line).trim());
+         return new ProjogTestLink(getText(line).trim());
       } else if (line.startsWith(TRUE_NO_TAG)) {
-         SysTestQuery query = createSingleCorrectAnswerWithNoAssignmentsQuery(line);
+         ProjogTestQuery query = createSingleCorrectAnswerWithNoAssignmentsQuery(line);
          query.setContinuesUntilFails(true);
          return query;
       } else if (line.startsWith(TRUE_TAG)) {
@@ -226,31 +196,31 @@ class SysTestParser implements Closeable {
       } else if (line.startsWith(FALSE_TAG)) {
          String queryStr = getText(line);
          // no answers
-         SysTestQuery query = new SysTestQuery(queryStr);
+         ProjogTestQuery query = new ProjogTestQuery(queryStr);
          query.setContinuesUntilFails(true);
          return query;
       } else if (line.startsWith(QUERY_TAG)) {
          return getQuery(line);
       } else if (isStandardComment(line)) {
-         return new SysTestComment(getComment(line));
+         return new ProjogTestComment(getComment(line));
       } else if (isMarkupComment(line)) {
          throw new IllegalArgumentException("Unknown sys-test markup: " + line);
       } else {
-         return new SysTestCode(line);
+         return new ProjogTestCode(line);
       }
    }
 
-   private SysTestQuery createSingleCorrectAnswerWithNoAssignmentsQuery(String line) {
+   private ProjogTestQuery createSingleCorrectAnswerWithNoAssignmentsQuery(String line) {
       String queryStr = getText(line);
-      SysTestQuery queryWithSingleCorrectAnswer = new SysTestQuery(queryStr);
+      ProjogTestQuery queryWithSingleCorrectAnswer = new ProjogTestQuery(queryStr);
       // single correct answer with no assignments
-      queryWithSingleCorrectAnswer.getAnswers().add(new SysTestAnswer());
+      queryWithSingleCorrectAnswer.getAnswers().add(new ProjogTestAnswer());
       return queryWithSingleCorrectAnswer;
    }
 
-   private SysTestQuery getQuery(final String line) throws IOException {
+   private ProjogTestQuery getQuery(final String line) throws IOException {
       String queryStr = getText(line);
-      SysTestQuery query = new SysTestQuery(queryStr);
+      ProjogTestQuery query = new ProjogTestQuery(queryStr);
       query.getAnswers().addAll(getAnswers());
       mark();
       String nextLine = br.readLine();
@@ -273,23 +243,23 @@ class SysTestParser implements Closeable {
       return query;
    }
 
-   private List<SysTestAnswer> getAnswers() throws IOException {
-      List<SysTestAnswer> answers = new ArrayList<>();
-      SysTestAnswer answer;
+   private List<ProjogTestAnswer> getAnswers() throws IOException {
+      List<ProjogTestAnswer> answers = new ArrayList<>();
+      ProjogTestAnswer answer;
       while ((answer = getAnswer()) != null) {
          answers.add(answer);
       }
       return answers;
    }
 
-   private SysTestAnswer getAnswer() throws IOException {
+   private ProjogTestAnswer getAnswer() throws IOException {
       mark();
       String line = br.readLine();
       if (line == null) {
          // end of file
          return null;
       }
-      SysTestAnswer answer = new SysTestAnswer();
+      ProjogTestAnswer answer = new ProjogTestAnswer();
 
       if (line.startsWith(OUTPUT_TAG)) {
          String expectedOutput = readLinesUntilNextTag(line, OUTPUT_TAG);
@@ -317,14 +287,14 @@ class SysTestParser implements Closeable {
       }
    }
 
-   private void addAssignments(SysTestAnswer answer) throws IOException {
+   private void addAssignments(ProjogTestAnswer answer) throws IOException {
       String next;
       while (!(next = br.readLine()).startsWith(ANSWER_TAG)) {
          addAssignment(answer, next);
       }
    }
 
-   private void addAssignment(SysTestAnswer answer, String line) {
+   private void addAssignment(ProjogTestAnswer answer, String line) {
       String assignmentStatement = getText(line);
       int equalsPos = assignmentStatement.indexOf('=');
       String variableId = assignmentStatement.substring(0, equalsPos).trim();
@@ -387,7 +357,7 @@ class SysTestParser implements Closeable {
 
    /**
     * Get text minus any sys-test markup.
-    * 
+    *
     * @param line e.g.: {@code %QUERY X is 1}
     * @return e.g.: {@code X is 1}
     */

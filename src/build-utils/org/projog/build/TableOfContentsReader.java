@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import java.util.Map;
  * Reads {@link BuildUtilsConstants#MANUAL_TEMPLATE} to determine the {@code TableOfContentsEntry} instances required to
  * construct <a href="http://projog.org/manual.html">manual.html<a>.
  */
-class TableOfContentsReader {
+final class TableOfContentsReader {
    private final TableOfContentsEntryFactory entryFactory;
    private final CommandSectionIterator commandSectionIterator;
    private final List<String> contents;
@@ -143,13 +143,11 @@ class TableOfContentsReader {
     * <p>
     * <b>Example 1</b> - {@code line} lists the prolog file the web page is constructed from:
     * </p>
-    * 
     * e.g.: <code>- concepts/prolog-debugging.pl</code>
     * <p>
     * or <b>Example 2</b> - {@code line} lists file name (minus extension) of the page followed by the displayed name of
     * the page:
     * </p>
-    * 
     * e.g.: <code>getting_started Getting Started</code>
     */
    private static String getHtmlFileNameFromLine(String line) {
@@ -170,13 +168,11 @@ class TableOfContentsReader {
     * <p>
     * <b>Example 1</b> - {@code line} lists the prolog file the web page is constructed from:
     * </p>
-    * 
     * e.g.: <code>- concepts/prolog-debugging.pl</code>
     * <p>
     * or <b>Example 2</b> - {@code line} lists file name (minus extension) of the page followed by the displayed name of
     * the page:
     * </p>
-    * 
     * e.g.: <code>getting_started Getting Started</code>
     */
    private static String getTitleFromLine(String line) {

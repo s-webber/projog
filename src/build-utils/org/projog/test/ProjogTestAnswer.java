@@ -1,19 +1,19 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
 import java.util.Map;
 import java.util.Set;
@@ -21,10 +21,10 @@ import java.util.TreeMap;
 
 /**
  * Represents an answer to a query contained in a system test file.
- * 
- * @see SysTestParser
+ *
+ * @see ProjogTestParser
  */
-class SysTestAnswer {
+public final class ProjogTestAnswer {
    /**
     * Text expected to be written to the standard output stream as part of determining this answer.
     */
@@ -41,7 +41,7 @@ class SysTestAnswer {
       this.expectedOuput = expectedOuput;
    }
 
-   String getExpectedOutput() {
+   public String getExpectedOutput() {
       return expectedOuput;
    }
 
@@ -53,8 +53,8 @@ class SysTestAnswer {
       return assignments.get(variableId);
    }
 
-   Set<Map.Entry<String, String>> getAssignments() {
-      return assignments.entrySet();
+   public Set<Map.Entry<String, String>> getAssignments() {
+      return new TreeMap<>(assignments).entrySet();
    }
 
    int getAssignmentsCount() {

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
-import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.isPrologScript;
 import static org.projog.build.BuildUtilsConstants.readAllBytes;
 import static org.projog.build.BuildUtilsConstants.toUnixLineEndings;
@@ -48,7 +47,7 @@ import org.projog.core.term.TermType;
  * always refers to what the compiled version should do, there are some "workarounds" for confirming the output of
  * running in interpreted mode.
  *
- * @see SysTestParser
+ * @see ProjogTestParser
  */
 public final class ProjogTestRunner implements Observer {
    private static final boolean DEBUG = false;
@@ -59,8 +58,13 @@ public final class ProjogTestRunner implements Observer {
    private Projog projog;
    private Result stats;
 
+   public static Result test(File testResourcesDir) {
+      List<File> scripts = getScriptsToRun(testResourcesDir);
+      return checkScripts(scripts);
+   }
+
    /**
-    * @see #checkScripts(List)
+    * @see #test(File)
     */
    private ProjogTestRunner() {
    }
@@ -114,11 +118,11 @@ public final class ProjogTestRunner implements Observer {
    private void checkScript(File f) {
       try {
          consultFile(f);
-         List<SysTestQuery> queries = SysTestParser.getQueries(f);
+         List<ProjogTestQuery> queries = ProjogTestParser.getQueries(f);
          checkQueries(f, queries);
       } catch (Exception e) {
          debug(e);
-         stats.addError(f, "Error checking systest script: " + f.getPath() + " " + e);
+         stats.addError(f, "Error checking Prolog test script: " + f.getPath() + " " + e);
       }
    }
 
@@ -127,26 +131,26 @@ public final class ProjogTestRunner implements Observer {
       projog.consultFile(script);
    }
 
-   private void checkQueries(File f, List<SysTestQuery> queries) {
-      for (SysTestQuery query : queries) {
+   private void checkQueries(File f, List<ProjogTestQuery> queries) {
+      for (ProjogTestQuery query : queries) {
          try {
             checkQuery(query);
          } catch (Exception e) {
             debug(e);
-            stats.addError(f, query.getQueryStr() + " " + e.getClass() + " " + e.getMessage());
+            stats.addError(f, query.getPrologQuery() + " " + e.getClass() + " " + e.getMessage());
          }
       }
    }
 
-   private void checkQuery(SysTestQuery query) {
-      debug("QUERY: " + query.getQueryStr());
+   private void checkQuery(ProjogTestQuery query) {
+      debug("QUERY: " + query.getPrologQuery());
       stats.queryCount++;
 
-      Iterator<SysTestAnswer> itr = null;
+      Iterator<ProjogTestAnswer> itr = null;
       Term redirectedOutputFileHandle = null;
       boolean parsedQuery = false;
       try {
-         QueryStatement stmt = projog.query(query.getQueryStr() + ".");
+         QueryStatement stmt = projog.query(query.getPrologQuery() + ".");
          QueryResult result = stmt.getResult();
          parsedQuery = true;
          itr = query.getAnswers().iterator();
@@ -162,7 +166,7 @@ public final class ProjogTestRunner implements Observer {
             if (!itr.hasNext()) {
                throw new RuntimeException("More answers than expected");
             }
-            SysTestAnswer correctAnswer = itr.next();
+            ProjogTestAnswer correctAnswer = itr.next();
             checkOutput(correctAnswer);
             checkAnswer(result, correctAnswer);
 
@@ -197,7 +201,7 @@ public final class ProjogTestRunner implements Observer {
          }
       }
       if (parsedQuery && itr.hasNext()) {
-         throw new RuntimeException("Less answers than expected for: " + query.getQueryStr());
+         throw new RuntimeException("Less answers than expected for: " + query.getPrologQuery());
       }
    }
 
@@ -220,7 +224,7 @@ public final class ProjogTestRunner implements Observer {
       return redirectedOutputFileHandle;
    }
 
-   private void checkOutput(SysTestAnswer answer) {
+   private void checkOutput(ProjogTestAnswer answer) {
       checkOutput(answer.getExpectedOutput());
    }
 
@@ -304,7 +308,7 @@ public final class ProjogTestRunner implements Observer {
       redirectedOutputFile.delete();
    }
 
-   private void checkAnswer(QueryResult result, SysTestAnswer correctAnswer) {
+   private void checkAnswer(QueryResult result, ProjogTestAnswer correctAnswer) {
       Set<String> variableIds = result.getVariableIds();
       if (variableIds.size() != correctAnswer.getAssignmentsCount()) {
          throw new RuntimeException("Different number of variables than expected. Actual: " + variableIds + " Expected: " + correctAnswer.getAssignments());
@@ -393,19 +397,6 @@ public final class ProjogTestRunner implements Observer {
       }
    }
 
-   private static void logMemory() {
-      Runtime r = Runtime.getRuntime();
-      logMemory(r);
-      r.gc();
-      logMemory(r);
-   }
-
-   private static void logMemory(Runtime r) {
-      long totalMemory = r.totalMemory();
-      long freeMemory = r.freeMemory();
-      println("Max memory: " + r.maxMemory() + " Total memory: " + totalMemory + " Free memory: " + freeMemory + " Used memory: " + (totalMemory - freeMemory));
-   }
-
    private static void println(String s) {
       System.out.println(s);
    }
@@ -449,7 +440,7 @@ public final class ProjogTestRunner implements Observer {
 
       public void assertSuccess() {
          if (hasFailures()) {
-            throw new RuntimeException(errorCount + " test failures: " + errorMessages);
+            throw new RuntimeException(errorCount + " test failures:\n" + errorMessages);
          }
       }
 
@@ -461,30 +452,6 @@ public final class ProjogTestRunner implements Observer {
             sb.append(errorMessages);
          }
          return sb.toString();
-      }
-   }
-
-   public static Result test(File testResourcesDir) {
-      List<File> scripts = getScriptsToRun(testResourcesDir);
-      return checkScripts(scripts);
-   }
-
-   public static final void main(String[] args) throws Exception {
-      File testResourcesDir;
-      if (args.length == 0) {
-         testResourcesDir = SCRIPTS_OUTPUT_DIR;
-         println("As no arguments provided, defaulting to running all system tests in " + testResourcesDir);
-      } else if (args.length == 1) {
-         testResourcesDir = new File(args[0]);
-      } else {
-         throw new RuntimeException("More than one argument supplied");
-      }
-
-      Result result = test(testResourcesDir);
-      System.out.println(result.getSummary());
-      logMemory();
-      if (result.hasFailures()) {
-         System.exit(-1);
       }
    }
 }

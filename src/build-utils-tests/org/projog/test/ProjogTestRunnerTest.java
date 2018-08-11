@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -46,7 +46,7 @@ public class ProjogTestRunnerTest {
          r.assertSuccess();
          fail();
       } catch (RuntimeException e) {
-         assertIgnoringCarriageReturns(expectedErrorCount + " test failures: " + expectedErrorMessages, e.getMessage());
+         assertIgnoringCarriageReturns(expectedErrorCount + " test failures:\n" + expectedErrorMessages, e.getMessage());
       }
    }
 

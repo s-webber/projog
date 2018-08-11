@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.projog.build;
+package org.projog.test;
 
-import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE_NAME;
 import static org.projog.build.BuildUtilsConstants.PROLOG_FILE_EXTENSION;
-import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
-import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
 
 import java.io.BufferedReader;
@@ -44,12 +41,23 @@ import org.projog.core.PredicateFactory;
  * Prolog syntax contained in the "{@code TEST}" comment at the top of the class.
  */
 public final class ProjogTestGenerator {
-   private final String packageName;
-   private final File outputDirectory;
+   private final ProjogTestGeneratorConfig config;
 
-   private ProjogTestGenerator(String packageName, File outputDirectory) {
-      this.packageName = packageName;
-      this.outputDirectory = outputDirectory;
+   public static void generate(ProjogTestGeneratorConfig config) {
+      ProjogTestGenerator generator = new ProjogTestGenerator(config);
+      List<File> javaSourceFiles = generator.getDocumentableJavaSourceFiles(new File(config.getJavaRootDirectory(), config.getPackageName().replace('.', File.separatorChar)));
+      Map<String, File> alreadyProcessed = new HashMap<String, File>();
+      for (File f : javaSourceFiles) {
+         File previousEntry = alreadyProcessed.put(f.getName(), f);
+         if (previousEntry != null) {
+            throw new IllegalArgumentException("Two instances of: " + f.getName() + " first: " + previousEntry + " second: " + f);
+         }
+         generator.produceScriptFileFromJavaFile(f);
+      }
+   }
+
+   private ProjogTestGenerator(ProjogTestGeneratorConfig config) {
+      this.config = config;
    }
 
    private List<File> getDocumentableJavaSourceFiles(File dir) {
@@ -107,34 +115,34 @@ public final class ProjogTestGenerator {
    }
 
    private void produceScriptFileFromJavaFile(File javaFile) {
-      outputDirectory.mkdirs();
       try (FileReader fr = new FileReader(javaFile); BufferedReader br = new BufferedReader(fr)) {
-         boolean sysTestRead = false;
+         boolean testRead = false;
          boolean javadocRead = false;
          String line;
-         while ((!sysTestRead || !javadocRead) && (line = br.readLine()) != null) {
+         while ((!testRead || !javadocRead) && (line = br.readLine()) != null) {
             line = line.trim();
             if ("/* TEST".equals(line)) {
-               sysTestRead = true;
+               testRead = true;
                writeScriptFile(javaFile, br);
-            } else if (sysTestRead && !javadocRead && "/**".equals(line)) {
+            } else if (testRead && !javadocRead && "/**".equals(line)) {
                javadocRead = true;
                writeTextFile(javaFile, br);
             }
          }
-         if (!sysTestRead) {
-            throw new Exception("No system tests read for: " + javaFile);
+         if (!testRead && config.isRequireTest()) {
+            throw new Exception("No Prolog tests found in: " + javaFile);
          }
-         if (!javadocRead) {
-            throw new Exception("No javadoc read for: " + javaFile);
+         if (!javadocRead && config.isRequireJavadoc()) {
+            throw new Exception("No Javadoc found in: " + javaFile);
          }
       } catch (Exception e) {
-         throw new RuntimeException("cannot generate script from " + javaFile + " due to " + e, e);
+         throw new RuntimeException("Cannot generate Prolog test script from " + javaFile + " due to " + e, e);
       }
    }
 
    private void writeScriptFile(File javaFile, BufferedReader br) {
       File scriptFile = getOutputFile(javaFile, PROLOG_FILE_EXTENSION);
+      scriptFile.getParentFile().mkdirs();
 
       try (FileWriter fw = new FileWriter(scriptFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
@@ -154,6 +162,7 @@ public final class ProjogTestGenerator {
     */
    private void writeTextFile(File javaFile, BufferedReader br) {
       File textFile = getOutputFile(javaFile, TEXT_FILE_EXTENSION);
+      textFile.getParentFile().mkdirs();
 
       try (FileWriter fw = new FileWriter(textFile); BufferedWriter bw = new BufferedWriter(fw)) {
          String line;
@@ -178,29 +187,12 @@ public final class ProjogTestGenerator {
    }
 
    private File getOutputFile(File javaSourceFile, String extension) {
-      return new File(outputDirectory, getClassName(javaSourceFile) + extension);
+      return new File(config.getPrologTestsDirectory(), getClassName(javaSourceFile) + extension);
    }
 
    private String getClassName(File javaFile) {
       String path = javaFile.getPath().replace(File.separatorChar, '.');
-      int startPos = path.lastIndexOf(packageName);
+      int startPos = path.lastIndexOf(config.getPackageName());
       return path.substring(startPos, path.lastIndexOf('.'));
-   }
-
-   public static void generate(File rootJavaDirectory, String packageName, File outputDirectory) {
-      ProjogTestGenerator generator = new ProjogTestGenerator(packageName, outputDirectory);
-      List<File> javaSourceFiles = generator.getDocumentableJavaSourceFiles(new File(rootJavaDirectory, packageName.replace('.', File.separatorChar)));
-      Map<String, File> alreadyProcessed = new HashMap<String, File>();
-      for (File f : javaSourceFiles) {
-         File previousEntry = alreadyProcessed.put(f.getName(), f);
-         if (previousEntry != null) {
-            throw new IllegalArgumentException("Two instances of: " + f.getName() + " first: " + previousEntry + " second: " + f);
-         }
-         generator.produceScriptFileFromJavaFile(f);
-      }
-   }
-
-   public static final void main(String[] args) throws Exception {
-      generate(SOURCE_INPUT_DIR, FUNCTION_PACKAGE_NAME, new File(SCRIPTS_OUTPUT_DIR, "commands"));
    }
 }

@@ -1,0 +1,23 @@
+@startuml ProjogTestParser.png
+hide members
+
+class ProjogTestParser {
++getNext()
+}
+
+interface ProjogTestContent
+
+ProjogTestContent <|-- ProjogTestCode
+ProjogTestContent <|-- ProjogTestComment
+ProjogTestContent <|-- ProjogTestLink
+ProjogTestContent <|-- ProjogTestQuery
+
+ProjogTestQuery o-- ProjogTestAnswer
+
+ProjogTestParser ..> ProjogTestContent
+
+ProjogTestRunner o-- ProjogTestParser
+CodeExamplesWebPageCreator o-- ProjogTestParser
+
+show ProjogTestParser method
+@enduml

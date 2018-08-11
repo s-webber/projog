@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Constants and utility methods used in the build process.
  */
-final class BuildUtilsConstants {
+public final class BuildUtilsConstants {
    static final String FUNCTION_PACKAGE_NAME = "org.projog.core.function";
    static final File BUILD_DIR = new File("build");
    static final File WEB_SRC_DIR = new File("web");
@@ -37,14 +37,14 @@ final class BuildUtilsConstants {
    static final File FUNCTION_PACKAGE_DIR = new File(SOURCE_INPUT_DIR, FUNCTION_PACKAGE_NAME.replace('.', File.separatorChar));
    static final String LINE_BREAK = "\n";
    static final String HTML_FILE_EXTENSION = ".html";
-   static final String PROLOG_FILE_EXTENSION = ".pl";
-   static final String TEXT_FILE_EXTENSION = ".txt";
+   public static final String PROLOG_FILE_EXTENSION = ".pl";
+   public static final String TEXT_FILE_EXTENSION = ".txt";
    static final String MANUAL_HTML = "manual" + HTML_FILE_EXTENSION;
    static final String HEADER_HTML = "header" + HTML_FILE_EXTENSION;
    static final String FOOTER_HTML = "footer" + HTML_FILE_EXTENSION;
 
    /** Returns {@code true} if the the specified file has a prolog file extension. */
-   static boolean isPrologScript(File f) {
+   public static boolean isPrologScript(File f) {
       return f.getName().endsWith(PROLOG_FILE_EXTENSION);
    }
 
@@ -54,7 +54,7 @@ final class BuildUtilsConstants {
     * @param f file to read
     * @return contents of file
     */
-   static byte[] readAllBytes(File f) {
+   public static byte[] readAllBytes(File f) {
       try {
          return Files.readAllBytes(f.toPath());
       } catch (Exception e) {
@@ -71,7 +71,7 @@ final class BuildUtilsConstants {
     * @param f text file to read
     * @return list of lines contained in specified file
     */
-   static String readText(File f) {
+   public static String readText(File f) {
       return concatLines(readAllLines(f));
    }
 
@@ -104,7 +104,7 @@ final class BuildUtilsConstants {
    }
 
    /** Replaces all Windows-style {@code CR+LF} (i.e. {@code \r\n}) line endings with {@code LF} (i.e. {@code \n}). */
-   static String toUnixLineEndings(String expected) {
+   public static String toUnixLineEndings(String expected) {
       return expected.replace("\r\n", "\n");
    }
 

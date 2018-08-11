@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,8 @@ import java.util.List;
 /**
  * Constants and utility methods used in the build process.
  */
-class BuildUtilsConstants {
+final class BuildUtilsConstants {
+   static final String FUNCTION_PACKAGE_NAME = "org.projog.core.function";
    static final File BUILD_DIR = new File("build");
    static final File WEB_SRC_DIR = new File("web");
    static final File DOCS_OUTPUT_DIR = new File(BUILD_DIR, "docs");
@@ -33,7 +34,7 @@ class BuildUtilsConstants {
    static final File COMMANDS_INDEX_FILE = new File(DOCS_OUTPUT_DIR, "prolog-predicates.html");
    static final String SOURCE_INPUT_DIR_NAME = "src/core/";
    static final File SOURCE_INPUT_DIR = new File(SOURCE_INPUT_DIR_NAME);
-   static final File FUNCTION_PACKAGE = new File(SOURCE_INPUT_DIR, "org/projog/core/function");
+   static final File FUNCTION_PACKAGE_DIR = new File(SOURCE_INPUT_DIR, FUNCTION_PACKAGE_NAME.replace('.', File.separatorChar));
    static final String LINE_BREAK = "\n";
    static final String HTML_FILE_EXTENSION = ".html";
    static final String PROLOG_FILE_EXTENSION = ".pl";
@@ -49,7 +50,7 @@ class BuildUtilsConstants {
 
    /**
     * Returns the contents of the specified file as a byte array.
-    * 
+    *
     * @param f file to read
     * @return contents of file
     */
@@ -66,7 +67,7 @@ class BuildUtilsConstants {
     * <p>
     * Note: Carriage returns will be represented by {@code #LINE_BREAK} rather than the underlying carriage return style
     * used in the actual file.
-    * 
+    *
     * @param f text file to read
     * @return list of lines contained in specified file
     */
@@ -90,7 +91,7 @@ class BuildUtilsConstants {
 
    /**
     * Returns list of lines contained in specified text file.
-    * 
+    *
     * @param f text file to read
     * @return list of lines contained in specified file
     */

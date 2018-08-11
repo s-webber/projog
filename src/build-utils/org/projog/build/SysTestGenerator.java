@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,10 +15,10 @@
  */
 package org.projog.build;
 
-import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE;
+import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE_NAME;
 import static org.projog.build.BuildUtilsConstants.PROLOG_FILE_EXTENSION;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
-import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR_NAME;
+import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.TEXT_FILE_EXTENSION;
 
 import java.io.BufferedReader;
@@ -37,23 +37,22 @@ import org.projog.core.Calculatable;
 import org.projog.core.PredicateFactory;
 
 /**
- * Produces {@code .txt} and {@code .pl} files for implementaions of {@code PredicateFactory}.
- * <p>
- * Looks for java source files in {@link BuildUtilsConstants#FUNCTION_PACKAGE} and its subdirectories.
- * </p>
+ * Produces {@code .txt} and {@code .pl} files for implementations of {@code PredicateFactory}.
  * <p>
  * The contents of the files are extracted from the comments in the {@code .java} file of the {@code PredicateFactory}.
- * The {@code .txt} file contains the contents of the javadoc comment of the class. The {@code .pl} file contains the
- * prolog syntax contained in the "{@code TEST}" comment at the top of the class.
- * </p>
- * <p>
- * Designed to be run as a stand-alone single-threaded console application.
- * </p>
+ * The {@code .txt} file contains the contents of the Javadoc comment of the class. The {@code .pl} file contains the
+ * Prolog syntax contained in the "{@code TEST}" comment at the top of the class.
  */
-public class SysTestGenerator {
-   private static final File COMMANDS_OUTPUT_DIR = new File(SCRIPTS_OUTPUT_DIR, "commands");
+public final class SysTestGenerator {
+   private final String packageName;
+   private final File outputDirectory;
 
-   private static List<File> getDocumentableJavaSourceFiles(File dir) throws ClassNotFoundException {
+   private SysTestGenerator(String packageName, File outputDirectory) {
+      this.packageName = packageName;
+      this.outputDirectory = outputDirectory;
+   }
+
+   private List<File> getDocumentableJavaSourceFiles(File dir) {
       List<File> result = new ArrayList<File>();
       for (File f : dir.listFiles()) {
          if (f.isDirectory()) {
@@ -65,14 +64,22 @@ public class SysTestGenerator {
       return result;
    }
 
-   private static boolean isJavaSourceFileOfDocumentedClass(File file) throws ClassNotFoundException {
+   private boolean isJavaSourceFileOfDocumentedClass(File file) {
       if (!isJavaSource(file)) {
          return false;
       }
 
-      String className = getClassName(file);
-      Class<?> c = Class.forName(className);
+      Class<?> c = getClass(file);
       return isDocumentable(c);
+   }
+
+   private Class<?> getClass(File file) {
+      try {
+         String className = getClassName(file);
+         return Class.forName(className);
+      } catch (ClassNotFoundException e) {
+         throw new RuntimeException(e);
+      }
    }
 
    private static boolean isDocumentable(Class<?> c) {
@@ -99,15 +106,8 @@ public class SysTestGenerator {
       return f.getName().endsWith(".java");
    }
 
-   private static String getClassName(File javaFile) {
-      String filePath = javaFile.getPath();
-      String filePathMinusExtension = removeFileExtension(filePath);
-      String filePathMinusSourceDirectoryAndFileExtension = filePath.substring(SOURCE_INPUT_DIR_NAME.length(), filePathMinusExtension.length());
-      return filePathMinusSourceDirectoryAndFileExtension.replace(File.separatorChar, '.');
-   }
-
-   private static void produceScriptFileFromJavaFile(File javaFile) {
-      COMMANDS_OUTPUT_DIR.mkdirs();
+   private void produceScriptFileFromJavaFile(File javaFile) {
+      outputDirectory.mkdirs();
       try (FileReader fr = new FileReader(javaFile); BufferedReader br = new BufferedReader(fr)) {
          boolean sysTestRead = false;
          boolean javadocRead = false;
@@ -133,7 +133,7 @@ public class SysTestGenerator {
       }
    }
 
-   private static void writeScriptFile(File javaFile, BufferedReader br) {
+   private void writeScriptFile(File javaFile, BufferedReader br) {
       File scriptFile = getOutputFile(javaFile, PROLOG_FILE_EXTENSION);
 
       try (FileWriter fw = new FileWriter(scriptFile); BufferedWriter bw = new BufferedWriter(fw)) {
@@ -152,7 +152,7 @@ public class SysTestGenerator {
     * <p>
     * Comments can then be reused to construct user manual documentation.
     */
-   private static void writeTextFile(File javaFile, BufferedReader br) {
+   private void writeTextFile(File javaFile, BufferedReader br) {
       File textFile = getOutputFile(javaFile, TEXT_FILE_EXTENSION);
 
       try (FileWriter fw = new FileWriter(textFile); BufferedWriter bw = new BufferedWriter(fw)) {
@@ -162,7 +162,7 @@ public class SysTestGenerator {
             if (line.startsWith("*")) {
                line = line.substring(1).trim();
             }
-            // ignore any annotations present in input Javadoc 
+            // ignore any annotations present in input Javadoc
             if (!isAnnotation(line)) {
                bw.write(line);
                bw.newLine();
@@ -177,37 +177,30 @@ public class SysTestGenerator {
       return line.startsWith("@");
    }
 
-   private static File getOutputFile(File javaSourceFile, String extension) {
-      return new File(COMMANDS_OUTPUT_DIR, toScriptName(javaSourceFile, extension));
+   private File getOutputFile(File javaSourceFile, String extension) {
+      return new File(outputDirectory, getClassName(javaSourceFile) + extension);
    }
 
-   private static String toScriptName(File javaFile, String extension) {
-      String nameIncludingPackageStructure = javaFile.getPath().substring(SOURCE_INPUT_DIR_NAME.length()).replace(File.separatorChar, '.');
-      return replaceFileExtension(nameIncludingPackageStructure, extension);
+   private String getClassName(File javaFile) {
+      String path = javaFile.getPath().replace(File.separatorChar, '.');
+      int startPos = path.lastIndexOf(packageName);
+      return path.substring(startPos, path.lastIndexOf('.'));
    }
 
-   private static String replaceFileExtension(String fileName, String newExtension) {
-      return removeFileExtension(fileName) + newExtension;
-   }
-
-   private static String removeFileExtension(String fileName) {
-      int extensionPos = fileName.lastIndexOf('.');
-      if (extensionPos == -1) {
-         return fileName;
-      } else {
-         return fileName.substring(0, extensionPos);
-      }
-   }
-
-   public static final void main(String[] args) throws Exception {
-      List<File> javaSourceFiles = getDocumentableJavaSourceFiles(FUNCTION_PACKAGE);
+   public static void generate(File rootJavaDirectory, String packageName, File outputDirectory) {
+      SysTestGenerator sysTestGenerator = new SysTestGenerator(packageName, outputDirectory);
+      List<File> javaSourceFiles = sysTestGenerator.getDocumentableJavaSourceFiles(new File(rootJavaDirectory, packageName.replace('.', File.separatorChar)));
       Map<String, File> alreadyProcessed = new HashMap<String, File>();
       for (File f : javaSourceFiles) {
          File previousEntry = alreadyProcessed.put(f.getName(), f);
          if (previousEntry != null) {
             throw new IllegalArgumentException("Two instances of: " + f.getName() + " first: " + previousEntry + " second: " + f);
          }
-         produceScriptFileFromJavaFile(f);
+         sysTestGenerator.produceScriptFileFromJavaFile(f);
       }
+   }
+
+   public static final void main(String[] args) throws Exception {
+      generate(SOURCE_INPUT_DIR, FUNCTION_PACKAGE_NAME, new File(SCRIPTS_OUTPUT_DIR, "commands"));
    }
 }

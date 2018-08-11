@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@ package org.projog.build;
 
 import static org.projog.build.BuildUtilsConstants.DOCS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.FOOTER_HTML;
-import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE;
+import static org.projog.build.BuildUtilsConstants.FUNCTION_PACKAGE_DIR;
 import static org.projog.build.BuildUtilsConstants.HEADER_HTML;
 import static org.projog.build.BuildUtilsConstants.LINE_BREAK;
 import static org.projog.build.BuildUtilsConstants.MANUAL_HTML;
@@ -49,7 +49,7 @@ import java.util.Properties;
  * Designed to be run as a stand-alone single-threaded console application.
  * </p>
  */
-public class HtmlGenerator {
+public final class HtmlGenerator {
    private static final String FOOTER = readTextFile(new File(WEB_SRC_DIR, FOOTER_HTML)).toString();
    private static final String HEADER_BEFORE_TITLE;
    private static final String HEADER_AFTER_TITLE;
@@ -105,7 +105,7 @@ public class HtmlGenerator {
 
    private static Map<String, String> getPackageDescriptions() {
       HashMap<String, String> packageDescriptions = new HashMap<String, String>();
-      for (File dir : FUNCTION_PACKAGE.listFiles()) {
+      for (File dir : FUNCTION_PACKAGE_DIR.listFiles()) {
          File packageInfo = new File(dir, "package-info.java");
          if (packageInfo.exists()) {
             String packageName = dir.getPath().substring(SOURCE_INPUT_DIR_NAME.length()).replace(File.separatorChar, '.');

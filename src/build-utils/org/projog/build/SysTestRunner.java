@@ -15,7 +15,6 @@
  */
 package org.projog.build;
 
-import static java.lang.System.out;
 import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.isPrologScript;
 import static org.projog.build.BuildUtilsConstants.readAllBytes;
@@ -48,21 +47,17 @@ import org.projog.core.term.TermType;
  * are some subtle differences about how the results may be presented. As the expected output specified by the tests
  * always refers to what the compiled version should do, there are some "workarounds" for confirming the output of
  * running in interpreted mode.
- * </p>
- * <p>
- * Designed to be run as a stand-alone single-threaded console application.
- * </p>
- * 
+ *
  * @see SysTestParser
  */
-public class SysTestRunner implements Observer {
+public final class SysTestRunner implements Observer {
    private static final boolean DEBUG = false;
-   private static final File REDIRECTED_OUTPUT_FILE = new File("SysTestRunnerOutput.tmp");
    private static final ProjogSystemProperties SYSTEM_PROPERTIES = new ProjogSystemProperties();
 
+   private final File redirectedOutputFile = new File("SysTestRunnerOutput_" + hashCode() + ".tmp");
    private final Map<Object, Integer> spypointSourceIds = new HashMap<>();
    private Projog projog;
-   private Result stats = new Result();
+   private Result stats;
 
    /**
     * @see #checkScripts(List)
@@ -70,8 +65,7 @@ public class SysTestRunner implements Observer {
    private SysTestRunner() {
    }
 
-   static List<File> getScriptsToRun(String file) {
-      File f = new File(file);
+   private static List<File> getScriptsToRun(File f) {
       if (!f.exists()) {
          throw new RuntimeException(f.getPath() + " not found");
       }
@@ -100,18 +94,20 @@ public class SysTestRunner implements Observer {
       }
    }
 
-   static Result checkScripts(List<File> scripts) {
+   private static Result checkScripts(List<File> scripts) {
       return new SysTestRunner()._checkScripts(scripts);
    }
 
    private Result _checkScripts(List<File> scripts) {
-      stats = new Result();
+      long start = System.currentTimeMillis();
+      stats = new Result(scripts.size());
       for (File script : scripts) {
          // create new Projog each time so rules added from previous scripts
          // don't interfere with results of the script about to be checked
          projog = new Projog(SYSTEM_PROPERTIES, this);
          checkScript(script);
       }
+      stats.duration = System.currentTimeMillis() - start;
       return stats;
    }
 
@@ -127,7 +123,7 @@ public class SysTestRunner implements Observer {
    }
 
    private void consultFile(File script) {
-      out.println("Checking script: " + script.getPath());
+      println("Checking script: " + script.getPath());
       projog.consultFile(script);
    }
 
@@ -207,13 +203,13 @@ public class SysTestRunner implements Observer {
 
    /**
     * Redirect output to a file, rather than <code>System.out</code>, so it can be checked against the expectations.
-    * 
+    *
     * @return a reference to the newly opened file so it can be closed and read from after the tests have run
     * @see #closeOutput(Term)
     */
    private Term redirectOutput() {
-      REDIRECTED_OUTPUT_FILE.delete();
-      QueryStatement openStmt = projog.query("open('" + REDIRECTED_OUTPUT_FILE.getName() + "',write,Z).");
+      redirectedOutputFile.delete();
+      QueryStatement openStmt = projog.query("open('" + redirectedOutputFile.getName() + "',write,Z).");
       QueryResult openResult = openStmt.getResult();
       openResult.next();
       Term redirectedOutputFileHandle = openResult.getTerm("Z");
@@ -224,12 +220,12 @@ public class SysTestRunner implements Observer {
       return redirectedOutputFileHandle;
    }
 
-   private static void checkOutput(SysTestAnswer answer) {
+   private void checkOutput(SysTestAnswer answer) {
       checkOutput(answer.getExpectedOutput());
    }
 
-   private static void checkOutput(String expected) {
-      byte[] redirectedOutputFileContents = readAllBytes(REDIRECTED_OUTPUT_FILE);
+   private void checkOutput(String expected) {
+      byte[] redirectedOutputFileContents = readAllBytes(redirectedOutputFile);
       String actual = new String(redirectedOutputFileContents);
       if (!equalExcludingLineTerminators(expected, actual)) {
          if (isInterpretedMode() && isEqualsIgnoringVariableIds(expected, actual)) {
@@ -254,17 +250,13 @@ public class SysTestRunner implements Observer {
     * </p>
     * <p>
     * Example: this method will consider the following two lines to be equal as it is the variable name ( <code>X</code>
-    * and <code>A</code>) that are different:
-    * 
-    * <pre>
+    * and <code>A</code>) that are different: <pre>
     * [2] CALL testCalculatables( X, 3, 7 )
-    * </pre>
-    * 
-    * <pre>
+    * </pre> <pre>
     * [2] CALL testCalculatables( A, 3, 7 )
     * </pre>
     * </p>
-    * 
+    *
     * @param expected the expected output specified by a system test
     * @param actual the actual output generated by running the query of a system test
     * @return {@code true} if equal apart from variable names, else {@code false}
@@ -300,7 +292,7 @@ public class SysTestRunner implements Observer {
 
    /**
     * Close the file that was used to redirect output from the tests.
-    * 
+    *
     * @param redirectedOutputFileHandle reference to the file to close
     * @see #redirectOutput()
     */
@@ -309,7 +301,7 @@ public class SysTestRunner implements Observer {
       QueryResult closeResult = closeStmt.getResult();
       closeResult.setTerm("Z", redirectedOutputFileHandle);
       closeResult.next();
-      REDIRECTED_OUTPUT_FILE.delete();
+      redirectedOutputFile.delete();
    }
 
    private void checkAnswer(QueryResult result, SysTestAnswer correctAnswer) {
@@ -329,13 +321,8 @@ public class SysTestRunner implements Observer {
 
          String expectedTerm = correctAnswer.getAssignedValue(variableId);
          if (expectedTerm == null) {
-            throw new RuntimeException(variableId
-                                       + " ("
-                                       + variable
-                                       + ") was not expected to be assigned to anything but was to: "
-                                       + actualTerm
-                                       + " "
-                                       + correctAnswer.getAssignments());
+            throw new RuntimeException(
+                        variableId + " (" + variable + ") was not expected to be assigned to anything but was to: " + actualTerm + " " + correctAnswer.getAssignments());
          } else if (!actualTerm.equals(expectedTerm)) {
             throw new RuntimeException(variableId + " (" + variable + ") assigned to: " + actualTerm + " not: " + expectedTerm + " " + correctAnswer.getAssignments());
          }
@@ -354,7 +341,7 @@ public class SysTestRunner implements Observer {
       switch (event.getType()) {
          case WARN:
             // log to console
-            out.println(event.getType() + " " + event.getMessage());
+            println(event.getType() + " " + event.getMessage());
             break;
          case INFO:
             // ignore
@@ -396,13 +383,13 @@ public class SysTestRunner implements Observer {
 
    private static void debug(String s) {
       if (DEBUG) {
-         out.println(s);
+         println(s);
       }
    }
 
    private void debug(Exception e) {
       if (DEBUG) {
-         e.printStackTrace(out);
+         e.printStackTrace(System.out);
       }
    }
 
@@ -416,57 +403,87 @@ public class SysTestRunner implements Observer {
    private static void logMemory(Runtime r) {
       long totalMemory = r.totalMemory();
       long freeMemory = r.freeMemory();
-      out.println("Max memory: " + r.maxMemory() + " Total memory: " + totalMemory + " Free memory: " + freeMemory + " Used memory: " + (totalMemory - freeMemory));
+      println("Max memory: " + r.maxMemory() + " Total memory: " + totalMemory + " Free memory: " + freeMemory + " Used memory: " + (totalMemory - freeMemory));
+   }
+
+   private static void println(String s) {
+      System.out.println(s);
    }
 
    /** Represents the results of a sys-test run. */
-   static class Result {
+   public static class Result {
       private final StringBuilder errorMessages = new StringBuilder();
+      private final int scriptsCount;
       private int queryCount;
       private int errorCount;
+      private long duration;
+
+      private Result(int scriptsCount) {
+         this.scriptsCount = scriptsCount;
+      }
 
       private void addError(File f, String errorDescription) {
          errorMessages.append(f.getName() + " " + errorDescription + "\n");
          errorCount++;
       }
 
-      String getErrorMessages() {
+      public String getErrorMessages() {
          return errorMessages.toString();
       }
 
-      int getQueryCount() {
+      public int getQueryCount() {
          return queryCount;
       }
 
-      int getErrorCount() {
+      public int getScriptsCount() {
+         return scriptsCount;
+      }
+
+      public int getErrorCount() {
          return errorCount;
+      }
+
+      public boolean hasFailures() {
+         return errorCount != 0;
+      }
+
+      public void assertSuccess() {
+         if (hasFailures()) {
+            throw new RuntimeException(errorCount + " test failures: " + errorMessages);
+         }
+      }
+
+      public String getSummary() {
+         StringBuilder sb = new StringBuilder();
+         sb.append("Completed " + queryCount + " queries from " + scriptsCount + " files with " + errorCount + " failures in: " + duration + "ms");
+         if (hasFailures()) {
+            sb.append("\n\n\n ***** Failed: " + errorCount + " tests!!! *****\n\n\n");
+            sb.append(errorMessages);
+         }
+         return sb.toString();
       }
    }
 
-   public static final void main(String[] args) throws Exception {
-      long start = System.currentTimeMillis();
+   public static Result test(File testResourcesDir) {
+      List<File> scripts = getScriptsToRun(testResourcesDir);
+      return checkScripts(scripts);
+   }
 
-      String arg;
+   public static final void main(String[] args) throws Exception {
+      File testResourcesDir;
       if (args.length == 0) {
-         arg = SCRIPTS_OUTPUT_DIR.getPath();
-         out.println();
-         out.println("As no arguments provided, defaulting to running all system tests in " + arg);
-         out.println();
+         testResourcesDir = SCRIPTS_OUTPUT_DIR;
+         println("As no arguments provided, defaulting to running all system tests in " + testResourcesDir);
       } else if (args.length == 1) {
-         arg = args[0];
+         testResourcesDir = new File(args[0]);
       } else {
          throw new RuntimeException("More than one argument supplied");
       }
 
-      List<File> scripts = getScriptsToRun(arg);
-
-      Result result = checkScripts(scripts);
-
-      out.println("\nCompleted: " + result.queryCount + " queries from: " + scripts.size() + " files in: " + (System.currentTimeMillis() - start) + "ms");
+      Result result = test(testResourcesDir);
+      System.out.println(result.getSummary());
       logMemory();
-      if (result.errorCount != 0) {
-         out.println("\n\n\n ***** Failed: " + result.errorCount + " tests!!! *****\n\n\n");
-         out.println(result.errorMessages);
+      if (result.hasFailures()) {
          System.exit(-1);
       }
    }

@@ -20,7 +20,7 @@ import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
 import java.io.File;
 
 import org.projog.test.ProjogTestRunner;
-import org.projog.test.ProjogTestRunner.Result;
+import org.projog.test.ProjogTestRunner.TestResults;
 
 /** Called from build.xml Ant script as part of project's build process. */
 public final class ProjogTestRunnerApplication {
@@ -35,7 +35,7 @@ public final class ProjogTestRunnerApplication {
          throw new RuntimeException("More than one argument supplied");
       }
 
-      Result result = ProjogTestRunner.test(testResourcesDir);
+      TestResults result = ProjogTestRunner.runTests(testResourcesDir);
       System.out.println(result.getSummary());
       logMemory();
       if (result.hasFailures()) {

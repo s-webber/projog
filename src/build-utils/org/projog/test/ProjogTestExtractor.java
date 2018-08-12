@@ -29,23 +29,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.projog.core.Calculatable;
 import org.projog.core.PredicateFactory;
 
 /**
- * Produces {@code .txt} and {@code .pl} files for implementations of {@code PredicateFactory}.
+ * Extracts Prolog tests from the comments of Java source files.
  * <p>
- * The contents of the files are extracted from the comments in the {@code .java} file of the {@code PredicateFactory}.
- * The {@code .txt} file contains the contents of the Javadoc comment of the class. The {@code .pl} file contains the
- * Prolog syntax contained in the "{@code TEST}" comment at the top of the class.
+ * Produces {@code .txt} and {@code .pl} files for implementations of {@code PredicateFactory} and {@code Calculatable}.
+ * The contents of the files are extracted from the comments in the {@code .java} file of the {@code PredicateFactory}
+ * or {@code Calculatable}. The {@code .txt} file contains the contents of the Javadoc comment of the class. The
+ * {@code .pl} file contains the Prolog syntax contained in the "{@code TEST}" comment at the top of the class.
+ *
+ * @see ProjogTestExtractorConfig
+ * @see ProjogTestRunner
  */
-public final class ProjogTestGenerator {
-   private final ProjogTestGeneratorConfig config;
+public final class ProjogTestExtractor {
+   private final ProjogTestExtractorConfig config;
 
-   public static void generate(ProjogTestGeneratorConfig config) {
-      ProjogTestGenerator generator = new ProjogTestGenerator(config);
-      List<File> javaSourceFiles = generator.getDocumentableJavaSourceFiles(new File(config.getJavaRootDirectory(), config.getPackageName().replace('.', File.separatorChar)));
+   public static void extractTests() {
+      extractTests(new ProjogTestExtractorConfig());
+   }
+
+   public static void extractTests(ProjogTestExtractorConfig config) {
+      validateConfig(config);
+
+      ProjogTestExtractor generator = new ProjogTestExtractor(config);
+      List<File> javaSourceFiles = generator.getDocumentableJavaSourceFiles(config.getJavaRootDirectory());
       Map<String, File> alreadyProcessed = new HashMap<String, File>();
       for (File f : javaSourceFiles) {
          File previousEntry = alreadyProcessed.put(f.getName(), f);
@@ -56,7 +67,17 @@ public final class ProjogTestGenerator {
       }
    }
 
-   private ProjogTestGenerator(ProjogTestGeneratorConfig config) {
+   private static void validateConfig(ProjogTestExtractorConfig config) {
+      Objects.requireNonNull(config, "no ProjogTestExtractorConfig specified");
+      Objects.requireNonNull(config.getJavaRootDirectory(), "no Java root directiry specified");
+      Objects.requireNonNull(config.getPrologTestsDirectory(), "no Prolog tests directiry specified");
+      Objects.requireNonNull(config.getFileFilter(), "no file filter specified in " + config);
+      if (!config.getJavaRootDirectory().exists()) {
+         throw new IllegalArgumentException("Java root directory does not exists: " + config.getJavaRootDirectory());
+      }
+   }
+
+   private ProjogTestExtractor(ProjogTestExtractorConfig config) {
       this.config = config;
    }
 
@@ -73,12 +94,7 @@ public final class ProjogTestGenerator {
    }
 
    private boolean isJavaSourceFileOfDocumentedClass(File file) {
-      if (!isJavaSource(file)) {
-         return false;
-      }
-
-      Class<?> c = getClass(file);
-      return isDocumentable(c);
+      return isJavaSource(file) && config.getFileFilter().accept(file) && isDocumentable(getClass(file));
    }
 
    private Class<?> getClass(File file) {
@@ -191,8 +207,8 @@ public final class ProjogTestGenerator {
    }
 
    private String getClassName(File javaFile) {
-      String path = javaFile.getPath().replace(File.separatorChar, '.');
-      int startPos = path.lastIndexOf(config.getPackageName());
-      return path.substring(startPos, path.lastIndexOf('.'));
+      String rootPath = config.getJavaRootDirectory().getPath();
+      String pathMinusRoot = javaFile.getPath().substring(rootPath.length() + 1);
+      return pathMinusRoot.replace(File.separatorChar, '.').substring(0, pathMinusRoot.lastIndexOf('.'));
    }
 }

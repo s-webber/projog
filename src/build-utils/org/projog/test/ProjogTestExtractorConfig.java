@@ -16,42 +16,66 @@
 package org.projog.test;
 
 import java.io.File;
+import java.io.FileFilter;
 
-public final class ProjogTestGeneratorConfig {
+/**
+ * Provides configuration for how Prolog tests should be extracted from the comments of Java source files.
+ *
+ * @see ProjogTestExtractor#extractTests(ProjogTestExtractorConfig)
+ */
+public final class ProjogTestExtractorConfig {
+   private static final FileFilter DEFAULT_FILE_FILTER = new FileFilter() {
+      @Override
+      public boolean accept(File pathname) {
+         return true;
+      }
+   };
+
    private File javaRootDirectory;
-   private String packageName;
    private File prologTestsDirectory;
    private boolean requireJavadoc;
    private boolean requireTest;
+   private FileFilter fileFilter;
+
+   public ProjogTestExtractorConfig() {
+      // default to values that seem sensible for use in a Maven project
+      setJavaRootDirectory(new File("src/main/java"));
+      setPrologTestsDirectory(new File("target/prolog-tests-extracted-from-java"));
+      setFileFilter(DEFAULT_FILE_FILTER);
+   }
 
    public File getJavaRootDirectory() {
       return javaRootDirectory;
    }
 
+   /** The root directory of the Java source files from which Prolog tests will be extracted. */
    public void setJavaRootDirectory(File javaRootDirectory) {
       this.javaRootDirectory = javaRootDirectory;
-   }
-
-   public String getPackageName() {
-      return packageName;
-   }
-
-   public void setPackageName(String packageName) {
-      this.packageName = packageName;
    }
 
    public File getPrologTestsDirectory() {
       return prologTestsDirectory;
    }
 
+   /** The output directory to which the extracted Prolog test file will be written. */
    public void setPrologTestsDirectory(File prologTestsDirectory) {
       this.prologTestsDirectory = prologTestsDirectory;
+   }
+
+   public FileFilter getFileFilter() {
+      return fileFilter;
+   }
+
+   /** A filter used to configure which Java source files should have tests extracted from them. */
+   public void setFileFilter(FileFilter fileFilter) {
+      this.fileFilter = fileFilter;
    }
 
    public boolean isRequireJavadoc() {
       return requireJavadoc;
    }
 
+   /** Indicates whether an exception being thrown when a Java source file does not contain Javadoc. */
    public void setRequireJavadoc(boolean requireJavadoc) {
       this.requireJavadoc = requireJavadoc;
    }
@@ -60,6 +84,7 @@ public final class ProjogTestGeneratorConfig {
       return requireTest;
    }
 
+   /** Indicates whether an exception being thrown when a Java source file does not contain Prolog tests. */
    public void setRequireTest(boolean requireTest) {
       this.requireTest = requireTest;
    }

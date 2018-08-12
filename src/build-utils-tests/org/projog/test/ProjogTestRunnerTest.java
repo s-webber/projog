@@ -34,7 +34,7 @@ public class ProjogTestRunnerTest {
       final int expectedQueryCount = 23;
       final int expectedErrorCount = 13;
 
-      ProjogTestRunner.Result r = ProjogTestRunner.test(TEST_RESOURCES_DIR);
+      ProjogTestRunner.TestResults r = ProjogTestRunner.runTests(TEST_RESOURCES_DIR);
       assertEquals(expectedScriptsCount, r.getScriptsCount());
       assertEquals(expectedQueryCount, r.getQueryCount());
       assertEquals(expectedErrorCount, r.getErrorCount());

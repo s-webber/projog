@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,14 +51,14 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * 
  * <pre>
  * package org.projog.example;
- * 
+ *
  * import java.io.File;
- * 
+ *
  * import org.projog.api.Projog;
  * import org.projog.api.QueryResult;
  * import org.projog.api.QueryStatement;
  * import org.projog.core.term.Atom;
- * 
+ *
  * public class ProjogExample {
  *    public static void main(String[] args) {
  *       Projog p = new Projog();
@@ -73,13 +73,13 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  *       while (r2.next()) {
  *          System.out.println("Y = " + r2.getTerm("Y"));
  *       }
- * 
+ *
  *       QueryStatement s2 = p.query("testRule(X).");
  *       QueryResult r3 = s2.getResult();
  *       while (r3.next()) {
  *          System.out.println("X = " + r3.getTerm("X"));
  *       }
- * 
+ *
  *       QueryStatement s3 = p.query("test(X, Y), Y<3.");
  *       QueryResult r4 = s3.getResult();
  *       while (r4.next()) {
@@ -87,7 +87,8 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  *       }
  *    }
  * }
- * </pre>
+ * </pre> 
+ * 
  * Contents of {@code test.pl}:
  * 
  * <pre>
@@ -100,15 +101,18 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * test(g,7).
  * test(h,8).
  * test(i,9).
- * 
+ *
  * testRule(X) :- test(X, Y), Y mod 2 =:= 0.
  * </pre>
+ * 
  * Compiling {@code ProjogExample.java}:
  * 
  * <pre>javac -cp projog-core.jar;. ProjogExample.java</pre>
+ * 
  * Running {@code ProjogExample}:
  * 
  * <pre>java -cp projog-core.jar;. ProjogExample</pre>
+ * 
  * Output of running {@code ProjogExample}:
  * 
  * <pre>
@@ -157,7 +161,7 @@ public final class Projog {
 
    /**
     * Populates this objects {@code KnowledgeBase} with clauses read from the specified file.
-    * 
+    *
     * @param prologScript source of the prolog syntax defining the clauses to add
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses
     */
@@ -167,7 +171,7 @@ public final class Projog {
 
    /**
     * Populates this objects {@code KnowledgeBase} with clauses read from the specified {@code Reader}.
-    * 
+    *
     * @param reader source of the prolog syntax defining the clauses to add
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses
     */
@@ -179,7 +183,7 @@ public final class Projog {
     * Creates a {@link QueryStatement} for querying the Projog environment.
     * <p>
     * The newly created object represents the query parsed from the specified syntax.
-    * 
+    *
     * @param prologQuery prolog syntax representing a query
     * @return representation of the query parsed from the specified syntax
     * @throws ProjogException if an error occurs parsing {@code prologQuery}
@@ -191,7 +195,7 @@ public final class Projog {
    /**
     * Registers an {@code Observer} to receive {@link org.projog.core.event.ProjogEvent}s generated during the
     * evaluation of Prolog goals.
-    * 
+    *
     * @param observer an observer to be added
     */
    public void addObserver(Observer observer) {
@@ -200,13 +204,27 @@ public final class Projog {
 
    /**
     * Returns a string representation of the specified {@code Term}.
-    * 
+    *
     * @param t the {@code Term} to represent as a string
     * @return a string representation of the specified {@code Term}
     * @see org.projog.core.term.TermFormatter#toString(Term)
     */
    public String toString(Term t) {
       return tf.toString(t);
+   }
+
+   /**
+    * Returns the {@link KnowledgeBase} associated with this object.
+    * <p>
+    * Each {@code Projog} object is associated with its own {@link KnowledgeBase}. In normal usage it should not be
+    * necessary to call this method - as the other methods of {@code Projog} provide a more convenient mechanism for
+    * updating and querying the "core" inference engine.
+    *
+    * @return the {@link KnowledgeBase} associated with this object.
+    * @see org.projog.core.KnowledgeBaseUtils
+    */
+   public KnowledgeBase getKnowledgeBase() {
+      return kb;
    }
 
    /**

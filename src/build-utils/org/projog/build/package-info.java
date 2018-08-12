@@ -2,7 +2,7 @@
  * Provides utilities executed by the Projog build.xml Ant script to generate system test files, run system tests and generate web content.
  * <p>
  * <ul>
- * <li><code>ant sys-test.generate</code> launches {@link org.projog.test.ProjogTestGenerator} which extracts
+ * <li><code>ant sys-test.generate</code> launches {@link org.projog.test.ProjogTestExtractor} which extracts
  * Prolog syntax contained in the comments of java source files to produce system tests files.</li>
  * <li><code>ant sys-test.run</code> launches {@link org.projog.test.ProjogTestRunner} which runs the
  * queries contained in the system test files and compares the actual results to the expected answers.</li>

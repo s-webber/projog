@@ -20,20 +20,26 @@ import static org.projog.build.BuildUtilsConstants.SCRIPTS_OUTPUT_DIR;
 import static org.projog.build.BuildUtilsConstants.SOURCE_INPUT_DIR;
 
 import java.io.File;
+import java.io.FileFilter;
 
-import org.projog.test.ProjogTestGenerator;
-import org.projog.test.ProjogTestGeneratorConfig;
+import org.projog.test.ProjogTestExtractor;
+import org.projog.test.ProjogTestExtractorConfig;
 
 /** Called from build.xml Ant script as part of project's build process. */
-public final class ProjogTestGeneratorApplication {
+public final class ProjogTestExtractorApplication {
    public static final void main(String[] args) throws Exception {
-      ProjogTestGeneratorConfig config = new ProjogTestGeneratorConfig();
+      ProjogTestExtractorConfig config = new ProjogTestExtractorConfig();
       config.setJavaRootDirectory(SOURCE_INPUT_DIR);
-      config.setPackageName(FUNCTION_PACKAGE_NAME);
       config.setPrologTestsDirectory(new File(SCRIPTS_OUTPUT_DIR, "commands"));
       config.setRequireJavadoc(true);
       config.setRequireTest(true);
+      config.setFileFilter(new FileFilter() {
+         @Override
+         public boolean accept(File f) {
+            return f.getPath().replace(File.separatorChar, '.').contains(FUNCTION_PACKAGE_NAME);
+         }
+      });
 
-      ProjogTestGenerator.generate(config);
+      ProjogTestExtractor.extractTests(config);
    }
 }

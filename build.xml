@@ -136,7 +136,7 @@
 <!-- SYSTEM TESTS -->
 	<target name="sys-test.generate">
 		<!-- Extract prolog code from comments in java source code into seperate files for use by ProjogTestRunnerApplication. -->
-		<java classname="org.projog.build.ProjogTestGeneratorApplication" failonerror="true">
+		<java classname="org.projog.build.ProjogTestExtractorApplication" failonerror="true">
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>

@@ -33,40 +33,63 @@ import java.util.Set;
 import org.projog.api.Projog;
 import org.projog.api.QueryResult;
 import org.projog.api.QueryStatement;
+import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.ProjogException;
-import org.projog.core.ProjogSystemProperties;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /**
- * Runs system tests comparing actual output to expected results.
+ * Runs tests defined in Prolog files and compares actual output against expected results.
  * <p>
- * The system tests can be run in two modes - interpreted and compiled. Although they should give the same result there
- * are some subtle differences about how the results may be presented. As the expected output specified by the tests
- * always refers to what the compiled version should do, there are some "workarounds" for confirming the output of
- * running in interpreted mode.
+ * Projog can operate in two modes - interpreted and compiled. Although they should give the same result there are some
+ * subtle differences about how the results may be presented. As the expected output specified by the tests always
+ * refers to what the compiled version should do, there are some "workarounds" for confirming the output of running in
+ * interpreted mode.
  *
  * @see ProjogTestParser
+ * @see ProjogTestExtractor
  */
 public final class ProjogTestRunner implements Observer {
    private static final boolean DEBUG = false;
-   private static final ProjogSystemProperties SYSTEM_PROPERTIES = new ProjogSystemProperties();
 
    private final File redirectedOutputFile = new File("ProjogTestRunnerOutput_" + hashCode() + ".tmp");
    private final Map<Object, Integer> spypointSourceIds = new HashMap<>();
+   private final ProjogSupplier projogFactory;
    private Projog projog;
-   private Result stats;
+   private TestResults testResults;
 
-   public static Result test(File testResourcesDir) {
-      List<File> scripts = getScriptsToRun(testResourcesDir);
-      return checkScripts(scripts);
+   /**
+    * Run the Prolog tests contained in the given file.
+    *
+    * @param testResources If {@code testResources} is a directory then all test scripts in the directory, and its
+    * sub-directories, will be run. If {@code testResources} is a file then all tests contained in the file will be run.
+    * @return the results of running the tests
+    */
+   public static TestResults runTests(File testResources) {
+      return runTests(testResources, new ProjogSupplier() {
+         @Override
+         public Projog get() {
+            return new Projog();
+         }
+      });
    }
 
    /**
-    * @see #test(File)
+    * Run the Prolog tests contained in the given file.
+    *
+    * @param testResources If {@code testResources} is a directory then all test scripts in the directory, and its
+    * sub-directories, will be run. If {@code testResources} is a file then all tests contained in the file will be run.
+    * @param projogFactory Used to obtain the {@link Projog} instance to run the tests against.
+    * @return the results of running the tests
     */
-   private ProjogTestRunner() {
+   public static TestResults runTests(File testResources, ProjogSupplier projogFactory) {
+      List<File> scripts = getScriptsToRun(testResources);
+      return new ProjogTestRunner(projogFactory).checkScripts(scripts);
+   }
+
+   private ProjogTestRunner(ProjogSupplier projogFactory) {
+      this.projogFactory = projogFactory;
    }
 
    private static List<File> getScriptsToRun(File f) {
@@ -98,21 +121,18 @@ public final class ProjogTestRunner implements Observer {
       }
    }
 
-   private static Result checkScripts(List<File> scripts) {
-      return new ProjogTestRunner()._checkScripts(scripts);
-   }
-
-   private Result _checkScripts(List<File> scripts) {
+   private TestResults checkScripts(List<File> scripts) {
       long start = System.currentTimeMillis();
-      stats = new Result(scripts.size());
+      testResults = new TestResults(scripts.size());
       for (File script : scripts) {
          // create new Projog each time so rules added from previous scripts
          // don't interfere with results of the script about to be checked
-         projog = new Projog(SYSTEM_PROPERTIES, this);
+         projog = projogFactory.get();
+         projog.addObserver(this);
          checkScript(script);
       }
-      stats.duration = System.currentTimeMillis() - start;
-      return stats;
+      testResults.duration = System.currentTimeMillis() - start;
+      return testResults;
    }
 
    private void checkScript(File f) {
@@ -122,7 +142,7 @@ public final class ProjogTestRunner implements Observer {
          checkQueries(f, queries);
       } catch (Exception e) {
          debug(e);
-         stats.addError(f, "Error checking Prolog test script: " + f.getPath() + " " + e);
+         testResults.addError(f, "Error checking Prolog test script: " + f.getPath() + " " + e);
       }
    }
 
@@ -137,14 +157,14 @@ public final class ProjogTestRunner implements Observer {
             checkQuery(query);
          } catch (Exception e) {
             debug(e);
-            stats.addError(f, query.getPrologQuery() + " " + e.getClass() + " " + e.getMessage());
+            testResults.addError(f, query.getPrologQuery() + " " + e.getClass() + " " + e.getMessage());
          }
       }
    }
 
    private void checkQuery(ProjogTestQuery query) {
       debug("QUERY: " + query.getPrologQuery());
-      stats.queryCount++;
+      testResults.queryCount++;
 
       Iterator<ProjogTestAnswer> itr = null;
       Term redirectedOutputFileHandle = null;
@@ -381,8 +401,8 @@ public final class ProjogTestRunner implements Observer {
       openResult.next();
    }
 
-   private static boolean isInterpretedMode() {
-      return SYSTEM_PROPERTIES.isRuntimeCompilationEnabled() == false;
+   private boolean isInterpretedMode() {
+      return !KnowledgeBaseUtils.getProjogProperties(projog.getKnowledgeBase()).isRuntimeCompilationEnabled();
    }
 
    private static void debug(String s) {
@@ -401,15 +421,19 @@ public final class ProjogTestRunner implements Observer {
       System.out.println(s);
    }
 
-   /** Represents the results of a sys-test run. */
-   public static class Result {
+   /**
+    * Represents the results of running the Prolog tests.
+    *
+    * @see #assertSuccess()
+    */
+   public static class TestResults {
       private final StringBuilder errorMessages = new StringBuilder();
       private final int scriptsCount;
       private int queryCount;
       private int errorCount;
       private long duration;
 
-      private Result(int scriptsCount) {
+      private TestResults(int scriptsCount) {
          this.scriptsCount = scriptsCount;
       }
 
@@ -418,16 +442,12 @@ public final class ProjogTestRunner implements Observer {
          errorCount++;
       }
 
-      public String getErrorMessages() {
-         return errorMessages.toString();
+      public int getScriptsCount() {
+         return scriptsCount;
       }
 
       public int getQueryCount() {
          return queryCount;
-      }
-
-      public int getScriptsCount() {
-         return scriptsCount;
       }
 
       public int getErrorCount() {
@@ -438,6 +458,15 @@ public final class ProjogTestRunner implements Observer {
          return errorCount != 0;
       }
 
+      public String getErrorMessages() {
+         return errorMessages.toString();
+      }
+
+      /**
+       * Throws an exception if any of the tests failed.
+       *
+       * @throws RuntimeException if any of the tests failes
+       */
       public void assertSuccess() {
          if (hasFailures()) {
             throw new RuntimeException(errorCount + " test failures:\n" + errorMessages);
@@ -453,5 +482,14 @@ public final class ProjogTestRunner implements Observer {
          }
          return sb.toString();
       }
+   }
+
+   /**
+    * Creates the {@link Projog} instance that tests will be run against.
+    * <p>
+    * TODO if this project is upgraded from Java 7 then this interface can be replaced with: java.util.function.Supplier
+    */
+   public interface ProjogSupplier {
+      Projog get();
    }
 }

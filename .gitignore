@@ -18,3 +18,7 @@ junit*.properties
 /src/prolog/tmp
 /temp
 /projogGeneratedClasses
+/target
+
+pom.xml*
+deploy*.xml

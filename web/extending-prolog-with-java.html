@@ -12,10 +12,22 @@ or <a href="javadoc/org/projog/core/function/AbstractRetryablePredicate.html" ti
 <h3>Example usage</h3>
 
 <p>
-Contents of <code>org/projog/example/SingletonPredicateExample.java</code>:
+If your project is configured using Maven then you can add a dependency on Projog by adding the following to your project's <code>pom.xml</code>:
 </p>
 
-<div class="code"><code>package org.projog.example;<br>
+<div class="code"><code>
+&lt;dependency&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.projog&lt;/groupId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;projog-core&lt;/artifactId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;version&gt;@PROJOG_VERSION@&lt;/version&gt;<br>
+&lt;/dependency&gt;</code></div>
+
+<p>
+Contents of <a href="https://github.com/s-webber/projog-examples/blob/master/calling-java-from-prolog/src/main/java/com/example/SingletonPredicateExample.java" target="_blank">
+<code>com/example/SingletonPredicateExample.java</code></a>:
+</p>
+
+<div class="code"><code>package com.example;<br>
 <br>
 import static org.projog.core.term.TermUtils.getAtomName;<br>
 <br>
@@ -23,11 +35,15 @@ import org.projog.core.function.AbstractSingletonPredicate;<br>
 import org.projog.core.term.Atom;<br>
 import org.projog.core.term.Term;<br>
 <br>
+/**<br>
+ * &lt;code&gt;uppercase(X,Y)&lt;/code&gt; - succeeds if the atom represented by Y is equal to an upper case version of the atom<br>
+ * represented by X.<br>
+ */<br>
 public class SingletonPredicateExample extends AbstractSingletonPredicate {<br>
 &nbsp;&nbsp;&nbsp;@Override<br>
-&nbsp;&nbsp;&nbsp;public boolean evaluate(Term t1, Term t2) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Atom t1ToUpperCase = new Atom(getAtomName(t1).toUpperCase());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return t2.unify(t1ToUpperCase);<br>
+&nbsp;&nbsp;&nbsp;public boolean evaluate(Term term1, Term term2) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Atom upperCaseTerm1 = new Atom(getAtomName(term1).toUpperCase());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return term2.unify(upperCaseTerm1);<br>
 &nbsp;&nbsp;&nbsp;}<br>
 }</code></div>
 
@@ -36,29 +52,29 @@ Example of integrating <code>org.projog.example.SingletonPredicateExample</code>
 </p>
 
 <div class="code"><pre>
-?- pj_add_predicate(to_upper/2, 'org.projog.example.SingletonPredicateExample').
+?- pj_add_predicate(uppercase/2, 'org.projog.example.SingletonPredicateExample').
 
 yes
 
-?- to_upper('The quick brown fox jumps over the lazy dog', X).
+?- uppercase('The quick brown fox jumps over the lazy dog', X).
 X = THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
 
 yes
 
-?- to_upper('The quick brown fox jumps over the lazy dog', 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG').
+?- uppercase('The quick brown fox jumps over the lazy dog', 'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG').
 
 yes
 
-?- to_upper('The quick brown fox jumps over the lazy dog', 'THE QUICK BROWN BOX JUMPS OVER THE LAZY FOG').
+?- uppercase('The quick brown fox jumps over the lazy dog', 'THE QUICK BROWN BOX JUMPS OVER THE LAZY FOG').
 
 no
 </pre></div>
 
 <p>
-Contents of <code>org/projog/example/RetryablePredicateExample.java</code>:
+Contents of <code>com/example/RetryablePredicateExample.java</code>:
 </p>
 
-<div class="code"><code>package org.projog.example;<br>
+<div class="code"><code>package com.example;<br>
 <br>
 import java.util.Iterator;<br>
 import java.util.Map;<br>
@@ -69,7 +85,7 @@ import org.projog.core.term.Atom;<br>
 import org.projog.core.term.Term;<br>
 <br>
 public class RetryablePredicateExample extends AbstractRetryablePredicate {<br>
-&nbsp;&nbsp;&nbsp;private Iterator<Map.Entry<Object, Object>> systemProperties;<br>
+&nbsp;&nbsp;&nbsp;private Iterator&lt;Map.Entry&lt;Object, Object&gt;&gt; systemProperties;<br>
 <br>
 &nbsp;&nbsp;&nbsp;@Override<br>
 &nbsp;&nbsp;&nbsp;public boolean evaluate(Term arg1, Term arg2) {<br>
@@ -79,10 +95,10 @@ public class RetryablePredicateExample extends AbstractRetryablePredicate {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (systemProperties.hasNext()) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg1.backtrack();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arg2.backtrack();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entry<Object, Object> entry = systemProperties.next();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entry&lt;Object, Object&gt; entry = systemProperties.next();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key = (String) entry.getKey();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String value = (String) entry.getValue();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (arg1.unify(new Atom(key)) && arg2.unify(new Atom(value))) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (arg1.unify(new Atom(key)) &amp;&amp; arg2.unify(new Atom(value))) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
@@ -96,11 +112,11 @@ public class RetryablePredicateExample extends AbstractRetryablePredicate {<br>
 }</code></div>
 
 <p>
-Example of integrating <code>org.projog.example.RetryablePredicateExample</code> into Projog:
+Example of integrating <code>com.example.RetryablePredicateExample</code> into Projog:
 </p>
 
 <div class="code"><pre>
-?- pj_add_predicate(props/2, 'org.projog.example.RetryablePredicateExample').
+?- pj_add_predicate(props/2, 'com.example.RetryablePredicateExample').
 
 yes
 
@@ -129,4 +145,5 @@ Y = http://java.oracle.com/
 <h3>See Also</h3>
 <ul>
 <li><a href="AddPredicateFactory.html">pj_add_predicate/2</li>
+<li><a href="https://github.com/s-webber/projog-examples/tree/master" target="_blank">The "projog-examples" GitHub project</a></li>
 </ul>

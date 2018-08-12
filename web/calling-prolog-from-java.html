@@ -2,22 +2,36 @@
 As well as interacting with Projog using the console application it is also possible to embed Projog in your Java applications.
 The steps required for applications to interact with Projog are as follows:
 <ul>
+<li>Add <code>projog-core-@PROJOG_VERSION@.jar</code> to your project.</li>
 <li>Create a new <a href="javadoc/org/projog/api/Projog.html" title="class in org.projog.api"><code>Projog</code></a> instance.</li>
-<li>Load in clauses and facts using <a href="javadoc/org/projog/api/Projog.html#consultFile(java.io.File)"><code>Projog.consultFile(File)</code></a> or <a href="javadoc/org/projog/api/Projog.html#consultReader(java.io.Reader)"><code>Projog.consultReader(Reader)</code></a>.</li>
-<li>Create a <a href="javadoc/org/projog/api/QueryStatement.html" title="class in org.projog.api"><code>QueryStatement</code></a> by using <a href="javadoc/org/projog/api/Projog.html#query(java.lang.String)"><code>Projog.query(String)</code></a>.</li>
-<li>Create a <a href="javadoc/org/projog/api/QueryResult.html" title="class in org.projog.api"><code>QueryResult</code></a> by using <a href="javadoc/org/projog/api/QueryStatement.html#getResult()"><code>QueryStatement.getResult()</code></a>.</li>
-<li>Iterate through all possible solutions to the query by using <a href="javadoc/org/projog/api/QueryResult.html#next()"><code>QueryResult.next()</code></a>.</li>
-<li>For each solution get the <a href="javadoc/org/projog/core/term/Term.html" title="interface in org.projog.core.term"><code>Term</code></a> instantiated to a <a href="javadoc/org/projog/core/term/Variable.html" title="class in org.projog.core.term"><code>Variable</code></a> in the query by calling <a href="javadoc/org/projog/api/QueryResult.html#getTerm(java.lang.String)"><code>QueryResult.getTerm(String)</code></a>.</li>
+<li>Load in clauses and facts using <a href="javadoc/org/projog/api/Projog.html#consultFile-java.io.File-"><code>Projog.consultFile(File)</code></a> or <a href="javadoc/org/projog/api/Projog.html#consultReader-java.io.Reader-"><code>Projog.consultReader(Reader)</code></a>.</li>
+<li>Create a <a href="javadoc/org/projog/api/QueryStatement.html" title="class in org.projog.api"><code>QueryStatement</code></a> by using <a href="javadoc/org/projog/api/Projog.html#query-java.lang.String-"><code>Projog.query(String)</code></a>.</li>
+<li>Create a <a href="javadoc/org/projog/api/QueryResult.html" title="class in org.projog.api"><code>QueryResult</code></a> by using <a href="javadoc/org/projog/api/QueryStatement.html#getResult--"><code>QueryStatement.getResult()</code></a>.</li>
+<li>Iterate through all possible solutions to the query by using <a href="javadoc/org/projog/api/QueryResult.html#next--"><code>QueryResult.next()</code></a>.</li>
+<li>For each solution get the <a href="javadoc/org/projog/core/term/Term.html" title="interface in org.projog.core.term"><code>Term</code></a> instantiated to a <a href="javadoc/org/projog/core/term/Variable.html" title="class in org.projog.core.term"><code>Variable</code></a> in the query by calling <a href="javadoc/org/projog/api/QueryResult.html#getTerm-java.lang.String-"><code>QueryResult.getTerm(String)</code></a>.</li>
 </ul>
 </p>
 
 <h3>Example usage</h3>
 
 <p>
-Contents of <code>org/projog/example/ProjogExample.java</code>:
+If your project is configured using Maven then you can add a dependency on Projog by adding the following to your project's <code>pom.xml</code>:
 </p>
 
-<div class="code"><code>package org.projog.example;<br>
+<div class="code"><code>
+&lt;dependency&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.projog&lt;/groupId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;projog-core&lt;/artifactId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;version&gt;@PROJOG_VERSION@&lt;/version&gt;<br>
+&lt;/dependency&gt;</code></div>
+
+<p>
+Contents of
+<a href="https://github.com/s-webber/projog-examples/blob/master/calling-prolog-from-java/src/main/java/com/example/ProjogExample.java" target="_blank">
+<code>com/example/ProjogExample.java</code></a>:
+</p>
+
+<div class="code"><code>package com.example;<br>
 <br>
 import java.io.File;<br>
 <br>
@@ -28,25 +42,36 @@ import org.projog.core.term.Atom;<br>
 <br>
 public class ProjogExample {<br>
 &nbsp;&nbsp;&nbsp;public static void main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Create a new Projog instance<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projog p = new Projog();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.consultFile(new File("test.pl"));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Read Prolog facts and rules from a file to populate the "Projog" instance created in step 1.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.consultFile(new File("src/main/resources/test.pl"));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Create a query that will use the facts read in step 2.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryStatement s1 = p.query("test(X,Y).");<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Execute the query created in step 3.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryResult r1 = s1.getResult();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (r1.next()) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("X = " + r1.getTerm("X") + " Y = " + r1.getTerm("Y"));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Execute the query created in step 3, after specifying a term for one of the variables contained in the query.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryResult r2 = s1.getResult();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r2.setTerm("X", new Atom("d"));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (r2.next()) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Y = " + r2.getTerm("Y"));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Create and execute a new query that will use the rule read in step 2.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryStatement s2 = p.query("testRule(X).");<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryResult r3 = s2.getResult();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (r3.next()) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("X = " + r3.getTerm("X"));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Create and execute a new query that uses a conjunction. See: http://www.projog.org/Conjunction.html<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryStatement s3 = p.query("test(X, Y), Y&lt;3.");<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QueryResult r4 = s3.getResult();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (r4.next()) {<br>
@@ -76,18 +101,6 @@ testRule(X) :- test(X, Y), Y mod 2 =:= 0.
 </div>
 
 <p>
-Compiling <code>org/projog/example/ProjogExample.java</code>:
-</p>
-
-<pre>javac -cp projog-core.jar;. org/projog/example/ProjogExample.java</pre>
-
-<p>
-Running <code>org.projog.example.ProjogExample</code>:
-</p>
-
-<pre>java -cp projog-core.jar;. org.projog.example.ProjogExample</pre>
-
-<p>
 Output of running <code>org.projog.example.ProjogExample</code>:
 </p>
 
@@ -111,3 +124,8 @@ X = a Y = 1
 X = b Y = 2
 </pre>
 </div>
+
+<h3>See Also</h3>
+<ul>
+<li><a href="https://github.com/s-webber/projog-examples/tree/master" target="_blank">The "projog-examples" GitHub project</a></li>
+</ul>

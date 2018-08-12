@@ -1,15 +1,27 @@
 <?xml version="1.0"?>
 <project name="projog" default="test">
-	<property name="core-jar" value="build/lib/projog-core.jar"/>
-	<property name="lib" value="lib"/>
-	<property name="junit-jar" value="${lib}/junit-4.11.jar"/>
-	<property name="hamcrest-jar" value="${lib}/hamcrest-core-1.3.jar"/>
 	<property name="maven-url" value="http://search.maven.org/remotecontent?filepath="/>
-	<property name="junit-url" value="${maven-url}junit/junit/4.11/junit-4.11.jar"/>
-	<property name="hamcrest-url" value="${maven-url}org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
+	<property name="junit-version" value="4.11"/>
+	<property name="junit-jar" value="lib/junit-${junit-version}.jar"/>
+	<property name="junit-url" value="${maven-url}junit/junit/${junit-version}/junit-${junit-version}.jar"/>
+	<property name="hamcrest-version" value="1.3"/>
+	<property name="hamcrest-jar" value="lib/hamcrest-core-${hamcrest-version}.jar"/>
+	<property name="hamcrest-url" value="${maven-url}org/hamcrest/hamcrest-core/${hamcrest-version}/hamcrest-core-${hamcrest-version}.jar"/>
 	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
-	<property name="zipPrefixDir" value="projog-0.1.0"/>
+	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
 	<property name="javac-target" value="1.7"/>
+
+	<!--
+	define Maven coordinates and artifact names https://central.sonatype.org/pages/apache-ant.html
+	-->
+	<property name="groupId" value="org.projog" />
+	<property name="artifactId" value="projog-core" />
+	<property name="version" value="0.1.0-SNAPSHOT" />
+	<property name="core-jar-name" value="${artifactId}-${version}.jar" />
+	<property name="core-jar" value="build/lib/${core-jar-name}" />
+	<property name="javadoc-jar" value="build/lib/${artifactId}-${version}-javadoc.jar" />
+	<property name="sources-jar" value="build/lib/${artifactId}-${version}-sources.jar" />
+	<property name="release-dir" value="projog-${version}"/>
 
 	<tstamp>
 		<format property="manifest.timestamp" pattern="yyyy-MM-dd HH:mm"/>
@@ -27,7 +39,7 @@
 	</target>
 
 	<target name="get-junit" depends="check-junit" unless="junit.exists">
-		<mkdir dir="${lib}"/>
+		<mkdir dir="lib"/>
 		<!-- JUnit has a dependency on Hamcrest -->
 		<get src="${hamcrest-url}" dest="${hamcrest-jar}"/>
 		<get src="${junit-url}" dest="${junit-jar}"/>
@@ -42,12 +54,12 @@
 		</javac>
 	</target>
 
-	<target name="compile.jar">
-		<!-- produce jar containing core classes and properties files -->
+	<target name="compile.jar" description="produce jar containing core classes and properties files">
 		<mkdir dir="build/lib"/>
 		<jar destfile="${core-jar}">
 			<manifest>
 				<attribute name="Main-Class" value="${mainClass}"/>
+				<attribute name="Projog-Version" value="${version}"/>
 				<attribute name="Build-Timestamp" value="${manifest.timestamp}"/>
 			</manifest>
 			<fileset dir="etc">
@@ -189,6 +201,7 @@
 			</fileset>
 		</copy>
 		<java classname="org.projog.build.HtmlGenerator" failonerror="true" fork="true">
+			<arg value="${version}"/>
 			<classpath>
 				<pathelement location="${core-jar}"/>
 				<pathelement location="build/classes/build-utils"/>
@@ -203,8 +216,8 @@
 		<mkdir dir="build/lib"/>
 		<javadoc destdir="build/docs/javadoc" packagenames="*" windowTitle="Projog Javadoc">
 			<doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
-			<header><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>Projog</a>]]></header>
-			<footer><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>Projog</a>]]></footer>
+			<header>${version}</header>
+			<footer>${version}</footer>
 			<bottom><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language.]]></bottom>
 			<sourcepath>
 				<pathelement location="src/core"/>
@@ -213,37 +226,48 @@
 	</target>
 
 <!-- RELEASE -->
-	<target name="release-bin" depends="clean,compile,unit-test,sys-test,web,javadoc"
+	<target name="release-artifacts" depends="clean,compile,unit-test,sys-test,javadoc"
+	        description="builds Maven artifacts">
+		<jar jarfile="${javadoc-jar}">
+			<fileset dir="build/docs/javadoc" />
+		</jar>
+
+		<jar jarfile="${sources-jar}">
+			<fileset dir="src/core" />
+		</jar>
+	</target>
+
+	<target name="release-application" depends="release-artifacts,web"
 	        description="builds release candidate as zip containing jar, html documentation and batch files">
 		<copy todir="build/etc">
 			<fileset dir="etc"/>
 		</copy>
 		<fixcrlf srcdir="build/etc" includes="*.sh" eol="lf" eof="remove" />
-		<zip destfile="build/projog-bin.zip">
-			<zipfileset dir="build/etc" prefix="${zipPrefixDir}">
+		<zip destfile="build/${release-dir}.zip">
+			<zipfileset dir="build/etc" prefix="${release-dir}">
 				<include name="projog-console*.bat"/>
 				<include name="projog-console*.sh"/>
 				<include name="README.txt"/>
 				<include name="towers-of-hanoi-example.pl"/>
 			</zipfileset>
-			<zipfileset dir="build" prefix="${zipPrefixDir}">
+			<zipfileset dir="build" prefix="${release-dir}">
 				<include name="docs/*.html"/>
 				<include name="docs/*.css"/>
 				<include name="docs/javadoc/**"/>
-				<include name="${lib}/**"/>
+				<include name="lib/${core-jar-name}"/>
 			</zipfileset>
-			<zipfileset dir="." includes="LICENSE" prefix="${zipPrefixDir}"/>
+			<zipfileset dir="." includes="LICENSE" prefix="${release-dir}"/>
 		</zip>
 	</target>
 
-	<target name="release-web" depends="release-bin"
+	<target name="release-website" depends="release-application"
 	        description="builds zip of web content for projog.org">
 		<zip destfile="build/projog-web-${filename.timestamp}.zip">
 			<fileset dir="build/docs">
 				<include name="**"/>
 			</fileset>
-			<zipfileset dir="build" includes="projog-bin.zip" prefix="downloads"/>
-			<zipfileset dir="build/lib" includes="projog-core.jar" prefix="downloads"/>
+			<zipfileset dir="build" includes="${release-dir}.zip" prefix="downloads"/>
+			<zipfileset dir="build/lib" includes="projog-*.jar" prefix="downloads"/>
 		</zip>
 	</target>
 </project>

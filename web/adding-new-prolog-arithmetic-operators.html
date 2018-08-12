@@ -6,52 +6,64 @@ This mechanism provides an easy way to configure and extend the arithmetic opera
 <h3>Example usage</h3>
 
 <p>
-Contents of <code>org/projog/example/CalculatableExample.java</code>:
+If your project is configured using Maven then you can add a dependency on Projog by adding the following to your project's <code>pom.xml</code>:
 </p>
 
-<div class="code"><code>package org.projog.example;<br>
+<div class="code"><code>
+&lt;dependency&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.projog&lt;/groupId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;projog-core&lt;/artifactId&gt;<br>
+&nbsp;&nbsp;&nbsp;&lt;version&gt;@PROJOG_VERSION@&lt;/version&gt;<br>
+&lt;/dependency&gt;</code></div>
+
+<p>
+Contents of
+<a href="https://github.com/s-webber/projog-examples/blob/master/calling-java-from-prolog/src/main/java/com/example/CalculatableExample.java" target="_blank">
+<code>com/example/CalculatableExample.java</code></a>:
+</p>
+
+<div class="code"><code>package com.example;<br>
 <br>
-import org.projog.core.Calculatable;<br>
-import org.projog.core.KnowledgeBase;<br>
-import org.projog.core.term.DoubleNumber;<br>
-import org.projog.core.term.Numeric;<br>
-import org.projog.core.term.Term;<br>
-import org.projog.core.term.TermUtils;<br>
+import org.projog.core.function.math.AbstractOneArgumentCalculatable;<br>
 <br>
-public class CalculatableExample implements Calculatable {<br>
+/**<br>
+ * &lt;code&gt;triple(X)&lt;/code&gt; - multiples the given number by 3.<br>
+ */<br>
+public class CalculatableExample extends AbstractOneArgumentCalculatable {<br>
+<br>
 &nbsp;&nbsp;&nbsp;@Override<br>
-&nbsp;&nbsp;&nbsp;public void setKnowledgeBase(KnowledgeBase kb) {<br>
+&nbsp;&nbsp;&nbsp;protected double calculateDouble(double input) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return input * 3;<br>
 &nbsp;&nbsp;&nbsp;}<br>
+<br>
 &nbsp;&nbsp;&nbsp;@Override<br>
-&nbsp;&nbsp;&nbsp;public Numeric calculate(Term... args) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Numeric input = castToNumeric(args[0]);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long rounded = Math.round(input.getDouble());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new IntegerNumber(rounded);<br>
+&nbsp;&nbsp;&nbsp;protected long calculateLong(long input) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return input * 3;<br>
 &nbsp;&nbsp;&nbsp;}<br>
 }</code></div>
 
 <p>
-Example of integrating <code>org.projog.example.CalculatableExample</code> into Projog:
+Example of integrating <code>com.example.CalculatableExample</code> into Projog:
 </p>
 
 <div class="code">
 <pre>
-?- pj_add_calculatable(round/1, 'org.projog.example.CalculatableExample').
+?- pj_add_calculatable(triple/1, 'com.example.CalculatableExample').
 
 yes
 
-?- X is round(109).
-X = 109
+?- X is triple(3).
+X = 9
 
 yes
 
-?- X is round(109.5).
-X = 110
+?- X is round(147).
+X = 441
 
 yes
 
-?- X is round(109.49).
-X = 109
+?- X is round(-42.5).
+X = 127.5
 
 yes
 </pre>
@@ -61,5 +73,6 @@ yes
 <ul>
 <li><a href="AddArithmeticFunction.html">arithmetic_function/1</li>
 <li><a href="AddCalculatable.html">pj_add_calculatable/2</li>
+<li><a href="https://github.com/s-webber/projog-examples/tree/master" target="_blank">The "projog-examples" GitHub project</a></li>
 </ul>
 

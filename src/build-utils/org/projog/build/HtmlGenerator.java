@@ -35,7 +35,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -60,8 +59,14 @@ public final class HtmlGenerator {
       HEADER_AFTER_TITLE = header.substring(titlePos);
       DOCS_OUTPUT_DIR.mkdir();
    }
+   private static String VERSION;
 
    public static void main(final String[] args) throws Exception {
+      if (args.length != 1) {
+         throw new IllegalArgumentException("expected single argument specifying the current version of the project");
+      }
+      VERSION = args[0];
+
       generateHtml();
    }
 
@@ -88,15 +93,12 @@ public final class HtmlGenerator {
     * <p>
     * Adds standard HTML header and footer to all files specified in {@link BuildUtilsConstants#STATIC_PAGES_LIST}.
     */
-   @SuppressWarnings("rawtypes")
    private static void produceWebContentNotIncludedInTableOfContents() throws Exception {
       Properties p = new Properties();
       try (FileInputStream fis = new FileInputStream(STATIC_PAGES_LIST)) {
          p.load(fis);
       }
-      Iterator itr = p.entrySet().iterator();
-      while (itr.hasNext()) {
-         Map.Entry entry = (Map.Entry) itr.next();
+      for (Map.Entry<Object, Object> entry : p.entrySet()) {
          String filename = (String) entry.getKey();
          String title = (String) entry.getValue();
          addHeadersAndFooters(title, new File(WEB_SRC_DIR, filename));
@@ -246,11 +248,15 @@ public final class HtmlGenerator {
          fw.write(HEADER_BEFORE_TITLE);
          fw.write(removeHtmlMarkup(title));
          fw.write(HEADER_AFTER_TITLE);
-         fw.write(content.toString());
+         fw.write(tokenFilter(content));
          fw.write(FOOTER);
       } catch (Exception e) {
          throw new RuntimeException(e);
       }
+   }
+
+   private static String tokenFilter(CharSequence content) {
+      return content.toString().replace("@PROJOG_VERSION@", VERSION);
    }
 
    private static String removeHtmlMarkup(String input) {

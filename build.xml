@@ -8,7 +8,6 @@
 	<property name="hamcrest-jar" value="lib/hamcrest-core-${hamcrest-version}.jar"/>
 	<property name="hamcrest-url" value="${maven-url}org/hamcrest/hamcrest-core/${hamcrest-version}/hamcrest-core-${hamcrest-version}.jar"/>
 	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
-	<property name="mainClass" value="org.projog.tools.ProjogConsole"/>
 	<property name="javac-target" value="1.7"/>
 
 	<!--

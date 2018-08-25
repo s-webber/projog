@@ -19,6 +19,3 @@ junit*.properties
 /temp
 /projogGeneratedClasses
 /target
-
-pom.xml*
-deploy*.xml

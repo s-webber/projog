@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.projog</groupId>
+  <artifactId>projog-core</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>projog-core</name>
+  <description>An implementation of the Prolog programming language for the Java platform.</description>
+  <url>http://www.projog.org/</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+   <developers>
+      <developer>
+         <name>S Webber</name>
+         <email>feedback@projog.org</email>
+         <organization>projog</organization>
+         <organizationUrl>https://github.com/s-webber</organizationUrl>
+      </developer>
+   </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/s-webber/projog.git</connection>
+    <developerConnection>scm:git:ssh://github.com:s-webber/projog.git</developerConnection>
+    <url>http://github.com/s-webber/projog/tree/master</url>
+   </scm>
+
+   <properties>
+      <maven.compiler.source>7</maven.compiler.source>
+      <maven.compiler.target>7</maven.compiler.target>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.projog</groupId>
+         <artifactId>projog-test</artifactId>
+         <version>0.2.0</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>4.12</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+
+   <distributionManagement>
+      <snapshotRepository>
+         <id>ossrh</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+      <repository>
+         <id>ossrh</id>
+         <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository>
+   </distributionManagement>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.5.201505241946</version>
+            <executions>
+               <execution>
+                  <id>default-prepare-agent</id>
+                  <goals>
+                     <goal>prepare-agent</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>default-report</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>report</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>default-check</id>
+                  <goals>
+                     <goal>check</goal>
+                  </goals>
+                  <configuration>
+                     <rules>
+                        <rule implementation="org.jacoco.maven.RuleConfiguration">
+                           <element>BUNDLE</element>
+                           <limits>
+                              <limit implementation="org.jacoco.report.check.Limit">
+                                 <counter>COMPLEXITY</counter>
+                                 <value>COVEREDRATIO</value>
+                                 <minimum>0.60</minimum>
+                              </limit>
+                           </limits>
+                        </rule>
+                     </rules>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <!--
+   mvn versions:set -DnewVersion=1.2.3
+   mvn clean deploy -P release
+   https://oss.sonatype.org/#nexus-search;quick~org.projog
+   -->
+   <profiles>
+      <profile>
+         <id>release</id>
+         <build>
+            <plugins>
+               <!--
+               Generation of Javadoc and sources attachments
+               -->
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-source-plugin</artifactId>
+                  <version>2.2.1</version>
+                  <executions>
+                     <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                           <goal>jar-no-fork</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+               </plugin>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-javadoc-plugin</artifactId>
+                  <version>2.9.1</version>
+                  <executions>
+                     <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                           <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                           <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+               <!--
+               The Maven GPG plugin is used to sign the components.
+               It relies on the gpg command being installed and the GPG credentials being available e.g. from settings.xml.
+               -->
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-gpg-plugin</artifactId>
+                  <version>1.5</version>
+                  <executions>
+                     <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                           <goal>sign</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+               </plugin>
+               <!--
+               The Nexus Staging Maven Plugin is the recommended way to deploy components to OSSRH 
+               and release them to the Central Repository.
+               -->
+               <plugin>
+                  <groupId>org.sonatype.plugins</groupId>
+                  <artifactId>nexus-staging-maven-plugin</artifactId>
+                  <version>1.6.3</version>
+                  <extensions>true</extensions>
+                  <configuration>
+                     <serverId>ossrh</serverId>
+                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+
+   <reporting>
+      <!-- mvn site -->
+      <plugins>
+         <plugin>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>2.8.1</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.3</version>
+            <configuration>
+               <additionalparam>-Xdoclint:none</additionalparam>
+               <bottom><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
+               <doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
+               <windowtitle>Projog - a Java based implementation of the Prolog logic programming language.</windowtitle>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>3.6</version>
+            <configuration>
+               <verbose>true</verbose>
+               <minimumPriority>0</minimumPriority>
+               <targetJdk>1.8</targetJdk>
+               <rulesets>
+                  <ruleset>src/test/resources/pmd-ruleset.xml</ruleset>
+               </rulesets>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
+            <configuration>
+               <configLocation>src/test/resources/checkstyle-checks.xml</configLocation>
+            </configuration>
+            <reportSets>
+               <reportSet>
+                  <reports>
+                     <report>checkstyle</report>
+                  </reports>
+               </reportSet>
+            </reportSets>
+         </plugin>
+         <plugin>
+             <!-- To see bug detail using the Findbugs GUI, use the following command "mvn findbugs:gui" -->
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.3</version>
+            <configuration>
+               <effort>Max</effort>
+               <threshold>Low</threshold>
+               <xmlOutput>true</xmlOutput>
+            </configuration>
+         </plugin>
+      </plugins>
+   </reporting>
+</project>

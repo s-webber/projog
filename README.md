@@ -60,14 +60,3 @@ To include Projog within your project, just add this dependency to your `pom.xml
 ## Reporting Issues
 
 We would be grateful for feedback. If you would like to report a bug, suggest an enhancement or ask a question then please [create a new issue](https://github.com/s-webber/projog/issues/new).
-
-## Directory structure
-
-* `build.xml` - Ant build script.
-* `etc` - Extra resources that get included in a release.
-* `src/build-utils` - Java source code used by the build process for system-testing and website content generation.
-* `src/build-utils-test` - JUnit tests for `src/build-utils`.
-* `src/core` - Core Projog Java source code. Includes inference engine, built-in predicates and console application.
-* `src/core-tests` - JUnit tests for `src/core`.
-* `src/prolog` - Prolog scripts used for system-testing and documentation.
-* `web` - Used to construct content of http://www.projog.org/

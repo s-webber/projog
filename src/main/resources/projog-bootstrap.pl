@@ -57,6 +57,7 @@
 ?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.function.compound.FindAll').
 ?- pj_add_predicate(setof/3, 'org.projog.core.function.compound.SetOf').
+?- pj_add_predicate('->'/2, 'org.projog.core.function.compound.IfThen').
 
 % construct
 ?- pj_add_predicate(functor/3, 'org.projog.core.function.construct.Functor').
@@ -180,6 +181,7 @@
 ?- op(1200, fx, ':-').
 ?- op(1100, fx, dynamic).
 ?- op(1100, xfy, ';').
+?- op(1050, xfy, '->').
 ?- op(1000, xfy, ',').
 ?- op(900, fy, '\+').
 ?- op(700, xfx, '=').

@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2012 - 2018 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,9 +15,11 @@
  */
 package org.projog.core.function.compound;
 
+import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.PredicateFactory;
+import org.projog.core.function.AbstractPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -28,7 +30,7 @@ import org.projog.core.term.TermUtils;
  %TRUE_NO true; fail
  %TRUE fail; true
  %FALSE fail; fail
- 
+
  %QUERY true; true; true
  %ANSWER/
  %ANSWER/
@@ -84,7 +86,7 @@ import org.projog.core.term.TermUtils;
  p4(X, Y, [q,w,e,r,t,y]) :- true.
 
  p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
- 
+
  %QUERY p1(X, Y, Z)
  %ANSWER
  % X=1
@@ -131,7 +133,7 @@ import org.projog.core.term.TermUtils;
  % Y=UNINSTANTIATED VARIABLE
  % Z=[q,w,e,r,t,y]
  %ANSWER
- 
+
  %QUERY p2(X); p2(X); p2(X)
  %ANSWER X=1
  %ANSWER X=2
@@ -153,12 +155,12 @@ import org.projog.core.term.TermUtils;
  %ANSWER X=1
  %ANSWER X=2
  %ANSWER X=3
- 
+
  %QUERY X=12; X=27; X=56
  %ANSWER X=12
  %ANSWER X=27
  %ANSWER X=56
- 
+
  %QUERY p2(X); X=12; p3(X); X=27; p2(X)
  %ANSWER X=1
  %ANSWER X=2
@@ -179,59 +181,142 @@ import org.projog.core.term.TermUtils;
  * <i>or</i> <code>Y</code> succeeds. If <code>X</code> fails then an attempt is made to satisfy <code>Y</code>. If
  * <code>Y</code> fails the entire disjunction fails.
  * </p>
+ * <p>
+ * <b>Note:</b> The behaviour of this predicate changes when its first argument is of the form <code>-&gt;/2</code>,
+ * i.e. the <i>"if/then"</i> predicate. When a <code>-&gt;/2</code> predicate is the first argument of a
+ * <code>;/2</code> predicate then the resulting behaviour is a <i>"if/then/else"</i> statement of the form
+ * <code>((if-&gt;then);else)</code>.
+ * </p>
+ *
+ * @See {@link IfThen}
  */
-public final class Disjunction extends AbstractRetryablePredicate {
-   private final Predicate firstPredicate;
-   private final Predicate secondPredicate;
-   private int currentlyEvaluatedPredicateOrdinal;
+public final class Disjunction implements PredicateFactory {
+   private KnowledgeBase kb;
 
-   public Disjunction() {
-      this(null, null);
+   @Override
+   public Predicate getPredicate(Term... args) {
+      if (args.length == 2) {
+         return getPredicate(args[0], args[1]);
+      } else {
+         throw new IllegalArgumentException();
+      }
    }
 
-   private Disjunction(Predicate firstPredicate, Predicate secondPredicate) {
-      this.firstPredicate = firstPredicate;
-      this.secondPredicate = secondPredicate;
+   public Predicate getPredicate(Term firstArg, Term secondArg) {
+      if ("->".equals(firstArg.getName())) {
+         return createIfThenElse(firstArg, secondArg);
+      } else {
+         return createDisjunction(firstArg, secondArg);
+      }
+   }
+
+   private IfThenElsePredicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
+      Term conditionTerm = ifThenTerm.getArgument(0);
+      Term thenTerm = ifThenTerm.getArgument(1);
+
+      return new IfThenElsePredicate(KnowledgeBaseUtils.getPredicate(kb, conditionTerm), KnowledgeBaseUtils.getPredicate(kb, thenTerm),
+                  KnowledgeBaseUtils.getPredicate(kb, elseTerm));
+   }
+
+   private DisjunctionPredicate createDisjunction(Term firstArg, Term secondArg) {
+      return new DisjunctionPredicate(KnowledgeBaseUtils.getPredicate(kb, firstArg), KnowledgeBaseUtils.getPredicate(kb, secondArg));
    }
 
    @Override
-   public Disjunction getPredicate(Term arg1, Term arg2) {
-      Predicate e1 = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), arg1);
-      Predicate e2 = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), arg2);
-      return new Disjunction(e1, e2);
+   public void setKnowledgeBase(KnowledgeBase kb) {
+      this.kb = kb;
    }
 
-   @Override
-   public boolean evaluate(Term inputArg1, Term inputArg2) {
-      if (currentlyEvaluatedPredicateOrdinal == 0) {
-         currentlyEvaluatedPredicateOrdinal = 1;
-      } else if (currentlyEvaluatedPredicateOrdinal == 1) {
-         if (!firstPredicate.isRetryable()) {
-            TermUtils.backtrack(inputArg1.getArgs());
+   private static final class DisjunctionPredicate extends AbstractPredicate {
+      private final Predicate firstPredicate;
+      private final Predicate secondPredicate;
+      private int currentlyEvaluatedPredicateOrdinal;
+
+      private DisjunctionPredicate(Predicate firstPredicate, Predicate secondPredicate) {
+         this.firstPredicate = firstPredicate;
+         this.secondPredicate = secondPredicate;
+      }
+
+      @Override
+      public boolean evaluate(Term inputArg1, Term inputArg2) {
+         if (currentlyEvaluatedPredicateOrdinal == 0) {
+            currentlyEvaluatedPredicateOrdinal = 1;
+         } else if (currentlyEvaluatedPredicateOrdinal == 1) {
+            if (!firstPredicate.isRetryable()) {
+               TermUtils.backtrack(inputArg1.getArgs());
+               currentlyEvaluatedPredicateOrdinal = 2;
+            }
+         } else {
+            if (!secondPredicate.isRetryable()) {
+               TermUtils.backtrack(inputArg2.getArgs());
+               return false;
+            }
+         }
+
+         if (currentlyEvaluatedPredicateOrdinal == 1) {
+            if (firstPredicate.evaluate(inputArg1.getArgs())) {
+               return true;
+            }
             currentlyEvaluatedPredicateOrdinal = 2;
          }
-      } else {
-         if (!secondPredicate.isRetryable()) {
-            TermUtils.backtrack(inputArg2.getArgs());
-            return false;
-         }
-      }
-
-      if (currentlyEvaluatedPredicateOrdinal == 1) {
-         if (firstPredicate.evaluate(inputArg1.getArgs())) {
+         if (secondPredicate.evaluate(inputArg2.getArgs())) {
             return true;
          }
-         currentlyEvaluatedPredicateOrdinal = 2;
+
+         return false;
       }
-      if (secondPredicate.evaluate(inputArg2.getArgs())) {
+
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return currentlyEvaluatedPredicateOrdinal < 2 || secondPredicate.couldReEvaluationSucceed();
+      }
+
+      @Override
+      public boolean isRetryable() {
          return true;
       }
-
-      return false;
    }
 
-   @Override
-   public boolean couldReEvaluationSucceed() {
-      return currentlyEvaluatedPredicateOrdinal < 2 || secondPredicate.couldReEvaluationSucceed();
+   private static final class IfThenElsePredicate extends AbstractPredicate {
+      private final Predicate conditionPredicate;
+      private final Predicate thenPredicate;
+      private final Predicate elsePredicate;
+      private Predicate actualPredicate;
+      private Term[] actualArgs;
+
+      private IfThenElsePredicate(Predicate conditionPredicate, Predicate thenPredicate, Predicate elsePredicate) {
+         this.conditionPredicate = conditionPredicate;
+         this.thenPredicate = thenPredicate;
+         this.elsePredicate = elsePredicate;
+      }
+
+      @Override
+      public boolean evaluate(Term ifThenTerm, Term elseTerm) {
+         if (actualPredicate == null) {
+            Term conditionTerm = ifThenTerm.getArgument(0);
+            if (conditionPredicate.evaluate(conditionTerm.getArgs())) {
+               actualPredicate = thenPredicate;
+               actualArgs = ifThenTerm.getArgument(1).getTerm().getArgs();
+            } else {
+               conditionTerm.backtrack();
+               actualPredicate = elsePredicate;
+               actualArgs = elseTerm.getArgs();
+            }
+         } else {
+            TermUtils.backtrack(actualArgs);
+         }
+
+         return actualPredicate.evaluate(actualArgs);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return thenPredicate.isRetryable() || elsePredicate.isRetryable();
+      }
+
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return isRetryable() && actualPredicate.couldReEvaluationSucceed();
+      }
    }
 }

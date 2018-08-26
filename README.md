@@ -19,9 +19,9 @@ Projog provides an implementation of the [Prolog](https://en.wikipedia.org/wiki/
 The following commands will download Projog and start the console:
 
 ```sh
-$ wget http://projog.org/downloads/projog-bin.zip
-$ jar xvf projog-bin.zip
-$ cd projog-0.1.0
+$ wget http://www.projog.org/downloads/projog-0.2.0.zip
+$ jar xvf projog-0.2.0.zip
+$ cd projog-0.2.0
 $ chmod u+x projog-console.sh
 $ ./projog-console.sh
 ```

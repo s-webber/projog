@@ -203,7 +203,7 @@ public final class Disjunction implements PredicateFactory {
    }
 
    public Predicate getPredicate(Term firstArg, Term secondArg) {
-      if ("->".equals(firstArg.getName())) {
+      if (kb.getPredicateFactory(firstArg) instanceof IfThen) {
          return createIfThenElse(firstArg, secondArg);
       } else {
          return createDisjunction(firstArg, secondArg);

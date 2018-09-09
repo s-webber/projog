@@ -287,7 +287,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       if (clauseCtr<4) {
          return true;
       }
-      if (e0!=null && e0.couldReEvaluationSucceed()) {
+      if (e0==null || e0.couldReEvaluationSucceed()) {
          return true;
       }
       return false;

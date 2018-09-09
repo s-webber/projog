@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,7 +48,7 @@ final class CompiledPredicateSourceGenerator {
    // In common with some other classes in org.projog.core.udp.compiler,
    // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
-   // and the system tests (which check actual behaviour) should give confidence when refactoring. 
+   // and the system tests (which check actual behaviour) should give confidence when refactoring.
 
    private static final String PACKAGE_NAME = "org.projog.content_generated_at_runtime";
    private static final String DEBUG_ENABLED = "d";
@@ -354,14 +354,14 @@ final class CompiledPredicateSourceGenerator {
                      inlineClausesCtr++;
                   } else if (pf instanceof CompiledPredicate) {
                      String varId = "c" + (clausesLength - 1) + "_" + retryableCompiledPredicateClausesCtr;
-                     w.beginIf(varId + "!=null && " + varId + ".couldReEvaluationSucceed()");
+                     w.beginIf(varId + "==null || " + varId + ".couldReEvaluationSucceed()");
                      w.returnTrue();
                      w.endBlock();
                      retryableCompiledPredicateClausesCtr++;
                   } else if (pf == null) {
                      w.ifTrueReturnTrue("true");
                   } else {
-                     w.beginIf("e" + retryableClausesCtr + "!=null && e" + retryableClausesCtr + ".couldReEvaluationSucceed()");
+                     w.beginIf("e" + retryableClausesCtr + "==null || e" + retryableClausesCtr + ".couldReEvaluationSucceed()");
                      w.returnTrue();
                      w.endBlock();
                      retryableClausesCtr++;
@@ -592,7 +592,7 @@ final class CompiledPredicateSourceGenerator {
       outputInitMethodBody();
       w.addLine("} while (true);");
 
-      // For performance reasons, and assuming that the second rule 
+      // For performance reasons, and assuming that the second rule
       // will be successfully evaluated more often than the first,
       // only attempt to evaluate the first rule when the second
       // rule can longer be successfully evaluated.

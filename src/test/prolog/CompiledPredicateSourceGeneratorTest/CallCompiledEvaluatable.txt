@@ -88,7 +88,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
       return true;
    }
    public final boolean couldReEvaluationSucceed() {
-      if (c0_0!=null && c0_0.couldReEvaluationSucceed()) {
+      if (c0_0==null || c0_0.couldReEvaluationSucceed()) {
          return true;
       }
       return false;

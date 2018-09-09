@@ -14,13 +14,6 @@ test2(Q) :- data(X), data(D), concatenate(D,X,Q).
 %ANSWER Q=[q,w,e,r,t,y,x,y,z]
 %ANSWER Q=[q,w,e,r,t,y,1,2,3]
 
-%QUERY test2(Q)
+%QUERY test2(Q), !
 %ANSWER Q = [a,b,c,a,b,c]
-%ANSWER Q = [x,y,z,a,b,c]
-%ANSWER Q = [1,2,3,a,b,c]
-%ANSWER Q = [a,b,c,x,y,z]
-%ANSWER Q = [x,y,z,x,y,z]
-%ANSWER Q = [1,2,3,x,y,z]
-%ANSWER Q = [a,b,c,1,2,3]
-%ANSWER Q = [x,y,z,1,2,3]
-%ANSWER Q = [1,2,3,1,2,3]
+%NO

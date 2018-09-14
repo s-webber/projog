@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,15 +33,15 @@ import org.projog.core.term.Variable;
 
 /* TEST
  squared(X,Y) :- Y is X * X.
- 
+
  %QUERY squared(3,X)
  %ANSWER X=9
- 
+
  %QUERY X is squared(3)
  %ERROR Cannot find calculatable: squared/1
- 
+
  %TRUE arithmetic_function(squared/1)
- 
+
  %QUERY X is squared(3)
  %ANSWER X=9
  */
@@ -86,7 +86,7 @@ public final class AddArithmeticFunction extends AbstractSingletonPredicate {
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);
 
-         if (pf.getPredicate(argsPlusResult).evaluate(argsPlusResult)) {
+         if (pf.getPredicate(argsPlusResult).evaluate()) {
             return TermUtils.castToNumeric(result);
          } else {
             throw new ProjogException("Could not evaluate: " + key + " with arguments: " + Arrays.toString(args));

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,10 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -40,13 +39,13 @@ import org.projog.core.term.Term;
  %FALSE append([a,b], [d,e,f], [a,b,c,d,e,f])
  %FALSE append([a,b,c], [e,f], [a,b,c,d,e,f])
  %QUERY append([W,b,c], [d,Y,f], [a,X,c,d,e,Z])
- %ANSWER 
+ %ANSWER
  % W=a
  % X=b
  % Y=e
  % Z=f
  %ANSWER
- 
+
  % Examples of when first term is a variable:
  %QUERY append([a,b,c], X, [a,b,c,d,e,f])
  %ANSWER X=[d,e,f]
@@ -58,7 +57,7 @@ import org.projog.core.term.Term;
  %ANSWER X=[a,b,c,d,e,f]
  %QUERY append([a,b,c,d,e,f], X, [a,b,c,d,e,f])
  %ANSWER X=[]
- 
+
  % Examples of when second term is a variable:
  %QUERY append(X, [d,e,f], [a,b,c,d,e,f])
  %ANSWER X=[a,b,c]
@@ -70,7 +69,7 @@ import org.projog.core.term.Term;
  %ANSWER X=[]
  %QUERY append(X, [], [a,b,c,d,e,f])
  %ANSWER X=[a,b,c,d,e,f]
- 
+
  % Examples of when third term is a variable:
  %QUERY append([a,b,c], [d,e,f], X)
  %ANSWER X=[a,b,c,d,e,f]
@@ -147,80 +146,67 @@ import org.projog.core.term.Term;
  * the list <code>Z</code>.
  * </p>
  */
-public final class Append implements PredicateFactory {
-   private final Singleton singleton = new Singleton();
-
+public final class Append extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
-   public Predicate getPredicate(Term prefix, Term suffix, Term combined) {
+   public Predicate getPredicate(Term prefix, Term suffix, Term concatenated) {
       if (prefix.getType().isVariable() && suffix.getType().isVariable()) {
-         List<Term> javaUtilList = toJavaUtilList(combined);
+         List<Term> javaUtilList = toJavaUtilList(concatenated);
          if (javaUtilList == null) {
-            throw new ProjogException("Expected list but got: " + combined.getType());
+            throw new ProjogException("Expected list but got: " + concatenated.getType());
          }
-         return new Retryable(javaUtilList);
+         return new Retryable(prefix, suffix, javaUtilList);
       } else {
-         return singleton;
+         boolean result = evaluate(prefix, suffix, concatenated);
+         return AbstractSingletonPredicate.toPredicate(result);
       }
    }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      singleton.setKnowledgeBase(kb);
-   }
+   private boolean evaluate(final Term prefix, final Term suffix, final Term concatenated) {
+      final List<Term> prefixList = toJavaUtilList(prefix);
+      final List<Term> suffixList = toJavaUtilList(suffix);
 
-   private static class Singleton extends AbstractSingletonPredicate {
-      @Override
-      public boolean evaluate(final Term prefix, final Term suffix, final Term concatenated) {
-         final List<Term> prefixList = toJavaUtilList(prefix);
-         final List<Term> suffixList = toJavaUtilList(suffix);
-
-         if (prefixList != null && suffixList != null) {
-            final List<Term> concatenatedList = new ArrayList<Term>();
-            concatenatedList.addAll(prefixList);
-            concatenatedList.addAll(suffixList);
-            return concatenated.unify(createList(concatenatedList));
-         }
-
-         if (prefixList == null && suffixList == null) {
-            return false;
-         }
-
-         final List<Term> concatenatedList = toJavaUtilList(concatenated);
-         if (concatenatedList == null) {
-            return false;
-         }
-         final int concatenatedLength = concatenatedList.size();
-
-         final int splitIdx;
-         if (prefixList != null) {
-            splitIdx = prefixList.size();
-         } else {
-            splitIdx = concatenatedLength - suffixList.size();
-         }
-
-         return prefix.unify(createList(concatenatedList.subList(0, splitIdx))) && suffix.unify(createList(concatenatedList.subList(splitIdx, concatenatedLength)));
+      if (prefixList != null && suffixList != null) {
+         final List<Term> concatenatedList = new ArrayList<>();
+         concatenatedList.addAll(prefixList);
+         concatenatedList.addAll(suffixList);
+         return concatenated.unify(createList(concatenatedList));
       }
+
+      if (prefixList == null && suffixList == null) {
+         return false;
+      }
+
+      final List<Term> concatenatedList = toJavaUtilList(concatenated);
+      if (concatenatedList == null) {
+         return false;
+      }
+      final int concatenatedLength = concatenatedList.size();
+
+      final int splitIdx;
+      if (prefixList != null) {
+         splitIdx = prefixList.size();
+      } else {
+         splitIdx = concatenatedLength - suffixList.size();
+      }
+
+      return prefix.unify(createList(concatenatedList.subList(0, splitIdx))) && suffix.unify(createList(concatenatedList.subList(splitIdx, concatenatedLength)));
    }
 
    private static class Retryable implements Predicate {
+      final Term arg1;
+      final Term arg2;
       final List<Term> combined;
       int ctr;
 
       @SuppressWarnings("unchecked")
-      Retryable(List<Term> combined) {
+      Retryable(Term arg1, Term arg2, List<Term> combined) {
+         this.arg1 = arg1;
+         this.arg2 = arg2;
          this.combined = combined == null ? Collections.EMPTY_LIST : combined;
       }
 
       @Override
-      public boolean evaluate(Term... args) {
-         return evaluate(args[0], args[1], args[2]);
-      }
-
-      private boolean evaluate(Term arg1, Term arg2, Term arg3) {
+      public boolean evaluate() {
          while (couldReEvaluationSucceed()) {
             arg1.backtrack();
             arg2.backtrack();
@@ -232,11 +218,6 @@ public final class Append implements PredicateFactory {
             return arg1.unify(prefix) && arg2.unify(suffix);
          }
          return false;
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true;
       }
 
       @Override

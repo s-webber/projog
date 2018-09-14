@@ -66,6 +66,7 @@ public final class JavaSourceCompiler {
    Class<?> compileClass(String className, String sourceCode) {
       synchronized (lock) {
          try {
+            // To view generated code uncomment: Files.write(new File("target", className + ".txt").toPath(), sourceCode.getBytes());
             return compile(className, sourceCode);
          } catch (Exception e) {
             throw new ProjogException("Cannot compile: " + className + " source: " + sourceCode, e);
@@ -74,7 +75,7 @@ public final class JavaSourceCompiler {
    }
 
    private Class<?> compile(String className, String sourceCode) throws ClassNotFoundException {
-      DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+      DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
       sourceFiles.add(new SourceJavaFileObject(className, sourceCode));
       CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnostics, null, null, sourceFiles);
 

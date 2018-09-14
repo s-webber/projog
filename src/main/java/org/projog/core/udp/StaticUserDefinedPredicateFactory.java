@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,7 +67,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     * Not supported.
     * <p>
     * It is not possible to add a clause to the beginning of a <i>static</i> user defined predicate.
-    * 
+    *
     * @throws UnsupportedOperationException
     */
    @Override
@@ -79,7 +79,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     * Adds new clause to list of clauses for this predicate.
     * <p>
     * Note: it is not possible to add clauses to a <i>static</i> user defined predicate once it has been compiled.
-    * 
+    *
     * @throws IllegalStateException if the predicate has already been compiled.
     */
    @Override
@@ -158,14 +158,14 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          if (data.length == 1) {
             return new SingleRuleWithSingleImmutableArgumentPredicate(data[0], getSpyPoint());
          } else {
-            return new MultipleRulesWithSingleImmutableArgumentPredicate(data, getSpyPoint());
+            return new MultipleRulesWithSingleImmutableArgumentPredicate(null, data, getSpyPoint());
          }
       } else {
          Term data[][] = createTwoDimensionTermArrayOfImplications();
          if (data.length == 1) {
             return new SingleRuleWithMultipleImmutableArgumentsPredicate(data[0], getSpyPoint());
          } else {
-            return new MultipleRulesWithMultipleImmutableArgumentsPredicate(data, getSpyPoint());
+            return new MultipleRulesWithMultipleImmutableArgumentsPredicate(null, data, getSpyPoint());
          }
       }
    }
@@ -224,13 +224,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    /**
     * Return {@code true} if this predicate calls a predicate that in turns calls this predicate.
     * <p>
-    * For example, in the following script both {@code a} and {@code b} are cyclic, but {@code c} is not.
-    * 
-    * <pre>
+    * For example, in the following script both {@code a} and {@code b} are cyclic, but {@code c} is not. <pre>
     * a(Z) :- b(Z).
-    * 
+    *
     * b(Z) :- a(Z).
-    * 
+    *
     * c(Z) :- b(Z).
     * </pre>
     */
@@ -329,6 +327,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return implications.get(index).copy();
    }
 
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
+
    /**
     * @see StaticUserDefinedPredicateFactory#getImplications
     */
@@ -372,11 +375,16 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public InterpretedUserDefinedPredicate getPredicate(Term... args) {
-         return new InterpretedUserDefinedPredicate(key, spyPoint, rows.iterator());
+         return new InterpretedUserDefinedPredicate(args, key, spyPoint, rows.iterator());
       }
 
       @Override
       public void setKnowledgeBase(KnowledgeBase kb) {
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true;
       }
    }
 }

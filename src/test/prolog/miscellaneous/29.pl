@@ -9,10 +9,11 @@ test1(Q) :- data(X), concatenate([q,w,e,r,t,y],X,Q).
 
 test2(Q) :- data(X), data(D), concatenate(D,X,Q).
 
-%QUERY test1(Q)
+% TODO remove cut from both of these queries and confirm still determines if re-evaluation should succeed
+
+%QUERY test1(Q), !
 %ANSWER Q=[q,w,e,r,t,y,a,b,c]
-%ANSWER Q=[q,w,e,r,t,y,x,y,z]
-%ANSWER Q=[q,w,e,r,t,y,1,2,3]
+%NO
 
 %QUERY test2(Q), !
 %ANSWER Q = [a,b,c,a,b,c]

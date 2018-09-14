@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 
 /**
@@ -63,7 +62,7 @@ public class BootstrapTest {
    }
 
    private List<Term> getQueriesByKey(PredicateKey key) {
-      List<Term> result = new ArrayList<Term>();
+      List<Term> result = new ArrayList<>();
       Term[] terms = parseTermsFromFile(BOOTSTRAP_FILE);
       for (Term next : terms) {
          if (QUESTION_PREDICATE_NAME.equals(next.getName())) {
@@ -82,8 +81,8 @@ public class BootstrapTest {
       PredicateFactory ef = kb.getPredicateFactory(key);
       assertFinal(ef);
       Class[] methodParameters = getMethodParameters(key);
-      if (ef instanceof AbstractRetryablePredicate) {
-         assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
+      if (ef instanceof PredicateFactory) {
+         // TODO assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
       }
       if (ef instanceof Predicate) {
          assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);

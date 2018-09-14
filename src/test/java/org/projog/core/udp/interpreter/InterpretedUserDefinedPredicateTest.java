@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,8 +44,8 @@ public class InterpretedUserDefinedPredicateTest {
 
    @Test
    public void testEmpty() {
-      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate();
-      assertTrue(p.isRetryable());
+      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(new Term[0]);
+      assertFalse(p.couldReEvaluationSucceed());
       assertFalse(p.evaluate());
    }
 
@@ -95,18 +95,18 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertEvaluates(Term inputArg, int timesMatched, ClauseAction... rows) {
-      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(rows);
       Term[] queryArgs = {inputArg};
+      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(queryArgs, rows);
       for (int i = 0; i < timesMatched; i++) {
-         assertTrue(p.evaluate(queryArgs));
+         assertTrue(p.evaluate());
       }
-      assertFalse(p.evaluate(queryArgs));
+      assertFalse(p.evaluate());
    }
 
    private void assertDoesNotEvaluate(Term inputArg, ClauseAction... rows) {
-      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(rows);
       Term[] queryArgs = {inputArg};
-      assertFalse(p.evaluate(queryArgs));
+      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(queryArgs, rows);
+      assertFalse(p.evaluate());
    }
 
    @Test
@@ -130,25 +130,25 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertEvaluateWithVariableInputArgument(DummyClauseAction... rows) {
-      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(rows);
       Variable v = variable("X");
       Term[] queryArgs = {v};
+      InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(queryArgs, rows);
       for (DummyClauseAction row : rows) {
          for (Term t : row.terms) {
-            assertTrue(p.evaluate(queryArgs));
+            assertTrue(p.evaluate());
             assertSame(t, v.getTerm());
          }
       }
-      assertFalse(p.evaluate(queryArgs));
+      assertFalse(p.evaluate());
       assertSame(v, v.getTerm());
    }
 
-   private InterpretedUserDefinedPredicate getInterpretedUserDefinedPredicate(ClauseAction... rows) {
+   private InterpretedUserDefinedPredicate getInterpretedUserDefinedPredicate(Term[] queryArgs, ClauseAction... rows) {
       List<ClauseAction> list = new ArrayList<>();
       for (ClauseAction row : rows) {
          list.add(row);
       }
-      return new InterpretedUserDefinedPredicate(key, spyPoint, list.iterator());
+      return new InterpretedUserDefinedPredicate(queryArgs, key, spyPoint, list.iterator());
    }
 
    private static class DummyClauseAction implements ClauseAction {

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * by {@link TailRecursivePredicateMetaData}.
  * </p>
  * <img src="doc-files/InterpretedTailRecursivePredicateFactory.png">
- * 
+ *
  * @see InterpretedTailRecursivePredicateFactory
  * @see TailRecursivePredicateMetaData
  */
@@ -49,8 +49,8 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    private final Term[] secondClauseConsequentArgs;
    private final Term[] secondClauseOriginalTerms;
 
-   InterpretedTailRecursivePredicate(Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs, Term[] firstClauseOriginalTerms, PredicateFactory[] secondClausePredicateFactories,
-            Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms, boolean isRetryable) {
+   InterpretedTailRecursivePredicate(Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs, Term[] firstClauseOriginalTerms,
+               PredicateFactory[] secondClausePredicateFactories, Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms, boolean isRetryable) {
       this.numArgs = inputArgs.length;
       this.currentQueryArgs = new Term[numArgs];
       for (int i = 0; i < numArgs; i++) {
@@ -80,7 +80,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
       for (int i = 0; i < firstClauseOriginalTerms.length; i++) {
          Term t = firstClauseOriginalTerms[i].copy(sharedVariables);
-         if (!firstClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate(t.getArgs())) {
+         if (!firstClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate()) {
             return false;
          }
       }
@@ -102,7 +102,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
       for (int i = 0; i < secondClauseOriginalTerms.length - 1; i++) {
          Term t = secondClauseOriginalTerms[i].copy(sharedVariables);
-         if (!secondClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate(t.getArgs())) {
+         if (!secondClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate()) {
             return false;
          }
       }
@@ -124,11 +124,6 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
    @Override
    public boolean couldReEvaluationSucceed() {
-      return isRetryable;
-   }
-
-   @Override
-   public boolean isRetryable() {
       return isRetryable;
    }
 }

@@ -49,7 +49,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertSame(SingleRuleAlwaysTruePredicate.class, pf.getClass());
       Predicate p = pf.getPredicate();
       assertTrue(p.evaluate());
-      assertFalse(p.isRetryable());
+      assertFalse(p.couldReEvaluationSucceed());
    }
 
    @Test
@@ -59,7 +59,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertSame(MultipleRulesAlwaysTruePredicate.class, pf.getClass());
       Predicate p = pf.getPredicate();
-      assertTrue(p.isRetryable());
+      assertTrue(p.couldReEvaluationSucceed());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
          assertTrue(p.couldReEvaluationSucceed());
          assertTrue(p.evaluate());

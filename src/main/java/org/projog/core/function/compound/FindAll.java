@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,25 +52,25 @@ import org.projog.core.term.Variable;
  % L=[]
  % X=UNINSTANTIATED VARIABLE
  %ANSWER
- 
+
  q(a(W)).
  q(C).
  q(1).
  y(X) :- X = o(T,R), q(T), q(R).
- 
+
  %QUERY findall(X,y(X),L)
  %ANSWER
  % L = [o(a(W), a(W)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
  % X=UNINSTANTIATED VARIABLE
  %ANSWER
- 
+
  %QUERY findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
  %ANSWER
  % L=[o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
  % H=o(a(q), a(z))
  % X=UNINSTANTIATED VARIABLE
  %ANSWER
- 
+
  %QUERY findall(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
  %ANSWER
  % L=[9,4,9]
@@ -88,10 +88,9 @@ public final class FindAll extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term template, Term goal, Term output) {
       final Predicate predicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), goal);
-      final Term[] goalArguments = goal.getArgs();
       final Term solutions;
-      if (predicate.evaluate(goalArguments)) {
-         solutions = createListOfAllSolutions(template, predicate, goalArguments);
+      if (predicate.evaluate()) {
+         solutions = createListOfAllSolutions(template, predicate);
       } else {
          solutions = EmptyList.EMPTY_LIST;
       }
@@ -100,17 +99,17 @@ public final class FindAll extends AbstractSingletonPredicate {
       return output.unify(solutions);
    }
 
-   private Term createListOfAllSolutions(Term template, final Predicate predicate, final Term[] goalArguments) {
+   private Term createListOfAllSolutions(Term template, final Predicate predicate) {
       final List<Term> solutions = new ArrayList<>();
       do {
          solutions.add(template.copy(new HashMap<Variable, Variable>()));
-      } while (hasFoundAnotherSolution(predicate, goalArguments));
+      } while (hasFoundAnotherSolution(predicate));
       final Term output = ListFactory.createList(solutions);
       output.backtrack();
       return output;
    }
 
-   private boolean hasFoundAnotherSolution(final Predicate predicate, final Term[] goalArguments) {
-      return predicate.isRetryable() && predicate.couldReEvaluationSucceed() && predicate.evaluate(goalArguments);
+   private boolean hasFoundAnotherSolution(final Predicate predicate) {
+      return predicate.couldReEvaluationSucceed() && predicate.evaluate();
    }
 }

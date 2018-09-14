@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,10 +18,9 @@ package org.projog.core.function.construct;
 import static org.projog.core.term.TermType.ATOM;
 import static org.projog.core.term.TermUtils.getAtomName;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -37,7 +36,7 @@ import org.projog.core.term.TermType;
  %TRUE atom_concat('', '', '')
  %FALSE atom_concat(ab, def, abcdef)
  %FALSE atom_concat(abc, ef, abcdef)
- 
+
  % Examples of when first term is a variable:
  %QUERY atom_concat(abc, X, abcdef)
  %ANSWER X=def
@@ -49,7 +48,7 @@ import org.projog.core.term.TermType;
  %ANSWER X=abcdef
  %QUERY atom_concat(abcdef, X, abcdef)
  %ANSWER X=
- 
+
  % Examples of when second term is a variable:
  %QUERY atom_concat(X, def, abcdef)
  %ANSWER X=abc
@@ -61,7 +60,7 @@ import org.projog.core.term.TermType;
  %ANSWER X=
  %QUERY atom_concat(X, '', abcdef)
  %ANSWER X=abcdef
- 
+
  % Examples of when third term is a variable:
  %QUERY atom_concat(abc, def, X)
  %ANSWER X=abcdef
@@ -140,79 +139,66 @@ import org.projog.core.term.TermType;
  * of atoms <code>X</code> and <code>Y</code>.
  * </p>
  */
-public final class AtomConcat implements PredicateFactory {
-   private final Singleton singleton = new Singleton();
-
+public final class AtomConcat extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
    public Predicate getPredicate(Term prefix, Term suffix, Term combined) {
       if (prefix.getType().isVariable() && suffix.getType().isVariable()) {
-         return new Retryable(getAtomName(combined));
+         return new Retryable(prefix, suffix, getAtomName(combined));
       } else {
-         return singleton;
+         boolean result = evaluate(prefix, suffix, combined);
+         return AbstractSingletonPredicate.toPredicate(result);
       }
    }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      singleton.setKnowledgeBase(kb);
-   }
+   private boolean evaluate(Term arg1, Term arg2, Term arg3) { // TODO rename arguments
+      assertAtomOrVariable(arg1);
+      assertAtomOrVariable(arg2);
+      assertAtomOrVariable(arg3);
 
-   private static class Singleton extends AbstractSingletonPredicate {
-      @Override
-      public boolean evaluate(Term arg1, Term arg2, Term arg3) {
-         assertAtomOrVariable(arg1);
-         assertAtomOrVariable(arg2);
-         assertAtomOrVariable(arg3);
-
-         final boolean isArg1Atom = isAtom(arg1);
-         final boolean isArg2Atom = isAtom(arg2);
-         if (isArg1Atom && isArg2Atom) {
-            final Atom concat = new Atom(arg1.getName() + arg2.getName());
-            return arg3.unify(concat);
+      final boolean isArg1Atom = isAtom(arg1);
+      final boolean isArg2Atom = isAtom(arg2);
+      if (isArg1Atom && isArg2Atom) {
+         final Atom concat = new Atom(arg1.getName() + arg2.getName());
+         return arg3.unify(concat);
+      } else {
+         final String atomName = getAtomName(arg3);
+         if (isArg1Atom) {
+            String prefix = arg1.getName();
+            return (atomName.startsWith(prefix) && arg2.unify(new Atom(atomName.substring(prefix.length()))));
+         } else if (isArg2Atom) {
+            String suffix = arg2.getName();
+            return (atomName.endsWith(suffix) && arg1.unify(new Atom(atomName.substring(0, (atomName.length() - suffix.length())))));
          } else {
-            final String atomName = getAtomName(arg3);
-            if (isArg1Atom) {
-               String prefix = arg1.getName();
-               return (atomName.startsWith(prefix) && arg2.unify(new Atom(atomName.substring(prefix.length()))));
-            } else if (isArg2Atom) {
-               String suffix = arg2.getName();
-               return (atomName.endsWith(suffix) && arg1.unify(new Atom(atomName.substring(0, (atomName.length() - suffix.length())))));
-            } else {
-               throw new ProjogException("If third argument is not an atom then both first and second arguments must be: " + arg1 + " " + arg2 + " " + arg3);
-            }
+            throw new ProjogException("If third argument is not an atom then both first and second arguments must be: " + arg1 + " " + arg2 + " " + arg3);
          }
       }
+   }
 
-      private void assertAtomOrVariable(Term t) {
-         final TermType type = t.getType();
-         if (type != TermType.ATOM && !type.isVariable()) {
-            throw new ProjogException("Expected an atom or variable but got: " + type + " with value: " + t);
-         }
+   private void assertAtomOrVariable(Term t) {
+      final TermType type = t.getType();
+      if (type != TermType.ATOM && !type.isVariable()) {
+         throw new ProjogException("Expected an atom or variable but got: " + type + " with value: " + t);
       }
+   }
 
-      private boolean isAtom(Term t) {
-         return t.getType() == ATOM;
-      }
+   private boolean isAtom(Term t) {
+      return t.getType() == ATOM;
    }
 
    private static class Retryable implements Predicate {
+      final Term arg1;
+      final Term arg2;
       final String combined;
       int ctr;
 
-      Retryable(String combined) {
+      Retryable(Term arg1, Term arg2, String combined) {
+         this.arg1 = arg1;
+         this.arg2 = arg2;
          this.combined = combined;
       }
 
       @Override
-      public boolean evaluate(Term... args) {
-         return evaluate(args[0], args[1], args[2]);
-      }
-
-      private boolean evaluate(Term arg1, Term arg2, Term arg3) {
+      public boolean evaluate() {
          while (couldReEvaluationSucceed()) {
             arg1.backtrack();
             arg2.backtrack();
@@ -224,11 +210,6 @@ public final class AtomConcat implements PredicateFactory {
             return arg1.unify(prefix) && arg2.unify(suffix);
          }
          return false;
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true;
       }
 
       @Override

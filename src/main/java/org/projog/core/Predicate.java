@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ import org.projog.core.term.Term;
  * <b>Note:</b> Rather than directly implementing {@code Predicate} it is recommended to extend either
  * {@link org.projog.core.function.AbstractSingletonPredicate} or
  * {@link org.projog.core.function.AbstractRetryablePredicate}.
- * 
+ *
  * @see PredicateFactory
  * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
  */
@@ -49,26 +49,12 @@ public interface Predicate {
     * code generated at runtime for user defined predicates will be able to use the overloaded method rather than the
     * varargs version and thus avoid the unnecessary overhead of creating a new {@code Term} array for each method
     * invocation.
-    * 
+    *
     * @param args the arguments to use in the evaluation of this goal
     * @return {@code true} if it was possible to satisfy the clause, {@code false} otherwise
     * @see PredicateFactory#getPredicate(Term[])
     */
-   boolean evaluate(Term... args);
-
-   /**
-    * Should instances of this implementation be re-evaluated when backtracking?
-    * <p>
-    * Some goals (e.g. {@code X is 1}) are only meant to be evaluated once (the statement is either true or false) while
-    * others (e.g. {@code repeat(3)}) are meant to be evaluated multiple times. For instances of {@code Predicate} that
-    * are designed to possibly have {@link #evaluate(Term[])} called on them multiple times for the same individual
-    * query this method should return {@code true}. For instances of {@code Predicate} that are designed to only be
-    * evaluated once per individual query this method should return {@code false}.
-    * 
-    * @return {@code true} if an attempt should be made to re-evaluate instances of implementing classes when
-    * backtracking, {@code false} otherwise
-    */
-   boolean isRetryable();
+   boolean evaluate();
 
    /**
     * Could the next re-evaluation of this instance succeed?
@@ -81,7 +67,7 @@ public interface Predicate {
     * (Note: the difference between this method and {@link #isRetryable()} is that {@link #isRetryable()} deals with
     * whether, in general, a specific <i>implementation</i> (rather than <i>instance</i>) of {@code Predicate} could
     * <i>ever</i> produce multiple answers for an individual query.)
-    * 
+    *
     * @return {@code true} if an attempt to re-evaluate this instance could possible succeed, {@code false} otherwise
     */
    boolean couldReEvaluationSucceed();

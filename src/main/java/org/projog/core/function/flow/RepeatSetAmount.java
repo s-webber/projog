@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,8 @@ package org.projog.core.function.flow;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.Predicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -27,16 +28,16 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
- %OUTPUT 
+ %OUTPUT
  % hello, world
  %
  %OUTPUT
  %ANSWER/
- %OUTPUT 
+ %OUTPUT
  % hello, world
  %
  %OUTPUT
- %ANSWER/ 
+ %ANSWER/
 
  %QUERY repeat(1)
  %ANSWER/
@@ -56,67 +57,30 @@ import org.projog.core.term.Term;
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.
  */
-public final class RepeatSetAmount extends AbstractRetryablePredicate {
-   private final long limit;
-   private int ctr;
-
-   public RepeatSetAmount() {
-      this(0);
-   }
-
-   /**
-    * Sets number of times it will successfully evaluate.
-    * 
-    * @param limit the number of times to successfully evaluate
-    */
-   public RepeatSetAmount(long limit) {
-      this.limit = limit;
-   }
-
+public final class RepeatSetAmount extends AbstractPredicateFactory {
    @Override
-   public boolean evaluate(Term arg) {
-      return evaluate();
-   }
-
-   /**
-    * Public no-arg overloaded version of {@code evaluate}.
-    * <p>
-    * <b>Note:</b> {@code public} as this overloaded version will be called directly for static user defined predicates
-    * that have a number of clauses, all of which will always evaluate successfully exactly once. (e.g. {@code a. a. a.}
-    * or {@code p(). p(). p().}
-    * 
-    * @return {@code true} if this instance has not yet been successfully evaluated for the number of times specified
-    * when it was created, else {@code false}
-    * @see org.projog.core.udp.StaticUserDefinedPredicateFactory
-    */
-   @Override
-   public boolean evaluate() {
-      return ctr++ < limit;
-   }
-
-   @Override
-   public RepeatSetAmount getPredicate(Term arg) {
+   public Predicate getPredicate(Term arg) {
       long n = castToNumeric(arg).getLong();
-      return new RepeatSetAmount(n);
+      return new RepeatSetAmountPredicate(n);
    }
 
-   /**
-    * Public no-arg overloaded version of {@code getPredicate}.
-    * <p>
-    * <b>Note:</b> {@code public} as this overloaded version will be called directly for static user defined predicates
-    * that have a number of clauses, all of which will always evaluate successfully exactly once. (e.g. {@code a. a. a.}
-    * or {@code p(). p(). p().}
-    * 
-    * @return copy of this instance
-    * @see org.projog.core.udp.StaticUserDefinedPredicateFactory
-    */
-   @Override
-   public RepeatSetAmount getPredicate() {
-      return new RepeatSetAmount(limit);
-   }
+   private static final class RepeatSetAmountPredicate implements Predicate {
+      private final long limit;
+      private int ctr;
 
-   @Override
-   public boolean couldReEvaluationSucceed() {
-      return ctr < limit;
+      /** @param limit the number of times to successfully evaluate */
+      private RepeatSetAmountPredicate(long limit) {
+         this.limit = limit;
+      }
+
+      @Override
+      public boolean evaluate() {
+         return ctr++ < limit;
+      }
+
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return ctr < limit;
+      }
    }
 }

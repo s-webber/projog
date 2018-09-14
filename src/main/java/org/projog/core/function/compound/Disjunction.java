@@ -21,7 +21,6 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.function.AbstractPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /* TEST
  %QUERY true; true
@@ -210,16 +209,29 @@ public final class Disjunction implements PredicateFactory {
       }
    }
 
-   private IfThenElsePredicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
+   private Predicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
       Term conditionTerm = ifThenTerm.getArgument(0);
       Term thenTerm = ifThenTerm.getArgument(1);
 
-      return new IfThenElsePredicate(KnowledgeBaseUtils.getPredicate(kb, conditionTerm), KnowledgeBaseUtils.getPredicate(kb, thenTerm),
-                  KnowledgeBaseUtils.getPredicate(kb, elseTerm));
+      Predicate actualPredicate;
+      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(kb, conditionTerm);
+      if (conditionPredicate.evaluate()) {
+         actualPredicate = KnowledgeBaseUtils.getPredicate(kb, thenTerm.getTerm());
+      } else {
+         conditionTerm.backtrack();
+         actualPredicate = KnowledgeBaseUtils.getPredicate(kb, elseTerm);
+      }
+
+      return actualPredicate;
    }
 
    private DisjunctionPredicate createDisjunction(Term firstArg, Term secondArg) {
-      return new DisjunctionPredicate(KnowledgeBaseUtils.getPredicate(kb, firstArg), KnowledgeBaseUtils.getPredicate(kb, secondArg));
+      return new DisjunctionPredicate(firstArg, secondArg);
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    @Override
@@ -227,39 +239,40 @@ public final class Disjunction implements PredicateFactory {
       this.kb = kb;
    }
 
-   private static final class DisjunctionPredicate extends AbstractPredicate {
-      private final Predicate firstPredicate;
-      private final Predicate secondPredicate;
-      private int currentlyEvaluatedPredicateOrdinal;
+   private final class DisjunctionPredicate extends AbstractPredicate {
+      private final Term inputArg1;
+      private final Term inputArg2;
+      private Predicate firstPredicate;
+      private Predicate secondPredicate;
 
-      private DisjunctionPredicate(Predicate firstPredicate, Predicate secondPredicate) {
-         this.firstPredicate = firstPredicate;
-         this.secondPredicate = secondPredicate;
+      private DisjunctionPredicate(Term inputArg1, Term inputArg2) {
+         this.inputArg1 = inputArg1;
+         this.inputArg2 = inputArg2;
       }
 
       @Override
-      public boolean evaluate(Term inputArg1, Term inputArg2) {
-         if (currentlyEvaluatedPredicateOrdinal == 0) {
-            currentlyEvaluatedPredicateOrdinal = 1;
-         } else if (currentlyEvaluatedPredicateOrdinal == 1) {
-            if (!firstPredicate.isRetryable()) {
-               TermUtils.backtrack(inputArg1.getArgs());
-               currentlyEvaluatedPredicateOrdinal = 2;
-            }
-         } else {
-            if (!secondPredicate.isRetryable()) {
-               TermUtils.backtrack(inputArg2.getArgs());
-               return false;
+      public boolean evaluate() {
+         inputArg1.backtrack();
+         if (firstPredicate == null) {
+            firstPredicate = KnowledgeBaseUtils.getPredicate(kb, inputArg1);
+            if (firstPredicate.evaluate()) {
+               return true;
             }
          }
 
-         if (currentlyEvaluatedPredicateOrdinal == 1) {
-            if (firstPredicate.evaluate(inputArg1.getArgs())) {
+         if (firstPredicate.couldReEvaluationSucceed() && firstPredicate.evaluate()) {
+            return true;
+         }
+
+         inputArg2.backtrack();
+         if (secondPredicate == null) {
+            secondPredicate = KnowledgeBaseUtils.getPredicate(kb, inputArg2);
+            if (secondPredicate.evaluate()) {
                return true;
             }
-            currentlyEvaluatedPredicateOrdinal = 2;
          }
-         if (secondPredicate.evaluate(inputArg2.getArgs())) {
+
+         if (secondPredicate.couldReEvaluationSucceed() && secondPredicate.evaluate()) {
             return true;
          }
 
@@ -268,55 +281,7 @@ public final class Disjunction implements PredicateFactory {
 
       @Override
       public boolean couldReEvaluationSucceed() {
-         return currentlyEvaluatedPredicateOrdinal < 2 || secondPredicate.couldReEvaluationSucceed();
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true;
-      }
-   }
-
-   private static final class IfThenElsePredicate extends AbstractPredicate {
-      private final Predicate conditionPredicate;
-      private final Predicate thenPredicate;
-      private final Predicate elsePredicate;
-      private Predicate actualPredicate;
-      private Term[] actualArgs;
-
-      private IfThenElsePredicate(Predicate conditionPredicate, Predicate thenPredicate, Predicate elsePredicate) {
-         this.conditionPredicate = conditionPredicate;
-         this.thenPredicate = thenPredicate;
-         this.elsePredicate = elsePredicate;
-      }
-
-      @Override
-      public boolean evaluate(Term ifThenTerm, Term elseTerm) {
-         if (actualPredicate == null) {
-            Term conditionTerm = ifThenTerm.getArgument(0);
-            if (conditionPredicate.evaluate(conditionTerm.getArgs())) {
-               actualPredicate = thenPredicate;
-               actualArgs = ifThenTerm.getArgument(1).getTerm().getArgs();
-            } else {
-               conditionTerm.backtrack();
-               actualPredicate = elsePredicate;
-               actualArgs = elseTerm.getArgs();
-            }
-         } else {
-            TermUtils.backtrack(actualArgs);
-         }
-
-         return actualPredicate.evaluate(actualArgs);
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return thenPredicate.isRetryable() || elsePredicate.isRetryable();
-      }
-
-      @Override
-      public boolean couldReEvaluationSucceed() {
-         return isRetryable() && actualPredicate.couldReEvaluationSucceed();
+         return secondPredicate == null || secondPredicate.couldReEvaluationSucceed();
       }
    }
 }

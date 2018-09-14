@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -186,10 +186,10 @@ public class DynamicUserDefinedPredicateFactoryTest {
          Term inputArg = atom(d);
          Term[] args = new Term[] {inputArg};
          Predicate e = dp.getPredicate(args);
-         assertTrue(e.isRetryable());
-         assertTrue(e.evaluate(args));
+         assertTrue(e.couldReEvaluationSucceed());
+         assertTrue(e.evaluate());
          assertSame(inputArg, args[0]);
-         assertFalse(e.evaluate(args));
+         assertFalse(e.evaluate());
          assertSame(inputArg, args[0]);
       }
 
@@ -197,13 +197,13 @@ public class DynamicUserDefinedPredicateFactoryTest {
       Term inputArg = variable();
       Term[] args = new Term[] {inputArg};
       Predicate e = dp.getPredicate(args);
-      assertTrue(e.isRetryable());
+      assertTrue(e.couldReEvaluationSucceed());
       for (String d : data) {
-         assertTrue(e.evaluate(args));
+         assertTrue(e.evaluate());
          assertSame(TermType.ATOM, args[0].getType());
          assertEquals(d, args[0].getName());
       }
-      assertFalse(e.evaluate(args));
+      assertFalse(e.evaluate());
       assertSame(inputArg, args[0]);
       assertSame(inputArg, args[0].getTerm());
    }

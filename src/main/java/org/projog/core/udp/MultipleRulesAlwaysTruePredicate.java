@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,15 @@
  */
 package org.projog.core.udp;
 
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.term.Term;
 
 /**
  * Represents a user defined predicate that has a number of rules - each of which always successfully evaluate.
  * <p>
- * e.g.:
- * 
- * <pre>
+ * e.g.: <pre>
  * p(_).
  * p(_).
  * p(_).
@@ -35,7 +35,7 @@ import org.projog.core.term.Term;
  * works with any number of arguments.
  * </p>
  */
-public final class MultipleRulesAlwaysTruePredicate extends AbstractRetryablePredicate {
+public final class MultipleRulesAlwaysTruePredicate implements Predicate, PredicateFactory {
    private final int limit;
    private int ctr;
 
@@ -44,7 +44,7 @@ public final class MultipleRulesAlwaysTruePredicate extends AbstractRetryablePre
    }
 
    @Override
-   public boolean evaluate(Term... args) {
+   public boolean evaluate() {
       return ctr++ < limit;
    }
 
@@ -56,5 +56,14 @@ public final class MultipleRulesAlwaysTruePredicate extends AbstractRetryablePre
    @Override
    public boolean couldReEvaluationSucceed() {
       return ctr < limit;
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
+
+   @Override
+   public void setKnowledgeBase(KnowledgeBase kb) {
    }
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 package org.projog.core.udp;
 
 import org.projog.core.Predicate;
-import org.projog.core.term.Term;
 
 /**
  * A template for implementations of {@code Predicate} that are tail recursive.
@@ -35,14 +34,14 @@ import org.projog.core.term.Term;
  * <i>tail recursion optimisation</i> using the criteria used by {@link TailRecursivePredicateMetaData}.
  * </p>
  * <img src="doc-files/TailRecursivePredicate.png">
- * 
+ *
  * @see TailRecursivePredicateMetaData
  */
 public abstract class TailRecursivePredicate implements Predicate {
    private boolean succededOnPreviousGo;
 
    @Override
-   public final boolean evaluate(Term... inputArgs) {
+   public final boolean evaluate() {
       while (true) {
          if (succededOnPreviousGo) {
             backtrack();
@@ -66,7 +65,7 @@ public abstract class TailRecursivePredicate implements Predicate {
     * Match the first rule of the tail recursive predicate.
     * <p>
     * If the head of the first rule is matched then the rule has been successfully evaluated.
-    * 
+    *
     * @return {@code true} if the first rule is matched, else {@code false}
     */
    protected abstract boolean matchFirstRule();
@@ -75,7 +74,7 @@ public abstract class TailRecursivePredicate implements Predicate {
     * Match the second rule of the tail recursive predicate.
     * <p>
     * If the second rule is matched then the attempt at evaluating the rule continues for another level of recursion.
-    * 
+    *
     * @return {@code true} if the second rule is matched, else {@code false}
     */
    protected abstract boolean matchSecondRule();

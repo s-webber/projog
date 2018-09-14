@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,9 +41,8 @@ public class InterpretedTailRecursivePredicateFactoryTest {
       Term arg2 = parseTerm("[a,b,c]");
       InterpretedTailRecursivePredicate singleResultPredicate = FACTORY.getPredicate(arg1, arg2);
 
-      assertFalse(singleResultPredicate.isRetryable());
       assertFalse(singleResultPredicate.couldReEvaluationSucceed());
-      assertTrue(singleResultPredicate.evaluate(arg1, arg2));
+      assertTrue(singleResultPredicate.evaluate());
    }
 
    @Test
@@ -52,17 +51,16 @@ public class InterpretedTailRecursivePredicateFactoryTest {
       Term arg2 = parseTerm("[a,b,c]");
       InterpretedTailRecursivePredicate multiResultPredicate = FACTORY.getPredicate(arg1, arg2);
 
-      assertTrue(multiResultPredicate.isRetryable());
       assertTrue(multiResultPredicate.couldReEvaluationSucceed());
-      assertTrue(multiResultPredicate.evaluate(arg1, arg2));
+      assertTrue(multiResultPredicate.evaluate());
       assertEquals("[]", write(arg1));
-      assertTrue(multiResultPredicate.evaluate(arg1, arg2));
+      assertTrue(multiResultPredicate.evaluate());
       assertEquals("[a]", write(arg1));
-      assertTrue(multiResultPredicate.evaluate(arg1, arg2));
+      assertTrue(multiResultPredicate.evaluate());
       assertEquals("[a,b]", write(arg1));
-      assertTrue(multiResultPredicate.evaluate(arg1, arg2));
+      assertTrue(multiResultPredicate.evaluate());
       assertEquals("[a,b,c]", write(arg1));
-      assertFalse(multiResultPredicate.evaluate(arg1, arg2));
+      assertFalse(multiResultPredicate.evaluate());
    }
 
    private InterpretedTailRecursivePredicateFactory createFactory(String firstClauseSyntax, String secondClauseSyntax) {

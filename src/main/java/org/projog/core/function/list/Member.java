@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,9 @@
  */
 package org.projog.core.function.list;
 
+import org.projog.core.Predicate;
 import org.projog.core.ProjogException;
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -24,7 +25,7 @@ import org.projog.core.term.TermType;
  %TRUE_NO member(a, [a,b,c])
  %TRUE_NO member(b, [a,b,c])
  %TRUE member(c, [a,b,c])
- 
+
  %FALSE member(d, [a,b,c])
  %FALSE member(d, [])
  %FALSE member([], [])
@@ -33,17 +34,17 @@ import org.projog.core.term.TermType;
  %ANSWER X=a
  %ANSWER X=b
  %ANSWER X=c
- 
+
  %QUERY member(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
- %ANSWER 
+ %ANSWER
  % X=a
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=z
  % Y=b
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=x(b)
  % Y=b
  %ANSWER
@@ -55,38 +56,47 @@ import org.projog.core.term.TermType;
  * retry the goal during backtracking - so it can be used to enumerate the members of a list.
  * </p>
  */
-public final class Member extends AbstractRetryablePredicate {
-   private Term list;
-
+public final class Member extends AbstractPredicateFactory {
    @Override
-   public Member getPredicate(Term element, Term list) {
-      final Member m = new Member();
+   public Predicate getPredicate(Term element, Term list) {
+      // TODO what if partial list? e.g. member(a,[a,b|X])
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
          throw new ProjogException("Expected list but got: " + list);
       }
-      m.list = list;
-      return m;
+      return new MemberPredicate(element, list);
    }
 
-   @Override
-   public boolean evaluate(Term element, Term secondArg) {
-      while (true) {
-         if (couldReEvaluationSucceed()) {
-            element.backtrack();
-            secondArg.backtrack();
-            Term head = list.getArgument(0);
-            list = list.getArgument(1);
-            if (element.unify(head)) {
-               return true;
+   private final class MemberPredicate implements Predicate {
+      private final Term element;
+      private final Term originalList;
+      private Term currentList;
+
+      private MemberPredicate(Term element, Term originalList) {
+         this.element = element;
+         this.originalList = originalList;
+         this.currentList = originalList;
+      }
+
+      @Override
+      public boolean evaluate() {
+         while (true) {
+            if (couldReEvaluationSucceed()) {
+               element.backtrack();
+               originalList.backtrack();
+               Term head = currentList.getArgument(0);
+               currentList = currentList.getArgument(1);
+               if (element.unify(head)) {
+                  return true;
+               }
+            } else {
+               return false;
             }
-         } else {
-            return false;
          }
       }
-   }
 
-   @Override
-   public boolean couldReEvaluationSucceed() {
-      return list.getType() == TermType.LIST;
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return currentList.getType() == TermType.LIST;
+      }
    }
 }

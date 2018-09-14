@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,9 @@ package org.projog.core.function.compound;
 
 import java.util.HashMap;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Unifier;
@@ -31,16 +30,16 @@ import org.projog.core.term.Variable;
  %FALSE true, fail
  %FALSE fail, true
  %FALSE fail, fail
- 
+
  %TRUE true, true, true
  %FALSE true, fail, fail
  %FALSE fail, true, fail
  %FALSE fail, fail, true
  %FALSE true, true, fail
- %FALSE true, fail, true 
+ %FALSE true, fail, true
  %FALSE fail, true, true
  %FALSE fail, fail, fail
- 
+
  b :- true.
  c :- true.
  d :- true.
@@ -63,7 +62,7 @@ import org.projog.core.term.Variable;
  p4(X, Y, [q,w,e,r,t,y]) :- true.
 
  p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
- 
+
  %QUERY p1(X, Y, Z)
  %ANSWER
  % X=1
@@ -120,7 +119,7 @@ import org.projog.core.term.Variable;
  % Y=c
  % Z=[q,w,e,r,t,y]
  %ANSWER
- 
+
  %QUERY p2(X), p2(X), p2(X)
  %ANSWER X=1
  %ANSWER X=2
@@ -136,81 +135,83 @@ import org.projog.core.term.Variable;
  * <code>X</code>. If <code>X</code> fails the entire conjunction fails.
  * </p>
  */
-public final class Conjunction extends AbstractRetryablePredicate {
+public final class Conjunction extends AbstractPredicateFactory {
    // TODO test using a junit test rather than just a Prolog script
    // as over complexity in internal workings (e.g. when and what it backtracks)
-   // may not be detectable via a system test. 
-
-   private PredicateFactory secondPredicateFactory;
-   private Predicate firstPredicate;
-   private Predicate secondPredicate;
-   private boolean firstGo = true;
-   private Term secondArg;
-   private Term tmpInputArg2;
-
-   public Conjunction() {
-   }
-
-   private Conjunction(KnowledgeBase knowledgeBase) {
-      setKnowledgeBase(knowledgeBase);
-   }
+   // may not be detectable via a system test.
 
    @Override
-   public Conjunction getPredicate(Term arg1, Term arg2) {
-      return new Conjunction(getKnowledgeBase());
+   public Predicate getPredicate(Term arg1, Term arg2) {
+      return new ConjunctionPredicate(arg1, arg2);
    }
 
-   @Override
-   public boolean evaluate(Term inputArg1, Term inputArg2) {
-      if (firstGo) {
-         firstPredicate = getKnowledgeBase().getPredicateFactory(inputArg1).getPredicate(inputArg1.getArgs());
+   private final class ConjunctionPredicate implements Predicate {
+      private final Term inputArg1;
+      private final Term inputArg2;
+      private PredicateFactory secondPredicateFactory;
+      private Predicate firstPredicate;
+      private Predicate secondPredicate;
+      private boolean firstGo = true;
+      private Term secondArg;
+      private Term tmpInputArg2;
 
-         while ((firstGo || firstPredicate.isRetryable()) && firstPredicate.evaluate(inputArg1.getArgs())) {
-            firstGo = false;
-            if (preMatch(inputArg2) && secondPredicate.evaluate(secondArg.getArgs())) {
+      public ConjunctionPredicate(Term inputArg1, Term inputArg2) {
+         this.inputArg1 = inputArg1;
+         this.inputArg2 = inputArg2;
+      }
+
+      @Override
+      public boolean evaluate() {
+         if (firstGo) {
+            firstPredicate = getKnowledgeBase().getPredicateFactory(inputArg1).getPredicate(inputArg1.getArgs());
+
+            while ((firstGo || firstPredicate.couldReEvaluationSucceed()) && firstPredicate.evaluate()) {
+               firstGo = false;
+               if (preMatch(inputArg2) && secondPredicate.evaluate()) {
+                  return true;
+               }
+               TermUtils.backtrack(tmpInputArg2.getArgs());
+            }
+
+            return false;
+         }
+
+         do {
+            final boolean evaluateSecondPredicate;
+            if (secondArg == null) {
+               evaluateSecondPredicate = preMatch(inputArg2);
+            } else {
+               evaluateSecondPredicate = secondPredicate.couldReEvaluationSucceed();
+            }
+
+            if (evaluateSecondPredicate && secondPredicate.evaluate()) {
                return true;
             }
+
             TermUtils.backtrack(tmpInputArg2.getArgs());
-         }
+            secondArg = null;
+         } while (firstPredicate.couldReEvaluationSucceed() && firstPredicate.evaluate());
 
          return false;
       }
 
-      do {
-         final boolean evaluateSecondPredicate;
-         if (secondArg == null) {
-            evaluateSecondPredicate = preMatch(inputArg2);
-         } else {
-            evaluateSecondPredicate = secondPredicate.isRetryable();
-         }
-
-         if (evaluateSecondPredicate && secondPredicate.evaluate(secondArg.getArgs())) {
+      private boolean preMatch(Term inputArg2) {
+         tmpInputArg2 = inputArg2.getTerm();
+         secondArg = tmpInputArg2.copy(new HashMap<Variable, Variable>());
+         if (Unifier.preMatch(tmpInputArg2.getArgs(), secondArg.getArgs())) {
+            if (secondPredicateFactory == null) {
+               secondPredicateFactory = getKnowledgeBase().getPredicateFactory(secondArg);
+            }
+            secondPredicate = secondPredicateFactory.getPredicate(secondArg.getArgs());
             return true;
+         } else {
+            return false;
          }
-
-         TermUtils.backtrack(tmpInputArg2.getArgs());
-         secondArg = null;
-      } while (firstPredicate.isRetryable() && firstPredicate.evaluate(inputArg1.getArgs()));
-
-      return false;
-   }
-
-   private boolean preMatch(Term inputArg2) {
-      tmpInputArg2 = inputArg2.getTerm();
-      secondArg = tmpInputArg2.copy(new HashMap<Variable, Variable>());
-      if (Unifier.preMatch(tmpInputArg2.getArgs(), secondArg.getArgs())) {
-         if (secondPredicateFactory == null) {
-            secondPredicateFactory = getKnowledgeBase().getPredicateFactory(secondArg);
-         }
-         secondPredicate = secondPredicateFactory.getPredicate(secondArg.getArgs());
-         return true;
-      } else {
-         return false;
       }
-   }
 
-   @Override
-   public boolean couldReEvaluationSucceed() {
-      return firstPredicate == null || firstPredicate.couldReEvaluationSucceed() || secondPredicate == null || secondPredicate.couldReEvaluationSucceed();
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return firstPredicate == null || firstPredicate.couldReEvaluationSucceed() || secondPredicate == null || secondPredicate.couldReEvaluationSucceed();
+      }
    }
 }

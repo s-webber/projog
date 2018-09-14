@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import java.util.List;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.event.ProjogEventsObservable;
-import org.projog.core.function.bool.True;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
@@ -77,13 +77,8 @@ public class KnowledgeBaseUtilsTest {
 
    @Test
    public void testGetPredicate() {
-      assertGetPredicate(atom("true"), True.class);
-      assertGetPredicate(atom("does_not_exist"), UnknownPredicate.class);
-   }
-
-   private void assertGetPredicate(Term input, Class<?> expected) {
-      Predicate e = KnowledgeBaseUtils.getPredicate(kb, input);
-      assertSame(expected, e.getClass());
+      assertSame(AbstractSingletonPredicate.TRUE, KnowledgeBaseUtils.getPredicate(kb, atom("true")));
+      assertSame(AbstractSingletonPredicate.FAIL, KnowledgeBaseUtils.getPredicate(kb, atom("does_not_exist")));
    }
 
    @Test
@@ -147,7 +142,7 @@ public class KnowledgeBaseUtilsTest {
    @Test
    public void testIsSingleAnswer_Disjunction() {
       // test disjunction
-      // (Note that the disjunction used in the test *would* only give a single answer 
+      // (Note that the disjunction used in the test *would* only give a single answer
       // but KnowledgeBaseUtils.isSingleAnswer is not currently smart enough to spot this)
       Term disjunctionOfTerms = TestUtils.parseSentence("true ; fail.");
       assertFalse(KnowledgeBaseUtils.isSingleAnswer(kb, disjunctionOfTerms));

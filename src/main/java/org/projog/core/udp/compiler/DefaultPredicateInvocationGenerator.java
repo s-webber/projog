@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,10 +29,10 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
    // In common with some other classes in org.projog.core.udp.compiler,
    // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
-   // and the system tests (which check actual behaviour) should give confidence when refactoring. 
+   // and the system tests (which check actual behaviour) should give confidence when refactoring.
 
    @Override
-   public void generate(CompiledPredicateWriter g) {
+   public void generate(final CompiledPredicateWriter g) {
       final Term function = g.currentClause().getCurrentFunction();
       final PredicateFactory ef = g.currentClause().getCurrentPredicateFactory();
       final boolean isRetryable = g.currentClause().isCurrentFunctionMulipleResult();
@@ -48,10 +48,10 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          Set<Variable> variablesInCurrentFunction = g.currentClause().getVariablesInCurrentFunction();
 
          // only has to be unique per clause as can be reused
-         String PredicateVariableName = g.classVariables().getNewMemberPredicateName(g.currentClause(), getPredicateReturnType(ef, numberOfArguments));
+         final String predicateVariableName = g.classVariables().getNewMemberPredicateName(g.currentClause(), getPredicateReturnType(ef, numberOfArguments));
 
          String functionVariableName = g.classVariables().getPredicateFactoryVariableName(function, g.knowledgeBase());
-         g.beginIf(PredicateVariableName + "==null");
+         g.beginIf(predicateVariableName + "==null");
          StringBuilder methodArgs = new StringBuilder();
          for (int i = 0; i < numberOfArguments; i++) {
             if (i != 0) {
@@ -67,19 +67,24 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
                methodArgs.append(argVariable);
             }
          }
-         g.assign(PredicateVariableName, functionVariableName + ".getPredicate(" + methodArgs + ")");
+         g.assign(predicateVariableName, functionVariableName + ".getPredicate(" + methodArgs + ")");
          g.elseStatement();
-         g.outputIfTrueThenBreak(PredicateVariableName + ".isRetryable()==false");
+         g.outputIfTrueThenBreak(predicateVariableName + ".couldReEvaluationSucceed()==false", new Runnable() {
+            @Override
+            public void run() {
+               g.assign(predicateVariableName, "null");
+            }
+         });
          Map<String, String> variablesToKeepTempVersionOf = g.assignTempVariablesBackToTerm();
          g.endBlock();
 
-         g.beginIf("!" + PredicateVariableName + ".evaluate(" + methodArgs + ")");
+         g.beginIf("!" + predicateVariableName + ".evaluate()");
          if (firstInMethod == false) {
             g.currentClause().addVariablesToBackTrack(variablesInCurrentFunction);
             g.outputBacktrack();
          }
          g.currentClause().clearVariablesToBackTrack();
-         g.assign(PredicateVariableName, null);
+         g.assign(predicateVariableName, null);
          g.exitClauseEvaluation();
          g.endBlock();
 
@@ -114,7 +119,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          m = predicateFactoryClass.getDeclaredMethod("getPredicate", getMethodParameters(numberOfArguments));
       } catch (NoSuchMethodException e) {
          try {
-            // default to using the overridden varargs version of the getPredicate method (as defined by PredicateFactory) 
+            // default to using the overridden varargs version of the getPredicate method (as defined by PredicateFactory)
             m = predicateFactoryClass.getDeclaredMethod("getPredicate", Term[].class);
          } catch (NoSuchMethodException e2) {
             throw new RuntimeException("No getPredicate(Term[]) method declared for: " + predicateFactoryClass, e2);

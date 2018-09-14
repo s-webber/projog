@@ -19,9 +19,8 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractPredicate;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /* TEST
  if_then_else_test(1).
@@ -106,7 +105,7 @@ public final class IfThen implements PredicateFactory {
    private KnowledgeBase kb;
 
    @Override
-   public IfThenPredicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term... args) {
       if (args.length == 2) {
          return getPredicate(args[0], args[1]);
       } else {
@@ -114,48 +113,23 @@ public final class IfThen implements PredicateFactory {
       }
    }
 
-   public IfThenPredicate getPredicate(Term conditionTerm, Term thenTerm) {
-      return new IfThenPredicate(KnowledgeBaseUtils.getPredicate(kb, conditionTerm), KnowledgeBaseUtils.getPredicate(kb, thenTerm));
+   public Predicate getPredicate(Term conditionTerm, Term thenTerm) {
+      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(kb, conditionTerm);
+      if (conditionPredicate.evaluate()) {
+         // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
+         return KnowledgeBaseUtils.getPredicate(kb, thenTerm.getTerm());
+      } else {
+         return AbstractSingletonPredicate.toPredicate(false);
+      }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    @Override
    public void setKnowledgeBase(KnowledgeBase kb) {
       this.kb = kb;
-   }
-
-   public static final class IfThenPredicate extends AbstractPredicate {
-      private final Predicate conditionPredicate;
-      private final Predicate thenPredicate;
-      private Term[] actualArgs;
-
-      private IfThenPredicate(Predicate conditionPredicate, Predicate thenPredicate) {
-         this.conditionPredicate = conditionPredicate;
-         this.thenPredicate = thenPredicate;
-      }
-
-      @Override
-      public boolean evaluate(Term conditionTerm, Term thenTerm) {
-         if (actualArgs == null) {
-            if (conditionPredicate.evaluate(conditionTerm.getArgs())) {
-               actualArgs = thenTerm.getTerm().getArgs();
-            } else {
-               return false;
-            }
-         } else {
-            TermUtils.backtrack(actualArgs);
-         }
-
-         return thenPredicate.evaluate(actualArgs);
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return thenPredicate.isRetryable();
-      }
-
-      @Override
-      public boolean couldReEvaluationSucceed() {
-         return isRetryable() && thenPredicate.couldReEvaluationSucceed();
-      }
    }
 }

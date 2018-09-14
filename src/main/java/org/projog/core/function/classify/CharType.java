@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.projog.core.Predicate;
 import org.projog.core.PredicateKey;
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.function.AbstractPredicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.io.GetChar;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -37,7 +39,7 @@ import org.projog.core.term.TermUtils;
  %TRUE char_type(a, alpha)
  %TRUE char_type(a, alnum)
  %FALSE char_type(a, white)
- 
+
  %FALSE char_type('A', digit)
  %FALSE char_type('A', lower)
  %TRUE char_type('A', upper)
@@ -51,14 +53,14 @@ import org.projog.core.term.TermUtils;
  %FALSE char_type('1', alpha)
  %TRUE char_type('1', alnum)
  %FALSE char_type('1', white)
- 
+
  %FALSE char_type(' ', digit)
  %FALSE char_type(' ', lower)
  %FALSE char_type(' ', upper)
  %FALSE char_type(' ', alpha)
  %FALSE char_type(' ', alnum)
  %TRUE char_type(' ', white)
- 
+
  %FALSE char_type('\t ', digit)
  %FALSE char_type('\t', lower)
  %FALSE char_type('\t', upper)
@@ -71,7 +73,7 @@ import org.projog.core.term.TermUtils;
  %ANSWER X=alpha
  %ANSWER X=lower
  %NO
- 
+
  %QUERY char_type(X, digit)
  %ANSWER X=0
  %ANSWER X=1
@@ -142,7 +144,7 @@ import org.projog.core.term.TermUtils;
  %ANSWER X=y
  %ANSWER X=z
  %NO
- 
+
  %QUERY char_type(X, alnum)
  %ANSWER X=0
  %ANSWER X=1
@@ -207,8 +209,8 @@ import org.projog.core.term.TermUtils;
  %ANSWER X=y
  %ANSWER X=z
  %NO
- 
- white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail. 
+
+ white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail.
  %QUERY white_test
  %OUTPUT
  % >\t<
@@ -232,7 +234,7 @@ import org.projog.core.term.TermUtils;
  * </ul>
  * </p>
  */
-public final class CharType extends AbstractRetryablePredicate {
+public final class CharType extends AbstractPredicateFactory {
    private static final Type[] EMPTY_TYPES_ARRAY = new Type[] {};
    private static final Atom[] ALL_CHARACTERS = new Atom[MAX_VALUE + 2];
    static {
@@ -259,9 +261,18 @@ public final class CharType extends AbstractRetryablePredicate {
       CHARACTER_TYPES_ARRAY = CHARACTER_TYPES_MAP.values().toArray(new Type[CHARACTER_TYPES_MAP.size()]);
    }
 
+   /** @see GetChar#toString(int) */
+   private static String charToString(int c) {
+      if (c == '\t') {
+         return "\\t";
+      } else {
+         return Character.toString((char) c);
+      }
+   }
+
    @SafeVarargs
    private static void addType(String id, Set<String>... charIdxs) {
-      Set<String> superSet = new HashSet<String>();
+      Set<String> superSet = new HashSet<>();
       for (Set<String> s : charIdxs) {
          superSet.addAll(s);
       }
@@ -298,18 +309,8 @@ public final class CharType extends AbstractRetryablePredicate {
       return strings;
    }
 
-   private final State state;
-
-   public CharType() {
-      this.state = null;
-   }
-
-   private CharType(State state) {
-      this.state = state;
-   }
-
    @Override
-   public CharType getPredicate(Term character, Term type) {
+   public Predicate getPredicate(Term character, Term type) {
       Term[] characters;
       if (character.getType().isVariable()) {
          characters = ALL_CHARACTERS;
@@ -329,33 +330,36 @@ public final class CharType extends AbstractRetryablePredicate {
             characterTypes = EMPTY_TYPES_ARRAY;
          }
       }
-      return new CharType(new State(characters, characterTypes));
+      return new CharTypePredicate(character, type, new State(characters, characterTypes));
    }
 
-   @Override
-   public boolean evaluate(Term character, Term type) {
-      while (state.hasNext()) {
-         state.next();
-         character.backtrack();
-         type.backtrack();
-         if (character.unify(state.getCharacter()) && state.getType().unify(character, type)) {
-            return true;
-         }
+   private final class CharTypePredicate extends AbstractPredicate {
+      private final Term character;
+      private final Term type;
+      private final State state;
+
+      private CharTypePredicate(Term character, Term type, State state) {
+         this.character = character;
+         this.type = type;
+         this.state = state;
       }
-      return false;
-   }
 
-   @Override
-   public boolean couldReEvaluationSucceed() {
-      return state.hasNext();
-   }
+      @Override
+      public boolean evaluate() {
+         while (state.hasNext()) {
+            state.next();
+            character.backtrack();
+            type.backtrack();
+            if (character.unify(state.getCharacter()) && state.getType().unify(character, type)) {
+               return true;
+            }
+         }
+         return false;
+      }
 
-   /** @see GetChar#toString(int) */
-   private static String charToString(int c) {
-      if (c == '\t') {
-         return "\\t";
-      } else {
-         return Character.toString((char) c);
+      @Override
+      public boolean couldReEvaluationSucceed() {
+         return state.hasNext();
       }
    }
 

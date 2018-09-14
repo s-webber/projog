@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,8 @@ import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.Predicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 
@@ -68,7 +70,7 @@ import org.projog.core.term.TermComparator;
  %ANSWER
 
  %FALSE setof(X,x(X,y,z),L)
- 
+
  %QUERY setof(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
  %ANSWER
  % L=[9]
@@ -90,36 +92,34 @@ import org.projog.core.term.TermComparator;
  * variables. The elements in <code>L</code> will appear in sorted order and will not include duplicates. Fails if
  * <code>P</code> has no solutions.
  */
-public final class SetOf extends AbstractCollectionOf {
-   /** needed to create prototype actual instances can be created from */
-   public SetOf() {
-   }
-
-   private SetOf(KnowledgeBase kb) {
-      setKnowledgeBase(kb);
-   }
-
+public final class SetOf extends AbstractPredicateFactory {
    @Override
-   public SetOf getPredicate(Term template, Term goal, Term bag) {
-      return new SetOf(getKnowledgeBase());
+   public Predicate getPredicate(Term template, Term goal, Term bag) {
+      return new SetOfPredicate(template, goal, bag, getKnowledgeBase());
    }
 
-   /** "setof" excludes duplicates and orders elements using {@link TermComparator}. */
-   @Override
-   protected void add(List<Term> list, Term newTerm) {
-      final int numberOfElements = list.size();
-      for (int i = 0; i < numberOfElements; i++) {
-         final Term next = list.get(i);
-         final int comparison = TERM_COMPARATOR.compare(newTerm, next);
-         if (comparison < 0) {
-            // found correct position - so add
-            list.add(i, newTerm);
-            return;
-         } else if (comparison == 0 && newTerm.strictEquality(next)) {
-            // duplicate - so ignore
-            return;
-         }
+   private final class SetOfPredicate extends AbstractCollectionOf {
+      private SetOfPredicate(Term template, Term goal, Term bag, KnowledgeBase kb) {
+         super(template, goal, bag, kb);
       }
-      list.add(newTerm);
+
+      /** "setof" excludes duplicates and orders elements using {@link TermComparator}. */
+      @Override
+      protected void add(List<Term> list, Term newTerm) {
+         final int numberOfElements = list.size();
+         for (int i = 0; i < numberOfElements; i++) {
+            final Term next = list.get(i);
+            final int comparison = TERM_COMPARATOR.compare(newTerm, next);
+            if (comparison < 0) {
+               // found correct position - so add
+               list.add(i, newTerm);
+               return;
+            } else if (comparison == 0 && newTerm.strictEquality(next)) {
+               // duplicate - so ignore
+               return;
+            }
+         }
+         list.add(newTerm);
+      }
    }
 }

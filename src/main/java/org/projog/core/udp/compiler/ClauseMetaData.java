@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.function.flow.Cut;
 import org.projog.core.term.Term;
@@ -44,7 +43,7 @@ final class ClauseMetaData {
    // In common with some other classes in org.projog.core.udp.compiler,
    // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
-   // and the system tests (which check actual behaviour) should give confidence when refactoring. 
+   // and the system tests (which check actual behaviour) should give confidence when refactoring.
 
    private final int clauseIndex;
    private final Term term;
@@ -129,14 +128,11 @@ final class ClauseMetaData {
    }
 
    private static boolean isRetryable(PredicateFactory ef, Term[] args) {
-      if (ef instanceof AbstractRetryablePredicate) {
-         return true;
-      }
       if (ef instanceof AbstractSingletonPredicate) {
          return false;
       }
       if (ef instanceof CompiledPredicate) {
-         return ef.getPredicate(args).isRetryable();
+         return ef.isRetryable();
       }
       // default to it being retryable
       return true;

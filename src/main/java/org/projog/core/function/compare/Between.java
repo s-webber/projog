@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import org.projog.core.term.Term;
  %TRUE between(1, 5, 3)
  %TRUE between(1, 5, 4)
  %TRUE between(1, 5, 5)
- 
+
  %FALSE between(1, 5, 0)
  %FALSE between(1, 5, -1)
  %FALSE between(1, 5, -9223372036854775808)
@@ -47,23 +47,23 @@ import org.projog.core.term.Term;
  %TRUE between(-9223372036854775808, 9223372036854775807, 0)
  %TRUE between(-9223372036854775808, 9223372036854775807, 1)
  %TRUE between(-9223372036854775808, 9223372036854775807, 9223372036854775807)
- 
+
  %QUERY between(1, 1, X)
  %ANSWER X=1
- 
+
  %QUERY between(1, 2, X)
  %ANSWER X=1
  %ANSWER X=2
- 
+
  %QUERY between(1, 5, X)
  %ANSWER X=1
  %ANSWER X=2
  %ANSWER X=3
  %ANSWER X=4
  %ANSWER X=5
-   
+
  %FALSE between(5, 1, X)
- 
+
  %TRUE between(5-2, 2+3, 2*2)
  %FALSE between(5-2, 2+3, 8-6)
  */
@@ -80,7 +80,6 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Between implements PredicateFactory {
-   private Singleton singleton;
    private Calculatables calculatables;
 
    @Override
@@ -90,57 +89,42 @@ public final class Between implements PredicateFactory {
 
    public Predicate getPredicate(Term low, Term high, Term middle) {
       if (middle.getType().isVariable()) {
-         return new Retryable(toLong(calculatables, low), toLong(calculatables, high));
+         return new Retryable(middle, toLong(calculatables, low), toLong(calculatables, high));
       } else {
-         return singleton;
+         boolean result = NUMERIC_TERM_COMPARATOR.compare(low, middle, calculatables) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, calculatables) < 1;
+         return AbstractSingletonPredicate.toPredicate(result);
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    @Override
    public void setKnowledgeBase(KnowledgeBase kb) {
       calculatables = getCalculatables(kb);
-      singleton = new Singleton(calculatables);
    }
 
-   private static class Singleton extends AbstractSingletonPredicate {
-      final Calculatables calculatables;
-
-      Singleton(Calculatables calculatables) {
-         this.calculatables = calculatables;
-      }
-
-      @Override
-      protected boolean evaluate(Term low, Term high, Term middle) {
-         return NUMERIC_TERM_COMPARATOR.compare(low, middle, calculatables) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, calculatables) < 1;
-      }
-   };
-
    private static class Retryable implements Predicate {
+      final Term middle;
       final long max;
       long ctr;
 
-      Retryable(long start, long max) {
+      Retryable(Term middle, long start, long max) {
+         this.middle = middle;
          this.ctr = start;
          this.max = max;
       }
 
       @Override
-      public boolean evaluate(Term... args) {
-         return evaluate(args[0], args[1], args[2]);
-      }
-
-      private boolean evaluate(Term low, Term high, Term middle) {
+      public boolean evaluate() {
          while (couldReEvaluationSucceed()) {
             middle.backtrack();
             IntegerNumber n = new IntegerNumber(ctr++);
             return middle.unify(n);
          }
          return false;
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true;
       }
 
       @Override

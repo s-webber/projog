@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,10 +27,11 @@ import org.projog.core.term.TermUtils;
 
 /**
  * Represents a user defined predicate.
- * 
+ *
  * @see #evaluate(Term...)
  */
 public final class InterpretedUserDefinedPredicate implements Predicate {
+   private Term[] queryArgs;
    private final PredicateKey key;
    private final Iterator<ClauseAction> clauseActions;
    private final SpyPoints.SpyPoint spyPoint;
@@ -40,7 +41,8 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
    private ClauseAction currentClauseAction;
    private boolean retryCurrentClauseAction;
 
-   public InterpretedUserDefinedPredicate(PredicateKey key, SpyPoints.SpyPoint spyPoint, Iterator<ClauseAction> clauseActions) {
+   public InterpretedUserDefinedPredicate(Term[] queryArgs, PredicateKey key, SpyPoints.SpyPoint spyPoint, Iterator<ClauseAction> clauseActions) {
+      this.queryArgs = queryArgs;
       this.key = key;
       this.clauseActions = clauseActions;
       this.spyPoint = spyPoint;
@@ -68,7 +70,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
     * clauses starting with the next clause in the sequence.
     */
    @Override
-   public boolean evaluate(Term... queryArgs) {
+   public boolean evaluate() {
       try {
          if (retryCurrentClauseAction) {
             if (debugEnabled) {
@@ -123,11 +125,6 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
          pe.addUserDefinedPredicate(this);
          throw pe;
       }
-   }
-
-   @Override
-   public boolean isRetryable() {
-      return true;
    }
 
    @Override

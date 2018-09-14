@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,7 +47,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
    // In common with some other classes in org.projog.core.udp.compiler,
    // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
-   // and the system tests (which check actual behaviour) should give confidence when refactoring. 
+   // and the system tests (which check actual behaviour) should give confidence when refactoring.
 
    static final String EMPTY_LIST_SYNTAX = "EmptyList.EMPTY_LIST";
    static final String MAIN_LOOP_LABEL = "mainloop";
@@ -168,7 +168,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       } else if (t.getType() == TermType.FRACTION) {
          return "new DecimalFraction(" + t.getName() + ")";
       } else {
-         throw new RuntimeException("unknown " + t.getType() + " " + t);
+         throw new RuntimeException("unknown " + t.getType() + " " + t.getClass() + " " + t);
       }
    }
 
@@ -340,7 +340,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          elseStatement();
          Map<String, String> variablesToKeepTempVersionOf = assignTempVariablesBackToTerm();
          endBlock();
-         beginIf("!" + compiledPredicateVariableName + ".evaluate((Term[])null)");
+         beginIf("!" + compiledPredicateVariableName + ".evaluate()");
          if (firstInMethod == false) {
             assign(compiledPredicateVariableName, null);
             outputBacktrack();
@@ -519,7 +519,7 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
 
    final Map<Term, String> getTermsThatRequireBacktrack(Term function) {
       Set<Variable> x = getTermArgumentsThatAreCurrentlyUnassignedAndNotReusedWithinTheTerm(function);
-      // use LinkedHashMap so order is predictable - purely so unit tests are easier 
+      // use LinkedHashMap so order is predictable - purely so unit tests are easier
       Map<Term, String> tempVars = new LinkedHashMap<>();
 
       for (int i = 0; i < function.getNumberOfArguments(); i++) {

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ import org.projog.core.term.Term;
  * <p>
  * <a href="doc-files/PredicateFactory.png">View Class Diagram</a>
  * </p>
- * 
+ *
  * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
  */
 public interface PredicateFactory {
@@ -69,10 +69,24 @@ public interface PredicateFactory {
     * {@link AbstractSingletonPredicate}. (As the compiler is aware that
     * {@link AbstractSingletonPredicate#getPredicate(Term...)} always returns {@code this}.
     * </p>
-    * 
+    *
     * @param args the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal
     * @see Predicate#evaluate(Term[])
     */
    Predicate getPredicate(Term... args);
+
+   /**
+    * Should instances of this implementation be re-evaluated when backtracking?
+    * <p>
+    * Some goals (e.g. {@code X is 1}) are only meant to be evaluated once (the statement is either true or false) while
+    * others (e.g. {@code repeat(3)}) are meant to be evaluated multiple times. For instances of {@code Predicate} that
+    * are designed to possibly have {@link #evaluate(Term[])} called on them multiple times for the same individual
+    * query this method should return {@code true}. For instances of {@code Predicate} that are designed to only be
+    * evaluated once per individual query this method should return {@code false}.
+    *
+    * @return {@code true} if an attempt should be made to re-evaluate instances of implementing classes when
+    * backtracking, {@code false} otherwise
+    */
+   boolean isRetryable();
 }

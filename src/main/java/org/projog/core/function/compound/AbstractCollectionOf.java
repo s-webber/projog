@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,20 +23,32 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
-import org.projog.core.function.AbstractRetryablePredicate;
+import org.projog.core.function.AbstractPredicate;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
-abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
+abstract class AbstractCollectionOf extends AbstractPredicate {
+   private final Term template;
+   private final Term goal;
+   private final Term bag;
+   private final KnowledgeBase kb;
    private List<Variable> variablesNotInTemplate;
    private Iterator<Entry<Key, List<Term>>> itr;
 
+   protected AbstractCollectionOf(Term template, Term goal, Term bag, KnowledgeBase kb) {
+      this.template = template;
+      this.goal = goal;
+      this.bag = bag;
+      this.kb = kb;
+   }
+
    @Override
-   public final boolean evaluate(Term template, Term goal, Term bag) {
+   public final boolean evaluate() {
       if (itr == null) {
          init(template, goal);
       }
@@ -60,20 +72,19 @@ abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
    private void init(Term template, Term goal) {
       variablesNotInTemplate = getVariablesNotInTemplate(template, goal);
 
-      Predicate predicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), goal);
-      Term[] goalArguments = goal.getArgs();
+      Predicate predicate = KnowledgeBaseUtils.getPredicate(kb, goal);
 
       Map<Key, List<Term>> m = new LinkedHashMap<>();
-      if (predicate.evaluate(goalArguments)) {
+      if (predicate.evaluate()) {
          do {
             Key key = new Key(variablesNotInTemplate);
             List<Term> l = m.get(key);
             if (l == null) {
-               l = new ArrayList<Term>();
+               l = new ArrayList<>();
                m.put(key, l);
             }
             add(l, template.getTerm());
-         } while (hasFoundAnotherSolution(predicate, goalArguments));
+         } while (hasFoundAnotherSolution(predicate));
       }
 
       goal.backtrack();
@@ -87,11 +98,11 @@ abstract class AbstractCollectionOf extends AbstractRetryablePredicate {
       Set<Variable> variablesInGoal = TermUtils.getAllVariablesInTerm(goal);
       Set<Variable> variablesInTemplate = TermUtils.getAllVariablesInTerm(template);
       variablesInGoal.removeAll(variablesInTemplate);
-      return new ArrayList<Variable>(variablesInGoal);
+      return new ArrayList<>(variablesInGoal);
    }
 
-   private boolean hasFoundAnotherSolution(final Predicate predicate, final Term[] goalArguments) {
-      return predicate.isRetryable() && predicate.couldReEvaluationSucceed() && predicate.evaluate(goalArguments);
+   private boolean hasFoundAnotherSolution(final Predicate predicate) {
+      return predicate.couldReEvaluationSucceed() && predicate.evaluate();
    }
 
    @Override

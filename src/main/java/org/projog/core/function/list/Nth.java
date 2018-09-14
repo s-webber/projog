@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,8 @@ import static org.projog.core.term.TermUtils.toInt;
 import java.util.Collections;
 import java.util.List;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
@@ -35,7 +34,7 @@ import org.projog.core.term.Term;
  %TRUE nth1(2, [a,b,c], b)
  %TRUE nth0(2, [a,b,c], c)
  %TRUE nth1(3, [a,b,c], c)
- 
+
  %FALSE nth0(-1, [a,b,c], a)
  %FALSE nth0(1, [a,b,c], a)
  %FALSE nth0(5, [a,b,c], a)
@@ -60,23 +59,23 @@ import org.projog.core.term.Term;
  %FALSE nth0(X, [h,e,l,l,o], z)
 
  %QUERY nth0(X, [h,e,l,l,o], Y)
- %ANSWER 
+ %ANSWER
  % X=0
  % Y=h
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=1
  % Y=e
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=2
  % Y=l
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=3
  % Y=l
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=4
  % Y=o
  %ANSWER
@@ -106,23 +105,23 @@ import org.projog.core.term.Term;
  %FALSE nth1(X, [h,e,l,l,o], z)
 
  %QUERY nth1(X, [h,e,l,l,o], Y)
- %ANSWER 
+ %ANSWER
  % X=1
  % Y=h
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=2
  % Y=e
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=3
  % Y=l
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=4
  % Y=l
  %ANSWER
- %ANSWER 
+ %ANSWER
  % X=5
  % Y=o
  %ANSWER
@@ -136,7 +135,7 @@ import org.projog.core.term.Term;
  * Indexing starts at 0 when using <code>nth0</code>. Indexing starts at 1 when using <code>nth1</code>.
  * </p>
  */
-public final class Nth implements PredicateFactory {
+public final class Nth extends AbstractPredicateFactory {
    public static Nth nth0() {
       return new Nth(0);
    }
@@ -145,7 +144,6 @@ public final class Nth implements PredicateFactory {
       return new Nth(1);
    }
 
-   private final Singleton singleton = new Singleton();
    private final int startingIdx;
 
    private Nth(int startingIdx) {
@@ -153,60 +151,51 @@ public final class Nth implements PredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
    public Predicate getPredicate(Term index, Term list, Term element) {
       if (index.getType().isVariable()) {
-         return new Retryable(toJavaUtilList(list));
+         return new Retryable(index, list, element, toJavaUtilList(list));
       } else {
-         return singleton;
+         boolean result = evaluate(index, list, element);
+         return AbstractSingletonPredicate.toPredicate(result);
       }
    }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      singleton.setKnowledgeBase(kb);
+   private boolean evaluate(Term index, Term list, Term element) {
+      List<Term> l = toJavaUtilList(list);
+      if (l == null) {
+         return false;
+      }
+
+      int i = toInt(index);
+      int idx = i - startingIdx;
+      if (isValidIndex(l, idx)) {
+         return element.unify(l.get(idx));
+      } else {
+         return false;
+      }
    }
 
-   private class Singleton extends AbstractSingletonPredicate {
-      @Override
-      protected boolean evaluate(Term index, Term list, Term element) {
-         List<Term> l = toJavaUtilList(list);
-         if (l == null) {
-            return false;
-         }
-
-         int i = toInt(index);
-         int idx = i - startingIdx;
-         if (isValidIndex(l, idx)) {
-            return element.unify(l.get(idx));
-         } else {
-            return false;
-         }
-      }
-
-      private boolean isValidIndex(List<Term> l, int idx) {
-         return idx > -1 && idx < l.size();
-      }
-   };
+   private boolean isValidIndex(List<Term> l, int idx) {
+      return idx > -1 && idx < l.size();
+   }
 
    private class Retryable implements Predicate {
+      final Term index;
+      final Term list;
+      final Term element;
       final List<Term> javaUtilList;
       int ctr;
 
       @SuppressWarnings("unchecked")
-      Retryable(List<Term> javaUtilList) {
+      Retryable(Term index, Term list, Term element, List<Term> javaUtilList) {
+         this.index = index;
+         this.list = list;
+         this.element = element;
          this.javaUtilList = javaUtilList == null ? Collections.EMPTY_LIST : javaUtilList;
       }
 
       @Override
-      public boolean evaluate(Term... args) {
-         return evaluate(args[0], args[1], args[2]);
-      }
-
-      private boolean evaluate(Term index, Term list, Term element) {
+      public boolean evaluate() {
          while (couldReEvaluationSucceed()) {
             backtrack(index, list, element);
             Term t = javaUtilList.get(ctr);
@@ -227,13 +216,8 @@ public final class Nth implements PredicateFactory {
       }
 
       @Override
-      public boolean isRetryable() {
-         return true;
-      }
-
-      @Override
       public boolean couldReEvaluationSucceed() {
          return ctr < javaUtilList.size();
       }
-   };
+   }
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * <p>
  * A "dynamic" user defined predicate is one that can have clauses added and removed <i>after</i> it has been first
  * defined. This is normally done using the {@code asserta/1}, {@code assertz/1} and {@code retract/1} predicates.
- * 
+ *
  * @see org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate
  */
 public final class DynamicUserDefinedPredicateFactory implements UserDefinedPredicateFactory {
@@ -67,7 +67,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public Predicate getPredicate(Term... args) {
       ClauseActionIterator itr = new ClauseActionIterator(ends[FIRST]);
-      return new InterpretedUserDefinedPredicate(predicateKey, spyPoint, itr);
+      return new InterpretedUserDefinedPredicate(args, predicateKey, spyPoint, itr);
    }
 
    @Override
@@ -240,5 +240,10 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       private ClauseAction getClauseAction() {
          return ClauseActionFactory.getClauseAction(kb, clauseModel);
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 }

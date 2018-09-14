@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ public final class ProjogSourceReader {
 
    /**
     * Populates the KnowledgeBase with clauses defined in the file.
-    * 
+    *
     * @param kb the KnowledgeBase to add the clauses to
     * @param prologSourceFile source of the prolog syntax defining clauses to add to the KnowledgeBase
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
@@ -69,7 +69,7 @@ public final class ProjogSourceReader {
     * <p>
     * If {@code prologSourceResourceName} refers to an existing file on the file system then that file is used as the
     * source of the prolog syntax else {@code prologSourceResourceName} is read from the classpath.
-    * 
+    *
     * @param kb the KnowledgeBase to add the clauses to
     * @param prologSourceResourceName source of the prolog syntax defining clauses to add to the KnowledgeBase
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
@@ -88,7 +88,7 @@ public final class ProjogSourceReader {
     * <p>
     * Note that this method will call {@code close()} on the specified reader - regardless of whether this method
     * completes successfully or if an exception is thrown.
-    * 
+    *
     * @param kb the KnowledgeBase to add the clauses to
     * @param reader source of the prolog syntax defining clauses to add to the KnowledgeBase
     * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
@@ -176,7 +176,7 @@ public final class ProjogSourceReader {
          declareDynamicPredicate(query.getArgument(0));
       } else {
          Predicate e = KnowledgeBaseUtils.getPredicate(kb, query);
-         while (e.evaluate(query.getArgs()) && e.isRetryable()) {
+         while (e.evaluate() && e.couldReEvaluationSucceed()) {
             // keep re-evaluating until fail
          }
       }
@@ -187,7 +187,7 @@ public final class ProjogSourceReader {
     * <p>
     * Only user defined predicates declared as "dynamic" can be used with the "asserta", "assertz" and "retract"
     * commands.
-    * 
+    *
     * @param query structure named {@code /} where first argument is name and second is arity.
     * @throws ProjogException if the user defined predicate has already been read
     */

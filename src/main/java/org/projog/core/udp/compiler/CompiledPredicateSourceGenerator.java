@@ -86,6 +86,8 @@ final class CompiledPredicateSourceGenerator {
       w.writeImport("org.projog.core.term.*");
       w.writeImport("org.projog.core.*");
       w.writeImport("static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR");
+      w.writeImport("static org.projog.core.function.AbstractSingletonPredicate.toPredicate");
+
       String s;
       if (factMetaData().isTailRecursive()) {
          s = "extends CompiledTailRecursivePredicate";
@@ -392,7 +394,14 @@ final class CompiledPredicateSourceGenerator {
    private void outputGetPredicateMethod() {
       w.beginMethod("public final Predicate getPredicate(final Term... termArgs)");
       if (factMetaData().isSingleResultPredicate()) {
-         w.returnThis();
+         StringBuilder args = new StringBuilder(); // TODO extract method
+         for (int i = 0; i < factMetaData().getNumberArguments(); i++) {
+            if (i != 0) {
+               args.append(',');
+            }
+            args.append("termArgs[").append(i).append(']');
+         }
+         w.writeStatement("return toPredicate(staticEvaluate(" + args + "))");
       } else {
          StringBuilder args = new StringBuilder();
          for (int i = 0; i < factMetaData().getNumberArguments(); i++) {
@@ -436,8 +445,8 @@ final class CompiledPredicateSourceGenerator {
     * {@link CompiledPredicate} that only ever returns at most a single result per unique query.
     */
    private void outputSingleResultEvaluateMethod() {
-      w.beginMethod("public final boolean evaluate(final Term... args)");
-      w.writeStatement("return staticEvaluate(" + getArgsFromArrayCall() + ")");
+      w.beginMethod("public final boolean evaluate()");
+      w.writeStatement("throw new UnsupportedOperationException()"); // TODO just don't implement Predicate, so won't need to implement this method
       w.endBlock();
 
       w.beginMethod("static final boolean staticEvaluate(" + getArgsDeclaration() + ")");
@@ -454,7 +463,7 @@ final class CompiledPredicateSourceGenerator {
     * {@link CompiledPredicate} that may return multiple results per unique query.
     */
    private void outputMultiResultEvaluateMethod(ClauseMetaData[] clauses) {
-      w.beginMethod("public final boolean evaluate(final Term... args)");
+      w.beginMethod("public final boolean evaluate()");
 
       if (isSpyPointsEnabled()) {
          w.beginIf(DEBUG_ENABLED);
@@ -921,10 +930,6 @@ final class CompiledPredicateSourceGenerator {
 
    private StringBuilder getArgsDeclarationNotFinal() {
       return getArgsCsv("Term " + ARGUMENT_PREFIX, null);
-   }
-
-   private StringBuilder getArgsFromArrayCall() {
-      return getArgsCsv("args[", "]");
    }
 
    private StringBuilder getArgsCall() {

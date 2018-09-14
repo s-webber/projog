@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,27 +15,27 @@
  */
 package org.projog.core.udp;
 
+import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.SpyPoints;
-import org.projog.core.function.AbstractRetryablePredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /**
  * Provides an optimised implementation for evaluating a particular subset of user defined predicates that have an arity
- * greater than one and a number of clauses that all have a body of {@code true} and no shared variables. Example:
- * 
- * <pre>
+ * greater than one and a number of clauses that all have a body of {@code true} and no shared variables. Example: <pre>
  * p(a,b,c).
  * p(x,y,z).
  * p(1,2,3).
  * </pre>
- * 
+ *
  * @see SingleRuleWithSingleImmutableArgumentPredicate
  * @see SingleRuleWithMultipleImmutableArgumentsPredicate
  * @see MultipleRulesWithSingleImmutableArgumentPredicate
  */
-public final class MultipleRulesWithMultipleImmutableArgumentsPredicate extends AbstractRetryablePredicate {
+public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implements Predicate, PredicateFactory { // TODO split into two classes
+   private Term[] args;
    /** Public so can be used directly be code compiled at runtime. */
    public final Term[][] data;
    /** Public so can be used directly be code compiled at runtime. */
@@ -45,7 +45,8 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate extends 
    private int ctr;
    private boolean retrying;
 
-   public MultipleRulesWithMultipleImmutableArgumentsPredicate(Term[][] data, SpyPoints.SpyPoint spyPoint) {
+   public MultipleRulesWithMultipleImmutableArgumentsPredicate(Term[] args, Term[][] data, SpyPoints.SpyPoint spyPoint) {
+      this.args = args;
       this.data = data;
       this.numClauses = data.length;
       this.spyPoint = spyPoint;
@@ -54,11 +55,11 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate extends 
 
    @Override
    public Predicate getPredicate(Term... args) {
-      return new MultipleRulesWithMultipleImmutableArgumentsPredicate(data, spyPoint);
+      return new MultipleRulesWithMultipleImmutableArgumentsPredicate(args, data, spyPoint);
    }
 
    @Override
-   public boolean evaluate(Term... args) {
+   public boolean evaluate() {
       if (retrying) {
          if (isDebugEnabled) {
             spyPoint.logRedo(this, args);
@@ -87,5 +88,14 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate extends 
    @Override
    public boolean couldReEvaluationSucceed() {
       return ctr < numClauses;
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
+
+   @Override
+   public void setKnowledgeBase(KnowledgeBase kb) {
    }
 }

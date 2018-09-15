@@ -263,19 +263,15 @@ final class ClauseMetaData {
          return false;
       }
 
-      boolean b = false;
       for (int i = conjunctionIndex - 1; i > -1; i--) {
          if (isCut(i)) {
             return true;
          }
          if (isConjunctionMulipleResult[i]) {
-            if (b) {
-               return false;
-            } else {
-               b = true;
-            }
+            return false;
          }
       }
+
       return false;
    }
 

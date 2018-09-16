@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,15 +29,17 @@ import org.projog.core.term.TermType;
  %QUERY p(a,b,c) =.. X
  %ANSWER X=[p,a,b,c]
 
+ %TRUE p(a,b,c) =.. [p,a,b,c]
+
  %FALSE p(a,b,c) =.. [p,x,y,z]
 
  %FALSE p(a,b,c) =.. []
- 
+
  %QUERY [a,b,c,d] =.. X
  %ANSWER X=[.,a,[b,c,d]]
 
  %QUERY [a,b,c,d] =.. [X|Y]
- %ANSWER 
+ %ANSWER
  % X=.
  % Y=[a,[b,c,d]]
  %ANSWER
@@ -56,9 +58,17 @@ import org.projog.core.term.TermType;
  % X=a
  % Y=b
  %ANSWER
- 
- %QUERY a =.. [a]
- %ERROR Expected first argument to be a variable or a predicate but got a ATOM with value: a
+
+ %TRUE a =.. [a]
+
+ %FALSE a =.. [b]
+
+ %FALSE p =.. [p,x,y,z]
+
+ %FALSE p(a,b,c) =.. [p]
+
+ %QUERY X =.. [a]
+ %ANSWER X=a
 
  %QUERY a+b =.. '+ X Y'
  %ERROR Expected second argument to be a variable or a list but got a ATOM with value: + X Y
@@ -70,7 +80,7 @@ import org.projog.core.term.TermType;
  * <code>X=..L</code> - "univ".
  * <p>
  * The <code>X=..L</code> predicate (pronounced "univ") provides a way to obtain the arguments of a structure as a list
- * or construct a structure from a list of arguments.
+ * or construct a structure or atom from a list of arguments.
  * </p>
  */
 public final class Univ extends AbstractSingletonPredicate {
@@ -80,16 +90,17 @@ public final class Univ extends AbstractSingletonPredicate {
       TermType argType2 = arg2.getType();
       boolean isFirstArgumentVariable = argType1.isVariable();
       boolean isFirstArgumentPredicate = argType1.isStructure();
+      boolean isFirstArgumentAtom = argType1 == TermType.ATOM;
       boolean isSecondArgumentVariable = argType2.isVariable();
       boolean isSecondArgumentList = isList(argType2);
 
-      if (!isFirstArgumentPredicate && !isFirstArgumentVariable) {
+      if (!isFirstArgumentPredicate && !isFirstArgumentVariable && !isFirstArgumentAtom) {
          throw new ProjogException("Expected first argument to be a variable or a predicate but got a " + argType1 + " with value: " + arg1);
       } else if (!isSecondArgumentList && !isSecondArgumentVariable) {
          throw new ProjogException("Expected second argument to be a variable or a list but got a " + argType2 + " with value: " + arg2);
       } else if (isFirstArgumentVariable && isSecondArgumentVariable) {
          throw new ProjogException("Both arguments are variables: " + arg1 + " and: " + arg2);
-      } else if (isFirstArgumentPredicate) {
+      } else if (isFirstArgumentPredicate || isFirstArgumentAtom) {
          Term predicateAsList = toList(arg1);
          return predicateAsList.unify(arg2);
       } else {
@@ -106,7 +117,9 @@ public final class Univ extends AbstractSingletonPredicate {
       if (t.getArgument(0).getType() != TermType.ATOM) {
          throw new ProjogException("First argument is not an atom in list: " + t);
       }
+
       String predicateName = t.getArgument(0).getName();
+
       ArrayList<Term> predicateArgs = new ArrayList<>();
       Term arg = t.getArgument(1);
       while (arg.getType() == TermType.LIST) {
@@ -116,7 +129,12 @@ public final class Univ extends AbstractSingletonPredicate {
       if (arg.getType() != TermType.EMPTY_LIST) {
          predicateArgs.add(arg);
       }
-      return Structure.createStructure(predicateName, predicateArgs.toArray(new Term[predicateArgs.size()]));
+
+      if (predicateArgs.size() == 0) {
+         return new Atom(predicateName);
+      } else {
+         return Structure.createStructure(predicateName, predicateArgs.toArray(new Term[predicateArgs.size()]));
+      }
    }
 
    private Term toList(Term t) {

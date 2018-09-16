@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ public final class KnowledgeBase {
     * <p>
     * The {@code pj_add_predicate/2} predicate allows other implementations of {@link PredicateFactory} to be
     * "plugged-in" to a {@code KnowledgeBase} at runtime using Prolog syntax.
-    * 
+    *
     * @see AddPredicateFactory#evaluate(Term[])
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
@@ -90,7 +90,7 @@ public final class KnowledgeBase {
     * <p>
     * If this object does not already have a {@code UserDefinedPredicateFactory} for the specified {@code PredicateKey}
     * then it will create it.
-    * 
+    *
     * @throws ProjogException if the specified {@code PredicateKey} represents an existing "plugin" predicate
     */
    public UserDefinedPredicateFactory createOrReturnUserDefinedPredicate(PredicateKey key) {
@@ -111,7 +111,7 @@ public final class KnowledgeBase {
     * Adds a user defined predicate to this object.
     * <p>
     * Any existing {@code UserDefinedPredicateFactory} with the same {@code PredicateKey} will be replaced.
-    * 
+    *
     * @throws ProjogException if the {@code PredicateKey} of the specified {@code UserDefinedPredicateFactory}
     * represents an existing "plugin" predicate
     */
@@ -189,7 +189,7 @@ public final class KnowledgeBase {
    private PredicateFactory unknownPredicate(PredicateKey key) {
       ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
       getProjogEventsObservable(this).notifyObservers(event);
-      return UnknownPredicate.UNKNOWN_PREDICATE;
+      return new UnknownPredicate(this, key);
    }
 
    /**
@@ -199,7 +199,7 @@ public final class KnowledgeBase {
     * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
     * adding functionality not possible to define in pure Prolog syntax.
     * </p>
-    * 
+    *
     * @param key The name and arity to associate the {@link PredicateFactory} with.
     * @param predicateFactoryClassName The name of a class that implements {@link PredicateFactory}.
     */

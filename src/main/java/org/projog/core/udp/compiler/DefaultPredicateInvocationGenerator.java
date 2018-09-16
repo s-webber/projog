@@ -16,6 +16,7 @@
 package org.projog.core.udp.compiler;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,6 +54,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          String functionVariableName = g.classVariables().getPredicateFactoryVariableName(function, g.knowledgeBase());
          g.beginIf(predicateVariableName + "==null");
          StringBuilder methodArgs = new StringBuilder();
+         final ArrayList<String> terms = new ArrayList<>();
          for (int i = 0; i < numberOfArguments; i++) {
             if (i != 0) {
                methodArgs.append(", ");
@@ -64,6 +66,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
             } else {
                String argVariable = g.classVariables().getNewTermVariable(g.currentClause());
                g.assign(argVariable, argValue + ".getTerm()");
+               terms.add(argVariable);
                methodArgs.append(argVariable);
             }
          }
@@ -72,6 +75,9 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          g.outputIfTrueThenBreak(predicateVariableName + ".couldReEvaluationSucceed()==false", new Runnable() {
             @Override
             public void run() {
+               for (String t : terms) {
+                  g.writeStatement(t + ".backtrack();");
+               }
                g.assign(predicateVariableName, "null");
             }
          });

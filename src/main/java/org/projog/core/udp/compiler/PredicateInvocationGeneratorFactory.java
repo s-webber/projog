@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,7 +55,6 @@ final class PredicateInvocationGeneratorFactory {
 
       mappings.put(org.projog.core.function.bool.True.class, new TruePredicateInvocationGenerator());
       mappings.put(org.projog.core.function.bool.Fail.class, new FailPredicateInvocationGenerator());
-      mappings.put(org.projog.core.UnknownPredicate.class, new FailPredicateInvocationGenerator());
       mappings.put(org.projog.core.function.flow.Cut.class, new CutPredicateInvocationGenerator());
       mappings.put(org.projog.core.function.math.Is.class, new IsPredicateInvocationGenerator());
       mappings.put(org.projog.core.function.compare.Equal.class, new EqualPredicateInvocationGenerator());

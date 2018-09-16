@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,7 +63,12 @@ final class DefiniteClauseGrammerConvertor {
       String consequentName = consequent.getName();
       Variable variable = new Variable("A");
       List list = ListFactory.createList(antecedant.getArgument(0), variable);
-      Term[] args = {list, variable};
+      Term[] args = new Term[consequent.getNumberOfArguments() + 2];
+      for (int i = 0; i < consequent.getNumberOfArguments(); i++) {
+         args[i] = consequent.getArgument(i);
+      }
+      args[args.length - 2] = list;
+      args[args.length - 1] = variable;
       return Structure.createStructure(consequentName, args);
    }
 
@@ -152,6 +157,9 @@ final class DefiniteClauseGrammerConvertor {
    }
 
    private static boolean hasSingleListWithSingleAtomElement(Term[] terms) {
-      return terms.length == 1 && terms[0].getType() == TermType.LIST && terms[0].getArgument(0).getType() == TermType.ATOM && terms[0].getArgument(1).getType() == TermType.EMPTY_LIST;
+      return terms.length == 1
+             && terms[0].getType() == TermType.LIST
+             && terms[0].getArgument(0).getType() == TermType.ATOM
+             && terms[0].getArgument(1).getType() == TermType.EMPTY_LIST;
    }
 }

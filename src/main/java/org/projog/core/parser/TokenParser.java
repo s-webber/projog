@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ import org.projog.core.Operands;
 
 /**
  * Parses an input stream into discrete 'tokens' that are used to represent Prolog queries and rules.
- * 
+ *
  * @see SentenceParser
  */
 class TokenParser {
@@ -64,7 +64,7 @@ class TokenParser {
 
    /**
     * Parse and return the next {@code Token}.
-    * 
+    *
     * @return the token that was parsed as a result of this call
     * @throws ParserException if there are no more tokens to parse (i.e. parser has reached the end of the underlying
     * input stream)
@@ -91,6 +91,8 @@ class TokenParser {
          return parseText(c, ATOM);
       } else if (isQuote(c)) {
          return parseQuotedText();
+      } else if (isZero(c)) {
+         return parseLeadingZero(c);
       } else if (isDigit(c)) {
          return parseNumber(c);
       } else {
@@ -102,7 +104,7 @@ class TokenParser {
     * Rewinds the parser (i.e. "pushes-back" the last parsed token).
     * <p>
     * The last parsed value will remain after the next call to {@link #next()}
-    * 
+    *
     * @param value the value to rewind
     * @throws IllegalArgumentException if already in a rewound state (i.e. have already called
     * {@link TokenParser#rewind(String)} since the last call to {@link #next()}), or {@code value} is not equal to
@@ -172,8 +174,8 @@ class TokenParser {
             c = parser.getNext();
             // If we reach a ' that is not immediately followed by another '
             // we assume we have reached the end of the string.
-            // If we find a ' that is immediately followed by another ' (i.e. '') 
-            // we treat it as a single ' - this is so the ' character can be included in strings. 
+            // If we find a ' that is immediately followed by another ' (i.e. '')
+            // we treat it as a single ' - this is so the ' character can be included in strings.
             // e.g. 'abc''def' will be treated as  a single string with the value abc'def
             if (!isQuote(c)) {
                // found closing '
@@ -185,6 +187,66 @@ class TokenParser {
          }
          sb.append((char) c);
       } while (true);
+   }
+
+   /**
+    * Parses a character code and represents it as an integer.
+    * <p>
+    * e.g. the text {@code 0'a} results in a token with the value {@code 97} (the ascii value for {@code a}) being
+    * returned.
+    */
+   private Token parseLeadingZero(int zero) {
+      if (zero != '0') {
+         // sanity check - should never get here, as have already checked that the next character is a single quote
+         throw new IllegalStateException();
+      }
+
+      if (parser.peek() != '\'') {
+         return parseNumber(zero);
+      }
+
+      parser.getNext(); // skip single quote
+
+      int code;
+      int next = parser.getNext();
+      if (next == -1) {
+         throw newParserException("unexpected end of file after '");
+      }
+
+      if (next != '\\') { // e.g. 0'a
+         code = next;
+      } else {
+         int escape = parser.getNext();
+         if (escape == 'u') { // e.g. 0'\u00a5
+            code = parseUnicode();
+         } else {
+            code = escape(escape); // e.g. 0'\n
+         }
+      }
+
+      return createToken(Integer.toString(code), INTEGER);
+   }
+
+   private int parseUnicode() {
+      StringBuilder hex = new StringBuilder(4);
+      hex.append(parseHex());
+      hex.append(parseHex());
+      hex.append(parseHex());
+      hex.append(parseHex());
+      return Integer.parseInt(hex.toString(), 16);
+   }
+
+   private char parseHex() {
+      int h = parser.getNext();
+      if (isDigit(h)) {
+         return (char) h;
+      } else if (h >= 'a' && h <= 'f') {
+         return (char) h;
+      } else if (h >= 'A' && h <= 'F') {
+         return (char) h;
+      } else {
+         throw newParserException("invalid unicode value");
+      }
    }
 
    /**
@@ -231,6 +293,30 @@ class TokenParser {
       }
 
       return createToken(sb, readDecimalPoint ? FLOAT : INTEGER);
+   }
+
+   private int escape(int escape) {
+      // https://docs.oracle.com/javase/tutorial/java/data/characters.html
+      switch (escape) {
+         case 't': // tab
+            return '\t';
+         case 'b': // backspace
+            return '\b';
+         case 'n': // newline
+            return '\n';
+         case 'r': // carriage return
+            return '\r';
+         case 'f': // formfeed
+            return '\f';
+         case '\'': // single quote
+            return '\'';
+         case '\"': // double quote
+            return '\"';
+         case '\\': // backslash
+            return '\\';
+         default:
+            throw newParserException("invalid character escape sequence");
+      }
    }
 
    private Token parseSymbol(int c) {
@@ -313,6 +399,10 @@ class TokenParser {
 
    private boolean isQuote(int c) {
       return c == '\'';
+   }
+
+   private boolean isZero(int c) {
+      return c == '0';
    }
 
    private boolean isValidParseableElement(String commandName) {

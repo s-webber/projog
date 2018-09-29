@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,8 +37,8 @@ import org.projog.core.term.TermUtils;
  %QUERY writef('%s%n %t%r', [[h,e,l,l,o], 44, world, !, 3])
  %OUTPUT hello, world!!!
  %ANSWER/
- 
- %QUERY writef('.%7l.\n.%7l.\n.%7l.\n.%7l.\n.%7l.', [a, abc, abcd, abcdefg, abcdefgh])
+
+ %QUERY writef('.%7l.\\n.%7l.\\n.%7l.\\n.%7l.\\n.%7l.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
  % .a      .
  % .abc    .
@@ -46,9 +46,9 @@ import org.projog.core.term.TermUtils;
  % .abcdefg.
  % .abcdefgh.
  %OUTPUT
- %ANSWER/ 
+ %ANSWER/
 
- %QUERY writef('.%7r.\n.%7r.\n.%7r.\n.%7r.\n.%7r.', [a, abc, abcd, abcdefg, abcdefgh])
+ %QUERY writef('.%7r.\\n.%7r.\\n.%7r.\\n.%7r.\\n.%7r.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
  % .      a.
  % .    abc.
@@ -56,9 +56,9 @@ import org.projog.core.term.TermUtils;
  % .abcdefg.
  % .abcdefgh.
  %OUTPUT
- %ANSWER/ 
+ %ANSWER/
 
- %QUERY writef('.%7c.\n.%7c.\n.%7c.\n.%7c.\n.%7c.', [a, abc, abcd, abcdefg, abcdefgh])
+ %QUERY writef('.%7c.\\n.%7c.\\n.%7c.\\n.%7c.\\n.%7c.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
  % .   a   .
  % .  abc  .
@@ -66,26 +66,26 @@ import org.projog.core.term.TermUtils;
  % .abcdefg.
  % .abcdefgh.
  %OUTPUT
- %ANSWER/ 
+ %ANSWER/
 
  %QUERY writef('%w %d', [1+1, 1+1])
  %OUTPUT 1 + 1 +(1, 1)
  %ANSWER/
- 
- %QUERY writef('\%\%%q\\\\\r\n\u0048',[abc])
+
+ %QUERY writef('\\%\\%%q\\\\\\\\\\r\\n\\u0048',[abc])
  %OUTPUT
  % %%abc\\
  % H
  %OUTPUT
  %ANSWER/
- 
+
  % Note: calling writef with only 1 argument is the same as calling it with an empty list for the second argument:
- %QUERY writef('\u0048\u0065\u006C\u006c\u006F', [])
+ %QUERY writef('\\u0048\\u0065\\u006C\\u006c\\u006F', [])
  %OUTPUT Hello
  %ANSWER/
- %QUERY writef('\u0048\u0065\u006C\u006c\u006F')
+ %QUERY writef('\\u0048\\u0065\\u006C\\u006c\\u006F')
  %OUTPUT Hello
- %ANSWER/ 
+ %ANSWER/
  */
 /**
  * <code>writef(X,Y)</code> - writes formatted text to the output stream.

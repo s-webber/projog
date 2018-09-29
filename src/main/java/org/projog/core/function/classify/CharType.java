@@ -61,12 +61,12 @@ import org.projog.core.term.TermUtils;
  %FALSE char_type(' ', alnum)
  %TRUE char_type(' ', white)
 
- %FALSE char_type('\t ', digit)
- %FALSE char_type('\t', lower)
- %FALSE char_type('\t', upper)
- %FALSE char_type('\t', alpha)
- %FALSE char_type('\t', alnum)
- %TRUE char_type('\t', white)
+ %FALSE char_type('\\t ', digit)
+ %FALSE char_type('\\t', lower)
+ %FALSE char_type('\\t', upper)
+ %FALSE char_type('\\t', alpha)
+ %FALSE char_type('\\t', alnum)
+ %TRUE char_type('\\t', white)
 
  %QUERY char_type(z, X)
  %ANSWER X=alnum

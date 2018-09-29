@@ -182,6 +182,8 @@ class TokenParser {
                parser.rewind();
                return createToken(sb, QUOTED_ATOM);
             }
+         } else if (isEscapeSequencePrefix(c)) {
+            c = parseEscapeSequence();
          } else if (isEndOfStream(c)) {
             throw newParserException("No closing ' on quoted string");
          }
@@ -201,7 +203,7 @@ class TokenParser {
          throw new IllegalStateException();
       }
 
-      if (parser.peek() != '\'') {
+      if (!isQuote(parser.peek())) {
          return parseNumber(zero);
       }
 
@@ -213,18 +215,24 @@ class TokenParser {
          throw newParserException("unexpected end of file after '");
       }
 
-      if (next != '\\') { // e.g. 0'a
-         code = next;
+      if (isEscapeSequencePrefix(next)) {
+         code = parseEscapeSequence();
       } else {
-         int escape = parser.getNext();
-         if (escape == 'u') { // e.g. 0'\u00a5
-            code = parseUnicode();
-         } else {
-            code = escape(escape); // e.g. 0'\n
-         }
+         code = next; // e.g. 0'a
       }
 
       return createToken(Integer.toString(code), INTEGER);
+   }
+
+   private int parseEscapeSequence() {
+      int next = parser.getNext();
+      if (next == 'u') {
+         // e.g. 0'\u00a5
+         return parseUnicode();
+      } else {
+         // e.g. 0'\n
+         return escape(next);
+      }
    }
 
    private int parseUnicode() {
@@ -373,47 +381,51 @@ class TokenParser {
       }
    }
 
-   private boolean isEndOfStream(int c) {
-      return c == -1;
-   }
-
-   private boolean isSingleLineComment(int c) {
-      return c == '%';
-   }
-
-   private boolean isMultiLineCommentStart(int c1, int c2) {
-      return c1 == '/' && c2 == '*';
-   }
-
-   private boolean isMultiLineCommentEnd(int c1, int c2) {
-      return c1 == '*' && c2 == '/';
-   }
-
-   private boolean isValidForAtom(int c) {
-      return isAlphabetic(c) || isDigit(c) || isAnonymousVariable(c);
-   }
-
-   private boolean isAnonymousVariable(int c) {
-      return c == '_';
-   }
-
-   private boolean isQuote(int c) {
-      return c == '\'';
-   }
-
-   private boolean isZero(int c) {
-      return c == '0';
-   }
-
    private boolean isValidParseableElement(String commandName) {
       return isDelimiter(commandName) || operands.isDefined(commandName);
    }
 
-   private Token createToken(StringBuilder value, TokenType type) {
+   private static boolean isEndOfStream(int c) {
+      return c == -1;
+   }
+
+   private static boolean isSingleLineComment(int c) {
+      return c == '%';
+   }
+
+   private static boolean isMultiLineCommentStart(int c1, int c2) {
+      return c1 == '/' && c2 == '*';
+   }
+
+   private static boolean isMultiLineCommentEnd(int c1, int c2) {
+      return c1 == '*' && c2 == '/';
+   }
+
+   private static boolean isValidForAtom(int c) {
+      return isAlphabetic(c) || isDigit(c) || isAnonymousVariable(c);
+   }
+
+   private static boolean isAnonymousVariable(int c) {
+      return c == '_';
+   }
+
+   private static boolean isQuote(int c) {
+      return c == '\'';
+   }
+
+   private static boolean isZero(int c) {
+      return c == '0';
+   }
+
+   private static boolean isEscapeSequencePrefix(int c) {
+      return c == '\\';
+   }
+
+   private static Token createToken(StringBuilder value, TokenType type) {
       return createToken(value.toString(), type);
    }
 
-   private Token createToken(String value, TokenType type) {
+   private static Token createToken(String value, TokenType type) {
       return new Token(value, type);
    }
 }

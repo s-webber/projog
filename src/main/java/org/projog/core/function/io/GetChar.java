@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,15 +45,14 @@ import org.projog.core.term.Term;
     C=='end_of_file',
     !.
 
- %TRUE write_to_file('ab\tc\r\nxyz')
+ %TRUE write_to_file('abc\nxyz')
  %QUERY read_from_file
- %OUTPUT 
+ %OUTPUT
  % a
  % b
- % \t
  % c
- % \r
- % \n
+ %
+ %
  % x
  % y
  % z
@@ -68,7 +67,7 @@ import org.projog.core.term.Term;
     set_input(Z),
     close(Z),
     print_contents.
-    
+
  %QUERY force_error
  %ERROR Could not read next character from input stream
 
@@ -109,17 +108,10 @@ public final class GetChar extends AbstractSingletonPredicate {
    }
 
    private String toString(int c) {
-      switch (c) {
-         case -1:
-            return "end_of_file";
-         case '\n':
-            return "\\n";
-         case '\r':
-            return "\\r";
-         case '\t':
-            return "\\t";
-         default:
-            return Character.toString((char) c);
+      if (c == -1) {
+         return "end_of_file";
+      } else {
+         return Character.toString((char) c);
       }
    }
 }

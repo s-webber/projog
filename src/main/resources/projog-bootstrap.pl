@@ -32,7 +32,7 @@
 ?- pj_add_predicate('='/2, 'org.projog.core.function.compare.Equal').
 ?- pj_add_predicate('=='/2, 'org.projog.core.function.compare.StrictEquality').
 ?- pj_add_predicate('=:='/2, 'org.projog.core.function.compare.NumericEquality').
-?- pj_add_predicate('=\='/2, 'org.projog.core.function.compare.NumericInequality').
+?- pj_add_predicate('=\\='/2, 'org.projog.core.function.compare.NumericInequality').
 ?- pj_add_predicate('<'/2, 'org.projog.core.function.compare.NumericLessThan').
 ?- pj_add_predicate('=<'/2, 'org.projog.core.function.compare.NumericLessThanOrEqual').
 ?- pj_add_predicate('>'/2, 'org.projog.core.function.compare.NumericGreaterThan').
@@ -41,7 +41,7 @@
 ?- pj_add_predicate('@>'/2, 'org.projog.core.function.compare.TermGreaterThan').
 ?- pj_add_predicate('@>='/2, 'org.projog.core.function.compare.TermGreaterThanOrEqual').
 ?- pj_add_predicate('@=<'/2, 'org.projog.core.function.compare.TermLessThanOrEqual').
-?- pj_add_predicate('\='/2, 'org.projog.core.function.compare.NotUnifiable').
+?- pj_add_predicate('\\='/2, 'org.projog.core.function.compare.NotUnifiable').
 ?- pj_add_predicate(compare/3, 'org.projog.core.function.compare.Compare').
 ?- pj_add_predicate(predsort/3, 'org.projog.core.function.compare.PredSort').
 ?- pj_add_predicate(between/3, 'org.projog.core.function.compare.Between').
@@ -49,7 +49,7 @@
 % compound
 ?- pj_add_predicate(','/2, 'org.projog.core.function.compound.Conjunction').
 ?- pj_add_predicate(';'/2, 'org.projog.core.function.compound.Disjunction').
-?- pj_add_predicate('/'('\+', 1), 'org.projog.core.function.compound.Not').
+?- pj_add_predicate('/'('\\+', 1), 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(not/1, 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(call/1, 'org.projog.core.function.compound.Call').
 ?- pj_add_predicate(time/1, 'org.projog.core.function.compound.Call').
@@ -167,7 +167,7 @@
 ?- pj_add_calculatable(mod/2, 'org.projog.core.function.math.Modulo').
 ?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
 ?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
-?- pj_add_calculatable('/\'/2, 'org.projog.core.function.math.BitwiseAnd').
+?- pj_add_calculatable('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
 ?- pj_add_calculatable('>>'/2, 'org.projog.core.function.math.ShiftRight').
 ?- pj_add_calculatable(max/2, 'org.projog.core.function.math.Max').
 ?- pj_add_calculatable(abs/1, 'org.projog.core.function.math.Abs').
@@ -184,11 +184,11 @@
 ?- op(1100, xfy, ';').
 ?- op(1050, xfy, '->').
 ?- op(1000, xfy, ',').
-?- op(900, fy, '\+').
+?- op(900, fy, '\\+').
 ?- op(700, xfx, '=').
 ?- op(700, xfx, '==').
 ?- op(700, xfx, '=:=').
-?- op(700, xfx, '=\=').
+?- op(700, xfx, '=\\=').
 ?- op(700, xfx, '=..').
 ?- op(700, xfx, '<').
 ?- op(700, xfx, '>').
@@ -198,7 +198,7 @@
 ?- op(700, xfx, '@=<').
 ?- op(700, xfx, '@>').
 ?- op(700, xfx, '@>=').
-?- op(700, xfx, '\=').
+?- op(700, xfx, '\\=').
 ?- op(700, xfx, is).
 ?- op(600, xfy, ':').
 ?- op(500, yfx, '+').
@@ -208,6 +208,6 @@
 ?- op(400, yfx, '//').
 ?- op(400, yfx, mod).
 ?- op(400, yfx, rem).
-?- op(400, yfx, '/\').
+?- op(400, yfx, '/\\').
 ?- op(400, yfx, '>>').
 ?- op(200, fy, '-').

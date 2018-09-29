@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,39 +37,77 @@ import org.projog.core.term.Variable;
 public class TermParserTest {
    @Test
    public void testAtoms() {
-      testNonVariableTerm(new Atom("x"), "x");
-      testNonVariableTerm(new Atom("xyz"), "xyz");
-      testNonVariableTerm(new Atom("xYz"), "xYz");
-      testNonVariableTerm(new Atom("xYZ"), "xYZ");
-      testNonVariableTerm(new Atom("x_1"), "x_1");
-      testNonVariableTerm(new Atom("xttRytf_uiu"), "xttRytf_uiu");
-      testNonVariableTerm(new Atom("Abc"), "'Abc'");
-      testNonVariableTerm(new Atom("a B 1.2,3;4 !:$% c"), "'a B 1.2,3;4 !:$% c'");
-      testNonVariableTerm(new Atom("'"), "''''");
-      testNonVariableTerm(new Atom("Ab'c"), "'Ab''c'");
-      testNonVariableTerm(new Atom("A'b''c"), "'A''b''''c'");
-      testNonVariableTerm(new Atom("~"), "~");
+      assertNonVariableTerm(new Atom("x"), "x");
+      assertNonVariableTerm(new Atom("xyz"), "xyz");
+      assertNonVariableTerm(new Atom("xYz"), "xYz");
+      assertNonVariableTerm(new Atom("xYZ"), "xYZ");
+   }
+
+   @Test
+   public void testAtomsWithUnderscores() {
+      assertNonVariableTerm(new Atom("x_1"), "x_1");
+      assertNonVariableTerm(new Atom("xttRytf_uiu"), "xttRytf_uiu");
+   }
+
+   @Test
+   public void testAtomsEnclosedInSingleQuotes() {
+      assertNonVariableTerm(new Atom("Abc"), "'Abc'");
+      assertNonVariableTerm(new Atom("a B 1.2,3;4 !:$% c"), "'a B 1.2,3;4 !:$% c'");
+   }
+
+   @Test
+   public void testAtomsContainingSingleQuotes() {
+      assertNonVariableTerm(new Atom("'"), "''''");
+      assertNonVariableTerm(new Atom("Ab'c"), "'Ab''c'");
+      assertNonVariableTerm(new Atom("A'b''c"), "'A''b''''c'");
+   }
+
+   @Test
+   public void testAtomsWithSingleNonAlphanumericCharacter() {
+      assertNonVariableTerm(new Atom("~"), "~");
+      assertNonVariableTerm(new Atom("!"), "!");
+   }
+
+   @Test
+   public void testAtomsWithEscapedCharacters() {
+      assertNonVariableTerm(new Atom("\t"), "'\\t'");
+      assertNonVariableTerm(new Atom("\b"), "'\\b'");
+      assertNonVariableTerm(new Atom("\n"), "'\\n'");
+      assertNonVariableTerm(new Atom("\r"), "'\\r'");
+      assertNonVariableTerm(new Atom("\f"), "'\\f'");
+      assertNonVariableTerm(new Atom("\'"), "'\\''");
+      assertNonVariableTerm(new Atom("\""), "'\\\"'");
+      assertNonVariableTerm(new Atom("\\"), "'\\\\'");
+      assertNonVariableTerm(new Atom("abc\t\t\tdef\n"), "'abc\\t\\t\\tdef\\n'");
+   }
+
+   @Test
+   public void testAtomsWithUnicodeCharacters() {
+      assertNonVariableTerm(new Atom("Hello"), "'\u0048\u0065\u006C\u006c\u006F'");
+      assertNonVariableTerm(new Atom("Hello"), "'\u0048ello'");
+      assertNonVariableTerm(new Atom("Hello"), "'H\u0065l\u006co'");
+      assertNonVariableTerm(new Atom("Hello"), "'Hell\u006F'");
    }
 
    @Test
    public void testIntegerNumbers() {
       for (int i = 0; i < 10; i++) {
-         testNonVariableTerm(new IntegerNumber(i), Integer.toString(i));
+         assertNonVariableTerm(new IntegerNumber(i), Integer.toString(i));
       }
-      testNonVariableTerm(new IntegerNumber(Long.MAX_VALUE), Long.toString(Long.MAX_VALUE));
-      testNonVariableTerm(new IntegerNumber(Long.MIN_VALUE), Long.toString(Long.MIN_VALUE));
+      assertNonVariableTerm(new IntegerNumber(Long.MAX_VALUE), Long.toString(Long.MAX_VALUE));
+      assertNonVariableTerm(new IntegerNumber(Long.MIN_VALUE), Long.toString(Long.MIN_VALUE));
    }
 
    @Test
    public void testDecimalFractions() {
       double[] testData = {0, 1, 2, 10, 3.14, 1.0000001, 0.2};
       for (double d : testData) {
-         testNonVariableTerm(new DecimalFraction(d), Double.toString(d));
-         testNonVariableTerm(new DecimalFraction(-d), Double.toString(-d));
+         assertNonVariableTerm(new DecimalFraction(d), Double.toString(d));
+         assertNonVariableTerm(new DecimalFraction(-d), Double.toString(-d));
       }
-      testNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235E38");
-      testNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235e38");
-      testNonVariableTerm(new DecimalFraction(340.28235), "3.4028235E2");
+      assertNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235E38");
+      assertNonVariableTerm(new DecimalFraction(3.4028235E38), "3.4028235e38");
+      assertNonVariableTerm(new DecimalFraction(340.28235), "3.4028235E2");
    }
 
    @Test
@@ -170,21 +208,21 @@ public class TermParserTest {
 
    @Test
    public void testVariables() {
-      testVariableTerm(new Variable("X"), "X");
-      testVariableTerm(new Variable("XYZ"), "XYZ");
-      testVariableTerm(new Variable("Xyz"), "Xyz");
-      testVariableTerm(new Variable("XyZ"), "XyZ");
-      testVariableTerm(new Variable("X_1"), "X_1");
+      assertVariableTerm(new Variable("X"), "X");
+      assertVariableTerm(new Variable("XYZ"), "XYZ");
+      assertVariableTerm(new Variable("Xyz"), "Xyz");
+      assertVariableTerm(new Variable("XyZ"), "XyZ");
+      assertVariableTerm(new Variable("X_1"), "X_1");
    }
 
    @Test
    public void testAnonymousVariable() {
-      testVariableTerm(new Variable("_"), "_");
-      testVariableTerm(new Variable("_123"), "_123");
-      testVariableTerm(new Variable("_Test"), "_Test");
+      assertVariableTerm(new Variable("_"), "_");
+      assertVariableTerm(new Variable("_123"), "_123");
+      assertVariableTerm(new Variable("_Test"), "_Test");
    }
 
-   private void testNonVariableTerm(Term expected, String input) {
+   private void assertNonVariableTerm(Term expected, String input) {
       Term actual = parseTerm(input);
       assertNotNull(actual);
       assertEquals(expected.getClass(), actual.getClass());
@@ -194,7 +232,7 @@ public class TermParserTest {
       assertTrue(expected.strictEquality(actual));
    }
 
-   private void testVariableTerm(Term expected, String input) {
+   private void assertVariableTerm(Term expected, String input) {
       Term actual = parseTerm(input);
       assertNotNull(actual);
       assertEquals(expected.getClass(), actual.getClass());

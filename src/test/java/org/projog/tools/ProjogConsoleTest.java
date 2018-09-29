@@ -92,7 +92,7 @@ public class ProjogConsoleTest {
    public void testConsultAndTrace() throws IOException {
       File tempFile = createFileToConsult("test(a).", "test(b).", "test(c).");
       String path = tempFile.getPath();
-      String input = createInput("consult('" + path + "').", "trace.", "test(X).", ";", ";");
+      String input = createInput("consult('" + path.replace("\\", "\\\\") + "').", "trace.", "test(X).", ";", ";");
       String expected = createExpectedOutput(PROMPT + "[THREAD-ID] INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "",
                   PROMPT + "[THREAD-ID] CALL test( X )", "[THREAD-ID] EXIT test( a )", "", "X = a", "", YES + "[THREAD-ID] REDO test( a )", "[THREAD-ID] EXIT test( b )", "",
                   "X = b", "", YES + "[THREAD-ID] REDO test( b )", "[THREAD-ID] EXIT test( c )", "", "X = c", "", YES);

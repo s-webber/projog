@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -257,10 +257,11 @@ public class SentenceParserTest {
       check("?- write(p(1, ',', 1))", "?-(write(p(1, ,, 1)))");
       check("?- write(p(<,>,=))", "?-(write(p(<, >, =)))");
 
-      // following fails as '\\+' prefix operand has higher precedence than '/' infix operand
-      error("?- test('\\+'/1, 'abc').");
+      // following fails as '\+' prefix operand has higher precedence than '/' infix operand
+      // Note that need to specify '\+' as '\\\\+' (escape slash once for Java String literal and once for Projog parser)
+      error("?- test('\\\\+'/1, 'abc').");
       // following works as explicitly specifying '/' as the functor of a structure
-      check("?- test('/'('\\+', 1), 'abc')", "?-(test(/(\\+, 1), abc))");
+      check("?- test('/'('\\\\+', 1), 'abc')", "?-(test(/(\\+, 1), abc))");
 
       error("p(a :- b).");
       check("p(:-(a, b))", "p(:-(a, b))");

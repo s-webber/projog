@@ -39,8 +39,52 @@ final class CompiledPredicateSourceGeneratorUtils {
       return encodeName(t.getName());
    }
 
-   static String encodeName(String s) {
-      return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+   static String encodeName(String in) {
+      StringBuilder out = new StringBuilder(in.length() + 2);
+      out.append('\"');
+      for (int i = 0; i < in.length(); i++) {
+         char c = in.charAt(i);
+         if (c == '\\') {
+            out.append("\\\\");
+         } else if (c == '\"') {
+            out.append("\\\"");
+         } else if (c >= ' ' && c <= '~') {
+            out.append(c);
+         } else {
+            switch (c) {
+               case '\t': // tab
+                  out.append("\\t");
+                  break;
+               case '\b': // backspace
+                  out.append("\\b");
+                  break;
+               case '\n': // newline
+                  out.append("\\n");
+                  break;
+               case '\r': // carriage return
+                  out.append("\\r");
+                  break;
+               case '\f': // formfeed
+                  out.append("\\f");
+                  break;
+               case '\"': // double quote
+                  out.append("\\\"");
+                  break;
+               case '\\': // backslash
+                  out.append("\\\\");
+                  break;
+               default:
+                  out.append("\\u");
+                  String hex = Integer.toString(c, 16);
+                  for (int p = hex.length(); p < 4; p++) {
+                     out.append('0');
+                  }
+                  out.append(hex);
+            }
+         }
+      }
+      out.append('\"');
+      return out.toString();
    }
 
    static String getKeyGeneration(PredicateKey key) {

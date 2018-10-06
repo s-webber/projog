@@ -90,7 +90,7 @@ public class AbstractPredicateFactoryTest {
          }
 
          @Override
-         public boolean couldReEvaluationSucceed() {
+         public boolean couldReevaluationSucceed() {
             return false;
          }
       };

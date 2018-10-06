@@ -123,7 +123,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return isRetryable;
    }
 }

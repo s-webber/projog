@@ -110,8 +110,8 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final boolean isRetryable() {
       return true;
    }
-   public final boolean couldReEvaluationSucceed() {
-      if (c0_0==null || c0_0.couldReEvaluationSucceed()) {
+   public final boolean couldReevaluationSucceed() {
+      if (c0_0==null || c0_0.couldReevaluationSucceed()) {
          return true;
       }
       return false;

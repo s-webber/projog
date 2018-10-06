@@ -196,7 +196,7 @@ public final class Nth extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReEvaluationSucceed()) {
+         while (couldReevaluationSucceed()) {
             backtrack(index, list, element);
             Term t = javaUtilList.get(ctr);
             IntegerNumber n = new IntegerNumber(ctr + startingIdx);
@@ -216,7 +216,7 @@ public final class Nth extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return ctr < javaUtilList.size();
       }
    }

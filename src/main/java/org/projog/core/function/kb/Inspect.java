@@ -205,7 +205,7 @@ public final class Inspect extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return implications == null || implications.hasNext();
       }
    }

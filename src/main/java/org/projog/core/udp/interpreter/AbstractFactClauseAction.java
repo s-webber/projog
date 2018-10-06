@@ -39,7 +39,7 @@ abstract class AbstractFactClauseAction implements ClauseAction {
    }
 
    @Override
-   public final boolean couldReEvaluationSucceed() {
+   public final boolean couldReevaluationSucceed() {
       return false;
    }
 

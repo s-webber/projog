@@ -20,7 +20,7 @@ import org.projog.core.Predicate;
 /** A skeletal implementation of {@link Predicate} */
 public abstract class AbstractPredicate implements Predicate {
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return true;
    }
 }

@@ -41,7 +41,7 @@ public class InterpretedTailRecursivePredicateFactoryTest {
       Term arg2 = parseTerm("[a,b,c]");
       InterpretedTailRecursivePredicate singleResultPredicate = FACTORY.getPredicate(arg1, arg2);
 
-      assertFalse(singleResultPredicate.couldReEvaluationSucceed());
+      assertFalse(singleResultPredicate.couldReevaluationSucceed());
       assertTrue(singleResultPredicate.evaluate());
    }
 
@@ -51,7 +51,7 @@ public class InterpretedTailRecursivePredicateFactoryTest {
       Term arg2 = parseTerm("[a,b,c]");
       InterpretedTailRecursivePredicate multiResultPredicate = FACTORY.getPredicate(arg1, arg2);
 
-      assertTrue(multiResultPredicate.couldReEvaluationSucceed());
+      assertTrue(multiResultPredicate.couldReevaluationSucceed());
       assertTrue(multiResultPredicate.evaluate());
       assertEquals("[]", write(arg1));
       assertTrue(multiResultPredicate.evaluate());

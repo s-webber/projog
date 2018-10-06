@@ -45,7 +45,7 @@ public class InterpretedUserDefinedPredicateTest {
    @Test
    public void testEmpty() {
       InterpretedUserDefinedPredicate p = getInterpretedUserDefinedPredicate(new Term[0]);
-      assertFalse(p.couldReEvaluationSucceed());
+      assertFalse(p.couldReevaluationSucceed());
       assertFalse(p.evaluate());
    }
 
@@ -181,7 +181,7 @@ public class InterpretedUserDefinedPredicateTest {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return terms.length > 0;
       }
    };

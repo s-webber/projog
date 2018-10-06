@@ -77,7 +77,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
                spyPoint.logRedo(this, queryArgs);
             }
             if (currentClauseAction.evaluate(queryArgs)) {
-               retryCurrentClauseAction = currentClauseAction.couldReEvaluationSucceed();
+               retryCurrentClauseAction = currentClauseAction.couldReevaluationSucceed();
                if (debugEnabled) {
                   spyPoint.logExit(this, queryArgs);
                }
@@ -101,7 +101,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
             currentClauseIdx++;
             currentClauseAction = clauseActions.next().getFree();
             if (currentClauseAction.evaluate(queryArgs)) {
-               retryCurrentClauseAction = currentClauseAction.couldReEvaluationSucceed();
+               retryCurrentClauseAction = currentClauseAction.couldReevaluationSucceed();
                if (debugEnabled) {
                   spyPoint.logExit(this, queryArgs);
                }
@@ -128,7 +128,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return retryCurrentClauseAction || clauseActions.hasNext();
    }
 

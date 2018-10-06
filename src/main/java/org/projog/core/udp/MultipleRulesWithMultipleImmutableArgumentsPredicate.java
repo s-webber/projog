@@ -86,7 +86,7 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implemen
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return ctr < numClauses;
    }
 

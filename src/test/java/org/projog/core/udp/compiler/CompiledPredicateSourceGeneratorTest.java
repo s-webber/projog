@@ -369,7 +369,7 @@ public class CompiledPredicateSourceGeneratorTest {
          }
 
          @Override
-         public boolean couldReEvaluationSucceed() {
+         public boolean couldReevaluationSucceed() {
             return true;
          }
       });
@@ -409,7 +409,7 @@ public class CompiledPredicateSourceGeneratorTest {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return false;
       }
    }
@@ -431,7 +431,7 @@ public class CompiledPredicateSourceGeneratorTest {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return true;
       }
 

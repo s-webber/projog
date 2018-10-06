@@ -103,7 +103,7 @@ public final class Select extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReEvaluationSucceed()) {
+         while (couldReevaluationSucceed()) {
             if (retrying()) {
                element.backtrack();
                inputList.backtrack();
@@ -121,7 +121,7 @@ public final class Select extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return ctr < list.size();
       }
 

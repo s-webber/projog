@@ -102,11 +102,11 @@ abstract class AbstractCollectionOf extends AbstractPredicate {
    }
 
    private boolean hasFoundAnotherSolution(final Predicate predicate) {
-      return predicate.couldReEvaluationSucceed() && predicate.evaluate();
+      return predicate.couldReevaluationSucceed() && predicate.evaluate();
    }
 
    @Override
-   public final boolean couldReEvaluationSucceed() {
+   public final boolean couldReevaluationSucceed() {
       return itr == null || itr.hasNext();
    }
 

@@ -70,5 +70,5 @@ public interface Predicate {
     *
     * @return {@code true} if an attempt to re-evaluate this instance could possible succeed, {@code false} otherwise
     */
-   boolean couldReEvaluationSucceed();
+   boolean couldReevaluationSucceed();
 }

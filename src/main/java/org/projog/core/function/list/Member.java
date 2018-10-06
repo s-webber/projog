@@ -80,7 +80,7 @@ public final class Member extends AbstractPredicateFactory {
       @Override
       public boolean evaluate() {
          while (true) {
-            if (couldReEvaluationSucceed()) {
+            if (couldReevaluationSucceed()) {
                element.backtrack();
                originalList.backtrack();
                Term head = currentList.getArgument(0);
@@ -95,7 +95,7 @@ public final class Member extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return currentList.getType() == TermType.LIST;
       }
    }

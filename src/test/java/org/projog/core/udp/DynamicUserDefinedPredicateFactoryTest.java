@@ -186,7 +186,7 @@ public class DynamicUserDefinedPredicateFactoryTest {
          Term inputArg = atom(d);
          Term[] args = new Term[] {inputArg};
          Predicate e = dp.getPredicate(args);
-         assertTrue(e.couldReEvaluationSucceed());
+         assertTrue(e.couldReevaluationSucceed());
          assertTrue(e.evaluate());
          assertSame(inputArg, args[0]);
          assertFalse(e.evaluate());
@@ -197,7 +197,7 @@ public class DynamicUserDefinedPredicateFactoryTest {
       Term inputArg = variable();
       Term[] args = new Term[] {inputArg};
       Predicate e = dp.getPredicate(args);
-      assertTrue(e.couldReEvaluationSucceed());
+      assertTrue(e.couldReevaluationSucceed());
       for (String d : data) {
          assertTrue(e.evaluate());
          assertSame(TermType.ATOM, args[0].getType());

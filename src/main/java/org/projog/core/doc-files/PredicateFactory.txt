@@ -4,7 +4,7 @@ hide members
 interface Predicate {
 +evaluate(Term...)
 +isRetryable()
-+couldReEvaluationSucceed()
++couldReevaluationSucceed()
 }
 interface PredicateFactory {
 +getPredicate(Term... args)

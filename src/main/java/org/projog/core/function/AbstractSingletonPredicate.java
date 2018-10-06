@@ -44,7 +44,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return false;
       }
    };
@@ -55,7 +55,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return false;
       }
    };

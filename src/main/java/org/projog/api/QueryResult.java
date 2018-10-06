@@ -66,7 +66,7 @@ public final class QueryResult {
    public boolean next() {
       if (predicate == null) {
          return doFirstEvaluationOfQuery();
-      } else if (predicate.couldReEvaluationSucceed()) {
+      } else if (predicate.couldReevaluationSucceed()) {
          return doRetryEvaluationOfQuery();
       } else {
          return false;
@@ -94,13 +94,13 @@ public final class QueryResult {
     * Returns {@code true} if it is known that all possible solutions have been found, else {@code false}.
     *
     * @return {@code true} if it is known that all possible solutions have been found, else {@code false}.
-    * @see org.projog.core.Predicate#couldReEvaluationSucceed()
+    * @see org.projog.core.Predicate#couldReevaluationSucceed()
     */
    public boolean isExhausted() {
       if (predicate == null) {
          return false;
       }
-      return predicate.couldReEvaluationSucceed() == false;
+      return predicate.couldReevaluationSucceed() == false;
    }
 
    /**

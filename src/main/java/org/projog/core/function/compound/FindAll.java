@@ -110,6 +110,6 @@ public final class FindAll extends AbstractSingletonPredicate {
    }
 
    private boolean hasFoundAnotherSolution(final Predicate predicate) {
-      return predicate.couldReEvaluationSucceed() && predicate.evaluate();
+      return predicate.couldReevaluationSucceed() && predicate.evaluate();
    }
 }

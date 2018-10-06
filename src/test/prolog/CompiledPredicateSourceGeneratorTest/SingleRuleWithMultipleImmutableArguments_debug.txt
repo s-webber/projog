@@ -521,7 +521,7 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final boolean isRetryable() {
       return true;
    }
-   public final boolean couldReEvaluationSucceed() {
+   public final boolean couldReevaluationSucceed() {
       if (clauseCtr<9) {
          return true;
       }

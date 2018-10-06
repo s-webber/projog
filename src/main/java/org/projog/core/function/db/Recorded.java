@@ -74,7 +74,7 @@ public final class Recorded extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReEvaluationSucceed()) {
+         while (couldReevaluationSucceed()) {
             Record next = itr.next();
             key.backtrack();
             value.backtrack();
@@ -91,7 +91,7 @@ public final class Recorded extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return itr.hasNext();
       }
    }

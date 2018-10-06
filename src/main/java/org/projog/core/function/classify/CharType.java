@@ -358,7 +358,7 @@ public final class CharType extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return state.hasNext();
       }
    }

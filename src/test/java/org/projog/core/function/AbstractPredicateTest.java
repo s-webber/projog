@@ -28,6 +28,6 @@ public class AbstractPredicateTest {
             throw new UnsupportedOperationException();
          }
       };
-      assertTrue(p.couldReEvaluationSucceed());
+      assertTrue(p.couldReevaluationSucceed());
    }
 }

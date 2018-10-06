@@ -165,7 +165,7 @@ public final class Conjunction extends AbstractPredicateFactory {
          if (firstGo) {
             firstPredicate = getKnowledgeBase().getPredicateFactory(inputArg1).getPredicate(inputArg1.getArgs());
 
-            while ((firstGo || firstPredicate.couldReEvaluationSucceed()) && firstPredicate.evaluate()) {
+            while ((firstGo || firstPredicate.couldReevaluationSucceed()) && firstPredicate.evaluate()) {
                firstGo = false;
                if (preMatch(inputArg2) && secondPredicate.evaluate()) {
                   return true;
@@ -181,7 +181,7 @@ public final class Conjunction extends AbstractPredicateFactory {
             if (secondArg == null) {
                evaluateSecondPredicate = preMatch(inputArg2);
             } else {
-               evaluateSecondPredicate = secondPredicate.couldReEvaluationSucceed();
+               evaluateSecondPredicate = secondPredicate.couldReevaluationSucceed();
             }
 
             if (evaluateSecondPredicate && secondPredicate.evaluate()) {
@@ -190,7 +190,7 @@ public final class Conjunction extends AbstractPredicateFactory {
 
             TermUtils.backtrack(tmpInputArg2.getArgs());
             secondArg = null;
-         } while (firstPredicate.couldReEvaluationSucceed() && firstPredicate.evaluate());
+         } while (firstPredicate.couldReevaluationSucceed() && firstPredicate.evaluate());
 
          return false;
       }
@@ -210,8 +210,8 @@ public final class Conjunction extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
-         return firstPredicate == null || firstPredicate.couldReEvaluationSucceed() || secondPredicate == null || secondPredicate.couldReEvaluationSucceed();
+      public boolean couldReevaluationSucceed() {
+         return firstPredicate == null || firstPredicate.couldReevaluationSucceed() || secondPredicate == null || secondPredicate.couldReevaluationSucceed();
       }
    }
 }

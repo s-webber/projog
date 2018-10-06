@@ -79,7 +79,7 @@ public final class RepeatSetAmount extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return ctr < limit;
       }
    }

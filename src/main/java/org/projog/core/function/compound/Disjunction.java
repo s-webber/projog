@@ -260,7 +260,7 @@ public final class Disjunction implements PredicateFactory {
             }
          }
 
-         if (firstPredicate.couldReEvaluationSucceed() && firstPredicate.evaluate()) {
+         if (firstPredicate.couldReevaluationSucceed() && firstPredicate.evaluate()) {
             return true;
          }
 
@@ -272,7 +272,7 @@ public final class Disjunction implements PredicateFactory {
             }
          }
 
-         if (secondPredicate.couldReEvaluationSucceed() && secondPredicate.evaluate()) {
+         if (secondPredicate.couldReevaluationSucceed() && secondPredicate.evaluate()) {
             return true;
          }
 
@@ -280,8 +280,8 @@ public final class Disjunction implements PredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
-         return secondPredicate == null || secondPredicate.couldReEvaluationSucceed();
+      public boolean couldReevaluationSucceed() {
+         return secondPredicate == null || secondPredicate.couldReevaluationSucceed();
       }
    }
 }

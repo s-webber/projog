@@ -50,7 +50,7 @@ public class ClauseActionFactoryTest {
    private void testAlwaysMatchedClauseAction(String sentence) {
       ClauseAction ca = getClauseAction(sentence);
       assertEquals(AlwaysMatchedClauseAction.class, ca.getClass());
-      assertFalse(ca.couldReEvaluationSucceed());
+      assertFalse(ca.couldReevaluationSucceed());
       assertTrue(ca.getFree().evaluate((Term[]) null));
    }
 
@@ -92,7 +92,7 @@ public class ClauseActionFactoryTest {
    public void testMultiFunctionSingleResultClauseAction1() {
       ClauseAction ca = getClauseAction("test(X, Y) :- true, N is X+1, N<5, N=Y.");
       assertEquals(MultiFunctionSingleResultClauseAction.class, ca.getClass());
-      assertFalse(ca.couldReEvaluationSucceed());
+      assertFalse(ca.couldReevaluationSucceed());
 
       Term x = integerNumber(2);
       Variable y = variable("Y");
@@ -162,7 +162,7 @@ public class ClauseActionFactoryTest {
       int iterations = 3;
       ClauseAction ca = getClauseAction("test :- repeat(" + iterations + ").");
       assertEquals(SingleFunctionMultiResultClauseAction.class, ca.getClass());
-      assertTrue(ca.couldReEvaluationSucceed());
+      assertTrue(ca.couldReevaluationSucceed());
       for (int i = 0; i < iterations; i++) {
          assertTrue(ca.evaluate(TermUtils.EMPTY_ARRAY));
       }
@@ -174,29 +174,29 @@ public class ClauseActionFactoryTest {
    public void testSingleFunctionMultiResultClauseActionVariableAntecedant() {
       ClauseAction ca = getClauseAction("true(X) :- X.");
       assertEquals(SingleFunctionMultiResultClauseAction.class, ca.getClass());
-      assertTrue(ca.couldReEvaluationSucceed());
+      assertTrue(ca.couldReevaluationSucceed());
 
       assertTrue(ca.evaluate(new Term[] {new Atom("true")}));
-      assertFalse(ca.couldReEvaluationSucceed());
+      assertFalse(ca.couldReevaluationSucceed());
 
       ca = ca.getFree();
       assertFalse(ca.evaluate(new Term[] {new Atom("fail")}));
 
       ca = ca.getFree();
       assertTrue(ca.evaluate(new Term[] {new Atom("repeat")}));
-      assertTrue(ca.couldReEvaluationSucceed());
+      assertTrue(ca.couldReevaluationSucceed());
    }
 
    // helper methods
    private void testNonRetryableClauseActionSuccess(ClauseAction ca, String query, String output) {
-      assertFalse(ca.couldReEvaluationSucceed());
+      assertFalse(ca.couldReevaluationSucceed());
       Term t = parseSentence(query + ".");
       assertTrue(ca.getFree().evaluate(t.getArgs()));
       assertEquals(output, t.toString());
    }
 
    private void testNonRetryableClauseActionFailure(ClauseAction ca, String query) {
-      assertFalse(ca.couldReEvaluationSucceed());
+      assertFalse(ca.couldReevaluationSucceed());
       Term t = parseSentence(query + ".");
       assertFalse(ca.getFree().evaluate(t.getArgs()));
    }

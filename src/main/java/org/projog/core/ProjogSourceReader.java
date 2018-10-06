@@ -176,7 +176,7 @@ public final class ProjogSourceReader {
          declareDynamicPredicate(query.getArgument(0));
       } else {
          Predicate e = KnowledgeBaseUtils.getPredicate(kb, query);
-         while (e.evaluate() && e.couldReEvaluationSucceed()) {
+         while (e.evaluate() && e.couldReevaluationSucceed()) {
             // keep re-evaluating until fail
          }
       }

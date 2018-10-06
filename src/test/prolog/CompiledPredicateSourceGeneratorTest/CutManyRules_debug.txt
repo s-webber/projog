@@ -327,11 +327,11 @@ public final class %CLASS_NAME% implements CompiledPredicate {
    public final boolean isRetryable() {
       return true;
    }
-   public final boolean couldReEvaluationSucceed() {
+   public final boolean couldReevaluationSucceed() {
       if (clauseCtr<4) {
          return true;
       }
-      if (e0==null || e0.couldReEvaluationSucceed()) {
+      if (e0==null || e0.couldReevaluationSucceed()) {
          return true;
       }
       return false;

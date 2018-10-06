@@ -54,7 +54,7 @@ public final class MultipleRulesAlwaysTruePredicate implements Predicate, Predic
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return ctr < limit;
    }
 

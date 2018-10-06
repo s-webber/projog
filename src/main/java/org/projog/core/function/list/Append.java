@@ -207,7 +207,7 @@ public final class Append extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReEvaluationSucceed()) {
+         while (couldReevaluationSucceed()) {
             arg1.backtrack();
             arg2.backtrack();
 
@@ -221,7 +221,7 @@ public final class Append extends AbstractPredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return ctr <= combined.size();
       }
    }

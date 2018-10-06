@@ -72,7 +72,7 @@ final class DefaultPredicateInvocationGenerator implements PredicateInvocationGe
          }
          g.assign(predicateVariableName, functionVariableName + ".getPredicate(" + methodArgs + ")");
          g.elseStatement();
-         g.outputIfTrueThenBreak(predicateVariableName + ".couldReEvaluationSucceed()==false", new Runnable() {
+         g.outputIfTrueThenBreak(predicateVariableName + ".couldReevaluationSucceed()==false", new Runnable() {
             @Override
             public void run() {
                for (String t : terms) {

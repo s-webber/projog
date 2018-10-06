@@ -52,7 +52,7 @@ public final class SingleFunctionMultiResultClauseAction extends AbstractMultiAn
 
    @Override
    protected boolean reEvaluateAntecedant() {
-      return predicate.couldReEvaluationSucceed() && predicate.evaluate();
+      return predicate.couldReevaluationSucceed() && predicate.evaluate();
    }
 
    @Override
@@ -61,7 +61,7 @@ public final class SingleFunctionMultiResultClauseAction extends AbstractMultiAn
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
-      return predicate == null || predicate.couldReEvaluationSucceed();
+   public boolean couldReevaluationSucceed() {
+      return predicate == null || predicate.couldReevaluationSucceed();
    }
 }

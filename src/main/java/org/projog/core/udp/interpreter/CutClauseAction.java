@@ -54,7 +54,7 @@ public final class CutClauseAction extends AbstractMultiAnswerClauseAction {
    }
 
    @Override
-   public boolean couldReEvaluationSucceed() {
+   public boolean couldReevaluationSucceed() {
       return true;
    }
 }

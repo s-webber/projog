@@ -55,10 +55,10 @@ public interface ClauseAction {
     * {@code true} to determine whether it is worth calling {@link #evaluate(Term[])} again to find alternative
     * solutions.
     * <p>
-    * Similar to {@link org.projog.core.Predicate#couldReEvaluationSucceed()} but on a clause rather than predicate
+    * Similar to {@link org.projog.core.Predicate#couldReevaluationSucceed()} but on a clause rather than predicate
     * basis.
     * 
     * @return {@code true} if an attempt to re-evaluate this instance could possible succeed, {@code false} otherwise
     */
-   public boolean couldReEvaluationSucceed();
+   public boolean couldReevaluationSucceed();
 }

@@ -71,7 +71,7 @@ final class CompiledPredicateSourceGenerator {
          outputEvaluateMethod(factMetaData().getClauses());
       }
       outputIsRetryableMethod();
-      outputCouldReEvaluationSucceedMethod(factMetaData().getClauses());
+      outputcouldReevaluationSucceedMethod(factMetaData().getClauses());
       outputSetKnowledgeBaseMethod();
       outputGetPredicateMethod();
       outputMemberVariables();
@@ -320,9 +320,9 @@ final class CompiledPredicateSourceGenerator {
       w.endBlock();
    }
 
-   /** Constructs an implementation of {@link org.projog.core.Predicate#couldReEvaluationSucceed()}. */
-   private void outputCouldReEvaluationSucceedMethod(ClauseMetaData[] clauses) {
-      w.addLine("public final boolean couldReEvaluationSucceed() {");
+   /** Constructs an implementation of {@link org.projog.core.Predicate#couldReevaluationSucceed()}. */
+   private void outputcouldReevaluationSucceedMethod(ClauseMetaData[] clauses) {
+      w.addLine("public final boolean couldReevaluationSucceed() {");
       if (factMetaData().isPossibleSingleResultRecursiveFunction()) {
          w.writeStatement("return isRetryable");
       } else if (factMetaData().isSingleResultPredicate()) {
@@ -356,14 +356,14 @@ final class CompiledPredicateSourceGenerator {
                      inlineClausesCtr++;
                   } else if (pf instanceof CompiledPredicate) {
                      String varId = "c" + (clausesLength - 1) + "_" + retryableCompiledPredicateClausesCtr;
-                     w.beginIf(varId + "==null || " + varId + ".couldReEvaluationSucceed()");
+                     w.beginIf(varId + "==null || " + varId + ".couldReevaluationSucceed()");
                      w.returnTrue();
                      w.endBlock();
                      retryableCompiledPredicateClausesCtr++;
                   } else if (pf == null) {
                      w.ifTrueReturnTrue("true");
                   } else {
-                     w.beginIf("e" + retryableClausesCtr + "==null || e" + retryableClausesCtr + ".couldReEvaluationSucceed()");
+                     w.beginIf("e" + retryableClausesCtr + "==null || e" + retryableClausesCtr + ".couldReevaluationSucceed()");
                      w.returnTrue();
                      w.endBlock();
                      retryableClausesCtr++;

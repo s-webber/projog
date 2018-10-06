@@ -119,7 +119,7 @@ public final class Between implements PredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReEvaluationSucceed()) {
+         while (couldReevaluationSucceed()) {
             middle.backtrack();
             IntegerNumber n = new IntegerNumber(ctr++);
             return middle.unify(n);
@@ -128,7 +128,7 @@ public final class Between implements PredicateFactory {
       }
 
       @Override
-      public boolean couldReEvaluationSucceed() {
+      public boolean couldReevaluationSucceed() {
          return ctr <= max;
       }
    };

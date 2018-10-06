@@ -28,16 +28,194 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
-/**
- * Extended by {@code Predicate}s that compares a term to a list of individual characters or digits.
+/* TEST
+ %QUERY atom_chars(X,[a,p,p,l,e])
+ %ANSWER X = apple
+
+ %QUERY atom_chars(X,[97,112,112,108,101])
+ %ANSWER X = apple
+
+ %QUERY atom_chars(apple,X)
+ %ANSWER X = [a,p,p,l,e]
+
+ %TRUE atom_chars(apple,[a,p,p,l,e])
+
+ %FALSE atom_chars(apple,[97,112,112,108,101])
+
+ %TRUE atom_chars('APPLE',['A','P','P','L','E'])
+
+ %FALSE atom_chars(apple,[a,112,p,108,101])
+
+ %FALSE atom_chars(apple,[a,p,l,l,e])
+
+ %FALSE atom_chars(apple,[a,p,p,l,e,s])
+
+ %FALSE atom_chars(apple,[a,112,p,108,102])
+
+ %FALSE atom_chars('APPLE',[a,p,p,l,e])
+
+ %FALSE atom_chars('apple',['A','P','P','L','E'])
+
+ %QUERY atom_chars(apple,[X,Y,Y,Z,e])
+ %ANSWER
+ % X = a
+ % Y = p
+ % Z = l
+ %ANSWER
+
+ %FALSE atom_chars(apple,[X,Y,Z,Z,e])
+
+ %QUERY atom_chars(X,'apple')
+ %ERROR As the first argument: X is a variable the second argument needs to be a list but was: apple of type: ATOM
+
+ %QUERY atom_codes(X,[a,p,p,l,e])
+ %ANSWER X = apple
+
+ %QUERY atom_codes(X,[97,112,112,108,101])
+ %ANSWER X = apple
+
+ %FALSE atom_codes(apple,[a,p,p,l,e])
+
+ %TRUE atom_codes(apple,[97,112,112,108,101])
+
+ %QUERY atom_codes(apple,X)
+ %ANSWER X = [97,112,112,108,101]
+
+ %TRUE atom_codes('APPLE',[65,80,80,76,69])
+
+ %FALSE atom_codes(apple,[a,112,p,108,101])
+
+ %FALSE atom_codes(apple,[97,112,108,108,101])
+
+ %FALSE atom_codes(apple,[97,112,112,108,101,102])
+
+ %FALSE atom_codes(apple,[a,112,p,108,102])
+
+ %FALSE atom_codes('APPLE',[97,112,112,108,101])
+
+ %FALSE atom_codes('apple',[65,80,80,76,69])
+
+ %QUERY atom_codes(apple,[X,Y,Y,Z,101])
+ %ANSWER
+ % X = 97
+ % Y = 112
+ % Z = 108
+ %ANSWER
+
+ %FALSE atom_codes(apple,[X,Y,Z,Z,101])
+
+ %QUERY atom_codes(X,'apple')
+ %ERROR As the first argument: X is a variable the second argument needs to be a list but was: apple of type: ATOM
+
+ %TRUE number_chars(-193457260, ['-', '1','9','3','4','5','7','2','6','0'])
+ %FALSE number_chars(-193457260, [45,49,57,51,52,53,55,50,54,48])
+
+ %QUERY number_chars(193457260,X)
+ %ANSWER X =  [1,9,3,4,5,7,2,6,0]
+
+ %QUERY number_chars(-193457260,X)
+ %ANSWER X =  [-,1,9,3,4,5,7,2,6,0]
+
+ %QUERY number_chars(X,['1','9','3','4','5','7','2','6','0'])
+ %ANSWER X = 193457260
+
+ %QUERY number_chars(X,['-', '1','9','3','4','5','7','2','6','0'])
+ %ANSWER X = -193457260
+
+ %QUERY number_chars(X,['o','n','e'])
+ %ERROR Could not convert characters to an integer: 'one'
+
+ %QUERY number_chars(X,1257)
+ %ERROR As the first argument: X is a variable the second argument needs to be a list but was: 1257 of type: INTEGER
+
+ %QUERY number_chars(X,['6','.','4'])
+ %ANSWER X = 6.4
+
+ %QUERY number_chars(X,['-','7','2','.','4','6','3'])
+ %ANSWER X = -72.463
+
+ %QUERY number_chars(X,['.','4','6','3'])
+ %ANSWER X = 0.463
+
+ %QUERY number_chars(X,['-','.','4','6','3'])
+ %ANSWER X = -0.463
+
+ %QUERY number_chars('193457260',X)
+ %ERROR Unexpected type for first argument: ATOM
+
+ %TRUE number_codes(-193457260, [45,49,57,51,52,53,55,50,54,48])
+ %FALSE number_codes(-193457260, ['-','1','9','3','4','5','7','2','6','0'])
+
+ %QUERY number_codes(193457260,X)
+ %ANSWER X = [49,57,51,52,53,55,50,54,48]
+
+ %QUERY number_codes(-193457260,X)
+ %ANSWER X = [45,49,57,51,52,53,55,50,54,48]
+
+ %QUERY number_codes(X,[49,57,51,52,53,55,50,54,48])
+ %ANSWER X = 193457260
+
+ %QUERY number_codes(X,[45,49,57,51,52,53,55,50,54,48])
+ %ANSWER X = -193457260
+
+ %QUERY number_codes(X,['o','n','e'])
+ %ERROR Could not convert characters to an integer: 'one'
+
+ %QUERY number_codes(X,1257)
+ %ERROR As the first argument: X is a variable the second argument needs to be a list but was: 1257 of type: INTEGER
+
+ %QUERY number_codes(X,[54,46,52])
+ %ANSWER X = 6.4
+
+ %QUERY number_codes(X,[45,55,50,46,52,54,51])
+ %ANSWER X = -72.463
+
+ %QUERY number_codes(X,[46,52,54,51])
+ %ANSWER X = 0.463
+
+ %QUERY number_codes(X,[45,46,52,54,51])
+ %ANSWER X = -0.463
+
+ %QUERY number_codes('193457260',X)
+ %ERROR Unexpected type for first argument: ATOM
  */
-abstract class AbstractTermSplitFunction extends AbstractSingletonPredicate {
+/**
+ * <code>atom_chars</code> / <code>atom_codes</code> / <code>number_chars</code> / <code>number_codes(N,L)</code>
+ * <p>
+ * <ul>
+ * <li><code>atom_chars(A,L)</code> compares the atom <code>A</code> to the list of characters <code>L</code>.</li>
+ * <ul>
+ * <li><code>atom_codes(A,L)</code> compares the atom <code>A</code> to the list of character codes <code>L</code>.</li>
+ * <ul>
+ * <li><code>number_chars(N,L)</code> compares the number <code>N</code> to the list of characters <code>L</code>.</li>
+ * <ul>
+ * <li><code>number_codes(N,L)</code> compares the number <code>N</code> to the list of character codes
+ * <code>L</code>.</li> *</li>
+ * </ul>
+ */
+public final class TermSplit extends AbstractSingletonPredicate {
    private final boolean firstArgNumeric;
    private final boolean convertToCharCodes;
 
    private Calculatables calculatables;
 
-   AbstractTermSplitFunction(boolean firstArgNumeric, boolean convertToCharCodes) {
+   public static TermSplit atomChars() {
+      return new TermSplit(false, false);
+   }
+
+   public static TermSplit atomCodes() {
+      return new TermSplit(false, true);
+   }
+
+   public static TermSplit numberChars() {
+      return new TermSplit(true, false);
+   }
+
+   public static TermSplit numberCodes() {
+      return new TermSplit(true, true);
+   }
+
+   private TermSplit(boolean firstArgNumeric, boolean convertToCharCodes) {
       this.firstArgNumeric = firstArgNumeric;
       this.convertToCharCodes = convertToCharCodes;
    }

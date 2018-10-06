@@ -63,9 +63,10 @@
 ?- pj_add_predicate(functor/3, 'org.projog.core.function.construct.Functor').
 ?- pj_add_predicate(arg/3, 'org.projog.core.function.construct.Arg').
 ?- pj_add_predicate('=..'/2, 'org.projog.core.function.construct.Univ').
-?- pj_add_predicate(atom_chars/2, 'org.projog.core.function.construct.AtomChars').
-?- pj_add_predicate(atom_codes/2, 'org.projog.core.function.construct.AtomCodes').
-?- pj_add_predicate(number_chars/2, 'org.projog.core.function.construct.NumberChars').
+?- pj_add_predicate(atom_chars/2, 'org.projog.core.function.construct.TermSplit/atomChars').
+?- pj_add_predicate(atom_codes/2, 'org.projog.core.function.construct.TermSplit/atomCodes').
+?- pj_add_predicate(number_chars/2, 'org.projog.core.function.construct.TermSplit/numberChars').
+?- pj_add_predicate(number_codes/2, 'org.projog.core.function.construct.TermSplit/numberCodes').
 ?- pj_add_predicate(atom_concat/3, 'org.projog.core.function.construct.AtomConcat').
 
 % debug

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,10 @@ import org.projog.core.Predicate;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.term.EmptyList;
+import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 /* TEST
  % Examples of when all three terms are lists:
@@ -132,12 +135,57 @@ import org.projog.core.term.Term;
  % Examples when combination of term types cause failure:
  %QUERY append(X, Y, Z)
  %ERROR Expected list but got: NAMED_VARIABLE
- %FALSE append([], Y, Z)
  %FALSE append(X, [], Z)
+ %FALSE append(a, b, Z)
  %FALSE append(a, b, c)
  %FALSE append(a, [], [])
  %FALSE append([], b, [])
  %FALSE append([], [], c)
+
+ %QUERY append([], tail, Z)
+ %ANSWER Z=tail
+
+ %QUERY append([], Z, tail)
+ %ANSWER Z=tail
+
+ %QUERY append([a], b, X)
+ %ANSWER X = [a|b]
+
+ %QUERY append([a,b,c], d, X)
+ %ANSWER X = [a,b,c|d]
+
+ %QUERY append([a], [], X)
+ %ANSWER X = [a]
+
+ %QUERY append([a], [b], X)
+ %ANSWER X = [a,b]
+
+ %QUERY append([X|FL],['^'],[a,f,g,^])
+ %ANSWER
+ % FL = [f,g]
+ % X = a
+ %ANSWER
+
+ %FALSE append([X|FL],['^'],[a,f,g,^,z])
+
+ %QUERY append([X|FL],['^'],[a,f,g,^,z,^])
+ %ANSWER
+ % FL = [f,g,^,z]
+ % X = a
+ %ANSWER
+
+ %QUERY append([X|FL],['^'],[a,f,g,^,^])
+ %ANSWER
+ % FL = [f,g,^]
+ % X = a
+ %ANSWER
+
+ %FALSE append([a|b], [b|c], X)
+ %FALSE append([a|b], [b|c], [a,b,c,d])
+ %FALSE append([a|b], X, [a,b,c,d])
+ %FALSE append(X, [b|c], [a,b,c,d])
+ %FALSE append([a|b], X, Y)
+ %FALSE append(X, [b|c], Y)
  */
 /**
  * <code>append(X,Y,Z)</code> - concatenates two lists.
@@ -156,12 +204,20 @@ public final class Append extends AbstractPredicateFactory {
          }
          return new Retryable(prefix, suffix, javaUtilList);
       } else {
-         boolean result = evaluate(prefix, suffix, concatenated);
+         boolean result = evaluateSingleOutcome(prefix, suffix, concatenated);
          return AbstractSingletonPredicate.toPredicate(result);
       }
    }
 
-   private boolean evaluate(final Term prefix, final Term suffix, final Term concatenated) {
+   private boolean evaluateSingleOutcome(final Term prefix, final Term suffix, final Term concatenated) {
+      if (prefix.getType() == TermType.EMPTY_LIST) {
+         return concatenated.unify(suffix);
+      }
+
+      if (concatenated.getType() == TermType.EMPTY_LIST) {
+         return EmptyList.EMPTY_LIST.unify(prefix) && EmptyList.EMPTY_LIST.unify(suffix);
+      }
+
       final List<Term> prefixList = toJavaUtilList(prefix);
       final List<Term> suffixList = toJavaUtilList(suffix);
 
@@ -176,20 +232,25 @@ public final class Append extends AbstractPredicateFactory {
          return false;
       }
 
-      final List<Term> concatenatedList = toJavaUtilList(concatenated);
-      if (concatenatedList == null) {
-         return false;
-      }
-      final int concatenatedLength = concatenatedList.size();
+      if (concatenated.getType() == TermType.LIST) {
+         final List<Term> concatenatedList = toJavaUtilList(concatenated);
+         final int concatenatedLength = concatenatedList.size();
 
-      final int splitIdx;
+         final int splitIdx;
+         if (prefixList != null) {
+            splitIdx = prefixList.size();
+         } else {
+            splitIdx = concatenatedLength - suffixList.size();
+         }
+
+         return prefix.unify(createList(concatenatedList.subList(0, splitIdx))) && suffix.unify(createList(concatenatedList.subList(splitIdx, concatenatedLength)));
+      }
+
       if (prefixList != null) {
-         splitIdx = prefixList.size();
-      } else {
-         splitIdx = concatenatedLength - suffixList.size();
+         return concatenated.unify(ListFactory.createList(prefixList.toArray(new Term[prefixList.size()]), suffix));
       }
 
-      return prefix.unify(createList(concatenatedList.subList(0, splitIdx))) && suffix.unify(createList(concatenatedList.subList(splitIdx, concatenatedLength)));
+      return false;
    }
 
    private static class Retryable implements Predicate {

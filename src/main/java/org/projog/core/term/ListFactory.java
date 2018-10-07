@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ import java.util.Collection;
 
 /**
  * Static factory methods for creating new instances of {@link List}.
- * 
+ *
  * @see List
  * @see ListUtils
  */
@@ -39,18 +39,18 @@ public final class ListFactory {
 
    /**
     * Returns a new {@link List} with specified head and tail.
-    * 
+    *
     * @param head the first argument in the list
     * @param tail the second argument in the list
     * @return a new {@link List} with specified head and tail
     */
    public static List createList(Term head, Term tail) {
-      return createList(head, tail, head.isImmutable() && tail.isImmutable());
+      return new List(head, tail);
    }
 
    /**
     * Returns a new {@link List} with the specified terms and a empty list as the final tail element.
-    * 
+    *
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and a empty list as the final tail element
     */
@@ -63,7 +63,7 @@ public final class ListFactory {
     * <p>
     * By having a {@code List} with a {@code List} as its tail it is possible to represent an ordered sequence of the
     * specified terms.
-    * 
+    *
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and a empty list as the final tail element
     */
@@ -76,7 +76,7 @@ public final class ListFactory {
     * <p>
     * By having a {@code List} with a {@code List} as its tail it is possible to represent an ordered sequence of the
     * specified terms.
-    * 
+    *
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and the second parameter as the tail element
     */
@@ -85,19 +85,12 @@ public final class ListFactory {
       if (numberOfElements == 0) {
          return EmptyList.EMPTY_LIST;
       }
-      // keep track of whether sublists are immutable
-      boolean isImmutable = tail.isImmutable();
       Term list = tail;
       for (int i = numberOfElements - 1; i > -1; i--) {
          Term element = terms[i];
-         isImmutable = isImmutable && element.isImmutable();
-         list = createList(element, list, isImmutable);
+         list = createList(element, list);
       }
       return list;
-   }
-
-   private static List createList(Term head, Term tail, boolean isImmutable) {
-      return new List(head, tail, isImmutable);
    }
 
    /** Returns a new list of the specified length where is each element is a variable. */

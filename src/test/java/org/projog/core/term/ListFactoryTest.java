@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
@@ -88,10 +89,53 @@ public class ListFactoryTest {
    public void testCreateListOfLengthThree() {
       Term t = ListFactory.createListOfLength(3);
       assertSame(List.class, t.getClass());
-      assertSame(List.class, t.getClass());
       assertTrue(t.getArgument(0).getType().isVariable());
       assertSame(List.class, t.getArgument(1).getClass());
       assertEquals(".(E0, .(E1, .(E2, [])))", t.toString());
+   }
+
+   @Test
+   public void testCreateListFromTwoAtoms() {
+      Atom head = atom("a");
+      Atom tail = atom("b");
+      List t = ListFactory.createList(head, tail);
+      assertSame(List.class, t.getClass());
+      assertSame(head, t.getArgument(0));
+      assertSame(tail, t.getArgument(1));
+      assertTrue(t.isImmutable());
+   }
+
+   @Test
+   public void testCreateListWithVariableHead() {
+      Variable head = variable("X");
+      Atom tail = atom("b");
+      Term t = ListFactory.createList(head, tail);
+      assertSame(List.class, t.getClass());
+      assertSame(head, t.getArgument(0));
+      assertSame(tail, t.getArgument(1));
+      assertFalse(t.isImmutable());
+   }
+
+   @Test
+   public void testCreateListWithVariableTail() {
+      Atom head = atom("a");
+      Variable tail = variable("Y");
+      Term t = ListFactory.createList(head, tail);
+      assertSame(List.class, t.getClass());
+      assertSame(head, t.getArgument(0));
+      assertSame(tail, t.getArgument(1));
+      assertFalse(t.isImmutable());
+   }
+
+   @Test
+   public void testCreateListWithVariableHeadAndTail() {
+      Variable head = variable("X");
+      Variable tail = variable("Y");
+      Term t = ListFactory.createList(head, tail);
+      assertSame(List.class, t.getClass());
+      assertSame(head, t.getArgument(0));
+      assertSame(tail, t.getArgument(1));
+      assertFalse(t.isImmutable());
    }
 
    private Term[] createArguments() {

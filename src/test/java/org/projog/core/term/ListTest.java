@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ import org.projog.TestUtils;
 public class ListTest {
    private static final Term head = new Atom("a");
    private static final Term tail = new Atom("b");
-   private static final List testList = new List(head, tail, true);
+   private static final List testList = new List(head, tail);
 
    @Test
    public void testGetName() {
@@ -98,7 +98,7 @@ public class ListTest {
       Variable Y = new Variable("Y");
       Structure head = structure("p", X);
 
-      List original = new List(head, Y, false); // [p(X), Y]
+      List original = new List(head, Y); // [p(X), Y]
 
       assertSame(original, original.getTerm());
 
@@ -141,8 +141,8 @@ public class ListTest {
       Atom b = new Atom("b");
       Variable X = new Variable("X");
       Variable Y = new Variable("Y");
-      List l1 = new List(a, Y, false);
-      List l2 = new List(X, b, false);
+      List l1 = new List(a, Y);
+      List l2 = new List(X, b);
 
       assertStrictEqualityUnifyAndBacktrack(l1, l2);
       assertStrictEqualityUnifyAndBacktrack(l2, l1);
@@ -151,9 +151,9 @@ public class ListTest {
    @Test
    public void testUnifyWhenBothListsHaveVariableArguments_1() {
       // [x, Y]
-      List l1 = new List(new Atom("x"), new Variable("Y"), false);
+      List l1 = new List(new Atom("x"), new Variable("Y"));
       // [X, y]
-      List l2 = new List(new Variable("X"), new Atom("y"), false);
+      List l2 = new List(new Variable("X"), new Atom("y"));
       assertTrue(l1.unify(l2));
       assertEquals(".(x, y)", l1.toString());
       assertEquals(l1.toString(), l2.toString());
@@ -162,9 +162,9 @@ public class ListTest {
    @Test
    public void testUnifyWhenBothListsHaveVariableArguments_2() {
       // [x, z]
-      List l1 = new List(new Atom("x"), new Atom("z"), false);
+      List l1 = new List(new Atom("x"), new Atom("z"));
       // [X, y]
-      List l2 = new List(new Variable("X"), new Atom("y"), false);
+      List l2 = new List(new Variable("X"), new Atom("y"));
       assertFalse(l1.unify(l2));
       assertEquals(".(x, z)", l1.toString());
       // Note: following is expected quirk - list doesn't automatically backtrack on failure
@@ -177,9 +177,9 @@ public class ListTest {
    @Test
    public void testUnifyWhenBothListsHaveVariableArguments_3() {
       // [X, z]
-      List l1 = new List(new Variable("X"), new Atom("z"), false);
+      List l1 = new List(new Variable("X"), new Atom("z"));
       // [x, y]
-      List l2 = new List(new Atom("x"), new Atom("y"), false);
+      List l2 = new List(new Atom("x"), new Atom("y"));
       assertFalse(l1.unify(l2));
       // Note: following is expected quirk - list doesn't automatically backtrack on failure
       assertEquals(".(x, z)", l1.toString());
@@ -199,7 +199,7 @@ public class ListTest {
             bigListSyntaxBuilder2.append(",");
          }
          bigListSyntaxBuilder1.append(i);
-         // make one element in second list different than first 
+         // make one element in second list different than first
          if (i == 789) {
             bigListSyntaxBuilder2.append(i - 1);
          } else {
@@ -224,6 +224,39 @@ public class ListTest {
 
    @Test
    public void testIsImmutable() {
+      Atom atom = atom("a");
+      IntegerNumber number = integerNumber(42);
+      Variable variable1 = variable("X");
+      Variable variable2 = variable("Y");
+      Structure immutableStructure = structure("p", atom("c"));
+      Structure mutableStructure = structure("p", variable("Z"));
+
+      // assert when both terms are mutable
+      assertTrue(new List(atom, number).isImmutable());
+      assertTrue(new List(atom, atom).isImmutable());
+      assertTrue(new List(immutableStructure, number).isImmutable());
+      assertTrue(new List(atom, immutableStructure).isImmutable());
+      assertTrue(new List(immutableStructure, immutableStructure).isImmutable());
+
+      // assert when one at least one term is a variable
+      assertFalse(new List(variable1, variable2).isImmutable());
+      assertFalse(new List(variable1, variable1).isImmutable());
+      assertFalse(new List(atom, variable2).isImmutable());
+      assertFalse(new List(variable1, number).isImmutable());
+      assertFalse(new List(immutableStructure, variable2).isImmutable());
+      assertFalse(new List(variable1, immutableStructure).isImmutable());
+
+      // assert when one term is a mutable structure
+      assertFalse(new List(atom, mutableStructure).isImmutable());
+      assertFalse(new List(mutableStructure, number).isImmutable());
+      assertFalse(new List(mutableStructure, immutableStructure).isImmutable());
+      assertFalse(new List(immutableStructure, mutableStructure).isImmutable());
+      assertFalse(new List(mutableStructure, number).isImmutable());
+      assertFalse(new List(mutableStructure, mutableStructure).isImmutable());
+   }
+
+   @Test
+   public void testIsImmutableAfterCopy() {
       Variable v = variable("X");
       Atom a = atom("test");
       List l1 = list(atom(), structure("p", atom(), v, integerNumber()), list(integerNumber(), decimalFraction()));
@@ -237,7 +270,7 @@ public class ListTest {
    }
 
    private void assertMatch(List l1, List l2, boolean expectMatch) {
-      // NOTE important to test toString, strictEquality and unify 
+      // NOTE important to test toString, strictEquality and unify
       // methods doesn't throw stackoverflow
       assertEquals(expectMatch, l1.strictEquality(l2));
       assertEquals(expectMatch, l1.unify(l2));

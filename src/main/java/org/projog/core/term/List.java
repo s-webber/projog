@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ import java.util.Map;
  * The head and tail can be any {@link Term}s - including other {@code List}s. By having a {@code List} with a
  * {@code List} as its tail it is possible to represent an ordered sequence of {@link Term}s of any length. The end of
  * an ordered sequence of {@link Term}s is normally represented as a tail having the value of an {@link EmptyList}.
- * 
+ *
  * @see EmptyList
  * @see ListFactory
  * @see ListUtils
@@ -36,16 +36,15 @@ public final class List implements Term {
    /**
     * Creates a new list with the specified head and tail.
     * <p>
-    * Use {@link ListFactory} rather than calling directly.
-    * 
+    * Consider using {@link ListFactory} rather than calling directly.
+    *
     * @param head the head of the new list
     * @param tail the tail of the new list
-    * @param immutable is this list immutable (i.e. are both the head and tail known to be immutable)?
     */
-   List(Term head, Term tail, boolean immutable) {
+   public List(Term head, Term tail) {
       this.head = head;
       this.tail = tail;
-      this.immutable = immutable;
+      this.immutable = head.isImmutable() && tail.isImmutable();
    }
 
    /**
@@ -55,7 +54,7 @@ public final class List implements Term {
     * not recommend as altering the tail of a list after it has been created may cause unexpected behaviour.
     * <p>
     * TODO Find an alternative to this method for doing tail-recursive optimisation.
-    * 
+    *
     * @param tail term to set as the tail of this object
     * @deprecated only used to make tail recursive functions more efficient
     */
@@ -66,7 +65,7 @@ public final class List implements Term {
 
    /**
     * Returns {@link ListFactory#LIST_PREDICATE_NAME}.
-    * 
+    *
     * @return {@link ListFactory#LIST_PREDICATE_NAME}
     */
    @Override
@@ -91,7 +90,7 @@ public final class List implements Term {
 
    /**
     * Returns {@link TermType#LIST}.
-    * 
+    *
     * @return {@link TermType#LIST}
     */
    @Override
@@ -114,7 +113,7 @@ public final class List implements Term {
          if (newHead == head && newTail == tail) {
             return this;
          } else {
-            return new List(newHead, newTail, newHead.isImmutable() && newTail.isImmutable());
+            return new List(newHead, newTail);
          }
       }
    }
@@ -129,7 +128,7 @@ public final class List implements Term {
          if (newHead == head && newTail == tail) {
             return this;
          } else {
-            return new List(newHead, newTail, newHead.isImmutable() && newTail.isImmutable());
+            return new List(newHead, newTail);
          }
       }
    }
@@ -157,7 +156,7 @@ public final class List implements Term {
 
    /**
     * Performs a strict comparison of this list to the specified term.
-    * 
+    *
     * @param t1 the term to compare this list against
     * @return {@code true} if the given term represents a {@link TermType#LIST} with a head and tail strictly equal to
     * the corresponding head and tail of this List object.

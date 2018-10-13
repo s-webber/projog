@@ -158,7 +158,6 @@ final class CompiledPredicateSourceGenerator {
 
       if (factMetaData().isPossibleSingleResultRecursiveFunction()) {
          w.writeStatement("private final boolean isRetryable");
-         outputStaticRecursiveFunctions();
       }
    }
 
@@ -584,63 +583,6 @@ final class CompiledPredicateSourceGenerator {
       }
    }
 
-   private void outputStaticRecursiveFunctions() {
-      classVariables().clearAssignedVariables();
-      classVariables().clearDeclaredVariables();
-      setCurrentClause(factMetaData().getClause(0));
-      StringBuilder ph = new StringBuilder();
-      for (int i = 0; i < factMetaData().getNumberArguments(); i++) {
-         if (factMetaData().isTailRecursiveArgument(i)) {
-            ph.append(", final List " + PLACEHOLDER_PREFIX);
-            ph.append(i);
-         }
-      }
-      outputInitMethod("private static final boolean staticInitRule0(" + getArgsDeclaration() + ph + ")");
-
-      outputStaticRecursiveEvaluateBody();
-   }
-
-   private void outputStaticRecursiveEvaluateBody() {
-      w.setInStaticRecursiveMethodBlock(true);
-
-      setCurrentClause(factMetaData().getClause(1));
-
-      w.beginMethod("static final boolean staticEvaluate(" + getArgsDeclarationNotFinal() + ")");
-      declareDebugEnabledLocalVariable();
-      String ph = "";
-      for (int i = 0; i < factMetaData().getNumberArguments(); i++) {
-         if (factMetaData().isTailRecursiveArgument(i)) {
-            ph += ", " + PLACEHOLDER_PREFIX + i;
-            w.assign("List " + PLACEHOLDER_PREFIX + i, "null");
-         }
-      }
-      w.addLine("do {");
-      logCall();
-      outputInitMethodBody();
-      w.addLine("} while (true);");
-
-      // For performance reasons, and assuming that the second rule
-      // will be successfully evaluated more often than the first,
-      // only attempt to evaluate the first rule when the second
-      // rule can longer be successfully evaluated.
-      String eval = "staticInitRule0(" + getArgsCall() + ph + ")";
-      if (isSpyPointsEnabled()) {
-         w.beginIf(eval);
-         logExit(1);
-         w.returnTrue();
-         w.addLine("} else {");
-         logFail();
-         w.returnFalse();
-         w.endBlock();
-      } else {
-         w.writeStatement("return " + eval);
-      }
-
-      w.endBlock(); // end method
-
-      w.setInStaticRecursiveMethodBlock(false);
-   }
-
    private void outputInitMethod() {
       outputInitMethod(getRuleInitMethodNameDeclaration());
    }
@@ -935,7 +877,7 @@ final class CompiledPredicateSourceGenerator {
    private void log(String level, int clauseIdx) {
       if (isSpyPointsEnabled()) {
          w.beginIf(DEBUG_ENABLED);
-         String source = factMetaData().isSingleResultPredicate() || w.isInStaticRecursiveMethodBlock() ? className() + ".class" : "this";
+         String source = factMetaData().isSingleResultPredicate() ? className() + ".class" : "this";
          if (factMetaData().getNumberArguments() > 0) {
             source += ", new Term[]{" + getArgsCall() + "}";
          } else {

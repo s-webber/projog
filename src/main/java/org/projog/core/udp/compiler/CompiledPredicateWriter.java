@@ -77,14 +77,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       this.currentClause = currentClause;
    }
 
-   boolean isInStaticRecursiveMethodBlock() {
-      return inStaticRecursiveMethodBlock;
-   }
-
-   void setInStaticRecursiveMethodBlock(boolean inStaticRecursiveMethodBlock) {
-      this.inStaticRecursiveMethodBlock = inStaticRecursiveMethodBlock;
-   }
-
    boolean isNeedsKnowledgeBaseStaticVariable() {
       return needsKnowledgeBaseStaticVariable;
    }
@@ -292,39 +284,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       currentClause.addVariablesToBackTrack(variablesInCurrentFunction);
       if (isRetryable) {
          String compiledPredicateVariableName = classVariables.getNewCompiledPredicateVariableName(currentClause(), compiledPredicateName);
-         StringBuilder sb = new StringBuilder();
-         if (currentClause.getCurrentPredicateFactory() instanceof CompiledTailRecursivePredicate) {
-            CompiledTailRecursivePredicate marfe = (CompiledTailRecursivePredicate) currentClause.getCurrentPredicateFactory();
-            boolean[] isSingleResultIfArgumentImmutable = marfe.isSingleResultIfArgumentImmutable();
-            for (int i = 0; i < function.getNumberOfArguments(); i++) {
-               Term arg = function.getArgument(i);
-               if (arg.getType() == TermType.NAMED_VARIABLE) {
-                  if (isSingleResultIfArgumentImmutable[i] && classVariables.isAssignedVariable(getVariableId(arg))) {
-                     if (sb.length() != 0) {
-                        sb.append(" || ");
-                     }
-                     sb.append(getVariableId(arg));
-                     sb.append(".isImmutable()");
-                  }
-               }
-            }
-            if (sb.length() > 0) {
-               String needToBacktrackVariableName = classVariables.getNewBooleanVariableName();
-               beginIf(needToBacktrackVariableName);
-               if (!firstInMethod) {
-                  // note: no need to set variable to false if first in method
-                  // as will now exit method and it will never be re-called
-                  assign(needToBacktrackVariableName, "false");
-               }
-               outputBacktrackAndExitClauseEvaluation();
-               elseIf(compiledPredicateVariableName + "==null && (" + sb + ")");
-               beginIf("!" + compiledPredicateName + ".staticEvaluate(" + constructorArgs + ")");
-               outputBacktrackAndExitClauseEvaluation();
-               endBlock();
-               assign(needToBacktrackVariableName, "true");
-               addLine("} else {");
-            }
-         }
 
          beginIf(compiledPredicateVariableName + "==null");
 
@@ -349,10 +308,6 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
          exitClauseEvaluation();
          endBlock();
          assignTermToTempVariable(variablesToKeepTempVersionOf);
-
-         if (sb.length() > 0) {
-            endBlock();
-         }
       } else {
          outputStaticEvaluateCall(compiledPredicateName, constructorArgs);
       }

@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,13 +19,20 @@ import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
+import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
+import org.projog.core.term.TermUtils;
+import org.projog.core.term.Variable;
+import org.projog.core.udp.ClauseModel;
+import org.projog.core.udp.UserDefinedPredicateFactory;
 
 /**
  * Collection of spy points.
@@ -36,17 +43,21 @@ import org.projog.core.term.TermFormatter;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code SpyPoints} instance.
  * </p>
- * 
+ *
  * @see KnowledgeBaseUtils#getSpyPoints(KnowledgeBase)
  */
 public final class SpyPoints {
    private final Object lock = new Object();
    private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>();
    private final KnowledgeBase kb;
+   private final ProjogEventsObservable projogEventsObservable;
+   private final TermFormatter termFormatter;
    private boolean traceEnabled;
 
    public SpyPoints(KnowledgeBase kb) {
       this.kb = kb;
+      this.projogEventsObservable = getProjogEventsObservable(kb);
+      termFormatter = getTermFormatter(kb);
    }
 
    public void setTraceEnabled(boolean traceEnabled) {
@@ -113,44 +124,92 @@ public final class SpyPoints {
 
       /** Generates an event of type {@link ProjogEventType#CALL} */
       public void logCall(Object source, Term[] args) {
-         log(ProjogEventType.CALL, source, args);
+         log(ProjogEventType.CALL, source, args, -1);
       }
 
       /** Generates an event of type {@link ProjogEventType#REDO} */
       public void logRedo(Object source, Term[] args) {
-         log(ProjogEventType.REDO, source, args);
+         log(ProjogEventType.REDO, source, args, -1);
       }
 
       /** Generates an event of type {@link ProjogEventType#EXIT} */
-      public void logExit(Object source, Term[] args) {
-         log(ProjogEventType.EXIT, source, args);
+      public void logExit(Object source, Term[] args, int clauseIdx) {
+         log(ProjogEventType.EXIT, source, args, clauseIdx);
       }
 
       /** Generates an event of type {@link ProjogEventType#FAIL} */
       public void logFail(Object source, Term[] args) {
-         log(ProjogEventType.FAIL, source, args);
+         log(ProjogEventType.FAIL, source, args, -1);
       }
 
-      private void log(ProjogEventType type, Object source, Term[] args) {
+      private void log(ProjogEventType type, Object source, Term[] args, int clauseIdx) {
          if (isEnabled() == false) {
             return;
          }
 
-         TermFormatter tf = getTermFormatter(kb);
-         StringBuilder sb = new StringBuilder();
-         sb.append(key.getName());
-         if (args != null) {
-            sb.append("( ");
-            for (int i = 0; i < args.length; i++) {
-               if (i != 0) {
-                  sb.append(", ");
-               }
-               sb.append(tf.toString(args[i]));
+         SpyPointEvent spe = new SpyPointEvent(key, args, clauseIdx);
+         ProjogEvent pe = new ProjogEvent(type, spe, source);
+         projogEventsObservable.notifyObservers(pe);
+      }
+   }
+
+   public class SpyPointEvent {
+      private final PredicateKey key;
+      private final Term[] args;
+      private int clauseIdx;
+
+      private SpyPointEvent(PredicateKey key, Term[] args, int clauseIdx) {
+         this.key = key;
+         for (int i = 0; i < args.length; i++) {
+            if (args[i] == null) {
+               args[i] = new Variable("Variable");
             }
-            sb.append(" )");
          }
-         ProjogEvent event = new ProjogEvent(type, sb.toString(), source);
-         getProjogEventsObservable(kb).notifyObservers(event);
+         this.args = TermUtils.copy(args);
+         this.clauseIdx = clauseIdx;
+      }
+
+      public PredicateKey getPredicateKey() {
+         return key;
+      }
+
+      public String getFormattedTerm() {
+         if (args.length == 0) {
+            return key.getName();
+         } else {
+            Term term = Structure.createStructure(key.getName(), args);
+            return termFormatter.toString(term);
+         }
+      }
+
+      public int getClauseIdx() {
+         if (clauseIdx < 1) {
+            throw new IllegalStateException("No clause specified for event");
+         }
+         return clauseIdx;
+      }
+
+      public String getFormattedClause() {
+         return termFormatter.toString(getClauseModel().getOriginal());
+      }
+
+      private ClauseModel getClauseModel() {
+         if (clauseIdx < 1) {
+            throw new IllegalStateException("No clause specified for event");
+         }
+
+         Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
+         UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
+         Iterator<ClauseModel> itr = userDefinedPredicate.getImplications();
+         for (int i = 1; i < clauseIdx; i++) {
+            itr.next();
+         }
+         return itr.next();
+      }
+
+      @Override
+      public String toString() {
+         return getFormattedTerm();
       }
    }
 }

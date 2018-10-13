@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,15 @@
  */
 package org.projog.core.udp.interpreter;
 
+import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 import static org.projog.core.KnowledgeBaseUtils.toArrayOfConjunctions;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateFactory;
+import org.projog.core.PredicateKey;
+import org.projog.core.SpyPoints;
+import org.projog.core.SpyPoints.SpyPoint;
 import org.projog.core.term.Term;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.TailRecursivePredicate;
@@ -38,6 +43,7 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * @see TailRecursivePredicateMetaData
  */
 public final class InterpretedTailRecursivePredicateFactory implements PredicateFactory {
+   private final SpyPoint spyPoint;
    private final TailRecursivePredicateMetaData metaData;
    private final PredicateFactory[] firstClausePredicateFactories;
    private final Term[] firstClauseConsequentArgs;
@@ -47,6 +53,7 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
    private final Term[] secondClauseOriginalTerms;
 
    public InterpretedTailRecursivePredicateFactory(KnowledgeBase kb, TailRecursivePredicateMetaData metaData) {
+      this.spyPoint = getSpyPoint(kb, metaData);
       this.metaData = metaData;
       ClauseModel firstClause = metaData.getFirstClause();
       ClauseModel secondClause = metaData.getSecondClause();
@@ -70,8 +77,8 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
 
    @Override
    public InterpretedTailRecursivePredicate getPredicate(Term... args) {
-      return new InterpretedTailRecursivePredicate(args, firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms, secondClausePredicateFactories,
-                  secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(args));
+      return new InterpretedTailRecursivePredicate(spyPoint, args, firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
+                  secondClausePredicateFactories, secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(args));
    }
 
    private boolean isRetryable(Term[] args) {
@@ -81,6 +88,15 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
          }
       }
       return true;
+   }
+
+   private static SpyPoints.SpyPoint getSpyPoint(KnowledgeBase kb, TailRecursivePredicateMetaData metaData) { // TODO move to Utils and share
+      if (KnowledgeBaseUtils.getProjogProperties(kb).isSpyPointsEnabled()) {
+         PredicateKey key = PredicateKey.createForTerm(metaData.getFirstClause().getConsequent());
+         return getSpyPoints(kb).getSpyPoint(key);
+      } else {
+         return null;
+      }
    }
 
    @Override

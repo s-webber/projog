@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,18 @@ import org.projog.core.Predicate;
  * @see TailRecursivePredicateMetaData
  */
 public abstract class TailRecursivePredicate implements Predicate {
+   private boolean retrying;
    private boolean succededOnPreviousGo;
 
    @Override
    public final boolean evaluate() {
+      if (retrying) {
+         logRedo();
+      } else {
+         logCall();
+         retrying = false;
+      }
+
       while (true) {
          if (succededOnPreviousGo) {
             backtrack();
@@ -49,6 +57,7 @@ public abstract class TailRecursivePredicate implements Predicate {
          } else {
             if (matchFirstRule()) {
                succededOnPreviousGo = true;
+               logExit();
                return true;
             } else {
                backtrack();
@@ -56,6 +65,7 @@ public abstract class TailRecursivePredicate implements Predicate {
          }
 
          if (!matchSecondRule()) {
+            logFail();
             return false;
          }
       }
@@ -83,4 +93,12 @@ public abstract class TailRecursivePredicate implements Predicate {
     * Backtracks the arguments to before the last attempt to match the first rule.
     */
    protected abstract void backtrack();
+
+   protected abstract void logCall();
+
+   protected abstract void logRedo();
+
+   protected abstract void logExit();
+
+   protected abstract void logFail();
 }

@@ -13,14 +13,14 @@ testTrueFail(X) :- true, X = 'rule4'.
 %TRUE trace
 %QUERY testTrueFail(X)
 %OUTPUT
-% [1] CALL testTrueFail( X )
-% [1] EXIT testTrueFail( rule1 )
+% [1] CALL testTrueFail(X)
+% [1] EXIT testTrueFail(rule1)
 %
 %OUTPUT
 %ANSWER X=rule1
 %OUTPUT
-% [1] REDO testTrueFail( rule1 )
-% [1] EXIT testTrueFail( rule4 )
+% [1] REDO testTrueFail(rule1)
+% [1] EXIT testTrueFail(rule4)
 %
 %OUTPUT
 %ANSWER X=rule4
@@ -50,56 +50,56 @@ testCalculatables(A,B,C) :- Z is B+C, A is Z.
 %TRUE trace
 %QUERY testCalculatables(X, 3, 7)
 %OUTPUT
-% [1] CALL testCalculatables( X, 3, 7 )
-% [1] EXIT testCalculatables( 1000, 3, 7 )
+% [1] CALL testCalculatables(X, 3, 7)
+% [1] EXIT testCalculatables(1000, 3, 7)
 %
 %OUTPUT
 %ANSWER X=1000
 %OUTPUT
-% [1] REDO testCalculatables( 1000, 3, 7 )
-% [1] EXIT testCalculatables( 1.5, 3, 7 )
+% [1] REDO testCalculatables(1000, 3, 7)
+% [1] EXIT testCalculatables(1.5, 3, 7)
 %
 %OUTPUT
 %ANSWER X=1.5
 %OUTPUT
-% [1] REDO testCalculatables( 1.5, 3, 7 )
-% [1] EXIT testCalculatables( 10, 3, 7 )
+% [1] REDO testCalculatables(1.5, 3, 7)
+% [1] EXIT testCalculatables(10, 3, 7)
 %
 %OUTPUT
 %ANSWER X=10
 %OUTPUT
-% [1] REDO testCalculatables( 10, 3, 7 )
-% [1] EXIT testCalculatables( -4, 3, 7 )
+% [1] REDO testCalculatables(10, 3, 7)
+% [1] EXIT testCalculatables(-4, 3, 7)
 %
 %OUTPUT
 %ANSWER X=-4
 %OUTPUT
-% [1] REDO testCalculatables( -4, 3, 7 )
-% [1] EXIT testCalculatables( 21, 3, 7 )
+% [1] REDO testCalculatables(-4, 3, 7)
+% [1] EXIT testCalculatables(21, 3, 7)
 %
 %OUTPUT
 %ANSWER X=21
 %OUTPUT
-% [1] REDO testCalculatables( 21, 3, 7 )
-% [1] EXIT testCalculatables( 0, 3, 7 )
+% [1] REDO testCalculatables(21, 3, 7)
+% [1] EXIT testCalculatables(0, 3, 7)
 %
 %OUTPUT
 %ANSWER X=0
 %OUTPUT
-% [1] REDO testCalculatables( 0, 3, 7 )
-% [1] EXIT testCalculatables( 19, 3, 7 )
+% [1] REDO testCalculatables(0, 3, 7)
+% [1] EXIT testCalculatables(19, 3, 7)
 %
 %OUTPUT
 %ANSWER X=19
 %OUTPUT
-% [1] REDO testCalculatables( 19, 3, 7 )
-% [1] EXIT testCalculatables( 18.5, 3, 7 )
+% [1] REDO testCalculatables(19, 3, 7)
+% [1] EXIT testCalculatables(18.5, 3, 7)
 %
 %OUTPUT
 %ANSWER X=18.5
 %OUTPUT
-% [1] REDO testCalculatables( 18.5, 3, 7 )
-% [1] EXIT testCalculatables( 10, 3, 7 )
+% [1] REDO testCalculatables(18.5, 3, 7)
+% [1] EXIT testCalculatables(10, 3, 7)
 %
 %OUTPUT
 %ANSWER X=10
@@ -115,38 +115,38 @@ testCallCompiledEvaluatable(A, B) :- C is (B*2)+1, testCalculatables(A, B, C), A
 %TRUE trace
 %QUERY testCallCompiledEvaluatable(X, 3)
 %OUTPUT
-% [1] CALL testCallCompiledEvaluatable( X, 3 )
-% [2] CALL testCalculatables( X, 3, 7 )
-% [2] EXIT testCalculatables( 1000, 3, 7 )
-% [2] REDO testCalculatables( 1000, 3, 7 )
-% [2] EXIT testCalculatables( 1.5, 3, 7 )
-% [2] REDO testCalculatables( 1.5, 3, 7 )
-% [2] EXIT testCalculatables( 10, 3, 7 )
-% [1] EXIT testCallCompiledEvaluatable( 10, 3 )
+% [1] CALL testCallCompiledEvaluatable(X, 3)
+% [2] CALL testCalculatables(X, 3, 7)
+% [2] EXIT testCalculatables(1000, 3, 7)
+% [2] REDO testCalculatables(1000, 3, 7)
+% [2] EXIT testCalculatables(1.5, 3, 7)
+% [2] REDO testCalculatables(1.5, 3, 7)
+% [2] EXIT testCalculatables(10, 3, 7)
+% [1] EXIT testCallCompiledEvaluatable(10, 3)
 %
 %OUTPUT
 %ANSWER X=10
 %OUTPUT
-% [1] REDO testCallCompiledEvaluatable( 10, 3 )
-% [2] REDO testCalculatables( 10, 3, 7 )
-% [2] EXIT testCalculatables( -4, 3, 7 )
-% [2] REDO testCalculatables( -4, 3, 7 )
-% [2] EXIT testCalculatables( 21, 3, 7 )
-% [2] REDO testCalculatables( 21, 3, 7 )
-% [2] EXIT testCalculatables( 0, 3, 7 )
-% [2] REDO testCalculatables( 0, 3, 7 )
-% [2] EXIT testCalculatables( 19, 3, 7 )
-% [2] REDO testCalculatables( 19, 3, 7 )
-% [2] EXIT testCalculatables( 18.5, 3, 7 )
-% [1] EXIT testCallCompiledEvaluatable( 18.5, 3 )
+% [1] REDO testCallCompiledEvaluatable(10, 3)
+% [2] REDO testCalculatables(10, 3, 7)
+% [2] EXIT testCalculatables(-4, 3, 7)
+% [2] REDO testCalculatables(-4, 3, 7)
+% [2] EXIT testCalculatables(21, 3, 7)
+% [2] REDO testCalculatables(21, 3, 7)
+% [2] EXIT testCalculatables(0, 3, 7)
+% [2] REDO testCalculatables(0, 3, 7)
+% [2] EXIT testCalculatables(19, 3, 7)
+% [2] REDO testCalculatables(19, 3, 7)
+% [2] EXIT testCalculatables(18.5, 3, 7)
+% [1] EXIT testCallCompiledEvaluatable(18.5, 3)
 %
 %OUTPUT
 %ANSWER X=18.5
 %OUTPUT
-% [1] REDO testCallCompiledEvaluatable( 18.5, 3 )
-% [2] REDO testCalculatables( 18.5, 3, 7 )
-% [2] EXIT testCalculatables( 10, 3, 7 )
-% [1] EXIT testCallCompiledEvaluatable( 10, 3 )
+% [1] REDO testCallCompiledEvaluatable(18.5, 3)
+% [2] REDO testCalculatables(18.5, 3, 7)
+% [2] EXIT testCalculatables(10, 3, 7)
+% [1] EXIT testCallCompiledEvaluatable(10, 3)
 %
 %OUTPUT
 %ANSWER X=10
@@ -159,8 +159,20 @@ testSimpleTailRecursive([X|Xs]) :- testSimpleTailRecursive(Xs).
 %FALSE testSimpleTailRecursive(abc)
 
 %TRUE trace
-%TRUE testSimpleTailRecursive([a,b,c])
-%FALSE testSimpleTailRecursive(abc)
+%QUERY testSimpleTailRecursive([a,b,c])
+%OUTPUT
+% [1] CALL testSimpleTailRecursive([a,b,c])
+% [1] EXIT testSimpleTailRecursive([])
+%
+%OUTPUT
+%ANSWER/
+%QUERY testSimpleTailRecursive(abc)
+%OUTPUT
+% [1] CALL testSimpleTailRecursive(abc)
+% [1] FAIL testSimpleTailRecursive(abc)
+%
+%OUTPUT
+%NO
 
 testSimpleNonTailRecursive(N). 
 testSimpleNonTailRecursive(N) :- N > 1, N1 is N-1, testSimpleNonTailRecursive(N1).

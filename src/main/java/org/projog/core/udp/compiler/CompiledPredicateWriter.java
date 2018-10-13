@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -610,11 +610,19 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
       endBlock();
    }
 
-   final void logInlinedPredicatePredicate(String type, String functionVariableName, Term function) {
+   void logExitInlinedPredicatePredicate(String functionVariableName, Term function, String clauseIdx) {
+      log("Exit", functionVariableName, clauseIdx, function.getArgs());
+   }
+
+   void logInlinedPredicatePredicate(String type, String functionVariableName, Term function) {
       log(type, functionVariableName, function.getArgs());
    }
 
    private void log(String type, String functionVariableName, Term... arguments) {
+      log(type, functionVariableName, null, arguments);
+   }
+
+   private void log(String type, String functionVariableName, String clauseIdx, Term... arguments) {
       if (isSpyPointsEnabled() == false) {
          return;
       }
@@ -632,6 +640,9 @@ final class CompiledPredicateWriter extends JavaSourceWriter {
             sb.append(getLogArgument(arg));
          }
          sb.append("}");
+      }
+      if (clauseIdx != null) {
+         sb.append("," + clauseIdx);
       }
       String spyPointVariableName = functionVariableName + ".spyPoint";
       beginIf(spyPointVariableName + ".isEnabled()");

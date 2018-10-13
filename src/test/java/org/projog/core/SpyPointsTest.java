@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,6 +35,7 @@ import java.util.Observer;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.SpyPoints.SpyPointEvent;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.EmptyList;
@@ -188,39 +189,39 @@ public class SpyPointsTest {
       PredicateKey key = createKey("test", 2);
       SpyPoints.SpyPoint sp = testObject.getSpyPoint(key);
 
-      // make a number of log calls to the spy point - 
+      // make a number of log calls to the spy point -
       // the observer should not be updated with any of them as the spy point is not set
       assertFalse(sp.isSet());
       sp.logCall(this, new Term[] {atom("a")});
-      sp.logExit(this, new Term[] {atom("b")});
+      sp.logExit(this, new Term[] {atom("b")}, 0);
       sp.logFail(this, new Term[] {atom("c")});
       sp.logRedo(this, new Term[] {atom("d")});
       assertTrue(events.isEmpty());
 
-      // set the spy point and then make a number of log calls to the spy point - 
+      // set the spy point and then make a number of log calls to the spy point -
       // the observer should now be updated with each call in the order they are made
       testObject.setSpyPoint(key, true);
       sp.logCall(this, new Term[] {atom("z")});
-      sp.logExit(this, new Term[] {list(atom("a"), variable("X"))});
+      sp.logExit(this, new Term[] {list(atom("a"), variable("X"))}, 0);
       sp.logFail(this, new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))});
       sp.logRedo(this, new Term[] {createAnonymousVariable()});
       assertEquals(4, events.size());
-      assertProjogEvent(events.get(0), ProjogEventType.CALL, "test( z )");
-      assertProjogEvent(events.get(1), ProjogEventType.EXIT, "test( [a,X] )");
-      assertProjogEvent(events.get(2), ProjogEventType.FAIL, "test( c([], z, 1) )");
-      assertProjogEvent(events.get(3), ProjogEventType.REDO, "test( _ )");
+      assertProjogEvent(events.get(0), ProjogEventType.CALL, "test(z)");
+      assertProjogEvent(events.get(1), ProjogEventType.EXIT, "test([a,X])");
+      assertProjogEvent(events.get(2), ProjogEventType.FAIL, "test(c([], z, 1))");
+      assertProjogEvent(events.get(3), ProjogEventType.REDO, "test(_)");
    }
 
-   private void assertProjogEvent(Object o, ProjogEventType t, String message) {
+   private void assertProjogEvent(Object o, ProjogEventType t, String expectedMessage) {
       assertSame(ProjogEvent.class, o.getClass());
       ProjogEvent e = (ProjogEvent) o;
       assertSame(t, e.getType());
-      assertEquals(message, e.getMessage());
+      SpyPointEvent spe = (SpyPointEvent) e.getDetails();
+      assertEquals(expectedMessage, spe.toString());
       assertSame(this, e.getSource());
    }
 
    private PredicateKey createKey(String name, int numArgs) {
-      Term arity = structure("/", atom(name), integerNumber(numArgs));
-      return PredicateKey.createFromNameAndArity(arity);
+      return new PredicateKey(name, numArgs);
    }
 }

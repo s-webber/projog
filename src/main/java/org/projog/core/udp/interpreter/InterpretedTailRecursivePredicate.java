@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.projog.core.PredicateFactory;
+import org.projog.core.SpyPoints.SpyPoint;
 import org.projog.core.term.Term;
 import org.projog.core.term.Unifier;
 import org.projog.core.term.Variable;
@@ -37,8 +38,7 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * @see TailRecursivePredicateMetaData
  */
 final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
-   // TODO doesn't currently respect spypoints
-
+   private final SpyPoint spyPoint;
    private final int numArgs;
    private final Term[] currentQueryArgs;
    private final boolean isRetryable;
@@ -49,8 +49,10 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    private final Term[] secondClauseConsequentArgs;
    private final Term[] secondClauseOriginalTerms;
 
-   InterpretedTailRecursivePredicate(Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs, Term[] firstClauseOriginalTerms,
-               PredicateFactory[] secondClausePredicateFactories, Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms, boolean isRetryable) {
+   InterpretedTailRecursivePredicate(SpyPoint spyPoint, Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs,
+               Term[] firstClauseOriginalTerms, PredicateFactory[] secondClausePredicateFactories, Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms,
+               boolean isRetryable) {
+      this.spyPoint = spyPoint;
       this.numArgs = inputArgs.length;
       this.currentQueryArgs = new Term[numArgs];
       for (int i = 0; i < numArgs; i++) {
@@ -113,6 +115,34 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
       }
 
       return true;
+   }
+
+   @Override
+   protected void logCall() {
+      if (spyPoint != null) {
+         spyPoint.logCall(this, currentQueryArgs);
+      }
+   }
+
+   @Override
+   protected void logRedo() {
+      if (spyPoint != null) {
+         spyPoint.logCall(this, currentQueryArgs);
+      }
+   }
+
+   @Override
+   protected void logExit() {
+      if (spyPoint != null) {
+         spyPoint.logExit(this, currentQueryArgs, 1);
+      }
+   }
+
+   @Override
+   protected void logFail() {
+      if (spyPoint != null) {
+         spyPoint.logFail(this, currentQueryArgs);
+      }
    }
 
    @Override

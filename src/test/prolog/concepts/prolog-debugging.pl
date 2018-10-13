@@ -16,32 +16,32 @@ p(x, y).
 
 %QUERY p(X)
 %OUTPUT
-% [1] CALL p( X )
-% [1] EXIT p( a )
+% [1] CALL p(X)
+% [1] EXIT p(a)
 %
 %OUTPUT
 %ANSWER X = a
 %OUTPUT
-% [1] REDO p( a )
-% [2] CALL p2( 2 )
-% [2] EXIT p2( 2 )
-% [1] EXIT p( b )
+% [1] REDO p(a)
+% [2] CALL p2(2)
+% [2] EXIT p2(2)
+% [1] EXIT p(b)
 %
 %OUTPUT
 %ANSWER X = b
 %OUTPUT
-% [1] REDO p( b )
-% [2] REDO p2( 2 )
-% [2] FAIL p2( 2 )
-% [1] EXIT p( c )
+% [1] REDO p(b)
+% [2] REDO p2(2)
+% [2] FAIL p2(2)
+% [1] EXIT p(c)
 %
 %OUTPUT
 %ANSWER X = c
 
 %QUERY p(d)
 %OUTPUT
-% [1] CALL p( d )
-% [1] FAIL p( d )
+% [1] CALL p(d)
+% [1] FAIL p(d)
 %
 %OUTPUT
 
@@ -76,28 +76,28 @@ p(x, y).
 
 %QUERY p(X)
 %OUTPUT
-% [1] CALL p( X )
-% [1] EXIT p( a )
+% [1] CALL p(X)
+% [1] EXIT p(a)
 %
 %OUTPUT
 %ANSWER X = a
 %OUTPUT
-% [1] REDO p( a )
-% [1] EXIT p( b )
+% [1] REDO p(a)
+% [1] EXIT p(b)
 %
 %OUTPUT
 %ANSWER X = b
 %OUTPUT
-% [1] REDO p( b )
-% [1] EXIT p( c )
+% [1] REDO p(b)
+% [1] EXIT p(c)
 %
 %OUTPUT
 %ANSWER X = c
 
 %QUERY p(d)
 %OUTPUT
-% [1] CALL p( d )
-% [1] FAIL p( d )
+% [1] CALL p(d)
+% [1] FAIL p(d)
 %
 %OUTPUT
 

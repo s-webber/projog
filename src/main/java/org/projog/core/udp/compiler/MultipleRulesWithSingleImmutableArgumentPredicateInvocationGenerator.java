@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ final class MultipleRulesWithSingleImmutableArgumentPredicateInvocationGenerator
    // In common with some other classes in org.projog.core.udp.compiler,
    // this class is large and its intentions not always immediately obvious.
    // CompiledPredicateSourceGeneratorTest (which checks actual content of generated source files)
-   // and the system tests (which check actual behaviour) should give confidence when refactoring. 
+   // and the system tests (which check actual behaviour) should give confidence when refactoring.
 
    @Override
    public void generate(CompiledPredicateWriter g) {
@@ -48,7 +48,7 @@ final class MultipleRulesWithSingleImmutableArgumentPredicateInvocationGenerator
          g.outputIfTrueThenBreak(ctrVarName + ">" + (mrwsia.data.length - 1), r);
          g.classVariables().addAssignedVariable(variableId);
          g.assign(variableId, functionVariableName + ".data[" + ctrVarName + "++]");
-         g.logInlinedPredicatePredicate("Exit", functionVariableName, function);
+         g.logExitInlinedPredicatePredicate(functionVariableName, function, ctrVarName);
       } else {
          Map<Term, String> tmpVars = g.getTermsThatRequireBacktrack(function);
          Map<String, String> variablesToKeepTempVersionOf = g.outputBacktrackTermArguments(tmpVars);
@@ -57,7 +57,7 @@ final class MultipleRulesWithSingleImmutableArgumentPredicateInvocationGenerator
          g.addLine("do {");
          g.outputIfTrueThenBreak(ctrVarName + ">" + (mrwsia.data.length - 1), r);
          g.beginIf(getUnifyStatement(termId, functionVariableName + ".data[" + ctrVarName + "++]"));
-         g.logInlinedPredicatePredicate("Exit", functionVariableName, function);
+         g.logExitInlinedPredicatePredicate(functionVariableName, function, ctrVarName);
          g.writeStatement("break");
          if (arg.isImmutable() == false) {
             g.elseStatement();

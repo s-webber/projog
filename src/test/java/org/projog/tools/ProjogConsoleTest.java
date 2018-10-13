@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,8 +94,8 @@ public class ProjogConsoleTest {
       String path = tempFile.getPath();
       String input = createInput("consult('" + path.replace("\\", "\\\\") + "').", "trace.", "test(X).", ";", ";");
       String expected = createExpectedOutput(PROMPT + "[THREAD-ID] INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "",
-                  PROMPT + "[THREAD-ID] CALL test( X )", "[THREAD-ID] EXIT test( a )", "", "X = a", "", YES + "[THREAD-ID] REDO test( a )", "[THREAD-ID] EXIT test( b )", "",
-                  "X = b", "", YES + "[THREAD-ID] REDO test( b )", "[THREAD-ID] EXIT test( c )", "", "X = c", "", YES);
+                  PROMPT + "[THREAD-ID] CALL test(X)", "[THREAD-ID] EXIT test(a)", "", "X = a", "", YES + "[THREAD-ID] REDO test(a)", "[THREAD-ID] EXIT test(b)", "", "X = b", "",
+                  YES + "[THREAD-ID] REDO test(b)", "[THREAD-ID] EXIT test(c)", "", "X = c", "", YES);
       String actual = getOutput(input);
       compare(expected, actual);
    }

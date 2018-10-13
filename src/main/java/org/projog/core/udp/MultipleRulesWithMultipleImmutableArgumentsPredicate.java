@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implemen
       while (ctr < numClauses) {
          if (TermUtils.unify(args, data[ctr++])) {
             if (isDebugEnabled) {
-               spyPoint.logExit(this, args);
+               spyPoint.logExit(this, args, ctr);
             }
             return true;
          }

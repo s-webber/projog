@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -388,6 +388,22 @@ final class CompiledPredicateSourceGenerator {
       w.beginMethod("protected final boolean matchSecondRule()");
       w.writeStatement("return initRule1()");
       w.endBlock();
+
+      w.beginMethod("protected final void logCall()");
+      logCall();
+      w.endBlock();
+
+      w.beginMethod("protected final void logRedo()");
+      logRedo();
+      w.endBlock();
+
+      w.beginMethod("protected final void logExit()");
+      logExit(1);
+      w.endBlock();
+
+      w.beginMethod("protected final void logFail()");
+      logFail();
+      w.endBlock();
    }
 
    /** Constructs an implementation of {@link org.projog.core.PredicateFactory#getPredicate(Term...)}. */
@@ -450,12 +466,16 @@ final class CompiledPredicateSourceGenerator {
       w.endBlock();
 
       w.beginMethod("static final boolean staticEvaluate(" + getArgsDeclaration() + ")");
-      if (isSpyPointsEnabled()) {
-         w.assign("final boolean " + DEBUG_ENABLED, SPYPOINT + ".isEnabled()");
-      }
+      declareDebugEnabledLocalVariable();
       logCall();
       w.writeStatement("return " + getRuleInitMethodNameCall());
       w.endBlock();
+   }
+
+   private void declareDebugEnabledLocalVariable() {
+      if (isSpyPointsEnabled()) {
+         w.assign("final boolean " + DEBUG_ENABLED, SPYPOINT + ".isEnabled()");
+      }
    }
 
    /**
@@ -509,7 +529,7 @@ final class CompiledPredicateSourceGenerator {
             }
             w.beginIf(getRuleInitMethodNameCall());
             w.assign("clauseCtr", clauseCtr + 1);
-            logExit();
+            logExit(clauseCtr + 1);
             w.returnTrue();
             w.endBlock();
          } else {
@@ -528,7 +548,7 @@ final class CompiledPredicateSourceGenerator {
    private void outputMultiAnswerClauseEvaluateBlock(int clauseCtr) {
       w.beginIf("isRetrying");
       w.beginIf(getRuleRetryMethodName());
-      logExit();
+      logExit(clauseCtr + 1);
       w.returnTrue();
       w.endBlock();
       w.assignFalse("isRetrying");
@@ -541,7 +561,7 @@ final class CompiledPredicateSourceGenerator {
       if (clauseCtr != 0) {
          w.assign("clauseCtr", clauseCtr);
       }
-      logExit();
+      logExit(clauseCtr + 1);
       w.returnTrue();
       w.endBlock();
       w.endBlock();
@@ -586,9 +606,7 @@ final class CompiledPredicateSourceGenerator {
       setCurrentClause(factMetaData().getClause(1));
 
       w.beginMethod("static final boolean staticEvaluate(" + getArgsDeclarationNotFinal() + ")");
-      if (isSpyPointsEnabled()) {
-         w.assign("final boolean " + DEBUG_ENABLED, SPYPOINT + ".isEnabled()");
-      }
+      declareDebugEnabledLocalVariable();
       String ph = "";
       for (int i = 0; i < factMetaData().getNumberArguments(); i++) {
          if (factMetaData().isTailRecursiveArgument(i)) {
@@ -608,7 +626,7 @@ final class CompiledPredicateSourceGenerator {
       String eval = "staticInitRule0(" + getArgsCall() + ph + ")";
       if (isSpyPointsEnabled()) {
          w.beginIf(eval);
-         logExit();
+         logExit(1);
          w.returnTrue();
          w.addLine("} else {");
          logFail();
@@ -632,6 +650,10 @@ final class CompiledPredicateSourceGenerator {
 
       outputInitMethodBody();
 
+      if (factMetaData().isSingleResultPredicate()) {
+         declareDebugEnabledLocalVariable();
+         logExit(1);
+      }
       w.returnTrue();
       w.endBlock();
    }
@@ -895,22 +917,22 @@ final class CompiledPredicateSourceGenerator {
    }
 
    private void logCall() {
-      log("Call");
+      log("Call", -1);
    }
 
    private void logRedo() {
-      log("Redo");
+      log("Redo", -1);
    }
 
-   private void logExit() {
-      log("Exit");
+   private void logExit(int clauseIdx) {
+      log("Exit", clauseIdx);
    }
 
    private void logFail() {
-      log("Fail");
+      log("Fail", -1);
    }
 
-   private void log(String level) {
+   private void log(String level, int clauseIdx) {
       if (isSpyPointsEnabled()) {
          w.beginIf(DEBUG_ENABLED);
          String source = factMetaData().isSingleResultPredicate() || w.isInStaticRecursiveMethodBlock() ? className() + ".class" : "this";
@@ -919,6 +941,13 @@ final class CompiledPredicateSourceGenerator {
          } else {
             source += ", TermUtils.EMPTY_ARRAY";
          }
+
+         if (clauseIdx > 0) {
+            source += ", " + clauseIdx;
+         } else if ("Exit".equals(level)) {
+            throw new IllegalArgumentException(level + " " + clauseIdx);
+         }
+
          w.writeStatement(SPYPOINT + ".log" + level + "(" + source + ")");
          w.endBlock();
       }

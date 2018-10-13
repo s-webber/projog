@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 S. Webber
+ * Copyright 2018 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,39 +19,44 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %FALSE X == Y
+ %QUERY X \== Y
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ %ANSWER
 
- %QUERY X == X
- %ANSWER X=UNINSTANTIATED VARIABLE
+ %FALSE X \== X
 
- %QUERY X = Y, X == Y, Y = 1
+ %FALSE X=Y, X \== Y, Y=1
+
+ %QUERY X \== Y, Y = 1, X = Y
  %ANSWER
  % X=1
  % Y=1
  %ANSWER
 
- %FALSE X == Y, Y = 1, X = Y
-
- %FALSE append([A|B],C) == append(X,Y)
-
- %QUERY append([A|B],C) == append([A|B],C)
+ %QUERY append([A|B],C) \== append(X,Y)
  %ANSWER
  % A=UNINSTANTIATED VARIABLE
  % B=UNINSTANTIATED VARIABLE
  % C=UNINSTANTIATED VARIABLE
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
  %ANSWER
+
+ %FALSE append([A|B],C) \== append([A|B],C)
  */
 /**
- * <code>X==Y</code> - a strict equality test.
+ * <code>X\==Y</code> - a strict equality test.
  * <p>
- * If <code>X</code> can be matched with <code>Y</code> the goal succeeds else the goal fails. A <code>X==Y</code> goal
- * will only consider an uninstantiated variable to be equal to another uninstantiated variable that is already sharing
- * with it.
+ * If <code>X</code> cannot be matched with <code>Y</code> the goal succeeds else the goal fails. A <code>X\==Y</code>
+ * goal will only consider an uninstantiated variable to be equal to another uninstantiated variable that is already
+ * sharing with it.
  * </p>
  */
-public final class StrictEquality extends AbstractSingletonPredicate {
+public final class NotStrictEquality extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      return arg1.strictEquality(arg2);
+      return !arg1.strictEquality(arg2);
    }
 }

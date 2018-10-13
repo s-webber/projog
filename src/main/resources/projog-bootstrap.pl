@@ -31,6 +31,7 @@
 % compare
 ?- pj_add_predicate('='/2, 'org.projog.core.function.compare.Equal').
 ?- pj_add_predicate('=='/2, 'org.projog.core.function.compare.StrictEquality').
+?- pj_add_predicate('\\=='/2, 'org.projog.core.function.compare.NotStrictEquality').
 ?- pj_add_predicate('=:='/2, 'org.projog.core.function.compare.NumericEquality').
 ?- pj_add_predicate('=\\='/2, 'org.projog.core.function.compare.NumericInequality').
 ?- pj_add_predicate('<'/2, 'org.projog.core.function.compare.NumericLessThan').
@@ -203,6 +204,7 @@
 ?- op(700, xfx, '@>').
 ?- op(700, xfx, '@>=').
 ?- op(700, xfx, '\\=').
+?- op(700, xfx, '\\==').
 ?- op(700, xfx, is).
 ?- op(600, xfy, ':').
 ?- op(500, yfx, '+').

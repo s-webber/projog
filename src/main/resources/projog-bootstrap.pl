@@ -53,6 +53,15 @@
 ?- pj_add_predicate('/'('\\+', 1), 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(not/1, 'org.projog.core.function.compound.Not').
 ?- pj_add_predicate(call/1, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/2, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/3, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/4, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/5, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/6, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/7, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/8, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/9, 'org.projog.core.function.compound.Call').
+?- pj_add_predicate(call/10, 'org.projog.core.function.compound.Call').
 ?- pj_add_predicate(time/1, 'org.projog.core.function.compound.Call').
 ?- pj_add_predicate(once/1, 'org.projog.core.function.compound.Once').
 ?- pj_add_predicate(bagof/3, 'org.projog.core.function.compound.BagOf').

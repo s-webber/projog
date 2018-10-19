@@ -78,6 +78,8 @@
 ?- pj_add_predicate(number_chars/2, 'org.projog.core.function.construct.TermSplit/numberChars').
 ?- pj_add_predicate(number_codes/2, 'org.projog.core.function.construct.TermSplit/numberCodes').
 ?- pj_add_predicate(atom_concat/3, 'org.projog.core.function.construct.AtomConcat').
+?- pj_add_predicate(numbervars/1, 'org.projog.core.function.construct.NumberVars').
+?- pj_add_predicate(numbervars/3, 'org.projog.core.function.construct.NumberVars').
 ?- pj_add_predicate(copy_term/2, 'org.projog.core.function.construct.CopyTerm').
 
 % debug

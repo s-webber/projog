@@ -19,7 +19,6 @@ import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -133,8 +132,8 @@ public final class SpyPoints {
       }
 
       /** Generates an event of type {@link ProjogEventType#EXIT} */
-      public void logExit(Object source, Term[] args, int clauseIdx) {
-         log(ProjogEventType.EXIT, source, args, clauseIdx);
+      public void logExit(Object source, Term[] args, int clauseNumber) {
+         log(ProjogEventType.EXIT, source, args, clauseNumber);
       }
 
       /** Generates an event of type {@link ProjogEventType#FAIL} */
@@ -156,9 +155,10 @@ public final class SpyPoints {
    public class SpyPointEvent {
       private final PredicateKey key;
       private final Term[] args;
-      private int clauseIdx;
+      private final ClauseModel clauseModel;
+      private int clauseNumber;
 
-      private SpyPointEvent(PredicateKey key, Term[] args, int clauseIdx) {
+      private SpyPointEvent(PredicateKey key, Term[] args, int clauseNumber) {
          this.key = key;
          for (int i = 0; i < args.length; i++) {
             if (args[i] == null) {
@@ -166,7 +166,16 @@ public final class SpyPoints {
             }
          }
          this.args = TermUtils.copy(args);
-         this.clauseIdx = clauseIdx;
+         this.clauseNumber = clauseNumber;
+
+         if (clauseNumber != -1) {
+            Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
+            UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
+            // clauseNumber starts at 1 / getClauseModel starts at 0
+            this.clauseModel = userDefinedPredicate.getClauseModel(clauseNumber - 1);
+         } else {
+            this.clauseModel = null;
+         }
       }
 
       public PredicateKey getPredicateKey() {
@@ -182,29 +191,22 @@ public final class SpyPoints {
          }
       }
 
-      public int getClauseIdx() {
-         if (clauseIdx < 1) {
+      public int getClauseNumber() {
+         if (clauseNumber == -1) {
+            throw new IllegalStateException("No clause number specified for event");
+         }
+         return clauseNumber;
+      }
+
+      public ClauseModel getClauseModel() {
+         if (clauseModel == null) {
             throw new IllegalStateException("No clause specified for event");
          }
-         return clauseIdx;
+         return clauseModel;
       }
 
       public String getFormattedClause() {
          return termFormatter.toString(getClauseModel().getOriginal());
-      }
-
-      private ClauseModel getClauseModel() {
-         if (clauseIdx < 1) {
-            throw new IllegalStateException("No clause specified for event");
-         }
-
-         Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
-         UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
-         Iterator<ClauseModel> itr = userDefinedPredicate.getImplications();
-         for (int i = 1; i < clauseIdx; i++) {
-            itr.next();
-         }
-         return itr.next();
       }
 
       @Override

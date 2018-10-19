@@ -40,6 +40,8 @@ import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
+import org.projog.core.udp.ClauseModel;
+import org.projog.core.udp.DynamicUserDefinedPredicateFactory;
 
 public class SpyPointsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
@@ -185,15 +187,19 @@ public class SpyPointsTest {
       };
       getProjogEventsObservable(kb).addObserver(observer);
 
+      PredicateKey key = createKey("test", 1);
+      DynamicUserDefinedPredicateFactory pf = new DynamicUserDefinedPredicateFactory(kb, key);
+      pf.addFirst(ClauseModel.createClauseModel(structure("test", createAnonymousVariable())));
+      kb.addUserDefinedPredicate(pf);
+
       SpyPoints testObject = new SpyPoints(kb);
-      PredicateKey key = createKey("test", 2);
       SpyPoints.SpyPoint sp = testObject.getSpyPoint(key);
 
       // make a number of log calls to the spy point -
       // the observer should not be updated with any of them as the spy point is not set
       assertFalse(sp.isSet());
       sp.logCall(this, new Term[] {atom("a")});
-      sp.logExit(this, new Term[] {atom("b")}, 0);
+      sp.logExit(this, new Term[] {atom("b")}, 1);
       sp.logFail(this, new Term[] {atom("c")});
       sp.logRedo(this, new Term[] {atom("d")});
       assertTrue(events.isEmpty());

@@ -182,6 +182,7 @@
 ?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
 ?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
 ?- pj_add_calculatable('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
+?- pj_add_calculatable('\\/'/2, 'org.projog.core.function.math.BitwiseOr').
 ?- pj_add_calculatable('>>'/2, 'org.projog.core.function.math.ShiftRight').
 ?- pj_add_calculatable(max/2, 'org.projog.core.function.math.Max').
 ?- pj_add_calculatable(abs/1, 'org.projog.core.function.math.Abs').
@@ -224,5 +225,6 @@
 ?- op(400, yfx, mod).
 ?- op(400, yfx, rem).
 ?- op(400, yfx, '/\\').
+?- op(400, yfx, '\\/').
 ?- op(400, yfx, '>>').
 ?- op(200, fy, '-').

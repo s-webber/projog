@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +24,8 @@ import org.projog.core.term.TermType;
 /**
  * Represents the structure of a {@link Term}.
  * <p>
- * Defines {@link Term}s by their name (functor) and number of arguments (arity). This "metadata" or
- * "descriptor information" allows rules whose heads (consequences) share the same structure to be grouped together.
+ * Defines {@link Term}s by their name (functor) and number of arguments (arity). This "metadata" or "descriptor
+ * information" allows rules whose heads (consequences) share the same structure to be grouped together.
  * <p>
  * As {@link org.projog.core.term.Atom} and {@link org.projog.core.term.Structure} are the only subclasses of
  * {@link org.projog.core.term.Term} that can be the head (consequent) of a rule they are the only subclasses of
@@ -39,7 +39,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
 
    /**
     * Returns a {@code PredicateKey} for the specified term.
-    * 
+    *
     * @param t a term the returned {@code PredicateKey} should represent (needs to have a {@link Term#getType()} value
     * of {@link TermType#ATOM} or {@link TermType#STRUCTURE})
     * @return a {@code PredicateKey} for the specified term.
@@ -61,14 +61,10 @@ public final class PredicateKey implements Comparable<PredicateKey> {
    }
 
    /**
-    * @param t must be either an atom representing the predicate name, or a structure named {@code /} where the first
-    * argument is the name of the predicate to represent and the second (and final) argument is the arity.
+    * @param t must be a structure named {@code /} where the first argument is the name of the predicate to represent
+    * and the second (and final) argument is the arity.
     */
    public static PredicateKey createFromNameAndArity(Term t) {
-      if (t.getType() == TermType.ATOM) {
-         return createForTerm(t);
-      }
-
       if (t.getType() != TermType.STRUCTURE) {
          throw new ProjogException(getInvalidTypeExceptionMessage(t));
       }

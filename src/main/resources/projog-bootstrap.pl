@@ -13,8 +13,8 @@
 ?- op(400, yfx, '/').
 
 % boolean
-?- pj_add_predicate(true, 'org.projog.core.function.bool.True').
-?- pj_add_predicate(fail, 'org.projog.core.function.bool.Fail').
+?- pj_add_predicate(true/0, 'org.projog.core.function.bool.True').
+?- pj_add_predicate(fail/0, 'org.projog.core.function.bool.Fail').
 
 % classify
 ?- pj_add_predicate(var/1, 'org.projog.core.function.classify.IsVar').
@@ -83,10 +83,10 @@
 ?- pj_add_predicate(copy_term/2, 'org.projog.core.function.construct.CopyTerm').
 
 % debug
-?- pj_add_predicate(debugging, 'org.projog.core.function.debug.Debugging').
-?- pj_add_predicate(nodebug, 'org.projog.core.function.debug.NoDebug').
-?- pj_add_predicate(trace, 'org.projog.core.function.debug.Trace').
-?- pj_add_predicate(notrace, 'org.projog.core.function.debug.NoTrace').
+?- pj_add_predicate(debugging/0, 'org.projog.core.function.debug.Debugging').
+?- pj_add_predicate(nodebug/0, 'org.projog.core.function.debug.NoDebug').
+?- pj_add_predicate(trace/0, 'org.projog.core.function.debug.Trace').
+?- pj_add_predicate(notrace/0, 'org.projog.core.function.debug.NoTrace').
 ?- pj_add_predicate(spy/1, 'org.projog.core.function.debug.AlterSpyPoint/spy').
 ?- pj_add_predicate(nospy/1, 'org.projog.core.function.debug.AlterSpyPoint/noSpy').
 
@@ -95,15 +95,15 @@
 ?- pj_add_predicate(current_input/1, 'org.projog.core.function.io.CurrentInput').
 ?- pj_add_predicate(seeing/1, 'org.projog.core.function.io.CurrentInput').
 ?- pj_add_predicate(see/1, 'org.projog.core.function.io.See').
-?- pj_add_predicate(seen, 'org.projog.core.function.io.Seen').
+?- pj_add_predicate(seen/0, 'org.projog.core.function.io.Seen').
 ?- pj_add_predicate(tab/1, 'org.projog.core.function.io.Tab').
 ?- pj_add_predicate(tell/1, 'org.projog.core.function.io.Tell').
-?- pj_add_predicate(told, 'org.projog.core.function.io.Told').
+?- pj_add_predicate(told/0, 'org.projog.core.function.io.Told').
 ?- pj_add_predicate(current_output/1, 'org.projog.core.function.io.CurrentOutput').
 ?- pj_add_predicate(get_char/1, 'org.projog.core.function.io.GetChar').
 ?- pj_add_predicate(get_code/1, 'org.projog.core.function.io.GetCode').
 ?- pj_add_predicate(get0/1, 'org.projog.core.function.io.GetCode').
-?- pj_add_predicate(nl, 'org.projog.core.function.io.NewLine').
+?- pj_add_predicate(nl/0, 'org.projog.core.function.io.NewLine').
 ?- pj_add_predicate(open/3, 'org.projog.core.function.io.Open').
 ?- pj_add_predicate(put_char/1, 'org.projog.core.function.io.PutChar').
 ?- pj_add_predicate(read/1, 'org.projog.core.function.io.Read').
@@ -140,9 +140,9 @@
 ?- pj_add_predicate(is/2, 'org.projog.core.function.math.Is').
 
 % flow control
-?- pj_add_predicate(repeat, 'org.projog.core.function.flow.RepeatInfinitely').
+?- pj_add_predicate(repeat/0, 'org.projog.core.function.flow.RepeatInfinitely').
 ?- pj_add_predicate(repeat/1, 'org.projog.core.function.flow.RepeatSetAmount').
-?- pj_add_predicate('!', 'org.projog.core.function.flow.Cut').
+?- pj_add_predicate('!'/0, 'org.projog.core.function.flow.Cut').
 
 % list
 ?- pj_add_predicate(length/2, 'org.projog.core.function.list.Length').

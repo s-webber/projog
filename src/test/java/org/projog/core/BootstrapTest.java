@@ -53,11 +53,11 @@ public class BootstrapTest {
    }
 
    @Test
-   public void testCalculatables() throws Exception {
+   public void testArithmeticOperators() throws Exception {
       List<Term> terms = getQueriesByKey(ADD_CALCULATABLE_KEY);
       assertFalse(terms.isEmpty());
       for (Term t : terms) {
-         assertCalculatable(t.getArgument(1));
+         assertArithmeticOperator(t.getArgument(1));
       }
    }
 
@@ -89,10 +89,10 @@ public class BootstrapTest {
       }
    }
 
-   private void assertCalculatable(Term className) throws Exception {
+   private void assertArithmeticOperator(Term className) throws Exception {
       Class<?> c = Class.forName(className.getName());
       Object o = c.newInstance();
-      assertTrue(o instanceof Calculatable);
+      assertTrue(o instanceof ArithmeticOperator);
       assertFinal(o);
    }
 

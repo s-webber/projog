@@ -57,7 +57,7 @@ package org.projog.core.function.math;
 /**
  * <code>**</code> - calculates the result of the first argument raised to the power of the second argument.
  */
-public final class Power extends AbstractTwoArgumentsCalculatable {
+public final class Power extends AbstractBinaryArithmeticOperator {
    @Override
    protected double calculateDouble(double n1, double n2) {
       return Math.pow(n1, n2);

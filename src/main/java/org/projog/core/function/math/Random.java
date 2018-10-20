@@ -29,7 +29,7 @@ import org.projog.core.term.Numeric;
 /**
  * <code>random(X)</code> Evaluate to a random integer i for which 0 =< i < X.
  */
-public final class Random extends AbstractCalculatable {
+public final class Random extends AbstractArithmeticOperator {
    @Override
    public Numeric calculate(Numeric n) {
       long max = n.getLong();

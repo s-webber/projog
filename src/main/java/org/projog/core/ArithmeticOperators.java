@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,57 +26,57 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.TermUtils;
 
 /**
- * Maintains a collection of {@link Calculatable} instances.
+ * Maintains a collection of {@link ArithmeticOperator} instances.
  * <p>
- * This class provides a mechanism for "plugging in" or "injecting" implementations of {@link Calculatable} at runtime.
- * This mechanism provides an easy way to configure and extend the arithmetic operations supported by Projog.
+ * This class provides a mechanism for "plugging in" or "injecting" implementations of {@link ArithmeticOperator} at
+ * runtime. This mechanism provides an easy way to configure and extend the arithmetic operations supported by Projog.
  * <p>
- * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code CalculatableFactory} instance.
+ * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ArithmeticOperators} instance.
  */
-public final class Calculatables {
+public final class ArithmeticOperators {
    private final KnowledgeBase kb;
    private final Object lock = new Object();
-   private final Map<PredicateKey, String> calculatableClassNames = new HashMap<>();
-   private final Map<PredicateKey, Calculatable> calculatableInstances = new HashMap<>();
+   private final Map<PredicateKey, String> operatorClassNames = new HashMap<>();
+   private final Map<PredicateKey, ArithmeticOperator> operatorInstances = new HashMap<>();
 
-   public Calculatables(KnowledgeBase kb) {
+   public ArithmeticOperators(KnowledgeBase kb) {
       this.kb = kb;
    }
 
    /**
-    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
-    * 
-    * @param calculatable The instance of {@code Calculatable} to be associated with {@code key}.
+    * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
+    *
+    * @param calculatable The instance of {@code ArithmeticOperator} to be associated with {@code key}.
     */
-   public void addCalculatable(PredicateKey key, Calculatable calculatable) {
+   public void addArithmeticOperator(PredicateKey key, ArithmeticOperator calculatable) {
       synchronized (lock) {
-         if (calculatableClassNames.containsKey(key)) {
+         if (operatorClassNames.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
          } else {
-            calculatableClassNames.put(key, calculatable.getClass().getName());
-            calculatableInstances.put(key, calculatable);
+            operatorClassNames.put(key, calculatable.getClass().getName());
+            operatorInstances.put(key, calculatable);
          }
       }
    }
 
    /**
-    * Associates a {@link Calculatable} with this {@code KnowledgeBase}.
-    * 
-    * @param calculatableClassName The class name of the {@code Calculatable} to be associated with {@code key}.
+    * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
+    *
+    * @param calculatableClassName The class name of the {@link ArithmeticOperator} to be associated with {@code key}.
     */
-   public void addCalculatable(PredicateKey key, String calculatableClassName) {
+   public void addArithmeticOperator(PredicateKey key, String calculatableClassName) {
       synchronized (lock) {
-         if (calculatableClassNames.containsKey(key)) {
+         if (operatorClassNames.containsKey(key)) {
             throw new ProjogException("Already defined calculatable: " + key);
          } else {
-            calculatableClassNames.put(key, calculatableClassName);
+            operatorClassNames.put(key, calculatableClassName);
          }
       }
    }
 
    /**
     * Returns the result of evaluating the specified arithmetic expression.
-    * 
+    *
     * @param t a {@code Term} that can be evaluated as an arithmetic expression (e.g. a {@code Structure} of the form
     * {@code +(1,2)} or a {@code Numeric})
     * @return the result of evaluating the specified arithmetic expression
@@ -98,38 +98,38 @@ public final class Calculatables {
    }
 
    private Numeric calculate(Term term, Term[] args) {
-      return getCalculatable(term).calculate(args);
+      return getArithmeticOperator(term).calculate(args);
    }
 
-   private Calculatable getCalculatable(Term term) {
+   private ArithmeticOperator getArithmeticOperator(Term term) {
       PredicateKey key = PredicateKey.createForTerm(term);
-      Calculatable e = calculatableInstances.get(key);
+      ArithmeticOperator e = operatorInstances.get(key);
       if (e != null) {
          return e;
-      } else if (calculatableClassNames.containsKey(key)) {
-         return instantiateCalculatable(key);
+      } else if (operatorClassNames.containsKey(key)) {
+         return instantiateArithmeticOperator(key);
       } else {
-         throw new ProjogException("Cannot find calculatable: " + key);
+         throw new ProjogException("Cannot find arithmetic operator: " + key);
       }
    }
 
-   private Calculatable instantiateCalculatable(PredicateKey key) {
+   private ArithmeticOperator instantiateArithmeticOperator(PredicateKey key) {
       synchronized (lock) {
-         Calculatable calculatable = calculatableInstances.get(key);
+         ArithmeticOperator calculatable = operatorInstances.get(key);
          if (calculatable == null) {
-            calculatable = instantiateCalculatable(calculatableClassNames.get(key));
+            calculatable = instantiateArithmeticOperator(operatorClassNames.get(key));
             calculatable.setKnowledgeBase(kb);
-            calculatableInstances.put(key, calculatable);
+            operatorInstances.put(key, calculatable);
          }
          return calculatable;
       }
    }
 
-   private Calculatable instantiateCalculatable(String className) {
+   private ArithmeticOperator instantiateArithmeticOperator(String className) {
       try {
          return instantiate(className);
       } catch (Exception e) {
-         throw new RuntimeException("Could not create new Calculatable using: " + className, e);
+         throw new RuntimeException("Could not create new ArithmeticOperator using: " + className, e);
       }
    }
 }

@@ -15,9 +15,9 @@
  */
 package org.projog.core.function.construct;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
@@ -197,7 +197,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
    private final boolean firstArgNumeric;
    private final boolean convertToCharCodes;
 
-   private Calculatables calculatables;
+   private ArithmeticOperators operators;
 
    public static TermSplit atomChars() {
       return new TermSplit(false, false);
@@ -222,7 +222,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
 
    @Override
    public final void init() {
-      calculatables = getCalculatables(getKnowledgeBase());
+      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    @Override
@@ -307,7 +307,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
          String name = t.getName();
          sb.append(stringToChar(name));
       } else if (type.isNumeric()) {
-         long n = calculatables.getNumeric(t).getLong();
+         long n = operators.getNumeric(t).getLong();
          sb.append(numericToChar(n));
       } else if (type != TermType.EMPTY_LIST) {
          throw new ProjogException("Unexpected type in list: " + type);

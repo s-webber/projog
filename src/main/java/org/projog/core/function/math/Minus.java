@@ -21,7 +21,7 @@ package org.projog.core.function.math;
 /**
  * <code>-</code> - minus operator.
  */
-public final class Minus extends AbstractOneArgumentCalculatable {
+public final class Minus extends AbstractUnaryArithmeticOperator {
    @Override
    protected double calculateDouble(double n) {
       return -n;

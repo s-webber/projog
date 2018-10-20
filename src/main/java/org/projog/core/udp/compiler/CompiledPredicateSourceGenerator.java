@@ -121,7 +121,7 @@ final class CompiledPredicateSourceGenerator {
       }
 
       if (w.isNeedsCalculatablesStaticVariable()) {
-         w.writeStatement("private static Calculatables c");
+         w.writeStatement("private static ArithmeticOperators c");
       }
 
       for (CompiledPredicateVariables.PredicateFactoryStaticVariable v : classVariables().getRequiredPredicateFactories()) {
@@ -199,7 +199,7 @@ final class CompiledPredicateSourceGenerator {
          w.assign("kb", "_kb");
       }
       if (w.isNeedsCalculatablesStaticVariable()) {
-         w.assign("c", "KnowledgeBaseUtils.getCalculatables(_kb)");
+         w.assign("c", "KnowledgeBaseUtils.getArithmeticOperators(_kb)");
       }
 
       if (isSpyPointsEnabled()) {

@@ -37,7 +37,7 @@ package org.projog.core.function.math;
 /**
  * <code>&gt;&gt;</code> - right shift bits.
  */
-public final class ShiftRight extends AbstractTwoIntegerArgumentsCalculatable {
+public final class ShiftRight extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long n1, long n2) {
       return n1 >> n2;

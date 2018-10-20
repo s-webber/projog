@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,12 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
@@ -36,10 +36,10 @@ import org.projog.core.term.Term;
  %QUERY flag(p(a), X, 5)
  %ANSWER X=20
  %TRUE flag(p(b), 5, 7)
- 
+
  %FALSE flag(p, 1, 1)
  %TRUE flag(p, 0, 1)
- 
+
  %QUERY flag(a(a), X, 25)
  %ANSWER X=0
  %QUERY flag(a(b), X, X+1)
@@ -59,11 +59,11 @@ import org.projog.core.term.Term;
  */
 public final class Flag extends AbstractSingletonPredicate {
    private final Map<PredicateKey, Numeric> flags = new HashMap<>();
-   private Calculatables calculatables;
+   private ArithmeticOperators operators;
 
    @Override
    public void init() {
-      calculatables = getCalculatables(getKnowledgeBase());
+      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    @Override
@@ -91,6 +91,6 @@ public final class Flag extends AbstractSingletonPredicate {
    }
 
    private void put(PredicateKey pk, Term value) {
-      flags.put(pk, calculatables.getNumeric(value));
+      flags.put(pk, operators.getNumeric(value));
    }
 }

@@ -115,7 +115,7 @@
 ?- pj_add_predicate(writef/1, 'org.projog.core.function.io.Writef').
 
 % kb (knowledge base)
-?- pj_add_predicate(pj_add_calculatable/2, 'org.projog.core.function.kb.AddCalculatable').
+?- pj_add_predicate(pj_add_arithmetic_operator/2, 'org.projog.core.function.kb.AddArithmeticOperator').
 ?- pj_add_predicate(asserta/1, 'org.projog.core.function.kb.Assert/assertA').
 ?- pj_add_predicate(assertz/1, 'org.projog.core.function.kb.Assert/assertZ').
 ?- pj_add_predicate(assert/1, 'org.projog.core.function.kb.Assert/assertZ').
@@ -173,22 +173,22 @@
 ?- pj_add_predicate(convert_time/2, 'org.projog.core.function.time.ConvertTime').
 
 % numerical operations
-?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddArithmeticFunction').
-?- pj_add_calculatable('+'/2, 'org.projog.core.function.math.Add').
-?- pj_add_calculatable('/'('-', 1), 'org.projog.core.function.math.Minus').
-?- pj_add_calculatable('/'('-', 2), 'org.projog.core.function.math.Subtract').
-?- pj_add_calculatable('/'/2, 'org.projog.core.function.math.Divide').
-?- pj_add_calculatable('//'/2, 'org.projog.core.function.math.IntegerDivide').
-?- pj_add_calculatable('*'/2, 'org.projog.core.function.math.Multiply').
-?- pj_add_calculatable('**'/2, 'org.projog.core.function.math.Power').
-?- pj_add_calculatable(mod/2, 'org.projog.core.function.math.Modulo').
-?- pj_add_calculatable(rem/2, 'org.projog.core.function.math.Remainder').
-?- pj_add_calculatable(random/1, 'org.projog.core.function.math.Random').
-?- pj_add_calculatable('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
-?- pj_add_calculatable('\\/'/2, 'org.projog.core.function.math.BitwiseOr').
-?- pj_add_calculatable('>>'/2, 'org.projog.core.function.math.ShiftRight').
-?- pj_add_calculatable(max/2, 'org.projog.core.function.math.Max').
-?- pj_add_calculatable(abs/1, 'org.projog.core.function.math.Abs').
+?- pj_add_predicate(arithmetic_function/1, 'org.projog.core.function.math.AddUserDefinedArithmeticOperator').
+?- pj_add_arithmetic_operator('+'/2, 'org.projog.core.function.math.Add').
+?- pj_add_arithmetic_operator('/'('-', 1), 'org.projog.core.function.math.Minus').
+?- pj_add_arithmetic_operator('/'('-', 2), 'org.projog.core.function.math.Subtract').
+?- pj_add_arithmetic_operator('/'/2, 'org.projog.core.function.math.Divide').
+?- pj_add_arithmetic_operator('//'/2, 'org.projog.core.function.math.IntegerDivide').
+?- pj_add_arithmetic_operator('*'/2, 'org.projog.core.function.math.Multiply').
+?- pj_add_arithmetic_operator('**'/2, 'org.projog.core.function.math.Power').
+?- pj_add_arithmetic_operator(mod/2, 'org.projog.core.function.math.Modulo').
+?- pj_add_arithmetic_operator(rem/2, 'org.projog.core.function.math.Remainder').
+?- pj_add_arithmetic_operator(random/1, 'org.projog.core.function.math.Random').
+?- pj_add_arithmetic_operator('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
+?- pj_add_arithmetic_operator('\\/'/2, 'org.projog.core.function.math.BitwiseOr').
+?- pj_add_arithmetic_operator('>>'/2, 'org.projog.core.function.math.ShiftRight').
+?- pj_add_arithmetic_operator(max/2, 'org.projog.core.function.math.Max').
+?- pj_add_arithmetic_operator(abs/1, 'org.projog.core.function.math.Abs').
 
 % definite clause grammers (DCG)
 ?- op(1200, xfx, '-->').

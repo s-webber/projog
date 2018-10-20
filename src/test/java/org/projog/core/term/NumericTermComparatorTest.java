@@ -22,18 +22,18 @@ import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
 public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final Calculatables calculatables = getCalculatables(kb);
+   private final ArithmeticOperators calculatables = getArithmeticOperators(kb);
 
    @Test
    public void testCompareDecimalValues() {
@@ -135,13 +135,13 @@ public class NumericTermComparatorTest {
          NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), calculatables);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: test", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: test", e.getMessage());
       }
       try {
          NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, calculatables);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: ~/2", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: ~/2", e.getMessage());
       }
    }
 

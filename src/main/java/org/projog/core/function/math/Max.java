@@ -50,7 +50,7 @@ import org.projog.core.term.Numeric;
 /**
  * <code>max</code> - finds the maximum of two numbers.
  */
-public final class Max extends AbstractCalculatable {
+public final class Max extends AbstractArithmeticOperator {
    @Override
    protected Numeric calculate(Numeric n1, Numeric n2) {
       if (n1.getDouble() > n2.getDouble()) {

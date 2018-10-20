@@ -23,9 +23,9 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.TermType;
 
 /**
- * A template for {@code Calculatable}s that accept two arguments of type {@link TermType#INTEGER}.
+ * A template for {@code ArithmeticOperator}s that accept two arguments of type {@link TermType#INTEGER}.
  */
-public abstract class AbstractTwoIntegerArgumentsCalculatable extends AbstractCalculatable {
+public abstract class AbstractBinaryIntegerArithmeticOperator extends AbstractArithmeticOperator {
    @Override
    public final Numeric calculate(Numeric n1, Numeric n2) {
       final long i1 = toLong(n1);

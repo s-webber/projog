@@ -15,12 +15,12 @@
  */
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
 import java.util.Arrays;
 
-import org.projog.core.Calculatable;
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperator;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -38,7 +38,7 @@ import org.projog.core.term.Variable;
  %ANSWER X=9
 
  %QUERY X is squared(3)
- %ERROR Cannot find calculatable: squared/1
+ %ERROR Cannot find arithmetic operator: squared/1
 
  %TRUE arithmetic_function(squared/1)
 
@@ -50,31 +50,31 @@ import org.projog.core.term.Variable;
  * <p>
  * Allows the predicate defined by <code>X</code> to be used as an arithmetic function.
  */
-public final class AddArithmeticFunction extends AbstractSingletonPredicate {
-   private Calculatables calculatables;
+public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPredicate {
+   private ArithmeticOperators operators;
 
    @Override
    public void init() {
-      calculatables = getCalculatables(getKnowledgeBase());
+      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
-      calculatables.addCalculatable(key, createCalculatable(key));
+      operators.addArithmeticOperator(key, createArithmeticOperator(key));
       return true;
    }
 
-   private ArithmeticFunction createCalculatable(final PredicateKey key) {
-      return new ArithmeticFunction(getKnowledgeBase(), key);
+   private UserDefinedArithmeticOperator createArithmeticOperator(final PredicateKey key) {
+      return new UserDefinedArithmeticOperator(getKnowledgeBase(), key);
    }
 
-   private static class ArithmeticFunction implements Calculatable {
+   private static class UserDefinedArithmeticOperator implements ArithmeticOperator {
       final KnowledgeBase kb;
       final int numArgs;
       final PredicateKey key;
 
-      ArithmeticFunction(KnowledgeBase kb, PredicateKey originalKey) {
+      UserDefinedArithmeticOperator(KnowledgeBase kb, PredicateKey originalKey) {
          this.kb = kb;
          this.numArgs = originalKey.getNumArgs();
          this.key = new PredicateKey(originalKey.getName(), numArgs + 1);

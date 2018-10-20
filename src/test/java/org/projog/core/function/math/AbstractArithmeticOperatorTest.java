@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,9 +33,9 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
-public class AbstractCalculatableTest {
-   // a non-abstract implementation of AbstractPredicate (so we can create and test it) 
-   static class DummyCalculatable extends AbstractCalculatable {
+public class AbstractArithmeticOperatorTest {
+   // a non-abstract implementation of ArithmeticOperator (so we can create and test it)
+   static class DummyArithmeticOperator extends AbstractArithmeticOperator {
    }
 
    @Test
@@ -47,12 +47,13 @@ public class AbstractCalculatableTest {
 
    private void assertWrongNumberOfArgumentsException(int numberOfArguments) {
       try {
-         DummyCalculatable c = new DummyCalculatable();
+         DummyArithmeticOperator c = new DummyArithmeticOperator();
          c.setKnowledgeBase(createKnowledgeBase());
          c.calculate(createArgs(numberOfArguments, integerNumber()));
          fail();
       } catch (IllegalArgumentException e) {
-         String expectedMessage = "The Calculatable: class org.projog.core.function.math.AbstractCalculatableTest$DummyCalculatable does next accept the number of arguments: " + numberOfArguments;
+         String expectedMessage = "The ArithmeticOperator: class org.projog.core.function.math.AbstractArithmeticOperatorTest$DummyArithmeticOperator does next accept the number of arguments: "
+                                  + numberOfArguments;
          assertEquals(expectedMessage, e.getMessage());
       }
    }
@@ -60,7 +61,7 @@ public class AbstractCalculatableTest {
    @Test
    public void testOneArg() {
       final Numeric expected = integerNumber(14);
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1) {
             return expected;
@@ -74,7 +75,7 @@ public class AbstractCalculatableTest {
    @Test
    public void testTwoArgs() {
       final Numeric expected = integerNumber(14);
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1, Numeric n2) {
             return expected;
@@ -89,7 +90,7 @@ public class AbstractCalculatableTest {
 
    @Test
    public void testInvalidArgument() {
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1) {
             return n1;
@@ -103,7 +104,7 @@ public class AbstractCalculatableTest {
 
    @Test
    public void testInvalidArguments() {
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1, Numeric n2) {
             return n1;
@@ -119,16 +120,16 @@ public class AbstractCalculatableTest {
       assertUnexpectedVariable(c, variable(), integerNumber());
    }
 
-   private void assertUnexpectedAtom(AbstractCalculatable c, Term... args) {
+   private void assertUnexpectedAtom(AbstractArithmeticOperator c, Term... args) {
       try {
          c.calculate(new Term[] {atom()});
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find calculatable: test", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: test", e.getMessage());
       }
    }
 
-   private void assertUnexpectedVariable(AbstractCalculatable c, Term... args) {
+   private void assertUnexpectedVariable(AbstractArithmeticOperator c, Term... args) {
       try {
          c.calculate(args);
          fail();
@@ -139,7 +140,7 @@ public class AbstractCalculatableTest {
 
    @Test
    public void testArithmeticFunctionArgument() {
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1) {
             return new IntegerNumber(n1.getLong() + 5);
@@ -153,7 +154,7 @@ public class AbstractCalculatableTest {
 
    @Test
    public void testArithmeticFunctionArguments() {
-      final AbstractCalculatable c = new AbstractCalculatable() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
          @Override
          public Numeric calculate(Numeric n1, Numeric n2) {
             return new IntegerNumber(n1.getLong() - n2.getLong());

@@ -15,12 +15,12 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 
 import java.io.PrintStream;
 
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -63,17 +63,17 @@ import org.projog.core.term.Term;
  */
 public final class Tab extends AbstractSingletonPredicate {
    private FileHandles fileHandles;
-   private Calculatables calculatables;
+   private ArithmeticOperators operators;
 
    @Override
    protected void init() {
       fileHandles = getFileHandles(getKnowledgeBase());
-      calculatables = getCalculatables(getKnowledgeBase());
+      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    @Override
    public boolean evaluate(Term arg) {
-      long numberOfSpaces = calculatables.getNumeric(arg).getLong();
+      long numberOfSpaces = operators.getNumeric(arg).getLong();
       PrintStream os = fileHandles.getCurrentOutputStream();
       for (int i = 0; i < numberOfSpaces; i++) {
          os.print(' ');

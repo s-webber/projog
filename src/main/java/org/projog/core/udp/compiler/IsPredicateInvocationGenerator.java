@@ -15,7 +15,7 @@
  */
 package org.projog.core.udp.compiler;
 
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.udp.compiler.CompiledPredicateSourceGeneratorUtils.getUnifyStatement;
 
 import java.util.HashMap;
@@ -153,7 +153,7 @@ final class IsPredicateInvocationGenerator implements PredicateInvocationGenerat
    }
 
    private Numeric getNumeric(CompiledPredicateWriter g, Term t) {
-      return getCalculatables(g.knowledgeBase()).getNumeric(t);
+      return getArithmeticOperators(g.knowledgeBase()).getNumeric(t);
    }
 
    private static String getNumeric(final String variableId, final CompiledPredicateWriter g) {

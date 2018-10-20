@@ -43,7 +43,7 @@ package org.projog.core.function.math;
 /**
  * <code>/\</code> - performs bitwise addition.
  */
-public final class BitwiseAnd extends AbstractTwoIntegerArgumentsCalculatable {
+public final class BitwiseAnd extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long n1, long n2) {
       return n1 & n2;

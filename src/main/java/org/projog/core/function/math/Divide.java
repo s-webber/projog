@@ -26,7 +26,7 @@ import org.projog.core.term.TermType;
 /**
  * <code>/</code> - performs division.
  */
-public final class Divide extends AbstractCalculatable {
+public final class Divide extends AbstractArithmeticOperator {
    @Override
    public Numeric calculate(Numeric n1, Numeric n2) {
       if (containsFraction(n1, n2)) {

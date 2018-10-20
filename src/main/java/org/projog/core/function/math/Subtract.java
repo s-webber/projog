@@ -21,7 +21,7 @@ package org.projog.core.function.math;
 /**
  * <code>-</code> - performs subtraction.
  */
-public final class Subtract extends AbstractTwoArgumentsCalculatable {
+public final class Subtract extends AbstractBinaryArithmeticOperator {
    /** Returns the difference of the two arguments */
    @Override
    protected double calculateDouble(double n1, double n2) {

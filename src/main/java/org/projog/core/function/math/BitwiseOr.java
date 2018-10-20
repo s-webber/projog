@@ -43,7 +43,7 @@ package org.projog.core.function.math;
 /**
  * <code>\/<code> - bitwise 'or'.
  */
-public final class BitwiseOr extends AbstractTwoIntegerArgumentsCalculatable {
+public final class BitwiseOr extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long n1, long n2) {
       return n1 | n2;

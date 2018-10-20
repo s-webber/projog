@@ -24,7 +24,7 @@ import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Map;
@@ -44,7 +44,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
 
 public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final Calculatables calculatables = getCalculatables(kb);
+   private final ArithmeticOperators calculatables = getArithmeticOperators(kb);
 
    /** Check that {@link ProjogSystemProperties} is used by default. */
    @Test
@@ -60,7 +60,7 @@ public class KnowledgeBaseTest {
       assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
    }
 
-   /** @see CalculatablesTest */
+   /** @see ArithmeticOperatorsTest */
    @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));

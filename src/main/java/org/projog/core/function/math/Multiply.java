@@ -21,7 +21,7 @@ package org.projog.core.function.math;
 /**
  * <code>*</code> - performs multiplication.
  */
-public final class Multiply extends AbstractTwoArgumentsCalculatable {
+public final class Multiply extends AbstractBinaryArithmeticOperator {
    /** Returns the product of the two arguments */
    @Override
    protected double calculateDouble(double n1, double n2) {

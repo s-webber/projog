@@ -69,7 +69,7 @@ public final class KnowledgeBaseUtils {
    /**
     * Consults the {@link ProjogProperties#getBootstrapScript()} for the {@code KnowledgeBase}.
     * <p>
-    * This is a way to configure a new {@code KnowledgeBase} (i.e. plugging in {@link Calculatable} and
+    * This is a way to configure a new {@code KnowledgeBase} (i.e. plugging in {@link ArithmeticOperator} and
     * {@link PredicateFactory} instances).
     * <p>
     * When using {@link ProjogSystemProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
@@ -201,7 +201,7 @@ public final class KnowledgeBaseUtils {
       return getServiceLocator(kb).getInstance(FileHandles.class);
    }
 
-   public static Calculatables getCalculatables(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(Calculatables.class);
+   public static ArithmeticOperators getArithmeticOperators(KnowledgeBase kb) {
+      return getServiceLocator(kb).getInstance(ArithmeticOperators.class);
    }
 }

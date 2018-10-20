@@ -45,7 +45,7 @@ package org.projog.core.function.math;
 /**
  * <code>abs</code> - returns the absolute value of a numeric argument.
  */
-public final class Abs extends AbstractOneArgumentCalculatable {
+public final class Abs extends AbstractUnaryArithmeticOperator {
    @Override
    protected double calculateDouble(double n) {
       return Math.abs(n);

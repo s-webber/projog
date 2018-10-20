@@ -27,13 +27,13 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.KnowledgeBaseUtils.getCalculatables;
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
 import java.util.Set;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
 
@@ -231,7 +231,7 @@ public class TermUtilsTest {
    @Test
    public void testIntegerNumberToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      Calculatables calculatables = getCalculatables(kb);
+      ArithmeticOperators calculatables = getArithmeticOperators(kb);
       assertEquals(Integer.MAX_VALUE, TermUtils.toLong(calculatables, integerNumber(Integer.MAX_VALUE)));
       assertEquals(1, TermUtils.toLong(calculatables, integerNumber(1)));
       assertEquals(0, TermUtils.toLong(calculatables, integerNumber(0)));
@@ -241,7 +241,7 @@ public class TermUtilsTest {
    @Test
    public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      Calculatables calculatables = getCalculatables(kb);
+      ArithmeticOperators calculatables = getArithmeticOperators(kb);
       Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
       assertEquals(21, TermUtils.toLong(calculatables, arithmeticExpression));
    }
@@ -249,14 +249,14 @@ public class TermUtilsTest {
    @Test
    public void testToLongExceptions() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertTestToLongException(kb, atom("test"), "Cannot find calculatable: test");
-      assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find calculatable: p/2");
+      assertTestToLongException(kb, atom("test"), "Cannot find arithmetic operator: test");
+      assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find arithmetic operator: p/2");
       assertTestToLongException(kb, decimalFraction(0), "Expected integer but got: FRACTION with value: 0.0");
       assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected integer but got: FRACTION with value: 2.0");
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
-      Calculatables calculatables = getCalculatables(kb);
+      ArithmeticOperators calculatables = getArithmeticOperators(kb);
       try {
          TermUtils.toLong(calculatables, t);
          fail();

@@ -17,13 +17,13 @@ package org.projog.core.term;
 
 import java.util.Comparator;
 
-import org.projog.core.Calculatables;
+import org.projog.core.ArithmeticOperators;
 import org.projog.core.ProjogException;
 
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Numeric}.
  * 
- * @see #compare(Term, Term, Calculatables)
+ * @see #compare(Term, Term, ArithmeticOperators)
  * @see TermComparator
  */
 public final class NumericTermComparator implements Comparator<Term> {
@@ -54,9 +54,9 @@ public final class NumericTermComparator implements Comparator<Term> {
     * the second
     * @throws ProjogException if either argument does not represent an arithmetic expression
     * @see #compare(Term, Term)
-    * @see Calculatables#getNumeric(Term)
+    * @see ArithmeticOperators#getNumeric(Term)
     */
-   public int compare(Term t1, Term t2, Calculatables calculatables) {
+   public int compare(Term t1, Term t2, ArithmeticOperators calculatables) {
       Numeric n1 = calculatables.getNumeric(t1);
       Numeric n2 = calculatables.getNumeric(t2);
       return compare(n1, n2);
@@ -68,7 +68,7 @@ public final class NumericTermComparator implements Comparator<Term> {
     * Returns a negative integer, zero, or a positive integer as the numeric value represented by the first argument is
     * less than, equal to, or greater than the second.
     * <p>
-    * Unlike {@link #compare(Term, Term, Calculatables)} this method only works for arguments that represent a
+    * Unlike {@link #compare(Term, Term, ArithmeticOperators)} this method only works for arguments that represent a
     * {@link Numeric} (e.g. a {@link Structure} of the form {@code +(1,2)} would cause a {@code ProjogException}).
     * 
     * @param t1 the first term to be compared
@@ -76,7 +76,7 @@ public final class NumericTermComparator implements Comparator<Term> {
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than
     * the second
     * @throws ProjogException if either argument does not represent a {@link Numeric} term
-    * @see #compare(Term, Term, Calculatables)
+    * @see #compare(Term, Term, ArithmeticOperators)
     */
    @Override
    public int compare(Term t1, Term t2) {

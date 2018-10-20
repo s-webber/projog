@@ -21,23 +21,27 @@ import org.projog.core.term.Numeric;
 import org.projog.core.term.TermType;
 
 /**
- * A template for {@code Calculatable}s that accept exactly one argument.
+ * A template for {@code ArithmeticOperator}s that accept two arguments.
  */
-public abstract class AbstractOneArgumentCalculatable extends AbstractCalculatable {
+public abstract class AbstractBinaryArithmeticOperator extends AbstractArithmeticOperator {
    @Override
-   public final Numeric calculate(Numeric n) {
-      if (n.getType() == TermType.FRACTION) {
-         double answer = calculateDouble(n.getDouble());
+   public final Numeric calculate(Numeric n1, Numeric n2) {
+      if (containsFraction(n1, n2)) {
+         double answer = calculateDouble(n1.getDouble(), n2.getDouble());
          return new DecimalFraction(answer);
       } else {
-         long answer = calculateLong(n.getLong());
+         long answer = calculateLong(n1.getLong(), n2.getLong());
          return new IntegerNumber(answer);
       }
    }
 
-   /** Returns the result of evaluating an arithmetic expression using the specified argument */
-   protected abstract double calculateDouble(double n);
+   private static boolean containsFraction(Numeric n1, Numeric n2) {
+      return n1.getType() == TermType.FRACTION || n2.getType() == TermType.FRACTION;
+   }
 
-   /** Returns the result of evaluating an arithmetic expression using the specified argument */
-   protected abstract long calculateLong(long n);
+   /** Returns the result of evaluating an arithmetic expression using the two arguments */
+   protected abstract double calculateDouble(double n1, double n2);
+
+   /** Returns the result of evaluating an arithmetic expression using the two arguments */
+   protected abstract long calculateLong(long n1, long n2);
 }

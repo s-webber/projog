@@ -21,7 +21,7 @@ package org.projog.core.function.math;
 /**
  * <code>+</code> - performs addition.
  */
-public final class Add extends AbstractTwoArgumentsCalculatable {
+public final class Add extends AbstractBinaryArithmeticOperator {
    /** Returns the sum of the two arguments */
    @Override
    protected double calculateDouble(double n1, double n2) {

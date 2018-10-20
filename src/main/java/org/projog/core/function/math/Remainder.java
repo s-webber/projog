@@ -23,7 +23,7 @@ package org.projog.core.function.math;
  * <p>
  * The result has the same sign as the dividend (i.e. first argument).
  */
-public final class Remainder extends AbstractTwoIntegerArgumentsCalculatable {
+public final class Remainder extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long numerator, long divider) {
       return numerator % divider;

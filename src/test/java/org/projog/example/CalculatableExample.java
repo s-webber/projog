@@ -17,13 +17,13 @@ package org.projog.example;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import org.projog.core.Calculatable;
+import org.projog.core.ArithmeticOperator;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
-public class CalculatableExample implements Calculatable {
+public class CalculatableExample implements ArithmeticOperator {
    @Override
    public void setKnowledgeBase(KnowledgeBase kb) {
    }

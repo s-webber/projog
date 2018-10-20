@@ -24,7 +24,7 @@ package org.projog.core.function.math;
  * <p>
  * The result has the same sign as the divisor (i.e. second argument).
  */
-public final class Modulo extends AbstractTwoIntegerArgumentsCalculatable {
+public final class Modulo extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long numerator, long divider) {
       final long modulo = numerator % divider;

@@ -253,12 +253,12 @@ public class KnowledgeBaseUtilsTest {
    public void testCalculatables() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      Calculatables o1 = KnowledgeBaseUtils.getCalculatables(kb1);
-      Calculatables o2 = KnowledgeBaseUtils.getCalculatables(kb2);
+      ArithmeticOperators o1 = KnowledgeBaseUtils.getArithmeticOperators(kb1);
+      ArithmeticOperators o2 = KnowledgeBaseUtils.getArithmeticOperators(kb2);
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getCalculatables(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getCalculatables(kb2));
+      assertSame(o1, KnowledgeBaseUtils.getArithmeticOperators(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getArithmeticOperators(kb2));
    }
 }

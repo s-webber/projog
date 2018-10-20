@@ -48,7 +48,7 @@ import org.projog.core.udp.ClauseModel;
  */
 public class TestUtils {
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
-   public static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_calculatable", 2);
+   public static final PredicateKey ADD_CALCULATABLE_KEY = new PredicateKey("pj_add_arithmetic_operator", 2);
    public static final File BOOTSTRAP_FILE = new File("src/main/resources/projog-bootstrap.pl");
    public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogDefaultProperties() {
       @Override

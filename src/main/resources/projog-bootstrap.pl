@@ -109,10 +109,11 @@
 ?- pj_add_predicate(read/1, 'org.projog.core.function.io.Read').
 ?- pj_add_predicate(set_input/1, 'org.projog.core.function.io.SetInput').
 ?- pj_add_predicate(set_output/1, 'org.projog.core.function.io.SetOutput').
-?- pj_add_predicate(write/1, 'org.projog.core.function.io.Write').
+?- pj_add_predicate(write/1, 'org.projog.core.function.io.Write/write').
+?- pj_add_predicate(writeln/1, 'org.projog.core.function.io.Write/writeln').
 ?- pj_add_predicate(write_canonical/1, 'org.projog.core.function.io.WriteCanonical').
-?- pj_add_predicate(writef/2, 'org.projog.core.function.io.Writef').
 ?- pj_add_predicate(writef/1, 'org.projog.core.function.io.Writef').
+?- pj_add_predicate(writef/2, 'org.projog.core.function.io.Writef').
 
 % kb (knowledge base)
 ?- pj_add_predicate(pj_add_arithmetic_operator/2, 'org.projog.core.function.kb.AddArithmeticOperator').

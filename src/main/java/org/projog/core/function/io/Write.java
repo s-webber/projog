@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,8 @@ package org.projog.core.function.io;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
+import java.io.PrintStream;
+
 import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -27,10 +29,27 @@ import org.projog.core.term.TermFormatter;
  %QUERY write( 1+1 )
  %OUTPUT 1 + 1
  %ANSWER/
+
  %QUERY write( '+'(1,1) )
  %OUTPUT 1 + 1
  %ANSWER/
- */
+
+ %QUERY write(hello), nl, write(world), nl
+ %OUTPUT
+ %hello
+ %world
+ %
+ %OUTPUT
+ %ANSWER/
+
+ %QUERY writeln(hello), writeln(world)
+ %OUTPUT
+ %hello
+ %world
+ %
+ %OUTPUT
+ %ANSWER/
+  */
 /**
  * <code>write(X)</code> - writes a term to the output stream.
  * <p>
@@ -41,12 +60,30 @@ import org.projog.core.term.TermFormatter;
  * <p>
  * Succeeds only once.
  * </p>
- * 
+ * <p>
+ * <code>writeln(X)</code> writes the term <code>X</code> to the current output stream, followed by a new line
+ * character. <code>writeln(X)</code> can be used as an alternative to <code>write(X), nl</code>.
+ * </p>
+ *
  * @see #toString(Term)
  */
 public final class Write extends AbstractSingletonPredicate {
+   private final boolean addNewLine;
+
    private TermFormatter termFormatter;
    private FileHandles fileHandles;
+
+   public static Write write() {
+      return new Write(false);
+   }
+
+   public static Write writeln() {
+      return new Write(true);
+   }
+
+   private Write(boolean addNewLine) {
+      this.addNewLine = addNewLine;
+   }
 
    @Override
    protected void init() {
@@ -65,6 +102,11 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    private void print(String s) {
-      fileHandles.getCurrentOutputStream().print(s);
+      PrintStream os = fileHandles.getCurrentOutputStream();
+      if (addNewLine) {
+         os.println(s);
+      } else {
+         os.print(s);
+      }
    }
 }

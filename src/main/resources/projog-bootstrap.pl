@@ -187,6 +187,7 @@
 ?- pj_add_arithmetic_operator(random/1, 'org.projog.core.function.math.Random').
 ?- pj_add_arithmetic_operator('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
 ?- pj_add_arithmetic_operator('\\/'/2, 'org.projog.core.function.math.BitwiseOr').
+?- pj_add_arithmetic_operator('<<'/2, 'org.projog.core.function.math.ShiftLeft').
 ?- pj_add_arithmetic_operator('>>'/2, 'org.projog.core.function.math.ShiftRight').
 ?- pj_add_arithmetic_operator(max/2, 'org.projog.core.function.math.Max').
 ?- pj_add_arithmetic_operator(abs/1, 'org.projog.core.function.math.Abs').
@@ -230,5 +231,6 @@
 ?- op(400, yfx, rem).
 ?- op(400, yfx, '/\\').
 ?- op(400, yfx, '\\/').
+?- op(400, yfx, '<<').
 ?- op(400, yfx, '>>').
 ?- op(200, fy, '-').

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 S. Webber
+ * Copyright 2018 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,32 @@
 package org.projog.core.function.math;
 
 /* TEST
- %QUERY X is 13 >> 0
+ %QUERY X is 13 << 0
  %ANSWER X=13
 
- %QUERY X is 13 >> 1
- %ANSWER X=6
+ %QUERY X is 13 << 1
+ %ANSWER X=26
 
- %QUERY X is 13 >> 2
- %ANSWER X=3
+ %QUERY X is 13 << 2
+ %ANSWER X=52
 
- %QUERY X is 13 >> 3
- %ANSWER X=1
+ %QUERY X is 13 << 3
+ %ANSWER X=104
 
- %QUERY X is 13 >> 4
- %ANSWER X=0
+ %QUERY X is 13 << 4
+ %ANSWER X=208
 
  % Note bit shifting using a negative value gives different results than in some other Prolog implementations.
- %QUERY X is 13 >> -1
- %ANSWER X=0
+ %QUERY X is 13 << -1
+ %ANSWER X=-9223372036854775808
  */
 /**
- * <code>&gt;&gt;</code> - right shift bits.
+ * <code>&lt;&lt;</code> - left shift bits.
  */
-public final class ShiftRight extends AbstractBinaryIntegerArithmeticOperator {
+public final class ShiftLeft extends AbstractBinaryIntegerArithmeticOperator {
+   // TODO for both this class and ShiftRight, review what happens when the second argument is negative
    @Override
    protected long calculateLong(long n1, long n2) {
-      return n1 >> n2;
+      return n1 << n2;
    }
 }

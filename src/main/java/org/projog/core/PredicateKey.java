@@ -46,18 +46,11 @@ public final class PredicateKey implements Comparable<PredicateKey> {
     * @throws ProjogException if {@code t} is not of type {@link TermType#ATOM} or {@link TermType#STRUCTURE}
     */
    public static PredicateKey createForTerm(Term t) {
-      int numArgs;
-      switch (t.getType()) {
-         case ATOM:
-            numArgs = 0;
-            break;
-         case STRUCTURE:
-            numArgs = t.getArgs().length;
-            break;
-         default:
-            throw new ProjogException(getInvalidTypeExceptionMessage(t));
+      TermType type = t.getType();
+      if (type != TermType.STRUCTURE && type != TermType.ATOM && type != TermType.LIST) {
+         throw new ProjogException(getInvalidTypeExceptionMessage(t));
       }
-      return new PredicateKey(t.getName(), numArgs);
+      return new PredicateKey(t.getName(), t.getNumberOfArguments());
    }
 
    /**

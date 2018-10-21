@@ -32,11 +32,21 @@ import org.projog.core.term.Term;
 
 public class PredicateKeyTest {
    @Test
-   public void testCanCreate() {
+   public void testCanCreateForAtom() {
       String name = "abc";
       testCanCreate(atom(name), name, 0);
+   }
+
+   @Test
+   public void testCanCreateForStructure() {
+      String name = "abc";
       testCanCreate(structure(name, atom()), name, 1);
       testCanCreate(structure(name, atom(), integerNumber(), decimalFraction()), name, 3);
+   }
+
+   @Test
+   public void testCanCreateForList() {
+      testCanCreate(list(atom(), atom()), ".", 2);
    }
 
    private void testCanCreate(Term t, String name, int numArgs) {
@@ -113,7 +123,6 @@ public class PredicateKeyTest {
       testCannotCreateForTerm(decimalFraction());
       testCannotCreateForTerm(variable());
       testCannotCreateForTerm(EmptyList.EMPTY_LIST);
-      testCannotCreateForTerm(list(atom(), atom()));
    }
 
    private void testCannotCreateForTerm(Term t) {

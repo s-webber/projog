@@ -25,18 +25,15 @@ import org.projog.core.term.Term;
  * <ul>
  * <li><i>User defined predicates</i> are defined by a mixture of rules and facts constructed from Prolog syntax
  * consulted at runtime.</li>
- * <li><i>Plugin predicates</i> are written in Java. Plugin predicates can provide facilities that would not be possible
- * using pure Prolog syntax. The two predicates that are always available in Projog are {@code pj_add_predicate/2} and
- * {@code pj_add_arithmetic_operator/2}. The {@code pj_add_predicate/2} predicate allows other predicates to be
- * "plugged-in" to Projog.</li>
+ * <li><i>Built-in predicates</i> are written in Java. Built-in predicates can provide facilities that would not be
+ * possible using pure Prolog syntax. The two predicates that are always available in Projog are
+ * {@code pj_add_predicate/2} and {@code pj_add_arithmetic_operator/2}. The {@code pj_add_predicate/2} predicate allows
+ * other predicates to be "plugged-in" to Projog.</li>
  * </ul>
  * <p>
  * <b>Note:</b> Rather than directly implementing {@code PredicateFactory} it is recommended to extend either
  * {@link org.projog.core.function.AbstractSingletonPredicate} or
- * {@link org.projog.core.function.AbstractRetryablePredicate}.
- * </p>
- * <p>
- * <a href="doc-files/PredicateFactory.png">View Class Diagram</a>
+ * {@link org.projog.core.function.AbstractPredicateFactory}.
  * </p>
  *
  * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
@@ -72,7 +69,7 @@ public interface PredicateFactory {
     *
     * @param args the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal
-    * @see Predicate#evaluate(Term[])
+    * @see Predicate#evaluate()
     */
    Predicate getPredicate(Term... args);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,7 @@ import org.projog.core.term.Term;
  * Superclass of "plug-in" predicates that are not re-evaluated as part of backtracking.
  * <p>
  * Provides a skeletal implementation of {@link PredicateFactory} and {@link Predicate}. No attempt to find multiple
- * solutions will be made as part of backtracking as {@link #isRetryable()} always returns {@code false} - meaning
- * {@link Predicate#evaluate(org.projog.core.term.Term...)} will never be invoked twice on a
- * {@code AbstractSingletonPredicate} for the same query. As they do not need to preserve state between calls to
- * {@link Predicate#evaluate(org.projog.core.term.Term...)} {@code AbstractSingletonPredicate}s are state-less. As
- * {@code AbstractSingletonPredicate}s are state-less the same instance can be reused for the evaluation of all queries
- * of the predicate it represents. This is implemented by
- * {@link PredicateFactory#getPredicate(org.projog.core.term.Term...)} always returning {@code this}.
- * <p>
- *
- * @see AbstractRetryablePredicate
- * @see Predicate#evaluate(Term[])
+ * solutions will be made as part of backtracking as {@link #isRetryable()} always returns {@code false}.
  */
 public abstract class AbstractSingletonPredicate implements PredicateFactory {
    public static final Predicate TRUE = new Predicate() { // TODO

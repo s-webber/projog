@@ -180,17 +180,14 @@ import org.projog.core.term.TermType;
  %ERROR Unexpected type for first argument: ATOM
  */
 /**
- * <code>atom_chars</code> / <code>atom_codes</code> / <code>number_chars</code> / <code>number_codes(N,L)</code>
+ * <code>atom_chars</code> / <code>atom_codes</code> / <code>number_chars</code> / <code>number_codes</code>
  * <p>
  * <ul>
  * <li><code>atom_chars(A,L)</code> compares the atom <code>A</code> to the list of characters <code>L</code>.</li>
- * <ul>
  * <li><code>atom_codes(A,L)</code> compares the atom <code>A</code> to the list of character codes <code>L</code>.</li>
- * <ul>
  * <li><code>number_chars(N,L)</code> compares the number <code>N</code> to the list of characters <code>L</code>.</li>
- * <ul>
  * <li><code>number_codes(N,L)</code> compares the number <code>N</code> to the list of character codes
- * <code>L</code>.</li> *</li>
+ * <code>L</code>.</li>
  * </ul>
  */
 public final class TermSplit extends AbstractSingletonPredicate {

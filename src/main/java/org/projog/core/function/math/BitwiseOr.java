@@ -41,7 +41,7 @@ package org.projog.core.function.math;
  %ANSWER X=0
  */
 /**
- * <code>\/<code> - bitwise 'or'.
+ * <code>\/</code> - bitwise 'or'.
  */
 public final class BitwiseOr extends AbstractBinaryIntegerArithmeticOperator {
    @Override

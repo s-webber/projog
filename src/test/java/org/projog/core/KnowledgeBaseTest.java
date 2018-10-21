@@ -44,7 +44,6 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
 
 public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final ArithmeticOperators calculatables = getArithmeticOperators(kb);
 
    /** Check that {@link ProjogSystemProperties} is used by default. */
    @Test
@@ -64,7 +63,7 @@ public class KnowledgeBaseTest {
    @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));
-      Numeric n = calculatables.getNumeric(p);
+      Numeric n = getArithmeticOperators(kb).getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(4, n.getLong());
    }

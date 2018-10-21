@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import org.projog.core.term.Term;
  %ANSWER X=2
  */
 /**
- * <code>pj_add_calculatable(X,Y)</code> - defines a Java class as an arithmetic operator.
+ * <code>pj_add_arithmetic_operator(X,Y)</code> - defines a Java class as an arithmetic operator.
  * <p>
  * <code>X</code> represents the name and arity of the predicate. <code>Y</code> represents the full class name of an
  * implementation of <code>org.projog.core.ArithmeticOperator</code>.

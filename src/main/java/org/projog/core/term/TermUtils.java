@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ public final class TermUtils {
 
    /**
     * Returns copies of the specified {link Term}s
-    * 
+    *
     * @param input {@link Term}s to copy
     * @return copies of the specified {link Term}s
     */
@@ -59,7 +59,7 @@ public final class TermUtils {
 
    /**
     * Backtracks all {@link Term}s in the specified array.
-    * 
+    *
     * @param terms {@link Term}s to backtrack
     * @see Term#backtrack()
     */
@@ -74,7 +74,7 @@ public final class TermUtils {
     * <p>
     * <b>Note: If the attempt to unify the corresponding terms is unsuccessful only the terms in {@code queryArgs} will
     * get backtracked.</b>
-    * 
+    *
     * @param queryArgs terms to unify with {@code consequentArgs}
     * @param consequentArgs terms to unify with {@code queryArgs}
     * @return {@code true} if the attempt to unify all corresponding terms was successful
@@ -93,7 +93,7 @@ public final class TermUtils {
 
    /**
     * Returns all {@link Variable}s contained in the specified term.
-    * 
+    *
     * @param argument the term to find variables for
     * @return all {@link Variable}s contained in the specified term.
     */
@@ -117,7 +117,7 @@ public final class TermUtils {
 
    /**
     * Return the {@link Numeric} represented by the specified {@link Term}.
-    * 
+    *
     * @param t the term representing a {@link Numeric}
     * @return the {@link Numeric} represented by the specified {@link Term}
     * @throws ProjogException if the specified {@link Term} does not represent a {@link Numeric}
@@ -132,7 +132,7 @@ public final class TermUtils {
 
    /**
     * Returns the integer value of the {@link Numeric} represented by the specified {@link Term}.
-    * 
+    *
     * @param t the term representing a {@link Numeric}
     * @return the {@code int} value represented by {@code t}
     * @throws ProjogException if the specified {@link Term} cannot be represented as an {@code int}.
@@ -148,13 +148,13 @@ public final class TermUtils {
 
    /**
     * Return the long value represented by the specified term.
-    * 
+    *
     * @param t the term representing a long value
     * @return the {@code long} value represented by {@code t}
     * @throws ProjogException if the specified {@link Term} does not represent a term of type {@link TermType#INTEGER}
     */
-   public static long toLong(final ArithmeticOperators calculatables, final Term t) {
-      final Numeric n = calculatables.getNumeric(t);
+   public static long toLong(final ArithmeticOperators operators, final Term t) {
+      final Numeric n = operators.getNumeric(t);
       if (n.getType() == TermType.INTEGER) {
          return n.getLong();
       } else {
@@ -164,7 +164,7 @@ public final class TermUtils {
 
    /**
     * Return the name of the {@link Atom} represented by the specified {@link Atom}.
-    * 
+    *
     * @param t the term representing an {@link Atom}
     * @return the name of {@link Atom} represented by the specified {@link Term}
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}

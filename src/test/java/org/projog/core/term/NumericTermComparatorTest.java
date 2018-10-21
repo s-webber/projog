@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import org.projog.core.ProjogException;
 
 public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final ArithmeticOperators calculatables = getArithmeticOperators(kb);
+   private final ArithmeticOperators operators = getArithmeticOperators(kb);
 
    @Test
    public void testCompareDecimalValues() {
@@ -85,9 +85,9 @@ public class NumericTermComparatorTest {
    /**
     * NumericTermComparator provides an overloaded version of {@link NumericTermComparator#compare(Term, Term)} that
     * also accepts a {@code KnowledgeBase} argument - this method tests that overloaded version.
-    * 
+    *
     * @see NumericTermComparator#compare(Term, Term, KnowledgeBase)
-    * @see #testStructuresRepresentingCalculatables
+    * @see #testStructuresRepresentingArithmeticOperators
     */
    @Test
    public void testOverloadedCompareMethod() {
@@ -105,7 +105,7 @@ public class NumericTermComparatorTest {
     * {@code ProjogException}
     */
    @Test
-   public void testStructuresRepresentingCalculatables() {
+   public void testStructuresRepresentingArithmeticOperators() {
       Structure addition = structure("+", integerNumber(1), integerNumber(3));
       Structure subtraction = structure("-", integerNumber(5), integerNumber(2));
 
@@ -125,20 +125,20 @@ public class NumericTermComparatorTest {
       }
 
       // test compare(Term, Term) evaluates structures representing arithmetic expressions
-      assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, calculatables));
-      assertEquals(-1, NUMERIC_TERM_COMPARATOR.compare(subtraction, addition, calculatables));
-      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(addition, addition, calculatables));
+      assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, operators));
+      assertEquals(-1, NUMERIC_TERM_COMPARATOR.compare(subtraction, addition, operators));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(addition, addition, operators));
 
       // test compare(Term, Term, KnowledgeBase) throws a ProjogException if
       // a structure can not be evaluated as an arithmetic expression
       try {
-         NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), calculatables);
+         NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), operators);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find arithmetic operator: test", e.getMessage());
       }
       try {
-         NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, calculatables);
+         NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, operators);
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find arithmetic operator: ~/2", e.getMessage());
@@ -175,7 +175,7 @@ public class NumericTermComparatorTest {
    private void compare(String s1, String s2, KnowledgeBase kb, int expected) {
       Term t1 = TestUtils.parseSentence(s1 + ".");
       Term t2 = TestUtils.parseSentence(s2 + ".");
-      assertEquals(expected, NUMERIC_TERM_COMPARATOR.compare(t1, t2, calculatables));
-      assertEquals(0 - expected, NUMERIC_TERM_COMPARATOR.compare(t2, t1, calculatables));
+      assertEquals(expected, NUMERIC_TERM_COMPARATOR.compare(t1, t2, operators));
+      assertEquals(0 - expected, NUMERIC_TERM_COMPARATOR.compare(t2, t1, operators));
    }
 }

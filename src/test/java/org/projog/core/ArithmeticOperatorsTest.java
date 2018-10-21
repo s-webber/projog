@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,28 +34,28 @@ import org.projog.core.term.TermUtils;
 
 public class ArithmeticOperatorsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final String dummyCalculatableName = "dummy_calculatable";
-   private final PredicateKey dummyCalculatableKey = new PredicateKey(dummyCalculatableName, 1);
+   private final String dummyOperatorName = "dummy_arithmetic_operator";
+   private final PredicateKey dummyOperatorKey = new PredicateKey(dummyOperatorName, 1);
    private final int dummyTermArgument = 7;
-   private final Structure dummyTerm = structure(dummyCalculatableName, integerNumber(dummyTermArgument));
+   private final Structure dummyTerm = structure(dummyOperatorName, integerNumber(dummyTermArgument));
 
    @Test
    public void testGetNumericIntegerNumber() {
-      ArithmeticOperators c = createCalculatables();
+      ArithmeticOperators c = createOperators();
       IntegerNumber i = integerNumber(1);
       assertSame(i, c.getNumeric(i));
    }
 
    @Test
    public void testGetNumericDecimalFraction() {
-      ArithmeticOperators c = createCalculatables();
+      ArithmeticOperators c = createOperators();
       DecimalFraction d = decimalFraction(17.6);
       assertSame(d, c.getNumeric(d));
    }
 
    @Test
    public void testGetNumericException() {
-      ArithmeticOperators c = createCalculatables();
+      ArithmeticOperators c = createOperators();
       try {
          c.getNumeric(variable("X"));
          fail();
@@ -66,77 +66,77 @@ public class ArithmeticOperatorsTest {
 
    @Test
    public void testGetNumericPredicate() {
-      ArithmeticOperators c = createCalculatables();
+      ArithmeticOperators c = createOperators();
 
-      // try to use calculatable by a name that there is no match for (expect exception)
+      // try to use arithmetic operator by a name that there is no match for (expect exception)
       try {
          c.getNumeric(dummyTerm);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find arithmetic operator: dummy_calculatable/1", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: dummy_arithmetic_operator/1", e.getMessage());
       }
 
-      // add new calculatable
-      c.addArithmeticOperator(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
+      // add new arithmetic operator
+      c.addArithmeticOperator(dummyOperatorKey, DummyArithmeticOperatorDefaultConstructor.class.getName());
 
-      // assert that the factory is now using the newly added calculatable
+      // assert that the factory is now using the newly added arithmetic operator
       Numeric n = c.getNumeric(dummyTerm);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(dummyTermArgument + 1, n.getLong());
    }
 
    @Test
-   public void testAddExistingCalculatableName() {
-      ArithmeticOperators c = createCalculatables();
+   public void testAddExistingOperatorName() {
+      ArithmeticOperators c = createOperators();
 
-      // add new calculatable class name
-      c.addArithmeticOperator(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
+      // add new arithmetic operator class name
+      c.addArithmeticOperator(dummyOperatorKey, DummyArithmeticOperatorDefaultConstructor.class.getName());
 
-      // attempt to add calculatable again
-      // (should fail now a calculatable with the same name already exists in the factoty)
+      // attempt to add arithmetic operator again
+      // (should fail now a arithmetic operator with the same name already exists in the factoty)
       try {
-         c.addArithmeticOperator(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
-         fail("could re-add calculatable named: " + dummyCalculatableName);
+         c.addArithmeticOperator(dummyOperatorKey, DummyArithmeticOperatorDefaultConstructor.class.getName());
+         fail("could re-add arithmetic operator named: " + dummyOperatorName);
       } catch (ProjogException e) {
          // expected;
       }
       try {
-         c.addArithmeticOperator(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
-         fail("could re-add calculatable named: " + dummyCalculatableName);
-      } catch (ProjogException e) {
-         // expected;
-      }
-   }
-
-   @Test
-   public void testAddExistingCalculatableInstance() {
-      ArithmeticOperators c = createCalculatables();
-
-      // add new calculatable instance
-      c.addArithmeticOperator(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
-
-      // attempt to add calculatable again
-      // (should fail now a calculatable with the same name already exists in the factoty)
-      try {
-         c.addArithmeticOperator(dummyCalculatableKey, DummyCalculatableDefaultConstructor.class.getName());
-         fail("could re-add calculatable named: " + dummyCalculatableName);
-      } catch (ProjogException e) {
-         // expected;
-      }
-      try {
-         c.addArithmeticOperator(dummyCalculatableKey, new DummyCalculatableDefaultConstructor());
-         fail("could re-add calculatable named: " + dummyCalculatableName);
+         c.addArithmeticOperator(dummyOperatorKey, new DummyArithmeticOperatorDefaultConstructor());
+         fail("could re-add arithmetic operator named: " + dummyOperatorName);
       } catch (ProjogException e) {
          // expected;
       }
    }
 
    @Test
-   public void testAddCalculatableError() {
-      ArithmeticOperators c = createCalculatables();
+   public void testAddExistingOperatorInstance() {
+      ArithmeticOperators c = createOperators();
 
-      // add new calculatable with invalid name
-      c.addArithmeticOperator(dummyCalculatableKey, "an invalid class name");
+      // add new arithmetic operator instance
+      c.addArithmeticOperator(dummyOperatorKey, new DummyArithmeticOperatorDefaultConstructor());
+
+      // attempt to add arithmetic operator again
+      // (should fail now a arithmetic operator with the same name already exists in the factoty)
+      try {
+         c.addArithmeticOperator(dummyOperatorKey, DummyArithmeticOperatorDefaultConstructor.class.getName());
+         fail("could re-add arithmetic operator named: " + dummyOperatorName);
+      } catch (ProjogException e) {
+         // expected;
+      }
+      try {
+         c.addArithmeticOperator(dummyOperatorKey, new DummyArithmeticOperatorDefaultConstructor());
+         fail("could re-add arithmetic operator named: " + dummyOperatorName);
+      } catch (ProjogException e) {
+         // expected;
+      }
+   }
+
+   @Test
+   public void testAddOperatorError() {
+      ArithmeticOperators c = createOperators();
+
+      // add new arithmetic operator with invalid name
+      c.addArithmeticOperator(dummyOperatorKey, "an invalid class name");
       try {
          c.getNumeric(dummyTerm);
          fail();
@@ -146,23 +146,23 @@ public class ArithmeticOperatorsTest {
       }
    }
 
-   /** Test using a static method to add a calculatable that does not have a public no arg constructor. */
+   /** Test using a static method to add a arithmetic operator that does not have a public no arg constructor. */
    @Test
-   public void testAddCalculatableUsingStaticMethod() {
-      final ArithmeticOperators c = createCalculatables();
-      final String className = DummyCalculatableNoPublicConstructor.class.getName();
-      c.addArithmeticOperator(dummyCalculatableKey, className + "/getInstance");
+   public void testAddOperatorUsingStaticMethod() {
+      final ArithmeticOperators c = createOperators();
+      final String className = DummyArithmeticOperatorPublicConstructor.class.getName();
+      c.addArithmeticOperator(dummyOperatorKey, className + "/getInstance");
       Numeric n = c.getNumeric(dummyTerm);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(dummyTermArgument * 3, n.getLong());
    }
 
-   private ArithmeticOperators createCalculatables() {
+   private ArithmeticOperators createOperators() {
       return new ArithmeticOperators(kb);
    }
 
-   /** Calculatable used to test that new calculatables can be added to the factory. */
-   public static class DummyCalculatableDefaultConstructor implements ArithmeticOperator {
+   /** ArithmeticOperator used to test that new arithmetic operators can be added to the factory. */
+   public static class DummyArithmeticOperatorDefaultConstructor implements ArithmeticOperator {
       KnowledgeBase kb;
 
       /**
@@ -171,7 +171,7 @@ public class ArithmeticOperatorsTest {
       @Override
       public Numeric calculate(Term... args) {
          if (kb == null) {
-            // setKnowledgeBase should be called by Calculatables when it creates an instance of this class
+            // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);
          }
          long input = TermUtils.castToNumeric(args[0]).getLong();
@@ -185,15 +185,15 @@ public class ArithmeticOperatorsTest {
       }
    }
 
-   /** Calculatable used to test that new calculatables can be created using a static method. */
-   public static class DummyCalculatableNoPublicConstructor implements ArithmeticOperator {
+   /** ArithmeticOperator used to test that new arithmetic operators can be created using a static method. */
+   public static class DummyArithmeticOperatorPublicConstructor implements ArithmeticOperator {
       KnowledgeBase kb;
 
-      public static DummyCalculatableNoPublicConstructor getInstance() {
-         return new DummyCalculatableNoPublicConstructor();
+      public static DummyArithmeticOperatorPublicConstructor getInstance() {
+         return new DummyArithmeticOperatorPublicConstructor();
       }
 
-      private DummyCalculatableNoPublicConstructor() {
+      private DummyArithmeticOperatorPublicConstructor() {
          // private as want to test creation using getInstance static method
       }
 
@@ -203,7 +203,7 @@ public class ArithmeticOperatorsTest {
       @Override
       public Numeric calculate(Term... args) {
          if (kb == null) {
-            // setKnowledgeBase should be called by Calculatables when it creates an instance of this class
+            // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);
          }
          long input = TermUtils.castToNumeric(args[0]).getLong();

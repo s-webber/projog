@@ -46,15 +46,15 @@ public final class ArithmeticOperators {
    /**
     * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
     *
-    * @param calculatable The instance of {@code ArithmeticOperator} to be associated with {@code key}.
+    * @param operator The instance of {@code ArithmeticOperator} to be associated with {@code key}.
     */
-   public void addArithmeticOperator(PredicateKey key, ArithmeticOperator calculatable) {
+   public void addArithmeticOperator(PredicateKey key, ArithmeticOperator operator) {
       synchronized (lock) {
          if (operatorClassNames.containsKey(key)) {
-            throw new ProjogException("Already defined calculatable: " + key);
+            throw new ProjogException("Already defined operator: " + key);
          } else {
-            operatorClassNames.put(key, calculatable.getClass().getName());
-            operatorInstances.put(key, calculatable);
+            operatorClassNames.put(key, operator.getClass().getName());
+            operatorInstances.put(key, operator);
          }
       }
    }
@@ -62,14 +62,14 @@ public final class ArithmeticOperators {
    /**
     * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
     *
-    * @param calculatableClassName The class name of the {@link ArithmeticOperator} to be associated with {@code key}.
+    * @param operatorClassName The class name of the {@link ArithmeticOperator} to be associated with {@code key}.
     */
-   public void addArithmeticOperator(PredicateKey key, String calculatableClassName) {
+   public void addArithmeticOperator(PredicateKey key, String operatorClassName) {
       synchronized (lock) {
          if (operatorClassNames.containsKey(key)) {
-            throw new ProjogException("Already defined calculatable: " + key);
+            throw new ProjogException("Already defined operator: " + key);
          } else {
-            operatorClassNames.put(key, calculatableClassName);
+            operatorClassNames.put(key, operatorClassName);
          }
       }
    }
@@ -115,13 +115,13 @@ public final class ArithmeticOperators {
 
    private ArithmeticOperator instantiateArithmeticOperator(PredicateKey key) {
       synchronized (lock) {
-         ArithmeticOperator calculatable = operatorInstances.get(key);
-         if (calculatable == null) {
-            calculatable = instantiateArithmeticOperator(operatorClassNames.get(key));
-            calculatable.setKnowledgeBase(kb);
-            operatorInstances.put(key, calculatable);
+         ArithmeticOperator operator = operatorInstances.get(key);
+         if (operator == null) {
+            operator = instantiateArithmeticOperator(operatorClassNames.get(key));
+            operator.setKnowledgeBase(kb);
+            operatorInstances.put(key, operator);
          }
-         return calculatable;
+         return operator;
       }
    }
 

@@ -250,7 +250,7 @@ public class KnowledgeBaseUtilsTest {
    }
 
    @Test
-   public void testCalculatables() {
+   public void testArithmeticOperators() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
       ArithmeticOperators o1 = KnowledgeBaseUtils.getArithmeticOperators(kb1);

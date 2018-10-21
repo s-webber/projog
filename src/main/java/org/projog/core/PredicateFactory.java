@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import org.projog.core.term.Term;
  * consulted at runtime.</li>
  * <li><i>Plugin predicates</i> are written in Java. Plugin predicates can provide facilities that would not be possible
  * using pure Prolog syntax. The two predicates that are always available in Projog are {@code pj_add_predicate/2} and
- * {@code pj_add_calculatable/2}. The {@code pj_add_predicate/2} predicate allows other predicates to be "plugged-in" to
- * Projog.</li>
+ * {@code pj_add_arithmetic_operator/2}. The {@code pj_add_predicate/2} predicate allows other predicates to be
+ * "plugged-in" to Projog.</li>
  * </ul>
  * <p>
  * <b>Note:</b> Rather than directly implementing {@code PredicateFactory} it is recommended to extend either

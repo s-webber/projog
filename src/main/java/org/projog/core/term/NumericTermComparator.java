@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import org.projog.core.ProjogException;
 
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Numeric}.
- * 
+ *
  * @see #compare(Term, Term, ArithmeticOperators)
  * @see TermComparator
  */
@@ -47,7 +47,7 @@ public final class NumericTermComparator implements Comparator<Term> {
     * <p>
     * Unlike {@link #compare(Term, Term)} this method will work for arguments that represent arithmetic expressions
     * (e.g. a {@link Structure} of the form {@code +(1,2)}) as well as {@link Numeric} terms.
-    * 
+    *
     * @param t1 the first term to be compared
     * @param t2 the second term to be compared
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than
@@ -56,9 +56,9 @@ public final class NumericTermComparator implements Comparator<Term> {
     * @see #compare(Term, Term)
     * @see ArithmeticOperators#getNumeric(Term)
     */
-   public int compare(Term t1, Term t2, ArithmeticOperators calculatables) {
-      Numeric n1 = calculatables.getNumeric(t1);
-      Numeric n2 = calculatables.getNumeric(t2);
+   public int compare(Term t1, Term t2, ArithmeticOperators operators) {
+      Numeric n1 = operators.getNumeric(t1);
+      Numeric n2 = operators.getNumeric(t2);
       return compare(n1, n2);
    }
 
@@ -70,7 +70,7 @@ public final class NumericTermComparator implements Comparator<Term> {
     * <p>
     * Unlike {@link #compare(Term, Term, ArithmeticOperators)} this method only works for arguments that represent a
     * {@link Numeric} (e.g. a {@link Structure} of the form {@code +(1,2)} would cause a {@code ProjogException}).
-    * 
+    *
     * @param t1 the first term to be compared
     * @param t2 the second term to be compared
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than

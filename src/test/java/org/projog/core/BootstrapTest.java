@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.ADD_CALCULATABLE_KEY;
+import static org.projog.TestUtils.ADD_ARITHMETIC_OPERATOR_KEY;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.BOOTSTRAP_FILE;
 import static org.projog.TestUtils.parseTermsFromFile;
@@ -54,7 +54,7 @@ public class BootstrapTest {
 
    @Test
    public void testArithmeticOperators() throws Exception {
-      List<Term> terms = getQueriesByKey(ADD_CALCULATABLE_KEY);
+      List<Term> terms = getQueriesByKey(ADD_ARITHMETIC_OPERATOR_KEY);
       assertFalse(terms.isEmpty());
       for (Term t : terms) {
          assertArithmeticOperator(t.getArgument(1));

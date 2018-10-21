@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -152,7 +152,7 @@ public class TermUtilsTest {
       assertSame(x, x.getTerm());
       assertSame(z, z.getTerm());
 
-      // as javadocs states, terms passed in second argument to unify may not be backtracked 
+      // as javadocs states, terms passed in second argument to unify may not be backtracked
       assertSame(b, y.getTerm());
    }
 
@@ -231,19 +231,19 @@ public class TermUtilsTest {
    @Test
    public void testIntegerNumberToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      ArithmeticOperators calculatables = getArithmeticOperators(kb);
-      assertEquals(Integer.MAX_VALUE, TermUtils.toLong(calculatables, integerNumber(Integer.MAX_VALUE)));
-      assertEquals(1, TermUtils.toLong(calculatables, integerNumber(1)));
-      assertEquals(0, TermUtils.toLong(calculatables, integerNumber(0)));
-      assertEquals(Integer.MIN_VALUE, TermUtils.toLong(calculatables, integerNumber(Integer.MIN_VALUE)));
+      ArithmeticOperators operators = getArithmeticOperators(kb);
+      assertEquals(Integer.MAX_VALUE, TermUtils.toLong(operators, integerNumber(Integer.MAX_VALUE)));
+      assertEquals(1, TermUtils.toLong(operators, integerNumber(1)));
+      assertEquals(0, TermUtils.toLong(operators, integerNumber(0)));
+      assertEquals(Integer.MIN_VALUE, TermUtils.toLong(operators, integerNumber(Integer.MIN_VALUE)));
    }
 
    @Test
    public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      ArithmeticOperators calculatables = getArithmeticOperators(kb);
+      ArithmeticOperators operators = getArithmeticOperators(kb);
       Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
-      assertEquals(21, TermUtils.toLong(calculatables, arithmeticExpression));
+      assertEquals(21, TermUtils.toLong(operators, arithmeticExpression));
    }
 
    @Test
@@ -256,9 +256,9 @@ public class TermUtilsTest {
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
-      ArithmeticOperators calculatables = getArithmeticOperators(kb);
+      ArithmeticOperators operators = getArithmeticOperators(kb);
       try {
-         TermUtils.toLong(calculatables, t);
+         TermUtils.toLong(operators, t);
          fail();
       } catch (ProjogException e) {
          assertEquals(expectedExceptionMessage, e.getMessage());

@@ -46,6 +46,7 @@
 ?- pj_add_predicate(compare/3, 'org.projog.core.function.compare.Compare').
 ?- pj_add_predicate(predsort/3, 'org.projog.core.function.compare.PredSort').
 ?- pj_add_predicate(between/3, 'org.projog.core.function.compare.Between').
+?- pj_add_predicate(unify_with_occurs_check/2, 'org.projog.core.function.compare.UnifyWithOccursCheck').
 
 % compound
 ?- pj_add_predicate(','/2, 'org.projog.core.function.compound.Conjunction').

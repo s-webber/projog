@@ -40,11 +40,13 @@ public class AbstractPredicateFactoryTest {
       final Atom arg1 = atom("a");
       final Atom arg2 = atom("b");
       final Atom arg3 = atom("c");
+      final Atom arg4 = atom("d");
 
       final Predicate noArgPredicate = createPredicate();
       final Predicate oneArgPredicate = createPredicate();
       final Predicate twoArgsPredicate = createPredicate();
       final Predicate threeArgsPredicate = createPredicate();
+      final Predicate fourArgsPredicate = createPredicate();
 
       final AbstractPredicateFactory pf = new AbstractPredicateFactory() {
          @Override
@@ -72,14 +74,23 @@ public class AbstractPredicateFactoryTest {
             assertSame(arg3, t3);
             return threeArgsPredicate;
          }
+
+         @Override
+         protected Predicate getPredicate(Term t1, Term t2, Term t3, Term t4) {
+            assertSame(arg1, t1);
+            assertSame(arg2, t2);
+            assertSame(arg3, t3);
+            return fourArgsPredicate;
+         }
       };
 
       assertSame(noArgPredicate, pf.getPredicate(new Term[0]));
       assertSame(oneArgPredicate, pf.getPredicate(new Term[] {arg1}));
       assertSame(twoArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2}));
       assertSame(threeArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2, arg3}));
+      assertSame(fourArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2, arg3, arg4}));
 
-      assertIllegalArgumentException(pf, 4);
+      assertIllegalArgumentException(pf, 5);
    }
 
    private Predicate createPredicate() {

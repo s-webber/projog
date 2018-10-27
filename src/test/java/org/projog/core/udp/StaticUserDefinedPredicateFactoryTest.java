@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Predicate p = pf.getPredicate();
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
+      assertFalse(pf.isRetryable());
    }
 
    @Test
@@ -66,6 +67,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       }
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(p.evaluate());
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -75,6 +77,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertSame(SingleRuleWithSingleImmutableArgumentPredicate.class, pf.getClass());
       SingleRuleWithSingleImmutableArgumentPredicate sr = (SingleRuleWithSingleImmutableArgumentPredicate) pf;
       assertStrictEquality(clause.getArgument(0), sr.data);
+      assertFalse(pf.isRetryable());
    }
 
    @Test
@@ -87,6 +90,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       for (int i = 0; i < clauses.length; i++) {
          assertStrictEquality(clauses[i].getArgument(0), mr.data[i]);
       }
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -99,6 +103,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       for (int i = 0; i < clause.getNumberOfArguments(); i++) {
          assertStrictEquality(clause.getArgument(i), sr.data[i]);
       }
+      assertFalse(pf.isRetryable());
    }
 
    @Test
@@ -114,12 +119,14 @@ public class StaticUserDefinedPredicateFactoryTest {
             assertStrictEquality(clauses[c].getArgument(a), mr.data[c][a]);
          }
       }
+      assertTrue(pf.isRetryable());
    }
 
    @Test
    public void testInterpretedTailRecursivePredicateFactory() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(RECURSIVE_PREDICATE_SYNTAX));
       assertSame(InterpretedTailRecursivePredicateFactory.class, pf.getClass());
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -127,12 +134,14 @@ public class StaticUserDefinedPredicateFactoryTest {
       PredicateFactory pf = getActualPredicateFactory(COMPILATION_ENABLED_KB, toTerms(RECURSIVE_PREDICATE_SYNTAX));
       assertTrue(pf instanceof CompiledPredicate);
       assertTrue(pf instanceof CompiledTailRecursivePredicate);
+      assertTrue(pf.isRetryable());
    }
 
    @Test
    public void testInterpretedUserDefinedPredicate() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
       assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -140,6 +149,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       PredicateFactory pf = getActualPredicateFactory(COMPILATION_ENABLED_KB, toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
       assertTrue(pf instanceof CompiledPredicate);
       assertFalse(pf instanceof CompiledTailRecursivePredicate);
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -147,6 +157,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term[] clauses = toTerms("and(X,Y) :- X, Y.");
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+      assertTrue(pf.isRetryable());
    }
 
    @Test
@@ -154,6 +165,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term[] clauses = toTerms("true(X) :- X.");
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+      assertTrue(pf.isRetryable());
    }
 
    private PredicateFactory getActualPredicateFactory(Term... clauses) {

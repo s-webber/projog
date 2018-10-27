@@ -32,6 +32,7 @@ public class AbstractSingletonPredicateTest {
    private static final Atom ARG1 = atom("a");
    private static final Atom ARG2 = atom("b");
    private static final Atom ARG3 = atom("c");
+   private static final Atom ARG4 = atom("d");
 
    /**
     * Check {@code AbstractSingletonPredicate#setKnowledgeBase(KnowledgeBase)} invokes
@@ -120,6 +121,20 @@ public class AbstractSingletonPredicateTest {
       assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3}));
 
       assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1}));
+   }
+
+   @Test
+   public void testFourArguments() {
+      AbstractSingletonPredicate pf = new AbstractSingletonPredicate() {
+         @Override
+         protected boolean evaluate(Term t1, Term t2, Term t3, Term t4) {
+            return t1 == ARG1 && t2 == ARG2 && t3 == ARG3 && t4 == ARG4;
+         }
+      };
+
+      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3, ARG4}));
+
+      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1, ARG1}));
    }
 
    private void assertIllegalArgumentException(AbstractSingletonPredicate pf, int numberOfArguments) {

@@ -170,7 +170,8 @@
 ?- pj_add_predicate(checklist/3, 'org.projog.core.function.list.MapList').
 ?- pj_add_predicate(include/3, 'org.projog.core.function.list.SubList').
 ?- pj_add_predicate(sublist/3, 'org.projog.core.function.list.SubList').
- 
+?- pj_add_predicate(foldl/4, 'org.projog.core.function.list.Fold').
+
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.function.time.GetTime').
 ?- pj_add_predicate(convert_time/2, 'org.projog.core.function.time.ConvertTime').

@@ -34,6 +34,8 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
             return getPredicate(args[0], args[1]);
          case 3:
             return getPredicate(args[0], args[1], args[2]);
+         case 4:
+            return getPredicate(args[0], args[1], args[2], args[3]);
          default:
             throw createWrongNumberOfArgumentsException(args.length);
       }
@@ -53,6 +55,10 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
 
    protected Predicate getPredicate(Term arg1, Term arg2, Term arg3) {
       throw createWrongNumberOfArgumentsException(3);
+   }
+
+   protected Predicate getPredicate(Term arg1, Term arg2, Term arg3, Term arg4) {
+      throw createWrongNumberOfArgumentsException(4);
    }
 
    private IllegalArgumentException createWrongNumberOfArgumentsException(int numberOfArguments) {

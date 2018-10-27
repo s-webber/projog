@@ -72,6 +72,8 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
             return evaluate(args[0], args[1]);
          case 3:
             return evaluate(args[0], args[1], args[2]);
+         case 4:
+            return evaluate(args[0], args[1], args[2], args[3]);
          default:
             throw createWrongNumberOfArgumentsException(args.length);
       }
@@ -91,6 +93,10 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
 
    protected boolean evaluate(Term arg1, Term arg2, Term arg3) {
       throw createWrongNumberOfArgumentsException(3);
+   }
+
+   protected boolean evaluate(Term arg1, Term arg2, Term arg3, Term arg4) {
+      throw createWrongNumberOfArgumentsException(4);
    }
 
    private IllegalArgumentException createWrongNumberOfArgumentsException(int numberOfArguments) {

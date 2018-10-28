@@ -45,6 +45,12 @@ single_result_predicate(X,Y,Z) :-  Z is X+Y.
 %TRUE foldl(single_result_predicate, [2,4,7], 0, 13)
 %FALSE foldl(single_result_predicate, [2,4,7], 0, 12)
 
+%QUERY foldl(single_result_predicate, [], 7, X)
+%ANSWER X=7
+
+%QUERY foldl(single_result_predicate, [3], 7, X)
+%ANSWER X=10
+
 %QUERY foldl(multiple_result_predicate, [2,4,7], 42, X)
 %ANSWER X=55
 %ANSWER X=336
@@ -71,6 +77,14 @@ single_result_predicate(X,Y,Z) :-  Z is X+Y.
 %ANSWER/
 %ANSWER/
 %ANSWER/
+%NO
+
+%QUERY foldl(multiple_result_predicate, [], 7, X)
+%ANSWER X=7
+
+%QUERY foldl(multiple_result_predicate, [3], 7, X)
+%ANSWER X=10
+%ANSWER X=21
 %NO
 */
 /**
@@ -143,11 +157,7 @@ public final class Fold extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
-         if (idx > 0) {
-            // If retrying after a previous successful evaluation then backtrack the result
-            // so it can be unified against the solution found during this reevaluation.
-            result.backtrack();
-         }
+         result.backtrack();
 
          while (true) {
             boolean success = predicates.get(idx).evaluate();

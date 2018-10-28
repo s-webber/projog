@@ -122,10 +122,10 @@ public class AbstractArithmeticOperatorTest {
 
    private void assertUnexpectedAtom(AbstractArithmeticOperator c, Term... args) {
       try {
-         c.calculate(new Term[] {atom()});
+         c.calculate(args);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find arithmetic operator: test", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: test/0", e.getMessage());
       }
    }
 
@@ -164,6 +164,6 @@ public class AbstractArithmeticOperatorTest {
       Structure f1 = structure("*", integerNumber(3), integerNumber(7));
       Structure f2 = structure("/", integerNumber(12), integerNumber(2));
       Numeric result = c.calculate(new Term[] {f1, f2});
-      assertEquals(15, result.getLong()); // 26 = (3*7)-(12/2)
+      assertEquals(15, result.getLong()); // 15 = (3*7)-(12/2)
    }
 }

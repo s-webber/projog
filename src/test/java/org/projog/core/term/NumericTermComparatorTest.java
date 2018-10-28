@@ -135,7 +135,7 @@ public class NumericTermComparatorTest {
          NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), operators);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot find arithmetic operator: test", e.getMessage());
+         assertEquals("Cannot find arithmetic operator: test/0", e.getMessage());
       }
       try {
          NUMERIC_TERM_COMPARATOR.compare(structure("~", integerNumber(5), integerNumber(2)), subtraction, operators);

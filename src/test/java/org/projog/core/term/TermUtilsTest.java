@@ -249,7 +249,7 @@ public class TermUtilsTest {
    @Test
    public void testToLongExceptions() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      assertTestToLongException(kb, atom("test"), "Cannot find arithmetic operator: test");
+      assertTestToLongException(kb, atom("test"), "Cannot find arithmetic operator: test/0");
       assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find arithmetic operator: p/2");
       assertTestToLongException(kb, decimalFraction(0), "Expected integer but got: FRACTION with value: 0.0");
       assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected integer but got: FRACTION with value: 2.0");

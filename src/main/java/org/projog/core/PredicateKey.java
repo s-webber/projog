@@ -125,11 +125,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
     */
    @Override
    public String toString() {
-      if (numArgs == 0) {
-         return name;
-      } else {
-         return name + PREDICATE_KEY_FUNCTOR + numArgs;
-      }
+      return name + PREDICATE_KEY_FUNCTOR + numArgs;
    }
 
    /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ import org.projog.core.term.Term;
  %ERROR Cannot find arithmetic operator: sum/2
 
  %QUERY X is ten
- %ERROR Cannot find arithmetic operator: ten
+ %ERROR Cannot find arithmetic operator: ten/0
 
  %QUERY X is []
  %ERROR Cannot get Numeric for term: [] of type: EMPTY_LIST

@@ -71,12 +71,7 @@ public class PredicateKeyTest {
    private void testCreatedKey(PredicateKey k, String name, int numArgs) {
       assertEquals(name, k.getName());
       assertEquals(numArgs, k.getNumArgs());
-
-      if (numArgs == 0) {
-         assertEquals(name, k.toString());
-      } else {
-         assertEquals(name + PREDICATE_KEY_FUNCTOR + numArgs, k.toString());
-      }
+      assertEquals(name + PREDICATE_KEY_FUNCTOR + numArgs, k.toString());
    }
 
    @Test

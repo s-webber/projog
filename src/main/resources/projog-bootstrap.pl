@@ -195,6 +195,7 @@
 ?- pj_add_arithmetic_operator('<<'/2, 'org.projog.core.function.math.ShiftLeft').
 ?- pj_add_arithmetic_operator('>>'/2, 'org.projog.core.function.math.ShiftRight').
 ?- pj_add_arithmetic_operator(max/2, 'org.projog.core.function.math.Max').
+?- pj_add_arithmetic_operator(min/2, 'org.projog.core.function.math.Min').
 ?- pj_add_arithmetic_operator(abs/1, 'org.projog.core.function.math.Abs').
 
 % definite clause grammers (DCG)

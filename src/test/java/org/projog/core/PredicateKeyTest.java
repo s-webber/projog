@@ -17,6 +17,7 @@ package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
@@ -27,10 +28,15 @@ import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
 
 import org.junit.Test;
+import org.projog.core.term.Atom;
 import org.projog.core.term.EmptyList;
+import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 public class PredicateKeyTest {
+   private static final String PREDICATE_KEY_FUNCTOR = "/";
+
    @Test
    public void testCanCreateForAtom() {
       String name = "abc";
@@ -65,10 +71,11 @@ public class PredicateKeyTest {
    private void testCreatedKey(PredicateKey k, String name, int numArgs) {
       assertEquals(name, k.getName());
       assertEquals(numArgs, k.getNumArgs());
+
       if (numArgs == 0) {
          assertEquals(name, k.toString());
       } else {
-         assertEquals(name + "/" + numArgs, k.toString());
+         assertEquals(name + PREDICATE_KEY_FUNCTOR + numArgs, k.toString());
       }
    }
 
@@ -140,7 +147,7 @@ public class PredicateKeyTest {
       testCannotCreateFromNameAndArity(atom());
       testCannotCreateFromNameAndArity(variable());
       testCannotCreateFromNameAndArity(structure("\\", atom(), atom()));
-      testCannotCreateFromNameAndArity(structure("/", atom(), atom(), atom()));
+      testCannotCreateFromNameAndArity(structure(PREDICATE_KEY_FUNCTOR, atom(), atom(), atom()));
    }
 
    private void testCannotCreateFromNameAndArity(Term t) {
@@ -192,11 +199,30 @@ public class PredicateKeyTest {
       }
    }
 
+   @Test
+   public void testToTerm() {
+      // create predicate key
+      String name = "test";
+      int numArgs = 7;
+      PredicateKey key = createKey(name, numArgs);
+
+      // create term from key
+      Term term = key.toTerm();
+
+      // assert term matches details of key it was created from
+      assertEquals(key, PredicateKey.createFromNameAndArity(term));
+      assertSame(TermType.STRUCTURE, term.getType());
+      assertEquals(PREDICATE_KEY_FUNCTOR, term.getName());
+      assertEquals(2, term.getNumberOfArguments());
+      assertEquals(name, ((Atom) term.getArgument(0)).getName());
+      assertEquals(numArgs, ((IntegerNumber) term.getArgument(1)).getLong());
+   }
+
    private PredicateKey createKey(String name, int numArgs) {
       return PredicateKey.createFromNameAndArity(createArity(name, numArgs));
    }
 
    private Term createArity(String name, int numArgs) {
-      return structure("/", atom(name), integerNumber(numArgs));
+      return structure(PREDICATE_KEY_FUNCTOR, atom(name), integerNumber(numArgs));
    }
 }

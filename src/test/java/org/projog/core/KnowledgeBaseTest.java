@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +28,9 @@ import static org.projog.TestUtils.structure;
 import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 import org.projog.TestUtils;
@@ -69,17 +72,6 @@ public class KnowledgeBaseTest {
    }
 
    @Test
-   public void testUserDefinedPredicatesUnmodifiable() {
-      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
-      try {
-         userDefinedPredicates.put(null, null);
-         fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
-      }
-   }
-
-   @Test
    public void testCannotOverwritePluginPredicate() {
       Term input = atom("true");
       PredicateKey key = PredicateKey.createForTerm(input);
@@ -98,7 +90,7 @@ public class KnowledgeBaseTest {
    }
 
    @Test
-   public void testUserDefinedPredicates() {
+   public void testGetUserDefinedPredicates() {
       assertTrue(kb.getUserDefinedPredicates().isEmpty());
 
       PredicateKey key1 = PredicateKey.createForTerm(atom("test"));
@@ -124,6 +116,55 @@ public class KnowledgeBaseTest {
       assertNotSame(udp1, udp2);
       assertNotSame(udp1, udp3);
       assertNotSame(udp2, udp3);
+   }
+
+   @Test
+   public void testGetUserDefinedPredicatesUnmodifiable() {
+      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
+      try {
+         userDefinedPredicates.put(null, null);
+         fail();
+      } catch (UnsupportedOperationException e) {
+         // expected
+      }
+   }
+
+   @Test
+   public void testGetAllDefinedPredicateKeys() {
+      // create keys
+      PredicateKey k1 = new PredicateKey("a", 9);
+      PredicateKey k2 = new PredicateKey("x", 1);
+      PredicateKey k3 = new PredicateKey("x", 2);
+      PredicateKey k4 = new PredicateKey("x", 3);
+      PredicateKey k5 = new PredicateKey("z", 2);
+      PredicateKey k6 = new PredicateKey("z", 7);
+
+      // add keys to knowledge base
+      // add some as "build-in" predicates and others as "user-defined" predicates
+      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
+      kb.createOrReturnUserDefinedPredicate(k6);
+      kb.addPredicateFactory(k4, "com.example.Abc");
+      kb.createOrReturnUserDefinedPredicate(k5);
+      kb.addPredicateFactory(k2, "com.example.Xyz");
+      kb.addPredicateFactory(k3, "com.example.Abc");
+      kb.createOrReturnUserDefinedPredicate(k1);
+
+      // get all defined predicate keys from the knowledge base
+      Set<PredicateKey> allKeys = kb.getAllDefinedPredicateKeys();
+      assertEquals(7, allKeys.size());
+
+      // assert all the keys we added are included, and in the correct order
+      Iterator<PredicateKey> iterator = allKeys.iterator();
+      assertEquals(k1, iterator.next());
+      // although we didn't add "pj_add_predicate/2" it will be returned -
+      // it is the one predicate that is hardcoded in Projog and so is always present
+      assertEquals(TestUtils.ADD_PREDICATE_KEY, iterator.next());
+      assertEquals(k2, iterator.next());
+      assertEquals(k3, iterator.next());
+      assertEquals(k4, iterator.next());
+      assertEquals(k5, iterator.next());
+      assertEquals(k6, iterator.next());
+      assertFalse(iterator.hasNext());
    }
 
    @Test

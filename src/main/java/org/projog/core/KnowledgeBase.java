@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
@@ -76,6 +78,16 @@ public final class KnowledgeBase {
     */
    KnowledgeBase() {
       addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
+   }
+
+   /**
+    * Returns details of all predicates, both user-defined and built-in predicates.
+    */
+   public Set<PredicateKey> getAllDefinedPredicateKeys() {
+      Set<PredicateKey> result = new TreeSet<>();
+      result.addAll(javaPredicateClassNames.keySet());
+      result.addAll(userDefinedPredicates.keySet());
+      return Collections.unmodifiableSet(result);
    }
 
    /**

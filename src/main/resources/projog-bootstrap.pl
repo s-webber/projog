@@ -129,6 +129,7 @@
 ?- pj_add_predicate('.'/2, 'org.projog.core.function.kb.ConsultList').
 ?- pj_add_predicate(ensure_loaded/1, 'org.projog.core.function.kb.EnsureLoaded').
 ?- pj_add_predicate(flag/3, 'org.projog.core.function.kb.Flag').
+?- pj_add_predicate(current_predicate/1, 'org.projog.core.function.kb.CurrentPredicate').
 
 % db (recorded database)
 ?- pj_add_predicate(erase/1, 'org.projog.core.function.db.Erase').

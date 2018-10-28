@@ -18,6 +18,9 @@ package org.projog.core;
 import static org.projog.core.term.TermUtils.getAtomName;
 import static org.projog.core.term.TermUtils.toInt;
 
+import org.projog.core.term.Atom;
+import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -34,6 +37,8 @@ import org.projog.core.term.TermType;
  * PredicateKeys are constant; their values cannot be changed after they are created.
  */
 public final class PredicateKey implements Comparable<PredicateKey> {
+   private static final String PREDICATE_KEY_FUNCTOR = "/";
+
    private final String name;
    private final int numArgs;
 
@@ -62,7 +67,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
          throw new ProjogException(getInvalidTypeExceptionMessage(t));
       }
 
-      if (!"/".equals(t.getName()) || t.getArgs().length != 2) {
+      if (!PREDICATE_KEY_FUNCTOR.equals(t.getName()) || t.getArgs().length != 2) {
          throw new ProjogException("Expected a predicate with two arguments and the name: '/' but got: " + t);
       }
 
@@ -89,6 +94,10 @@ public final class PredicateKey implements Comparable<PredicateKey> {
 
    public int getNumArgs() {
       return numArgs;
+   }
+
+   public Term toTerm() {
+      return Structure.createStructure(PREDICATE_KEY_FUNCTOR, new Term[] {new Atom(name), new IntegerNumber(numArgs)});
    }
 
    /**
@@ -119,7 +128,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
       if (numArgs == 0) {
          return name;
       } else {
-         return name + "/" + numArgs;
+         return name + PREDICATE_KEY_FUNCTOR + numArgs;
       }
    }
 

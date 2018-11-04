@@ -186,6 +186,22 @@ import org.projog.core.term.TermType;
  %FALSE append(X, [b|c], [a,b,c,d])
  %FALSE append([a|b], X, Y)
  %FALSE append(X, [b|c], Y)
+
+ %FALSE append([a, a], X, [a])
+ %FALSE append(X,[a,a],[a])
+ %FALSE append([a,a],X,[])
+ %FALSE append(X,[a,a],[])
+
+ %QUERY append(X,[a,a],[a,a])
+ %ANSWER X=[]
+ %QUERY append([a,a],X,[a,a])
+ %ANSWER X=[]
+ %QUERY append(X,[],[a,a])
+ %ANSWER X=[a,a]
+ %QUERY append([],X,[a,a])
+ %ANSWER X=[a,a]
+ %QUERY append([],[],X)
+ %ANSWER X=[]
  */
 /**
  * <code>append(X,Y,Z)</code> - concatenates two lists.
@@ -241,6 +257,10 @@ public final class Append extends AbstractPredicateFactory {
             splitIdx = prefixList.size();
          } else {
             splitIdx = concatenatedLength - suffixList.size();
+         }
+
+         if (splitIdx < 0 || splitIdx > concatenatedList.size()) {
+            return false;
          }
 
          return prefix.unify(createList(concatenatedList.subList(0, splitIdx))) && suffix.unify(createList(concatenatedList.subList(splitIdx, concatenatedLength)));

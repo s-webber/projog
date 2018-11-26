@@ -15,6 +15,8 @@
  */
 package org.projog.core;
 
+import java.io.File;
+
 import org.projog.api.Projog;
 
 /**
@@ -65,4 +67,12 @@ public interface ProjogProperties {
     * @see KnowledgeBaseUtils#bootstrap(KnowledgeBase)
     */
    String getBootstrapScript();
+
+   /**
+    * The directory to store Java source code generated at runtime for compiled predicates.
+    *
+    * @return directory to store Java source code generated at runtime, or {@code null} if source code is not to be
+    * written to the file-system
+    */
+   File getCompiledContentOutputDirectory();
 }

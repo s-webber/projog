@@ -17,6 +17,8 @@ package org.projog.core.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseSentence;
 import static org.projog.TestUtils.write;
@@ -25,6 +27,7 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.Operands;
 import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
 public class SentenceParserTest {
    @Test
@@ -115,6 +118,39 @@ public class SentenceParserTest {
          assertNotNull(t);
          assertEquals(sentence, write(t));
       }
+   }
+
+   @Test
+   public void testVariables() {
+      Term t = parseSentence("test(A, A, _A, _A, B, _, _).");
+      Variable a1 = (Variable) t.getArgument(0);
+      Variable a2 = (Variable) t.getArgument(1);
+      Variable _a1 = (Variable) t.getArgument(2);
+      Variable _a2 = (Variable) t.getArgument(3);
+      Variable b = (Variable) t.getArgument(4);
+      Variable _1 = (Variable) t.getArgument(5);
+      Variable _2 = (Variable) t.getArgument(6);
+
+      assertEquals("A", a1.getId());
+      assertEquals("A", a2.getId());
+      assertEquals("_A", _a1.getId());
+      assertEquals("_A", _a2.getId());
+      assertEquals("B", b.getId());
+      assertEquals("_", _1.getId());
+      assertEquals("_", _2.getId());
+
+      // variables in same clause with same ID should reference the same object
+      assertSame(a1, a2);
+      assertSame(_a1, _a2);
+      // variables in same clause with different IDs should never reference the same object
+      assertNotSame(b, a1);
+      assertNotSame(b, _a1);
+      // different anonymous variables should never reference the same object (despite having the same variable ID)
+      assertNotSame(_1, _2);
+      // anonymous variables should never reference the same object as a named variable
+      assertNotSame(_1, a1);
+      assertNotSame(_1, _a1);
+      assertNotSame(_1, b);
    }
 
    @Test

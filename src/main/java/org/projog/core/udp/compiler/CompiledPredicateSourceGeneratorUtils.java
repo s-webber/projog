@@ -17,7 +17,6 @@ package org.projog.core.udp.compiler;
 
 import org.projog.core.PredicateKey;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /**
@@ -29,10 +28,6 @@ final class CompiledPredicateSourceGeneratorUtils {
     */
    private CompiledPredicateSourceGeneratorUtils() {
       // do nothing
-   }
-
-   static String getClassNameMinusPackage(Object o) {
-      return o.getClass().getSimpleName();
    }
 
    static String encodeName(Term t) {
@@ -88,26 +83,14 @@ final class CompiledPredicateSourceGeneratorUtils {
    }
 
    static String getKeyGeneration(PredicateKey key) {
-      return "new PredicateKey(" + encodeName(key.getName()) + ", " + key.getNumArgs() + ")";
+      return "new PredicateKey(" + encodeName(key.getName()) + "," + key.getNumArgs() + ")";
    }
 
-   static boolean isNoMoreThanTwoElementList(Term t) {
-      if (t.getType() != TermType.LIST) {
-         return false;
-      }
-      Term tail = t.getArgument(1);
-      return tail.getType() != TermType.LIST;
+   static boolean isNotAnonymousVariable(Term t) {
+      return !isAnonymousVariable(t);
    }
 
-   static String getUnifyStatement(String variable1, String variable2) {
-      return variable1 + ".unify(" + variable2 + ")";
-   }
-
-   static String getNewVariableSyntax(Term variable) {
-      return "new Variable(\"" + ((Variable) variable).getId() + "\")";
-   }
-
-   static String getNewListSyntax(String head, String tail) {
-      return "new List(" + head + ", " + tail + ")";
+   static boolean isAnonymousVariable(Term t) {
+      return t.getType().isVariable() && ((Variable) t).isAnonymous();
    }
 }

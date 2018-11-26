@@ -1,0 +1,222 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testNumericComparison"/3
+public final class P0 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+Variable v0=new Variable("A");
+Variable v1=new Variable("B");
+Variable v2=new Variable("C");
+if(v0.unify(a0)&&v1.unify(a1)&&v2.unify(a2)){
+Term v3=v2.getTerm();
+if(!F0.evaluate(v3,ATOM))return false;
+Term v4=v0.getTerm();
+Term v5=v1.getTerm();
+if(Double.compare(O.getNumeric(v4).getDouble(),O.getNumeric(v5).getDouble())<=0)return false;
+return true;
+}else return false;
+}
+private boolean initRule1(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v6=new Variable("A");
+Variable v7=new Variable("B");
+Variable v8=new Variable("C");
+if(v6.unify(a0)&&v7.unify(a1)&&v8.unify(a2)){
+Term v9=v8.getTerm();
+if(!F0.evaluate(v9,ATOM_0))return false;
+Term v10=v6.getTerm();
+Term v11=v7.getTerm();
+if(Double.compare(O.getNumeric(v10).getDouble(),O.getNumeric(v11).getDouble())<0)return false;
+return true;
+}else return false;
+}
+private boolean initRule2(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v12=new Variable("A");
+Variable v13=new Variable("B");
+Variable v14=new Variable("C");
+if(v12.unify(a0)&&v13.unify(a1)&&v14.unify(a2)){
+Term v15=v14.getTerm();
+if(!F0.evaluate(v15,ATOM_1))return false;
+Term v16=v12.getTerm();
+Term v17=v13.getTerm();
+if(Double.compare(O.getNumeric(v16).getDouble(),O.getNumeric(v17).getDouble())>=0)return false;
+return true;
+}else return false;
+}
+private boolean initRule3(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v18=new Variable("A");
+Variable v19=new Variable("B");
+Variable v20=new Variable("C");
+if(v18.unify(a0)&&v19.unify(a1)&&v20.unify(a2)){
+Term v21=v20.getTerm();
+if(!F0.evaluate(v21,ATOM_2))return false;
+Term v22=v18.getTerm();
+Term v23=v19.getTerm();
+if(Double.compare(O.getNumeric(v22).getDouble(),O.getNumeric(v23).getDouble())>0)return false;
+return true;
+}else return false;
+}
+private boolean initRule4(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v24=new Variable("A");
+Variable v25=new Variable("B");
+Variable v26=new Variable("C");
+if(v24.unify(a0)&&v25.unify(a1)&&v26.unify(a2)){
+Term v27=v26.getTerm();
+if(!F0.evaluate(v27,ATOM_3))return false;
+Term v28=v24.getTerm();
+Term v29=v25.getTerm();
+if(Double.compare(O.getNumeric(v28).getDouble(),O.getNumeric(v29).getDouble())!=0)return false;
+return true;
+}else return false;
+}
+private boolean initRule5(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v30=new Variable("A");
+Variable v31=new Variable("B");
+Variable v32=new Variable("C");
+if(v30.unify(a0)&&v31.unify(a1)&&v32.unify(a2)){
+Term v33=v32.getTerm();
+if(!F0.evaluate(v33,ATOM_4))return false;
+Term v34=v30.getTerm();
+Term v35=v31.getTerm();
+if(Double.compare(O.getNumeric(v34).getDouble(),O.getNumeric(v35).getDouble())==0)return false;
+return true;
+}else return false;
+}
+private boolean initRule6(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v36=new Variable("A");
+Variable v37=new Variable("B");
+Variable v38=new Variable("C");
+if(v36.unify(a0)&&v37.unify(a1)&&v38.unify(a2)){
+Term v39=v38.getTerm();
+if(!F0.evaluate(v39,ATOM_5))return false;
+Term v40=v36.getTerm();
+Term v41=v37.getTerm();
+if(Double.compare(A0.calculate(O.getNumeric(v40),O.getNumeric(v41)).getDouble(),A1.calculate(O.getNumeric(v41),INTEGER_3).getDouble())<=0)return false;
+return true;
+}else return false;
+}
+private boolean initRule7(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v42=new Variable("A");
+Variable v43=new Variable("B");
+Variable v44=new Variable("C");
+if(v42.unify(a0)&&v43.unify(a1)&&v44.unify(a2)){
+Term v45=v44.getTerm();
+if(!F0.evaluate(v45,ATOM_6))return false;
+Term v46=v42.getTerm();
+if(Double.compare(O.getNumeric(v46).getDouble(),7d)>=0)return false;
+Term v47=v43.getTerm();
+if(Double.compare(5d,O.getNumeric(v47).getDouble())>0)return false;
+return true;
+}else return false;
+}
+public boolean evaluate(){
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+return true;}
+case 1:
+c=2;
+if(initRule1())
+{
+return true;}
+case 2:
+c=3;
+if(initRule2())
+{
+return true;}
+case 3:
+c=4;
+if(initRule3())
+{
+return true;}
+case 4:
+c=5;
+if(initRule4())
+{
+return true;}
+case 5:
+c=6;
+if(initRule5())
+{
+return true;}
+case 6:
+c=7;
+if(initRule6())
+{
+return true;}
+case 7:
+c=8;
+if(initRule7())
+{
+return true;}
+}}catch(CutException e){c=8;}
+return false;}
+public boolean couldReevaluationSucceed(){
+return c!=8;
+}
+public P0 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2]);
+}
+public P0 getPredicate(Term i0,Term i1,Term i2) {
+return new P0(i0,i1,i2);}
+public boolean isRetryable(){return true;}
+public P0(KnowledgeBase kb){
+F0=(org.projog.core.function.compare.Equal)kb.getPredicateFactory(new PredicateKey("=",2));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+A0=(org.projog.core.function.math.Subtract)O.getArithmeticOperator(new PredicateKey("-",2));
+A1=(org.projog.core.function.math.Add)O.getArithmeticOperator(new PredicateKey("+",2));
+a0=null;
+a1=null;
+a2=null;
+}
+private P0(Term i0,Term i1,Term i2) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.function.compare.Equal F0;
+private static org.projog.core.ArithmeticOperators O;
+private static org.projog.core.function.math.Subtract A0;
+private static org.projog.core.function.math.Add A1;
+private static final Atom ATOM=new Atom("a");
+private static final Atom ATOM_0=new Atom("b");
+private static final Atom ATOM_1=new Atom("c");
+private static final Atom ATOM_2=new Atom("d");
+private static final Atom ATOM_3=new Atom("e");
+private static final Atom ATOM_4=new Atom("f");
+private static final Atom ATOM_5=new Atom("g");
+private static final IntegerNumber INTEGER_3=new IntegerNumber(3L);
+private static final Atom ATOM_6=new Atom("h");
+private final Term a0;
+private final Term a1;
+private final Term a2;
+private int c;
+}

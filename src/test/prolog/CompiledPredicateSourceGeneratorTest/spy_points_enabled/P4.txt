@@ -1,0 +1,119 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testOnce"/7
+public final class P4 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+Variable v0=new Variable("A");
+Variable v1=new Variable("B");
+Variable v2=new Variable("C");
+Variable v3=new Variable("D");
+Variable v4=new Variable("E");
+Variable v5=new Variable("F");
+Variable v6=new Variable("G");
+if(v0.unify(a0)&&v1.unify(a1)&&v2.unify(a2)&&v3.unify(a3)&&v4.unify(a4)&&v5.unify(a5)&&v6.unify(a6)){
+if(!F0.evaluate())return false;
+Term v7=v0.getTerm();
+Term v8=v1.getTerm();
+if(!F1.getPredicate(v7,v8).evaluate())return false;
+Variable v9=new Variable("X");
+if(!F2.getPredicate(v9).evaluate())return false;
+if(!F3.getPredicate(INTEGER_3).evaluate())return false;
+Term v10=v2.getTerm();
+Term v11=v3.getTerm();
+if(!F4.getPredicate(v10,v11).evaluate())return false;
+Term v12=v4.getTerm();
+Term v13=v9.getTerm();
+if(!F5.evaluate(v12,v13))return false;
+Term v14=v7.getTerm();
+Term v15=v8.getTerm();
+Term v16=v5.getTerm();
+if(!F6.getPredicate(v14,v15,v16).evaluate())return false;
+Term v17=v6.getTerm();
+if(!F7.evaluate(v17))return false;
+return true;
+}else return false;
+}
+public boolean evaluate(){
+if(d){
+if(c==0){
+if(d){s.logCall(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});}
+}else{
+if(d){s.logRedo(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});}
+}}
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+if(d){s.logExit(this,new Term[]{a0,a1,a2,a3,a4,a5,a6},1);}
+return true;}
+}}catch(CutException e){c=1;}
+if(d){s.logFail(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});}
+return false;}
+public boolean couldReevaluationSucceed(){
+return false;
+}
+public P4 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
+}
+public P4 getPredicate(Term i0,Term i1,Term i2,Term i3,Term i4,Term i5,Term i6) {
+return new P4(i0,i1,i2,i3,i4,i5,i6);}
+public boolean isRetryable(){return false;}
+public P4(KnowledgeBase kb){
+F0=(org.projog.core.function.bool.True)kb.getPredicateFactory(new PredicateKey("true",0));
+F1=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("multipleFactsMultipleArguments",2));
+F2=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("singleFactSingleArgument",1));
+F3=(org.projog.core.function.flow.RepeatSetAmount)kb.getPredicateFactory(new PredicateKey("repeat",1));
+F4=(org.projog.core.function.list.Length)kb.getPredicateFactory(new PredicateKey("length",2));
+F5=(org.projog.core.function.compare.Equal)kb.getPredicateFactory(new PredicateKey("=",2));
+F6=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("testTailRecursiveAppend",3));
+F7=(org.projog.core.function.compound.Once)kb.getPredicateFactory(new PredicateKey("once",1));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+s=KnowledgeBaseUtils.getSpyPoints(kb).getSpyPoint(new PredicateKey("testOnce",7));
+d=false;
+a0=null;
+a1=null;
+a2=null;
+a3=null;
+a4=null;
+a5=null;
+a6=null;
+}
+private P4(Term i0,Term i1,Term i2,Term i3,Term i4,Term i5,Term i6) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+a3=i3.getTerm();
+a4=i4.getTerm();
+a5=i5.getTerm();
+a6=i6.getTerm();
+d=s.isEnabled();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.function.bool.True F0;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F1;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F2;
+private static org.projog.core.function.flow.RepeatSetAmount F3;
+private static org.projog.core.function.list.Length F4;
+private static org.projog.core.function.compare.Equal F5;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F6;
+private static org.projog.core.function.compound.Once F7;
+private static org.projog.core.ArithmeticOperators O;
+private static final IntegerNumber INTEGER_3=new IntegerNumber(3L);
+private final Term a0;
+private final Term a1;
+private final Term a2;
+private final Term a3;
+private final Term a4;
+private final Term a5;
+private final Term a6;
+private int c;
+private static org.projog.core.SpyPoints.SpyPoint s;
+private final boolean d;
+}

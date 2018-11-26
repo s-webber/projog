@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.parser.TokenType.ANONYMOUS_VARIABLE;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
@@ -64,16 +63,16 @@ public class TokenParserTest {
       assertTokenType("X1", VARIABLE);
       assertTokenType("X_", VARIABLE);
       assertTokenType("X_7hU", VARIABLE);
+      assertTokenType("__", VARIABLE);
+      assertTokenType("_X", VARIABLE);
+      assertTokenType("_x", VARIABLE);
+      assertTokenType("_2", VARIABLE);
+      assertTokenType("_X_2a", VARIABLE);
    }
 
    @Test
    public void testAnonymousVariable() {
-      assertTokenType("_", ANONYMOUS_VARIABLE);
-      assertTokenType("__", ANONYMOUS_VARIABLE);
-      assertTokenType("_X", ANONYMOUS_VARIABLE);
-      assertTokenType("_x", ANONYMOUS_VARIABLE);
-      assertTokenType("_2", ANONYMOUS_VARIABLE);
-      assertTokenType("_X_2a", ANONYMOUS_VARIABLE);
+      assertTokenType("_", VARIABLE);
    }
 
    @Test

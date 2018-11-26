@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
 import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.write;
@@ -35,6 +36,7 @@ import java.io.StringReader;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
+import org.projog.core.ProjogProperties;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -192,8 +194,18 @@ public class ProjogTest {
 
    /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
    @Test
-   public void testIOExceptionWhileEvaluatingQueries() {
-      Projog p = new Projog(COMPILATION_ENABLED_PROPERTIES);
+   public void testIOExceptionWhileEvaluatingQueries_compiledMode() {
+      assertStackTraceOfIOExceptionWhileEvaluatingQueries(COMPILATION_ENABLED_PROPERTIES);
+   }
+
+   /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
+   @Test
+   public void testIOExceptionWhileEvaluatingQueries_interpretedMode() {
+      assertStackTraceOfIOExceptionWhileEvaluatingQueries(COMPILATION_DISABLED_PROPERTIES);
+   }
+
+   private void assertStackTraceOfIOExceptionWhileEvaluatingQueries(ProjogProperties projogProperties) {
+      Projog p = new Projog(projogProperties);
       StringBuilder inputSource = new StringBuilder();
       inputSource.append("x(A) :- fail. x(A) :- y(A). x(A). ");
       inputSource.append("y(A) :- Q is 4 + 5, z(A, A, Q). ");
@@ -207,10 +219,10 @@ public class ProjogTest {
          fail();
       } catch (ProjogException projogException) {
          assertEquals("Unable to open input for: a_directory_that_doesnt_exist/another_directory_that_doesnt_exist/some_file.xyz", projogException.getMessage());
-         FileNotFoundException fileNotFoundException = (FileNotFoundException) projogException.getCause();
+         assertSame(FileNotFoundException.class, projogException.getCause().getClass());
 
          // retrieve and check stack trace elements
-         ProjogStackTraceElement[] elements = p.getStackTrace(fileNotFoundException);
+         ProjogStackTraceElement[] elements = p.getStackTrace(projogException);
          assertEquals(3, elements.length);
          assertProjogStackTraceElement(elements[0], "z/3", 2, ":-(z(A, B, C), open(A, read, Z))");
          assertProjogStackTraceElement(elements[1], "y/1", 0, ":-(y(A), ,(is(Q, +(4, 5)), z(A, A, Q)))");

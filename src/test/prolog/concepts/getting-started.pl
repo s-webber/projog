@@ -69,4 +69,3 @@
 %
 %OUTPUT
 %ANSWER/
-%NO

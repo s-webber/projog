@@ -98,11 +98,11 @@ public final class ArithmeticOperators {
    }
 
    private Numeric calculate(Term term, Term[] args) {
-      return getArithmeticOperator(term).calculate(args);
+      PredicateKey key = PredicateKey.createForTerm(term);
+      return getArithmeticOperator(key).calculate(args);
    }
 
-   private ArithmeticOperator getArithmeticOperator(Term term) {
-      PredicateKey key = PredicateKey.createForTerm(term);
+   public ArithmeticOperator getArithmeticOperator(PredicateKey key) {
       ArithmeticOperator e = operatorInstances.get(key);
       if (e != null) {
          return e;

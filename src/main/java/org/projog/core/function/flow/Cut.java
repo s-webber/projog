@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@ import org.projog.core.function.AbstractPredicate;
 import org.projog.core.function.AbstractPredicateFactory;
 
 /* TEST
- %QUERY repeat, !
- %ANSWER/
- %NO
+ %TRUE_NO repeat, !
 
  print_first_sentence(X) :-
     atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
@@ -30,14 +28,12 @@ import org.projog.core.function.AbstractPredicateFactory;
  %QUERY print_first_sentence('word1 word2 word3. word4 word5 word6.')
  %OUTPUT word1 word2 word3.
  %ANSWER/
- %NO
 
  a(x, Y) :- Y = 1, !.
  a(X, Y) :- Y = 2.
 
  %QUERY a(x, Y)
  %ANSWER Y = 1
- %NO
 
  %QUERY a(y, Y)
  %ANSWER Y = 2

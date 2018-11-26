@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,7 @@ import static org.projog.core.parser.Delimiters.isListTail;
 import static org.projog.core.parser.Delimiters.isPredicateCloseBracket;
 import static org.projog.core.parser.Delimiters.isPredicateOpenBracket;
 import static org.projog.core.parser.Delimiters.isSentenceTerminator;
+import static org.projog.core.term.Variable.ANONYMOUS_VARIABLE_ID;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -50,7 +51,7 @@ import org.projog.core.term.Variable;
  * <p>
  * <b>Note:</b> not thread safe.
  * </p>
- * 
+ *
  * @see Operands
  */
 public class SentenceParser {
@@ -95,7 +96,7 @@ public class SentenceParser {
 
    /**
     * Returns a new {@code SentenceParser} will parse the specified {@code String} using the specified {@code Operands}.
-    * 
+    *
     * @param prologSyntax the prolog syntax to be parsed
     * @param operands details of the operands to use during parsing
     * @return a new {@code SentenceParser}
@@ -108,7 +109,7 @@ public class SentenceParser {
    /**
     * Returns a new {@code SentenceParser} that will parse Prolog syntax read from the specified {@code Reader} using
     * the specified {@code Operands}.
-    * 
+    *
     * @param reader the source of the prolog syntax to be parsed
     * @param operands details of the operands to use during parsing
     * @return a new {@code SentenceParser}
@@ -126,7 +127,7 @@ public class SentenceParser {
    /**
     * Creates a {@link Term} from Prolog syntax, terminated by a {@code .}, read from this object's
     * {@link CharacterParser}.
-    * 
+    *
     * @return a {@link Term} created from Prolog syntax read from this object's {@link CharacterParser} or {@code null}
     * if the end of the underlying stream being parsed has been reached
     * @throws ParserException if an error parsing the Prolog syntax occurs
@@ -147,7 +148,7 @@ public class SentenceParser {
 
    /**
     * Creates a {@link Term} from Prolog syntax read from this object's {@link CharacterParser}.
-    * 
+    *
     * @return a {@link Term} created from Prolog syntax read from this object's {@link CharacterParser} or {@code null}
     * if the end of the underlying stream being parsed has been reached
     * @throws ParserException if an error parsing the Prolog syntax occurs
@@ -173,7 +174,7 @@ public class SentenceParser {
     * <p>
     * Returns all {@link Variable}s created by this {@code SentenceParser} either since it was created or since the last
     * execution of {@link #parseTerm()}.
-    * 
+    *
     * @return collection of {@link Variable} instances created by this {@code SentenceParser}
     */
    @SuppressWarnings("unchecked")
@@ -200,7 +201,7 @@ public class SentenceParser {
     * considered to make sure the terms are ordered correctly (due to different operand precedence it is not always the
     * case that the terms will be ordered in the resulting composite term in the same order they were parsed from the
     * input stream).
-    * 
+    *
     * @param currentTerm represents the current state of the process to parse a complete term
     * @param currentLevel the current priority/precedence/level of terms being parsed - if an operand represented by a
     * term retrieved by this method has a higher priority then reordering needs to take place to position the term in
@@ -219,7 +220,7 @@ public class SentenceParser {
          Term postfixTerm = addPostfixOperand(next, currentTerm);
          return getTerm(postfixTerm, currentLevel, maxLevel, false);
       } else if (!operands.infix(next)) {
-         // could be '.' if end of sentence 
+         // could be '.' if end of sentence
          // or ',', '|', ']' or ')' if parsing list or predicate
          // or could be an error
          parser.rewind(nextToken);
@@ -268,7 +269,7 @@ public class SentenceParser {
     * <p>
     * If the parsed {@code Term} represents a prefix operand, then the subsequent term is also parsed so it can be used
     * as an argument in the returned structure.
-    * 
+    *
     * @param currentLevel the current priority level of terms being parsed (if the parsed term represents a prefix
     * operand, then the operand cannot have a higher priority than {@code currentLevel} (a {@code ParserException} will
     * be thrown if does).
@@ -324,7 +325,7 @@ public class SentenceParser {
     * <p>
     * The correct position of the post-fix operand within the composite term (and so what the post-fix operands actual
     * argument will be) is determined by operand priority.
-    * 
+    *
     * @param original a composite term representing the current state of parsing the current sentence
     * @param postfixOperand a term which represents a post-fix operand
     */
@@ -374,8 +375,6 @@ public class SentenceParser {
                return toDecimalFraction(token.value);
             case VARIABLE:
                return getVariable(token.value);
-            case ANONYMOUS_VARIABLE:
-               return getAnonymousVariable(token.value);
             default:
                throw new IllegalArgumentException();
          }
@@ -404,7 +403,7 @@ public class SentenceParser {
             throw newParserException("No arguments specified for structure: " + name);
          }
 
-         ArrayList<Term> args = new ArrayList<Term>();
+         ArrayList<Term> args = new ArrayList<>();
 
          Term t = getCommaSeparatedArgument();
          args.add(t);
@@ -431,16 +430,24 @@ public class SentenceParser {
     * new {@code Variable} will be created.
     */
    private Variable getVariable(String id) {
+      if (ANONYMOUS_VARIABLE_ID.equals(id)) {
+         return getAnonymousVariable();
+      } else {
+         return getNamedVariable(id);
+      }
+   }
+
+   private Variable getAnonymousVariable() {
+      return new Variable(ANONYMOUS_VARIABLE_ID);
+   }
+
+   private Variable getNamedVariable(String id) {
       Variable v = variables.get(id);
       if (v == null) {
          v = new Variable(id);
          variables.put(id, v);
       }
       return v;
-   }
-
-   private Variable getAnonymousVariable(String id) {
-      return new Variable(id);
    }
 
    /** Returns a newly created {@code List} with elements read from the parser. */
@@ -481,9 +488,9 @@ public class SentenceParser {
     * of any comma. i.e. Any parsed comma should not be considered as part of the argument currently being parsed.
     */
    private Term getCommaSeparatedArgument() {
-      // Call getArgument with a priority/precedence/level of one less than the priority of a comma - 
+      // Call getArgument with a priority/precedence/level of one less than the priority of a comma -
       // as we only want to continue parsing terms that have a lower priority level than that.
-      // The reason this is slightly complicated is because of the overloaded use of a comma in Prolog -  
+      // The reason this is slightly complicated is because of the overloaded use of a comma in Prolog -
       // as well as acting as a delimiter in a sequence of arguments for a list or structure,
       // a comma is also a predicate in its own right (as a conjunction).
       if (operands.infix(",")) {
@@ -495,7 +502,7 @@ public class SentenceParser {
 
    private Term getTermInBrackets() {
       // As we are at the starting point for parsing a term contained in brackets
-      // (and as it being in brackets means we can parse it in isolation without 
+      // (and as it being in brackets means we can parse it in isolation without
       // considering the priority of any surrounding terms outside the brackets)
       // we call getArgument with the highest possible priority.
       Term t = getTerm(Integer.MAX_VALUE);

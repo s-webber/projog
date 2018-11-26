@@ -248,4 +248,23 @@ public class VariableTest {
       } catch (StackOverflowError e) {
       }
    }
+
+   public void testAnonymous() {
+      assertTrue(new Variable("_").isAnonymous());
+   }
+
+   public void testNotAnonymous() {
+      assertFalse(new Variable("__").isAnonymous());
+      assertFalse(new Variable("_1").isAnonymous());
+      assertFalse(new Variable("_X").isAnonymous());
+      assertFalse(new Variable("X").isAnonymous());
+      assertFalse(new Variable("XYZ").isAnonymous());
+      assertFalse(new Variable("X_").isAnonymous());
+      assertFalse(new Variable("X_Y").isAnonymous());
+      assertFalse(new Variable("_X_Y_").isAnonymous());
+   }
+
+   public void testAnonymousId() {
+      assertEquals("_", Variable.ANONYMOUS_VARIABLE_ID);
+   }
 }

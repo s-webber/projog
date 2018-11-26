@@ -46,16 +46,16 @@ c9 :- true.
 c10 :- !.
 c10 :- true.
 
-%TRUE_NO c1
-%TRUE_NO c2
-%TRUE_NO c3
-%TRUE_NO c4
-%TRUE_NO c5
-%TRUE_NO c6
-%TRUE_NO c7
-%TRUE_NO c8
-%TRUE_NO c9
-%TRUE_NO c10
+%TRUE c1
+%TRUE c2
+%TRUE c3
+%TRUE c4
+%TRUE c5
+%TRUE c6
+%TRUE c7
+%TRUE c8
+%TRUE c9
+%TRUE c10
 
 d :- true, 1>2, !.
 d :- true.

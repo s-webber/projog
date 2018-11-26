@@ -18,6 +18,7 @@ package org.projog.core.udp;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
+import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -32,14 +33,19 @@ import org.projog.core.term.Term;
  * arguments.
  */
 public final class SingleRuleAlwaysTruePredicate implements PredicateFactory {
-   public final static SingleRuleAlwaysTruePredicate SINGLETON = new SingleRuleAlwaysTruePredicate();
+   private final SpyPoints.SpyPoint spyPoint;
 
-   /** @see #SINGLETON */
-   private SingleRuleAlwaysTruePredicate() {
+   SingleRuleAlwaysTruePredicate(SpyPoints.SpyPoint spyPoint) {
+      this.spyPoint = spyPoint;
    }
 
    @Override
    public Predicate getPredicate(Term... args) {
+      if (spyPoint.isEnabled()) {
+         spyPoint.logCall(this, args);
+         spyPoint.logExit(this, args, 1);
+      }
+
       return AbstractSingletonPredicate.toPredicate(true);
    }
 

@@ -94,3 +94,65 @@ z :- a(A), b(B), x(A,B,Y,Z), write(A / B / Y / Z), nl, fail.
 %
 %OUTPUT
 %NO
+
+test1(X,_,Y) :- X>1, !, repeat(3), Y is 3, !, X<4.
+test2(X,Y):- a(X), b(Y), test1(Y, X, Z).
+
+%QUERY test2(X,Y)
+%ANSWER
+% X=a
+% Y=2
+%ANSWER
+%ANSWER
+% X=a
+% Y=3 
+%ANSWER
+%ANSWER
+% X=b
+% Y=2 
+%ANSWER
+%ANSWER
+% X=b
+% Y=3 
+%ANSWER
+%ANSWER
+% X=c
+% Y=2 
+%ANSWER
+%ANSWER
+% X=c
+% Y=3 
+%ANSWER
+%ANSWER
+% X=d
+% Y=2 
+%ANSWER
+%ANSWER
+% X=d
+% Y=3 
+%ANSWER
+%ANSWER
+% X=e
+% Y=2 
+%ANSWER
+%ANSWER
+% X=e
+% Y=3 
+%ANSWER
+%ANSWER
+% X=f
+% Y=2 
+%ANSWER
+%ANSWER
+% X=f
+% Y=3 
+%ANSWER
+%ANSWER
+% X=g
+% Y=2 
+%ANSWER
+%ANSWER
+% X=g
+% Y=3
+%ANSWER
+%NO

@@ -93,7 +93,7 @@ public final class Write extends AbstractSingletonPredicate {
 
    @Override
    public boolean evaluate(Term arg) {
-      print(toString(arg));
+      writeString(toString(arg));
       return true;
    }
 
@@ -101,7 +101,8 @@ public final class Write extends AbstractSingletonPredicate {
       return termFormatter.toString(t);
    }
 
-   private void print(String s) {
+   /** Called directly from compiled predicates generated at runtime. */
+   public void writeString(String s) {
       PrintStream os = fileHandles.getCurrentOutputStream();
       if (addNewLine) {
          os.println(s);

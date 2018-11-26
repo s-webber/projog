@@ -15,6 +15,8 @@
  */
 package org.projog.core;
 
+import java.io.File;
+
 /**
  * Implementation of {@link ProjogProperties} with hard-coded values.
  * <p>
@@ -44,5 +46,11 @@ public class ProjogDefaultProperties implements ProjogProperties {
    @Override
    public String getBootstrapScript() {
       return DEFAULT_BOOTSTRAP_SCRIPT;
+   }
+
+   /** Returns {@code null} */
+   @Override
+   public File getCompiledContentOutputDirectory() {
+      return null;
    }
 }

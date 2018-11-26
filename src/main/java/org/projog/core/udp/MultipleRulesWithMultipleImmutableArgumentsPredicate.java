@@ -34,60 +34,24 @@ import org.projog.core.term.TermUtils;
  * @see SingleRuleWithMultipleImmutableArgumentsPredicate
  * @see MultipleRulesWithSingleImmutableArgumentPredicate
  */
-public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implements Predicate, PredicateFactory { // TODO split into two classes
-   private Term[] args;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final Term[][] data;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final SpyPoints.SpyPoint spyPoint;
+public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implements PredicateFactory {
+   private final Term[][] data;
+   private final SpyPoints.SpyPoint spyPoint;
    private final int numClauses;
-   private final boolean isDebugEnabled;
-   private int ctr;
-   private boolean retrying;
 
-   public MultipleRulesWithMultipleImmutableArgumentsPredicate(Term[] args, Term[][] data, SpyPoints.SpyPoint spyPoint) {
-      this.args = args;
+   MultipleRulesWithMultipleImmutableArgumentsPredicate(Term[][] data, SpyPoints.SpyPoint spyPoint) {
       this.data = data;
       this.numClauses = data.length;
       this.spyPoint = spyPoint;
-      this.isDebugEnabled = spyPoint != null && spyPoint.isEnabled();
    }
 
    @Override
    public Predicate getPredicate(Term... args) {
-      return new MultipleRulesWithMultipleImmutableArgumentsPredicate(args, data, spyPoint);
+      return new RetryablePredicate(args);
    }
 
    @Override
-   public boolean evaluate() {
-      if (retrying) {
-         if (isDebugEnabled) {
-            spyPoint.logRedo(this, args);
-         }
-         TermUtils.backtrack(args);
-      } else {
-         if (isDebugEnabled) {
-            spyPoint.logCall(this, args);
-         }
-         retrying = true;
-      }
-      while (ctr < numClauses) {
-         if (TermUtils.unify(args, data[ctr++])) {
-            if (isDebugEnabled) {
-               spyPoint.logExit(this, args, ctr);
-            }
-            return true;
-         }
-      }
-      if (isDebugEnabled) {
-         spyPoint.logFail(this, args);
-      }
-      return false;
-   }
-
-   @Override
-   public boolean couldReevaluationSucceed() {
-      return ctr < numClauses;
+   public void setKnowledgeBase(KnowledgeBase kb) {
    }
 
    @Override
@@ -95,7 +59,66 @@ public final class MultipleRulesWithMultipleImmutableArgumentsPredicate implemen
       return true;
    }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
+   private class RetryablePredicate implements Predicate {
+      private final Term[] args;
+      private final boolean isDebugEnabled;
+      private int ctr;
+      private boolean retrying;
+
+      RetryablePredicate(Term[] args) {
+         this.args = args;
+         this.isDebugEnabled = spyPoint != null && spyPoint.isEnabled();
+      }
+
+      @Override
+      public boolean evaluate() {
+         if (retrying) {
+            logRedo();
+            TermUtils.backtrack(args);
+         } else {
+            logCall();
+            retrying = true;
+         }
+
+         while (ctr < numClauses) {
+            if (TermUtils.unify(args, data[ctr++])) {
+               logExit();
+               return true;
+            }
+            TermUtils.backtrack(args);
+         }
+
+         logFail();
+         return false;
+      }
+
+      private void logRedo() {
+         if (isDebugEnabled) {
+            spyPoint.logRedo(this, args);
+         }
+      }
+
+      private void logCall() {
+         if (isDebugEnabled) {
+            spyPoint.logCall(this, args);
+         }
+      }
+
+      private void logExit() {
+         if (isDebugEnabled) {
+            spyPoint.logExit(this, args, ctr);
+         }
+      }
+
+      private void logFail() {
+         if (isDebugEnabled) {
+            spyPoint.logFail(this, args);
+         }
+      }
+
+      @Override
+      public boolean couldReevaluationSucceed() {
+         return ctr < numClauses;
+      }
    }
 }

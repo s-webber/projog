@@ -15,6 +15,8 @@
  */
 package org.projog.core;
 
+import java.io.File;
+
 /**
  * Implementation of {@link ProjogProperties} with values determined from system properties.
  * <p>
@@ -26,6 +28,9 @@ package org.projog.core;
  * <li><code>projog.spypoints</code> - <code>true</code> if the Projog inference engine should support the creation of
  * spypoints to aid debugging, or <code>false</code> if requests to set spypoints should be ignored. Ignoring spypoints
  * can give small performance improvements. Defaults to <code>true</code>.</li>
+ * <li><code>projog.compiledContentOutputDirectory</code> - specifies the directory to store Java source code generated
+ * at runtime during the compilation of user-defined predicates. If not specified then the source code will not be
+ * written to the file-system.</li>
  * </ul>
  * </p>
  * <p>
@@ -37,8 +42,16 @@ package org.projog.core;
  * @see ProjogDefaultProperties
  */
 public final class ProjogSystemProperties implements ProjogProperties {
-   private final boolean isSpyPointsEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.spypoints"));
-   private final boolean isRuntimeCompilationEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.compile"));
+   private final boolean isSpyPointsEnabled;
+   private final boolean isRuntimeCompilationEnabled;
+   private final File compiledContentOutputDirectory;
+
+   public ProjogSystemProperties() {
+      this.isSpyPointsEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.spypoints"));
+      this.isRuntimeCompilationEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.compile"));
+      String outputDirectoryName = System.getProperty("projog.compiledContentOutputDirectory");
+      this.compiledContentOutputDirectory = outputDirectoryName == null ? null : new File(outputDirectoryName);
+   }
 
    /**
     * Returns {@code true} unless there is a system property named "projog.spypoints" with the value "false".
@@ -70,5 +83,16 @@ public final class ProjogSystemProperties implements ProjogProperties {
    @Override
    public String getBootstrapScript() {
       return DEFAULT_BOOTSTRAP_SCRIPT;
+   }
+
+   /**
+    * Returns the file represented by "projog.compiledContentOutputDirectory".
+    *
+    * @return the file represented by "projog.compiledContentOutputDirectory", or {@code null} if there is no system
+    * property with that key.
+    */
+   @Override
+   public File getCompiledContentOutputDirectory() {
+      return compiledContentOutputDirectory;
    }
 }

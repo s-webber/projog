@@ -13,4 +13,3 @@ test4(_) :- true.
 %QUERY test4(a)
 %ANSWER/
 %ANSWER/
-%NO

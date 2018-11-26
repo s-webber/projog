@@ -1,0 +1,76 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testTailRecursiveAppend"/3
+public final class P1 extends org.projog.core.udp.compiler.CompiledTailRecursivePredicate{
+private boolean initRule0(){
+Variable v0=new Variable("Ys");
+if(EmptyList.EMPTY_LIST.unify(a0)&&v0.unify(a1)&&v0.unify(a2)){
+return true;
+}else return false;
+}
+private boolean initRule1(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v1=new Variable("X");
+v2=new Variable("Zs");
+v3=new Variable("Ys");
+v4=new Variable("Xs");
+if(new List(v1.getTerm(), v4.getTerm()).unify(a0)&&v3.unify(a1)&&new List(v1.getTerm(), v2.getTerm()).unify(a2)){
+return true;
+}else return false;
+}
+public boolean couldReevaluationSucceed(){return r;}
+public final boolean[] isSingleResultIfArgumentImmutable(){return new boolean[]{true,false,false};}
+protected final boolean matchFirstRule(){return initRule0();}
+protected final boolean matchSecondRule(){if (initRule1()){
+a0=v4.getTerm();
+a1=v3.getTerm();
+a2=v2.getTerm();
+return true;}return false;}
+protected final void backtrack(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+}
+protected final void logCall(){
+}
+protected final void logRedo(){
+}
+protected final void logExit(){
+}
+protected final void logFail(){
+}
+public P1 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2]);
+}
+public P1 getPredicate(Term i0,Term i1,Term i2) {
+return new P1(i0,i1,i2);}
+public boolean isRetryable(){return true;}
+public P1(KnowledgeBase kb){
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+a0=null;
+a1=null;
+a2=null;
+r=true;}
+private P1(Term i0,Term i1,Term i2) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+r=!i0.isImmutable();
+}
+private final boolean r;
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.ArithmeticOperators O;
+private Variable v2;
+private Variable v3;
+private Variable v4;
+private  Term a0;
+private  Term a1;
+private  Term a2;
+}

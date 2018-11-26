@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import static java.lang.Character.isUpperCase;
 import static java.lang.Character.isWhitespace;
 import static org.projog.core.parser.Delimiters.isDelimiter;
 import static org.projog.core.parser.Delimiters.isListOpenBracket;
-import static org.projog.core.parser.TokenType.ANONYMOUS_VARIABLE;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
@@ -83,10 +82,8 @@ class TokenParser {
       final int c = parser.getNext();
       if (isEndOfStream(c)) {
          throw newParserException("Unexpected end of stream");
-      } else if (isUpperCase(c)) {
+      } else if (isVariable(c)) {
          return parseText(c, VARIABLE);
-      } else if (isAnonymousVariable(c)) {
-         return parseText(c, ANONYMOUS_VARIABLE);
       } else if (isLowerCase(c)) {
          return parseText(c, ATOM);
       } else if (isQuote(c)) {
@@ -402,10 +399,14 @@ class TokenParser {
    }
 
    private static boolean isValidForAtom(int c) {
-      return isAlphabetic(c) || isDigit(c) || isAnonymousVariable(c);
+      return isAlphabetic(c) || isDigit(c) || isUnderscore(c);
    }
 
-   private static boolean isAnonymousVariable(int c) {
+   private static boolean isVariable(int c) {
+      return isUpperCase(c) || isUnderscore(c);
+   }
+
+   private static boolean isUnderscore(int c) {
       return c == '_';
    }
 

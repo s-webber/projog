@@ -18,6 +18,8 @@ package org.projog.api;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.term.TermUtils.createAnonymousVariable;
+import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_METHOD_NAME_PREFIX;
+import static org.projog.core.udp.compiler.CompiledPredicateConstants.RETRY_RULE_METHOD_NAME_PREFIX;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -40,6 +42,7 @@ import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
+import org.projog.core.udp.compiler.CompiledPredicateConstants;
 import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
 /**
@@ -277,7 +280,7 @@ public final class Projog {
    private ProjogStackTraceElement createProjogStackTraceElement(StackTraceElement element, List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates) {
       String className = element.getClassName();
       String methodName = element.getMethodName();
-      if ("org.projog.core.udp.InterpretedUserDefinedPredicate".equals(className) && "evaluate".equals(methodName)) {
+      if (InterpretedUserDefinedPredicate.class.getName().equals(className) && "evaluate".equals(methodName)) {
          InterpretedUserDefinedPredicate p = interpretedUserDefinedPredicates.remove(0);
          return createProjogStackTraceElementFromInterpretedUserDefinedPredicate(p);
       } else if (isCompiledPredicate(className) && isRuleEvaluationMethod(methodName)) {
@@ -299,11 +302,11 @@ public final class Projog {
    }
 
    private boolean isCompiledPredicate(String className) {
-      return className.startsWith("org.projog.content_generated_at_runtime.");
+      return className.startsWith(CompiledPredicateConstants.COMPILED_PREDICATES_PACKAGE);
    }
 
    private boolean isRuleEvaluationMethod(String methodName) {
-      return methodName.startsWith("initRule") || methodName.startsWith("retryRule");
+      return methodName.startsWith(INIT_RULE_METHOD_NAME_PREFIX) || methodName.startsWith(RETRY_RULE_METHOD_NAME_PREFIX);
    }
 
    private ProjogStackTraceElement createProjogStackTraceElementFromCompiledPredicate(String className, String methodName) {
@@ -317,10 +320,10 @@ public final class Projog {
 
    private int getRuleIndex(String methodName) {
       int beginIndex;
-      if (methodName.startsWith("initRule")) {
-         beginIndex = "initRule".length();
+      if (methodName.startsWith(INIT_RULE_METHOD_NAME_PREFIX)) {
+         beginIndex = INIT_RULE_METHOD_NAME_PREFIX.length();
       } else {
-         beginIndex = "retryRule".length();
+         beginIndex = RETRY_RULE_METHOD_NAME_PREFIX.length();
       }
       String suffix = methodName.substring(beginIndex);
       return Integer.parseInt(suffix);

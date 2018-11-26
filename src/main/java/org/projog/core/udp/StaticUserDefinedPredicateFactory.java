@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseServiceLocator;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -106,8 +107,8 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       setCompiledPredicateFactoryInvocationCtr++;
       final List<ClauseAction> rows = createClauseActionsFromClauseModels();
 
-      if (isAllAlwaysMatchedClauseActions(rows)) {
-         compiledPredicateFactory = createPredicateFactoryFromAlwaysMatchedClauseActions(rows);
+      if (isSingleAlwaysMatchedClauseActions(rows)) {
+         compiledPredicateFactory = createPredicateFactoryFromSingleAlwaysMatchedClauseAction(rows);
       } else if (isAllImmutableArgumentsClauseActions(rows)) {
          compiledPredicateFactory = createPredicateFactoryFromNoVariableArgumentsClauseActions(rows);
       } else {
@@ -133,23 +134,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return true;
    }
 
-   private boolean isAllAlwaysMatchedClauseActions(List<ClauseAction> rows) {
-      for (ClauseAction r : rows) {
-         if ((r instanceof AlwaysMatchedClauseAction) == false) {
-            return false;
-         }
-      }
-      return true;
+   private boolean isSingleAlwaysMatchedClauseActions(List<ClauseAction> rows) {
+      return rows.size() == 1 && rows.get(0) instanceof AlwaysMatchedClauseAction;
    }
 
-   private PredicateFactory createPredicateFactoryFromAlwaysMatchedClauseActions(List<ClauseAction> rows) {
-      if (rows.size() == 1) {
-         // e.g. "a." or "p(_)."
-         return SingleRuleAlwaysTruePredicate.SINGLETON;
-      } else {
-         // e.g. "a. a. a." or "p(_). p(_). p(_)."
-         return new MultipleRulesAlwaysTruePredicate(rows.size());
-      }
+   private PredicateFactory createPredicateFactoryFromSingleAlwaysMatchedClauseAction(List<ClauseAction> rows) {
+      // e.g. "a." or "p(_)."
+      return new SingleRuleAlwaysTruePredicate(getSpyPoint());
    }
 
    private PredicateFactory createPredicateFactoryFromNoVariableArgumentsClauseActions(List<ClauseAction> rows) {
@@ -158,14 +149,14 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          if (data.length == 1) {
             return new SingleRuleWithSingleImmutableArgumentPredicate(data[0], getSpyPoint());
          } else {
-            return new MultipleRulesWithSingleImmutableArgumentPredicate(null, data, getSpyPoint());
+            return new MultipleRulesWithSingleImmutableArgumentPredicate(data, getSpyPoint());
          }
       } else {
          Term data[][] = createTwoDimensionTermArrayOfImplications();
          if (data.length == 1) {
             return new SingleRuleWithMultipleImmutableArgumentsPredicate(data[0], getSpyPoint());
          } else {
-            return new MultipleRulesWithMultipleImmutableArgumentsPredicate(null, data, getSpyPoint());
+            return new MultipleRulesWithMultipleImmutableArgumentsPredicate(data, getSpyPoint());
          }
       }
    }
@@ -256,7 +247,8 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private PredicateFactory createCompiledPredicateFactoryFromClauseActions(List<ClauseModel> clauseModels) {
-      return CompiledPredicateClassGenerator.generateCompiledPredicate(kb, clauseModels);
+      CompiledPredicateClassGenerator g = KnowledgeBaseServiceLocator.getServiceLocator(kb).getInstance(CompiledPredicateClassGenerator.class);
+      return g.generateCompiledPredicate(kb, clauseModels);
    }
 
    private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions, List<ClauseModel> clauseModels) {
@@ -329,7 +321,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    @Override
    public boolean isRetryable() {
-      return compiledPredicateFactory.isRetryable();
+      return getActualPredicateFactory().isRetryable();
    }
 
    /**

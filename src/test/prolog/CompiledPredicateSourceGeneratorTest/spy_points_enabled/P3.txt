@@ -1,0 +1,343 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testConjunction"/3
+public final class P3 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+v0=new Variable("X");
+v1=new Variable("Y");
+v2=new Variable("Z");
+if(v0.unify(a0)&&v1.unify(a1)&&v2.unify(a2)){
+j=0;
+return true;
+}else return false;
+}
+private boolean retryRule0(){
+while(true){
+switch(j){
+case 0:
+if(p0==null){
+v3=v0.getTerm();
+v4=v1.getTerm();
+p0=F0.getPredicate(v3,v4);
+if(!p0.evaluate()){
+return false;
+}}else{
+b0_0();
+if(!p0.couldReevaluationSucceed()||!p0.evaluate()){
+return false;
+}}
+j=1;
+case 1:
+if(p1==null){
+v5=new Variable("A");
+v6=v3.getTerm();
+v7=v4.getTerm();
+p1=F1.getPredicate(v6,v7,v5);
+if(!p1.evaluate()){
+j=0;
+continue;
+}}else{
+b0_1();
+if(!p1.couldReevaluationSucceed()||!p1.evaluate()){
+j=0;
+continue;
+}}
+v8=new Variable("B2");
+v9=new Variable("B3");
+v10=new Variable("B1");
+if(!F2.getPredicate(v10,v8,v9).evaluate())continue;
+j=2;
+case 2:
+if(p2==null){
+v11=v8.getTerm();
+v12=v9.getTerm();
+v13=v5.getTerm();
+v14=new Variable("C");
+v15=v10.getTerm();
+p2=F1.getPredicate(new List(v15.getTerm(), new List(v11.getTerm(), new List(v12.getTerm(), EmptyList.EMPTY_LIST).getTerm()).getTerm()),v13,v14);
+if(!p2.evaluate()){
+j=1;
+continue;
+}}else{
+b0_3();
+if(!p2.couldReevaluationSucceed()||!p2.evaluate()){
+j=1;
+continue;
+}}
+j=3;
+case 3:
+if(p3==null){
+v16=new Variable("D");
+p3=F3.getPredicate(v16);
+if(!p3.evaluate()){
+j=2;
+continue;
+}}else{
+b0_4();
+if(!p3.couldReevaluationSucceed()||!p3.evaluate()){
+j=2;
+continue;
+}}
+v17=v16.getTerm();
+if(!F4.evaluate(v17))continue;
+j=4;
+case 4:
+if(p4==null){
+v18=v14.getTerm();
+v19=v17.getTerm();
+v20=new Variable("E");
+p4=F1.getPredicate(v18,v19,v20);
+if(!p4.evaluate()){
+j=3;
+continue;
+}}else{
+b0_6();
+if(!p4.couldReevaluationSucceed()||!p4.evaluate()){
+j=3;
+continue;
+}}
+j=5;
+case 5:
+if(p5==null){
+v21=v20.getTerm();
+v22=new Variable("Length");
+p5=F5.getPredicate(v21,v22);
+if(!p5.evaluate()){
+j=4;
+continue;
+}}else{
+b0_7();
+if(!p5.couldReevaluationSucceed()||!p5.evaluate()){
+j=4;
+continue;
+}}
+v23=v2.getTerm();
+if(!F6.getPredicate(v23).evaluate())continue;
+v24=new Variable("F");
+if(!F7.getPredicate(v24).evaluate())continue;
+v25=v22.getTerm();
+v26=v24.getTerm();
+v27=new Variable("G");
+if(!v27.unify(A1.calculate(A0.calculate(O.getNumeric(v26),INTEGER_2),O.getNumeric(v25))))continue;
+j=6;
+case 6:
+if(p6==null){
+v28=v21.getTerm();
+v29=v25.getTerm();
+v30=v27.getTerm();
+v31=v23.getTerm();
+p6=F1.getPredicate(v28,new List(v30.getTerm(), new List(v29.getTerm(), EmptyList.EMPTY_LIST).getTerm()),v31);
+if(!p6.evaluate()){
+j=5;
+continue;
+}}else{
+b0_12();
+if(!p6.couldReevaluationSucceed()||!p6.evaluate()){
+j=5;
+continue;
+}}
+v32=v26.getTerm();
+v33=new Variable("H");
+if(!v33.unify(A2.calculate(O.getNumeric(v32),INTEGER_39)))continue;
+j=7;
+case 7:
+if(p7==null){
+v34=v33.getTerm();
+p7=F8.getPredicate(v34);
+if(!p7.evaluate()){
+j=6;
+continue;
+}}else{
+b0_14();
+if(!p7.couldReevaluationSucceed()||!p7.evaluate()){
+j=6;
+continue;
+}}
+}
+return true;
+}
+}
+private void b0_0(){
+if(v5!=null)v5.backtrack();
+if(v6!=null)v6.backtrack();
+if(v7!=null)v7.backtrack();
+p1=null;
+}
+private void b0_1(){
+if(v8!=null)v8.backtrack();
+if(v9!=null)v9.backtrack();
+if(v10!=null)v10.backtrack();
+if(v11!=null)v11.backtrack();
+if(v12!=null)v12.backtrack();
+if(v13!=null)v13.backtrack();
+if(v14!=null)v14.backtrack();
+if(v15!=null)v15.backtrack();
+p2=null;
+}
+private void b0_3(){
+if(v16!=null)v16.backtrack();
+p3=null;
+}
+private void b0_4(){
+if(v17!=null)v17.backtrack();
+if(v18!=null)v18.backtrack();
+if(v19!=null)v19.backtrack();
+if(v20!=null)v20.backtrack();
+p4=null;
+}
+private void b0_6(){
+if(v21!=null)v21.backtrack();
+if(v22!=null)v22.backtrack();
+p5=null;
+}
+private void b0_7(){
+if(v23!=null)v23.backtrack();
+if(v24!=null)v24.backtrack();
+if(v25!=null)v25.backtrack();
+if(v26!=null)v26.backtrack();
+if(v27!=null)v27.backtrack();
+if(v28!=null)v28.backtrack();
+if(v29!=null)v29.backtrack();
+if(v30!=null)v30.backtrack();
+if(v31!=null)v31.backtrack();
+p6=null;
+}
+private void b0_12(){
+if(v32!=null)v32.backtrack();
+if(v33!=null)v33.backtrack();
+if(v34!=null)v34.backtrack();
+p7=null;
+}
+private void b0_14(){
+}
+public boolean evaluate(){
+if(d){
+if(p0==null){
+if(d){s.logCall(this,new Term[]{a0,a1,a2});}
+}else{
+if(d){s.logRedo(this,new Term[]{a0,a1,a2});}
+}}
+try{
+switch(c){
+case 0:
+if(p0==null){
+if(initRule0()&&retryRule0()){
+{
+if(d){s.logExit(this,new Term[]{a0,a1,a2},1);}
+return true;}
+}}else if(retryRule0()){
+{
+if(d){s.logExit(this,new Term[]{a0,a1,a2},1);}
+return true;}
+}c=1;
+}}catch(CutException e){c=1;}
+if(d){s.logFail(this,new Term[]{a0,a1,a2});}
+return false;}
+public boolean couldReevaluationSucceed(){
+if (c==0)return(p0==null||p0.couldReevaluationSucceed())||(p1!=null&&p1.couldReevaluationSucceed())||(p2!=null&&p2.couldReevaluationSucceed())||(p3!=null&&p3.couldReevaluationSucceed())||(p4!=null&&p4.couldReevaluationSucceed())||(p5!=null&&p5.couldReevaluationSucceed())||(p6!=null&&p6.couldReevaluationSucceed())||(p7!=null&&p7.couldReevaluationSucceed());
+return c!=1;
+}
+public P3 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2]);
+}
+public P3 getPredicate(Term i0,Term i1,Term i2) {
+return new P3(i0,i1,i2);}
+public boolean isRetryable(){return true;}
+public P3(KnowledgeBase kb){
+F0=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("multipleFactsMultipleArguments",2));
+F1=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("testTailRecursiveAppend",3));
+F2=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("singleFactMultipleArguments",3));
+F3=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("multipleFactsSingleArgument",1));
+F4=(org.projog.core.function.classify.IsList)kb.getPredicateFactory(new PredicateKey("is_list",1));
+F5=(org.projog.core.function.list.Length)kb.getPredicateFactory(new PredicateKey("length",2));
+F6=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("singleClauseAlwaysTrue",1));
+F7=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("singleFactSingleArgument",1));
+F8=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("testTailRecursiveRepeat",1));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+A0=(org.projog.core.function.math.Multiply)O.getArithmeticOperator(new PredicateKey("*",2));
+A1=(org.projog.core.function.math.Add)O.getArithmeticOperator(new PredicateKey("+",2));
+A2=(org.projog.core.function.math.Subtract)O.getArithmeticOperator(new PredicateKey("-",2));
+s=KnowledgeBaseUtils.getSpyPoints(kb).getSpyPoint(new PredicateKey("testConjunction",3));
+d=false;
+a0=null;
+a1=null;
+a2=null;
+}
+private P3(Term i0,Term i1,Term i2) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+d=s.isEnabled();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F0;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F1;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F2;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F3;
+private static org.projog.core.function.classify.IsList F4;
+private static org.projog.core.function.list.Length F5;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F6;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F7;
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F8;
+private static org.projog.core.ArithmeticOperators O;
+private static org.projog.core.function.math.Multiply A0;
+private static org.projog.core.function.math.Add A1;
+private static org.projog.core.function.math.Subtract A2;
+private Predicate p0;
+private Predicate p1;
+private Predicate p2;
+private Predicate p3;
+private Predicate p4;
+private Predicate p5;
+private Predicate p6;
+private Predicate p7;
+private Variable v0;
+private Variable v1;
+private Variable v2;
+private Term v3;
+private Term v4;
+private Variable v5;
+private Term v6;
+private Term v7;
+private Variable v8;
+private Variable v9;
+private Variable v10;
+private Term v11;
+private Term v12;
+private Term v13;
+private Variable v14;
+private Term v15;
+private Variable v16;
+private Term v17;
+private Term v18;
+private Term v19;
+private Variable v20;
+private Term v21;
+private Variable v22;
+private Term v23;
+private Variable v24;
+private Term v25;
+private Term v26;
+private Variable v27;
+private Term v28;
+private Term v29;
+private Term v30;
+private Term v31;
+private Term v32;
+private Variable v33;
+private Term v34;
+private static final IntegerNumber INTEGER_2=new IntegerNumber(2L);
+private static final IntegerNumber INTEGER_39=new IntegerNumber(39L);
+private final Term a0;
+private final Term a1;
+private final Term a2;
+private int j;
+private int c;
+private static org.projog.core.SpyPoints.SpyPoint s;
+private final boolean d;
+}

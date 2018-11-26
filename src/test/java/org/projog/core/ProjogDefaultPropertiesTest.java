@@ -16,6 +16,7 @@
 package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -36,5 +37,10 @@ public class ProjogDefaultPropertiesTest {
    @Test
    public void testIsSpyPointsEnabled() {
       assertTrue(properties.isSpyPointsEnabled());
+   }
+
+   @Test
+   public void testGetCompiledContentOutputDirectory() {
+      assertNull(properties.getCompiledContentOutputDirectory());
    }
 }

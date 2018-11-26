@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,13 @@ import java.util.Map;
  * <p>
  * A {@code Variable} can be either instantiated (representing another single {@link Term}) or uninstantiated (not
  * representing any other {@link Term}). {@code Variable}s are not constants. What {@link Term}, if any, a
- * {@code Variable} is instantiated with can vary during its life time. A {@code Variable} becomes instantiated by
- * calls to {@link #unify(Term)} and becomes uninstantiated again by calls to {@link #backtrack()}.
+ * {@code Variable} is instantiated with can vary during its life time. A {@code Variable} becomes instantiated by calls
+ * to {@link #unify(Term)} and becomes uninstantiated again by calls to {@link #backtrack()}.
  * <p>
  * <img src="doc-files/Variable.png">
  */
 public final class Variable implements Term {
+   public static final String ANONYMOUS_VARIABLE_ID = "_";
    /**
     * The value by which the variable can be identified
     */
@@ -47,7 +48,7 @@ public final class Variable implements Term {
 
    /**
     * Calls {@link Term#getName()} on the {@link Term} this variable is instantiated with.
-    * 
+    *
     * @throws NullPointerException if the {@code Variable} is currently uninstantiated
     */
    @Override
@@ -65,9 +66,13 @@ public final class Variable implements Term {
       return id;
    }
 
+   public boolean isAnonymous() {
+      return ANONYMOUS_VARIABLE_ID.equals(id);
+   }
+
    /**
     * Calls {@link Term#getArgs()} on the {@link Term} this variable is instantiated with.
-    * 
+    *
     * @throws NullPointerException if the {@code Variable} is currently uninstantiated
     */
    @Override
@@ -80,7 +85,7 @@ public final class Variable implements Term {
 
    /**
     * Calls {@link Term#getNumberOfArguments()} on the {@link Term} this variable is instantiated with.
-    * 
+    *
     * @throws NullPointerException if the {@code Variable} is currently uninstantiated
     */
    @Override
@@ -93,7 +98,7 @@ public final class Variable implements Term {
 
    /**
     * Calls {@link Term#getArgument(int)} on the {@link Term} this variable is instantiated with.
-    * 
+    *
     * @throws NullPointerException if the {@code Variable} is currently uninstantiated
     */
    @Override
@@ -134,7 +139,7 @@ public final class Variable implements Term {
 
    /**
     * Returns {@link TermType#NAMED_VARIABLE} if uninstantiated else {@link TermType} of instantiated {@link Term}.
-    * 
+    *
     * @return {@link TermType#NAMED_VARIABLE} if this variable is uninstantiated else calls {@link Term#getType()} on
     * the {@link Term} this variable is instantiated with.
     */
@@ -149,7 +154,7 @@ public final class Variable implements Term {
 
    /**
     * Always returns {@code false} even if instantiated with an immutable {@link Term}.
-    * 
+    *
     * @return {@code false}
     */
    @Override

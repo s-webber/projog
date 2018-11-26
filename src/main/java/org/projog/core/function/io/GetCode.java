@@ -61,7 +61,6 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
- %NO
 
  force_error :-
     open('get_code.tmp', read, Z),

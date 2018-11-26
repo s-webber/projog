@@ -62,7 +62,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
       return result ? TRUE : FAIL;
    }
 
-   protected boolean evaluate(Term... args) { // TODO make private
+   public final boolean evaluate(Term... args) {
       switch (args.length) {
          case 0:
             return evaluate();

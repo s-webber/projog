@@ -15,12 +15,10 @@
  */
 package org.projog.core.udp;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.SpyPoints;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /**
  * Provides an optimised implementation for evaluating a particular subset of user defined predicates that have an arity
@@ -34,70 +32,82 @@ import org.projog.core.term.TermUtils;
  * @see SingleRuleWithMultipleImmutableArgumentsPredicate
  * @see MultipleRulesWithMultipleImmutableArgumentsPredicate
  */
-public final class MultipleRulesWithSingleImmutableArgumentPredicate implements Predicate, PredicateFactory { // TODO split into two classes
-   private final Term[] args;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final Term[] data;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final SpyPoints.SpyPoint spyPoint;
-   private final boolean isDebugEnabled;
+public final class MultipleRulesWithSingleImmutableArgumentPredicate extends AbstractPredicateFactory {
+   private final Term[] data;
+   private final SpyPoints.SpyPoint spyPoint;
    private final int numClauses;
-   private int ctr;
-   private boolean retrying;
 
-   public MultipleRulesWithSingleImmutableArgumentPredicate(Term[] args, Term[] data, SpyPoints.SpyPoint spyPoint) {
-      this.args = args;
+   MultipleRulesWithSingleImmutableArgumentPredicate(Term[] data, SpyPoints.SpyPoint spyPoint) {
       this.data = data;
       this.numClauses = data.length;
       this.spyPoint = spyPoint;
-      this.isDebugEnabled = spyPoint != null && spyPoint.isEnabled();
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
-      return new MultipleRulesWithSingleImmutableArgumentPredicate(args, data, spyPoint);
+   public Predicate getPredicate(Term arg) {
+      return new RetryablePredicate(arg);
    }
 
-   @Override
-   public boolean evaluate() {
-      if (retrying) {
-         if (isDebugEnabled) {
-            spyPoint.logRedo(this, args);
-         }
-         TermUtils.backtrack(args);
-      } else {
-         if (isDebugEnabled) {
-            spyPoint.logCall(this, args);
-         }
-         retrying = true;
+   private class RetryablePredicate implements Predicate {
+      private final Term arg;
+      private final boolean isDebugEnabled;
+      private int ctr;
+      private boolean retrying;
+
+      RetryablePredicate(Term arg) {
+         this.arg = arg;
+         this.isDebugEnabled = spyPoint != null && spyPoint.isEnabled();
       }
-      while (ctr < numClauses) {
-         if (args[0].unify(data[ctr++])) {
-            if (isDebugEnabled) {
-               spyPoint.logExit(this, args, ctr);
-            }
-            return true;
+
+      @Override
+      public boolean evaluate() {
+         if (retrying) {
+            logRedo();
+            arg.backtrack();
          } else {
-            args[0].backtrack();
+            logCall();
+            retrying = true;
+         }
+
+         while (ctr < numClauses) {
+            if (arg.unify(data[ctr++])) {
+               logExit();
+               return true;
+            }
+            arg.backtrack();
+         }
+
+         logFail();
+         return false;
+      }
+
+      private void logRedo() {
+         if (isDebugEnabled) {
+            spyPoint.logRedo(this, new Term[] {arg});
          }
       }
-      if (isDebugEnabled) {
-         spyPoint.logFail(this, args);
+
+      private void logCall() {
+         if (isDebugEnabled) {
+            spyPoint.logCall(this, new Term[] {arg});
+         }
       }
-      return false;
-   }
 
-   @Override
-   public boolean couldReevaluationSucceed() {
-      return ctr < numClauses;
-   }
+      private void logExit() {
+         if (isDebugEnabled) {
+            spyPoint.logExit(this, new Term[] {arg}, ctr);
+         }
+      }
 
-   @Override
-   public boolean isRetryable() {
-      return true;
-   }
+      private void logFail() {
+         if (isDebugEnabled) {
+            spyPoint.logFail(this, new Term[] {arg});
+         }
+      }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
+      @Override
+      public boolean couldReevaluationSucceed() {
+         return ctr < numClauses;
+      }
    }
 }

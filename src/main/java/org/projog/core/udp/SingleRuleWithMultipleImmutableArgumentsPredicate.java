@@ -15,6 +15,9 @@
  */
 package org.projog.core.udp;
 
+import org.projog.core.KnowledgeBase;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -30,32 +33,44 @@ import org.projog.core.term.TermUtils;
  * @see MultipleRulesWithSingleImmutableArgumentPredicate
  * @see MultipleRulesWithMultipleImmutableArgumentsPredicate
  */
-public final class SingleRuleWithMultipleImmutableArgumentsPredicate extends AbstractSingletonPredicate {
-   /** Public so can be used directly be code compiled at runtime. */
-   public final Term[] data;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final SpyPoints.SpyPoint spyPoint;
+public final class SingleRuleWithMultipleImmutableArgumentsPredicate implements PredicateFactory {
+   private final Term[] data;
+   private final SpyPoints.SpyPoint spyPoint;
 
-   public SingleRuleWithMultipleImmutableArgumentsPredicate(Term[] data, SpyPoints.SpyPoint spyPoint) {
+   SingleRuleWithMultipleImmutableArgumentsPredicate(Term[] data, SpyPoints.SpyPoint spyPoint) {
       this.data = data;
       this.spyPoint = spyPoint;
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      if (spyPoint != null) {
+   public Predicate getPredicate(Term... args) {
+      if (isSpyPointEnabled()) {
          spyPoint.logCall(this, args);
       }
+
       final boolean result = TermUtils.unify(args, data);
-      if (result) {
-         if (spyPoint != null) {
+
+      if (isSpyPointEnabled()) {
+         if (result) {
             spyPoint.logExit(this, args, 1);
-         }
-      } else {
-         if (spyPoint != null) {
+         } else {
             spyPoint.logFail(this, args);
          }
       }
-      return result;
+
+      return AbstractSingletonPredicate.toPredicate(result);
+   }
+
+   private boolean isSpyPointEnabled() {
+      return spyPoint != null && spyPoint.isEnabled();
+   }
+
+   @Override
+   public void setKnowledgeBase(KnowledgeBase kb) {
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return false;
    }
 }

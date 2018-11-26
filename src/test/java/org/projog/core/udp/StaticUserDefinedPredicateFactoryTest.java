@@ -15,7 +15,6 @@
  */
 package org.projog.core.udp;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -45,7 +44,15 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    @Test
    public void testTrue() {
-      PredicateFactory pf = getActualPredicateFactory(toTerms("p."));
+      assertSingleRuleAlwaysTruePredicate("p.");
+      assertSingleRuleAlwaysTruePredicate("p(_).");
+      assertSingleRuleAlwaysTruePredicate("p(X).");
+      assertSingleRuleAlwaysTruePredicate("p(A,B,C).");
+      assertSingleRuleAlwaysTruePredicate("p(A,_,C).");
+   }
+
+   private void assertSingleRuleAlwaysTruePredicate(String term) {
+      PredicateFactory pf = getActualPredicateFactory(toTerms(term));
       assertSame(SingleRuleAlwaysTruePredicate.class, pf.getClass());
       Predicate p = pf.getPredicate();
       assertTrue(p.evaluate());
@@ -55,10 +62,21 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    @Test
    public void testRepeatSetAmount() {
-      Term[] clauses = toTerms("p.", "p.", "p.");
+      assertRepeatSetAmount("p.");
+      assertRepeatSetAmount("p(_).");
+      assertRepeatSetAmount("p(X).");
+      assertRepeatSetAmount("p(A,B,C).");
+      assertRepeatSetAmount("p(A,_,C).");
+   }
+
+   private void assertRepeatSetAmount(String term) {
+      Term[] clauses = toTerms(term, term, term);
       int expectedSuccessfulEvaluations = clauses.length;
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(MultipleRulesAlwaysTruePredicate.class, pf.getClass());
+      // Note that use to return specialised "MultipleRulesAlwaysTruePredicate" object for predicates of this style
+      // but now use generic "InterpretedUserDefinedPredicatePredicateFactory" as seemed overly complex to support
+      // this special case when it is so rarely used.
+      assertSame(StaticUserDefinedPredicateFactory.InterpretedUserDefinedPredicatePredicateFactory.class, pf.getClass());
       Predicate p = pf.getPredicate();
       assertTrue(p.couldReevaluationSucceed());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
@@ -75,8 +93,6 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term clause = TestUtils.parseTerm("p(a)");
       PredicateFactory pf = getActualPredicateFactory(clause);
       assertSame(SingleRuleWithSingleImmutableArgumentPredicate.class, pf.getClass());
-      SingleRuleWithSingleImmutableArgumentPredicate sr = (SingleRuleWithSingleImmutableArgumentPredicate) pf;
-      assertStrictEquality(clause.getArgument(0), sr.data);
       assertFalse(pf.isRetryable());
    }
 
@@ -85,11 +101,6 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term[] clauses = toTerms("p(a).", "p(b).", "p(c).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
-      MultipleRulesWithSingleImmutableArgumentPredicate mr = (MultipleRulesWithSingleImmutableArgumentPredicate) pf;
-      assertEquals(clauses.length, mr.data.length);
-      for (int i = 0; i < clauses.length; i++) {
-         assertStrictEquality(clauses[i].getArgument(0), mr.data[i]);
-      }
       assertTrue(pf.isRetryable());
    }
 
@@ -98,11 +109,6 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term clause = TestUtils.parseTerm("p(a,b,c).");
       PredicateFactory pf = getActualPredicateFactory(clause);
       assertSame(SingleRuleWithMultipleImmutableArgumentsPredicate.class, pf.getClass());
-      SingleRuleWithMultipleImmutableArgumentsPredicate sr = (SingleRuleWithMultipleImmutableArgumentsPredicate) pf;
-      assertEquals(clause.getNumberOfArguments(), sr.data.length);
-      for (int i = 0; i < clause.getNumberOfArguments(); i++) {
-         assertStrictEquality(clause.getArgument(i), sr.data[i]);
-      }
       assertFalse(pf.isRetryable());
    }
 
@@ -111,14 +117,6 @@ public class StaticUserDefinedPredicateFactoryTest {
       Term[] clauses = toTerms("p(a,b,c).", "p(1,2,3).", "p(x,y,z).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertSame(MultipleRulesWithMultipleImmutableArgumentsPredicate.class, pf.getClass());
-      MultipleRulesWithMultipleImmutableArgumentsPredicate mr = (MultipleRulesWithMultipleImmutableArgumentsPredicate) pf;
-      assertEquals(clauses.length, mr.data.length);
-      for (int c = 0; c < clauses.length; c++) {
-         assertEquals(clauses[c].getNumberOfArguments(), mr.data[c].length);
-         for (int a = 0; a < clauses[c].getNumberOfArguments(); a++) {
-            assertStrictEquality(clauses[c].getArgument(a), mr.data[c][a]);
-         }
-      }
       assertTrue(pf.isRetryable());
    }
 
@@ -192,9 +190,5 @@ public class StaticUserDefinedPredicateFactoryTest {
          clauses[i] = TestUtils.parseSentence(clausesSyntax[i]);
       }
       return clauses;
-   }
-
-   private void assertStrictEquality(Term t1, Term t2) {
-      assertTrue("Term: " + t1 + " is not strictly equal to term: " + t2, t1.strictEquality(t2));
    }
 }

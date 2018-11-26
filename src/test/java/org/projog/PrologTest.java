@@ -33,9 +33,7 @@ import org.projog.test.ProjogTestRunner;
 import org.projog.test.ProjogTestRunner.ProjogSupplier;
 import org.projog.test.ProjogTestRunner.TestResults;
 
-/**
- * TODO
- */
+/** Uses {@code projog-test} to run Prolog code and compare the results against expectations. */
 public class PrologTest {
    private static final File EXTRACTED_PROLOG_TESTS_DIR = new File("target/prolog-tests-extracted-from-java");
    private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog");
@@ -49,8 +47,7 @@ public class PrologTest {
       config.setFileFilter(new FileFilter() {
          @Override
          public boolean accept(File f) {
-            String path = f.getPath();
-            return !path.endsWith("package-info.java") && path.replace(File.separatorChar, '.').contains("org.projog.core.function");
+            return f.getPath().replace(File.separatorChar, '.').contains("org.projog.core.function");
          }
       });
       ProjogTestExtractor.extractTests(config);

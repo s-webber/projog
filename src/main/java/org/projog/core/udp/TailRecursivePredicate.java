@@ -39,7 +39,7 @@ import org.projog.core.Predicate;
  */
 public abstract class TailRecursivePredicate implements Predicate {
    private boolean retrying;
-   private boolean succededOnPreviousGo;
+   private boolean succeededOnPreviousGo;
 
    @Override
    public final boolean evaluate() {
@@ -51,12 +51,12 @@ public abstract class TailRecursivePredicate implements Predicate {
       }
 
       while (true) {
-         if (succededOnPreviousGo) {
+         if (succeededOnPreviousGo) {
             backtrack();
-            succededOnPreviousGo = false;
+            succeededOnPreviousGo = false;
          } else {
             if (matchFirstRule()) {
-               succededOnPreviousGo = true;
+               succeededOnPreviousGo = true;
                logExit();
                return true;
             } else {

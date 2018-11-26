@@ -1,0 +1,57 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testAnonymous"/3
+public final class P7 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+Variable v0=new Variable("X");
+Variable v1=new Variable("Y");
+if(Structure.createStructure("p", new Term[]{v0.getTerm(), v1.getTerm()}).unify(a0)&&v1.unify(a2)){
+Term v2=v0.getTerm();
+if(!F0.getPredicate(v2).evaluate())return false;
+return true;
+}else return false;
+}
+public boolean evaluate(){
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+return true;}
+}}catch(CutException e){c=1;}
+return false;}
+public boolean couldReevaluationSucceed(){
+return false;
+}
+public P7 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2]);
+}
+public P7 getPredicate(Term i0,Term i1,Term i2) {
+return new P7(i0,i1,i2);}
+public boolean isRetryable(){return false;}
+public P7(KnowledgeBase kb){
+F0=(org.projog.core.udp.StaticUserDefinedPredicateFactory)kb.getPredicateFactory(new PredicateKey("singleFactSingleArgument",1));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+a0=null;
+a1=null;
+a2=null;
+}
+private P7(Term i0,Term i1,Term i2) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.udp.StaticUserDefinedPredicateFactory F0;
+private static org.projog.core.ArithmeticOperators O;
+private final Term a0;
+private final Term a1;
+private final Term a2;
+private int c;
+}

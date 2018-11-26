@@ -1,0 +1,245 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testCalculatables"/3
+public final class P11 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+Variable v0=new Variable("A");
+Variable v1=new Variable("B");
+Variable v2=new Variable("C");
+if(v0.unify(a0)&&v1.unify(a1)&&v2.unify(a2)){
+Term v3=v0.getTerm();
+if(!v3.unify(INTEGER_1000))return false;
+Variable v4=new Variable("Z");
+if(!v4.unify(A0.calculate(INTEGER_500,INTEGER_2)))return false;
+Term v5=v3.getTerm();
+Term v6=v4.getTerm();
+if(!v5.unify(O.getNumeric(v6)))return false;
+return true;
+}else return false;
+}
+private boolean initRule1(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v7=new Variable("A");
+Variable v8=new Variable("B");
+Variable v9=new Variable("C");
+if(v7.unify(a0)&&v8.unify(a1)&&v9.unify(a2)){
+Variable v10=new Variable("Y");
+if(!v10.unify(FRACTION_1_5))return false;
+Term v11=v7.getTerm();
+Term v12=v10.getTerm();
+if(!v11.unify(O.getNumeric(v12)))return false;
+return true;
+}else return false;
+}
+private boolean initRule2(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v13=new Variable("A");
+Variable v14=new Variable("B");
+Variable v15=new Variable("C");
+if(v13.unify(a0)&&v14.unify(a1)&&v15.unify(a2)){
+Term v16=v13.getTerm();
+Term v17=v14.getTerm();
+Term v18=v15.getTerm();
+if(!v16.unify(A1.calculate(O.getNumeric(v17),O.getNumeric(v18))))return false;
+return true;
+}else return false;
+}
+private boolean initRule3(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v19=new Variable("A");
+Variable v20=new Variable("B");
+Variable v21=new Variable("C");
+if(v19.unify(a0)&&v20.unify(a1)&&v21.unify(a2)){
+Term v22=v19.getTerm();
+Term v23=v20.getTerm();
+Term v24=v21.getTerm();
+if(!v22.unify(A2.calculate(O.getNumeric(v23),O.getNumeric(v24))))return false;
+return true;
+}else return false;
+}
+private boolean initRule4(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v25=new Variable("A");
+Variable v26=new Variable("B");
+Variable v27=new Variable("C");
+if(v25.unify(a0)&&v26.unify(a1)&&v27.unify(a2)){
+Term v28=v25.getTerm();
+Term v29=v26.getTerm();
+Term v30=v27.getTerm();
+if(!v28.unify(A0.calculate(O.getNumeric(v29),O.getNumeric(v30))))return false;
+return true;
+}else return false;
+}
+private boolean initRule5(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v31=new Variable("A");
+Variable v32=new Variable("B");
+Variable v33=new Variable("C");
+if(v31.unify(a0)&&v32.unify(a1)&&v33.unify(a2)){
+Term v34=v31.getTerm();
+Term v35=v32.getTerm();
+Term v36=v33.getTerm();
+if(!v34.unify(A3.calculate(O.getNumeric(v35),O.getNumeric(v36))))return false;
+return true;
+}else return false;
+}
+private boolean initRule6(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v37=new Variable("A");
+Variable v38=new Variable("B");
+Variable v39=new Variable("C");
+if(v37.unify(a0)&&v38.unify(a1)&&v39.unify(a2)){
+Term v40=v37.getTerm();
+Term v41=v38.getTerm();
+Term v42=v39.getTerm();
+if(!v40.unify(A2.calculate(A1.calculate(A3.calculate(O.getNumeric(v41),O.getNumeric(v42)),A0.calculate(O.getNumeric(v41),O.getNumeric(v42))),INTEGER_2)))return false;
+return true;
+}else return false;
+}
+private boolean initRule7(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v43=new Variable("A");
+Variable v44=new Variable("B");
+Variable v45=new Variable("C");
+if(v43.unify(a0)&&v44.unify(a1)&&v45.unify(a2)){
+Term v46=v43.getTerm();
+Variable v47=new Variable("Z");
+if(!F0.evaluate(v46,v47))return false;
+Term v48=v44.getTerm();
+Term v49=v45.getTerm();
+Term v50=v47.getTerm();
+if(!v50.unify(A2.calculate(A1.calculate(A3.calculate(O.getNumeric(v48),O.getNumeric(v49)),A0.calculate(O.getNumeric(v48),O.getNumeric(v49))),A1.calculate(A1.calculate(FRACTION_1_25,FRACTION_0_25),INTEGER_1))))return false;
+return true;
+}else return false;
+}
+private boolean initRule8(){
+a0.backtrack();
+a1.backtrack();
+a2.backtrack();
+Variable v51=new Variable("A");
+Variable v52=new Variable("B");
+Variable v53=new Variable("C");
+if(v51.unify(a0)&&v52.unify(a1)&&v53.unify(a2)){
+Term v54=v52.getTerm();
+Term v55=v53.getTerm();
+Variable v56=new Variable("Z");
+if(!v56.unify(A1.calculate(O.getNumeric(v54),O.getNumeric(v55))))return false;
+Term v57=v51.getTerm();
+Term v58=v56.getTerm();
+if(!v57.unify(O.getNumeric(v58)))return false;
+return true;
+}else return false;
+}
+public boolean evaluate(){
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+return true;}
+case 1:
+c=2;
+if(initRule1())
+{
+return true;}
+case 2:
+c=3;
+if(initRule2())
+{
+return true;}
+case 3:
+c=4;
+if(initRule3())
+{
+return true;}
+case 4:
+c=5;
+if(initRule4())
+{
+return true;}
+case 5:
+c=6;
+if(initRule5())
+{
+return true;}
+case 6:
+c=7;
+if(initRule6())
+{
+return true;}
+case 7:
+c=8;
+if(initRule7())
+{
+return true;}
+case 8:
+c=9;
+if(initRule8())
+{
+return true;}
+}}catch(CutException e){c=9;}
+return false;}
+public boolean couldReevaluationSucceed(){
+return c!=9;
+}
+public P11 getPredicate(Term... args){
+return getPredicate(args[0],args[1],args[2]);
+}
+public P11 getPredicate(Term i0,Term i1,Term i2) {
+return new P11(i0,i1,i2);}
+public boolean isRetryable(){return true;}
+public P11(KnowledgeBase kb){
+F0=(org.projog.core.function.compare.Equal)kb.getPredicateFactory(new PredicateKey("=",2));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+A0=(org.projog.core.function.math.Multiply)O.getArithmeticOperator(new PredicateKey("*",2));
+A1=(org.projog.core.function.math.Add)O.getArithmeticOperator(new PredicateKey("+",2));
+A2=(org.projog.core.function.math.Subtract)O.getArithmeticOperator(new PredicateKey("-",2));
+A3=(org.projog.core.function.math.IntegerDivide)O.getArithmeticOperator(new PredicateKey("//",2));
+a0=null;
+a1=null;
+a2=null;
+}
+private P11(Term i0,Term i1,Term i2) {
+a0=i0.getTerm();
+a1=i1.getTerm();
+a2=i2.getTerm();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.function.compare.Equal F0;
+private static org.projog.core.ArithmeticOperators O;
+private static org.projog.core.function.math.Multiply A0;
+private static org.projog.core.function.math.Add A1;
+private static org.projog.core.function.math.Subtract A2;
+private static org.projog.core.function.math.IntegerDivide A3;
+private static final IntegerNumber INTEGER_1000=new IntegerNumber(1000L);
+private static final IntegerNumber INTEGER_500=new IntegerNumber(500L);
+private static final IntegerNumber INTEGER_2=new IntegerNumber(2L);
+private static final DecimalFraction FRACTION_1_5=new DecimalFraction(1.5);
+private static final DecimalFraction FRACTION_1_25=new DecimalFraction(1.25);
+private static final DecimalFraction FRACTION_0_25=new DecimalFraction(0.25);
+private static final IntegerNumber INTEGER_1=new IntegerNumber(1L);
+private final Term a0;
+private final Term a1;
+private final Term a2;
+private int c;
+}

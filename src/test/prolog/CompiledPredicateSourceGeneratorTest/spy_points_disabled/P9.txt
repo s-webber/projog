@@ -1,0 +1,44 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testCutSingleRuleSingleResult"/0
+public final class P9 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+if(Double.compare(1d,2d)>=0)return false;
+c=1;
+if(Double.compare(2d,1d)<=0){c=1;return false;}
+return true;
+}
+public boolean evaluate(){
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+return true;}
+if(c==1)break;
+}}catch(CutException e){c=1;}
+return false;}
+public boolean couldReevaluationSucceed(){
+return false;
+}
+public P9 getPredicate(Term... args){
+return getPredicate();
+}
+public P9 getPredicate() {
+return new P9();}
+public boolean isRetryable(){return false;}
+public P9(KnowledgeBase kb){
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+}
+private P9() {
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.ArithmeticOperators O;
+private int c;
+}

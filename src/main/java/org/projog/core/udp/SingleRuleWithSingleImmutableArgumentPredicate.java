@@ -30,10 +30,8 @@ import org.projog.core.term.Term;
  * @see MultipleRulesWithMultipleImmutableArgumentsPredicate
  */
 public final class SingleRuleWithSingleImmutableArgumentPredicate extends AbstractSingletonPredicate {
-   /** Public so can be used directly be code compiled at runtime. */
-   public final Term data;
-   /** Public so can be used directly be code compiled at runtime. */
-   public final SpyPoints.SpyPoint spyPoint;
+   private final Term data;
+   private final SpyPoints.SpyPoint spyPoint;
 
    public SingleRuleWithSingleImmutableArgumentPredicate(Term data, SpyPoints.SpyPoint spyPoint) {
       this.data = data;
@@ -41,20 +39,25 @@ public final class SingleRuleWithSingleImmutableArgumentPredicate extends Abstra
    }
 
    @Override
-   public boolean evaluate(Term... args) {
-      if (spyPoint != null) {
-         spyPoint.logCall(this, args);
+   public boolean evaluate(Term arg) {
+      if (isSpyPointEnabled()) {
+         spyPoint.logCall(this, new Term[] {arg});
       }
-      final boolean result = args[0].unify(data);
-      if (result) {
-         if (spyPoint != null) {
-            spyPoint.logExit(this, args, 1);
-         }
-      } else {
-         if (spyPoint != null) {
-            spyPoint.logFail(this, args);
+
+      final boolean result = arg.unify(data);
+
+      if (isSpyPointEnabled()) {
+         if (result) {
+            spyPoint.logExit(this, new Term[] {arg}, 1);
+         } else {
+            spyPoint.logFail(this, new Term[] {arg});
          }
       }
+
       return result;
+   }
+
+   private boolean isSpyPointEnabled() {
+      return spyPoint != null && spyPoint.isEnabled();
    }
 }

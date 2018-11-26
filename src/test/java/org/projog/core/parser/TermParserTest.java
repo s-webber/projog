@@ -213,13 +213,13 @@ public class TermParserTest {
       assertVariableTerm(new Variable("Xyz"), "Xyz");
       assertVariableTerm(new Variable("XyZ"), "XyZ");
       assertVariableTerm(new Variable("X_1"), "X_1");
+      assertVariableTerm(new Variable("_123"), "_123");
+      assertVariableTerm(new Variable("_Test"), "_Test");
    }
 
    @Test
    public void testAnonymousVariable() {
       assertVariableTerm(new Variable("_"), "_");
-      assertVariableTerm(new Variable("_123"), "_123");
-      assertVariableTerm(new Variable("_Test"), "_Test");
    }
 
    private void assertNonVariableTerm(Term expected, String input) {

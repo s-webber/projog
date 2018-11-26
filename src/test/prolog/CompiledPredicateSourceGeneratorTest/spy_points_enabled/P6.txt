@@ -1,0 +1,165 @@
+package org.projog.compiled_at_runtime;
+import org.projog.core.term.*;
+import org.projog.core.CutException;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+// "testNot"/1
+public final class P6 implements org.projog.core.udp.compiler.CompiledPredicate{
+private boolean initRule0(){
+Variable v0=new Variable("X");
+if(v0.unify(a0)){
+Term v1=v0.getTerm();
+if(!F0.evaluate(v1,INTEGER_1))return false;
+if(F1.evaluate())return false;
+return true;
+}else return false;
+}
+private boolean initRule1(){
+a0.backtrack();
+Variable v2=new Variable("X");
+if(v2.unify(a0)){
+Term v3=v2.getTerm();
+if(!F0.evaluate(v3,INTEGER_2))return false;
+if(F2.evaluate())return false;
+return true;
+}else return false;
+}
+private boolean initRule2(){
+a0.backtrack();
+Variable v4=new Variable("X");
+if(v4.unify(a0)){
+Term v5=v4.getTerm();
+if(!F3.evaluate(v5))return false;
+Term v6=v5.getTerm();
+if(!F4.evaluate(v6))return false;
+return true;
+}else return false;
+}
+private boolean initRule3(){
+a0.backtrack();
+Variable v7=new Variable("X");
+if(v7.unify(a0)){
+Term v8=v7.getTerm();
+if(!F0.evaluate(v8,INTEGER_4))return false;
+Term v9=v8.getTerm();
+if(F5.getPredicate(v9).evaluate())return false;
+return true;
+}else return false;
+}
+private boolean initRule4(){
+a0.backtrack();
+Variable v10=new Variable("X");
+if(v10.unify(a0)){
+Term v11=v10.getTerm();
+if(!F0.evaluate(v11,INTEGER_5))return false;
+Term v12=v11.getTerm();
+if(F6.evaluate(v12))return false;
+return true;
+}else return false;
+}
+private boolean initRule5(){
+a0.backtrack();
+Variable v13=new Variable("X");
+if(v13.unify(a0)){
+Term v14=v13.getTerm();
+if(!F0.evaluate(v14,INTEGER_6))return false;
+Term v15=v14.getTerm();
+if(F3.evaluate(v15))return false;
+return true;
+}else return false;
+}
+public boolean evaluate(){
+if(d){
+if(c==0){
+if(d){s.logCall(this,new Term[]{a0});}
+}else{
+if(d){s.logRedo(this,new Term[]{a0});}
+}}
+try{
+switch(c){
+case 0:
+c=1;
+if(initRule0())
+{
+if(d){s.logExit(this,new Term[]{a0},1);}
+return true;}
+case 1:
+c=2;
+if(initRule1())
+{
+if(d){s.logExit(this,new Term[]{a0},2);}
+return true;}
+case 2:
+c=3;
+if(initRule2())
+{
+if(d){s.logExit(this,new Term[]{a0},3);}
+return true;}
+case 3:
+c=4;
+if(initRule3())
+{
+if(d){s.logExit(this,new Term[]{a0},4);}
+return true;}
+case 4:
+c=5;
+if(initRule4())
+{
+if(d){s.logExit(this,new Term[]{a0},5);}
+return true;}
+case 5:
+c=6;
+if(initRule5())
+{
+if(d){s.logExit(this,new Term[]{a0},6);}
+return true;}
+}}catch(CutException e){c=6;}
+if(d){s.logFail(this,new Term[]{a0});}
+return false;}
+public boolean couldReevaluationSucceed(){
+return c!=6;
+}
+public P6 getPredicate(Term... args){
+return getPredicate(args[0]);
+}
+public P6 getPredicate(Term i0) {
+return new P6(i0);}
+public boolean isRetryable(){return true;}
+public P6(KnowledgeBase kb){
+F0=(org.projog.core.function.compare.Equal)kb.getPredicateFactory(new PredicateKey("=",2));
+F1=(org.projog.core.function.bool.True)kb.getPredicateFactory(new PredicateKey("true",0));
+F2=(org.projog.core.function.bool.Fail)kb.getPredicateFactory(new PredicateKey("fail",0));
+F3=(org.projog.core.function.classify.IsAtom)kb.getPredicateFactory(new PredicateKey("atom",1));
+F4=(org.projog.core.function.compound.Not)kb.getPredicateFactory(new PredicateKey("\\+",1));
+F5=(org.projog.core.function.flow.RepeatSetAmount)kb.getPredicateFactory(new PredicateKey("repeat",1));
+F6=(org.projog.core.function.classify.IsNumber)kb.getPredicateFactory(new PredicateKey("number",1));
+O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+s=KnowledgeBaseUtils.getSpyPoints(kb).getSpyPoint(new PredicateKey("testNot",1));
+d=false;
+a0=null;
+}
+private P6(Term i0) {
+a0=i0.getTerm();
+d=s.isEnabled();
+}
+public void setKnowledgeBase(KnowledgeBase k){}
+private static org.projog.core.function.compare.Equal F0;
+private static org.projog.core.function.bool.True F1;
+private static org.projog.core.function.bool.Fail F2;
+private static org.projog.core.function.classify.IsAtom F3;
+private static org.projog.core.function.compound.Not F4;
+private static org.projog.core.function.flow.RepeatSetAmount F5;
+private static org.projog.core.function.classify.IsNumber F6;
+private static org.projog.core.ArithmeticOperators O;
+private static final IntegerNumber INTEGER_1=new IntegerNumber(1L);
+private static final IntegerNumber INTEGER_2=new IntegerNumber(2L);
+private static final IntegerNumber INTEGER_4=new IntegerNumber(4L);
+private static final IntegerNumber INTEGER_5=new IntegerNumber(5L);
+private static final IntegerNumber INTEGER_6=new IntegerNumber(6L);
+private final Term a0;
+private int c;
+private static org.projog.core.SpyPoints.SpyPoint s;
+private final boolean d;
+}

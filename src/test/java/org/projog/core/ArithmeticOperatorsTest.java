@@ -86,6 +86,17 @@ public class ArithmeticOperatorsTest {
    }
 
    @Test
+   public void testGetArithmeticOperator() {
+      // add operator
+      ArithmeticOperators c = createOperators();
+      c.addArithmeticOperator(dummyOperatorKey, DummyArithmeticOperatorDefaultConstructor.class.getName());
+
+      // assert getArithmeticOperator returns the newly added operator
+      assertSame(DummyArithmeticOperatorDefaultConstructor.class, c.getArithmeticOperator(dummyOperatorKey).getClass());
+      assertSame(c.getArithmeticOperator(dummyOperatorKey), c.getArithmeticOperator(dummyOperatorKey));
+   }
+
+   @Test
    public void testAddExistingOperatorName() {
       ArithmeticOperators c = createOperators();
 

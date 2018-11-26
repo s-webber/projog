@@ -20,9 +20,13 @@ import org.projog.core.term.Term;
 
 /* TEST
  %FALSE X == Y
+ %FALSE _ == _
 
  %QUERY X == X
  %ANSWER X=UNINSTANTIATED VARIABLE
+
+ %QUERY _1 == _1
+ %ANSWER _1=UNINSTANTIATED VARIABLE
 
  %QUERY X = Y, X == Y, Y = 1
  %ANSWER
@@ -31,6 +35,12 @@ import org.projog.core.term.Term;
  %ANSWER
 
  %FALSE X == Y, Y = 1, X = Y
+
+ %TRUE a=a
+ %TRUE 1=1
+ %TRUE 1.0=1.0
+ %FALSE 1=1.0
+ %TRUE '+'(1,2)=1+2
 
  %FALSE append([A|B],C) == append(X,Y)
 

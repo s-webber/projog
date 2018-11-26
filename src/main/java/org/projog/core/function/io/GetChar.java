@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,6 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
- %NO
 
  force_error :-
     open('get_char_test.tmp', read, Z),

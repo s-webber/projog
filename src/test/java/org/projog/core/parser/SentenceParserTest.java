@@ -176,7 +176,7 @@ public class SentenceParserTest {
 
    @Test
    public void testBrackets4() {
-      assertParse("?- Y = ( ^^ = @@ ).", "?- Y = (^^ = @@)", "?-(=(Y, =(^^, @@)))");
+      assertParse("?- Y = ( ## = @@ ).", "?- Y = (## = @@)", "?-(=(Y, =(##, @@)))");
    }
 
    @Test

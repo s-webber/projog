@@ -186,6 +186,7 @@
 ?- pj_add_arithmetic_operator('//'/2, 'org.projog.core.function.math.IntegerDivide').
 ?- pj_add_arithmetic_operator('*'/2, 'org.projog.core.function.math.Multiply').
 ?- pj_add_arithmetic_operator('**'/2, 'org.projog.core.function.math.Power').
+?- pj_add_arithmetic_operator('^'/2, 'org.projog.core.function.math.Power').
 ?- pj_add_arithmetic_operator(mod/2, 'org.projog.core.function.math.Modulo').
 ?- pj_add_arithmetic_operator(rem/2, 'org.projog.core.function.math.Remainder').
 ?- pj_add_arithmetic_operator(random/1, 'org.projog.core.function.math.Random').
@@ -232,6 +233,7 @@
 ?- op(500, yfx, '-').
 ?- op(400, yfx, '*').
 ?- op(400, yfx, '**').
+?- op(400, yfx, '^').
 ?- op(400, yfx, '//').
 ?- op(400, yfx, mod).
 ?- op(400, yfx, rem).

@@ -27,6 +27,27 @@ import org.projog.core.term.Term;
  % Note: "not" is a synonym for "\+".
  %FALSE not(true)
  %TRUE not(fail)
+
+ %QUERY \+ [A,B,C,9]=[1,2,3,4], A=6, B=7, C=8
+ %ANSWER
+ % A=6
+ % B=7
+ % C=8
+ %ANSWER
+
+ %QUERY \+ ((X=Y,1>2)), X=1, Y=2
+ %ANSWER
+ % X=1
+ % Y=2
+ %ANSWER
+
+ test(X,Y) :- \+ ((X=Y,1>2)), X=1, Y=2.
+
+ %QUERY test(X,Y)
+ %ANSWER
+ % X=1
+ % Y=2
+ %ANSWER
  */
 /**
  * <code>\+ X</code> - "not".
@@ -39,6 +60,11 @@ public final class Not extends AbstractSingletonPredicate {
    @Override
    public boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
-      return !e.evaluate();
+      if (!e.evaluate()) {
+         t.backtrack();
+         return true;
+      } else {
+         return false;
+      }
    }
 }

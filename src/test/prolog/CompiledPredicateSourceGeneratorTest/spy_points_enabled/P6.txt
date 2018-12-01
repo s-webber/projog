@@ -45,6 +45,7 @@ Term v8=v7.getTerm();
 if(!F0.evaluate(v8,INTEGER_4))return false;
 Term v9=v8.getTerm();
 if(F5.getPredicate(v9).evaluate())return false;
+v9.backtrack();
 return true;
 }else return false;
 }
@@ -56,6 +57,7 @@ Term v11=v10.getTerm();
 if(!F0.evaluate(v11,INTEGER_5))return false;
 Term v12=v11.getTerm();
 if(F6.evaluate(v12))return false;
+v12.backtrack();
 return true;
 }else return false;
 }
@@ -67,6 +69,62 @@ Term v14=v13.getTerm();
 if(!F0.evaluate(v14,INTEGER_6))return false;
 Term v15=v14.getTerm();
 if(F3.evaluate(v15))return false;
+v15.backtrack();
+return true;
+}else return false;
+}
+private boolean initRule6(){
+a0.backtrack();
+Variable v16=new Variable("X");
+if(v16.unify(a0)){
+Term v17=v16.getTerm();
+if(!F0.evaluate(v17,INTEGER_7))return false;
+Variable v18=new Variable("A");
+Variable v19=new Variable("B");
+Variable v20=new Variable("C");
+Variable v21=new Variable("D");
+Variable v22=new Variable("E");
+if(F0.evaluate(new List(v18.getTerm(), new List(v19.getTerm(), new List(v20.getTerm(), new List(v21.getTerm(), new List(v22.getTerm(), EmptyList.EMPTY_LIST).getTerm()).getTerm()).getTerm()).getTerm()),LIST))return false;
+v18.backtrack();
+v19.backtrack();
+v20.backtrack();
+v21.backtrack();
+v22.backtrack();
+return true;
+}else return false;
+}
+private boolean initRule7(){
+a0.backtrack();
+Variable v23=new Variable("X");
+if(v23.unify(a0)){
+Variable v24=new Variable("C");
+if(!F0.evaluate(v24,INTEGER_3))return false;
+Variable v25=new Variable("D");
+if(!F0.evaluate(v25,INTEGER_5))return false;
+Variable v26=new Variable("A");
+Variable v27=new Variable("B");
+Term v28=v24.getTerm();
+Term v29=v25.getTerm();
+Variable v30=new Variable("E");
+if(F0.evaluate(new List(v26.getTerm(), new List(v27.getTerm(), new List(v28.getTerm(), new List(INTEGER_9, new List(v29.getTerm(), new List(v30.getTerm(), EmptyList.EMPTY_LIST).getTerm()).getTerm()).getTerm()).getTerm()).getTerm()),LIST_0))return false;
+v26.backtrack();
+v27.backtrack();
+v28.backtrack();
+v29.backtrack();
+v30.backtrack();
+Term v31=v26.getTerm();
+if(!F0.evaluate(v31,INTEGER_42))return false;
+Term v32=v27.getTerm();
+if(!F0.evaluate(v32,INTEGER_7))return false;
+Term v33=v30.getTerm();
+if(!F0.evaluate(v33,INTEGER_51))return false;
+Term v34=v31.getTerm();
+Term v35=v32.getTerm();
+Term v36=v28.getTerm();
+Term v37=v29.getTerm();
+Term v38=v33.getTerm();
+Term v39=v23.getTerm();
+if(!v39.unify(A0.calculate(A0.calculate(A0.calculate(A0.calculate(O.getNumeric(v34),O.getNumeric(v35)),O.getNumeric(v36)),O.getNumeric(v37)),O.getNumeric(v38))))return false;
 return true;
 }else return false;
 }
@@ -115,11 +173,23 @@ if(initRule5())
 {
 if(d){s.logExit(this,new Term[]{a0},6);}
 return true;}
-}}catch(CutException e){c=6;}
+case 6:
+c=7;
+if(initRule6())
+{
+if(d){s.logExit(this,new Term[]{a0},7);}
+return true;}
+case 7:
+c=8;
+if(initRule7())
+{
+if(d){s.logExit(this,new Term[]{a0},8);}
+return true;}
+}}catch(CutException e){c=8;}
 if(d){s.logFail(this,new Term[]{a0});}
 return false;}
 public boolean couldReevaluationSucceed(){
-return c!=6;
+return c!=8;
 }
 public P6 getPredicate(Term... args){
 return getPredicate(args[0]);
@@ -136,6 +206,7 @@ F4=(org.projog.core.function.compound.Not)kb.getPredicateFactory(new PredicateKe
 F5=(org.projog.core.function.flow.RepeatSetAmount)kb.getPredicateFactory(new PredicateKey("repeat",1));
 F6=(org.projog.core.function.classify.IsNumber)kb.getPredicateFactory(new PredicateKey("number",1));
 O=KnowledgeBaseUtils.getArithmeticOperators(kb);
+A0=(org.projog.core.function.math.Add)O.getArithmeticOperator(new PredicateKey("+",2));
 s=KnowledgeBaseUtils.getSpyPoints(kb).getSpyPoint(new PredicateKey("testNot",1));
 d=false;
 a0=null;
@@ -153,11 +224,19 @@ private static org.projog.core.function.compound.Not F4;
 private static org.projog.core.function.flow.RepeatSetAmount F5;
 private static org.projog.core.function.classify.IsNumber F6;
 private static org.projog.core.ArithmeticOperators O;
+private static org.projog.core.function.math.Add A0;
 private static final IntegerNumber INTEGER_1=new IntegerNumber(1L);
 private static final IntegerNumber INTEGER_2=new IntegerNumber(2L);
 private static final IntegerNumber INTEGER_4=new IntegerNumber(4L);
 private static final IntegerNumber INTEGER_5=new IntegerNumber(5L);
 private static final IntegerNumber INTEGER_6=new IntegerNumber(6L);
+private static final IntegerNumber INTEGER_7=new IntegerNumber(7L);
+private static final List LIST=new List(new IntegerNumber(1L), new List(new IntegerNumber(2L), new List(new IntegerNumber(3L), new List(new IntegerNumber(4L), new List(new IntegerNumber(5L), EmptyList.EMPTY_LIST)))));
+private static final IntegerNumber INTEGER_3=new IntegerNumber(3L);
+private static final IntegerNumber INTEGER_9=new IntegerNumber(9L);
+private static final List LIST_0=new List(new IntegerNumber(1L), new List(new IntegerNumber(2L), new List(new IntegerNumber(3L), new List(new IntegerNumber(4L), new List(new IntegerNumber(5L), new List(new IntegerNumber(6L), EmptyList.EMPTY_LIST))))));
+private static final IntegerNumber INTEGER_42=new IntegerNumber(42L);
+private static final IntegerNumber INTEGER_51=new IntegerNumber(51L);
 private final Term a0;
 private int c;
 private static org.projog.core.SpyPoints.SpyPoint s;

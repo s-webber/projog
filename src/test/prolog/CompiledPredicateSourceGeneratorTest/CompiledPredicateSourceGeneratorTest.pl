@@ -356,10 +356,13 @@ testNot(X) :- atom(X), \+ X.
 testNot(X) :- X=4, \+ repeat(X).
 testNot(X) :- X=5, \+ number(X).
 testNot(X) :- X=6, \+ atom(X).
+testNot(X) :- X=7, \+ [A,B,C,D,E]=[1,2,3,4,5].
+testNot(X) :- C=3, D=5, \+ [A,B,C,9,D,E]=[1,2,3,4,5,6], A=42, B=7, E=51, X is A+B+C+D+E.
 
 %QUERY testNot(X)
 %ANSWER X=2
 %ANSWER X=6
+%ANSWER X=108
 
 %TRUE_NO testNot(fail)
 %FALSE testNot(true)

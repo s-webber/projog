@@ -166,7 +166,7 @@ final class CompiledPredicateSourceGenerator {
       pw.println('}');
 
       pw.close();
-      //System.out.println(sw.toString());
+
       return sw.toString();
    }
 
@@ -624,6 +624,7 @@ final class CompiledPredicateSourceGenerator {
          return;
       }
 
+      boolean backtrackOnSuccess = false;
       String condition;
       if (pf instanceof Fail) {
          condition = "true";
@@ -634,6 +635,7 @@ final class CompiledPredicateSourceGenerator {
          } else {
             condition = getPredicateEvaluateMethodCall(firstArgument);
          }
+         backtrackOnSuccess = true;
       } else if (pf instanceof Once && !elementState.getFirstArgument().getType().isVariable()) {
          Term firstArgument = elementState.getFirstArgument();
          if (kb.getPredicateFactory(firstArgument) instanceof AbstractSingletonPredicate) {
@@ -666,6 +668,12 @@ final class CompiledPredicateSourceGenerator {
          pw.println("continue;");
       } else {
          pw.println("return false;");
+      }
+
+      if (backtrackOnSuccess) {
+         for (ClauseVariableMetaData cvmd : elementState.getVariables()) {
+            pw.println(state.getExistingJavaVariableName(cvmd) + ".backtrack();");
+         }
       }
    }
 

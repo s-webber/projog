@@ -21,13 +21,14 @@ import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.model.AntecedentElementMetaData;
 import org.projog.core.udp.compiler.model.ClauseVariableMetaData;
 
-final class AntecedantElementState {
+/** Contains state used in the generation of Java source code to represent the body of a clause. */
+final class AntecedentElementState {
    private final ClauseState clauseState;
    private List<ClauseVariableMetaData> variables;
    private String predicateName;
    private final AntecedentElementMetaData element;
 
-   AntecedantElementState(ClauseState clauseState, AntecedentElementMetaData element) {
+   AntecedentElementState(ClauseState clauseState, AntecedentElementMetaData element) {
       this.clauseState = clauseState;
       this.element = element;
    }
@@ -62,7 +63,7 @@ final class AntecedantElementState {
 
    boolean hasPrecedingRetryableElements() {
       for (int i = 0; i < getElementIdx(); i++) {
-         AntecedentElementMetaData precedingState = clauseState.getAntecedantElementState(i).element;
+         AntecedentElementMetaData precedingState = clauseState.getAntecedentElementState(i).element;
          if (precedingState.isRetryable()) {
             return true;
          }
@@ -72,7 +73,7 @@ final class AntecedantElementState {
 
    boolean wouldBacktrackingInvokeCut() {
       for (int i = getElementIdx() - 1; i > -1; i--) {
-         AntecedentElementMetaData precedingState = clauseState.getAntecedantElementState(i).element;
+         AntecedentElementMetaData precedingState = clauseState.getAntecedentElementState(i).element;
          if (precedingState.isRetryable()) {
             return false;
          } else if (precedingState.isCut()) {

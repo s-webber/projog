@@ -31,6 +31,11 @@ import org.projog.core.udp.ClauseModel;
 
 /**
  * Constructs and compiles source code for new {@link CompiledPredicate} classes.
+ * <p>
+ * Used at runtime to convert user defined predicates (defined using Prolog syntax) into Java classes.
+ *
+ * @see CompiledPredicateSourceGenerator
+ * @see JavaSourceCompiler
  */
 public final class CompiledPredicateClassGenerator {
    private final AtomicInteger classCtr = new AtomicInteger();

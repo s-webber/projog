@@ -19,21 +19,19 @@ import org.projog.core.PredicateKey;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
-/**
- * Contains static methods which aid the construction of {@link CompiledPredicate} source code.
- */
+/** Contains static methods which aid the construction of {@link CompiledPredicate} source code. */
 final class CompiledPredicateSourceGeneratorUtils {
-   /**
-    * Private constructor as all methods are static.
-    */
+   /** Private constructor as all methods are static. */
    private CompiledPredicateSourceGeneratorUtils() {
       // do nothing
    }
 
+   /** Encode the name of the given {@code Term} so it is suitable to be included in Java source code. */
    static String encodeName(Term t) {
       return encodeName(t.getName());
    }
 
+   /** Encode the name of the given {@code String} so it is suitable to be included in Java source code. */
    static String encodeName(String in) {
       StringBuilder out = new StringBuilder(in.length() + 2);
       out.append('\"');
@@ -82,14 +80,17 @@ final class CompiledPredicateSourceGeneratorUtils {
       return out.toString();
    }
 
+   /** Returns Java source code to create the given {@code PredicateKey}. */
    static String getKeyGeneration(PredicateKey key) {
       return "new PredicateKey(" + encodeName(key.getName()) + "," + key.getNumArgs() + ")";
    }
 
+   /** Returns {@code true} if the given {@code Term} is not an anonymous variable, else returns {@code false}. */
    static boolean isNotAnonymousVariable(Term t) {
       return !isAnonymousVariable(t);
    }
 
+   /** Returns {@code true} if the given {@code Term} is an anonymous variable, else returns {@code false}. */
    static boolean isAnonymousVariable(Term t) {
       return t.getType().isVariable() && ((Variable) t).isAnonymous();
    }

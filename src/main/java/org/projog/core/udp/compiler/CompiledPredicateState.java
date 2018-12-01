@@ -30,22 +30,23 @@ import org.projog.core.PredicateKey;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
-import org.projog.core.udp.compiler.model.ClassMetaData;
 import org.projog.core.udp.compiler.model.ClauseMetaData;
 import org.projog.core.udp.compiler.model.ClauseVariableMetaData;
+import org.projog.core.udp.compiler.model.PredicateMetaData;
 
+/** Contains state used in the generation of Java source code to represent a user-defined Prolog predicate. */
 final class CompiledPredicateState {
    private final KnowledgeBase kb;
    private final ArithmeticOperators ao;
    private final String className;
-   private final Map<String, Term> staticMemberVariables = new LinkedHashMap<>(); // TODO move to separate member variables class
+   private final Map<String, Term> staticMemberVariables = new LinkedHashMap<>();
    private int predicateCtr;
    private final Map<PredicateKey, StaticVariableState<PredicateFactory>> predicateFactories = new LinkedHashMap<>();
    private final Map<PredicateKey, StaticVariableState<ArithmeticOperator>> arithmeticOperators = new LinkedHashMap<>();
    private final Map<ClauseVariableMetaData, String> javaVariableNamesByMetaData = new LinkedHashMap<>();
    private final Map<String, String> javaVariableNamesByPrologVariableName = new LinkedHashMap<>();
    private final List<ClauseState> clauseStates;
-   private final ClassMetaData classMetaData;
+   private final PredicateMetaData classMetaData;
    private final List<ClauseVariableState> membersVariables = new ArrayList<>();
    private final TermCreationWriter writer;
    private final NumericCreationWriter calculationWriter;
@@ -56,7 +57,7 @@ final class CompiledPredicateState {
       this.writer = new TermCreationWriter();
       this.calculationWriter = new NumericCreationWriter();
       this.className = compiledPredicateClassName;
-      classMetaData = new ClassMetaData(PredicateKey.createForTerm(implications.iterator().next().getConsequent().getTerm()), kb, implications);
+      classMetaData = new PredicateMetaData(PredicateKey.createForTerm(implications.iterator().next().getConsequent().getTerm()), kb, implications);
       clauseStates = new ArrayList<>(implications.size());
       for (ClauseMetaData md : classMetaData.getClauses()) {
          ClauseState s = new ClauseState(md);
@@ -72,7 +73,7 @@ final class CompiledPredicateState {
       return clauseStates;
    }
 
-   ClassMetaData getClassMetaData() {
+   PredicateMetaData getClassMetaData() {
       return classMetaData;
    }
 
@@ -169,22 +170,22 @@ final class CompiledPredicateState {
    }
 
    String getExistingJavaVariableName(ClauseVariableMetaData cmdv) {
-      String name = javaVariableNamesByMetaData.get(cmdv);
-      if (name == null) {
+      String javaVariableName = javaVariableNamesByMetaData.get(cmdv);
+      if (javaVariableName == null) {
          throw new RuntimeException(cmdv.getPrologVariableName() + " not in " + javaVariableNamesByMetaData);
       }
-      return name;
+      return javaVariableName;
    }
 
-   ClauseVariableState getNewJavaVariableName(ClauseVariableMetaData cmdv) { // TODO
+   ClauseVariableState createClauseVariableState(ClauseVariableMetaData cmdv) {
       if (javaVariableNamesByMetaData.containsKey(cmdv)) {
          throw new RuntimeException(cmdv.getPrologVariableName() + " already in " + javaVariableNamesByMetaData);
       }
-      String name = "v" + javaVariableNamesByMetaData.size();
-      javaVariableNamesByMetaData.put(cmdv, name);
-      javaVariableNamesByPrologVariableName.put(cmdv.getPrologVariableName(), name);
+      String javaVariableName = "v" + javaVariableNamesByMetaData.size();
+      javaVariableNamesByMetaData.put(cmdv, javaVariableName);
+      javaVariableNamesByPrologVariableName.put(cmdv.getPrologVariableName(), javaVariableName);
 
-      ClauseVariableState s = new ClauseVariableState(name, cmdv);
+      ClauseVariableState s = new ClauseVariableState(javaVariableName, cmdv);
       membersVariables.add(s);
       return s;
    }

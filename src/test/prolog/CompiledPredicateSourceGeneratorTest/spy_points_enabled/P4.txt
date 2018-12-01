@@ -41,9 +41,9 @@ return true;
 public boolean evaluate(){
 if(d){
 if(c==0){
-if(d){s.logCall(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});}
+s.logCall(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});
 }else{
-if(d){s.logRedo(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});}
+s.logRedo(this,new Term[]{a0,a1,a2,a3,a4,a5,a6});
 }}
 try{
 switch(c){

@@ -136,9 +136,9 @@ return true;
 public boolean evaluate(){
 if(d){
 if(c==0){
-if(d){s.logCall(this,new Term[]{a0,a1,a2});}
+s.logCall(this,new Term[]{a0,a1,a2});
 }else{
-if(d){s.logRedo(this,new Term[]{a0,a1,a2});}
+s.logRedo(this,new Term[]{a0,a1,a2});
 }}
 try{
 switch(c){

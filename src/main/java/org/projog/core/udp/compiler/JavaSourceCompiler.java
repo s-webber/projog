@@ -39,7 +39,7 @@ import javax.tools.ToolProvider;
 import org.projog.core.ProjogException;
 
 /** Compiles Java source code into bytecode. */
-public final class JavaSourceCompiler {
+final class JavaSourceCompiler {
    private final Object lock = new Object();
    private final JavaCompiler compiler;
    private final SimpleJavaFileManager fileManager;
@@ -49,7 +49,7 @@ public final class JavaSourceCompiler {
    /** Java class files generated at runtime. Key = class name. */
    private final Map<String, ClassJavaFileObject> classFiles = new HashMap<>();
 
-   public JavaSourceCompiler() {
+   JavaSourceCompiler() {
       compiler = ToolProvider.getSystemJavaCompiler();
       StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, Locale.ENGLISH, null);
       fileManager = new SimpleJavaFileManager(standardFileManager);

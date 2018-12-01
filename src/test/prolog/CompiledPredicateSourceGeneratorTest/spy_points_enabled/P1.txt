@@ -21,7 +21,7 @@ Variable v1=new Variable("X");
 v2=new Variable("Zs");
 v3=new Variable("Ys");
 v4=new Variable("Xs");
-if(new List(v1.getTerm(), v4.getTerm()).unify(a0)&&v3.unify(a1)&&new List(v1.getTerm(), v2.getTerm()).unify(a2)){
+if(new List(v1.getTerm(),v4.getTerm()).unify(a0)&&v3.unify(a1)&&new List(v1.getTerm(),v2.getTerm()).unify(a2)){
 return true;
 }else return false;
 }

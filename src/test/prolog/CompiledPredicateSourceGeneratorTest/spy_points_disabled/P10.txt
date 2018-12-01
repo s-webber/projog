@@ -136,10 +136,10 @@ try{
 switch(c){
 case 0:
 if(p0==null){
-if(initRule0()&&retryRule0()){
+if(initRule0()&&retryRule0())
 {
 return true;}
-}}else if(retryRule0()){
+}else if(retryRule0()){
 {
 return true;}
 }if(c==5)break;
@@ -163,10 +163,10 @@ return true;}
 if(c==5)break;
 case 4:
 if(p1==null){
-if(initRule4()&&retryRule4()){
+if(initRule4()&&retryRule4())
 {
 return true;}
-}}else if(retryRule4()){
+}else if(retryRule4()){
 {
 return true;}
 }c=5;

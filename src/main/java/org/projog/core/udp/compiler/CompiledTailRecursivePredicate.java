@@ -28,5 +28,12 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * @see TailRecursivePredicateMetaData
  */
 public abstract class CompiledTailRecursivePredicate extends TailRecursivePredicate implements CompiledPredicate {
+   /**
+    * Indicates which arguments, if they are immutable, will prohibit re-evaluation of the predicate from succeeding.
+    * <p>
+    * The length of the returned array will be equal to the arity (i.e. number of arguments) of the predicate. If an
+    * element in the array is {@code true} then that indicates that, if the corresponding predicate argument is
+    * immutable, then evaluation of the predicate will succeed (at most) once.
+    */
    public abstract boolean[] isSingleResultIfArgumentImmutable();
 }

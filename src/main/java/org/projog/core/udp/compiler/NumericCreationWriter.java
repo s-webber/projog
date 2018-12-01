@@ -17,6 +17,7 @@ package org.projog.core.udp.compiler;
 
 import org.projog.core.term.Term;
 
+/** Generates Java source code to construct a {@code Numeric}. */
 final class NumericCreationWriter {
    String outputNumericAsDoubleStatement(Term t, CompiledPredicateState state) {
       if (t.getType().isNumeric()) {

@@ -36,19 +36,19 @@ private void b0_2(){
 public boolean evaluate(){
 if(d){
 if(p0==null){
-if(d){s.logCall(this,TermUtils.EMPTY_ARRAY);}
+s.logCall(this,TermUtils.EMPTY_ARRAY);
 }else{
-if(d){s.logRedo(this,TermUtils.EMPTY_ARRAY);}
+s.logRedo(this,TermUtils.EMPTY_ARRAY);
 }}
 try{
 switch(c){
 case 0:
 if(p0==null){
-if(initRule0()&&retryRule0()){
+if(initRule0()&&retryRule0())
 {
 if(d){s.logExit(this,TermUtils.EMPTY_ARRAY,1);}
 return true;}
-}}else if(retryRule0()){
+}else if(retryRule0()){
 {
 if(d){s.logExit(this,TermUtils.EMPTY_ARRAY,1);}
 return true;}

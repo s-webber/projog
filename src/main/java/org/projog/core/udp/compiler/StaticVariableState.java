@@ -17,6 +17,7 @@ package org.projog.core.udp.compiler;
 
 import org.projog.core.PredicateKey;
 
+/** Represents a static Java variable contained in source code generated at runtime for a user-defined predicate. */
 final class StaticVariableState<T> {
    private final PredicateKey predicateKey;
    private T variableType;

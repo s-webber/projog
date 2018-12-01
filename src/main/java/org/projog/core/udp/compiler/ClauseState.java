@@ -23,54 +23,55 @@ import org.projog.core.udp.compiler.model.AntecedentElementMetaData;
 import org.projog.core.udp.compiler.model.ClauseMetaData;
 import org.projog.core.udp.compiler.model.ConsequentMetaData;
 
+/** Contains state used in the generation of Java source code to represent a clause. */
 final class ClauseState {
-   private final List<AntecedantElementState> antecedantElementStates;
+   private final List<AntecedentElementState> antecedentElementStates;
    private ClauseMetaData md;
 
    ClauseState(ClauseMetaData md) {
       this.md = md;
 
       List<AntecedentElementMetaData> elements = md.getElements();
-      antecedantElementStates = new ArrayList<>(elements.size());
+      antecedentElementStates = new ArrayList<>(elements.size());
       for (AntecedentElementMetaData element : elements) {
-         AntecedantElementState state = new AntecedantElementState(this, element);
-         antecedantElementStates.add(state);
+         AntecedentElementState state = new AntecedentElementState(this, element);
+         antecedentElementStates.add(state);
       }
    }
 
-   AntecedantElementState getLastAntecedantElement() {
-      return antecedantElementStates.get(antecedantElementStates.size() - 1);
+   AntecedentElementState getLastAntecedentElement() {
+      return antecedentElementStates.get(antecedentElementStates.size() - 1);
    }
 
-   /** Returns antecedant elements that are after the first retryable element */
-   Collection<AntecedantElementState> getAntecedantElementStatesAfterFirstRetryableElement() {
-      return antecedantElementStates.subList(md.getIndexOfFirstRetryableElement() + 1, antecedantElementStates.size());
+   /** Returns antecedent elements that are after the first retryable element */
+   Collection<AntecedentElementState> getAntecedentElementStatesAfterFirstRetryableElement() {
+      return antecedentElementStates.subList(md.getIndexOfFirstRetryableElement() + 1, antecedentElementStates.size());
    }
 
-   /** Returns antecedant elements starting from the first retryable element */
-   Collection<AntecedantElementState> getAntecedantElementStatesToRetry() {
-      return antecedantElementStates.subList(md.getIndexOfFirstRetryableElement(), antecedantElementStates.size());
+   /** Returns antecedent elements starting from the first retryable element */
+   Collection<AntecedentElementState> getAntecedentElementStatesToRetry() {
+      return antecedentElementStates.subList(md.getIndexOfFirstRetryableElement(), antecedentElementStates.size());
    }
 
-   /** Returns antecedant elements before the first retryable element */
-   Collection<AntecedantElementState> getAntecedantElementStatesToInit() {
-      return antecedantElementStates.subList(0, md.getIndexOfFirstRetryableElement());
+   /** Returns antecedent elements before the first retryable element */
+   Collection<AntecedentElementState> getAntecedentElementStatesToInit() {
+      return antecedentElementStates.subList(0, md.getIndexOfFirstRetryableElement());
    }
 
-   AntecedantElementState getFirstRetryableAntecedantElement() {
-      return antecedantElementStates.get(md.getIndexOfFirstRetryableElement());
+   AntecedentElementState getFirstRetryableAntecedentElement() {
+      return antecedentElementStates.get(md.getIndexOfFirstRetryableElement());
    }
 
-   Collection<AntecedantElementState> getAntecedantElementStates() {
-      return antecedantElementStates;
+   Collection<AntecedentElementState> getAntecedentElementStates() {
+      return antecedentElementStates;
    }
 
-   AntecedantElementState getAntecedantElementState(int i) {
-      return antecedantElementStates.get(i);
+   AntecedentElementState getAntecedentElementState(int i) {
+      return antecedentElementStates.get(i);
    }
 
    int getNumberOfElements() {
-      return antecedantElementStates.size();
+      return antecedentElementStates.size();
    }
 
    boolean hasCutWhichStopsReevaluation() {

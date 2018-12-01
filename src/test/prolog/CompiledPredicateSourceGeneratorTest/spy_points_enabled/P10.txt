@@ -134,19 +134,19 @@ private void b4_1(){
 public boolean evaluate(){
 if(d){
 if(p0==null){
-if(d){s.logCall(this,new Term[]{a0,a1,a2});}
+s.logCall(this,new Term[]{a0,a1,a2});
 }else{
-if(d){s.logRedo(this,new Term[]{a0,a1,a2});}
+s.logRedo(this,new Term[]{a0,a1,a2});
 }}
 try{
 switch(c){
 case 0:
 if(p0==null){
-if(initRule0()&&retryRule0()){
+if(initRule0()&&retryRule0())
 {
 if(d){s.logExit(this,new Term[]{a0,a1,a2},1);}
 return true;}
-}}else if(retryRule0()){
+}else if(retryRule0()){
 {
 if(d){s.logExit(this,new Term[]{a0,a1,a2},1);}
 return true;}
@@ -174,11 +174,11 @@ return true;}
 if(c==5)break;
 case 4:
 if(p1==null){
-if(initRule4()&&retryRule4()){
+if(initRule4()&&retryRule4())
 {
 if(d){s.logExit(this,new Term[]{a0,a1,a2},5);}
 return true;}
-}}else if(retryRule4()){
+}else if(retryRule4()){
 {
 if(d){s.logExit(this,new Term[]{a0,a1,a2},5);}
 return true;}

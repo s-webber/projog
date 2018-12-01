@@ -10,7 +10,7 @@ public final class P7 implements org.projog.core.udp.compiler.CompiledPredicate{
 private boolean initRule0(){
 Variable v0=new Variable("X");
 Variable v1=new Variable("Y");
-if(Structure.createStructure("p", new Term[]{v0.getTerm(), v1.getTerm()}).unify(a0)&&v1.unify(a2)){
+if(Structure.createStructure("p",new Term[]{v0.getTerm(),v1.getTerm()}).unify(a0)&&v1.unify(a2)){
 Term v2=v0.getTerm();
 if(!F0.getPredicate(v2).evaluate())return false;
 return true;

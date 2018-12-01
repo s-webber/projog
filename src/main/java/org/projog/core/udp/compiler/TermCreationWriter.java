@@ -23,8 +23,12 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
+/** Generates Java source code to construct a {@code Term}. */
 final class TermCreationWriter {
    String outputCreateTermStatement(Term t, CompiledPredicateState state, boolean outputImmutable) {
+      // TODO even when "outputImmutable==true" still use variable name, rather than creating a new term,
+      // if a suitable candidate has already been created and assigned to a static variable.
+
       if (t == EmptyList.EMPTY_LIST) {
          return "EmptyList.EMPTY_LIST";
       } else if (!outputImmutable && t.isImmutable()) {
@@ -36,13 +40,13 @@ final class TermCreationWriter {
       } else if (t.getType() == TermType.STRUCTURE) {
          StringBuilder sb = new StringBuilder("Structure.createStructure(");
          sb.append(encodeName(t));
-         sb.append(", new Term[]{");
+         sb.append(",new Term[]{");
          boolean first = true;
          for (Term arg : t.getArgs()) {
             if (first) {
                first = false;
             } else {
-               sb.append(", ");
+               sb.append(",");
             }
             sb.append(outputCreateTermStatement(arg, state, outputImmutable));
             if (arg.isImmutable() == false) {
@@ -54,7 +58,7 @@ final class TermCreationWriter {
       } else if (t.getType() == TermType.LIST) {
          String headSyntax = outputListElement(t.getArgument(0), state, outputImmutable);
          String tailSyntax = outputListElement(t.getArgument(1), state, outputImmutable);
-         return "new List(" + headSyntax + ", " + tailSyntax + ")";
+         return "new List(" + headSyntax + "," + tailSyntax + ")";
       } else if (t.getType() == TermType.ATOM) {
          return "new Atom(" + encodeName(t) + ")";
       } else if (t.getType() == TermType.INTEGER) {

@@ -23,6 +23,12 @@ import org.projog.core.function.flow.Cut;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledTailRecursivePredicate;
 
+/**
+ * Contains meta-data for an element of an antecedent (i.e. body) of a clause.
+ * <p>
+ * If the antecedent of a clause is a conjunction then it each element of the conjunction will be represented as a
+ * distinct element.
+ */
 public final class AntecedentElementMetaData implements ClauseElement {
    private final Term term;
    private final PredicateFactory predicateFactory;

@@ -56,11 +56,16 @@ import org.projog.core.term.TermType;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.TailRecursivePredicateMetaData;
 import org.projog.core.udp.compiler.model.AntecedentElementMetaData;
-import org.projog.core.udp.compiler.model.ClassMetaData;
 import org.projog.core.udp.compiler.model.ClauseElement;
 import org.projog.core.udp.compiler.model.ClauseVariableMetaData;
 import org.projog.core.udp.compiler.model.ConsequentMetaData;
+import org.projog.core.udp.compiler.model.PredicateMetaData;
 
+/**
+ * Translates Prolog predicates into Java source code.
+ * <p>
+ * Classes generated at runtime by this class will implement {@link CompiledPredicate}.
+ */
 final class CompiledPredicateSourceGenerator {
    private static final String CONJUNCTION_CTR = "j";
    private static final String CLAUSE_CTR = "c";
@@ -92,7 +97,7 @@ final class CompiledPredicateSourceGenerator {
    }
 
    String write() {
-      ClassMetaData classMetaData = state.getClassMetaData();
+      PredicateMetaData classMetaData = state.getClassMetaData();
       StringWriter sw = new StringWriter();
       pw = new PrintWriter(sw);
 
@@ -205,7 +210,7 @@ final class CompiledPredicateSourceGenerator {
       }
    }
 
-   private void writePublicConstructor(KnowledgeBase kb, ClassMetaData classMetaData, int numArgs) {
+   private void writePublicConstructor(KnowledgeBase kb, PredicateMetaData classMetaData, int numArgs) {
       pw.println("public " + state.getClassNameExcludingPackage() + "(KnowledgeBase kb){");
 
       writeAssignStaticVariables();
@@ -310,7 +315,7 @@ final class CompiledPredicateSourceGenerator {
          pw.println("case " + caseCtr + ":");
          if (cs.hasRetryableElements()) {
             String predicateName = null;
-            for (AntecedantElementState s : cs.getAntecedantElementStates()) {
+            for (AntecedentElementState s : cs.getAntecedentElementStates()) {
                if (s.getElement().isRetryable()) {
                   predicateName = s.getPredicateName();
                   break;
@@ -320,9 +325,9 @@ final class CompiledPredicateSourceGenerator {
                throw new RuntimeException();
             }
             pw.println("if(" + predicateName + "==null){");
-            pw.println("if(" + INIT_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "()&&" + RETRY_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "()){");
+            pw.println("if(" + INIT_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "()&&" + RETRY_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "())");
             writeExitBlock(cs.getClauseIdx());
-            pw.println("}}else if(" + RETRY_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "()){");
+            pw.println("}else if(" + RETRY_RULE_METHOD_NAME_PREFIX + cs.getClauseIdx() + "()){");
             writeExitBlock(cs.getClauseIdx());
             pw.print("}"); // end of if/else
 
@@ -363,7 +368,7 @@ final class CompiledPredicateSourceGenerator {
          if (last.hasRetryableElements()) {
             pw.print("if (" + CLAUSE_CTR + "==" + (state.getClauseStates().size() - 1) + ")return");
             boolean first = true;
-            for (AntecedantElementState s : last.getAntecedantElementStates()) {
+            for (AntecedentElementState s : last.getAntecedentElementStates()) {
                if (s.getElement().isRetryable()) {
                   if (first) {
                      pw.print("(" + s.getPredicateName() + "==null||" + s.getPredicateName() + ".couldReevaluationSucceed())");
@@ -407,7 +412,7 @@ final class CompiledPredicateSourceGenerator {
    private void writeDeclareStaticVariables() {
       writeDeclareStaticVariables(state.getPredicateFactories());
 
-      // TODO only declare if required
+      // TODO some predicates will not require ArithmeticOperators so in those cases we could avoid declaring it
       pw.println("private static org.projog.core.ArithmeticOperators " + ARITHMETIC_OPERATORS_VARIABLE_NAME + ";");
       writeDeclareStaticVariables(state.getArithmeticOperators());
    }
@@ -457,7 +462,7 @@ final class CompiledPredicateSourceGenerator {
          pw.println("){");
       }
 
-      for (AntecedantElementState elementState : clauseState.getAntecedantElementStatesToInit()) {
+      for (AntecedentElementState elementState : clauseState.getAntecedentElementStatesToInit()) {
          assignVariables(elementState);
          if (!clauseState.hasRetryableElements() && elementState.getElement().isCut()) {
             pw.println(getSetClauseCtrDueToCutStatement());
@@ -481,7 +486,7 @@ final class CompiledPredicateSourceGenerator {
       pw.println("switch(" + CONJUNCTION_CTR + "){");
 
       int caseIdx = -1;
-      for (AntecedantElementState elementState : clauseState.getAntecedantElementStatesToRetry()) {
+      for (AntecedentElementState elementState : clauseState.getAntecedentElementStatesToRetry()) {
          AntecedentElementMetaData element = elementState.getElement();
 
          if (element.isRetryable()) {
@@ -519,18 +524,18 @@ final class CompiledPredicateSourceGenerator {
       pw.println('}'); // end of while statement
       pw.println('}'); // end of method
 
-      for (AntecedantElementState elementState : clauseState.getAntecedantElementStatesToRetry()) {
+      for (AntecedentElementState elementState : clauseState.getAntecedentElementStatesToRetry()) {
          if (elementState.getElement().isRetryable()) {
             writeBacktrackMethodCalls(elementState);
          }
       }
    }
 
-   private void writeBacktrackMethodCalls(final AntecedantElementState elementToBacktrackTo) {
+   private void writeBacktrackMethodCalls(final AntecedentElementState elementToBacktrackTo) {
       pw.println("private void b" + elementToBacktrackTo.getClauseState().getClauseIdx() + "_" + elementToBacktrackTo.getElementIdx() + "(){");
 
       for (int i = elementToBacktrackTo.getElementIdx() + 1; i < elementToBacktrackTo.getClauseState().getNumberOfElements(); i++) {
-         AntecedantElementState elementToBacktrack = elementToBacktrackTo.getClauseState().getAntecedantElementState(i);
+         AntecedentElementState elementToBacktrack = elementToBacktrackTo.getClauseState().getAntecedentElementState(i);
          for (ClauseVariableMetaData cvmd : elementToBacktrack.getVariables()) {
             if (!cvmd.isMemberVariable()) {
                throw new IllegalStateException();
@@ -550,17 +555,17 @@ final class CompiledPredicateSourceGenerator {
    }
 
    private boolean doesCutPreventReevaluation(ClauseState clauseState) {
-      AntecedantElementState lastAntecedantElement = clauseState.getLastAntecedantElement();
-      if (lastAntecedantElement.getElement().isRetryable()) {
+      AntecedentElementState lastAntecedentElement = clauseState.getLastAntecedentElement();
+      if (lastAntecedentElement.getElement().isRetryable()) {
          return false;
-      } else if (lastAntecedantElement.getElement().isCut()) {
+      } else if (lastAntecedentElement.getElement().isCut()) {
          return true;
       } else {
-         return lastAntecedantElement.wouldBacktrackingInvokeCut();
+         return lastAntecedentElement.wouldBacktrackingInvokeCut();
       }
    }
 
-   private void handledFailedRetryableElement(int caseIdx, AntecedantElementState elementState) {
+   private void handledFailedRetryableElement(int caseIdx, AntecedentElementState elementState) {
       if (!elementState.getElement().isRetryable()) {
          throw new IllegalStateException();
       } else if (elementState.wouldBacktrackingInvokeCut()) {
@@ -574,7 +579,7 @@ final class CompiledPredicateSourceGenerator {
       }
    }
 
-   private void assignVariables(AntecedantElementState elementState) {
+   private void assignVariables(AntecedentElementState elementState) {
       elementState.setVariables(assignVariables(elementState.getElement(), elementState.getClauseState()));
    }
 
@@ -582,7 +587,7 @@ final class CompiledPredicateSourceGenerator {
       ArrayList<ClauseVariableMetaData> variablesToBacktrack = new ArrayList<>();
 
       for (ClauseVariableMetaData cmdv : element.getVariables()) {
-         ClauseVariableState javaVariable = state.getNewJavaVariableName(cmdv);
+         ClauseVariableState javaVariable = state.createClauseVariableState(cmdv);
          StringBuilder sb = new StringBuilder();
          if (!cmdv.isMemberVariable()) {
             sb.append(javaVariable.getJavaType()).append(' ');
@@ -600,7 +605,7 @@ final class CompiledPredicateSourceGenerator {
       return variablesToBacktrack;
    }
 
-   private void writeEvaluateSingleResultPredicate(AntecedantElementState elementState) {
+   private void writeEvaluateSingleResultPredicate(AntecedentElementState elementState) {
       AntecedentElementMetaData element = elementState.getElement();
       PredicateFactory pf = element.getPredicateFactory();
 
@@ -644,7 +649,10 @@ final class CompiledPredicateSourceGenerator {
             condition = "!" + getPredicateEvaluateMethodCall(firstArgument);
          }
       } else if (pf instanceof Is) {
-         // TODO if left argument is first use of Prolog variable then assign Java variable directly to numeric
+         // TODO If the first argument of the "is" predicate is the first use of Prolog variable then we could assign
+         // the corresponding Java variable directly to the Numeric represented by the second argument of the "is" predicate.
+         // This would avoid the intermediary step of assigning the Java variable to a new org.projog.term.Variable
+         // that is then unified with the Numeric represented by the second argument.
          String left = state.outputCreateTermStatement(elementState.getFirstArgument(), false);
          String right = state.outputCreateNumericStatement(elementState.getSecondArgument());
          condition = "!" + left + ".unify(" + right + ")";
@@ -706,14 +714,14 @@ final class CompiledPredicateSourceGenerator {
          pw.println("if(" + DEBUG_ENABLED_FLAG + "){");
          ClauseState first = state.getFirstClause();
          if (first.hasRetryableElements()) {
-            pw.println("if(" + first.getFirstRetryableAntecedantElement().getPredicateName() + "==null){");
+            pw.println("if(" + first.getFirstRetryableAntecedentElement().getPredicateName() + "==null){");
          } else {
             pw.println("if(" + CLAUSE_CTR + "==0){");
          }
          String logStatementMethodArguments = getLogStatementMethodArguments();
-         log("Call", logStatementMethodArguments);
+         pw.println(getLogStatementMethodCall("Call", logStatementMethodArguments));
          pw.println("}else{");
-         log("Redo", logStatementMethodArguments);
+         pw.println(getLogStatementMethodCall("Redo", logStatementMethodArguments));
          pw.println("}}");
       }
    }
@@ -796,7 +804,7 @@ final class CompiledPredicateSourceGenerator {
       pw.println("protected final boolean matchFirstRule(){return " + INIT_RULE_METHOD_NAME_PREFIX + "0();}");
 
       pw.println("protected final boolean matchSecondRule(){if (" + INIT_RULE_METHOD_NAME_PREFIX + "1()){");
-      AntecedantElementState firstRetryable = state.getSecondClause().getFirstRetryableAntecedantElement();
+      AntecedentElementState firstRetryable = state.getSecondClause().getFirstRetryableAntecedentElement();
       for (int i = 0; i < state.getClassMetaData().getPredicateKey().getNumArgs(); i++) {
          pw.println("a" + i + "=" + state.outputCreateTermStatement(firstRetryable.getElement().getTerm().getArgument(i), false) + ".getTerm();");
       }

@@ -23,12 +23,13 @@ import org.projog.core.PredicateKey;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.TailRecursivePredicateMetaData;
 
-public final class ClassMetaData {
+/** Contains meta-data for a user-defined Prolog predicate. */
+public final class PredicateMetaData {
    private final PredicateKey key;
    private final List<ClauseMetaData> clauses;
    private final TailRecursivePredicateMetaData recursiveFunctionMetaData;
 
-   public ClassMetaData(PredicateKey key, KnowledgeBase kb, List<ClauseModel> clauseModels) {
+   public PredicateMetaData(PredicateKey key, KnowledgeBase kb, List<ClauseModel> clauseModels) {
       this.key = key;
       this.clauses = new ArrayList<>(clauseModels.size());
       for (ClauseModel m : clauseModels) {

@@ -59,7 +59,7 @@ v12=v9.getTerm();
 v13=v5.getTerm();
 v14=new Variable("C");
 v15=v10.getTerm();
-p2=F1.getPredicate(new List(v15.getTerm(), new List(v11.getTerm(), new List(v12.getTerm(), EmptyList.EMPTY_LIST).getTerm()).getTerm()),v13,v14);
+p2=F1.getPredicate(new List(v15.getTerm(),new List(v11.getTerm(),new List(v12.getTerm(),EmptyList.EMPTY_LIST).getTerm()).getTerm()),v13,v14);
 if(!p2.evaluate()){
 j=1;
 continue;
@@ -131,7 +131,7 @@ v28=v21.getTerm();
 v29=v25.getTerm();
 v30=v27.getTerm();
 v31=v23.getTerm();
-p6=F1.getPredicate(v28,new List(v30.getTerm(), new List(v29.getTerm(), EmptyList.EMPTY_LIST).getTerm()),v31);
+p6=F1.getPredicate(v28,new List(v30.getTerm(),new List(v29.getTerm(),EmptyList.EMPTY_LIST).getTerm()),v31);
 if(!p6.evaluate()){
 j=5;
 continue;
@@ -220,10 +220,10 @@ try{
 switch(c){
 case 0:
 if(p0==null){
-if(initRule0()&&retryRule0()){
+if(initRule0()&&retryRule0())
 {
 return true;}
-}}else if(retryRule0()){
+}else if(retryRule0()){
 {
 return true;}
 }c=1;

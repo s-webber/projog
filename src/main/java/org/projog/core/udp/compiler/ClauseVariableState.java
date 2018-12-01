@@ -17,12 +17,14 @@ package org.projog.core.udp.compiler;
 
 import org.projog.core.udp.compiler.model.ClauseVariableMetaData;
 
+/** Associates a Java variable name to a Prolog variable for the purpose of translating Prolog predicates to Java. */
 final class ClauseVariableState {
-   private final String name;
+   // TODO should some of the logic contained in this class be moved to ClauseVariableMetaData?
+   private final String javaVariableName;
    private final ClauseVariableMetaData cmdv;
 
-   ClauseVariableState(String name, ClauseVariableMetaData cmdv) {
-      this.name = name;
+   ClauseVariableState(String javaVariableName, ClauseVariableMetaData cmdv) {
+      this.javaVariableName = javaVariableName;
       this.cmdv = cmdv;
    }
 
@@ -30,8 +32,8 @@ final class ClauseVariableState {
       return cmdv.isMemberVariable();
    }
 
-   String getJavaVariableName() { // TODO move every method but this to ClauseVariableMetaData
-      return name;
+   String getJavaVariableName() {
+      return javaVariableName;
    }
 
    boolean isVariableTerm() {

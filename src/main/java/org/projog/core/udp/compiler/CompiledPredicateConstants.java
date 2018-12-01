@@ -15,6 +15,7 @@
  */
 package org.projog.core.udp.compiler;
 
+/** Contains constants that exist in the Java source code of predicates compiled at runtime. */
 public final class CompiledPredicateConstants {
    public static final String COMPILED_PREDICATES_PACKAGE = "org.projog.compiled_at_runtime";
    public static final String INIT_RULE_METHOD_NAME_PREFIX = "initRule";
@@ -22,5 +23,6 @@ public final class CompiledPredicateConstants {
    static final String ARITHMETIC_OPERATORS_VARIABLE_NAME = "O";
 
    private CompiledPredicateConstants() {
+      // do nothing
    }
 }

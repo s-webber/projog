@@ -17,6 +17,7 @@ package org.projog.core.udp.compiler.model;
 
 import java.util.Collection;
 
+/** Contains meta-data for a distinct element of a clause of a user-defined Prolog predicate. */
 public interface ClauseElement {
    Collection<ClauseVariableMetaData> getVariables();
 }

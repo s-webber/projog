@@ -15,6 +15,7 @@
  */
 package org.projog.core.udp.compiler.model;
 
+/** Contains meta-data for a Prolog variable contained in the clause of a user-defined Prolog predicate. */
 public final class ClauseVariableMetaData {
    private final String prologVariableName;
    private final ClauseVariableMetaData previous;
@@ -36,7 +37,7 @@ public final class ClauseVariableMetaData {
       return prologVariableName;
    }
 
-   public boolean isMemberVariable() { // TODO rename to instance variable?
+   public boolean isMemberVariable() {
       return doesRequireBacktracking() || isAssignedToMemberVariable();
    }
 

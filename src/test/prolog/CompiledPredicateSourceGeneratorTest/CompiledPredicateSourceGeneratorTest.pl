@@ -341,12 +341,12 @@ testOnce(A,B,C,D,E,F,G) :-
 %FALSE testOnce(A,B,C,D,E,F,fail)
 %FALSE testOnce(A,B,C,D,E,F,E>43)
 
-testWrite(X) :- writeln('hel'), write('lo, '), write(X), write('!').
+testWrite(X) :- writeln('hello, "world"!'), write('hello, "'), write(X), write('"!').
 
-%QUERY testWrite('world')
+%QUERY testWrite('everyone')
 %OUTPUT
-%hel
-%lo, world!
+%hello, "world"!
+%hello, "everyone"!
 %OUTPUT
 %ANSWER/
 

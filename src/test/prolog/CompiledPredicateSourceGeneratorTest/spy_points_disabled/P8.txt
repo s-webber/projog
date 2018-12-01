@@ -38,10 +38,10 @@ try{
 switch(c){
 case 0:
 if(p0==null){
-if(initRule0()&&retryRule0()){
+if(initRule0()&&retryRule0())
 {
 return true;}
-}}else if(retryRule0()){
+}else if(retryRule0()){
 {
 return true;}
 }if(c==1)break;

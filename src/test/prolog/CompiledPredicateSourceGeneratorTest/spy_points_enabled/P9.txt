@@ -16,9 +16,9 @@ return true;
 public boolean evaluate(){
 if(d){
 if(c==0){
-if(d){s.logCall(this,TermUtils.EMPTY_ARRAY);}
+s.logCall(this,TermUtils.EMPTY_ARRAY);
 }else{
-if(d){s.logRedo(this,TermUtils.EMPTY_ARRAY);}
+s.logRedo(this,TermUtils.EMPTY_ARRAY);
 }}
 try{
 switch(c){

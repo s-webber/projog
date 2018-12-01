@@ -20,6 +20,8 @@ import org.projog.core.PredicateFactory;
 
 /**
  * Implemented by all code generated at runtime to represent user defined predicates.
+ *
+ * @see CompiledPredicateSourceGenerator
  */
 public interface CompiledPredicate extends Predicate, PredicateFactory {
 }

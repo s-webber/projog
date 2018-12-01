@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.projog.core.term.Term;
 
+/** Contains meta-data for the consequent (i.e. head) of a clause. */
 public final class ConsequentMetaData implements ClauseElement {
    private final Term term;
    private final Map<String, ClauseVariableMetaData> variables;
@@ -35,6 +36,7 @@ public final class ConsequentMetaData implements ClauseElement {
 
    @Override
    public Collection<ClauseVariableMetaData> getVariables() {
+      // TODO Return a unmodifiable copy instead? (Also review for other classes of this package.)
       return variables.values();
    }
 }

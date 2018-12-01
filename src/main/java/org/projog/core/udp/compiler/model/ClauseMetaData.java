@@ -30,6 +30,7 @@ import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
 
+/** Contains meta-data for a clause of a user-defined Prolog predicate. */
 public final class ClauseMetaData {
    private final int clauseIdx;
    private final ConsequentMetaData consequentElement;
@@ -65,13 +66,13 @@ public final class ClauseMetaData {
    }
 
    private List<AntecedentElementMetaData> createAntecedentElements(KnowledgeBase kb, ClauseModel cm) {
-      Term[] conjunctions = toArrayOfConjunctions(cm.getAntecedant());
+      Term[] conjunctions = toArrayOfConjunctions(cm.getAntecedent());
       List<AntecedentElementMetaData> elements = new ArrayList<>(conjunctions.length);
       for (Term term : conjunctions) {
          int elementIdx = elements.size();
-         Map<String, ClauseVariableMetaData> variablesInAntecedant = getVariablesInTerm(term, elementIdx);
+         Map<String, ClauseVariableMetaData> variablesInAntecedent = getVariablesInTerm(term, elementIdx);
          PredicateFactory predicateFactory = kb.getPredicateFactory(PredicateKey.createForTerm(term));
-         AntecedentElementMetaData element = new AntecedentElementMetaData(predicateFactory, term, variablesInAntecedant, this, elementIdx);
+         AntecedentElementMetaData element = new AntecedentElementMetaData(predicateFactory, term, variablesInAntecedent, this, elementIdx);
          elements.add(element);
       }
 
@@ -79,18 +80,18 @@ public final class ClauseMetaData {
    }
 
    private Map<String, ClauseVariableMetaData> getVariablesInTerm(Term term, int elementIdx) {
-      Map<String, ClauseVariableMetaData> variablesInAntecedant = new HashMap<>();
+      Map<String, ClauseVariableMetaData> variablesInAntecedent = new HashMap<>();
 
       for (Variable v : TermUtils.getAllVariablesInTerm(term)) {
          if (!v.isAnonymous()) {
             String id = v.getId();
             ClauseVariableMetaData cmdv = new ClauseVariableMetaData(id, allVariablesInClause.get(id), this, elementIdx);
             allVariablesInClause.put(id, cmdv);
-            variablesInAntecedant.put(id, cmdv);
+            variablesInAntecedent.put(id, cmdv);
          }
       }
 
-      return variablesInAntecedant;
+      return variablesInAntecedent;
    }
 
    public int getIndexOfFirstRetryableElement() {

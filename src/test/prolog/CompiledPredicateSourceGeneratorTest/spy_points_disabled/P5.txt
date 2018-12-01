@@ -10,11 +10,11 @@ public final class P5 implements org.projog.core.udp.compiler.CompiledPredicate{
 private boolean initRule0(){
 Variable v0=new Variable("X");
 if(v0.unify(a0)){
-F0.writeString("hel");
-F1.writeString("lo, ");
+F0.writeString("hello, \"world\"!");
+F1.writeString("hello, \"");
 Term v1=v0.getTerm();
 F1.evaluate(v1);
-F1.writeString("!");
+F1.writeString("\"!");
 return true;
 }else return false;
 }

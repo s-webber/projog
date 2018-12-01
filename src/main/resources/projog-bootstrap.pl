@@ -190,6 +190,7 @@
 ?- pj_add_arithmetic_operator(mod/2, 'org.projog.core.function.math.Modulo').
 ?- pj_add_arithmetic_operator(rem/2, 'org.projog.core.function.math.Remainder').
 ?- pj_add_arithmetic_operator(random/1, 'org.projog.core.function.math.Random').
+?- pj_add_arithmetic_operator(integer/1, 'org.projog.core.function.math.Round').
 ?- pj_add_arithmetic_operator('/\\'/2, 'org.projog.core.function.math.BitwiseAnd').
 ?- pj_add_arithmetic_operator('\\/'/2, 'org.projog.core.function.math.BitwiseOr').
 ?- pj_add_arithmetic_operator(xor/2, 'org.projog.core.function.math.BitwiseXor').

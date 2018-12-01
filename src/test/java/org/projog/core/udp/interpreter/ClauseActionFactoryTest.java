@@ -171,7 +171,7 @@ public class ClauseActionFactoryTest {
 
    /** @see SingleFunctionMultiResultClauseAction */
    @Test
-   public void testSingleFunctionMultiResultClauseActionVariableAntecedant() {
+   public void testSingleFunctionMultiResultClauseActionVariableAntecedent() {
       ClauseAction ca = getClauseAction("true(X) :- X.");
       assertEquals(SingleFunctionMultiResultClauseAction.class, ca.getClass());
       assertTrue(ca.couldReevaluationSucceed());

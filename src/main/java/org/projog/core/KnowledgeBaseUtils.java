@@ -152,8 +152,8 @@ public final class KnowledgeBaseUtils {
       return l.toArray(new Term[l.size()]);
    }
 
-   private static boolean isConjunctionWithSingleResult(KnowledgeBase kb, Term antecedant) {
-      Term[] functions = toArrayOfConjunctions(antecedant);
+   private static boolean isConjunctionWithSingleResult(KnowledgeBase kb, Term antecedent) {
+      Term[] functions = toArrayOfConjunctions(antecedent);
       return isAllSingleAnswerFunctions(kb, functions);
    }
 

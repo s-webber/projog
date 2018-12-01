@@ -34,11 +34,11 @@ public final class ClauseModel {
 
    private final Term original;
    private final Term consequent;
-   private final Term antecedant;
+   private final Term antecedent;
 
    public static ClauseModel createClauseModel(Term original) {
       final Term consequent;
-      final Term antecedant;
+      final Term antecedent;
 
       if (DefiniteClauseGrammerConvertor.isDCG(original)) {
          original = DefiniteClauseGrammerConvertor.convert(original);
@@ -48,28 +48,28 @@ public final class ClauseModel {
          Term[] implicationArgs = original.getArgs();
          consequent = implicationArgs[0];
          if (implicationArgs.length == 2) {
-            antecedant = implicationArgs[1];
+            antecedent = implicationArgs[1];
          } else if (implicationArgs.length == 1) {
-            antecedant = TRUE;
+            antecedent = TRUE;
          } else {
             throw new RuntimeException();
          }
       } else {
          consequent = original;
-         antecedant = TRUE;
+         antecedent = TRUE;
       }
 
-      return new ClauseModel(original, consequent, antecedant);
+      return new ClauseModel(original, consequent, antecedent);
    }
 
-   private ClauseModel(Term original, Term consequent, Term antecedant) {
+   private ClauseModel(Term original, Term consequent, Term antecedent) {
       this.original = original;
       this.consequent = consequent;
-      this.antecedant = antecedant;
+      this.antecedent = antecedent;
    }
 
-   public Term getAntecedant() {
-      return antecedant;
+   public Term getAntecedent() {
+      return antecedent;
    }
 
    public Term getConsequent() {
@@ -81,12 +81,12 @@ public final class ClauseModel {
    }
 
    public ClauseModel copy() {
-      Term[] newTerms = TermUtils.copy(original, consequent, antecedant);
+      Term[] newTerms = TermUtils.copy(original, consequent, antecedent);
       return new ClauseModel(newTerms[0], newTerms[1], newTerms[2]);
    }
 
    @Override
    public String toString() {
-      return "[" + super.toString() + " " + consequent + " " + antecedant + "]";
+      return "[" + super.toString() + " " + consequent + " " + antecedent + "]";
    }
 }

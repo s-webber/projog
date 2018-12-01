@@ -229,16 +229,16 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private boolean areClausesSuitableForCompilation(List<ClauseModel> clauseModels) {
       for (ClauseModel cm : clauseModels) {
-         Term antecedant = cm.getAntecedant();
-         if (!isTermSuitableForCompilation(antecedant)) {
+         Term antecedent = cm.getAntecedent();
+         if (!isTermSuitableForCompilation(antecedent)) {
             return false;
          }
       }
       return true;
    }
 
-   private boolean isTermSuitableForCompilation(Term antecedant) {
-      for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedant)) {
+   private boolean isTermSuitableForCompilation(Term antecedent) {
+      for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedent)) {
          if (t.getType().isVariable()) {
             return false;
          }

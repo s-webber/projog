@@ -29,18 +29,18 @@ import org.projog.core.udp.ClauseModel;
  * e.g. {@code p(X) :- X<2.}
  */
 public final class SingleFunctionSingleResultClauseAction extends AbstractSingleAnswerClauseAction {
-   private final Term originalAntecedant;
+   private final Term originalAntecedent;
    private final PredicateFactory ef;
 
    SingleFunctionSingleResultClauseAction(KnowledgeBase kb, ClauseModel ci) {
       super(kb, ci.getConsequent().getArgs());
-      originalAntecedant = ci.getAntecedant();
-      ef = kb.getPredicateFactory(originalAntecedant);
+      originalAntecedent = ci.getAntecedent();
+      ef = kb.getPredicateFactory(originalAntecedent);
    }
 
    @Override
-   protected boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables) {
-      Term antecedant = originalAntecedant.copy(sharedVariables);
-      return ef.getPredicate(antecedant.getArgs()).evaluate();
+   protected boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables) {
+      Term antecedent = originalAntecedent.copy(sharedVariables);
+      return ef.getPredicate(antecedent.getArgs()).evaluate();
    }
 }

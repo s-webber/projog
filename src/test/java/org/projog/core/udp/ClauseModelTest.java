@@ -42,10 +42,10 @@ public class ClauseModelTest {
       assertClauseModel("a --> b, c.", "a(A2, A0)", ",(b(A2, A1), c(A1, A0))");
    }
 
-   private void assertClauseModel(String inputSyntax, String consequentSyntax, String antecedantSyntax) {
+   private void assertClauseModel(String inputSyntax, String consequentSyntax, String antecedentSyntax) {
       ClauseModel ci = TestUtils.createClauseModel(inputSyntax);
       assertToString(consequentSyntax, ci.getConsequent());
-      assertToString(antecedantSyntax, ci.getAntecedant());
+      assertToString(antecedentSyntax, ci.getAntecedent());
    }
 
    private void assertToString(String syntax, Term t1) {

@@ -38,18 +38,18 @@ public final class ClauseActionFactory {
     */
    public static ClauseAction getClauseAction(KnowledgeBase kb, ClauseModel clauseModel) {
       Term consequent = clauseModel.getConsequent();
-      Term antecedant = clauseModel.getAntecedant();
-      if (antecedant.getType().isVariable()) {
+      Term antecedent = clauseModel.getAntecedent();
+      if (antecedent.getType().isVariable()) {
          return new SingleFunctionMultiResultClauseAction(kb, clauseModel);
       }
-      PredicateFactory ef = kb.getPredicateFactory(antecedant);
+      PredicateFactory ef = kb.getPredicateFactory(antecedent);
 
       if (ef.getClass() == True.class) {
-         return createClauseActionWithNoAntecedant(consequent);
+         return createClauseActionWithNoAntecedent(consequent);
       } else if (ef.getClass() == Cut.class) {
          return new CutClauseAction(kb, consequent.getArgs());
-      } else if (isSingleAnswer(kb, antecedant)) {
-         if (isConjunction(antecedant)) {
+      } else if (isSingleAnswer(kb, antecedent)) {
+         if (isConjunction(antecedent)) {
             return new MultiFunctionSingleResultClauseAction(kb, clauseModel);
          } else {
             return new SingleFunctionSingleResultClauseAction(kb, clauseModel);
@@ -61,7 +61,7 @@ public final class ClauseActionFactory {
       }
    }
 
-   private static ClauseAction createClauseActionWithNoAntecedant(Term consequent) {
+   private static ClauseAction createClauseActionWithNoAntecedent(Term consequent) {
       if (consequent.getNumberOfArguments() == 0) {
          return new AlwaysMatchedClauseAction(null);
       }

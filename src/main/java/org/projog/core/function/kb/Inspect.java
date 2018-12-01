@@ -200,8 +200,8 @@ public final class Inspect extends AbstractPredicateFactory {
 
       private boolean unifiable(Term clauseHead, Term clauseBody, ClauseModel clauseModel) {
          Term consequent = clauseModel.getConsequent();
-         Term antecedant = clauseModel.getAntecedant();
-         return clauseHead.unify(consequent) && (clauseBody == null || clauseBody.unify(antecedant));
+         Term antecedent = clauseModel.getAntecedent();
+         return clauseHead.unify(consequent) && (clauseBody == null || clauseBody.unify(antecedent));
       }
 
       @Override

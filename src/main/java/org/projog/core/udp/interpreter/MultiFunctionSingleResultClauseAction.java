@@ -36,7 +36,7 @@ public final class MultiFunctionSingleResultClauseAction extends AbstractSingleA
 
    MultiFunctionSingleResultClauseAction(KnowledgeBase kb, ClauseModel ci) {
       super(kb, ci.getConsequent().getArgs());
-      originalTerms = toArrayOfConjunctions(ci.getAntecedant());
+      originalTerms = toArrayOfConjunctions(ci.getAntecedent());
       predicateFactories = new PredicateFactory[originalTerms.length];
       for (int i = 0; i < originalTerms.length; i++) {
          predicateFactories[i] = kb.getPredicateFactory(originalTerms[i]);
@@ -44,7 +44,7 @@ public final class MultiFunctionSingleResultClauseAction extends AbstractSingleA
    }
 
    @Override
-   protected boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables) {
+   protected boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables) {
       for (int i = 0; i < originalTerms.length; i++) {
          Term t = originalTerms[i].copy(sharedVariables);
          if (!predicateFactories[i].getPredicate(t.getArgs()).evaluate()) {

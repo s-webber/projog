@@ -100,7 +100,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public void addFirst(ClauseModel clauseModel) {
       synchronized (LOCK) {
-         // if first used in a implication antecedant before being used as a consequent,
+         // if first used in a implication antecedent before being used as a consequent,
          // it will originally been created with first and last both null
          ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          ClauseActionMetaData first = ends[FIRST];
@@ -118,7 +118,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public void addLast(ClauseModel clauseModel) {
       synchronized (LOCK) {
-         // if first used in a implication antecedant before being used as a consequent,
+         // if first used in a implication antecedent before being used as a consequent,
          // it will originally been created with first and last both null
          ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          ClauseActionMetaData last = ends[LAST];

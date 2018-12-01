@@ -31,11 +31,11 @@ import org.projog.core.term.TermType;
  * for <i>tail recursion optimisation</i> using a {@link TailRecursivePredicate}):
  * <ul>
  * <li>The user defined predicate must consist of exactly 2 rules.</li>
- * <li>It must be possible to detect, at the point that the user defined predicate is defined, that the antecedant of
+ * <li>It must be possible to detect, at the point that the user defined predicate is defined, that the antecedent of
  * the first rule will never generate multiple solutions per-query.</li>
- * <li>If the antecedant of the second rule is not a conjunction, it must be a call to itself (i.e. the user defined
+ * <li>If the antecedent of the second rule is not a conjunction, it must be a call to itself (i.e. the user defined
  * predicate being defined) - this is what makes the predicate recursive.</li>
- * <li>If the antecedant of the second rule is a conjunction, the final element (i.e. the tail) of the conjunction must
+ * <li>If the antecedent of the second rule is a conjunction, the final element (i.e. the tail) of the conjunction must
  * be a call to itself (i.e. the user defined predicate being defined) - this is what makes the predicate recursive. It
  * must be possible to detect, at the point that the user defined predicate is defined, that all elements prior to the
  * final element of the conjunction will never generate multiple solutions per-query.</li>
@@ -90,18 +90,18 @@ public final class TailRecursivePredicateMetaData {
       }
 
       ClauseModel firstTerm = terms.get(0);
-      if (!isSingleAnswer(kb, firstTerm.getAntecedant())) {
+      if (!isSingleAnswer(kb, firstTerm.getAntecedent())) {
          return false;
       }
 
       ClauseModel secondTerm = terms.get(1);
-      return isAntecedantRecursive(kb, secondTerm);
+      return isAntecedentRecursive(kb, secondTerm);
    }
 
-   private static boolean isAntecedantRecursive(KnowledgeBase kb, ClauseModel secondTerm) {
+   private static boolean isAntecedentRecursive(KnowledgeBase kb, ClauseModel secondTerm) {
       Term consequent = secondTerm.getConsequent();
-      Term antecedant = secondTerm.getAntecedant();
-      Term[] functions = toArrayOfConjunctions(antecedant);
+      Term antecedent = secondTerm.getAntecedent();
+      Term[] functions = toArrayOfConjunctions(antecedent);
       Term lastFunction = functions[functions.length - 1];
       if (lastFunction.getType() == TermType.STRUCTURE && lastFunction.getName().equals(consequent.getName()) && lastFunction.getNumberOfArguments() == consequent.getNumberOfArguments()) {
          for (int i = 0; i < functions.length - 1; i++) {
@@ -138,12 +138,12 @@ public final class TailRecursivePredicateMetaData {
 
       Term firstRuleConsequent = firstClause.getConsequent();
       Term secondRuleConsequent = secondClause.getConsequent();
-      Term secondRuleAntecedantFinalFunction = getFinalFunction(secondClause.getAntecedant());
+      Term secondRuleAntecedentFinalFunction = getFinalFunction(secondClause.getAntecedent());
       boolean firstRuleConsequentHasEmptyListAsAnArgument = false;
       for (int i = 0; i < numberOfArguments; i++) {
          Term secondRuleConsequentArgument = secondRuleConsequent.getArgument(i);
-         Term secondRuleAntecedantArgument = secondRuleAntecedantFinalFunction.getArgument(i);
-         if (isTail(secondRuleConsequentArgument, secondRuleAntecedantArgument)) {
+         Term secondRuleAntecedentArgument = secondRuleAntecedentFinalFunction.getArgument(i);
+         if (isTail(secondRuleConsequentArgument, secondRuleAntecedentArgument)) {
             isTailRecursiveArgument[i] = true;
             if (firstRuleConsequent.getArgument(i).getType() == TermType.EMPTY_LIST) {
                isSingleResultIfArgumentImmutable[i] = true;

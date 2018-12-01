@@ -32,7 +32,7 @@ public final class Unifier {
     * When Prolog attempts to answer a query it searches its knowledge base for all rules with the same functor and
     * arity. For each rule founds it attempts to unify the arguments in the query with the arguments in the head
     * (consequent) of the rule. Only if the query and rule's head can be unified can it attempt to evaluate the body
-    * (antecedant) of the rule to determine if the rule is true.
+    * (antecedent) of the rule to determine if the rule is true.
     * 
     * @param inputArgs the arguments contained in the query
     * @param consequentArgs the arguments contained in the head (consequent) of the clause

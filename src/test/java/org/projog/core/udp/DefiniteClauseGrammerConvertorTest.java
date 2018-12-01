@@ -38,27 +38,27 @@ public class DefiniteClauseGrammerConvertorTest {
    }
 
    @Test
-   public void testSingleAtomAntecedant() {
+   public void testSingleAtomAntecedent() {
       performConversion("a --> b.", "a(A1, A0) :- b(A1, A0)");
    }
 
    @Test
-   public void testTwoAtomAntecedant() {
+   public void testTwoAtomAntecedent() {
       performConversion("a --> b, c.", "a(A2, A0) :- b(A2, A1) , c(A1, A0)");
    }
 
    @Test
-   public void testFiveAtomAntecedant() {
+   public void testFiveAtomAntecedent() {
       performConversion("a --> b, c, d, e, f.", "a(A5, A0) :- b(A5, A4) , c(A4, A3) , d(A3, A2) , e(A2, A1) , f(A1, A0)");
    }
 
    @Test
-   public void testSingleElementListAntecedant() {
+   public void testSingleElementListAntecedent() {
       performConversion("a --> [xyz].", "a([xyz|A], A)");
    }
 
    @Test
-   public void testConjunctionOfSingleElementListsAntecedant() {
+   public void testConjunctionOfSingleElementListsAntecedent() {
       performConversion("test1 --> [a], [b], [c].", "test1([a,b,c|A0], A0)");
    }
 
@@ -75,7 +75,7 @@ public class DefiniteClauseGrammerConvertorTest {
    }
 
    @Test
-   public void testPredicateAsAntecedantAndConsequent() {
+   public void testPredicateAsAntecedentAndConsequent() {
       performConversion("a(Y) --> b(X).", "a(Y, A1, A0) :- b(X, A1, A0)");
       performConversion("a(1,Y,X) --> b(2,X,Y).", "a(1, Y, X, A1, A0) :- b(2, X, Y, A1, A0)");
    }
@@ -88,7 +88,7 @@ public class DefiniteClauseGrammerConvertorTest {
    }
 
    @Test
-   public void testSingleListAntecedant() {
+   public void testSingleListAntecedent() {
       performConversion("test(qwerty) --> [qwerty].", "test(qwerty, [qwerty|A], A)");
       performConversion("test(qwerty) --> [x].", "test(qwerty, [x|A], A)");
    }

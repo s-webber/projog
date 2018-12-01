@@ -61,8 +61,8 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
       this.firstClauseConsequentArgs = firstClause.getConsequent().getArgs();
       this.secondClauseConsequentArgs = secondClause.getConsequent().getArgs();
 
-      this.firstClauseOriginalTerms = toArrayOfConjunctions(firstClause.getAntecedant());
-      this.secondClauseOriginalTerms = toArrayOfConjunctions(secondClause.getAntecedant());
+      this.firstClauseOriginalTerms = toArrayOfConjunctions(firstClause.getAntecedent());
+      this.secondClauseOriginalTerms = toArrayOfConjunctions(secondClause.getAntecedent());
 
       this.firstClausePredicateFactories = new PredicateFactory[firstClauseOriginalTerms.length];
       for (int i = 0; i < firstClauseOriginalTerms.length; i++) {

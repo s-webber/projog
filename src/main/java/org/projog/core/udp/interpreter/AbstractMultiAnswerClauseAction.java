@@ -52,16 +52,16 @@ abstract class AbstractMultiAnswerClauseAction implements ClauseAction {
          }
          boolean matched = Unifier.preMatch(queryArgs, consequentArgs);
          if (matched) {
-            return evaluateAntecedant(sharedVariables);
+            return evaluateAntecedent(sharedVariables);
          } else {
             return false;
          }
       } else {
-         return reEvaluateAntecedant();
+         return reEvaluateAntecedent();
       }
    }
 
-   protected abstract boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables);
+   protected abstract boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables);
 
-   protected abstract boolean reEvaluateAntecedant();
+   protected abstract boolean reEvaluateAntecedent();
 }

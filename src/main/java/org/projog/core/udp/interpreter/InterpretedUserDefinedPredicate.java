@@ -58,13 +58,13 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
     * <li>For each clause it attempts to unify the arguments in its head (consequent) with the arguments in the query (
     * {@code queryArgs}).</li>
     * <li>If the head of the clause can be unified with the query then an attempt is made to evaluate the body
-    * (antecedant) of the clause.</li>
+    * (antecedent) of the clause.</li>
     * <li>If the body of the clause is successfully evaluated then {@code true} is returned.</li>
     * <li>If the body of the clause is not successfully evaluated then the arguments in the query are backtracked.</li>
     * <li>When there are no more clauses left to check then {@code false} is returned.</li>
     * </ul>
     * Once {@code evaluate(Term...)} has returned {@code true} subsequent invocations of {@code evaluate(Term...)} will
-    * attempt to re-evaluate the antecedant of the previously successfully evaluated clause. If the body of the clause
+    * attempt to re-evaluate the antecedent of the previously successfully evaluated clause. If the body of the clause
     * is successfully re-evaluated then {@code true} is returned. If the body of the clause is not successfully
     * re-evaluated then the arguments in the query are backtracked and the method continues to iterate through the
     * clauses starting with the next clause in the sequence.

@@ -29,29 +29,29 @@ import org.projog.core.udp.ClauseModel;
  * e.g. {@code p(X) :- repeat(X).}
  */
 public final class SingleFunctionMultiResultClauseAction extends AbstractMultiAnswerClauseAction {
-   private final Term originalAntecedant;
-   private Term antecedant;
+   private final Term originalAntecedent;
+   private Term antecedent;
    private Predicate predicate;
 
    SingleFunctionMultiResultClauseAction(KnowledgeBase kb, ClauseModel ci) {
       super(kb, ci.getConsequent().getArgs());
-      originalAntecedant = ci.getAntecedant();
+      originalAntecedent = ci.getAntecedent();
    }
 
    private SingleFunctionMultiResultClauseAction(SingleFunctionMultiResultClauseAction original) {
       super(original);
-      originalAntecedant = original.originalAntecedant;
+      originalAntecedent = original.originalAntecedent;
    }
 
    @Override
-   protected boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables) {
-      antecedant = originalAntecedant.copy(sharedVariables);
-      predicate = kb.getPredicateFactory(antecedant).getPredicate(antecedant.getArgs());
+   protected boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables) {
+      antecedent = originalAntecedent.copy(sharedVariables);
+      predicate = kb.getPredicateFactory(antecedent).getPredicate(antecedent.getArgs());
       return predicate.evaluate();
    }
 
    @Override
-   protected boolean reEvaluateAntecedant() {
+   protected boolean reEvaluateAntecedent() {
       return predicate.couldReevaluationSucceed() && predicate.evaluate();
    }
 

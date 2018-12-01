@@ -39,12 +39,12 @@ public final class CutClauseAction extends AbstractMultiAnswerClauseAction {
    }
 
    @Override
-   protected boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables) {
+   protected boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables) {
       return true;
    }
 
    @Override
-   protected boolean reEvaluateAntecedant() {
+   protected boolean reEvaluateAntecedent() {
       throw CutException.CUT_EXCEPTION;
    }
 

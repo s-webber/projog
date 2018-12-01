@@ -45,14 +45,14 @@ abstract class AbstractSingleAnswerClauseAction implements ClauseAction {
          newConsequentArgs[i] = originalConsequentArgs[i].copy(sharedVariables);
       }
 
-      if (Unifier.preMatch(queryArgs, newConsequentArgs) && evaluateAntecedant(sharedVariables)) {
+      if (Unifier.preMatch(queryArgs, newConsequentArgs) && evaluateAntecedent(sharedVariables)) {
          return true;
       } else {
          return false;
       }
    }
 
-   protected abstract boolean evaluateAntecedant(Map<Variable, Variable> sharedVariables);
+   protected abstract boolean evaluateAntecedent(Map<Variable, Variable> sharedVariables);
 
    @Override
    public AbstractSingleAnswerClauseAction getFree() {

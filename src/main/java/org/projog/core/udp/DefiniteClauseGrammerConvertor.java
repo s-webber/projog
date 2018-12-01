@@ -48,21 +48,21 @@ final class DefiniteClauseGrammerConvertor {
       }
 
       Term consequent = getConsequent(dcgTerm);
-      Term antecedant = getAntecedant(dcgTerm);
+      Term antecedent = getAntecedent(dcgTerm);
       // slightly inefficient as will have already converted to an array in validate method
-      Term antecedants[] = toArrayOfConjunctions(antecedant);
+      Term antecedents[] = toArrayOfConjunctions(antecedent);
 
-      if (hasSingleListWithSingleAtomElement(antecedants)) {
-         return convertSingleListTermAntecedant(consequent, antecedants[0]);
+      if (hasSingleListWithSingleAtomElement(antecedents)) {
+         return convertSingleListTermAntecedent(consequent, antecedents[0]);
       } else {
-         return convertConjunctionOfAtomsAntecedant(consequent, antecedants);
+         return convertConjunctionOfAtomsAntecedent(consequent, antecedents);
       }
    }
 
-   private static Term convertSingleListTermAntecedant(Term consequent, Term antecedant) {
+   private static Term convertSingleListTermAntecedent(Term consequent, Term antecedent) {
       String consequentName = consequent.getName();
       Variable variable = new Variable("A");
-      List list = ListFactory.createList(antecedant.getArgument(0), variable);
+      List list = ListFactory.createList(antecedent.getArgument(0), variable);
       Term[] args = new Term[consequent.getNumberOfArguments() + 2];
       for (int i = 0; i < consequent.getNumberOfArguments(); i++) {
          args[i] = consequent.getArgument(i);
@@ -73,7 +73,7 @@ final class DefiniteClauseGrammerConvertor {
    }
 
    // TODO this method is too long - refactor
-   private static Term convertConjunctionOfAtomsAntecedant(Term consequent, Term[] conjunctionOfAtoms) {
+   private static Term convertConjunctionOfAtomsAntecedent(Term consequent, Term[] conjunctionOfAtoms) {
       ArrayList<Term> newSequence = new ArrayList<>();
 
       Variable lastArg = new Variable("A0");
@@ -84,8 +84,8 @@ final class DefiniteClauseGrammerConvertor {
       for (int i = conjunctionOfAtoms.length - 1; i > -1; i--) {
          Term term = conjunctionOfAtoms[i];
          if (term.getName().equals("{")) {
-            Term newAntecedantArg = term.getArgument(0).getArgument(0);
-            newSequence.add(0, newAntecedantArg);
+            Term newAntecedentArg = term.getArgument(0).getArgument(0);
+            newSequence.add(0, newAntecedentArg);
          } else if (term.getType() == TermType.LIST) {
             if (previousList != null) {
                term = appendToEndOfList(term, previousList);
@@ -94,26 +94,26 @@ final class DefiniteClauseGrammerConvertor {
          } else {
             if (previousList != null) {
                Variable next = new Variable("A" + (varctr++));
-               Term newAntecedantArg = Structure.createStructure("=", new Term[] {next, appendToEndOfList(previousList, previous)});
-               newSequence.add(0, newAntecedantArg);
+               Term newAntecedentArg = Structure.createStructure("=", new Term[] {next, appendToEndOfList(previousList, previous)});
+               newSequence.add(0, newAntecedentArg);
                previousList = null;
                previous = next;
             }
 
             Variable next = new Variable("A" + (varctr++));
-            Term newAntecedantArg = createNewPredicate(term, next, previous);
+            Term newAntecedentArg = createNewPredicate(term, next, previous);
             previous = next;
-            newSequence.add(0, newAntecedantArg);
+            newSequence.add(0, newAntecedentArg);
          }
       }
 
-      Term newAntecedant;
+      Term newAntecedent;
       if (newSequence.isEmpty()) {
-         newAntecedant = null;
+         newAntecedent = null;
       } else {
-         newAntecedant = newSequence.get(0);
+         newAntecedent = newSequence.get(0);
          for (int i = 1; i < newSequence.size(); i++) {
-            newAntecedant = Structure.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newAntecedant, newSequence.get(i)});
+            newAntecedent = Structure.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newAntecedent, newSequence.get(i)});
          }
       }
 
@@ -122,10 +122,10 @@ final class DefiniteClauseGrammerConvertor {
       }
       Term newConsequent = createNewPredicate(consequent, previous, lastArg);
 
-      if (newAntecedant == null) {
+      if (newAntecedent == null) {
          return newConsequent;
       } else {
-         return Structure.createStructure(IMPLICATION_PREDICATE_NAME, new Term[] {newConsequent, newAntecedant});
+         return Structure.createStructure(IMPLICATION_PREDICATE_NAME, new Term[] {newConsequent, newAntecedent});
       }
    }
 
@@ -152,7 +152,7 @@ final class DefiniteClauseGrammerConvertor {
       return dcgTerm.getArgument(0);
    }
 
-   private static Term getAntecedant(Term dcgTerm) {
+   private static Term getAntecedent(Term dcgTerm) {
       return dcgTerm.getArgument(1);
    }
 

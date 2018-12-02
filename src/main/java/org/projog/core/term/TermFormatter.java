@@ -84,7 +84,7 @@ public class TermFormatter {
          case EMPTY_LIST:
             sb.append("[]");
             break;
-         case NAMED_VARIABLE:
+         case VARIABLE:
             sb.append(((Variable) t).getId());
             break;
          default:

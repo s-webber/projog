@@ -134,7 +134,7 @@ public class AbstractArithmeticOperatorTest {
          c.calculate(args);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot get Numeric for term: X of type: NAMED_VARIABLE", e.getMessage());
+         assertEquals("Cannot get Numeric for term: X of type: VARIABLE", e.getMessage());
       }
    }
 

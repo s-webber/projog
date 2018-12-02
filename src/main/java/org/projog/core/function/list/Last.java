@@ -46,7 +46,7 @@ import org.projog.core.term.TermType;
 
  % Note: in some Prolog implementations this query would cause Y to be unified with a list with X as the tail.
  %QUERY last(Y, X)
- %ERROR Expected list but got: Y of type: NAMED_VARIABLE
+ %ERROR Expected list but got: Y of type: VARIABLE
  */
 /**
  * <code>last(X,Y)</code> - finds the last element of a list.

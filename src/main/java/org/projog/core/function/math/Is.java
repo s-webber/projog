@@ -35,7 +35,7 @@ import org.projog.core.term.Term;
  %FALSE 5 is 4+2
 
  %QUERY X is Y
- %ERROR Cannot get Numeric for term: Y of type: NAMED_VARIABLE
+ %ERROR Cannot get Numeric for term: Y of type: VARIABLE
 
  %QUERY Z=1+1, Y=9-Z, X is Y
  %ANSWER
@@ -45,7 +45,7 @@ import org.projog.core.term.Term;
  %ANSWER
 
  %QUERY X is _
- %ERROR Cannot get Numeric for term: _ of type: NAMED_VARIABLE
+ %ERROR Cannot get Numeric for term: _ of type: VARIABLE
 
  %QUERY X is sum(1,2)
  %ERROR Cannot find arithmetic operator: sum/2

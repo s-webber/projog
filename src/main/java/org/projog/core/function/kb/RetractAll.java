@@ -70,7 +70,7 @@ import org.projog.core.term.Term;
 
  % Argument must be suitably instantiated that the predicate of the clause can be determined.
  %QUERY retractall(X)
- %ERROR Expected an atom or a predicate but got a NAMED_VARIABLE with value: X
+ %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
  */
 /**
  * <code>retractall(X)</code> - remove clauses from the knowledge base.

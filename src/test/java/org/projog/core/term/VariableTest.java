@@ -68,7 +68,7 @@ public class VariableTest {
          TermUtils.castToNumeric(v);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: NAMED_VARIABLE with value: X", e.getMessage());
+         assertEquals("Expected Numeric but got: VARIABLE with value: X", e.getMessage());
       }
 
       assertTrue(v.unify(v));

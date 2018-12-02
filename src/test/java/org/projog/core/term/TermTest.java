@@ -165,7 +165,7 @@ public class TermTest {
          v.backtrack();
 
          // check backtrack undid result of unification
-         assertSame(TermType.NAMED_VARIABLE, v.getType());
+         assertSame(TermType.VARIABLE, v.getType());
          assertStrictEquality(t, v, false);
 
          // check can unify again (but this time with unify called on v with t passed as a parameter)
@@ -178,7 +178,7 @@ public class TermTest {
          v.backtrack();
 
          // check backtrack undid result of unification
-         assertSame(TermType.NAMED_VARIABLE, v.getType());
+         assertSame(TermType.VARIABLE, v.getType());
          assertStrictEquality(t, v, false);
 
          // unify v to something else

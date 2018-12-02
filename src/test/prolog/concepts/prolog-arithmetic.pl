@@ -79,7 +79,7 @@
 % Variables must be instantiated to numerical terms before they can be used in calculations.
 
 %QUERY X is 1 + Y
-%ERROR Cannot get Numeric for term: Y of type: NAMED_VARIABLE
+%ERROR Cannot get Numeric for term: Y of type: VARIABLE
 
 %QUERY Y = 4, X is 1 + Y
 %ANSWER

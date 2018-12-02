@@ -93,7 +93,7 @@ public final class TermComparator implements Comparator<Term> {
                return NUMERIC_TERM_COMPARATOR.compare(castToNumeric(v1), castToNumeric(t2));
             case ATOM:
                return t1.getName().compareTo(t2.getName());
-            case NAMED_VARIABLE:
+            case VARIABLE:
                // NOTE: uses Object's hashCode which is not guaranteed,
                // so may get different results in different JVMs
                return v1.hashCode() > v2.hashCode() ? 1 : -1;

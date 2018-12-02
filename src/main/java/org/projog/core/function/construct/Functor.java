@@ -99,7 +99,7 @@ public final class Functor extends AbstractSingletonPredicate {
          case LIST:
          case EMPTY_LIST:
             return functor.unify(new Atom(term.getName())) && arity.unify(new IntegerNumber(term.getNumberOfArguments()));
-         case NAMED_VARIABLE:
+         case VARIABLE:
             Term createdTerm = createTerm(functor, arity);
             return term.unify(createdTerm);
          default:

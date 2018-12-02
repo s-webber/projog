@@ -106,7 +106,7 @@ public final class TermUtils {
    private static void getAllVariablesInTerm(final Term argument, final Set<Variable> variables) {
       if (argument.isImmutable()) {
          // ignore
-      } else if (argument.getType() == TermType.NAMED_VARIABLE) {
+      } else if (argument.getType() == TermType.VARIABLE) {
          variables.add((Variable) argument);
       } else {
          for (int i = 0; i < argument.getNumberOfArguments(); i++) {

@@ -107,7 +107,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
 
  % Argument must be suitably instantiated that the predicate of the clause can be determined.
  %QUERY retract(X)
- %ERROR Expected an atom or a predicate but got a NAMED_VARIABLE with value: X
+ %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
  */
 /**
  * <code>clause(X,Y)</code> / <code>retract(X)</code> - matches terms to existing clauses.

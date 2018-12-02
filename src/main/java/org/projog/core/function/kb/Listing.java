@@ -58,7 +58,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %TRUE listing(predicate_name_that_doesnt_exist_in_knowledge_base)
 
  %QUERY listing(X)
- %ERROR Expected an atom but got: NAMED_VARIABLE with value: X
+ %ERROR Expected an atom but got: VARIABLE with value: X
  */
 /**
  * <code>listing(X)</code> - outputs current clauses.

@@ -78,7 +78,7 @@ public class TermUtilsTest {
    }
 
    private void assertVariable(Term t, String id) {
-      assertSame(TermType.NAMED_VARIABLE, t.getType());
+      assertSame(TermType.VARIABLE, t.getType());
       assertSame(t, t.getTerm());
       assertEquals(id, ((Variable) t).getId());
    }
@@ -208,7 +208,7 @@ public class TermUtilsTest {
          TermUtils.castToNumeric(v);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: NAMED_VARIABLE with value: X", e.getMessage());
+         assertEquals("Expected Numeric but got: VARIABLE with value: X", e.getMessage());
       }
       IntegerNumber i = integerNumber();
       v.unify(i);
@@ -285,7 +285,7 @@ public class TermUtilsTest {
    public void testCreateAnonymousVariable() {
       Term anon = TermUtils.createAnonymousVariable();
       assertSame(Variable.class, anon.getClass());
-      assertSame(TermType.NAMED_VARIABLE, anon.getType());
+      assertSame(TermType.VARIABLE, anon.getType());
       assertEquals("_", anon.toString());
       assertNotSame(anon, TermUtils.createAnonymousVariable());
    }

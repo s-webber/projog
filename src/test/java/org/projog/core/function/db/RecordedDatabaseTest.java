@@ -254,7 +254,7 @@ public class RecordedDatabaseTest {
       for (int i = 0; i < numberOfArguments; i++) {
          Term a = term.getArgument(i);
          assertTrue(uniqueTerms.add(a));
-         assertSame(TermType.NAMED_VARIABLE, a.getType());
+         assertSame(TermType.VARIABLE, a.getType());
          assertEquals("_", a.toString());
       }
    }

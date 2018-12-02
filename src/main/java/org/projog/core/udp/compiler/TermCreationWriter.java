@@ -35,7 +35,7 @@ final class TermCreationWriter {
          return state.getTermVariableName(t);
       } else if (isAnonymousVariable(t)) {
          return "new Variable(\"" + Variable.ANONYMOUS_VARIABLE_ID + "\")";
-      } else if (t.getType() == TermType.NAMED_VARIABLE) {
+      } else if (t.getType() == TermType.VARIABLE) {
          return state.getJavaVariableName((Variable) t);
       } else if (t.getType() == TermType.STRUCTURE) {
          StringBuilder sb = new StringBuilder("Structure.createStructure(");

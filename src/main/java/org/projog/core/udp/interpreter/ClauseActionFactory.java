@@ -73,7 +73,7 @@ public final class ClauseActionFactory {
       boolean hasSharedVariables = false;
       Set<Term> variables = new HashSet<>();
       for (Term t : consequent.getArgs()) {
-         if (t.getType() == TermType.NAMED_VARIABLE) {
+         if (t.getType() == TermType.VARIABLE) {
             hasVariables = true;
             if (!variables.add(t)) {
                hasSharedVariables = true;

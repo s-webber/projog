@@ -128,7 +128,7 @@ public final class Variable implements Term {
          b = true;
       } else if (value != null) {
          b = getValue().strictEquality(t);
-      } else if (t.getType() == TermType.NAMED_VARIABLE && ((Variable) t).value != null) {
+      } else if (t.getType() == TermType.VARIABLE && ((Variable) t).value != null) {
          // this is for when two unassigned variables are unified with each other
          b = t.strictEquality(this);
       } else {
@@ -138,15 +138,15 @@ public final class Variable implements Term {
    }
 
    /**
-    * Returns {@link TermType#NAMED_VARIABLE} if uninstantiated else {@link TermType} of instantiated {@link Term}.
+    * Returns {@link TermType#VARIABLE} if uninstantiated else {@link TermType} of instantiated {@link Term}.
     *
-    * @return {@link TermType#NAMED_VARIABLE} if this variable is uninstantiated else calls {@link Term#getType()} on
+    * @return {@link TermType#VARIABLE} if this variable is uninstantiated else calls {@link Term#getType()} on
     * the {@link Term} this variable is instantiated with.
     */
    @Override
    public TermType getType() {
       if (value == null) {
-         return TermType.NAMED_VARIABLE;
+         return TermType.VARIABLE;
       } else {
          return getValue().getType();
       }

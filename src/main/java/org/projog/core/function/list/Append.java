@@ -134,7 +134,7 @@ import org.projog.core.term.TermType;
 
  % Examples when combination of term types cause failure:
  %QUERY append(X, Y, Z)
- %ERROR Expected list but got: NAMED_VARIABLE
+ %ERROR Expected list but got: VARIABLE
  %FALSE append(X, [], Z)
  %FALSE append(a, b, Z)
  %FALSE append(a, b, c)

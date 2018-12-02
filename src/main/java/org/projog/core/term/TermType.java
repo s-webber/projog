@@ -22,7 +22,7 @@ package org.projog.core.term;
  */
 public enum TermType {
    /** @see Variable */
-   NAMED_VARIABLE(false, false, true, 1),
+   VARIABLE(false, false, true, 1),
    /** @see DecimalFraction */
    FRACTION(false, true, false, 2),
    /** @see IntegerNumber */

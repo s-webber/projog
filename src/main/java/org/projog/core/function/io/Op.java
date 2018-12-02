@@ -36,13 +36,13 @@ import org.projog.core.term.Term;
 
  % Example of invalid arguments
  %QUERY op(X,xfx,'><')
- %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
+ %ERROR Expected Numeric but got: VARIABLE with value: X
 
  %QUERY op(1000,Y,'><')
- %ERROR Expected an atom but got: NAMED_VARIABLE with value: Y
+ %ERROR Expected an atom but got: VARIABLE with value: Y
 
  %QUERY op(1000,xfx,Z)
- %ERROR Expected an atom but got: NAMED_VARIABLE with value: Z
+ %ERROR Expected an atom but got: VARIABLE with value: Z
 
  %QUERY op(1000,zfz,'><')
  %ERROR Cannot add operand with associativity of: zfz as the only values allowed are: [xfx, xfy, yfx, fx, fy, xf, yf]

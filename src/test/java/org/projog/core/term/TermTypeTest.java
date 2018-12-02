@@ -31,7 +31,7 @@ public class TermTypeTest {
       assertFalse(TermType.EMPTY_LIST.isNumeric());
       assertFalse(TermType.LIST.isNumeric());
       assertFalse(TermType.STRUCTURE.isNumeric());
-      assertFalse(TermType.NAMED_VARIABLE.isNumeric());
+      assertFalse(TermType.VARIABLE.isNumeric());
    }
 
    @Test
@@ -43,12 +43,12 @@ public class TermTypeTest {
       assertFalse(TermType.FRACTION.isStructure());
       assertFalse(TermType.INTEGER.isStructure());
       assertFalse(TermType.ATOM.isStructure());
-      assertFalse(TermType.NAMED_VARIABLE.isStructure());
+      assertFalse(TermType.VARIABLE.isStructure());
    }
 
    @Test
    public void testIsVariable() {
-      assertTrue(TermType.NAMED_VARIABLE.isVariable());
+      assertTrue(TermType.VARIABLE.isVariable());
 
       assertFalse(TermType.FRACTION.isVariable());
       assertFalse(TermType.INTEGER.isVariable());
@@ -60,7 +60,7 @@ public class TermTypeTest {
 
    @Test
    public void testGetPrecedence() {
-      assertEquals(1, TermType.NAMED_VARIABLE.getPrecedence());
+      assertEquals(1, TermType.VARIABLE.getPrecedence());
       assertEquals(2, TermType.FRACTION.getPrecedence());
       assertEquals(3, TermType.INTEGER.getPrecedence());
       assertEquals(4, TermType.EMPTY_LIST.getPrecedence());

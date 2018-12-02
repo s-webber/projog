@@ -52,7 +52,7 @@ import org.projog.core.term.Term;
  %FALSE repeat(-1)
 
  %QUERY repeat(X)
- %ERROR Expected Numeric but got: NAMED_VARIABLE with value: X
+ %ERROR Expected Numeric but got: VARIABLE with value: X
 */
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.

@@ -17,6 +17,7 @@ package org.projog.core.function.math;
 
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Numeric;
+import org.projog.core.term.TermType;
 
 /* TEST
 %QUERY X is integer(7.0)
@@ -88,6 +89,11 @@ import org.projog.core.term.Numeric;
 
 %QUERY X is integer(-7)
 %ANSWER X=-7
+
+%QUERY X is integer(9223372036854775806)
+%ANSWER X=9223372036854775806
+%QUERY X is integer(-9223372036854775807)
+%ANSWER X=-9223372036854775807
  */
 /**
  * <code>integer(X)</code> - round X to the nearest integer value.
@@ -95,7 +101,11 @@ import org.projog.core.term.Numeric;
 public final class Round extends AbstractArithmeticOperator {
    @Override
    public Numeric calculate(Numeric n) {
-      long rounded = Math.round(n.getDouble());
-      return new IntegerNumber(rounded);
+      if (n.getType() == TermType.INTEGER) {
+         return n;
+      } else {
+         long rounded = Math.round(n.getDouble());
+         return new IntegerNumber(rounded);
+      }
    }
 }

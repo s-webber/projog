@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,19 +38,19 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  test(X) :- X = 5.
  %QUERY listing(test)
  %OUTPUT
- % test(X) :- X < 3
- % test(X) :- X > 9
- % test(X) :- X = 5
+ %test(X) :- X < 3
+ %test(X) :- X > 9
+ %test(X) :- X = 5
  %
  %OUTPUT
  %ANSWER/
- 
+
  overloaded_predicate_name(X) :- X = this_rule_has_one_argument.
  overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments, X = Y.
  %QUERY listing(overloaded_predicate_name)
  %OUTPUT
- % overloaded_predicate_name(X) :- X = this_rule_has_one_argument
- % overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments , X = Y
+ %overloaded_predicate_name(X) :- X = this_rule_has_one_argument
+ %overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments , X = Y
  %
  %OUTPUT
  %ANSWER/

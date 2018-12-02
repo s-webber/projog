@@ -6,9 +6,9 @@ a(X,Y,Z):-
 
 %QUERY a(X,Y,Z), !
 %OUTPUT
-% text in "double quotes"
-% text in 'single quote'
-% !"$%^&*()-_+-=[]{}:;@'#~?/.>,<\|`
+%text in "double quotes"
+%text in 'single quote'
+%!"$%^&*()-_+-=[]{}:;@'#~?/.>,<\|`
 %
 %OUTPUT
 %ANSWER

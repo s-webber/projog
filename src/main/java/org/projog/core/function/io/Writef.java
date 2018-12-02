@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,31 +40,31 @@ import org.projog.core.term.TermUtils;
 
  %QUERY writef('.%7l.\\n.%7l.\\n.%7l.\\n.%7l.\\n.%7l.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
- % .a      .
- % .abc    .
- % .abcd   .
- % .abcdefg.
- % .abcdefgh.
+ %.a      .
+ %.abc    .
+ %.abcd   .
+ %.abcdefg.
+ %.abcdefgh.
  %OUTPUT
  %ANSWER/
 
  %QUERY writef('.%7r.\\n.%7r.\\n.%7r.\\n.%7r.\\n.%7r.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
- % .      a.
- % .    abc.
- % .   abcd.
- % .abcdefg.
- % .abcdefgh.
+ %.      a.
+ %.    abc.
+ %.   abcd.
+ %.abcdefg.
+ %.abcdefgh.
  %OUTPUT
  %ANSWER/
 
  %QUERY writef('.%7c.\\n.%7c.\\n.%7c.\\n.%7c.\\n.%7c.', [a, abc, abcd, abcdefg, abcdefgh])
  %OUTPUT
- % .   a   .
- % .  abc  .
- % . abcd  .
- % .abcdefg.
- % .abcdefgh.
+ %.   a   .
+ %.  abc  .
+ %. abcd  .
+ %.abcdefg.
+ %.abcdefgh.
  %OUTPUT
  %ANSWER/
 
@@ -74,8 +74,8 @@ import org.projog.core.term.TermUtils;
 
  %QUERY writef('\\%\\%%q\\\\\\\\\\r\\n\\u0048',[abc])
  %OUTPUT
- % %%abc\\
- % H
+ %%%abc\\
+ %H
  %OUTPUT
  %ANSWER/
 

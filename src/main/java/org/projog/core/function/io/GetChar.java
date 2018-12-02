@@ -48,15 +48,15 @@ import org.projog.core.term.Term;
  %TRUE write_to_file('abc\nxyz')
  %QUERY read_from_file
  %OUTPUT
- % a
- % b
- % c
+ %a
+ %b
+ %c
  %
  %
- % x
- % y
- % z
- % end_of_file
+ %x
+ %y
+ %z
+ %end_of_file
  %
  %OUTPUT
  %ANSWER/

@@ -48,16 +48,16 @@ import org.projog.core.term.Term;
  %TRUE write_to_file('ab\tc\r\nxyz')
  %QUERY read_from_file
  %OUTPUT
- % 97
- % 98
- % 9
- % 99
- % 13
- % 10
- % 120
- % 121
- % 122
- % -1
+ %97
+ %98
+ %9
+ %99
+ %13
+ %10
+ %120
+ %121
+ %122
+ %-1
  %
  %OUTPUT
  %ANSWER/

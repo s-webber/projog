@@ -24,17 +24,17 @@ import org.projog.core.term.Term;
 /* TEST
  %QUERY repeat(3), write('hello, world'), nl
  %OUTPUT
- % hello, world
+ %hello, world
  %
  %OUTPUT
  %ANSWER/
  %OUTPUT
- % hello, world
+ %hello, world
  %
  %OUTPUT
  %ANSWER/
  %OUTPUT
- % hello, world
+ %hello, world
  %
  %OUTPUT
  %ANSWER/

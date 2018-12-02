@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ import org.projog.core.term.Term;
 
  %QUERY op(1000,zfz,'><')
  %ERROR Cannot add operand with associativity of: zfz as the only values allowed are: [xfx, xfy, yfx, fx, fy, xf, yf]
- 
+
  % Create some prefix and postfix operators for the later examples below.
 
  %TRUE op(550, fy, 'fyExample')
@@ -58,8 +58,8 @@ import org.projog.core.term.Term;
 
  %QUERY X = fxExample fyExample fyExample a, write_canonical(X), nl
  %OUTPUT
- % fxExample(fyExample(fyExample(a)))
- % 
+ %fxExample(fyExample(fyExample(a)))
+ %
  %OUTPUT
  %ANSWER X=fxExample fyExample fyExample a
 
@@ -67,8 +67,8 @@ import org.projog.core.term.Term;
 
  %QUERY X = 123 yfExample, write_canonical(X), nl
  %OUTPUT
- % yfExample(123)
- % 
+ %yfExample(123)
+ %
  %OUTPUT
  %ANSWER X=123 yfExample
 
@@ -76,8 +76,8 @@ import org.projog.core.term.Term;
 
  %QUERY X = a xfExample yfExample yfExample, write_canonical(X), nl
  %OUTPUT
- % yfExample(yfExample(xfExample(a)))
- % 
+ %yfExample(yfExample(xfExample(a)))
+ %
  %OUTPUT
  %ANSWER X=a xfExample yfExample yfExample
 
@@ -85,8 +85,8 @@ import org.projog.core.term.Term;
 
  %QUERY X = fyExample a yfExample, write_canonical(X), nl
  %OUTPUT
- % yfExample(fyExample(a))
- % 
+ %yfExample(fyExample(a))
+ %
  %OUTPUT
  %ANSWER X=fyExample a yfExample
 
@@ -96,13 +96,13 @@ import org.projog.core.term.Term;
 
  %QUERY X = fyExampleB a yfExample, write_canonical(X), nl
  %OUTPUT
- % fyExampleB(yfExample(a))
- % 
+ %fyExampleB(yfExample(a))
+ %
  %OUTPUT
  %ANSWER X=fyExampleB a yfExample
 
  % Examples of how an "x" in an associativity (i.e. "fx" or "xf") means that the argument can contain operators of only a lower level of priority than the operator represented by "f".
- 
+
  %QUERY X = a xfExample xfExample
  %ERROR Invalid postfix: xfExample 500 and term: xfExample(a) 500 Line: X = a xfExample xfExample.
 

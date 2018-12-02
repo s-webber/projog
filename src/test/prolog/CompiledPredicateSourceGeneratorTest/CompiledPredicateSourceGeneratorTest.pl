@@ -503,56 +503,56 @@ testCalculatables(A,B,C) :- Z is B+C, A is Z.
 %TRUE trace
 %QUERY testCalculatables(X, 3, 7)
 %OUTPUT
-% [1] CALL testCalculatables(X, 3, 7)
-% [1] EXIT testCalculatables(1000, 3, 7)
+%[1] CALL testCalculatables(X, 3, 7)
+%[1] EXIT testCalculatables(1000, 3, 7)
 %
 %OUTPUT
 %ANSWER X=1000
 %OUTPUT
-% [1] REDO testCalculatables(1000, 3, 7)
-% [1] EXIT testCalculatables(1.5, 3, 7)
+%[1] REDO testCalculatables(1000, 3, 7)
+%[1] EXIT testCalculatables(1.5, 3, 7)
 %
 %OUTPUT
 %ANSWER X=1.5
 %OUTPUT
-% [1] REDO testCalculatables(1.5, 3, 7)
-% [1] EXIT testCalculatables(10, 3, 7)
+%[1] REDO testCalculatables(1.5, 3, 7)
+%[1] EXIT testCalculatables(10, 3, 7)
 %
 %OUTPUT
 %ANSWER X=10
 %OUTPUT
-% [1] REDO testCalculatables(10, 3, 7)
-% [1] EXIT testCalculatables(-4, 3, 7)
+%[1] REDO testCalculatables(10, 3, 7)
+%[1] EXIT testCalculatables(-4, 3, 7)
 %
 %OUTPUT
 %ANSWER X=-4
 %OUTPUT
-% [1] REDO testCalculatables(-4, 3, 7)
-% [1] EXIT testCalculatables(21, 3, 7)
+%[1] REDO testCalculatables(-4, 3, 7)
+%[1] EXIT testCalculatables(21, 3, 7)
 %
 %OUTPUT
 %ANSWER X=21
 %OUTPUT
-% [1] REDO testCalculatables(21, 3, 7)
-% [1] EXIT testCalculatables(0, 3, 7)
+%[1] REDO testCalculatables(21, 3, 7)
+%[1] EXIT testCalculatables(0, 3, 7)
 %
 %OUTPUT
 %ANSWER X=0
 %OUTPUT
-% [1] REDO testCalculatables(0, 3, 7)
-% [1] EXIT testCalculatables(19, 3, 7)
+%[1] REDO testCalculatables(0, 3, 7)
+%[1] EXIT testCalculatables(19, 3, 7)
 %
 %OUTPUT
 %ANSWER X=19
 %OUTPUT
-% [1] REDO testCalculatables(19, 3, 7)
-% [1] EXIT testCalculatables(18.5, 3, 7)
+%[1] REDO testCalculatables(19, 3, 7)
+%[1] EXIT testCalculatables(18.5, 3, 7)
 %
 %OUTPUT
 %ANSWER X=18.5
 %OUTPUT
-% [1] REDO testCalculatables(18.5, 3, 7)
-% [1] EXIT testCalculatables(10, 3, 7)
+%[1] REDO testCalculatables(18.5, 3, 7)
+%[1] EXIT testCalculatables(10, 3, 7)
 %
 %OUTPUT
 %ANSWER X=10

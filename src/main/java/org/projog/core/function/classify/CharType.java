@@ -213,8 +213,8 @@ import org.projog.core.term.TermUtils;
  white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail.
  %QUERY white_test
  %OUTPUT
- % >\t<
- % > <
+ %>\t<
+ %> <
  %
  %OUTPUT
  %NO

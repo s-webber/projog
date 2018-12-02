@@ -2,7 +2,7 @@
 
 %QUERY write('hello, world'), nl
 %OUTPUT 
-% hello, world
+%hello, world
 %
 %OUTPUT
 %ANSWER/
@@ -54,7 +54,7 @@
 
 %QUERY listing(hanoi)
 %OUTPUT
-% hanoi(N) :- move(N, left, centre, right)
+%hanoi(N) :- move(N, left, centre, right)
 %
 %OUTPUT
 %ANSWER/
@@ -63,9 +63,9 @@
 
 %QUERY hanoi(2)
 %OUTPUT
-% [move,a,disc,from,the,left,pole,to,the,right,pole]
-% [move,a,disc,from,the,left,pole,to,the,centre,pole]
-% [move,a,disc,from,the,right,pole,to,the,centre,pole]
+%[move,a,disc,from,the,left,pole,to,the,right,pole]
+%[move,a,disc,from,the,left,pole,to,the,centre,pole]
+%[move,a,disc,from,the,right,pole,to,the,centre,pole]
 %
 %OUTPUT
 %ANSWER/

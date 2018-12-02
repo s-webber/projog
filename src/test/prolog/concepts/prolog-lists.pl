@@ -197,20 +197,21 @@ adjacent(X,Y,Zs) :- append_to_list(As,[X,Y|Ys],Zs).
 %NO
 
 % Find the last element of a list.
-last(X,Xs) :- append_to_list(As,[X],Xs).
+% (Note: Projog provides a built-in last(X,Y) predicate.)
+last_element(X,Xs) :- append_to_list(As,[X],Xs).
 
-%TRUE_NO last(f,[a,b,c,d,e,f])
-%FALSE last(a,[a,b,c,d,e,f])
-%FALSE last(b,[a,b,c,d,e,f])
-%FALSE last(c,[a,b,c,d,e,f])
-%FALSE last(d,[a,b,c,d,e,f])
-%FALSE last(e,[a,b,c,d,e,f])
-%TRUE_NO last(f,[a,b,c,d,e,f])
-%FALSE last(z,[a,b,c,d,e,f])
-%QUERY last(X,[a,b,c,d,e,f])
+%TRUE_NO last_element(f,[a,b,c,d,e,f])
+%FALSE last_element(a,[a,b,c,d,e,f])
+%FALSE last_element(b,[a,b,c,d,e,f])
+%FALSE last_element(c,[a,b,c,d,e,f])
+%FALSE last_element(d,[a,b,c,d,e,f])
+%FALSE last_element(e,[a,b,c,d,e,f])
+%TRUE_NO last_element(f,[a,b,c,d,e,f])
+%FALSE last_element(z,[a,b,c,d,e,f])
+%QUERY last_element(X,[a,b,c,d,e,f])
 %ANSWER X=f
 %NO
-%QUERY last(f,[a,b,c,d,e,X])
+%QUERY last_element(f,[a,b,c,d,e,X])
 %ANSWER X=f
 %NO
 

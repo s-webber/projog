@@ -69,7 +69,7 @@ public final class ClauseModel {
    }
 
    /**
-    * Replaced by {{@link #getAntecedent()} but marking as deprecated, rather than removing, as is used in
+    * Replaced by {@link #getAntecedent()} but marking as deprecated, rather than removing, as is used in
     * projog-examples.
     *
     * @deprecated

@@ -48,22 +48,6 @@ public final class List implements Term {
    }
 
    /**
-    * Replaces the tail of the list with the specified term.
-    * <p>
-    * <b>Note:</b> This method has only been added to make it easier to optimise tail-recursive functions. It's use is
-    * not recommend as altering the tail of a list after it has been created may cause unexpected behaviour.
-    * <p>
-    * TODO Find an alternative to this method for doing tail-recursive optimisation.
-    *
-    * @param tail term to set as the tail of this object
-    * @deprecated only used to make tail recursive functions more efficient
-    */
-   @Deprecated
-   public void setTail(Term tail) {
-      this.tail = tail;
-   }
-
-   /**
     * Returns {@link ListFactory#LIST_PREDICATE_NAME}.
     *
     * @return {@link ListFactory#LIST_PREDICATE_NAME}

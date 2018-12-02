@@ -15,18 +15,16 @@
  */
 package org.projog.core.term;
 
-import java.util.Comparator;
-
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.ProjogException;
 
 /**
- * An implementation of {@code Comparator} for comparing instances of {@link Numeric}.
+ * Provides methods for comparing instances of {@link Numeric}.
  *
  * @see #compare(Term, Term, ArithmeticOperators)
  * @see TermComparator
  */
-public final class NumericTermComparator implements Comparator<Term> {
+public final class NumericTermComparator {
    /**
     * Singleton instance
     */
@@ -67,21 +65,18 @@ public final class NumericTermComparator implements Comparator<Term> {
     * <p>
     * Returns a negative integer, zero, or a positive integer as the numeric value represented by the first argument is
     * less than, equal to, or greater than the second.
-    * <p>
-    * Unlike {@link #compare(Term, Term, ArithmeticOperators)} this method only works for arguments that represent a
-    * {@link Numeric} (e.g. a {@link Structure} of the form {@code +(1,2)} would cause a {@code ProjogException}).
     *
-    * @param t1 the first term to be compared
-    * @param t2 the second term to be compared
+    * @param n1 the first term to be compared
+    * @param n2 the second term to be compared
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than
     * the second
-    * @throws ProjogException if either argument does not represent a {@link Numeric} term
     * @see #compare(Term, Term, ArithmeticOperators)
     */
-   @Override
-   public int compare(Term t1, Term t2) {
-      Numeric n1 = TermUtils.castToNumeric(t1);
-      Numeric n2 = TermUtils.castToNumeric(t2);
-      return Double.compare(n1.getDouble(), n2.getDouble());
+   public int compare(Numeric n1, Numeric n2) {
+      if (n1.getType() == TermType.INTEGER && n2.getType() == TermType.INTEGER) {
+         return Long.compare(n1.getLong(), n2.getLong());
+      } else {
+         return Double.compare(n1.getDouble(), n2.getDouble());
+      }
    }
 }

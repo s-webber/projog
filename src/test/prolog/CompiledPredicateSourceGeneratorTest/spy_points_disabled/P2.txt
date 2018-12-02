@@ -18,7 +18,7 @@ a0.backtrack();
 Variable v1=new Variable("N");
 if(v1.unify(a0)){
 Term v2=v1.getTerm();
-if(Double.compare(O.getNumeric(v2).getDouble(),1d)<=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v2),INTEGER_1)<=0)return false;
 v3=new Variable("N1");
 Term v4=v2.getTerm();
 if(!v3.unify(A0.calculate(O.getNumeric(v4),INTEGER_1)))return false;

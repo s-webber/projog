@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,16 @@
  */
 package org.projog.core.term;
 
+import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+import static org.projog.core.term.TermUtils.castToNumeric;
+
 import java.util.Comparator;
 
 import org.projog.core.ProjogException;
 
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Term}.
- * 
+ *
  * @see #compare(Term, Term)
  * @see NumericTermComparator
  * @see Term#strictEquality(Term)
@@ -58,7 +61,7 @@ public final class TermComparator implements Comparator<Term> {
     * comparing their arguments in order. The first corresponding arguments that differ determines the order of the two
     * structures.</li>
     * </ul>
-    * 
+    *
     * @param t1 the first term to be compared
     * @param t2 the second term to be compared
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than
@@ -87,7 +90,7 @@ public final class TermComparator implements Comparator<Term> {
          switch (type1) {
             case FRACTION:
             case INTEGER:
-               return NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(v1, v2);
+               return NUMERIC_TERM_COMPARATOR.compare(castToNumeric(v1), castToNumeric(t2));
             case ATOM:
                return t1.getName().compareTo(t2.getName());
             case NAMED_VARIABLE:

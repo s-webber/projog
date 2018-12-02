@@ -15,9 +15,9 @@ if(v0.unify(a0)&&v1.unify(a1)&&v2.unify(a2)){
 Term v3=v2.getTerm();
 if(!F0.evaluate(v3,INTEGER_1))return false;
 Term v4=v0.getTerm();
-if(Double.compare(O.getNumeric(v4).getDouble(),5d)<=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v4),INTEGER_5)<=0)return false;
 Term v5=v1.getTerm();
-if(Double.compare(O.getNumeric(v5).getDouble(),7d)>=0){c=5;return false;}
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v5),INTEGER_7)>=0){c=5;return false;}
 j=0;
 return true;
 }else return false;
@@ -54,10 +54,10 @@ if(v6.unify(a0)&&v7.unify(a1)&&v8.unify(a2)){
 Term v9=v8.getTerm();
 if(!F0.evaluate(v9,INTEGER_2))return false;
 Term v10=v6.getTerm();
-if(Double.compare(O.getNumeric(v10).getDouble(),3d)>=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v10),INTEGER_3)>=0)return false;
 c=5;
 Term v11=v7.getTerm();
-if(Double.compare(O.getNumeric(v11).getDouble(),7d)>=0){c=5;return false;}
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v11),INTEGER_7)>=0){c=5;return false;}
 if(!F1.getPredicate(INTEGER_7).evaluate()){c=5;return false;}
 c=5;
 if(!F1.getPredicate(INTEGER_3).evaluate()){c=5;return false;}
@@ -89,10 +89,10 @@ if(v16.unify(a0)&&v17.unify(a1)&&v18.unify(a2)){
 Term v19=v18.getTerm();
 if(!F0.evaluate(v19,INTEGER_4))return false;
 Term v20=v16.getTerm();
-if(Double.compare(O.getNumeric(v20).getDouble(),3d)<=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v20),INTEGER_3)<=0)return false;
 c=5;
 Term v21=v17.getTerm();
-if(Double.compare(O.getNumeric(v21).getDouble(),7d)>=0){c=5;return false;}
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v21),INTEGER_7)>=0){c=5;return false;}
 if(!F1.getPredicate(INTEGER_3).evaluate()){c=5;return false;}
 c=5;
 return true;
@@ -219,11 +219,11 @@ private static org.projog.core.ArithmeticOperators O;
 private Predicate p0;
 private Predicate p1;
 private static final IntegerNumber INTEGER_1=new IntegerNumber(1L);
+private static final IntegerNumber INTEGER_5=new IntegerNumber(5L);
+private static final IntegerNumber INTEGER_7=new IntegerNumber(7L);
 private static final IntegerNumber INTEGER_3=new IntegerNumber(3L);
 private static final IntegerNumber INTEGER_2=new IntegerNumber(2L);
-private static final IntegerNumber INTEGER_7=new IntegerNumber(7L);
 private static final IntegerNumber INTEGER_4=new IntegerNumber(4L);
-private static final IntegerNumber INTEGER_5=new IntegerNumber(5L);
 private final Term a0;
 private final Term a1;
 private final Term a2;

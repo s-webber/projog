@@ -21,7 +21,6 @@ import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
-import static org.projog.TestUtils.variable;
 import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
@@ -37,49 +36,48 @@ public class NumericTermComparatorTest {
 
    @Test
    public void testCompareDecimalValues() {
-      compare(decimalFraction(2.1), integerNumber(2));
-      compare(decimalFraction(2.1), decimalFraction(2.1));
-      compare(decimalFraction(2.1), decimalFraction(2.11));
-      compare(decimalFraction(2.1), decimalFraction(-2.1));
+      compareDecimals(decimalFraction(2.1), decimalFraction(2.1));
+      compareDecimals(decimalFraction(2.1), decimalFraction(2.11));
+      compareDecimals(decimalFraction(2.1), decimalFraction(-2.1));
    }
 
    @Test
    public void testCompareIntegerValues() {
-      int[] values = {0, 1, 2, 7, -1, -2, 7, Integer.MIN_VALUE, Integer.MAX_VALUE};
+      long[] values = {0, 1, 2, 7, -1, -2, 7, Integer.MIN_VALUE, Integer.MAX_VALUE, Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MAX_VALUE, Long.MAX_VALUE - 1};
       for (int i1 = 0; i1 < values.length; i1++) {
          for (int i2 = i1; i2 < values.length; i2++) {
-            compare(values[i1], values[i2]);
+            comparePrimitives(values[i1], values[i2]);
          }
       }
    }
 
    @Test
-   public void testAtoms() {
-      try {
-         NUMERIC_TERM_COMPARATOR.compare(atom("a"), atom("b"));
-         fail();
-      } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: ATOM with value: a", e.getMessage());
-      }
+   public void testMixedTypes() {
+      compareMixedTypes(decimalFraction(2.0), integerNumber(2));
+      compareMixedTypes(integerNumber(2), decimalFraction(2.0));
+
+      compareMixedTypes(decimalFraction(1.9), integerNumber(2));
+      compareMixedTypes(decimalFraction(2.1), integerNumber(2));
+
+      compareMixedTypes(integerNumber(2), decimalFraction(2.0));
+      compareMixedTypes(integerNumber(2), decimalFraction(2.0));
    }
 
+   /** Demonstrate unexpected results that can occur due to loss of precision when comparing decimal fractions. */
    @Test
-   public void testUnassignedVariables() {
-      try {
-         NUMERIC_TERM_COMPARATOR.compare(variable("X"), variable("Y"));
-         fail();
-      } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: NAMED_VARIABLE with value: X", e.getMessage());
-      }
-   }
+   public void testRoundingErrors() {
+      long a = Long.MAX_VALUE;
+      long b = a - 1; // "b" is less than "a" but they are considered equal when compared as decimal fractions
 
-   @Test
-   public void testAssignedVariables() {
-      Term x = variable("X");
-      Term y = variable("Y");
-      x.unify(integerNumber(2));
-      y.unify(integerNumber(2));
-      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(x, y));
+      assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(integerNumber(a), integerNumber(b)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(decimalFraction(a), integerNumber(b)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(integerNumber(a), decimalFraction(b)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(decimalFraction(a), decimalFraction(b)));
+
+      assertEquals(-1, NUMERIC_TERM_COMPARATOR.compare(integerNumber(b), integerNumber(a)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(decimalFraction(b), integerNumber(a)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(integerNumber(b), decimalFraction(a)));
+      assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(decimalFraction(b), decimalFraction(a)));
    }
 
    /**
@@ -100,29 +98,13 @@ public class NumericTermComparatorTest {
    }
 
    /**
-    * Test that {@link NumericTermComparator#compare(Term, Term, KnowledgeBase)} tries to evaluate {@code Structure}s
-    * that represent arithmetic expressions but {@link NumericTermComparator#compare(Term, Term)} throws a
-    * {@code ProjogException}
+    * Test that {@link NumericTermComparator#compare(Term, Term, KnowledgeBase)} works with {@code Structure}s that
+    * represent arithmetic expressions.
     */
    @Test
    public void testStructuresRepresentingArithmeticOperators() {
       Structure addition = structure("+", integerNumber(1), integerNumber(3));
       Structure subtraction = structure("-", integerNumber(5), integerNumber(2));
-
-      // test compare(Term, Term) throws a ProjogException for when
-      // a parameter is a structure (even if it represents an arithmetic expression).
-      try {
-         NUMERIC_TERM_COMPARATOR.compare(addition, subtraction);
-         fail();
-      } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: STRUCTURE with value: +(1, 3)", e.getMessage());
-      }
-      try {
-         NUMERIC_TERM_COMPARATOR.compare(integerNumber(1), subtraction);
-         fail();
-      } catch (ProjogException e) {
-         assertEquals("Expected Numeric but got: STRUCTURE with value: -(5, 2)", e.getMessage());
-      }
 
       // test compare(Term, Term) evaluates structures representing arithmetic expressions
       assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, operators));
@@ -130,7 +112,7 @@ public class NumericTermComparatorTest {
       assertEquals(0, NUMERIC_TERM_COMPARATOR.compare(addition, addition, operators));
 
       // test compare(Term, Term, KnowledgeBase) throws a ProjogException if
-      // a structure can not be evaluated as an arithmetic expression
+      // a structure cannot be evaluated as an arithmetic expression
       try {
          NUMERIC_TERM_COMPARATOR.compare(addition, structure("-", integerNumber(5), atom()), operators);
          fail();
@@ -145,31 +127,36 @@ public class NumericTermComparatorTest {
       }
    }
 
-   private void compare(int i1, int i2) {
-      compare(integerNumber(i1), integerNumber(i2));
-      compare(decimalFraction(i1), decimalFraction(i2));
-      compare(decimalFraction(i1), integerNumber(i2));
+   private void comparePrimitives(long i1, long i2) {
+      compareIntegers(integerNumber(i1), integerNumber(i2));
+      compareIntegers(integerNumber(i2), integerNumber(i1));
+
+      compareDecimals(decimalFraction(i1), decimalFraction(i2));
+      compareDecimals(decimalFraction(i2), decimalFraction(i1));
+
+      compareMixedTypes(decimalFraction(i1), integerNumber(i2));
+      compareMixedTypes(integerNumber(i1), decimalFraction(i2));
    }
 
-   private void compare(IntegerNumber t1, IntegerNumber t2) {
+   private void compareIntegers(IntegerNumber t1, IntegerNumber t2) {
       Long i1 = t1.getLong();
       Long i2 = t2.getLong();
       assertEquals(i1.compareTo(i2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
       assertEquals(i2.compareTo(i1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }
 
-   private void compare(DecimalFraction t1, DecimalFraction t2) {
+   private void compareDecimals(DecimalFraction t1, DecimalFraction t2) {
       Double d1 = t1.getDouble();
       Double d2 = t2.getDouble();
       assertEquals(d1.compareTo(d2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
       assertEquals(d2.compareTo(d1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }
 
-   private void compare(DecimalFraction t1, IntegerNumber t2) {
+   private void compareMixedTypes(Numeric t1, Numeric t2) {
       Double d1 = t1.getDouble();
       Double d2 = t2.getDouble();
-      assertEquals(d1 + " " + d2, d1.compareTo(d2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
-      assertEquals(d2 + " " + d1, d2.compareTo(d1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
+      assertEquals(d1.compareTo(d2), NUMERIC_TERM_COMPARATOR.compare(t1, t2));
+      assertEquals(d2.compareTo(d1), NUMERIC_TERM_COMPARATOR.compare(t2, t1));
    }
 
    private void compare(String s1, String s2, KnowledgeBase kb, int expected) {

@@ -657,9 +657,9 @@ final class CompiledPredicateSourceGenerator {
          String right = state.outputCreateNumericStatement(elementState.getSecondArgument());
          condition = "!" + left + ".unify(" + right + ")";
       } else if (NUMERIC_COMPARISON_PEDICATES.containsKey(pf.getClass())) {
-         String left = state.outputNumericAsDoubleStatement(elementState.getFirstArgument());
-         String right = state.outputNumericAsDoubleStatement(elementState.getSecondArgument());
-         condition = "Double.compare(" + left + "," + right + ")" + NUMERIC_COMPARISON_PEDICATES.get(pf.getClass()) + "0";
+         String left = state.outputCreateNumericStatement(elementState.getFirstArgument());
+         String right = state.outputCreateNumericStatement(elementState.getSecondArgument());
+         condition = "NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(" + left + "," + right + ")" + NUMERIC_COMPARISON_PEDICATES.get(pf.getClass()) + "0";
       } else if (pf instanceof AbstractSingletonPredicate) {
          condition = "!" + getAbstractSingletonPredicateEvaluateMethodCall(element.getTerm());
       } else {

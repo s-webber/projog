@@ -97,10 +97,6 @@ final class CompiledPredicateState {
       return calculationWriter.outputCreateNumericStatement(t, this);
    }
 
-   String outputNumericAsDoubleStatement(Term t) {
-      return calculationWriter.outputNumericAsDoubleStatement(t, this);
-   }
-
    ClauseState getFirstClause() {
       return clauseStates.get(0);
    }

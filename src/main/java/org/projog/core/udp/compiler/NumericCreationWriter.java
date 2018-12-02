@@ -19,14 +19,6 @@ import org.projog.core.term.Term;
 
 /** Generates Java source code to construct a {@code Numeric}. */
 final class NumericCreationWriter {
-   String outputNumericAsDoubleStatement(Term t, CompiledPredicateState state) {
-      if (t.getType().isNumeric()) {
-         return t.toString() + "d";
-      } else {
-         return outputCreateNumericStatement(t, state) + ".getDouble()";
-      }
-   }
-
    String outputCreateNumericStatement(Term t, CompiledPredicateState state) {
       if (t.getType().isNumeric()) {
          return state.outputCreateTermStatement(t, false);

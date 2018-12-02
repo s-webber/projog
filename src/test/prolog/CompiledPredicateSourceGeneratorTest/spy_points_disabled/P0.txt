@@ -16,7 +16,7 @@ Term v3=v2.getTerm();
 if(!F0.evaluate(v3,ATOM))return false;
 Term v4=v0.getTerm();
 Term v5=v1.getTerm();
-if(Double.compare(O.getNumeric(v4).getDouble(),O.getNumeric(v5).getDouble())<=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v4),O.getNumeric(v5))<=0)return false;
 return true;
 }else return false;
 }
@@ -32,7 +32,7 @@ Term v9=v8.getTerm();
 if(!F0.evaluate(v9,ATOM_0))return false;
 Term v10=v6.getTerm();
 Term v11=v7.getTerm();
-if(Double.compare(O.getNumeric(v10).getDouble(),O.getNumeric(v11).getDouble())<0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v10),O.getNumeric(v11))<0)return false;
 return true;
 }else return false;
 }
@@ -48,7 +48,7 @@ Term v15=v14.getTerm();
 if(!F0.evaluate(v15,ATOM_1))return false;
 Term v16=v12.getTerm();
 Term v17=v13.getTerm();
-if(Double.compare(O.getNumeric(v16).getDouble(),O.getNumeric(v17).getDouble())>=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v16),O.getNumeric(v17))>=0)return false;
 return true;
 }else return false;
 }
@@ -64,7 +64,7 @@ Term v21=v20.getTerm();
 if(!F0.evaluate(v21,ATOM_2))return false;
 Term v22=v18.getTerm();
 Term v23=v19.getTerm();
-if(Double.compare(O.getNumeric(v22).getDouble(),O.getNumeric(v23).getDouble())>0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v22),O.getNumeric(v23))>0)return false;
 return true;
 }else return false;
 }
@@ -80,7 +80,7 @@ Term v27=v26.getTerm();
 if(!F0.evaluate(v27,ATOM_3))return false;
 Term v28=v24.getTerm();
 Term v29=v25.getTerm();
-if(Double.compare(O.getNumeric(v28).getDouble(),O.getNumeric(v29).getDouble())!=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v28),O.getNumeric(v29))!=0)return false;
 return true;
 }else return false;
 }
@@ -96,7 +96,7 @@ Term v33=v32.getTerm();
 if(!F0.evaluate(v33,ATOM_4))return false;
 Term v34=v30.getTerm();
 Term v35=v31.getTerm();
-if(Double.compare(O.getNumeric(v34).getDouble(),O.getNumeric(v35).getDouble())==0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v34),O.getNumeric(v35))==0)return false;
 return true;
 }else return false;
 }
@@ -112,7 +112,7 @@ Term v39=v38.getTerm();
 if(!F0.evaluate(v39,ATOM_5))return false;
 Term v40=v36.getTerm();
 Term v41=v37.getTerm();
-if(Double.compare(A0.calculate(O.getNumeric(v40),O.getNumeric(v41)).getDouble(),A1.calculate(O.getNumeric(v41),INTEGER_3).getDouble())<=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(A0.calculate(O.getNumeric(v40),O.getNumeric(v41)),A1.calculate(O.getNumeric(v41),INTEGER_3))<=0)return false;
 return true;
 }else return false;
 }
@@ -127,9 +127,9 @@ if(v42.unify(a0)&&v43.unify(a1)&&v44.unify(a2)){
 Term v45=v44.getTerm();
 if(!F0.evaluate(v45,ATOM_6))return false;
 Term v46=v42.getTerm();
-if(Double.compare(O.getNumeric(v46).getDouble(),7d)>=0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(O.getNumeric(v46),INTEGER_7)>=0)return false;
 Term v47=v43.getTerm();
-if(Double.compare(5d,O.getNumeric(v47).getDouble())>0)return false;
+if(NumericTermComparator.NUMERIC_TERM_COMPARATOR.compare(INTEGER_5,O.getNumeric(v47))>0)return false;
 return true;
 }else return false;
 }
@@ -215,6 +215,8 @@ private static final Atom ATOM_4=new Atom("f");
 private static final Atom ATOM_5=new Atom("g");
 private static final IntegerNumber INTEGER_3=new IntegerNumber(3L);
 private static final Atom ATOM_6=new Atom("h");
+private static final IntegerNumber INTEGER_7=new IntegerNumber(7L);
+private static final IntegerNumber INTEGER_5=new IntegerNumber(5L);
 private final Term a0;
 private final Term a1;
 private final Term a2;

@@ -62,6 +62,66 @@ testNumericComparison(A,B,C) :- C=h, A<7, 5=<B.
 %ANSWER X=g
 %NO
 
+% Note: the reason "g" matches is because "B+3" causes an overflow which results in a negative value.
+%QUERY testNumericComparison(9223372036854775806, 9223372036854775807, X)
+%ANSWER X=c
+%ANSWER X=d
+%ANSWER X=f
+%ANSWER X=g
+%NO
+
+% Note: the reason "g" matches is because "B+3" causes an overflow which results in a negative value.
+%QUERY testNumericComparison(9223372036854775807, 9223372036854775806, X)
+%ANSWER X=a
+%ANSWER X=b
+%ANSWER X=f
+%ANSWER X=g
+%NO
+
+% Note: the reason "g" matches is because "B+3" causes an overflow which results in a negative value.
+%QUERY testNumericComparison(9223372036854775807, 9223372036854775807, X)
+%ANSWER X=b
+%ANSWER X=d
+%ANSWER X=e
+%ANSWER X=g
+%NO
+
+% Note: the reason "g" matches is because "B+3" causes an overflow which results in a negative value.
+%QUERY testNumericComparison(9223372036854775806, 9223372036854775806, X)
+%ANSWER X=b
+%ANSWER X=d
+%ANSWER X=e
+%ANSWER X=g
+%NO
+
+%QUERY testNumericComparison(-9223372036854775808, -9223372036854775807, X)
+%ANSWER X=c
+%ANSWER X=d
+%ANSWER X=f
+%ANSWER X=g
+%NO
+
+%QUERY testNumericComparison(-9223372036854775807, -9223372036854775808, X)
+%ANSWER X=a
+%ANSWER X=b
+%ANSWER X=f
+%ANSWER X=g
+%NO
+
+%QUERY testNumericComparison(-9223372036854775808, -9223372036854775808, X)
+%ANSWER X=b
+%ANSWER X=d
+%ANSWER X=e
+%ANSWER X=g
+%NO
+
+%QUERY testNumericComparison(-9223372036854775807, -9223372036854775807, X)
+%ANSWER X=b
+%ANSWER X=d
+%ANSWER X=e
+%ANSWER X=g
+%NO
+
 %TRUE_NO testNumericComparison(6,6,d)
 
 %FALSE testNumericComparison(17,7,g)

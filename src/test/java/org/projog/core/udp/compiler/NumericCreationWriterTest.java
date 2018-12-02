@@ -34,22 +34,22 @@ import org.projog.core.udp.ClauseModel;
 public class NumericCreationWriterTest {
    @Test
    public void integer() {
-      assertStatement(new IntegerNumber(42), "42d");
-      assertStatement(new IntegerNumber(-7), "-7d");
-      assertStatement(new IntegerNumber(0), "0d");
-      assertStatement(new IntegerNumber(Long.MAX_VALUE), "9223372036854775807d");
-      assertStatement(new IntegerNumber(Long.MIN_VALUE), "-9223372036854775808d");
+      assertStatement(new IntegerNumber(42), "INTEGER_42");
+      assertStatement(new IntegerNumber(-7), "INTEGER_N7");
+      assertStatement(new IntegerNumber(0), "INTEGER_0");
+      assertStatement(new IntegerNumber(Long.MAX_VALUE), "INTEGER_9223372036854775807");
+      assertStatement(new IntegerNumber(Long.MIN_VALUE), "INTEGER_N9223372036854775808");
    }
 
    @Test
    public void decimal() {
-      assertStatement(new DecimalFraction(42), "42.0d");
-      assertStatement(new DecimalFraction(42.5), "42.5d");
-      assertStatement(new DecimalFraction(-7), "-7.0d");
-      assertStatement(new DecimalFraction(-7.253846), "-7.253846d");
-      assertStatement(new DecimalFraction(0), "0.0d");
-      assertStatement(new DecimalFraction(Double.MAX_VALUE), "1.7976931348623157E308d");
-      assertStatement(new DecimalFraction(Double.MIN_VALUE), "4.9E-324d");
+      assertStatement(new DecimalFraction(42), "FRACTION_42_0");
+      assertStatement(new DecimalFraction(42.5), "FRACTION_42_5");
+      assertStatement(new DecimalFraction(-7), "FRACTION_N7_0");
+      assertStatement(new DecimalFraction(-7.253846), "FRACTION_N7_253846");
+      assertStatement(new DecimalFraction(0), "FRACTION_0_0");
+      assertStatement(new DecimalFraction(Double.MAX_VALUE), "FRACTION_1_7976931348623157E308");
+      assertStatement(new DecimalFraction(Double.MIN_VALUE), "FRACTION_4_9EN324");
    }
 
    @Test
@@ -58,11 +58,11 @@ public class NumericCreationWriterTest {
       List<ClauseModel> dummyClause = Collections.singletonList(ClauseModel.createClauseModel(new Atom("a")));
       CompiledPredicateState state = new CompiledPredicateState("test", createKnowledgeBase(), dummyClause);
 
-      String numeric = writer.outputCreateNumericStatement(parseSentence("1+2+3*4."), state);
-      assertEquals("A0.calculate(A0.calculate(INTEGER_1,INTEGER_2),A1.calculate(INTEGER_3,INTEGER_4))", numeric);
+      String statement1 = writer.outputCreateNumericStatement(parseSentence("1+2+3*4."), state);
+      assertEquals("A0.calculate(A0.calculate(INTEGER_1,INTEGER_2),A1.calculate(INTEGER_3,INTEGER_4))", statement1);
 
-      String numericAsDouble = writer.outputNumericAsDoubleStatement(parseSentence("1-2+7."), state);
-      assertEquals("A0.calculate(A2.calculate(INTEGER_1,INTEGER_2),INTEGER_7).getDouble()", numericAsDouble);
+      String statement2 = writer.outputCreateNumericStatement(parseSentence("1-2+7."), state);
+      assertEquals("A0.calculate(A2.calculate(INTEGER_1,INTEGER_2),INTEGER_7)", statement2);
 
       List<StaticVariableState<ArithmeticOperator>> operators = new ArrayList<>(state.getArithmeticOperators());
       assertEquals(3, operators.size());
@@ -77,12 +77,14 @@ public class NumericCreationWriterTest {
    }
 
    private void assertStatement(Term input, String expected) {
-      assertStatement(input, expected, null);
+      List<ClauseModel> dummyClause = Collections.singletonList(ClauseModel.createClauseModel(new Atom("a")));
+      CompiledPredicateState state = new CompiledPredicateState("test", createKnowledgeBase(), dummyClause);
+      assertStatement(input, expected, state);
    }
 
    private void assertStatement(Term input, String expected, CompiledPredicateState compiledPredicateState) {
       NumericCreationWriter w = new NumericCreationWriter();
-      String actual = w.outputNumericAsDoubleStatement(input, compiledPredicateState);
+      String actual = w.outputCreateNumericStatement(input, compiledPredicateState);
       assertEquals(expected, actual);
    }
 }

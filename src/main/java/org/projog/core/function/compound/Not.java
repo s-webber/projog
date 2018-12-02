@@ -41,13 +41,21 @@ import org.projog.core.term.Term;
  % Y=2
  %ANSWER
 
- test(X,Y) :- \+ ((X=Y,1>2)), X=1, Y=2.
+ test1(X,Y) :- \+ ((X=Y,1>2)), X=1, Y=2.
 
- %QUERY test(X,Y)
+ %QUERY test1(X,Y)
  %ANSWER
  % X=1
  % Y=2
  %ANSWER
+
+ test2(X) :- \+ \+ X=1, X=2.
+
+ %QUERY test2(X)
+ %ANSWER X=2
+
+ %FALSE test2(1)
+ %FALSE test2(2)
  */
 /**
  * <code>\+ X</code> - "not".

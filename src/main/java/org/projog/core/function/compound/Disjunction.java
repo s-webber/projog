@@ -15,11 +15,10 @@
  */
 package org.projog.core.function.compound;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.function.AbstractPredicate;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -189,20 +188,10 @@ import org.projog.core.term.Term;
  *
  * @See {@link IfThen}
  */
-public final class Disjunction implements PredicateFactory {
-   private KnowledgeBase kb;
-
+public final class Disjunction extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term... args) {
-      if (args.length == 2) {
-         return getPredicate(args[0], args[1]);
-      } else {
-         throw new IllegalArgumentException();
-      }
-   }
-
    public Predicate getPredicate(Term firstArg, Term secondArg) {
-      if (kb.getPredicateFactory(firstArg) instanceof IfThen) {
+      if (getKnowledgeBase().getPredicateFactory(firstArg) instanceof IfThen) {
          return createIfThenElse(firstArg, secondArg);
       } else {
          return createDisjunction(firstArg, secondArg);
@@ -214,12 +203,12 @@ public final class Disjunction implements PredicateFactory {
       Term thenTerm = ifThenTerm.getArgument(1);
 
       Predicate actualPredicate;
-      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(kb, conditionTerm);
+      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
       if (conditionPredicate.evaluate()) {
-         actualPredicate = KnowledgeBaseUtils.getPredicate(kb, thenTerm.getTerm());
+         actualPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
       } else {
          conditionTerm.backtrack();
-         actualPredicate = KnowledgeBaseUtils.getPredicate(kb, elseTerm);
+         actualPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), elseTerm);
       }
 
       return actualPredicate;
@@ -227,16 +216,6 @@ public final class Disjunction implements PredicateFactory {
 
    private DisjunctionPredicate createDisjunction(Term firstArg, Term secondArg) {
       return new DisjunctionPredicate(firstArg, secondArg);
-   }
-
-   @Override
-   public boolean isRetryable() {
-      return true;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      this.kb = kb;
    }
 
    private final class DisjunctionPredicate extends AbstractPredicate {
@@ -252,31 +231,22 @@ public final class Disjunction implements PredicateFactory {
 
       @Override
       public boolean evaluate() {
-         inputArg1.backtrack();
          if (firstPredicate == null) {
-            firstPredicate = KnowledgeBaseUtils.getPredicate(kb, inputArg1);
+            firstPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), inputArg1.getTerm());
             if (firstPredicate.evaluate()) {
                return true;
             }
-         }
-
-         if (firstPredicate.couldReevaluationSucceed() && firstPredicate.evaluate()) {
+         } else if (secondPredicate == null && firstPredicate.couldReevaluationSucceed() && firstPredicate.evaluate()) {
             return true;
          }
 
-         inputArg2.backtrack();
          if (secondPredicate == null) {
-            secondPredicate = KnowledgeBaseUtils.getPredicate(kb, inputArg2);
-            if (secondPredicate.evaluate()) {
-               return true;
-            }
+            inputArg1.backtrack();
+            secondPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), inputArg2.getTerm());
+            return secondPredicate.evaluate();
+         } else {
+            return secondPredicate.couldReevaluationSucceed() && secondPredicate.evaluate();
          }
-
-         if (secondPredicate.couldReevaluationSucceed() && secondPredicate.evaluate()) {
-            return true;
-         }
-
-         return false;
       }
 
       @Override

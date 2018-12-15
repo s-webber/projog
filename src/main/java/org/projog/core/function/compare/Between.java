@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR
 import static org.projog.core.term.TermUtils.toLong;
 
 import org.projog.core.ArithmeticOperators;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
@@ -79,14 +78,10 @@ import org.projog.core.term.Term;
  * values in the range from <code>X</code> to <code>Y</code>.
  * </p>
  */
-public final class Between implements PredicateFactory {
+public final class Between extends AbstractPredicateFactory {
    private ArithmeticOperators operators;
 
    @Override
-   public Predicate getPredicate(Term... args) {
-      return getPredicate(args[0], args[1], args[2]);
-   }
-
    public Predicate getPredicate(Term low, Term high, Term middle) {
       if (middle.getType().isVariable()) {
          return new Retryable(middle, toLong(operators, low), toLong(operators, high));
@@ -97,13 +92,8 @@ public final class Between implements PredicateFactory {
    }
 
    @Override
-   public boolean isRetryable() {
-      return true;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      operators = getArithmeticOperators(kb);
+   protected void init() {
+      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    private static class Retryable implements Predicate {
@@ -131,5 +121,5 @@ public final class Between implements PredicateFactory {
       public boolean couldReevaluationSucceed() {
          return ctr <= max;
       }
-   };
+   }
 }

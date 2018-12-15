@@ -21,11 +21,34 @@ import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 
 import org.junit.Test;
+import org.projog.TestUtils;
+import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 public class AbstractPredicateFactoryTest {
+   /**
+    * Check {@code AbstractPredicateFactory#setKnowledgeBase(KnowledgeBase)} invokes
+    * {@code AbstractPredicateFactory#init()} after setting the knowledge base.
+    */
+   @Test
+   public void testInit() {
+      class TestPredicateFactory extends AbstractPredicateFactory {
+         KnowledgeBase x;
+
+         @Override
+         protected void init() {
+            x = getKnowledgeBase();
+         }
+      }
+      TestPredicateFactory pf = new TestPredicateFactory();
+      KnowledgeBase kb = TestUtils.createKnowledgeBase();
+      pf.setKnowledgeBase(kb);
+      assertSame(kb, pf.x);
+      assertSame(kb, pf.getKnowledgeBase());
+   }
+
    @Test
    public void testIllegalArgumentException() {
       AbstractPredicateFactory pf = new AbstractPredicateFactory() {

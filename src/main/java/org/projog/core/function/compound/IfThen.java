@@ -15,10 +15,9 @@
  */
 package org.projog.core.function.compound;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
+import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -101,35 +100,15 @@ import org.projog.core.term.Term;
  *
  * @See {@link Disjunction}
  */
-public final class IfThen implements PredicateFactory {
-   private KnowledgeBase kb;
-
+public final class IfThen extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term... args) {
-      if (args.length == 2) {
-         return getPredicate(args[0], args[1]);
-      } else {
-         throw new IllegalArgumentException();
-      }
-   }
-
    public Predicate getPredicate(Term conditionTerm, Term thenTerm) {
-      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(kb, conditionTerm);
+      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
       if (conditionPredicate.evaluate()) {
          // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-         return KnowledgeBaseUtils.getPredicate(kb, thenTerm.getTerm());
+         return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
       } else {
          return AbstractSingletonPredicate.toPredicate(false);
       }
-   }
-
-   @Override
-   public boolean isRetryable() {
-      return true;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      this.kb = kb;
    }
 }

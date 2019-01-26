@@ -74,7 +74,6 @@ public final class CompiledPredicateClassGenerator {
          Constructor<?> constructor = c.getConstructor(KnowledgeBase.class);
          return (CompiledPredicate) constructor.newInstance(kb);
       } catch (Throwable e) {
-         e.printStackTrace();
          throw new ProjogException("Caught " + e.getClass().getName() + " while attempting to compile class: " + className + " with message: " + e.getMessage(), e);
       }
    }

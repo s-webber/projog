@@ -32,6 +32,8 @@ import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.SpyPoints;
+import org.projog.core.event.ProjogEvent;
+import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
 import org.projog.core.udp.interpreter.AlwaysMatchedClauseAction;
@@ -184,10 +186,18 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       List<ClauseModel> clauseModels = getCopyOfImplications();
 
       if (isPredicateSuitableForCompilation(clauseModels)) {
-         return createCompiledPredicateFactoryFromClauseActions(clauseModels);
-      } else {
-         return createInterpretedPredicateFactoryFromClauseActions(clauseActions, clauseModels);
+         try {
+            return createCompiledPredicateFactoryFromClauseActions(clauseModels);
+         } catch (Exception e) {
+            // If fail to compile a user-defined predicate to Java - possibly because the predicate is too large -
+            // then revert to evaluating the predicate in interpreted mode rather than throwing an exception.
+            ProjogEvent warning = new ProjogEvent(ProjogEventType.WARN,
+                        "Caught exception while compiling " + predicateKey + " to Java so will revert to operating in interpreted mode for this predicate.", this);
+            KnowledgeBaseUtils.getProjogEventsObservable(kb).notifyObservers(warning);
+         }
       }
+
+      return createInterpretedPredicateFactoryFromClauseActions(clauseActions, clauseModels);
    }
 
    private List<ClauseModel> getCopyOfImplications() {

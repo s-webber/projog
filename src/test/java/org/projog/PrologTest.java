@@ -15,6 +15,7 @@
  */
 package org.projog;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
@@ -22,11 +23,18 @@ import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.projog.api.Projog;
 import org.projog.core.ProjogProperties;
+import org.projog.core.event.ProjogEvent;
 import org.projog.test.ProjogTestExtractor;
 import org.projog.test.ProjogTestExtractorConfig;
 import org.projog.test.ProjogTestRunner;
@@ -71,6 +79,47 @@ public class PrologTest {
    @Test
    public void extractedTestsCompiledMode() {
       assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationEnabledProjog());
+   }
+
+   /** Test that if a user-defined predicate is too large to compile to Java then Projog reverts to interpreted mode. */
+   @Test
+   public void predicateTooLargeToCompileToJava() throws FileNotFoundException {
+      // write to the file system a script containing a predicate that is too large to compile to Java
+      File source = new File("target/predicateTooLargeToCompileToJava.pl");
+      try (PrintWriter pw = new PrintWriter(source)) {
+         for (int i = 1; i <= 2000; i++) {
+            pw.println("test(X,Y):-Y is X+" + i + ".");
+         }
+         pw.println("%QUERY test(7,Y)");
+         for (int i = 1; i <= 2000; i++) {
+            pw.println("%ANSWER Y=" + (7 + i));
+         }
+      }
+
+      // create Projog instance with an Observer so can check the events to confirm that the predicate cannot be compiled
+      final List<String> events = new ArrayList<>();
+      final Observer observer = new Observer() {
+         @Override
+         public void update(Observable o, Object arg) {
+            ProjogEvent event = (ProjogEvent) arg;
+            events.add(event.getMessage());
+         }
+      };
+      ProjogSupplier projogSupplier = new ProjogSupplier() {
+         @Override
+         public Projog get() {
+            return new Projog(COMPILATION_ENABLED_PROPERTIES, observer);
+         }
+      };
+
+      // assert tests pass
+      assertSuccess(source, projogSupplier);
+
+      // assert that notification was received that Projog reverted to interpreted mode
+      assertEquals(events.toString(), 3, events.size());
+      assertEquals("Reading prolog source in: projog-bootstrap.pl from classpath", events.get(0));
+      assertEquals("Reading prolog source in: target" + File.separator + "predicateTooLargeToCompileToJava.pl from file system", events.get(1));
+      assertEquals("Caught exception while compiling test/2 to Java so will revert to operating in interpreted mode for this predicate.", events.get(2));
    }
 
    private void assertSuccess(File scriptsDir, ProjogSupplier projogSupplier) {

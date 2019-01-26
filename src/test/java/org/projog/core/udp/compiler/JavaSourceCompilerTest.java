@@ -117,7 +117,7 @@ public class JavaSourceCompilerTest {
    }
 
    @Test
-   public void testCompilationFailure() {
+   public void testCannotFindSymbol() {
       String name = "com.example.MyClass";
       String source = "package com.example;public class MyClass{int x(){i++;}}";
       try {
@@ -127,6 +127,27 @@ public class JavaSourceCompilerTest {
          assertEquals("Cannot compile: " + name + " source: " + source, e.getMessage());
          assertEquals(ProjogException.class, e.getCause().getClass());
          assertTrue(e.getCause().getMessage().contains("Error on line 1 in /com/example/MyClass.java:1: error: cannot find symbol"));
+      }
+   }
+
+   @Test
+   public void testCodeTooLarge() {
+      String name = "com.example.MyClass";
+      StringBuilder source = new StringBuilder();
+      source.append("package com.example;public class MyClass{public static void main(String[] args) {try{");
+      for (int i = 0; i < 10000; i++) {
+         source.append("System.out.println(\"hello\");");
+      }
+      source.append("}catch(Exception e){}}}");
+      try
+
+      {
+         new JavaSourceCompiler().compileClass(name, source.toString());
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Cannot compile: " + name + " source: " + source, e.getMessage());
+         assertEquals(ProjogException.class, e.getCause().getClass());
+         assertTrue(e.getCause().getMessage().contains("Error on line 1 in /com/example/MyClass.java:1: error: code too large"));
       }
    }
 

@@ -30,8 +30,11 @@ import org.projog.core.term.TermUtils;
  * <p>
  * This class provides a mechanism for "plugging in" or "injecting" implementations of {@link ArithmeticOperator} at
  * runtime. This mechanism provides an easy way to configure and extend the arithmetic operations supported by Projog.
+ * </p>
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ArithmeticOperators} instance.
+ * </p>
+ * <img src="doc-files/ArithmeticOperators.png">
  */
 public final class ArithmeticOperators {
    private final KnowledgeBase kb;

@@ -13,7 +13,6 @@ TokenType : INTEGER
 TokenType : FLOAT
 TokenType : SYMBOL
 TokenType : VARIABLE
-TokenType : ANONYMOUS_VARIABLE
 
 class ProjogSourceReader {
 +parseFile(KnowledgeBase, File)

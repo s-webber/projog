@@ -14,12 +14,12 @@ KnowledgeBaseServiceLocator o-left- ProjogEventsObservable
 KnowledgeBaseServiceLocator o-up- SpyPoints
 KnowledgeBaseServiceLocator o-up- Operands
 KnowledgeBaseServiceLocator o-- ProjogProperties
-KnowledgeBaseServiceLocator o-- Calculatables
+KnowledgeBaseServiceLocator o-- ArithmeticOperators
 KnowledgeBaseServiceLocator o-up- TermFormatter
 KnowledgeBaseServiceLocator o-right- FileHandles
 
-interface Calculatable
-Calculatables o-right- Calculatable
+interface ArithmeticOperator
+ArithmeticOperators o-right- ArithmeticOperator
 
 show KnowledgeBaseServiceLocator method
 

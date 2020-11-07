@@ -15,6 +15,7 @@
  */
 package org.projog.api;
 
+import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
+import org.projog.core.ArithmeticOperator;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateFactory;
@@ -203,6 +205,38 @@ public final class Projog {
     */
    public void setUserOutput(PrintStream ps) {
       getFileHandles(kb).setUserOutput(ps);
+   }
+
+   /**
+    * Associates a {@link PredicateFactory} with the {@code KnowledgeBase} of this {@code Projog}.
+    * <p>
+    * This method provides a mechanism for "plugging in" or "injecting" implementations of {@link PredicateFactory} at
+    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
+    * adding functionality not possible to define in pure Prolog syntax.
+    * </p>
+    *
+    * @param key The name and arity to associate the {@link PredicateFactory} with.
+    * @param predicateFactory The {@link PredicateFactory} to be added.
+    * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
+    */
+   public void addPredicateFactory(PredicateKey key, PredicateFactory predicateFactory) {
+      kb.addPredicateFactory(key, predicateFactory);
+   }
+
+   /**
+    * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase} of this {@code Projog}.
+    * <p>
+    * This method provides a mechanism for "plugging in" or "injecting" implementations of {@link ArithmeticOperator} at
+    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
+    * adding functionality not possible to define in pure Prolog syntax.
+    * </p>
+    *
+    * @param key The name and arity to associate the {@link ArithmeticOperator} with.
+    * @param operator The instance of {@code ArithmeticOperator} to be associated with {@code key}.
+    * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
+    */
+   public void addArithmeticOperator(PredicateKey key, ArithmeticOperator operator) {
+      getArithmeticOperators(kb).addArithmeticOperator(key, operator);
    }
 
    /**

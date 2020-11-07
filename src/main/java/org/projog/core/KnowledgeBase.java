@@ -77,7 +77,7 @@ public final class KnowledgeBase {
     * @see KnowledgeBaseUtils#createKnowledgeBase(ProjogProperties)
     */
    KnowledgeBase() {
-      addPredicateFactory(ADD_PREDICATE_KEY, AddPredicateFactory.class.getName());
+      addPredicateFactory(ADD_PREDICATE_KEY, new AddPredicateFactory(this));
    }
 
    /**
@@ -107,7 +107,7 @@ public final class KnowledgeBase {
     */
    public UserDefinedPredicateFactory createOrReturnUserDefinedPredicate(PredicateKey key) {
       UserDefinedPredicateFactory userDefinedPredicate;
-      synchronized (predicatesLock) {
+      synchronized (predicatesLock) { // TODO if already in userDefinedPredicates then avoid need to synch
          userDefinedPredicate = userDefinedPredicates.get(key);
 
          if (userDefinedPredicate == null) {
@@ -130,7 +130,7 @@ public final class KnowledgeBase {
    public void addUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
       PredicateKey key = userDefinedPredicate.getPredicateKey();
       synchronized (predicatesLock) {
-         if (isExistingJavaPredicate(key)) {
+         if (isExistingJavaPredicate(key)) { // TODO should this be isExistingPredicate?
             throw new ProjogException("Cannot replace already defined plugin predicate: " + key);
          }
 
@@ -214,6 +214,7 @@ public final class KnowledgeBase {
     *
     * @param key The name and arity to associate the {@link PredicateFactory} with.
     * @param predicateFactoryClassName The name of a class that implements {@link PredicateFactory}.
+    * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
     */
    public void addPredicateFactory(PredicateKey key, String predicateFactoryClassName) {
       synchronized (predicatesLock) {
@@ -221,6 +222,29 @@ public final class KnowledgeBase {
             throw new ProjogException("Already defined: " + key);
          } else {
             javaPredicateClassNames.put(key, predicateFactoryClassName);
+         }
+      }
+   }
+
+   /**
+    * Associates a {@link PredicateFactory} with this {@code KnowledgeBase}.
+    * <p>
+    * This method provides a mechanism for "plugging in" or "injecting" implementations of {@link PredicateFactory} at
+    * runtime. This mechanism provides an easy way to configure and extend the functionality of Projog - including
+    * adding functionality not possible to define in pure Prolog syntax.
+    * </p>
+    *
+    * @param key The name and arity to associate the {@link PredicateFactory} with.
+    * @param predicateFactory The {@link PredicateFactory} to be added.
+    * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
+    */
+   public void addPredicateFactory(PredicateKey key, PredicateFactory predicateFactory) {
+      synchronized (predicatesLock) {
+         if (isExistingPredicate(key)) {
+            throw new ProjogException("Already defined: " + key);
+         } else {
+            javaPredicateClassNames.put(key, predicateFactory.getClass().getName());
+            javaPredicateInstances.put(key, predicateFactory);
          }
       }
    }

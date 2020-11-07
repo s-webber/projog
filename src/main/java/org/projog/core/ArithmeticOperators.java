@@ -49,7 +49,9 @@ public final class ArithmeticOperators {
    /**
     * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
     *
+    * @param key The name and arity to associate the {@link ArithmeticOperator} with.
     * @param operator The instance of {@code ArithmeticOperator} to be associated with {@code key}.
+    * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
     */
    public void addArithmeticOperator(PredicateKey key, ArithmeticOperator operator) {
       synchronized (lock) {
@@ -65,7 +67,9 @@ public final class ArithmeticOperators {
    /**
     * Associates a {@link ArithmeticOperator} with this {@code KnowledgeBase}.
     *
+    * @param key The name and arity to associate the {@link ArithmeticOperator} with.
     * @param operatorClassName The class name of the {@link ArithmeticOperator} to be associated with {@code key}.
+    * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
     */
    public void addArithmeticOperator(PredicateKey key, String operatorClassName) {
       synchronized (lock) {

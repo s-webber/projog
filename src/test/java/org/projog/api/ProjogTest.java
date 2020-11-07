@@ -36,10 +36,17 @@ import java.io.StringReader;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.ArithmeticOperator;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.PredicateFactory;
+import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
+import org.projog.core.function.flow.RepeatSetAmount;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Atom;
+import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -79,6 +86,48 @@ public class ProjogTest {
 
       // then the new stream should be read from
       assertEquals("hello", TermUtils.getAtomName(result.getTerm("X")));
+   }
+
+   @Test
+   public void testAddPredicateFactory() {
+      Projog projog = new Projog();
+
+      // associate testAddPredicateFactory/1 with an instance of RepeatSetAmount
+      PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
+      PredicateFactory pf = new RepeatSetAmount();
+      projog.addPredicateFactory(key, pf);
+
+      // confirm that queries can use testAddPredicateFactory/1
+      QueryResult result = projog.query("testAddPredicateFactory(3).").getResult();
+      assertTrue(result.next());
+      assertTrue(result.next());
+      assertTrue(result.next());
+      assertFalse(result.next()); // expect false on 4th attempt as used 3 as argument
+   }
+
+   @Test
+   public void testArithmeticOperator() {
+      Projog projog = new Projog();
+
+      // associate testArithmeticOperator/1 with an operator that adds 7 to its argument
+      PredicateKey key = new PredicateKey("testArithmeticOperator", 1);
+      ArithmeticOperator pf = new ArithmeticOperator() {
+         @Override
+         public Numeric calculate(Term... args) {
+            Numeric n = TermUtils.castToNumeric(args[0]);
+            return new IntegerNumber(n.getLong() + 7);
+         }
+
+         @Override
+         public void setKnowledgeBase(KnowledgeBase kb) {
+         }
+      };
+      projog.addArithmeticOperator(key, pf);
+
+      // confirm that queries can use testAddPredicateFactory/1
+      QueryResult result = projog.query("X is testArithmeticOperator(3).").getResult();
+      assertTrue(result.next());
+      assertEquals(10, TermUtils.castToNumeric(result.getTerm("X")).getLong()); // 3 + 7 = 10
    }
 
    @Test

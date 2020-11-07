@@ -15,6 +15,7 @@
  */
 package org.projog.api;
 
+import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.term.TermUtils.createAnonymousVariable;
@@ -22,6 +23,7 @@ import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.RETRY_RULE_METHOD_NAME_PREFIX;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -183,6 +185,24 @@ public final class Projog {
     */
    public void consultReader(Reader reader) {
       ProjogSourceReader.parseReader(kb, reader);
+   }
+
+   /**
+    * Reassigns the "standard" input stream.
+    * <p>
+    * By default the "standard" input stream will be {@code System.in}.
+    */
+   void setUserInput(InputStream is) {
+      getFileHandles(kb).setUserInput(is);
+   }
+
+   /**
+    * Reassigns the "standard" output stream.
+    * <p>
+    * By default the "standard" output stream will be {@code System.out}.
+    */
+   public void setUserOutput(PrintStream ps) {
+      getFileHandles(kb).setUserOutput(ps);
    }
 
    /**

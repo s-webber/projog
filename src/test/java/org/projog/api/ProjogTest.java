@@ -26,6 +26,7 @@ import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.write;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +41,7 @@ import org.projog.core.ProjogProperties;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 
 /**
  * Tests {@link Projog}.
@@ -49,6 +51,36 @@ import org.projog.core.term.Term;
  * with the contents of {@link #createTestScript()}
  */
 public class ProjogTest {
+   @Test
+   public void testSetUserOutput() {
+      Projog projog = new Projog();
+
+      // given the user output has been reassigned to a new stream
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      projog.setUserOutput(new PrintStream(baos));
+
+      // when we execute a query that writes to output
+      projog.query("write(hello).").getResult().next();
+
+      // then the new stream should be written to
+      assertEquals("hello", new String(baos.toByteArray()));
+   }
+
+   @Test
+   public void testSetUserInput() {
+      Projog projog = new Projog();
+
+      // given the user input has been reassigned to a new stream
+      projog.setUserInput(new ByteArrayInputStream("hello".getBytes()));
+
+      // when we execute a query that reads from input
+      QueryResult result = projog.query("read(X).").getResult();
+      result.next();
+
+      // then the new stream should be read from
+      assertEquals("hello", TermUtils.getAtomName(result.getTerm("X")));
+   }
+
    @Test
    public void testSimpleQuery() {
       QueryResult r = createQueryResult();

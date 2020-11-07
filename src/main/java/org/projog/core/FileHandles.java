@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,11 +33,21 @@ import org.projog.core.term.Term;
  * Collection of input and output streams.
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code FileHandles} instance.
- * 
+ *
  * @see KnowledgeBaseUtils#getFileHandles(KnowledgeBase)
  */
 public final class FileHandles {
+   /**
+    * The handle of the "standard" output stream.
+    * <p>
+    * By default the "standard" output stream will be {@code System.out}.
+    */
    public static final Atom USER_OUTPUT_HANDLE = new Atom("user_output");
+   /**
+    * The handle of the "standard" input stream.
+    * <p>
+    * By default the "standard" input stream will be {@code System.in}.
+    */
    public static final Atom USER_INPUT_HANDLE = new Atom("user_input");
 
    private final Object lock = new Object();
@@ -98,8 +108,36 @@ public final class FileHandles {
    }
 
    /**
+    * Reassigns the "standard" input stream.
+    *
+    * @see #USER_INPUT_HANDLE
+    */
+   public void setUserInput(InputStream is) {
+      synchronized (lock) {
+         inputHandles.put(USER_INPUT_HANDLE.getName(), is);
+         if (USER_INPUT_HANDLE.equals(currentInputHandle)) {
+            setInput(USER_INPUT_HANDLE);
+         }
+      }
+   }
+
+   /**
+    * Reassigns the "standard" output stream.
+    *
+    * @see #USER_OUTPUT_HANDLE
+    */
+   public void setUserOutput(PrintStream ps) {
+      synchronized (lock) {
+         outputHandles.put(USER_OUTPUT_HANDLE.getName(), ps);
+         if (USER_OUTPUT_HANDLE.equals(currentOutputHandle)) {
+            setOutput(USER_OUTPUT_HANDLE);
+         }
+      }
+   }
+
+   /**
     * Sets the current input stream to the input stream represented by the specified {@code Term}.
-    * 
+    *
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     */
    public void setInput(Term handle) {
@@ -109,14 +147,14 @@ public final class FileHandles {
             currentInputHandle = handle;
             in = inputHandles.get(handleName);
          } else {
-            throw new ProjogException("cannot find file input handle with name:" + handleName);
+            throw new ProjogException("cannot find file input handle with name: " + handleName);
          }
       }
    }
 
    /**
     * Sets the current output stream to the output stream represented by the specified {@code Term}.
-    * 
+    *
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     */
    public void setOutput(Term handle) {
@@ -126,14 +164,14 @@ public final class FileHandles {
             currentOutputHandle = handle;
             out = outputHandles.get(handleName);
          } else {
-            throw new ProjogException("cannot find file output handle with name:" + handleName);
+            throw new ProjogException("cannot find file output handle with name: " + handleName);
          }
       }
    }
 
    /**
     * Creates an intput file stream to read from the file with the specified name
-    * 
+    *
     * @param fileName the system-dependent filename
     * @return a reference to the newly created stream (as required by {@link #setInput(Term)} and {@link #close(Term)})
     * @throws ProjogException if this object's collection of input streams already includes the specified file
@@ -154,7 +192,7 @@ public final class FileHandles {
 
    /**
     * Creates an output file stream to write to the file with the specified name
-    * 
+    *
     * @param fileName the system-dependent filename
     * @return a reference to the newly created stream (as required by {@link #setOutput(Term)} and {@link #close(Term)})
     * @throws ProjogException if this object's collection of output streams already includes the specified file
@@ -175,7 +213,7 @@ public final class FileHandles {
 
    /**
     * Closes the stream represented by the specified {@code Term}.
-    * 
+    *
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     * @throws IOException if an I/O error occurs
     */

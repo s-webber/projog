@@ -47,6 +47,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
          <artifactId>projog-test</artifactId>
          <version>0.3.0</version>
          <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>org.projog</groupId>
+               <artifactId>projog-core</artifactId>
+            </exclusion>
+         </exclusions> 
       </dependency>
       <dependency>
          <groupId>junit</groupId>

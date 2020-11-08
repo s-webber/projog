@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ public final class DecimalFraction implements Numeric {
 
    /**
     * Returns a {@code String} representation of the {@code double} this term represents.
-    * 
+    *
     * @return a {@code String} representation of the {@code double} this term represents
     */
    @Override
@@ -62,7 +62,7 @@ public final class DecimalFraction implements Numeric {
 
    /**
     * Returns {@link TermType#FRACTION}.
-    * 
+    *
     * @return {@link TermType#FRACTION}
     */
    @Override
@@ -99,14 +99,15 @@ public final class DecimalFraction implements Numeric {
 
    /**
     * Performs a strict comparison of this term to the specified term.
-    * 
+    *
     * @param t the term to compare this term against
     * @return {@code true} if the given term represents a {@link TermType#FRACTION} with a value equal to the value of
     * this {@code DecimalFraction}
     */
+   @Deprecated
    @Override
    public boolean strictEquality(Term t) {
-      return t.getType() == TermType.FRACTION && value == ((DecimalFraction) t.getTerm()).value;
+      return TermUtils.termsEqual(this, t);
    }
 
    @Override
@@ -128,6 +129,24 @@ public final class DecimalFraction implements Numeric {
    @Override
    public double getDouble() {
       return value;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (o == this) {
+         return true;
+      }
+
+      if (o.getClass() == DecimalFraction.class) {
+         return value == ((DecimalFraction) o).value;
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      return Double.hashCode(value);
    }
 
    /**

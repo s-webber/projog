@@ -32,6 +32,7 @@ public final class List implements Term {
    private final Term head;
    private Term tail;
    private final boolean immutable;
+   private final int hashCode;
 
    /**
     * Creates a new list with the specified head and tail.
@@ -45,6 +46,7 @@ public final class List implements Term {
       this.head = head;
       this.tail = tail;
       this.immutable = head.isImmutable() && tail.isImmutable();
+      this.hashCode = head.hashCode() + (tail.hashCode() * 7);
    }
 
    /**
@@ -141,23 +143,14 @@ public final class List implements Term {
    /**
     * Performs a strict comparison of this list to the specified term.
     *
-    * @param t1 the term to compare this list against
+    * @param t the term to compare this list against
     * @return {@code true} if the given term represents a {@link TermType#LIST} with a head and tail strictly equal to
     * the corresponding head and tail of this List object.
     */
+   @Deprecated
    @Override
-   public boolean strictEquality(Term t1) {
-      // used to be implemented using recursion but caused stack overflow problems with long lists
-      Term t2 = this;
-      do {
-         boolean equal = t1.getType() == TermType.LIST && t1.getArgument(0).strictEquality(t2.getArgument(0));
-         if (equal == false) {
-            return false;
-         }
-         t1 = t1.getArgument(1);
-         t2 = t2.getArgument(1);
-      } while (t2.getType() == TermType.LIST);
-      return t1.strictEquality(t2);
+   public boolean strictEquality(Term t) {
+      return TermUtils.termsEqual(this, t);
    }
 
    @Override
@@ -169,8 +162,39 @@ public final class List implements Term {
    }
 
    @Override
+   public boolean equals(Object o) {
+      if (o == this) {
+         return true;
+      }
+
+      if (o.getClass() == List.class) {
+         // used to be implemented using recursion but caused stack overflow problems with long lists
+         Term a = this;
+         Term b = (List) o;
+
+         do {
+            if (!a.getArgument(0).equals(b.getArgument(0))) {
+               return false;
+            }
+
+            a = a.getArgument(1);
+            b = b.getArgument(1);
+         } while (a.getClass() == List.class && b.getClass() == List.class);
+
+         return a.equals(b);
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      return hashCode;
+   }
+
+   @Override
    public String toString() {
-      // used to be implemented using recursion but caused stack overflow problems with long listsSS
+      // used to be implemented using recursion but caused stack overflow problems with long lists
       StringBuilder sb = new StringBuilder();
       int listCtr = 0;
       Term t = this;

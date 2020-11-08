@@ -17,6 +17,7 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -217,6 +218,7 @@ public class ListTest {
       // NOTE important to test write method doesn't throw stackoverflow
       assertEquals(bigListSyntax1, TestUtils.write(t1));
       assertEquals(bigListSyntax2, TestUtils.write(t3));
+      // NOTE important to test toString, equals and unify methods don't throw stackoverflow
       assertMatch(t1, t1, true);
       assertMatch(t1, t2, true);
       assertMatch(t1, t3, false);
@@ -269,10 +271,39 @@ public class ListTest {
       assertSame(a, l2.getArgument(1).getArgument(0).getArgument(1));
    }
 
+   @Test
+   public void testHashCode() {
+      Atom w = new Atom("w");
+      Atom x = new Atom("x");
+      Atom y = new Atom("y");
+      Atom z = new Atom("z");
+      List l1 = new List(x, new List(y, z));
+
+      assertEquals(l1.hashCode(), new List(x, new List(y, z)).hashCode());
+      assertEquals(l1.hashCode(), new List(new Atom("x"), new List(new Atom("y"), new Atom("z"))).hashCode());
+
+      // assert lists of same length and elements do not have same hashcode if order is different
+      assertNotEquals(l1.hashCode(), new List(x, new List(z, y)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(z, new List(y, x)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(z, new List(x, y)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(y, new List(y, z)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(y, new List(z, y)).hashCode());
+
+      // assert lists of same length do not have same hashcode if elements are different
+      assertNotEquals(l1.hashCode(), new List(w, new List(y, z)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(x, new List(w, z)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(x, new List(y, w)).hashCode());
+      assertNotEquals(l1.hashCode(), new List(x, new List(y, new Variable("z"))).hashCode());
+
+      // assert lists of different length do not have same hashcode
+      assertNotEquals(l1.hashCode(), new List(x, y).hashCode());
+   }
+
    private void assertMatch(List l1, List l2, boolean expectMatch) {
-      // NOTE important to test toString, strictEquality and unify
-      // methods doesn't throw stackoverflow
-      assertEquals(expectMatch, l1.strictEquality(l2));
+      // NOTE important to test that toString, equals, hashCode and unify methods don't throw stackoverflow
+      assertStrictEquality(l1, l2, expectMatch);
+      assertEquals(expectMatch, l1.equals(l2));
+      assertEquals(expectMatch, l1.hashCode() == l2.hashCode());
       assertEquals(expectMatch, l1.unify(l2));
       assertEquals(expectMatch, l1.toString().equals(l2.toString()));
    }

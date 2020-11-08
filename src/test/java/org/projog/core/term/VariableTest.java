@@ -17,6 +17,7 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -195,8 +196,13 @@ public class VariableTest {
          v2.unify(tmpVar);
          v2 = tmpVar;
       }
+      assertNotEquals(v1, v2);
       Structure t = structure("name", atom("a"), atom("b"), atom("c"));
       assertTrue(v2.unify(t));
+      assertNotEquals(v1, v2);
+      assertStrictEquality(v1, v2, true);
+      assertStrictEquality(v1, t, true);
+      assertStrictEquality(v2, t, true);
 
       assertSame(t, v1.getTerm());
       assertSame(t, v1.copy(null));
@@ -249,10 +255,12 @@ public class VariableTest {
       }
    }
 
+   @Test
    public void testAnonymous() {
       assertTrue(new Variable("_").isAnonymous());
    }
 
+   @Test
    public void testNotAnonymous() {
       assertFalse(new Variable("__").isAnonymous());
       assertFalse(new Variable("_1").isAnonymous());
@@ -264,7 +272,129 @@ public class VariableTest {
       assertFalse(new Variable("_X_Y_").isAnonymous());
    }
 
+   @Test
    public void testAnonymousId() {
       assertEquals("_", Variable.ANONYMOUS_VARIABLE_ID);
+   }
+
+   @Test
+   public void testVariablesEqualToSelf() {
+      Variable v = new Variable("X");
+      int originalHashCode = v.hashCode();
+
+      // an uninstantiated variable is equal to itself
+      assertEquals(v, v);
+      assertStrictEquality(v, v, true);
+
+      // instantiate variable
+      v.unify(new Atom("test"));
+
+      // an instantiated variable is equal to itself and has its original hashcode
+      assertEquals(v, v);
+      assertStrictEquality(v, v, true);
+      assertEquals(originalHashCode, v.hashCode());
+
+      v.backtrack();
+
+      // after backtracking an uninstantiated variable is still equal to itself and has its original hashcode
+      assertEquals(v, v);
+      assertStrictEquality(v, v, true);
+      assertEquals(originalHashCode, v.hashCode());
+   }
+
+   @Test
+   public void testVariablesNotEqualWhenUnassigned() {
+      Variable v1 = new Variable("X");
+
+      Variable v2 = new Variable("X");
+      assertNotEquals(v1, v2);
+      assertNotEquals(v1.hashCode(), v2.hashCode());
+      assertStrictEquality(v1, v2, false);
+
+      Variable v3 = new Variable("Y");
+      assertNotEquals(v1, v3);
+      assertNotEquals(v1.hashCode(), v3.hashCode());
+      assertStrictEquality(v1, v3, false);
+   }
+
+   @Test
+   public void testVariablesNotEqualWhenUnifiedWithEachOther() {
+      Variable v1 = new Variable("X");
+      Variable v2 = new Variable("Y");
+      v1.unify(v2);
+
+      assertNotEquals(v1, v2);
+      assertNotEquals(v1.hashCode(), v2.hashCode());
+      assertStrictEquality(v1, v2, true);
+   }
+
+   @Test
+   public void testVariablesNotEqualWhenUnifiedWithEachOtherAndSomethingElse() {
+      Variable v1 = new Variable("X");
+      Variable v2 = new Variable("Y");
+      Atom a = new Atom("test");
+      v1.unify(v2);
+      v2.unify(a);
+
+      assertNotEquals(v1, v2);
+      assertNotEquals(v1.hashCode(), v2.hashCode());
+      assertStrictEquality(v1, v2, true);
+      assertStrictEquality(v1, a, true);
+      assertStrictEquality(v2, a, true);
+   }
+
+   @Test
+   public void testVariablesNotEqualWhenBothUnifiedToSameTerm() {
+      Variable v1 = new Variable("X");
+      Variable v2 = new Variable("Y");
+      Atom a = new Atom("test");
+      v1.unify(a);
+      v2.unify(a);
+
+      assertNotEquals(v1, v2);
+      assertNotEquals(v1.hashCode(), v2.hashCode());
+      assertStrictEquality(v1, v2, true);
+      assertStrictEquality(v1, a, true);
+      assertStrictEquality(v2, a, true);
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedAtom() {
+      assertVariableNotEqualToUnifiedTerm(new Atom("test"));
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedInteger() {
+      assertVariableNotEqualToUnifiedTerm(new IntegerNumber(7));
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedFraction() {
+      assertVariableNotEqualToUnifiedTerm(new DecimalFraction(7));
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedStructure() {
+      assertVariableNotEqualToUnifiedTerm(Structure.createStructure("test", new Term[] {atom()}));
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedList() {
+      assertVariableNotEqualToUnifiedTerm(new List(atom(), atom()));
+   }
+
+   @Test
+   public void testVariableNotEqualToUnifiedEmptyList() {
+      assertVariableNotEqualToUnifiedTerm(EmptyList.EMPTY_LIST);
+   }
+
+   private void assertVariableNotEqualToUnifiedTerm(Term t) {
+      Variable v = new Variable(t.getName());
+      assertTrue(v.unify(t));
+
+      assertStrictEquality(v, t, true);
+      assertFalse(v.equals(t));
+      assertFalse(t.equals(v));
+      assertNotEquals(v.hashCode(), t.hashCode());
    }
 }

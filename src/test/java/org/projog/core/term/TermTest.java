@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,10 @@
 package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
@@ -37,9 +39,8 @@ import org.junit.Test;
  * As so much of the tests are about interactions between different classes of Terms it was decided to have a generic
  * TermTest class to test generic behaviour and have only specific behaviour tested in separate test classes specific to
  * a particular Term implementation.
- * 
+ *
  * @see AtomTest
- * @see AnonymousVariableTest
  * @see DecimalFractionTest
  * @see EmptyListTest
  * @see IntegerNumberTest
@@ -200,6 +201,8 @@ public class TermTest {
 
    private void assertVariableIsUnifiedToTerm(Variable v, Term t) {
       assertStrictEquality(t, v, true);
+      assertFalse(v.equals(t));
+      assertFalse(t.equals(v));
       assertEquals(t.toString(), v.toString());
       assertSame(t.getType(), v.getType());
       assertSame(t, v.getTerm());
@@ -210,10 +213,5 @@ public class TermTest {
    private void assertUnify(Term t1, Term t2, boolean expected) {
       assertEquals(expected, t1.unify(t2));
       assertEquals(expected, t2.unify(t1));
-   }
-
-   private void assertStrictEquality(Term t1, Term t2, boolean expected) {
-      assertEquals(expected, t1.strictEquality(t2));
-      assertEquals(expected, t2.strictEquality(t1));
    }
 }

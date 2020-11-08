@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ public final class Atom implements Term {
 
    /**
     * Returns the value this {@code Atom} represents.
-    * 
+    *
     * @return the value this {@code Atom} represents
     */
    @Override
@@ -62,7 +62,7 @@ public final class Atom implements Term {
 
    /**
     * Returns {@link TermType#ATOM}.
-    * 
+    *
     * @return {@link TermType#ATOM}
     */
    @Override
@@ -99,19 +99,38 @@ public final class Atom implements Term {
 
    /**
     * Performs a strict comparison of this atom to the specified term.
-    * 
+    *
     * @param t the term to compare this atom against
     * @return {@code true} if the given term represents a {@link TermType#ATOM} with a value equal to the value of this
     * atom
     */
+   @Deprecated
    @Override
    public boolean strictEquality(Term t) {
-      return t.getType() == TermType.ATOM && value.equals(t.getName());
+      return TermUtils.termsEqual(this, t);
    }
 
    @Override
    public void backtrack() {
       // do nothing
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (o == this) {
+         return true;
+      }
+
+      if (o.getClass() == Atom.class) {
+         return value.equals(((Atom) o).value);
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      return value.hashCode();
    }
 
    /**

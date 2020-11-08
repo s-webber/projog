@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,9 @@
 package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.integerNumber;
 
@@ -90,5 +92,31 @@ public class IntegerNumberTest {
    public void testGetArgs() {
       IntegerNumber i = integerNumber();
       assertSame(TermUtils.EMPTY_ARRAY, i.getArgs());
+   }
+
+   @Test
+   public void testHashCode() {
+      IntegerNumber n = new IntegerNumber(7);
+
+      assertEquals(n.hashCode(), new IntegerNumber(7).hashCode());
+      assertNotEquals(n.hashCode(), new IntegerNumber(8).hashCode());
+   }
+
+   /** see {@link TermTest} */
+   @Test
+   public void testEquals() {
+      IntegerNumber n = new IntegerNumber(7);
+
+      assertTrue(n.equals(n));
+      assertTrue(n.equals(new IntegerNumber(7)));
+
+      assertNotEquals(n, new IntegerNumber(6));
+      assertNotEquals(n, new IntegerNumber(8));
+      assertNotEquals(n, new IntegerNumber(0));
+      assertNotEquals(n, new IntegerNumber(-7));
+      assertNotEquals(n, new DecimalFraction(7));
+      assertNotEquals(n, new Atom("7"));
+      assertNotEquals(n, Structure.createStructure("7", new Term[] {n}));
+      assertNotEquals(n, ListFactory.createList(n, n));
    }
 }

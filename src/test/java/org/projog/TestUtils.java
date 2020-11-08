@@ -15,6 +15,7 @@
  */
 package org.projog;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 
@@ -40,6 +41,7 @@ import org.projog.core.term.ListFactory;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
+import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
 
@@ -210,5 +212,11 @@ public class TestUtils {
    public static void assertStrictEquality(Term t1, Term t2, boolean expectedResult) {
       assertTrue(t1.strictEquality(t2) == expectedResult);
       assertTrue(t2.strictEquality(t1) == expectedResult);
+      assertEquals(expectedResult, TermUtils.termsEqual(t1, t2));
+      assertEquals(expectedResult, TermUtils.termsEqual(t2, t1));
+      if (expectedResult) {
+         // assert that if terms are equal then they have the same hashcode
+         assertEquals(t1.getTerm().hashCode(), t2.getTerm().hashCode());
+      }
    }
 }

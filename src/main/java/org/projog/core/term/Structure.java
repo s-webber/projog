@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
  */
 package org.projog.core.term;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -38,7 +39,7 @@ public final class Structure implements Term {
     * <li>structures with the functor {@code .} and two arguments are created as instances of {@link List}</li>
     * <li>no structures can be created without any arguments</li>
     * </ul>
-    * 
+    *
     * @param functor the name of the new term
     * @param args arguments for the new term
     * @return either a new {@link Structure}, a new {@link List} or {@link EmptyList#EMPTY_LIST}
@@ -69,7 +70,7 @@ public final class Structure implements Term {
 
    /**
     * Private constructor to force use of {@link #createStructure(String, Term[])}
-    * 
+    *
     * @param immutable is this structure immutable (i.e. are all its arguments known to be immutable)?
     */
    private Structure(String functor, Term[] args, boolean immutable) {
@@ -80,7 +81,7 @@ public final class Structure implements Term {
 
    /**
     * Returns the functor of this structure.
-    * 
+    *
     * @return the functor of this structure
     */
    @Override
@@ -105,7 +106,7 @@ public final class Structure implements Term {
 
    /**
     * Returns {@link TermType#STRUCTURE}.
-    * 
+    *
     * @return {@link TermType#STRUCTURE}
     */
    @Override
@@ -202,28 +203,14 @@ public final class Structure implements Term {
     * <li>The two terms have the same number of arguments</li>
     * <li>All corresponding arguments are strictly equal</li>
     * </ul>
-    * 
+    *
     * @param t the term to compare this term against
     * @return {@code true} if the given term is strictly equal to this term
     */
+   @Deprecated
    @Override
    public boolean strictEquality(Term t) {
-      if (t.getType() != TermType.STRUCTURE) {
-         return false;
-      }
-      Term[] tArgs = t.getArgs();
-      if (args.length != tArgs.length) {
-         return false;
-      }
-      if (!functor.equals(t.getName())) {
-         return false;
-      }
-      for (int i = 0; i < args.length; i++) {
-         if (!args[i].strictEquality(tArgs[i])) {
-            return false;
-         }
-      }
-      return true;
+      return TermUtils.termsEqual(this, t);
    }
 
    @Override
@@ -231,6 +218,27 @@ public final class Structure implements Term {
       if (!immutable) {
          TermUtils.backtrack(args);
       }
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (o == this) {
+         return true;
+      }
+
+      if (o.getClass() == Structure.class) {
+         Structure other = (Structure) o;
+         return functor.equals(other.functor) && Arrays.equals(args, other.args);
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      // TODO should this value be cached rather than calculated each time?
+      // TODO implement in a way that p(a,b,c) has a different hashcode than p(a,c,b) and p(c,b,a).
+      return functor.hashCode() * Arrays.hashCode(args);
    }
 
    /**

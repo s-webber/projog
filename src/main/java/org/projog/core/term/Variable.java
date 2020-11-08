@@ -121,27 +121,17 @@ public final class Variable implements Term {
       }
    }
 
+   @Deprecated
    @Override
    public boolean strictEquality(Term t) {
-      boolean b;
-      if (this == t) {
-         b = true;
-      } else if (value != null) {
-         b = getValue().strictEquality(t);
-      } else if (t.getType() == TermType.VARIABLE && ((Variable) t).value != null) {
-         // this is for when two unassigned variables are unified with each other
-         b = t.strictEquality(this);
-      } else {
-         b = false;
-      }
-      return b;
+      return TermUtils.termsEqual(this, t);
    }
 
    /**
     * Returns {@link TermType#VARIABLE} if uninstantiated else {@link TermType} of instantiated {@link Term}.
     *
-    * @return {@link TermType#VARIABLE} if this variable is uninstantiated else calls {@link Term#getType()} on
-    * the {@link Term} this variable is instantiated with.
+    * @return {@link TermType#VARIABLE} if this variable is uninstantiated else calls {@link Term#getType()} on the
+    * {@link Term} this variable is instantiated with.
     */
    @Override
    public TermType getType() {

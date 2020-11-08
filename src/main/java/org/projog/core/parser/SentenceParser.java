@@ -31,9 +31,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.projog.core.Operands;
 import org.projog.core.term.Atom;
@@ -81,7 +79,7 @@ public class SentenceParser {
     * e.g. <code>1+2/3</code> will get ordered like: <code>+(1, /(2, 3))</code> while <code>1/2+3</code> will be ordered
     * like: <code>+(/(1, 2), 3)</code>.
     */
-   private final Set<Term> parsedInfixTerms = new HashSet<>();
+   private final TermIdentitySet parsedInfixTerms = new TermIdentitySet();
    /**
     * Terms created, during the parsing of the current sentence, that were enclosed in brackets.
     * <p>
@@ -92,7 +90,7 @@ public class SentenceParser {
     * e.g. Although <code>1/2+3</code> will be ordered like: <code>+(/(1, 2), 3)</code>, <code>1/(2+3)</code> (i.e.
     * where <code>2+3</code> is enclosed in brackets) will be ordered like: <code>/(1, +(2, 3))</code>.
     */
-   private final Set<Term> bracketedTerms = new HashSet<>();
+   private final TermIdentitySet bracketedTerms = new TermIdentitySet();
 
    /**
     * Returns a new {@code SentenceParser} will parse the specified {@code String} using the specified {@code Operands}.

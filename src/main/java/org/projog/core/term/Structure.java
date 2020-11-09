@@ -29,6 +29,7 @@ public final class Structure implements Term {
    private final String functor;
    private final Term[] args;
    private final boolean immutable;
+   private final int hashCode;
 
    /**
     * Factory method for creating {@code Structure} instances.
@@ -77,6 +78,7 @@ public final class Structure implements Term {
       this.functor = functor;
       this.args = args;
       this.immutable = immutable;
+      this.hashCode = functor.hashCode() + Arrays.hashCode(args);
    }
 
    /**
@@ -226,7 +228,7 @@ public final class Structure implements Term {
          return true;
       }
 
-      if (o.getClass() == Structure.class) {
+      if (o.getClass() == Structure.class && hashCode == o.hashCode()) {
          Structure other = (Structure) o;
          return functor.equals(other.functor) && Arrays.equals(args, other.args);
       }
@@ -236,9 +238,7 @@ public final class Structure implements Term {
 
    @Override
    public int hashCode() {
-      // TODO should this value be cached rather than calculated each time?
-      // TODO implement in a way that p(a,b,c) has a different hashcode than p(a,c,b) and p(c,b,a).
-      return functor.hashCode() * Arrays.hashCode(args);
+      return hashCode;
    }
 
    /**

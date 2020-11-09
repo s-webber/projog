@@ -18,6 +18,7 @@ package org.projog.core.term;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -247,6 +248,43 @@ public class StructureTest {
       assertTrue(p2.isImmutable());
       assertSame(v, p1.getArgument(1).getArgument(1));
       assertSame(a, p2.getArgument(1).getArgument(1));
+   }
+
+   @Test
+   public void testHashCode() {
+      Atom a = new Atom("a");
+      Atom b = new Atom("b");
+      Atom c = new Atom("c");
+      Structure p = structure("p", a, b, c);
+
+      assertHashCodeEquals(p, structure("p", a, b, c));
+      assertHashCodeEquals(p, structure("p", new Atom("a"), new Atom("b"), new Atom("c")));
+
+      // assert order of args affects hashCode
+      assertHashCodeNotEquals(p, structure("p", a, c, b));
+      assertHashCodeNotEquals(p, structure("p", b, a, c));
+      assertHashCodeNotEquals(p, structure("p", b, c, a));
+      assertHashCodeNotEquals(p, structure("p", c, a, b));
+      assertHashCodeNotEquals(p, structure("p", c, b, a));
+
+      // assert number of args affects hashCode
+      assertHashCodeNotEquals(p, structure("p", a));
+      assertHashCodeNotEquals(p, structure("p", a, b, c, a));
+
+      // assert functor affects hashCode
+      assertHashCodeNotEquals(p, structure("P", a, b, c));
+      assertHashCodeNotEquals(p, structure("pp", a, b, c));
+
+      // assert arg types affects hashCode
+      assertHashCodeNotEquals(structure("p", new DecimalFraction(1)), structure("p", new IntegerNumber(1)));
+   }
+
+   private void assertHashCodeEquals(Object a, Object b) { // TODO move to TestUtils and use from other Term tests
+      assertEquals(a.hashCode(), b.hashCode());
+   }
+
+   private void assertHashCodeNotEquals(Object a, Object b) {
+      assertNotEquals(a.hashCode(), b.hashCode());
    }
 
    private void assertStrictEqualityAndUnify(Term t1, Term t2, boolean expectedResult) {

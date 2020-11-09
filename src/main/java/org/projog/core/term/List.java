@@ -167,7 +167,7 @@ public final class List implements Term {
          return true;
       }
 
-      if (o.getClass() == List.class) {
+      if (o.getClass() == List.class && hashCode == o.hashCode()) {
          // used to be implemented using recursion but caused stack overflow problems with long lists
          Term a = this;
          Term b = (List) o;

@@ -10,7 +10,7 @@ c(A,B,C) :- a(A), a(B), b(A,B,C).
 
 test(A,B,C) :- A=5; c(A,B,C).
 
-%TRUE_NO test(2,3,6)
+%TRUE test(2,3,6)
 
 %QUERY test(5,B,C)
 %ANSWER
@@ -23,7 +23,6 @@ test(A,B,C) :- A=5; c(A,B,C).
 %ANSWER X = 5
 %ANSWER X = -1
 %ANSWER X = 6
-%NO
 
 %QUERY test(A,B,6)
 %ANSWER

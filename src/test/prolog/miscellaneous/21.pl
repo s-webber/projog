@@ -68,9 +68,8 @@ test2(X, Y) :- p(X), p(Y).
 %ANSWER Y=1
 %ANSWER Y=2
 %ANSWER Y=3
-%NO
 
-%TRUE_NO test2(1,3)
+%TRUE test2(1,3)
 
 test3(X, X) :- p(X), p(X).
 
@@ -92,7 +91,6 @@ test3(X, X) :- p(X), p(X).
 %ANSWER
 % Y=1
 %ANSWER
-%NO
 
 %TRUE test3(3,3)
 %FALSE test3(1,3)

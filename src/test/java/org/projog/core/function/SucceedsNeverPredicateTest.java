@@ -1,0 +1,49 @@
+/*
+ * Copyright 2013-2014 S. Webber
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.projog.core.function;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+
+import org.junit.Test;
+
+public class SucceedsNeverPredicateTest {
+   @Test
+   public void testCount() {
+      assertEquals(0, SucceedsNeverPredicate.FAIL.getCount());
+   }
+
+   @Test
+   public void testEvaluates() {
+      assertFalse(SucceedsNeverPredicate.FAIL.evaluate());
+   }
+
+   @Test
+   public void testCouldReevaluationSucceed() {
+      assertFalse(SucceedsNeverPredicate.FAIL.couldReevaluationSucceed());
+   }
+
+   @Test
+   public void testGetFree() {
+      assertSame(SucceedsNeverPredicate.FAIL, SucceedsNeverPredicate.FAIL.getFree());
+   }
+
+   @Test
+   public void testIncrement() {
+      assertSame(SucceedsOncePredicate.TRUE, SucceedsNeverPredicate.FAIL.increment());
+   }
+}

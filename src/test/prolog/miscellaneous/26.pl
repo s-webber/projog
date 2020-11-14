@@ -8,8 +8,8 @@ x(L) :- L = p(X), p(L).
 %ANSWER A=p(2)
 %ANSWER A=p(3)
 
-%TRUE_NO x(p(1))
-%TRUE_NO x(p(2))
+%TRUE x(p(1))
+%TRUE x(p(2))
 %TRUE x(p(3))
 
 %FALSE x(p(4))

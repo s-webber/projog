@@ -1,0 +1,149 @@
+/*
+ * Copyright 2020 S. Webber
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.projog.core.udp;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.projog.TestUtils.atom;
+import static org.projog.TestUtils.structure;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.projog.TestUtils;
+import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.Predicate;
+import org.projog.core.PredicateKey;
+import org.projog.core.event.ProjogEvent;
+import org.projog.core.function.SucceedsManyTimesPredicate;
+import org.projog.core.function.SucceedsNeverPredicate;
+import org.projog.core.function.SucceedsOncePredicate;
+
+public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
+   private static final String FUNCTOR = "test";
+
+   private KnowledgeBase kb;
+   private MultipleRulesWithSingleImmutableArgumentPredicate testObject;
+
+   @Before
+   public void init() {
+      String[] atomNames = {"a", "b", "c", "c", "c", "c", "c", "d", "e", "b", "f"};
+
+      kb = TestUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
+      PredicateKey key = new PredicateKey(FUNCTOR, 1);
+      StaticUserDefinedPredicateFactory pf = new StaticUserDefinedPredicateFactory(key);
+      pf.setKnowledgeBase(kb);
+      for (String atomName : atomNames) {
+         ClauseModel clause = ClauseModel.createClauseModel(structure(FUNCTOR, atom(atomName)));
+         pf.addLast(clause);
+      }
+      kb.addUserDefinedPredicate(pf);
+      assertSame(pf, kb.getPredicateFactory(key));
+      testObject = (MultipleRulesWithSingleImmutableArgumentPredicate) pf.getActualPredicateFactory();
+   }
+
+   @Test
+   public void testSuceedsNever() {
+      assertSame(SucceedsNeverPredicate.FAIL, testObject.getPredicate(atom("z")));
+   }
+
+   @Test
+   public void testSucceedsOnce() {
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("a")));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("d")));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("e")));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("f")));
+   }
+
+   @Test
+   public void testSucceedsMany() {
+      assertEquals(2, ((SucceedsManyTimesPredicate) testObject.getPredicate( atom("b"))).getCount());
+      assertEquals(5, ((SucceedsManyTimesPredicate) testObject.getPredicate( atom("c"))).getCount());
+
+      assertSame(SucceedsManyTimesPredicate.class, testObject.getPredicate(atom("b")).getClass());
+      assertNotSame(testObject.getPredicate(atom("b")), testObject.getPredicate(atom("b")));
+   }
+
+   @Test
+   public void testSpyPointEnabled_fails() {
+      final SimpleObserver o = new SimpleObserver();
+      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+
+      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+
+      Predicate p = testObject.getPredicate(atom("z"));
+      assertFalse(p.evaluate());
+      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertEquals("CALLtest(z)FAILtest(z)", o.result());
+   }
+
+   @Test
+   public void testSpyPointEnabled_succeedsOnce() {
+      final SimpleObserver o = new SimpleObserver();
+      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+
+      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+
+      Predicate p = testObject.getPredicate(atom("a"));
+      assertTrue(p.evaluate());
+      assertFalse(p.couldReevaluationSucceed());
+      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertEquals("CALLtest(a)EXITtest(a)", o.result());
+   }
+
+   @Test
+   public void testSpyPointEnabled_succeedsMany() {
+      final SimpleObserver o = new SimpleObserver();
+      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+
+      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+
+      Predicate p = testObject.getPredicate(atom("c"));
+      assertTrue(p.evaluate());
+      assertTrue(p.couldReevaluationSucceed());
+      assertTrue(p.evaluate());
+      assertTrue(p.couldReevaluationSucceed());
+      assertTrue(p.evaluate());
+      assertTrue(p.couldReevaluationSucceed());
+      assertTrue(p.evaluate());
+      assertTrue(p.couldReevaluationSucceed());
+      assertTrue(p.evaluate());
+      assertFalse(p.couldReevaluationSucceed());
+      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertEquals("CALLtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)", o.result());
+   }
+
+   private static class SimpleObserver implements Observer {
+      final StringBuilder result = new StringBuilder();
+
+      @Override
+      public void update(Observable o, Object arg) {
+         ProjogEvent e = (ProjogEvent) arg;
+         result.append(e.getType());
+         result.append(e.getDetails());
+      }
+
+      String result() {
+         return result.toString();
+      }
+   }
+}

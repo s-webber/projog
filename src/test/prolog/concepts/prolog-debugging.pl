@@ -31,8 +31,6 @@ p(x, y).
 %ANSWER X = b
 %OUTPUT
 %[1] REDO p(b)
-%[2] REDO p2(2)
-%[2] FAIL p2(2)
 %[1] EXIT p(c)
 %
 %OUTPUT

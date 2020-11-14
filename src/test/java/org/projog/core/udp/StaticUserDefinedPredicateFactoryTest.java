@@ -105,6 +105,21 @@ public class StaticUserDefinedPredicateFactoryTest {
    }
 
    @Test
+   public void testMultipleRulesWithSingleImmutableArgumentPredicate_duplicates() {
+      Term[] clauses = toTerms("p(a).", "p(a).", "p(a).");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertTrue(pf.isRetryable());
+   }
+
+   @Test
+   public void testMultipleRulesWithSingleImmutableArgumentPredicate_differentTypes() {
+      Term[] clauses = toTerms("p(a).", "p(1).", "p(1.0).", "p(x(a)).", "p([]).", "p([a,b]).");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertTrue(pf.isRetryable());
+   }
+   @Test
    public void testSingleRuleWithMultipleImmutableArgumentsPredicate() {
       Term clause = TestUtils.parseTerm("p(a,b,c).");
       PredicateFactory pf = getActualPredicateFactory(clause);

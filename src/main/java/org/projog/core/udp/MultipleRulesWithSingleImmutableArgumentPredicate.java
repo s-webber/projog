@@ -15,14 +15,21 @@
  */
 package org.projog.core.udp;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.projog.core.Predicate;
 import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractPredicateFactory;
+import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.function.SucceedsFixedAmountPredicate;
 import org.projog.core.term.Term;
 
 /**
  * Provides an optimised implementation for evaluating a particular subset of user defined predicates that have an arity
- * of one and a number of clauses that all have a body of {@code true} and no shared variables. Example: <pre>
+ * of one and a number of clauses that all have a body of {@code true} (i.e. are "facts" rather than "rules") and are
+ * immutable (i.e. have variables). Example: <pre>
  * p(a).
  * p(b).
  * p(c).
@@ -33,28 +40,55 @@ import org.projog.core.term.Term;
  * @see MultipleRulesWithMultipleImmutableArgumentsPredicate
  */
 public final class MultipleRulesWithSingleImmutableArgumentPredicate extends AbstractPredicateFactory {
-   private final Term[] data;
+   private final Term[] masterData;
    private final SpyPoints.SpyPoint spyPoint;
-   private final int numClauses;
+   private final Map<Term, SucceedsFixedAmountPredicate> index;
 
    MultipleRulesWithSingleImmutableArgumentPredicate(Term[] data, SpyPoints.SpyPoint spyPoint) {
-      this.data = data;
-      this.numClauses = data.length;
+      this.masterData = data;
       this.spyPoint = spyPoint;
+
+      index = new HashMap<>(data.length);
+      for (Term t : data) {
+         SucceedsFixedAmountPredicate previous = index.put(t, AbstractSingletonPredicate.TRUE);
+         if (previous != null) {
+            index.put(t, previous.increment());
+         }
+      }
    }
 
    @Override
    public Predicate getPredicate(Term arg) {
-      return new RetryablePredicate(arg);
+      if (arg.isImmutable()) {
+         return getPredicateUsingIndex(arg);
+      } else {
+         return new RetryablePredicate(masterData, arg);
+      }
+   }
+
+   private Predicate getPredicateUsingIndex(Term arg) {
+      SucceedsFixedAmountPredicate match = index.getOrDefault(arg, AbstractSingletonPredicate.FAIL);
+
+      if (spyPoint != null && spyPoint.isEnabled()) {
+         Term[] data = new Term[match.getCount()];
+         Arrays.fill(data, arg);
+         return new RetryablePredicate(data, arg);
+      } else {
+         return match.getFree();
+      }
    }
 
    private class RetryablePredicate implements Predicate {
+      private final Term[] data;
+      private final int numClauses;
       private final Term arg;
       private final boolean isDebugEnabled;
       private int ctr;
       private boolean retrying;
 
-      RetryablePredicate(Term arg) {
+      RetryablePredicate(Term[] data, Term arg) {
+         this.data = data;
+         this.numClauses = data.length;
          this.arg = arg;
          this.isDebugEnabled = spyPoint != null && spyPoint.isEnabled();
       }

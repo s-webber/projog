@@ -27,28 +27,10 @@ import org.projog.core.term.Term;
  * solutions will be made as part of backtracking as {@link #isRetryable()} always returns {@code false}.
  */
 public abstract class AbstractSingletonPredicate implements PredicateFactory {
-   public static final Predicate TRUE = new Predicate() { // TODO
-      @Override
-      public boolean evaluate() {
-         return true;
-      }
-
-      @Override
-      public boolean couldReevaluationSucceed() {
-         return false;
-      }
-   };
-   public static final Predicate FAIL = new Predicate() { // TODO
-      @Override
-      public boolean evaluate() {
-         return false;
-      }
-
-      @Override
-      public boolean couldReevaluationSucceed() {
-         return false;
-      }
-   };
+   @Deprecated
+   public static final SucceedsFixedAmountPredicate TRUE = SucceedsOncePredicate.TRUE;
+   @Deprecated
+   public static final SucceedsNeverPredicate FAIL = SucceedsNeverPredicate.FAIL;
 
    private KnowledgeBase knowledgeBase;
 
@@ -58,7 +40,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
       return toPredicate(result);
    }
 
-   public static Predicate toPredicate(boolean result) { // TODO
+   public static Predicate toPredicate(boolean result) { // TODO move to PredicateUtils
       return result ? TRUE : FAIL;
    }
 

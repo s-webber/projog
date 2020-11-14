@@ -32,7 +32,6 @@ import org.projog.core.term.Term;
 
  %QUERY if_then_else_test(X) -> if_then_else_test(X)
  %ANSWER X=1
- %NO
 
  %QUERY if_then_else_test(X) -> if_then_else_test(Y)
  %ANSWER
@@ -68,7 +67,6 @@ import org.projog.core.term.Term;
 
  %QUERY if_then_else_test(X) -> if_then_else_test(X) ; if_then_else_test(X)
  %ANSWER X=1
- %NO
 
  %QUERY (if_then_else_test(X), fail) -> if_then_else_test(X) ; if_then_else_test(X)
  %ANSWER X=1

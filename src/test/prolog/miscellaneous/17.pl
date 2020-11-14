@@ -8,7 +8,6 @@ test1(X,Y) :- X=A, B=Y, C=p(A), Y=2, p(C).
 %QUERY test1(p(X), X)
 %ANSWER X=3
 %ANSWER X=2
-%NO
 
 p2(I) :- I=I2, p(p(p(I2))), 1 is I mod 2.
 

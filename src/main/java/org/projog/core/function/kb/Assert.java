@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER X=2
  %ANSWER X=1
  %FALSE p(X)
- 
+
  %QUERY X=p(1), assertz(X), assertz(p(2)), assertz(p(3))
  %ANSWER X=p(1)
  %QUERY p(X)
@@ -48,7 +48,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER X=2
  %ANSWER X=3
  %FALSE p(X)
- 
+
  % Note: "assert" is a synonym for "assertz".
  %FALSE z(X)
  %TRUE assert(z(a)), assert(z(b)), assert(z(c))
@@ -56,6 +56,71 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER X=a
  %ANSWER X=b
  %ANSWER X=c
+
+ % rules can be asserted, but have to be surrounded by brackets
+ %FALSE q(X,Y,Z)
+ %QUERY assert((q(X,Y,Z) :- Z is X+Y))
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ % Z=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUERY assert((q(X,Y,Z) :- Z is X-Y))
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ % Z=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUERY assert((q(X,Y,Z) :- Z is X*Y, repeat(3)))
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ % Z=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUERY assert((q(X,Y,Z) :- Z is -X))
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ % Z=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %TRUE_NO q(6,3,9)
+ %QUERY q(6,3,18)
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %FALSE q(6,3,17)
+ %QUERY q(5,2,Q)
+ %ANSWER Q=7
+ %ANSWER Q=3
+ %ANSWER Q=10
+ %ANSWER Q=10
+ %ANSWER Q=10
+ %ANSWER Q=-5
+ %QUERY q(6,7,Q)
+ %ANSWER Q=13
+ %ANSWER Q=-1
+ %ANSWER Q=42
+ %ANSWER Q=42
+ %ANSWER Q=42
+ %ANSWER Q=-6
+ %QUERY q(8,4,32)
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %QUERY asserta((q(X,Y,Z) :- Z is Y-X))
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=UNINSTANTIATED VARIABLE
+ % Z=UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUERY q(5,2,Q)
+ %ANSWER Q=-3
+ %ANSWER Q=7
+ %ANSWER Q=3
+ %ANSWER Q=10
+ %ANSWER Q=10
+ %ANSWER Q=10
+ %ANSWER Q=-5
  */
 /**
  * <code>asserta(X)</code> / <code>assertz(X)</code> - adds a clause to the knowledge base.
@@ -84,11 +149,11 @@ public final class Assert extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term consequent) {
-      PredicateKey key = PredicateKey.createForTerm(consequent);
+   public boolean evaluate(Term clause) {
+      ClauseModel clauseModel = ClauseModel.createClauseModel(clause);
+      PredicateKey key = PredicateKey.createForTerm(clauseModel.getConsequent());
       KnowledgeBase kb = getKnowledgeBase();
       UserDefinedPredicateFactory userDefinedPredicate = kb.createOrReturnUserDefinedPredicate(key);
-      ClauseModel clauseModel = ClauseModel.createClauseModel(consequent);
       add(userDefinedPredicate, clauseModel);
       return true;
    }

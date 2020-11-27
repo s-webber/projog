@@ -33,7 +33,6 @@ import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
 import org.projog.core.udp.interpreter.ClauseAction;
@@ -213,24 +212,12 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private Predicate createSingleClausePredicate(ClauseAction clause, Term[] args) {
-      if (clause.isRetryable()) {
-         return new SingleRetryableRulePredicateFactory.RetryableRulePredicate(clause, spyPoint, args);
-      } else {
-         return SingleNonRetryableRulePredicate.evaluateClause(clause, spyPoint, args);
-      }
-   }
-
    private Predicate createPredicate(Term[] args, ClauseAction[] clauses) {
       switch (clauses.length) {
          case 0:
-            if (spyPoint.isEnabled()) {
-               spyPoint.logCall(this, args);
-               spyPoint.logFail(this, args);
-            }
-            return AbstractSingletonPredicate.FAIL;
+            return PredicateUtils.createFailurePredicate(spyPoint, args);
          case 1:
-            return createSingleClausePredicate(clauses[0], args);
+            return PredicateUtils.createSingleClausePredicate(clauses[0], spyPoint, args);
          default:
             return new InterpretedUserDefinedPredicate(new ActionIterator(clauses), spyPoint, args);
       }

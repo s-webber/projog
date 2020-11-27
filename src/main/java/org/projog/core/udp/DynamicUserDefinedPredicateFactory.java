@@ -18,6 +18,7 @@ package org.projog.core.udp;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
@@ -46,9 +47,18 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    private final KnowledgeBase kb;
    private final SpyPoints.SpyPoint spyPoint;
    private final ClauseActionMetaData[] ends = new ClauseActionMetaData[2];
+   private ConcurrentHashMap<Term, ClauseActionMetaData> index;
+   private boolean hasPrimaryKey;
 
    public DynamicUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
       this.kb = kb;
+      if (predicateKey.getNumArgs() == 0) {
+         this.hasPrimaryKey = false;
+         this.index = null;
+      } else {
+         this.hasPrimaryKey = true;
+         index = new ConcurrentHashMap<>();
+      }
       this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
    }
 
@@ -59,7 +69,20 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
    @Override
    public Predicate getPredicate(Term... args) {
-      return new InterpretedUserDefinedPredicate(new ClauseActionIterator(ends[FIRST]), spyPoint, args);
+      if (hasPrimaryKey) {
+         Term firstArg = args[0];
+         if (firstArg.isImmutable()) {
+            ClauseActionMetaData match = index.get(firstArg);
+            if (match == null) {
+               return PredicateUtils.createFailurePredicate(spyPoint, args);
+            } else {
+               return PredicateUtils.createSingleClausePredicate(match.clause, spyPoint, args);
+            }
+         }
+      }
+
+      ClauseActionIterator itr = new ClauseActionIterator(ends[FIRST]);
+      return new InterpretedUserDefinedPredicate(itr, spyPoint, args);
    }
 
    @Override
@@ -92,9 +115,11 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public void addFirst(ClauseModel clauseModel) {
       synchronized (LOCK) {
+         ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
+         addToIndex(clauseModel, newClause);
+
          // if first used in a implication antecedent before being used as a consequent,
          // it will originally been created with first and last both null
-         ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          ClauseActionMetaData first = ends[FIRST];
          if (first == null) {
             ends[FIRST] = newClause;
@@ -110,9 +135,11 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public void addLast(ClauseModel clauseModel) {
       synchronized (LOCK) {
+         ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
+         addToIndex(clauseModel, newClause);
+
          // if first used in a implication antecedent before being used as a consequent,
          // it will originally been created with first and last both null
-         ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          ClauseActionMetaData last = ends[LAST];
          if (last == null) {
             ends[FIRST] = newClause;
@@ -122,6 +149,16 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          last.next = newClause;
          newClause.previous = last;
          ends[LAST] = newClause;
+      }
+   }
+
+   private void addToIndex(ClauseModel clauseModel, ClauseActionMetaData metaData) {
+      if (hasPrimaryKey) {
+         Term firstArg = clauseModel.getConsequent().getArgument(0);
+         if (!firstArg.isImmutable() || index.put(firstArg, metaData) != null) {
+            hasPrimaryKey = false;
+            index.clear();
+         }
       }
    }
 
@@ -137,7 +174,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       if (next == null) {
          return null;
       }
-      return next.clauseModel.copy();
+      return next.clause.getModel().copy();
    }
 
    private ClauseActionMetaData createClauseActionMetaData(ClauseModel clauseModel) {
@@ -159,7 +196,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       /** need to call getFree on result */
       @Override
       public ClauseAction next() {
-         ClauseAction c = next.getClauseAction();
+         ClauseAction c = next.clause;
          next = next.next;
          return c;
       }
@@ -188,7 +225,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       @Override
       public ClauseModel next() {
          ClauseActionMetaData next = getNext();
-         ClauseModel clauseModel = next.clauseModel;
+         ClauseModel clauseModel = next.clause.getModel();
          previous = next;
          return clauseModel.copy();
       }
@@ -214,23 +251,20 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
                }
                ends[LAST] = newTail;
             }
+            if (ends[FIRST] == null && ends[LAST] == null) {
+               hasPrimaryKey = index != null;
+            }
          }
       }
    }
 
    private static class ClauseActionMetaData {
-      final KnowledgeBase kb;
-      final ClauseModel clauseModel;
+      final ClauseAction clause;
       ClauseActionMetaData previous;
       ClauseActionMetaData next;
 
       ClauseActionMetaData(KnowledgeBase kb, ClauseModel clauseModel) {
-         this.kb = kb;
-         this.clauseModel = clauseModel;
-      }
-
-      private ClauseAction getClauseAction() {
-         return ClauseActionFactory.createClauseAction(kb, clauseModel);
+         this.clause = ClauseActionFactory.createClauseAction(kb, clauseModel);
       }
    }
 

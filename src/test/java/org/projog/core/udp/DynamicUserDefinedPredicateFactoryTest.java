@@ -181,15 +181,13 @@ public class DynamicUserDefinedPredicateFactoryTest {
          addLast(dp, d);
       }
 
-      // test evaluate with atom as argument
+      // test evaluate with atom as argument - will use index
       for (String d : data) {
          Term inputArg = atom(d);
          Term[] args = new Term[] {inputArg};
          Predicate e = dp.getPredicate(args);
-         assertTrue(e.couldReevaluationSucceed());
+         assertFalse(e.couldReevaluationSucceed());
          assertTrue(e.evaluate());
-         assertSame(inputArg, args[0]);
-         assertFalse(e.evaluate());
          assertSame(inputArg, args[0]);
       }
 

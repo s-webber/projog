@@ -21,7 +21,6 @@ import java.util.Map;
 import org.projog.core.PredicateFactory;
 import org.projog.core.SpyPoints.SpyPoint;
 import org.projog.core.term.Term;
-import org.projog.core.term.Unifier;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.TailRecursivePredicate;
 import org.projog.core.udp.TailRecursivePredicateMetaData;
@@ -38,6 +37,7 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * @see TailRecursivePredicateMetaData
  */
 final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
+   // TODO add exception handling ProjogException and CutException
    private final SpyPoint spyPoint;
    private final int numArgs;
    private final Term[] currentQueryArgs;
@@ -76,7 +76,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
          newConsequentArgs[i] = firstClauseConsequentArgs[i].copy(sharedVariables);
       }
 
-      if (Unifier.preMatch(currentQueryArgs, newConsequentArgs) == false) {
+      if (unify(currentQueryArgs, newConsequentArgs) == false) {
          return false;
       }
 
@@ -98,7 +98,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
          newConsequentArgs[i] = secondClauseConsequentArgs[i].copy(sharedVariables);
       }
 
-      if (Unifier.preMatch(currentQueryArgs, newConsequentArgs) == false) {
+      if (unify(currentQueryArgs, newConsequentArgs) == false) {
          return false;
       }
 
@@ -117,30 +117,52 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
       return true;
    }
 
+   /**
+    * Unifies the arguments in the head (consequent) of a clause with a query.
+    * <p>
+    * When Prolog attempts to answer a query it searches its knowledge base for all rules with the same functor and
+    * arity. For each rule founds it attempts to unify the arguments in the query with the arguments in the head
+    * (consequent) of the rule. Only if the query and rule's head can be unified can it attempt to evaluate the body
+    * (antecedent) of the rule to determine if the rule is true.
+    *
+    * @param inputArgs the arguments contained in the query
+    * @param consequentArgs the arguments contained in the head (consequent) of the clause
+    * @return {@code true} if the attempt to unify the arguments was successful
+    * @see Term#unify(Term)
+    */
+   public static boolean unify(Term[] inputArgs, Term[] consequentArgs) {
+      for (int i = 0; i < inputArgs.length; i++) {
+         if (!inputArgs[i].unify(consequentArgs[i])) {
+            return false;
+         }
+      }
+      return true;
+   }
+
    @Override
    protected void logCall() {
-      if (spyPoint != null) {
+      if (spyPoint != null && spyPoint.isEnabled()) {
          spyPoint.logCall(this, currentQueryArgs);
       }
    }
 
    @Override
    protected void logRedo() {
-      if (spyPoint != null) {
+      if (spyPoint != null && spyPoint.isEnabled()) {
          spyPoint.logCall(this, currentQueryArgs);
       }
    }
 
    @Override
    protected void logExit() {
-      if (spyPoint != null) {
+      if (spyPoint != null && spyPoint.isEnabled()) {
          spyPoint.logExit(this, currentQueryArgs, 1);
       }
    }
 
    @Override
    protected void logFail() {
-      if (spyPoint != null) {
+      if (spyPoint != null && spyPoint.isEnabled()) {
          spyPoint.logFail(this, currentQueryArgs);
       }
    }

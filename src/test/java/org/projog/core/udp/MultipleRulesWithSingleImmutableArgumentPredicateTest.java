@@ -32,17 +32,19 @@ import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.event.ProjogEvent;
-import org.projog.core.function.SucceedsManyTimesPredicate;
 import org.projog.core.function.SucceedsNeverPredicate;
 import org.projog.core.function.SucceedsOncePredicate;
+import org.projog.core.term.Term;
+import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
 public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    private static final String FUNCTOR = "test";
 
    private KnowledgeBase kb;
-   private MultipleRulesWithSingleImmutableArgumentPredicate testObject;
+   private PredicateFactory testObject;
 
    @Before
    public void init() {
@@ -50,15 +52,14 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb = TestUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
       PredicateKey key = new PredicateKey(FUNCTOR, 1);
-      StaticUserDefinedPredicateFactory pf = new StaticUserDefinedPredicateFactory(key);
-      pf.setKnowledgeBase(kb);
+      StaticUserDefinedPredicateFactory pf = new StaticUserDefinedPredicateFactory(kb, key);
       for (String atomName : atomNames) {
          ClauseModel clause = ClauseModel.createClauseModel(structure(FUNCTOR, atom(atomName)));
          pf.addLast(clause);
       }
       kb.addUserDefinedPredicate(pf);
       assertSame(pf, kb.getPredicateFactory(key));
-      testObject = (MultipleRulesWithSingleImmutableArgumentPredicate) pf.getActualPredicateFactory();
+      testObject = pf.getActualPredicateFactory();
    }
 
    @Test
@@ -76,11 +77,19 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSucceedsMany() {
-      assertEquals(2, ((SucceedsManyTimesPredicate) testObject.getPredicate( atom("b"))).getCount());
-      assertEquals(5, ((SucceedsManyTimesPredicate) testObject.getPredicate( atom("c"))).getCount());
-
-      assertSame(SucceedsManyTimesPredicate.class, testObject.getPredicate(atom("b")).getClass());
+      assertSucceedsMany(atom("b"), 2);
+      assertSucceedsMany(atom("c"), 5);
       assertNotSame(testObject.getPredicate(atom("b")), testObject.getPredicate(atom("b")));
+   }
+
+   private void assertSucceedsMany(Term arg, int expectedSuccesses) {
+      Predicate p = testObject.getPredicate(arg);
+      assertSame(InterpretedUserDefinedPredicate.class, p.getClass()); // TODO add assertClass to TestUtils
+      for (int i = 0; i < expectedSuccesses; i++) {
+         assertTrue(p.couldReevaluationSucceed());
+         assertTrue(p.evaluate());
+      }
+      assertFalse(p.evaluate());
    }
 
    @Test
@@ -92,7 +101,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       Predicate p = testObject.getPredicate(atom("z"));
       assertFalse(p.evaluate());
-      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertSame(SucceedsNeverPredicate.class, p.getClass());
       assertEquals("CALLtest(z)FAILtest(z)", o.result());
    }
 
@@ -106,7 +115,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
       Predicate p = testObject.getPredicate(atom("a"));
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
-      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertSame(SucceedsOncePredicate.class, p.getClass());
       assertEquals("CALLtest(a)EXITtest(a)", o.result());
    }
 
@@ -128,7 +137,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
       assertTrue(p.couldReevaluationSucceed());
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
-      assertEquals("org.projog.core.udp.MultipleRulesWithSingleImmutableArgumentPredicate$RetryablePredicate", p.getClass().getName());
+      assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertEquals("CALLtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)", o.result());
    }
 

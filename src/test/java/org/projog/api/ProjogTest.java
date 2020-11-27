@@ -305,9 +305,9 @@ public class ProjogTest {
          // retrieve and check stack trace elements
          ProjogStackTraceElement[] elements = p.getStackTrace(projogException);
          assertEquals(3, elements.length);
-         assertProjogStackTraceElement(elements[0], "z/3", 2, ":-(z(A, B, C), open(A, read, Z))");
-         assertProjogStackTraceElement(elements[1], "y/1", 0, ":-(y(A), ,(is(Q, +(4, 5)), z(A, A, Q)))");
-         assertProjogStackTraceElement(elements[2], "x/1", 1, ":-(x(A), y(A))");
+         assertProjogStackTraceElement(elements[0], "z/3", ":-(z(A, B, C), open(A, read, Z))");
+         assertProjogStackTraceElement(elements[1], "y/1", ":-(y(A), ,(is(Q, +(4, 5)), z(A, A, Q)))");
+         assertProjogStackTraceElement(elements[2], "x/1", ":-(x(A), y(A))");
 
          // Write stack trace to OutputStream so it can be compared against the expected result.
          ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -317,11 +317,11 @@ public class ProjogTest {
 
          // Generate expected stack trace.
          StringBuilder expectedResult = new StringBuilder();
-         expectedResult.append("z/3 rule 3 z(A, B, C) :- open(A, read, Z)");
+         expectedResult.append("z/3 clause: z(A, B, C) :- open(A, read, Z)");
          expectedResult.append(lineSeparator());
-         expectedResult.append("y/1 rule 1 y(A) :- Q is 4 + 5 , z(A, A, Q)");
+         expectedResult.append("y/1 clause: y(A) :- Q is 4 + 5 , z(A, A, Q)");
          expectedResult.append(lineSeparator());
-         expectedResult.append("x/1 rule 2 x(A) :- y(A)");
+         expectedResult.append("x/1 clause: x(A) :- y(A)");
          expectedResult.append(lineSeparator());
 
          // Confirm contents of stack trace
@@ -346,9 +346,8 @@ public class ProjogTest {
       assertEquals(write(inputTerm), p.toString(inputTerm));
    }
 
-   private void assertProjogStackTraceElement(ProjogStackTraceElement actual, String expectedKey, int expectedClauseIdx, String expectedTerm) {
+   private void assertProjogStackTraceElement(ProjogStackTraceElement actual, String expectedKey, String expectedTerm) {
       assertEquals(expectedKey, actual.getPredicateKey().toString());
-      assertEquals(expectedClauseIdx, actual.getClauseIdx());
       assertEquals(expectedTerm, actual.getTerm().toString());
    }
 

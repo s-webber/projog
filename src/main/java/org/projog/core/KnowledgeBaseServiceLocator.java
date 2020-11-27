@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 /**
@@ -66,12 +67,12 @@ public class KnowledgeBaseServiceLocator {
 
    /** @see #getServiceLocator */
    private KnowledgeBaseServiceLocator(KnowledgeBase kb) {
-      this.kb = kb;
+      this.kb = Objects.requireNonNull(kb);
    }
 
    /**
     * Adds the specified {@code instance} with the specified {@code referenceType} as its key.
-    * 
+    *
     * @throws IllegalArgumentException If {@code instance} is not an instance of {@code ReferenceType}.
     * @throws IllegalStateException If there is already a service associated with {@code referenceType}.
     */
@@ -93,7 +94,7 @@ public class KnowledgeBaseServiceLocator {
     * If no {@code Object} is already associated with {@code instanceType} then a new instance of {@code instanceType}
     * will be created and associated with {@code instanceType} for future use.
     * </p>
-    * 
+    *
     * @throws RuntimeException if an attempt to instantiate a new instance of the {@code instanceType} fails. e.g. If it
     * does not have a public constructor that accepts either no arguments or a single {@code KnowledgeBase} argument.
     */
@@ -107,7 +108,7 @@ public class KnowledgeBaseServiceLocator {
     * If no {@code Object} is already associated with {@code referenceType} then a new instance of {@code instanceType}
     * will be created and associated with {@code referenceType} for future use.
     * </p>
-    * 
+    *
     * @param referenceType The class to use as the key to retrieve an existing service.
     * @param instanceType The class to create a new instance of if there is no existing service associated with
     * {@code referenceType}.

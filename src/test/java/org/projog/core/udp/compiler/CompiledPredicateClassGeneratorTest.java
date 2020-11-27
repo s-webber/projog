@@ -22,11 +22,13 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.projog.api.Projog;
 import org.projog.core.ProjogDefaultProperties;
 import org.projog.core.ProjogProperties;
 
+@Ignore
 public class CompiledPredicateClassGeneratorTest {
    private static final File PROLOG_SOURCE_DIR = new File("src/test/prolog/CompiledPredicateSourceGeneratorTest");
    private static final File TARGET_DIR = new File("target");

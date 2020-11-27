@@ -17,6 +17,7 @@ package org.projog.core.udp;
 
 import static org.projog.core.KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME;
 
+import org.projog.core.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
@@ -48,6 +49,7 @@ public final class ClauseModel {
          Term[] implicationArgs = original.getArgs();
          consequent = implicationArgs[0];
          if (implicationArgs.length == 2) {
+            // TODO set to TRUE if equal to it
             antecedent = implicationArgs[1];
          } else if (implicationArgs.length == 1) {
             antecedent = TRUE;
@@ -94,9 +96,17 @@ public final class ClauseModel {
       return original;
    }
 
+   public PredicateKey getPredicateKey() {
+      return PredicateKey.createForTerm(consequent);
+   }
+
    public ClauseModel copy() {
       Term[] newTerms = TermUtils.copy(original, consequent, antecedent);
       return new ClauseModel(newTerms[0], newTerms[1], newTerms[2]);
+   }
+
+   public boolean isFact() {
+      return TRUE.equals(antecedent);
    }
 
    @Override

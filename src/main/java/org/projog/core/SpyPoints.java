@@ -47,7 +47,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  */
 public final class SpyPoints {
    private final Object lock = new Object();
-   private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>();
+   private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>(); // TODO make concurrent?
    private final KnowledgeBase kb;
    private final ProjogEventsObservable projogEventsObservable;
    private final TermFormatter termFormatter;
@@ -56,7 +56,13 @@ public final class SpyPoints {
    public SpyPoints(KnowledgeBase kb) {
       this.kb = kb;
       this.projogEventsObservable = getProjogEventsObservable(kb);
-      termFormatter = getTermFormatter(kb);
+      this.termFormatter = getTermFormatter(kb);
+   }
+
+   public SpyPoints(ProjogEventsObservable observable, TermFormatter termFormatter) { // TODO only used by tests - remove
+      this.kb = null;
+      this.projogEventsObservable = observable;
+      this.termFormatter = termFormatter;
    }
 
    public void setTraceEnabled(boolean traceEnabled) {
@@ -113,6 +119,10 @@ public final class SpyPoints {
          this.key = key;
       }
 
+      public PredicateKey getPredicateKey() {
+         return key;
+      }
+
       public boolean isSet() {
          return set;
       }
@@ -123,30 +133,44 @@ public final class SpyPoints {
 
       /** Generates an event of type {@link ProjogEventType#CALL} */
       public void logCall(Object source, Term[] args) {
-         log(ProjogEventType.CALL, source, args, -1);
+         log(ProjogEventType.CALL, source, args, null);
       }
 
       /** Generates an event of type {@link ProjogEventType#REDO} */
       public void logRedo(Object source, Term[] args) {
-         log(ProjogEventType.REDO, source, args, -1);
+         log(ProjogEventType.REDO, source, args, null);
       }
 
       /** Generates an event of type {@link ProjogEventType#EXIT} */
       public void logExit(Object source, Term[] args, int clauseNumber) {
-         log(ProjogEventType.EXIT, source, args, clauseNumber);
+         ClauseModel clauseModel;
+         if (clauseNumber != -1) {
+            Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
+            UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
+            // clauseNumber starts at 1 / getClauseModel starts at 0
+            clauseModel = userDefinedPredicate.getClauseModel(clauseNumber - 1);
+         } else {
+            clauseModel = null;
+         }
+         log(ProjogEventType.EXIT, source, args, clauseModel);
+      }
+
+      /** Generates an event of type {@link ProjogEventType#EXIT} */
+      public void logExit(Object source, Term[] args, ClauseModel clause) {
+         log(ProjogEventType.EXIT, source, args, clause);
       }
 
       /** Generates an event of type {@link ProjogEventType#FAIL} */
       public void logFail(Object source, Term[] args) {
-         log(ProjogEventType.FAIL, source, args, -1);
+         log(ProjogEventType.FAIL, source, args, null);
       }
 
-      private void log(ProjogEventType type, Object source, Term[] args, int clauseIdx) {
+      private void log(ProjogEventType type, Object source, Term[] args, ClauseModel clauseModel) {
          if (isEnabled() == false) {
             return;
          }
 
-         SpyPointEvent spe = new SpyPointEvent(key, args, clauseIdx);
+         SpyPointEvent spe = new SpyPointEvent(key, args, clauseModel);
          ProjogEvent pe = new ProjogEvent(type, spe, source);
          projogEventsObservable.notifyObservers(pe);
       }
@@ -156,9 +180,8 @@ public final class SpyPoints {
       private final PredicateKey key;
       private final Term[] args;
       private final ClauseModel clauseModel;
-      private int clauseNumber;
 
-      private SpyPointEvent(PredicateKey key, Term[] args, int clauseNumber) {
+      private SpyPointEvent(PredicateKey key, Term[] args, ClauseModel clauseModel) {
          this.key = key;
          for (int i = 0; i < args.length; i++) {
             if (args[i] == null) {
@@ -166,16 +189,7 @@ public final class SpyPoints {
             }
          }
          this.args = TermUtils.copy(args);
-         this.clauseNumber = clauseNumber;
-
-         if (clauseNumber != -1) {
-            Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
-            UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
-            // clauseNumber starts at 1 / getClauseModel starts at 0
-            this.clauseModel = userDefinedPredicate.getClauseModel(clauseNumber - 1);
-         } else {
-            this.clauseModel = null;
-         }
+         this.clauseModel = clauseModel;
       }
 
       public PredicateKey getPredicateKey() {
@@ -189,13 +203,6 @@ public final class SpyPoints {
             Term term = Structure.createStructure(key.getName(), args);
             return termFormatter.toString(term);
          }
-      }
-
-      public int getClauseNumber() {
-         if (clauseNumber == -1) {
-            throw new IllegalStateException("No clause number specified for event");
-         }
-         return clauseNumber;
       }
 
       public ClauseModel getClauseModel() {

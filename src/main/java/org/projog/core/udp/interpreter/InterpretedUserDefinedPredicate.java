@@ -19,7 +19,6 @@ import java.util.Iterator;
 
 import org.projog.core.CutException;
 import org.projog.core.Predicate;
-import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.term.Term;
@@ -31,21 +30,19 @@ import org.projog.core.term.TermUtils;
  * @see #evaluate(Term...)
  */
 public final class InterpretedUserDefinedPredicate implements Predicate {
-   private Term[] queryArgs;
-   private final PredicateKey key;
    private final Iterator<ClauseAction> clauseActions;
    private final SpyPoints.SpyPoint spyPoint;
+   private final Term[] queryArgs;
    private final boolean debugEnabled;
 
-   private int currentClauseIdx;
-   private ClauseAction currentClauseAction;
+   private ClauseAction currentClause;
+   private Predicate currentPredicate;
    private boolean retryCurrentClauseAction;
 
-   public InterpretedUserDefinedPredicate(Term[] queryArgs, PredicateKey key, SpyPoints.SpyPoint spyPoint, Iterator<ClauseAction> clauseActions) {
-      this.queryArgs = queryArgs;
-      this.key = key;
+   public InterpretedUserDefinedPredicate(Iterator<ClauseAction> clauseActions, SpyPoints.SpyPoint spyPoint, Term[] queryArgs) {
       this.clauseActions = clauseActions;
       this.spyPoint = spyPoint;
+      this.queryArgs = queryArgs;
       this.debugEnabled = spyPoint != null && spyPoint.isEnabled();
    }
 
@@ -76,17 +73,17 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
             if (debugEnabled) {
                spyPoint.logRedo(this, queryArgs);
             }
-            if (currentClauseAction.evaluate(queryArgs)) {
-               retryCurrentClauseAction = currentClauseAction.couldReevaluationSucceed();
+            if (currentPredicate.evaluate()) {
+               retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, queryArgs, currentClauseIdx);
+                  spyPoint.logExit(this, queryArgs, currentClause.getModel());
                }
                return true;
             }
             // attempt at retrying has failed so discard it
             retryCurrentClauseAction = false;
             TermUtils.backtrack(queryArgs);
-         } else if (currentClauseIdx == 0) {
+         } else if (currentClause == null) {
             if (debugEnabled) {
                spyPoint.logCall(this, queryArgs);
             }
@@ -98,12 +95,12 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
          }
          // cycle though all rules until none left
          while (clauseActions.hasNext()) {
-            currentClauseIdx++;
-            currentClauseAction = clauseActions.next().getFree();
-            if (currentClauseAction.evaluate(queryArgs)) {
-               retryCurrentClauseAction = currentClauseAction.couldReevaluationSucceed();
+            currentClause = clauseActions.next();
+            currentPredicate = currentClause.getPredicate(queryArgs);
+            if (currentPredicate != null && currentPredicate.evaluate()) {
+               retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, queryArgs, currentClauseIdx);
+                  spyPoint.logExit(this, queryArgs, currentClause.getModel());
                }
                return true;
             } else {
@@ -116,13 +113,16 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
          }
          return false;
       } catch (CutException e) {
+         if (debugEnabled) {
+            spyPoint.logFail(this, queryArgs);
+         }
          return false;
       } catch (ProjogException pe) {
-         pe.addUserDefinedPredicate(this);
+         pe.addClause(currentClause.getModel());
          throw pe;
       } catch (Throwable t) {
-         ProjogException pe = new ProjogException("Exception processing: " + key, t);
-         pe.addUserDefinedPredicate(this);
+         ProjogException pe = new ProjogException("Exception processing: " + spyPoint.getPredicateKey(), t);
+         pe.addClause(currentClause.getModel());
          throw pe;
       }
    }
@@ -130,13 +130,5 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
    @Override
    public boolean couldReevaluationSucceed() {
       return retryCurrentClauseAction || clauseActions.hasNext();
-   }
-
-   public PredicateKey getPredicateKey() {
-      return key;
-   }
-
-   public int getCurrentClauseIdx() {
-      return currentClauseIdx - 1;
    }
 }

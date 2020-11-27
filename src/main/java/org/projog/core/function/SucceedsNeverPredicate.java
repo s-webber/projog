@@ -15,7 +15,9 @@
  */
 package org.projog.core.function;
 
-public class SucceedsNeverPredicate implements SucceedsFixedAmountPredicate {
+import org.projog.core.Predicate;
+
+public class SucceedsNeverPredicate implements Predicate {
    public static final SucceedsNeverPredicate FAIL = new SucceedsNeverPredicate();
 
    private SucceedsNeverPredicate() {
@@ -29,20 +31,5 @@ public class SucceedsNeverPredicate implements SucceedsFixedAmountPredicate {
    @Override
    public boolean couldReevaluationSucceed() {
       return false;
-   }
-
-   @Override
-   public SucceedsNeverPredicate getFree() {
-      return this;
-   }
-
-   @Override
-   public SucceedsOncePredicate increment() {
-      return SucceedsOncePredicate.TRUE;
-   }
-
-   @Override
-   public int getCount() {
-      return 0;
    }
 }

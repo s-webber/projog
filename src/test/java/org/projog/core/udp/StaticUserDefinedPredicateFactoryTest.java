@@ -15,9 +15,13 @@
  */
 package org.projog.core.udp;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.projog.TestUtils.atom;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.projog.TestUtils;
@@ -53,7 +57,7 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    private void assertSingleRuleAlwaysTruePredicate(String term) {
       PredicateFactory pf = getActualPredicateFactory(toTerms(term));
-      assertSame(SingleRuleAlwaysTruePredicate.class, pf.getClass());
+      assertSame(SingleNonRetryableRulePredicate.class, pf.getClass());
       Predicate p = pf.getPredicate();
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
@@ -62,7 +66,6 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    @Test
    public void testRepeatSetAmount() {
-      assertRepeatSetAmount("p.");
       assertRepeatSetAmount("p(_).");
       assertRepeatSetAmount("p(X).");
       assertRepeatSetAmount("p(A,B,C).");
@@ -76,8 +79,8 @@ public class StaticUserDefinedPredicateFactoryTest {
       // Note that use to return specialised "MultipleRulesAlwaysTruePredicate" object for predicates of this style
       // but now use generic "InterpretedUserDefinedPredicatePredicateFactory" as seemed overly complex to support
       // this special case when it is so rarely used.
-      assertSame(StaticUserDefinedPredicateFactory.InterpretedUserDefinedPredicatePredicateFactory.class, pf.getClass());
-      Predicate p = pf.getPredicate();
+      Predicate p = pf.getPredicate(createArgs(clauses[0]));
+      assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertTrue(p.couldReevaluationSucceed());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
          assertTrue(p.couldReevaluationSucceed());
@@ -89,49 +92,80 @@ public class StaticUserDefinedPredicateFactoryTest {
    }
 
    @Test
-   public void testSingleRuleWithSingleImmutableArgumentPredicate() {
+   public void testSingleFactWithSingleImmutableArgumentPredicate() {
       Term clause = TestUtils.parseTerm("p(a)");
       PredicateFactory pf = getActualPredicateFactory(clause);
-      assertSame(SingleRuleWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertSame(SingleNonRetryableRulePredicate.class, pf.getClass());
       assertFalse(pf.isRetryable());
    }
 
    @Test
-   public void testMultipleRulesWithSingleImmutableArgumentPredicate() {
+   public void testMultipleFactsWithSingleImmutableArgumentPredicate() {
       Term[] clauses = toTerms("p(a).", "p(b).", "p(c).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertIndexablePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
 
    @Test
-   public void testMultipleRulesWithSingleImmutableArgumentPredicate_duplicates() {
+   public void testMultipleFactsWithSingleImmutableArgumentPredicate_duplicates() {
       Term[] clauses = toTerms("p(a).", "p(a).", "p(a).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertIndexablePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
 
    @Test
-   public void testMultipleRulesWithSingleImmutableArgumentPredicate_differentTypes() {
+   public void testMultipleFactsWithSingleImmutableArgumentPredicate_differentTypes() {
       Term[] clauses = toTerms("p(a).", "p(1).", "p(1.0).", "p(x(a)).", "p([]).", "p([a,b]).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(MultipleRulesWithSingleImmutableArgumentPredicate.class, pf.getClass());
+      assertIndexablePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
    @Test
-   public void testSingleRuleWithMultipleImmutableArgumentsPredicate() {
+   public void testSingleFactWithMultipleImmutableArgumentsPredicate() {
       Term clause = TestUtils.parseTerm("p(a,b,c).");
       PredicateFactory pf = getActualPredicateFactory(clause);
-      assertSame(SingleRuleWithMultipleImmutableArgumentsPredicate.class, pf.getClass());
+      assertSame(SingleNonRetryableRulePredicate.class, pf.getClass());
       assertFalse(pf.isRetryable());
    }
 
    @Test
-   public void testMultipleRulesWithMultipleImmutableArgumentsPredicate() {
+   public void testMultipleFactsWithMultipleImmutableArgumentsPredicate() {
       Term[] clauses = toTerms("p(a,b,c).", "p(1,2,3).", "p(x,y,z).");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(MultipleRulesWithMultipleImmutableArgumentsPredicate.class, pf.getClass());
+      assertIndexablePredicateFactory(pf);
+      assertTrue(pf.isRetryable());
+   }
+
+   @Test
+   public void testMultipleFactsWithNoArgumentsPredicate() {
+      Term[] clauses = toTerms("p.", "p.", "p.");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertTrue(pf.isRetryable());
+      Predicate p = pf.getPredicate();
+      assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
+      assertTrue(p.evaluate());
+      assertTrue(p.evaluate());
+      assertTrue(p.evaluate());
+      assertFalse(p.evaluate());
+   }
+
+   @Test
+   public void testIndexablePredicate() {
+      // has mutable arg so not treated as facts but some args are indexable
+      Term[] clauses = toTerms("p(a,b,c).", "p(1,2,3).", "p(x,y,Z).");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory", pf.getClass().getName());
+      assertTrue(pf.isRetryable());
+   }
+
+   @Test
+   public void testNotIndexablePredicate() {
+      // not args are indexable as none are always immutable
+      Term[] clauses = toTerms("p(a,b,c).", "p(1,2,3).", "p(X,Y,Z).");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$NotIndexablePredicateFactory", pf.getClass().getName());
       assertTrue(pf.isRetryable());
    }
 
@@ -153,7 +187,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    @Test
    public void testInterpretedUserDefinedPredicate() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
-      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(createArgs(3)).getClass());
       assertTrue(pf.isRetryable());
    }
 
@@ -169,7 +203,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    public void testConjunctionContainingVariables() {
       Term[] clauses = toTerms("and(X,Y) :- X, Y.");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
+      assertSingleRulePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
 
@@ -177,8 +211,15 @@ public class StaticUserDefinedPredicateFactoryTest {
    public void testVariableAntecedent() {
       Term[] clauses = toTerms("true(X) :- X.");
       PredicateFactory pf = getActualPredicateFactory(clauses);
-      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate().getClass());
-      assertTrue(pf.isRetryable());
+      assertSingleRulePredicateFactory(pf);
+   }
+
+   private void assertSingleRulePredicateFactory(PredicateFactory p) {
+      assertEquals("org.projog.core.udp.SingleRetryableRulePredicateFactory", p.getClass().getName());
+   }
+
+   private void assertIndexablePredicateFactory(PredicateFactory p) {
+      assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory", p.getClass().getName());
    }
 
    private PredicateFactory getActualPredicateFactory(Term... clauses) {
@@ -188,12 +229,11 @@ public class StaticUserDefinedPredicateFactoryTest {
    private PredicateFactory getActualPredicateFactory(KnowledgeBase kb, Term... clauses) {
       StaticUserDefinedPredicateFactory f = null;
       for (Term clause : clauses) {
-         if (f == null) {
-            PredicateKey key = PredicateKey.createForTerm(clause);
-            f = new StaticUserDefinedPredicateFactory(key);
-            f.setKnowledgeBase(kb);
-         }
          ClauseModel clauseModel = ClauseModel.createClauseModel(clause);
+         if (f == null) {
+            PredicateKey key = PredicateKey.createForTerm(clauseModel.getConsequent());
+            f = new StaticUserDefinedPredicateFactory(kb, key);
+         }
          f.addLast(clauseModel);
       }
       return f.getActualPredicateFactory();
@@ -205,5 +245,15 @@ public class StaticUserDefinedPredicateFactoryTest {
          clauses[i] = TestUtils.parseSentence(clausesSyntax[i]);
       }
       return clauses;
+   }
+
+   private Term[] createArgs(Term term) {
+      return createArgs(term.getNumberOfArguments());
+   }
+
+   private Term[] createArgs(int numArgs) {
+      Term[] args = new Term[numArgs];
+      Arrays.fill(args, atom());
+      return args;
    }
 }

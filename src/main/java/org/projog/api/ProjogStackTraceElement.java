@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,21 +26,19 @@ import org.projog.core.term.Term;
  */
 public final class ProjogStackTraceElement {
    private final PredicateKey key;
-   private final int clauseIdx;
    private final Term term;
 
    /**
     * @param term the clause this stack trace element was generated for
     */
-   ProjogStackTraceElement(PredicateKey key, int clauseIdx, Term term) {
+   ProjogStackTraceElement(PredicateKey key, Term term) {
       this.key = key;
-      this.clauseIdx = clauseIdx;
       this.term = term;
    }
 
    /**
     * Represents the user defined predicate this stack trace element was generated for.
-    * 
+    *
     * @return key Represents the user defined predicate this stack trace element was generated for
     */
    public PredicateKey getPredicateKey() {
@@ -48,22 +46,8 @@ public final class ProjogStackTraceElement {
    }
 
    /**
-    * Returns the position of the clause within its user defined predicate.
-    * <p>
-    * e.g. If {@code getClauseIdx()} returns 0 then the clause represented by this object is the first clause in the
-    * user defined function represented by {@link #getPredicateKey()}. If {@code getRuleIdx()} returns 9 then the clause
-    * represented by this object is the tenth clause in the user defined function represented by
-    * {@link #getPredicateKey()}.
-    * 
-    * @return the position of the clause within its user defined predicate (starting at 0)
-    */
-   public int getClauseIdx() {
-      return clauseIdx;
-   }
-
-   /**
     * Represents the clause this stack trace element was generated for.
-    * 
+    *
     * @return the clause this stack trace element was generated for
     */
    public Term getTerm() {

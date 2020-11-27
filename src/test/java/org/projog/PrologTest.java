@@ -31,6 +31,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.projog.api.Projog;
 import org.projog.core.ProjogProperties;
@@ -66,6 +67,7 @@ public class PrologTest {
       assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationDisabledProjog());
    }
 
+   @Ignore
    @Test
    public void prologTestsCompiledMode() {
       assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationEnabledProjog());
@@ -76,6 +78,7 @@ public class PrologTest {
       assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationDisabledProjog());
    }
 
+   @Ignore
    @Test
    public void extractedTestsCompiledMode() {
       assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationEnabledProjog());

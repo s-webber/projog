@@ -260,6 +260,10 @@ public class StructureTest {
       assertHashCodeEquals(p, structure("p", a, b, c));
       assertHashCodeEquals(p, structure("p", new Atom("a"), new Atom("b"), new Atom("c")));
 
+      assertHashCodeNotEquals(structure("p", a, b), structure("p", b, a));
+      assertHashCodeNotEquals(structure("p", structure("p", a, b), structure("p", b, a)), //
+                  structure("p", structure("p", b, a), structure("p", a, b)));
+
       // assert order of args affects hashCode
       assertHashCodeNotEquals(p, structure("p", a, c, b));
       assertHashCodeNotEquals(p, structure("p", b, a, c));

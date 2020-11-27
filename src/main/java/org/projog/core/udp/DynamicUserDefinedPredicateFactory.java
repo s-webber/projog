@@ -15,7 +15,6 @@
  */
 package org.projog.core.udp;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.Iterator;
@@ -45,18 +44,12 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
    private final Object LOCK = new Object();
    private final KnowledgeBase kb;
-   private final PredicateKey predicateKey;
    private final SpyPoints.SpyPoint spyPoint;
    private final ClauseActionMetaData[] ends = new ClauseActionMetaData[2];
 
    public DynamicUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
       this.kb = kb;
-      this.predicateKey = predicateKey;
-      if (getProjogProperties(kb).isSpyPointsEnabled()) {
-         this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
-      } else {
-         this.spyPoint = null;
-      }
+      this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
    }
 
    @Override
@@ -66,13 +59,12 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
    @Override
    public Predicate getPredicate(Term... args) {
-      ClauseActionIterator itr = new ClauseActionIterator(ends[FIRST]);
-      return new InterpretedUserDefinedPredicate(args, predicateKey, spyPoint, itr);
+      return new InterpretedUserDefinedPredicate(new ClauseActionIterator(ends[FIRST]), spyPoint, args);
    }
 
    @Override
    public PredicateKey getPredicateKey() {
-      return predicateKey;
+      return spyPoint.getPredicateKey();
    }
 
    @Override
@@ -238,7 +230,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       }
 
       private ClauseAction getClauseAction() {
-         return ClauseActionFactory.getClauseAction(kb, clauseModel);
+         return ClauseActionFactory.createClauseAction(kb, clauseModel);
       }
    }
 

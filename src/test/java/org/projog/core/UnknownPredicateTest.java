@@ -18,6 +18,7 @@ package org.projog.core;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.projog.TestUtils.variable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
@@ -35,15 +36,13 @@ public class UnknownPredicateTest {
       assertTrue(e.isRetryable());
 
       // assert that FAIL returned when UnknownPredicateTest/1 not yet defined
-      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate());
-      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate());
+      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate(variable()));
 
       // define UnknownPredicateTest/1
       kb.createOrReturnUserDefinedPredicate(key);
 
       // assert that new InterpretedUserDefinedPredicate is returned once UnknownPredicateTest/1 defined
-      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate().getClass());
-      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate().getClass());
-      assertNotSame(e.getPredicate(), e.getPredicate());
+      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(variable()).getClass());
+      assertNotSame(e.getPredicate(variable()), e.getPredicate(variable()));
    }
 }

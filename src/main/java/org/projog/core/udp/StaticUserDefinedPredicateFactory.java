@@ -30,16 +30,14 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
-import org.projog.core.ProjogProperties;
 import org.projog.core.SpyPoints;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
+import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
-import org.projog.core.udp.interpreter.AlwaysMatchedClauseAction;
 import org.projog.core.udp.interpreter.ClauseAction;
-import org.projog.core.udp.interpreter.ClauseActionFactory;
-import org.projog.core.udp.interpreter.ImmutableArgumentsClauseAction;
+import org.projog.core.udp.interpreter.Clauses;
 import org.projog.core.udp.interpreter.InterpretedTailRecursivePredicateFactory;
 import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
@@ -51,19 +49,22 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory {
    private final Object lock = new Object();
    private final PredicateKey predicateKey;
+   private final KnowledgeBase kb;
+   private final SpyPoints.SpyPoint spyPoint;
    private final List<ClauseModel> implications;
-   private KnowledgeBase kb;
    private PredicateFactory compiledPredicateFactory;
    private int setCompiledPredicateFactoryInvocationCtr;
 
-   public StaticUserDefinedPredicateFactory(PredicateKey predicateKey) {
+   public StaticUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
       this.predicateKey = predicateKey;
+      this.kb = kb;
+      this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
       this.implications = new ArrayList<>();
    }
 
    @Override
    public void setKnowledgeBase(KnowledgeBase kb) {
-      this.kb = kb;
+      throw new UnsupportedOperationException();
    }
 
    /**
@@ -107,83 +108,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private void setCompiledPredicateFactory() {
       setCompiledPredicateFactoryInvocationCtr++;
-      final List<ClauseAction> rows = createClauseActionsFromClauseModels();
-
-      if (isSingleAlwaysMatchedClauseActions(rows)) {
-         compiledPredicateFactory = createPredicateFactoryFromSingleAlwaysMatchedClauseAction(rows);
-      } else if (isAllImmutableArgumentsClauseActions(rows)) {
-         compiledPredicateFactory = createPredicateFactoryFromNoVariableArgumentsClauseActions(rows);
-      } else {
-         compiledPredicateFactory = createPredicateFactoryFromClauseActions(rows);
-      }
+      // TODO always create Clauses here - can we move creation until InterpretedUserDefinedPredicatePredicateFactory
+      final Clauses clauses = new Clauses(kb, implications);
+      compiledPredicateFactory = createPredicateFactoryFromClauseActions(clauses);
    }
 
-   private List<ClauseAction> createClauseActionsFromClauseModels() {
-      final List<ClauseAction> rows = new ArrayList<>(implications.size());
-      for (ClauseModel clauseModel : implications) {
-         ClauseAction row = ClauseActionFactory.getClauseAction(kb, clauseModel);
-         rows.add(row);
-      }
-      return rows;
-   }
-
-   private boolean isAllImmutableArgumentsClauseActions(List<ClauseAction> rows) {
-      for (ClauseAction r : rows) {
-         if ((r instanceof ImmutableArgumentsClauseAction) == false) {
-            return false;
-         }
-      }
-      return true;
-   }
-
-   private boolean isSingleAlwaysMatchedClauseActions(List<ClauseAction> rows) {
-      return rows.size() == 1 && rows.get(0) instanceof AlwaysMatchedClauseAction;
-   }
-
-   private PredicateFactory createPredicateFactoryFromSingleAlwaysMatchedClauseAction(List<ClauseAction> rows) {
-      // e.g. "a." or "p(_)."
-      return new SingleRuleAlwaysTruePredicate(getSpyPoint());
-   }
-
-   private PredicateFactory createPredicateFactoryFromNoVariableArgumentsClauseActions(List<ClauseAction> rows) {
-      if (predicateKey.getNumArgs() == 1) {
-         Term data[] = createSingleDimensionTermArrayOfImplications();
-         if (data.length == 1) {
-            return new SingleRuleWithSingleImmutableArgumentPredicate(data[0], getSpyPoint());
-         } else {
-            return new MultipleRulesWithSingleImmutableArgumentPredicate(data, getSpyPoint());
-         }
-      } else {
-         Term data[][] = createTwoDimensionTermArrayOfImplications();
-         if (data.length == 1) {
-            return new SingleRuleWithMultipleImmutableArgumentsPredicate(data[0], getSpyPoint());
-         } else {
-            return new MultipleRulesWithMultipleImmutableArgumentsPredicate(data, getSpyPoint());
-         }
-      }
-   }
-
-   private Term[] createSingleDimensionTermArrayOfImplications() {
-      Term data[] = new Term[implications.size()];
-      for (int i = 0; i < implications.size(); i++) {
-         Term arg = implications.get(i).getConsequent().getArgs()[0];
-         data[i] = arg;
-      }
-      return data;
-   }
-
-   private Term[][] createTwoDimensionTermArrayOfImplications() {
-      int numArgs = predicateKey.getNumArgs();
-      Term data[][] = new Term[implications.size()][numArgs];
-      for (int i = 0; i < implications.size(); i++) {
-         Term[] args = implications.get(i).getConsequent().getArgs();
-         data[i] = args;
-      }
-      return data;
-   }
-
-   private PredicateFactory createPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions) {
-      List<ClauseModel> clauseModels = getCopyOfImplications();
+   private PredicateFactory createPredicateFactoryFromClauseActions(Clauses clauses) {
+      List<ClauseModel> clauseModels = getCopyOfImplications(); // TODO do we need to copy here?
 
       if (isPredicateSuitableForCompilation(clauseModels)) {
          try {
@@ -197,7 +128,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          }
       }
 
-      return createInterpretedPredicateFactoryFromClauseActions(clauseActions, clauseModels);
+      return createInterpretedPredicateFactoryFromClauseActions(clauses, clauseModels);
    }
 
    private List<ClauseModel> getCopyOfImplications() {
@@ -219,7 +150,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private boolean isInterpretedMode() {
-      return !getProperties().isRuntimeCompilationEnabled();
+      return !getProjogProperties(kb).isRuntimeCompilationEnabled();
    }
 
    /**
@@ -261,24 +192,48 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return g.generateCompiledPredicate(kb, clauseModels);
    }
 
-   private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(List<ClauseAction> clauseActions, List<ClauseModel> clauseModels) {
+   private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(Clauses clauses, List<ClauseModel> clauseModels) {
       TailRecursivePredicateMetaData tailRecursiveMetaData = TailRecursivePredicateMetaData.create(kb, clauseModels);
       if (tailRecursiveMetaData != null) {
          return new InterpretedTailRecursivePredicateFactory(kb, tailRecursiveMetaData);
-      }
-      return new InterpretedUserDefinedPredicatePredicateFactory(predicateKey, getSpyPoint(), clauseActions);
-   }
-
-   private SpyPoints.SpyPoint getSpyPoint() {
-      if (getProperties().isSpyPointsEnabled()) {
-         return getSpyPoints(kb).getSpyPoint(predicateKey);
+      } else if (clauses.getClauseActions().length == 1) {
+         return createSingleClausePredicateFactory(clauses.getClauseActions()[0]);
+      } else if (clauses.getImmutableColumns().length == 0) {
+         return new NotIndexablePredicateFactory(clauses);
       } else {
-         return null;
+         return new IndexablePredicateFactory(clauses);
       }
    }
 
-   private ProjogProperties getProperties() {
-      return getProjogProperties(kb);
+   private PredicateFactory createSingleClausePredicateFactory(ClauseAction clause) {
+      if (clause.isRetryable()) {
+         return new SingleRetryableRulePredicateFactory(clause, spyPoint);
+      } else {
+         return new SingleNonRetryableRulePredicate(clause, spyPoint);
+      }
+   }
+
+   private Predicate createSingleClausePredicate(ClauseAction clause, Term[] args) {
+      if (clause.isRetryable()) {
+         return new SingleRetryableRulePredicateFactory.RetryableRulePredicate(clause, spyPoint, args);
+      } else {
+         return SingleNonRetryableRulePredicate.evaluateClause(clause, spyPoint, args);
+      }
+   }
+
+   private Predicate createPredicate(Term[] args, ClauseAction[] clauses) {
+      switch (clauses.length) {
+         case 0:
+            if (spyPoint.isEnabled()) {
+               spyPoint.logCall(this, args);
+               spyPoint.logFail(this, args);
+            }
+            return AbstractSingletonPredicate.FAIL;
+         case 1:
+            return createSingleClausePredicate(clauses[0], args);
+         default:
+            return new InterpretedUserDefinedPredicate(new ActionIterator(clauses), spyPoint, args);
+      }
    }
 
    @Override
@@ -364,20 +319,16 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   public static final class InterpretedUserDefinedPredicatePredicateFactory implements PredicateFactory {
-      private final PredicateKey key;
-      private final List<ClauseAction> rows;
-      private final SpyPoints.SpyPoint spyPoint;
+   private final class IndexablePredicateFactory implements PredicateFactory {
+      private final Indexes index;
 
-      private InterpretedUserDefinedPredicatePredicateFactory(PredicateKey key, SpyPoints.SpyPoint spyPoint, List<ClauseAction> rows) {
-         this.key = key;
-         this.spyPoint = spyPoint;
-         this.rows = rows;
+      private IndexablePredicateFactory(Clauses clauses) {
+         this.index = new Indexes(clauses);
       }
 
       @Override
-      public InterpretedUserDefinedPredicate getPredicate(Term... args) {
-         return new InterpretedUserDefinedPredicate(args, key, spyPoint, rows.iterator());
+      public Predicate getPredicate(Term... args) {
+         return createPredicate(args, index.index(args));
       }
 
       @Override
@@ -387,6 +338,47 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       @Override
       public boolean isRetryable() {
          return true;
+      }
+   }
+
+   private final class NotIndexablePredicateFactory implements PredicateFactory {
+      private final ClauseAction[] data;
+
+      private NotIndexablePredicateFactory(Clauses clauses) {
+         this.data = clauses.getClauseActions();
+      }
+
+      @Override
+      public Predicate getPredicate(Term... args) {
+         return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, args);
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true;
+      }
+   }
+
+   private static final class ActionIterator implements Iterator<ClauseAction> {
+      private final ClauseAction[] clauses;
+      private int pos=0;
+
+      ActionIterator(ClauseAction[] clauses) {
+         this.clauses = clauses;
+      }
+
+      @Override
+      public boolean hasNext() {
+         return clauses.length > pos;
+      }
+
+      @Override
+      public ClauseAction next() {
+         return clauses[pos++];
       }
    }
 }

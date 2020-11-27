@@ -16,6 +16,7 @@
 package org.projog;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 
@@ -117,6 +118,10 @@ public class TestUtils {
       }
    }
 
+   public static Term[] array(Term... terms) {
+      return terms;
+   }
+
    public static Atom atom() {
       return atom("test");
    }
@@ -191,7 +196,11 @@ public class TestUtils {
    }
 
    public static String write(Term t) {
-      return new TermFormatter(OPERANDS).toString(t);
+      return createTermFormatter().toString(t);
+   }
+
+   public static TermFormatter createTermFormatter() {
+      return new TermFormatter(OPERANDS);
    }
 
    public static Term[] parseTermsFromFile(File f) {
@@ -218,5 +227,9 @@ public class TestUtils {
          // assert that if terms are equal then they have the same hashcode
          assertEquals(t1.getTerm().hashCode(), t2.getTerm().hashCode());
       }
+   }
+
+   public static void assertClass(Class expected, Object instance) {
+      assertSame(expected, instance.getClass());
    }
 }

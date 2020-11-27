@@ -98,6 +98,17 @@ z :- a(A), b(B), x(A,B,Y,Z), write(A / B / Y / Z), nl, fail.
 test1(X,_,Y) :- X>1, !, repeat(3), Y is 3, !, X<4.
 test2(X,Y):- a(X), b(Y), test1(Y, X, Z).
 
+%QUERY b(Y), test1(Y, a, Z)
+%ANSWER
+% Y=2
+% Z=3
+%ANSWER
+%ANSWER
+% Y=3 
+% Z=3
+%ANSWER
+%NO
+
 %QUERY test2(X,Y)
 %ANSWER
 % X=a

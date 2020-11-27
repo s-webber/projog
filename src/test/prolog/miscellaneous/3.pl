@@ -8,7 +8,7 @@
 % X=r
 % Y=e
 %ANSWER
-%NO
+
 w(q,i).
 w(r,i).
 w(e,o).

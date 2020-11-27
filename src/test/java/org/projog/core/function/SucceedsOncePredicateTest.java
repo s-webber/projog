@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2020 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,12 @@
  */
 package org.projog.core.function;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 public class SucceedsOncePredicateTest {
-   @Test
-   public void testCount() {
-      assertEquals(1, SucceedsOncePredicate.TRUE.getCount());
-   }
-
    @Test
    public void testEvaluates() {
       assertTrue(SucceedsOncePredicate.TRUE.evaluate());
@@ -37,17 +29,5 @@ public class SucceedsOncePredicateTest {
    @Test
    public void testCouldReevaluationSucceed() {
       assertFalse(SucceedsOncePredicate.TRUE.couldReevaluationSucceed());
-   }
-
-   @Test
-   public void testGetFree() {
-      assertSame(SucceedsOncePredicate.TRUE, SucceedsOncePredicate.TRUE.getFree());
-   }
-
-   @Test
-   public void testIncrement() {
-      SucceedsManyTimesPredicate increment = SucceedsOncePredicate.TRUE.increment();
-      assertEquals(2, increment.getCount());
-      assertNotSame(increment, SucceedsOncePredicate.TRUE.increment());
    }
 }

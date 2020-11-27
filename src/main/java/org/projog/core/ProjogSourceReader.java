@@ -213,8 +213,7 @@ public final class ProjogSourceReader {
       PredicateKey key = PredicateKey.createForTerm(t);
       UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
       if (userDefinedPredicate == null) {
-         userDefinedPredicate = new StaticUserDefinedPredicateFactory(key);
-         userDefinedPredicate.setKnowledgeBase(kb);
+         userDefinedPredicate = new StaticUserDefinedPredicateFactory(kb, key);
          userDefinedPredicates.put(key, userDefinedPredicate);
       }
       return userDefinedPredicate;

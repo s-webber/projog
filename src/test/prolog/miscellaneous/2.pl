@@ -28,7 +28,7 @@
 % F=tom
 % C=harry
 %ANSWER
-%NO
+
 female(mary).
 mother(john,ann).
 mother(mary,ann).

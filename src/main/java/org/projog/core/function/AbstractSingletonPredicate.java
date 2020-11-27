@@ -28,7 +28,7 @@ import org.projog.core.term.Term;
  */
 public abstract class AbstractSingletonPredicate implements PredicateFactory {
    @Deprecated
-   public static final SucceedsFixedAmountPredicate TRUE = SucceedsOncePredicate.TRUE;
+   public static final SucceedsOncePredicate TRUE = SucceedsOncePredicate.TRUE;
    @Deprecated
    public static final SucceedsNeverPredicate FAIL = SucceedsNeverPredicate.FAIL;
 

@@ -15,7 +15,9 @@
  */
 package org.projog.core.function;
 
-public class SucceedsOncePredicate implements SucceedsFixedAmountPredicate {
+import org.projog.core.Predicate;
+
+public class SucceedsOncePredicate implements Predicate {
    public static final SucceedsOncePredicate TRUE = new SucceedsOncePredicate();
 
    private SucceedsOncePredicate() {
@@ -29,20 +31,5 @@ public class SucceedsOncePredicate implements SucceedsFixedAmountPredicate {
    @Override
    public boolean couldReevaluationSucceed() {
       return false;
-   }
-
-   @Override
-   public SucceedsOncePredicate getFree() {
-      return this;
-   }
-
-   @Override
-   public SucceedsManyTimesPredicate increment() {
-      return new SucceedsManyTimesPredicate(2);
-   }
-
-   @Override
-   public int getCount() {
-      return 1;
    }
 }

@@ -24,7 +24,9 @@ brother(A,B) :- siblings(A,B), male(B).
 
 % Simple questions - true if the fact exists in the knowledge base, else false.
 
-%TRUE_NO father(homer,bart)
+%TRUE father(homer,bart)
+%TRUE father(homer,lisa)
+%TRUE father(homer,maggie)
 %FALSE father(homer,rod)
 %FALSE father(homer,ralph)
 
@@ -34,7 +36,10 @@ brother(A,B) :- siblings(A,B), male(B).
 %ANSWER C=bart
 %ANSWER C=lisa
 %ANSWER C=maggie
-%NO
+
+%QUERY father(ned,C)
+%ANSWER C=rod
+%ANSWER C=todd
 
 % Question using two variables - evaluation of the query uses backtracking to find multiple solutions.
 
@@ -64,7 +69,6 @@ brother(A,B) :- siblings(A,B), male(B).
 %ANSWER C=bart
 %ANSWER C=lisa
 %ANSWER C=maggie
-%NO
 
 %QUERY brother(lisa,X)
 %ANSWER X=bart

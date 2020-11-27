@@ -3,7 +3,7 @@ p2(2).
 p2(3).
 
 p(a).
-p(b) :- p2(2).
+p(b) :- p2(3).
 p(c).
 
 p(x, y).
@@ -23,8 +23,8 @@ p(x, y).
 %ANSWER X = a
 %OUTPUT
 %[1] REDO p(a)
-%[2] CALL p2(2)
-%[2] EXIT p2(2)
+%[2] CALL p2(3)
+%[2] EXIT p2(3)
 %[1] EXIT p(b)
 %
 %OUTPUT

@@ -18,7 +18,7 @@ package org.projog.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
+import org.projog.core.udp.ClauseModel;
 
 /**
  * An exception that provides information on an error within the Projog environment.
@@ -29,7 +29,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 public class ProjogException extends RuntimeException {
    private static final long serialVersionUID = 1L;
 
-   private final List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates = new ArrayList<>();
+   private final List<ClauseModel> stackTrace = new ArrayList<>();
 
    public ProjogException(String message) {
       super(message, null);
@@ -39,11 +39,11 @@ public class ProjogException extends RuntimeException {
       super(message, throwable);
    }
 
-   public void addUserDefinedPredicate(InterpretedUserDefinedPredicate userDefinedPredicate) {
-      interpretedUserDefinedPredicates.add(userDefinedPredicate);
+   public void addClause(ClauseModel clause) {
+      stackTrace.add(clause);
    }
 
-   public List<InterpretedUserDefinedPredicate> getInterpretedUserDefinedPredicates() {
-      return new ArrayList<>(interpretedUserDefinedPredicates);
+   public List<ClauseModel> getClauses() {
+      return new ArrayList<>(stackTrace);
    }
 }

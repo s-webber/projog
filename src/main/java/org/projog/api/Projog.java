@@ -19,7 +19,6 @@ import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_METHOD_NAME_PREFIX;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.RETRY_RULE_METHOD_NAME_PREFIX;
 
@@ -300,9 +299,7 @@ public final class Projog {
    public void printProjogStackTrace(Throwable exception, PrintStream out) {
       ProjogStackTraceElement[] stackTrace = getStackTrace(exception);
       for (ProjogStackTraceElement e : stackTrace) {
-         // e.getRuleIdx() is zero-based so +1 before displaying in output
-         int ruleIdx = e.getClauseIdx() + 1;
-         out.println(e.getPredicateKey() + " rule " + ruleIdx + " " + toString(e.getTerm()));
+         out.println(e.getPredicateKey() + " clause: " + toString(e.getTerm()));
       }
    }
 
@@ -312,9 +309,9 @@ public final class Projog {
    public ProjogStackTraceElement[] getStackTrace(Throwable exception) {
       List<ProjogStackTraceElement> result = new ArrayList<>();
       StackTraceElement[] elements = exception.getStackTrace();
-      List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates = getInterpretedUserDefinedPredicates(exception);
+      List<ClauseModel> clauses = getClauses(exception);
       for (StackTraceElement element : elements) {
-         ProjogStackTraceElement pste = createProjogStackTraceElement(element, interpretedUserDefinedPredicates);
+         ProjogStackTraceElement pste = createProjogStackTraceElement(element, clauses);
          if (pste != null) {
             result.add(pste);
          }
@@ -322,21 +319,21 @@ public final class Projog {
       return result.toArray(new ProjogStackTraceElement[result.size()]);
    }
 
-   private List<InterpretedUserDefinedPredicate> getInterpretedUserDefinedPredicates(Throwable e) {
+   private List<ClauseModel> getClauses(Throwable e) {
       if (e instanceof ProjogException) {
          ProjogException pe = (ProjogException) e;
-         return pe.getInterpretedUserDefinedPredicates();
+         return pe.getClauses();
       } else {
          return new ArrayList<>();
       }
    }
 
-   private ProjogStackTraceElement createProjogStackTraceElement(StackTraceElement element, List<InterpretedUserDefinedPredicate> interpretedUserDefinedPredicates) {
+   private ProjogStackTraceElement createProjogStackTraceElement(StackTraceElement element, List<ClauseModel> clauses) {
       String className = element.getClassName();
       String methodName = element.getMethodName();
-      if (InterpretedUserDefinedPredicate.class.getName().equals(className) && "evaluate".equals(methodName)) {
-         InterpretedUserDefinedPredicate p = interpretedUserDefinedPredicates.remove(0);
-         return createProjogStackTraceElementFromInterpretedUserDefinedPredicate(p);
+      if (isInterpretedMethod(className, methodName)) {
+         ClauseModel m = clauses.remove(0);
+         return createProjogStackTraceElementFromClauseModel(m);
       } else if (isCompiledPredicate(className) && isRuleEvaluationMethod(methodName)) {
          return createProjogStackTraceElementFromCompiledPredicate(className, methodName);
       } else {
@@ -344,15 +341,20 @@ public final class Projog {
       }
    }
 
-   private ProjogStackTraceElement createProjogStackTraceElementFromInterpretedUserDefinedPredicate(InterpretedUserDefinedPredicate p) {
-      PredicateKey key = p.getPredicateKey();
-      int ruleIdx = p.getCurrentClauseIdx();
-      PredicateFactory ef = kb.getPredicateFactory(key);
-      UserDefinedPredicateFactory pf = (UserDefinedPredicateFactory) ef;
-      ClauseModel cm = pf.getClauseModel(ruleIdx);
-      // ClauseModel might be null for dynamic predicates where it has been retracted
-      Term term = cm == null ? createAnonymousVariable() : cm.getOriginal();
-      return new ProjogStackTraceElement(key, ruleIdx, term);
+   private boolean isInterpretedMethod(String className, String methodName) {
+      if (InterpretedUserDefinedPredicate.class.getName().equals(className) && "evaluate".equals(methodName)) {
+         return true;
+      } else if ("org.projog.core.udp.SingleRetryableRulePredicateFactory$RetryableRulePredicate".equals(className) && "evaluate".equals(methodName)) {
+         return true;
+      } else if ("org.projog.core.udp.SingleNonRetryableRulePredicate".equals(className) && "evaluateClause".equals(methodName)) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   private ProjogStackTraceElement createProjogStackTraceElementFromClauseModel(ClauseModel m) {
+      return new ProjogStackTraceElement(m.getPredicateKey(), m.getOriginal());
    }
 
    private boolean isCompiledPredicate(String className) {
@@ -369,7 +371,7 @@ public final class Projog {
       ClauseModel clauseModel = compiledPredicate.getClauseModel(ruleIdx);
       PredicateKey key = compiledPredicate.getPredicateKey();
       Term term = clauseModel.getOriginal();
-      return new ProjogStackTraceElement(key, ruleIdx, term);
+      return new ProjogStackTraceElement(key, term);
    }
 
    private int getRuleIndex(String methodName) {

@@ -75,6 +75,21 @@ public class SpyPointsTest {
    }
 
    @Test
+   public void testGetPredicateKey() {
+      SpyPoints testObject = new SpyPoints(kb);
+      PredicateKey key1 = createKey("test1", 2);
+      PredicateKey key2 = createKey("test1", 2);
+      PredicateKey key3 = createKey("test1", 1);
+      PredicateKey key4 = createKey("test2", 1);
+      assertNotSame(key1, key2);
+
+      assertSame(key1, testObject.getSpyPoint(key1).getPredicateKey());
+      assertSame(key1, testObject.getSpyPoint(key2).getPredicateKey());
+      assertSame(key3, testObject.getSpyPoint(key3).getPredicateKey());
+      assertSame(key4, testObject.getSpyPoint(key4).getPredicateKey());
+   }
+
+   @Test
    public void testGetSpyPoints() {
       SpyPoints testObject = new SpyPoints(kb);
       PredicateKey[] keys = {createKey("test1", 0), createKey("test1", 2), createKey("test2", 2)};

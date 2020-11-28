@@ -43,15 +43,15 @@ public final class ProjogSystemProperties implements ProjogProperties {
    private final File compiledContentOutputDirectory;
 
    public ProjogSystemProperties() {
-      this.isRuntimeCompilationEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.compile"));
+      this.isRuntimeCompilationEnabled = "true".equalsIgnoreCase(System.getProperty("projog.compile"));
       String outputDirectoryName = System.getProperty("projog.compiledContentOutputDirectory");
       this.compiledContentOutputDirectory = outputDirectoryName == null ? null : new File(outputDirectoryName);
    }
 
    /**
-    * Returns {@code true} unless there is a system property named "projog.compile" with the value "false".
+    * Returns {@code false} unless there is a system property named "projog.compile" with the value "true".
     *
-    * @return {@code true} unless there is a system property named "projog.compile" with the value "false".
+    * @return {@code false} unless there is a system property named "projog.compile" with the value "true".
     */
    @Override
    public boolean isRuntimeCompilationEnabled() {

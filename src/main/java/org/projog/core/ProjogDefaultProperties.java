@@ -30,10 +30,10 @@ import java.io.File;
  * @see ProjogSystemProperties
  */
 public class ProjogDefaultProperties implements ProjogProperties {
-   /** Returns {@code true} */
+   /** Returns {@code false} */
    @Override
    public boolean isRuntimeCompilationEnabled() {
-      return true;
+      return false;
    }
 
    /** Returns {@link #DEFAULT_BOOTSTRAP_SCRIPT} */

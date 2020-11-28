@@ -16,8 +16,8 @@
 package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ public class ProjogDefaultPropertiesTest {
 
    @Test
    public void testIsRuntimeCompilationEnabled() {
-      assertTrue(properties.isRuntimeCompilationEnabled());
+      assertFalse(properties.isRuntimeCompilationEnabled());
    }
 
    @Test

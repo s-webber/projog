@@ -19,7 +19,6 @@ import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 import static org.projog.core.KnowledgeBaseUtils.toArrayOfConjunctions;
 
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.SpyPoints;
@@ -90,13 +89,9 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
       return true;
    }
 
-   private static SpyPoints.SpyPoint getSpyPoint(KnowledgeBase kb, TailRecursivePredicateMetaData metaData) { // TODO move to Utils and share
-      if (KnowledgeBaseUtils.getProjogProperties(kb).isSpyPointsEnabled()) {
-         PredicateKey key = PredicateKey.createForTerm(metaData.getFirstClause().getConsequent());
-         return getSpyPoints(kb).getSpyPoint(key);
-      } else {
-         return null;
-      }
+   private static SpyPoints.SpyPoint getSpyPoint(KnowledgeBase kb, TailRecursivePredicateMetaData metaData) {
+      PredicateKey key = PredicateKey.createForTerm(metaData.getFirstClause().getConsequent());
+      return getSpyPoints(kb).getSpyPoint(key);
    }
 
    @Override

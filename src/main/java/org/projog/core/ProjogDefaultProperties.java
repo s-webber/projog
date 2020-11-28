@@ -32,12 +32,6 @@ import java.io.File;
 public class ProjogDefaultProperties implements ProjogProperties {
    /** Returns {@code true} */
    @Override
-   public boolean isSpyPointsEnabled() {
-      return true;
-   }
-
-   /** Returns {@code true} */
-   @Override
    public boolean isRuntimeCompilationEnabled() {
       return true;
    }

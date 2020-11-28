@@ -25,9 +25,6 @@ import java.io.File;
  * <code>false</code> if the inference engine should run in "interpreted mode". Running in "compiled mode" causes user
  * defined predicates to be compiled to Java bytecode at runtime and can give large performance improvements. Defaults
  * to <code>true</code>.</li>
- * <li><code>projog.spypoints</code> - <code>true</code> if the Projog inference engine should support the creation of
- * spypoints to aid debugging, or <code>false</code> if requests to set spypoints should be ignored. Ignoring spypoints
- * can give small performance improvements. Defaults to <code>true</code>.</li>
  * <li><code>projog.compiledContentOutputDirectory</code> - specifies the directory to store Java source code generated
  * at runtime during the compilation of user-defined predicates. If not specified then the source code will not be
  * written to the file-system.</li>
@@ -42,25 +39,13 @@ import java.io.File;
  * @see ProjogDefaultProperties
  */
 public final class ProjogSystemProperties implements ProjogProperties {
-   private final boolean isSpyPointsEnabled;
    private final boolean isRuntimeCompilationEnabled;
    private final File compiledContentOutputDirectory;
 
    public ProjogSystemProperties() {
-      this.isSpyPointsEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.spypoints"));
       this.isRuntimeCompilationEnabled = !"false".equalsIgnoreCase(System.getProperty("projog.compile"));
       String outputDirectoryName = System.getProperty("projog.compiledContentOutputDirectory");
       this.compiledContentOutputDirectory = outputDirectoryName == null ? null : new File(outputDirectoryName);
-   }
-
-   /**
-    * Returns {@code true} unless there is a system property named "projog.spypoints" with the value "false".
-    *
-    * @return {@code true} unless there is a system property named "projog.spypoints" with the value "false".
-    */
-   @Override
-   public boolean isSpyPointsEnabled() {
-      return isSpyPointsEnabled;
    }
 
    /**

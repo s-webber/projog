@@ -15,7 +15,6 @@
  */
 package org.projog.core.udp.compiler;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.ARITHMETIC_OPERATORS_VARIABLE_NAME;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.COMPILED_PREDICATES_PACKAGE;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_METHOD_NAME_PREFIX;
@@ -771,7 +770,7 @@ final class CompiledPredicateSourceGenerator {
    }
 
    private boolean isSpyPointsEnabled() {
-      return getProjogProperties(kb).isSpyPointsEnabled();
+      return true;
    }
 
    private String getSetClauseCtrDueToCutStatement() {

@@ -35,24 +35,14 @@ public class CompiledPredicateClassGeneratorTest {
 
    @Test
    public void testSpyPointsEnabled() throws IOException {
-      assertCompiledSourceCodeContents(createProperties(true));
+      assertCompiledSourceCodeContents(createProperties());
    }
 
-   @Test
-   public void testSpyPointsDisabled() throws IOException {
-      assertCompiledSourceCodeContents(createProperties(false));
-   }
-
-   private ProjogProperties createProperties(final boolean isSpyPointsEnabled) {
+   private ProjogProperties createProperties() {
       final File compiledContentOutputDirectory = new File(TARGET_DIR, getClass().getName() + System.currentTimeMillis());
       compiledContentOutputDirectory.mkdir();
 
       return new ProjogDefaultProperties() {
-         @Override
-         public boolean isSpyPointsEnabled() {
-            return isSpyPointsEnabled;
-         }
-
          @Override
          public boolean isRuntimeCompilationEnabled() {
             return true;
@@ -68,7 +58,7 @@ public class CompiledPredicateClassGeneratorTest {
    private void assertCompiledSourceCodeContents(ProjogProperties properties) throws IOException {
       compilePredicates(properties);
 
-      File javaSourceDir = new File(PROLOG_SOURCE_DIR, properties.isSpyPointsEnabled() ? "spy_points_enabled" : "spy_points_disabled");
+      File javaSourceDir = new File(PROLOG_SOURCE_DIR, "spy_points_enabled");
       File[] expected = listTextFiles(javaSourceDir);
       File[] actual = listTextFiles(properties.getCompiledContentOutputDirectory());
 

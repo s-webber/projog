@@ -35,11 +35,6 @@ public class ProjogDefaultPropertiesTest {
    }
 
    @Test
-   public void testIsSpyPointsEnabled() {
-      assertTrue(properties.isSpyPointsEnabled());
-   }
-
-   @Test
    public void testGetCompiledContentOutputDirectory() {
       assertNull(properties.getCompiledContentOutputDirectory());
    }

@@ -37,18 +37,6 @@ public interface ProjogProperties {
    String DEFAULT_BOOTSTRAP_SCRIPT = "projog-bootstrap.pl";
 
    /**
-    * Returns {@code true} if the use of spy points is enabled.
-    * <p>
-    * If spy points are enabled then it will be possible to get information about the sequence of goals being evaluated
-    * by Projog as they are evaluated. This facility aids the debugging of Prolog code but can also have a slight impact
-    * on performance.
-    *
-    * @return {@code true} if the use of spy points is enabled
-    * @see SpyPoints
-    */
-   boolean isSpyPointsEnabled();
-
-   /**
     * Returns {@code true} if user defined predicates should be compiled at runtime.
     * <p>
     * Projog is able to convert user defined predicates specified using Prolog syntax into native Java code. Converting

@@ -43,7 +43,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
       this.clauseActions = clauseActions;
       this.spyPoint = spyPoint;
       this.queryArgs = queryArgs;
-      this.debugEnabled = spyPoint != null && spyPoint.isEnabled();
+      this.debugEnabled = spyPoint.isEnabled();
    }
 
    /**

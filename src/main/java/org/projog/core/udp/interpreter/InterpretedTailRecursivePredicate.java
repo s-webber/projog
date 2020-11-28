@@ -38,6 +38,7 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  */
 final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    // TODO add exception handling ProjogException and CutException
+   private final boolean isSpyPointEnabled;
    private final SpyPoint spyPoint;
    private final int numArgs;
    private final Term[] currentQueryArgs;
@@ -52,6 +53,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    InterpretedTailRecursivePredicate(SpyPoint spyPoint, Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs,
                Term[] firstClauseOriginalTerms, PredicateFactory[] secondClausePredicateFactories, Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms,
                boolean isRetryable) {
+      this.isSpyPointEnabled = spyPoint.isEnabled();
       this.spyPoint = spyPoint;
       this.numArgs = inputArgs.length;
       this.currentQueryArgs = new Term[numArgs];
@@ -141,28 +143,28 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
    @Override
    protected void logCall() {
-      if (spyPoint != null && spyPoint.isEnabled()) {
+      if (isSpyPointEnabled) {
          spyPoint.logCall(this, currentQueryArgs);
       }
    }
 
    @Override
    protected void logRedo() {
-      if (spyPoint != null && spyPoint.isEnabled()) {
+      if (isSpyPointEnabled) {
          spyPoint.logCall(this, currentQueryArgs);
       }
    }
 
    @Override
    protected void logExit() {
-      if (spyPoint != null && spyPoint.isEnabled()) {
+      if (isSpyPointEnabled) {
          spyPoint.logExit(this, currentQueryArgs, 1);
       }
    }
 
    @Override
    protected void logFail() {
-      if (spyPoint != null && spyPoint.isEnabled()) {
+      if (isSpyPointEnabled) {
          spyPoint.logFail(this, currentQueryArgs);
       }
    }

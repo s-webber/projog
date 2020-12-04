@@ -65,6 +65,10 @@ final class Indexes {
       }
    }
 
+   int getClauseCount() {
+      return masterData.length;
+   }
+
    private int createBitmask(Term[] args) {
       int bitmask = 0;
       for (int i = 0, b = 1, bitCount = 0; i < numIndexableArgs; i++, b *= 2) {

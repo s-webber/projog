@@ -15,8 +15,12 @@
  */
 package org.projog.core.function.compound;
 
+import java.util.Objects;
+
 import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -64,7 +68,7 @@ import org.projog.core.term.Term;
  * The <code>\+ X</code> goal fails if an attempt to satisfy the goal represented by the term <code>X</code> succeeds.
  * </p>
  */
-public final class Not extends AbstractSingletonPredicate {
+public final class Not extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    @Override
    public boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
@@ -73,6 +77,34 @@ public final class Not extends AbstractSingletonPredicate {
          return true;
       } else {
          return false;
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term arg = term.getArgument(0);
+      if (arg.getType().isVariable()) {
+         return this;
+      } else {
+         return new OptimisedNot(getKnowledgeBase().getPreprocessedPredicateFactory(arg));
+      }
+   }
+
+   private static final class OptimisedNot extends AbstractSingletonPredicate {
+      private final PredicateFactory pf;
+
+      OptimisedNot(PredicateFactory pf) {
+         this.pf = Objects.requireNonNull(pf);
+      }
+
+      @Override
+      public boolean evaluate(Term arg) {
+         if (!pf.getPredicate(arg.getArgs()).evaluate()) {
+            arg.backtrack();
+            return true;
+         } else {
+            return false;
+         }
       }
    }
 }

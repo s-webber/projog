@@ -15,15 +15,30 @@
  */
 package org.projog.core.function.compound;
 
+import java.util.Objects;
+
 import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
+import org.projog.core.PredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
+// TODO shouldn't need to wrap disjunctions in brackets. e.g. should be able to do: once(true;true;fail)
 /* TEST
  %TRUE once(repeat)
  %TRUE once(true)
+ %TRUE once((true,true,true))
+ %TRUE once((true;true;true))
+ %TRUE once((fail;true;true))
+ %TRUE once((true;fail;true))
+ %TRUE once((true;true;fail))
  %FALSE once(fail)
+ %FALSE once((fail;fail;fail))
+ %FALSE once((fail,fail,fail))
+ %FALSE once((true,true,fail))
+ %FALSE once((true,fail,true))
+ %FALSE once((fail,true,true))
  */
 /**
  * <code>once(X)</code> - calls the goal represented by a term.
@@ -32,10 +47,33 @@ import org.projog.core.term.Term;
  * succeeds. No attempt is made to retry the goal during backtracking - it is only evaluated once.
  * </p>
  */
-public final class Once extends AbstractSingletonPredicate {
+public final class Once extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    @Override
    public boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
       return e.evaluate();
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term arg = term.getArgument(0);
+      if (arg.getType().isVariable()) {
+         return this;
+      } else {
+         return new OptimisedOnce(getKnowledgeBase().getPreprocessedPredicateFactory(arg));
+      }
+   }
+
+   private static final class OptimisedOnce extends AbstractSingletonPredicate {
+      private final PredicateFactory pf;
+
+      OptimisedOnce(PredicateFactory pf) {
+         this.pf = Objects.requireNonNull(pf);
+      }
+
+      @Override
+      public boolean evaluate(Term arg) {
+         return pf.getPredicate(arg.getArgs()).evaluate();
+      }
    }
 }

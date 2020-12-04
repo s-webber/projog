@@ -48,7 +48,7 @@ public final class ClauseActionFactory {
       Term consequent = model.getConsequent();
       if (consequent.getNumberOfArguments() == 0) {
          // have zero arg rule
-         return isFact ? new AlwaysMatchedFact(model) : new ZeroArgConsequentRule(model, kb.getPredicateFactory(antecedent));
+         return isFact ? new AlwaysMatchedFact(model) : new ZeroArgConsequentRule(model, kb.getPreprocessedPredicateFactory(antecedent));
       }
 
       // if all non-shared variables then always true
@@ -72,11 +72,11 @@ public final class ClauseActionFactory {
       }
 
       if (!hasSharedVariables && !hasConcreteTerms) {
-         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, kb.getPredicateFactory(antecedent));
+         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, kb.getPreprocessedPredicateFactory(antecedent));
       } else if (hasConcreteTerms && !hasVariables) {
-         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, kb.getPredicateFactory(antecedent));
+         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, kb.getPreprocessedPredicateFactory(antecedent));
       } else {
-         return isFact ? new MutableFact(model) : new MutableRule(model, kb.getPredicateFactory(antecedent));
+         return isFact ? new MutableFact(model) : new MutableRule(model, kb.getPreprocessedPredicateFactory(antecedent));
       }
    }
 

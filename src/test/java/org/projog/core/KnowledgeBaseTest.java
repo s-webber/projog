@@ -21,6 +21,10 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
@@ -45,7 +49,6 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
-
 public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
@@ -318,6 +321,33 @@ public class KnowledgeBaseTest {
       final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
       kb.addPredicateFactory(key, className + "/getInstance");
       assertSame(DummyPredicateFactoryNoPublicConstructor.class, kb.getPredicateFactory(key).getClass());
+   }
+
+   @Test
+   public void testPreprocess_when_PreprocessablePredicateFactory() {
+      Term term = structure("testOptimise", atom("test"));
+      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
+      kb.addPredicateFactory(PredicateKey.createForTerm(term), mockPreprocessablePredicateFactory);
+
+      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
+      when(mockPreprocessablePredicateFactory.preprocess(term)).thenReturn(mockPredicateFactory);
+
+      assertSame(mockPredicateFactory, kb.getPreprocessedPredicateFactory(term));
+
+      verify(mockPreprocessablePredicateFactory).preprocess(term);
+      verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory);
+   }
+
+   @Test
+   public void testPreprocess_when_not_PreprocessablePredicateFactory() {
+      // note that mockPredicateFactory is not an instance of PreprocessablePredicateFactory
+      Term term = structure("testOptimise", atom("test"));
+      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
+      kb.addPredicateFactory(PredicateKey.createForTerm(term), mockPredicateFactory);
+
+      assertSame(mockPredicateFactory, kb.getPreprocessedPredicateFactory(term));
+
+      verifyNoMoreInteractions(mockPredicateFactory);
    }
 
    private void assertGetPredicateFactory(Term input, Class<?> expected) {

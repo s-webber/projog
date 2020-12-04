@@ -149,6 +149,15 @@ public final class KnowledgeBase {
       return getPredicateFactory(key);
    }
 
+   public PredicateFactory getPreprocessedPredicateFactory(Term term) {
+      PredicateFactory pf = getPredicateFactory(term);
+      if (pf instanceof PreprocessablePredicateFactory) {
+         return ((PreprocessablePredicateFactory) pf).preprocess(term);
+      } else {
+         return pf;
+      }
+   }
+
    /**
     * Returns the {@code PredicateFactory} associated with the specified {@code PredicateKey}.
     * <p>

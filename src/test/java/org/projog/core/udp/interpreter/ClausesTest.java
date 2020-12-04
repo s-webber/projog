@@ -127,7 +127,7 @@ public class ClausesTest {
       for (String clause : clauses) {
          models.add(createClauseModel(clause));
       }
-      return new Clauses(kb, models);
+      return Clauses.createFromModels(kb, models);
    }
 
    private void assertEmpty(int[] array) { // TODO more to TestUtils

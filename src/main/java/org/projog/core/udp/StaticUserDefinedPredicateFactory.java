@@ -26,6 +26,7 @@ import java.util.List;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseServiceLocator;
 import org.projog.core.KnowledgeBaseUtils;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -34,6 +35,7 @@ import org.projog.core.SpyPoints;
 import org.projog.core.event.ProjogEvent;
 import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
 import org.projog.core.udp.interpreter.ClauseAction;
 import org.projog.core.udp.interpreter.Clauses;
@@ -45,7 +47,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * <p>
  * A "static" user defined predicate is one that can not have clauses added or removed after it is first defined.
  */
-public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory {
+public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory, PreprocessablePredicateFactory {
    private final Object lock = new Object();
    private final PredicateKey predicateKey;
    private final KnowledgeBase kb;
@@ -108,7 +110,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private void setCompiledPredicateFactory() {
       setCompiledPredicateFactoryInvocationCtr++;
       // TODO always create Clauses here - can we move creation until InterpretedUserDefinedPredicatePredicateFactory
-      final Clauses clauses = new Clauses(kb, implications);
+      final Clauses clauses = Clauses.createFromModels(kb, implications);
       compiledPredicateFactory = createPredicateFactoryFromClauseActions(clauses);
    }
 
@@ -195,7 +197,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       TailRecursivePredicateMetaData tailRecursiveMetaData = TailRecursivePredicateMetaData.create(kb, clauseModels);
       if (tailRecursiveMetaData != null) {
          return new InterpretedTailRecursivePredicateFactory(kb, tailRecursiveMetaData);
-      } else if (clauses.getClauseActions().length == 1) {
+      } else {
+         return createInterpretedPredicateFactoryFromClauses(clauses);
+      }
+   }
+
+   private PredicateFactory createInterpretedPredicateFactoryFromClauses(Clauses clauses) {
+      if (clauses.getClauseActions().length == 1) {
          return createSingleClausePredicateFactory(clauses.getClauseActions()[0]);
       } else if (clauses.getImmutableColumns().length == 0) {
          return new NotIndexablePredicateFactory(clauses);
@@ -237,7 +245,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return predicateKey;
    }
 
-   public PredicateFactory getActualPredicateFactory() {
+   public PredicateFactory getActualPredicateFactory() { // TODO make package level access
       compile();
       return compiledPredicateFactory;
    }
@@ -273,7 +281,26 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    @Override
    public boolean isRetryable() {
-      return getActualPredicateFactory().isRetryable();
+      if (compiledPredicateFactory == null && !isCyclic()) {
+         compile();
+      }
+
+      return compiledPredicateFactory == null ? true : compiledPredicateFactory.isRetryable();
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term arg) {
+      if (compiledPredicateFactory == null && !isCyclic()) {
+         compile();
+      }
+
+      if (compiledPredicateFactory instanceof PreprocessablePredicateFactory) {
+         return ((PreprocessablePredicateFactory) compiledPredicateFactory).preprocess(arg);
+      } else if (compiledPredicateFactory != null) {
+         return compiledPredicateFactory;
+      } else {
+         return this;
+      }
    }
 
    /**
@@ -306,7 +333,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class IndexablePredicateFactory implements PredicateFactory {
+   private final class IndexablePredicateFactory implements PreprocessablePredicateFactory {
       private final Indexes index;
 
       private IndexablePredicateFactory(Clauses clauses) {
@@ -326,9 +353,22 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public boolean isRetryable() {
          return true;
       }
+
+      @Override
+      public PredicateFactory preprocess(Term arg) {
+         ClauseAction[] data = index.index(arg.getArgs());
+         List<ClauseAction> result = optimisePredicateFactory(data, arg);
+         System.out.println(arg + " " + result.size() + " " + data.length);
+         if (result.size() < index.getClauseCount()) {
+            final Clauses clauses = new Clauses(kb, result);
+            return createInterpretedPredicateFactoryFromClauses(clauses);
+         } else {
+            return this;
+         }
+      }
    }
 
-   private final class NotIndexablePredicateFactory implements PredicateFactory {
+   private final class NotIndexablePredicateFactory implements PreprocessablePredicateFactory {
       private final ClauseAction[] data;
 
       private NotIndexablePredicateFactory(Clauses clauses) {
@@ -348,6 +388,30 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public boolean isRetryable() {
          return true;
       }
+
+      @Override
+      public PredicateFactory preprocess(Term arg) {
+         List<ClauseAction> result = optimisePredicateFactory(data, arg);
+         if (result.size() < data.length) {
+            final Clauses clauses = new Clauses(kb, result);
+            return createInterpretedPredicateFactoryFromClauses(clauses);
+         } else {
+            return this;
+         }
+      }
+   }
+
+   private static List<ClauseAction> optimisePredicateFactory(ClauseAction[] data, Term arg) {
+      List<ClauseAction> result = new ArrayList<>();
+      Term[] queryArgs = TermUtils.copy(arg.getArgs());
+      for (ClauseAction action : data) {
+         Term[] clauseArgs = TermUtils.copy(action.getModel().getConsequent().getArgs());
+         if (TermUtils.unify(queryArgs, clauseArgs)) {
+            result.add(action);
+         }
+         TermUtils.backtrack(queryArgs);
+      }
+      return result;
    }
 
    private static final class ActionIterator implements Iterator<ClauseAction> {

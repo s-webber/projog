@@ -86,7 +86,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
    }
 
    @Override
-   public boolean isRetryable() {
+   public final boolean isRetryable() {
       return false;
    }
 

@@ -66,7 +66,7 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
    }
 
    @Override
-   public final boolean isRetryable() {
+   public boolean isRetryable() {
       return true;
    }
 

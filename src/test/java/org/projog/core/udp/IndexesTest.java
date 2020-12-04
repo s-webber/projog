@@ -180,7 +180,7 @@ public class IndexesTest {
          }
          models.add(ClauseModel.createClauseModel(structure("p", args)));
       }
-      Clauses clauses = new Clauses(TestUtils.createKnowledgeBase(), models);
+      Clauses clauses = Clauses.createFromModels(TestUtils.createKnowledgeBase(), models);
 
       Indexes indexes = new Indexes(clauses);
 
@@ -250,7 +250,7 @@ public class IndexesTest {
       for (String clause : clauses) {
          models.add(createClauseModel(clause));
       }
-      return new Clauses(kb, models);
+      return Clauses.createFromModels(kb, models);
    }
 
    private Variable v() {

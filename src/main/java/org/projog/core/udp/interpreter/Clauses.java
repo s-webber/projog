@@ -26,18 +26,25 @@ public class Clauses {
    private final List<ClauseAction> clauses;
    private final int[] immutableColumns;
 
-   public Clauses(KnowledgeBase kb, List<ClauseModel> models) {
-      this.numClauses = models.size();
-      this.clauses = new ArrayList<>(numClauses);
-      boolean isImmutableFacts = true;
-      int numArgs = models.get(0).getConsequent().getNumberOfArguments();
-      boolean[] muttableColumns = new boolean[numArgs];
-      int muttableColumnCtr = 0;
+   public static Clauses createFromModels(KnowledgeBase kb, List<ClauseModel> models) {
+      List<ClauseAction> actions = new ArrayList<>();
       for (ClauseModel model : models) {
          ClauseAction action = ClauseActionFactory.createClauseAction(kb, model);
+         actions.add(action);
+      }
+      return new Clauses(kb, actions);
+   }
+
+   public Clauses(KnowledgeBase kb, List<ClauseAction> actions) {
+      this.numClauses = actions.size();
+      this.clauses = new ArrayList<>(numClauses);
+      int numArgs = actions.get(0).getModel().getConsequent().getNumberOfArguments();
+      boolean[] muttableColumns = new boolean[numArgs];
+      int muttableColumnCtr = 0;
+      for (ClauseAction action : actions) {
          this.clauses.add(action);
          for (int i = 0; i < numArgs; i++) {
-            if (!muttableColumns[i] && !model.getConsequent().getArgument(i).isImmutable()) {
+            if (!muttableColumns[i] && !action.getModel().getConsequent().getArgument(i).isImmutable()) {
                muttableColumns[i] = true;
                muttableColumnCtr++;
             }

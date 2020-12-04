@@ -26,7 +26,7 @@ import org.projog.core.term.Term;
  * @see KnowledgeBase#getPredicateFactory(PredicateKey)
  * @see KnowledgeBase#getPredicateFactory(Term)
  */
-public final class UnknownPredicate implements PredicateFactory {
+public final class UnknownPredicate implements PreprocessablePredicateFactory {
    private final KnowledgeBase kb;
    private final PredicateKey key;
    private PredicateFactory actualPredicateFactory;
@@ -38,9 +38,7 @@ public final class UnknownPredicate implements PredicateFactory {
 
    @Override
    public Predicate getPredicate(Term... args) {
-      if (actualPredicateFactory == null) {
-         instantiatePredicateFactory();
-      }
+      instantiatePredicateFactory();
 
       if (actualPredicateFactory == null) {
          return AbstractSingletonPredicate.FAIL;
@@ -49,7 +47,24 @@ public final class UnknownPredicate implements PredicateFactory {
       }
    }
 
+   @Override
+   public PredicateFactory preprocess(Term arg) {
+      instantiatePredicateFactory();
+
+      if (actualPredicateFactory == null) {
+         return this;
+      } else if (actualPredicateFactory instanceof PreprocessablePredicateFactory) {
+         return ((PreprocessablePredicateFactory) actualPredicateFactory).preprocess(arg);
+      } else {
+         return actualPredicateFactory;
+      }
+   }
+
    private void instantiatePredicateFactory() {
+      if (actualPredicateFactory != null) {
+         return;
+      }
+
       synchronized (key) {
          if (actualPredicateFactory == null) {
             PredicateFactory pf = kb.getPredicateFactory(key);

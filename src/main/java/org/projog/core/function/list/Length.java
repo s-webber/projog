@@ -22,6 +22,7 @@ import static org.projog.core.term.ListUtils.toJavaUtilList;
 import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -110,7 +111,7 @@ public final class Length extends AbstractPredicateFactory {
    private boolean checkLength(final Term list, final Term expectedLength) {
       final java.util.List<Term> javaList = toJavaUtilList(list);
       if (javaList != null) {
-         final IntegerNumber actualLength = new IntegerNumber(javaList.size());
+         final IntegerNumber actualLength = IntegerNumberCache.valueOf(javaList.size());
          return expectedLength.unify(actualLength);
       } else {
          return false;
@@ -132,7 +133,7 @@ public final class Length extends AbstractPredicateFactory {
          list.backtrack();
          length.backtrack();
          list.unify(createListOfLength(i));
-         length.unify(new IntegerNumber(i));
+         length.unify(IntegerNumberCache.valueOf(i));
          i++;
          return true;
       }

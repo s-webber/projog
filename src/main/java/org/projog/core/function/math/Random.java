@@ -16,7 +16,7 @@
 package org.projog.core.function.math;
 
 import org.projog.core.ArithmeticOperator;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
@@ -41,7 +41,7 @@ public final class Random extends AbstractArithmeticOperator {
    @Override
    public Numeric calculate(Numeric n) {
       long max = n.getLong();
-      return new IntegerNumber((long) (Math.random() * max));
+      return IntegerNumberCache.valueOf((long) (Math.random() * max));
    }
 
    /**

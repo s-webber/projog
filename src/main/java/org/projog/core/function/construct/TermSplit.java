@@ -23,6 +23,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -321,7 +322,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
 
    protected Term charToTerm(char c) {
       if (convertToCharCodes) {
-         return new IntegerNumber(c);
+         return IntegerNumberCache.valueOf(c);
       } else {
          return new Atom(Character.toString(c));
       }
@@ -349,7 +350,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
 
    private IntegerNumber toInteger(String s) {
       try {
-         return new IntegerNumber(Integer.parseInt(s));
+         return IntegerNumberCache.valueOf(Integer.parseInt(s)); // TODO should this be Long.parseLong
       } catch (NumberFormatException e) {
          throw new ProjogException("Could not convert characters to an integer: '" + s + "'");
       }

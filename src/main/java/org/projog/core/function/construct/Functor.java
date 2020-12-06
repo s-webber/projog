@@ -21,7 +21,7 @@ import static org.projog.core.term.TermUtils.toInt;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -94,11 +94,11 @@ public final class Functor extends AbstractSingletonPredicate {
    public boolean evaluate(Term term, Term functor, Term arity) {
       switch (term.getType()) {
          case ATOM:
-            return functor.unify(term) && arity.unify(new IntegerNumber(0));
+            return functor.unify(term) && arity.unify(IntegerNumberCache.valueOf(0));
          case STRUCTURE:
          case LIST:
          case EMPTY_LIST:
-            return functor.unify(new Atom(term.getName())) && arity.unify(new IntegerNumber(term.getNumberOfArguments()));
+            return functor.unify(new Atom(term.getName())) && arity.unify(IntegerNumberCache.valueOf(term.getNumberOfArguments()));
          case VARIABLE:
             Term createdTerm = createTerm(functor, arity);
             return term.unify(createdTerm);

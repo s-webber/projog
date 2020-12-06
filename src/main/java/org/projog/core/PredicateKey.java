@@ -19,7 +19,7 @@ import static org.projog.core.term.TermUtils.getAtomName;
 import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.term.Atom;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -97,7 +97,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
    }
 
    public Term toTerm() {
-      return Structure.createStructure(PREDICATE_KEY_FUNCTOR, new Term[] {new Atom(name), new IntegerNumber(numArgs)});
+      return Structure.createStructure(PREDICATE_KEY_FUNCTOR, new Term[] {new Atom(name), IntegerNumberCache.valueOf(numArgs)});
    }
 
    /**

@@ -21,6 +21,7 @@ import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -96,7 +97,7 @@ public final class GetCode extends AbstractSingletonPredicate {
    public boolean evaluate(Term argument) {
       try {
          int c = fileHandles.getCurrentInputStream().read();
-         IntegerNumber next = new IntegerNumber(c);
+         IntegerNumber next = IntegerNumberCache.valueOf(c);
          return argument.unify(next);
       } catch (Exception e) {
          throw new ProjogException("Could not read next character from input stream", e);

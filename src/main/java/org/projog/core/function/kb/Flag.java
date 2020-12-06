@@ -23,7 +23,7 @@ import java.util.Map;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
@@ -84,7 +84,7 @@ public final class Flag extends AbstractSingletonPredicate {
    private Numeric getOrCreate(PredicateKey pk) {
       Numeric n = flags.get(pk);
       if (n == null) {
-         n = new IntegerNumber(0);
+         n = IntegerNumberCache.valueOf(0);
          flags.put(pk, n);
       }
       return n;

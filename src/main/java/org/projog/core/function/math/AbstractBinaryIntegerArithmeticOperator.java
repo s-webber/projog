@@ -18,7 +18,7 @@ package org.projog.core.function.math;
 import static org.projog.core.term.TermType.INTEGER;
 
 import org.projog.core.ProjogException;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.TermType;
 
@@ -30,7 +30,7 @@ public abstract class AbstractBinaryIntegerArithmeticOperator extends AbstractAr
    public final Numeric calculate(Numeric n1, Numeric n2) {
       final long i1 = toLong(n1);
       final long i2 = toLong(n2);
-      return new IntegerNumber(calculateLong(i1, i2));
+      return IntegerNumberCache.valueOf(calculateLong(i1, i2));
    }
 
    private long toLong(Numeric n) {

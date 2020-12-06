@@ -24,6 +24,7 @@ import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -111,7 +112,7 @@ public final class Between extends AbstractPredicateFactory {
       public boolean evaluate() {
          while (couldReevaluationSucceed()) {
             middle.backtrack();
-            IntegerNumber n = new IntegerNumber(ctr++);
+            IntegerNumber n = IntegerNumberCache.valueOf(ctr++);
             return middle.unify(n);
          }
          return false;

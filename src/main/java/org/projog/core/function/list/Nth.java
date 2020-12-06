@@ -25,6 +25,7 @@ import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -199,7 +200,7 @@ public final class Nth extends AbstractPredicateFactory {
          while (couldReevaluationSucceed()) {
             backtrack(index, list, element);
             Term t = javaUtilList.get(ctr);
-            IntegerNumber n = new IntegerNumber(ctr + startingIdx);
+            IntegerNumber n = IntegerNumberCache.valueOf(ctr + startingIdx);
             ctr++;
             if (index.unify(n) && element.unify(t)) {
                return true;

@@ -15,7 +15,7 @@
  */
 package org.projog.core.function.math;
 
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.TermType;
 
@@ -105,7 +105,7 @@ public final class Round extends AbstractArithmeticOperator {
          return n;
       } else {
          long rounded = Math.round(n.getDouble());
-         return new IntegerNumber(rounded);
+         return IntegerNumberCache.valueOf(rounded);
       }
    }
 }

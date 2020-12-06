@@ -18,7 +18,7 @@ package org.projog.core.function.construct;
 import java.util.LinkedHashMap;
 
 import org.projog.core.function.AbstractSingletonPredicate;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
@@ -99,7 +99,7 @@ public final class NumberVars extends AbstractSingletonPredicate {
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       long start = TermUtils.castToNumeric(arg2).getLong();
       long end = numberVars(arg1, start);
-      return arg3.unify(new IntegerNumber(end));
+      return arg3.unify(IntegerNumberCache.valueOf(end));
    }
 
    private long numberVars(Term term, long start) {
@@ -108,7 +108,7 @@ public final class NumberVars extends AbstractSingletonPredicate {
 
       long ctr = start;
       for (Variable v : sharedVariables.keySet()) {
-         v.unify(Structure.createStructure("$VAR", new Term[] {new IntegerNumber(ctr)}));
+         v.unify(Structure.createStructure("$VAR", new Term[] {IntegerNumberCache.valueOf(ctr)}));
          ctr++;
       }
       return ctr;

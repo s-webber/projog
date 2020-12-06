@@ -16,7 +16,7 @@
 package org.projog.core.function.math;
 
 import org.projog.core.term.DecimalFraction;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.TermType;
 
@@ -31,7 +31,7 @@ public abstract class AbstractUnaryArithmeticOperator extends AbstractArithmetic
          return new DecimalFraction(answer);
       } else {
          long answer = calculateLong(n.getLong());
-         return new IntegerNumber(answer);
+         return IntegerNumberCache.valueOf(answer);
       }
    }
 

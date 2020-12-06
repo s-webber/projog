@@ -61,28 +61,24 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
-      operators.addArithmeticOperator(key, createArithmeticOperator(key));
+      final UserDefinedArithmeticOperator arithmeticOperator = new UserDefinedArithmeticOperator(getKnowledgeBase(), key);
+      operators.addArithmeticOperator(key, arithmeticOperator);
       return true;
    }
 
-   private UserDefinedArithmeticOperator createArithmeticOperator(final PredicateKey key) {
-      return new UserDefinedArithmeticOperator(getKnowledgeBase(), key);
-   }
-
-   private static class UserDefinedArithmeticOperator implements ArithmeticOperator {
-      final KnowledgeBase kb;
+   private static final class UserDefinedArithmeticOperator implements ArithmeticOperator {
       final int numArgs;
       final PredicateKey key;
+      final PredicateFactory pf;
 
       UserDefinedArithmeticOperator(KnowledgeBase kb, PredicateKey originalKey) {
-         this.kb = kb;
          this.numArgs = originalKey.getNumArgs();
          this.key = new PredicateKey(originalKey.getName(), numArgs + 1);
+         this.pf = kb.getPredicateFactory(key);
       }
 
       @Override
       public Numeric calculate(Term... args) {
-         final PredicateFactory pf = kb.getPredicateFactory(key);
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);
 
@@ -104,7 +100,7 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
 
       @Override
       public void setKnowledgeBase(KnowledgeBase kb) {
-         // do nothing (KnowledgeBase set in constructor)
+         throw new UnsupportedOperationException();
       }
    }
 }

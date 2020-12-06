@@ -53,7 +53,7 @@ public class AbstractArithmeticOperatorTest {
          fail();
       } catch (IllegalArgumentException e) {
          String expectedMessage = "The ArithmeticOperator: class org.projog.core.function.math.AbstractArithmeticOperatorTest$DummyArithmeticOperator does next accept the number of arguments: "
-                                  + numberOfArguments;
+                     + numberOfArguments;
          assertEquals(expectedMessage, e.getMessage());
       }
    }
@@ -165,5 +165,41 @@ public class AbstractArithmeticOperatorTest {
       Structure f2 = structure("/", integerNumber(12), integerNumber(2));
       Numeric result = c.calculate(new Term[] {f1, f2});
       assertEquals(15, result.getLong()); // 15 = (3*7)-(12/2)
+   }
+
+   @Test
+   public void testPreprocess_one_argument() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
+         @Override
+         public Numeric calculate(Numeric n1) {
+            return new IntegerNumber(-(n1.getLong() * 2));
+         }
+      };
+      c.setKnowledgeBase(createKnowledgeBase());
+      assertEquals(integerNumber(-84), c.preprocess(structure("dummy", integerNumber(42))));
+      assertSame(c, c.preprocess(structure("dummy", variable())));
+      // TODO test PreprocessedUnaryOperator
+      assertEquals("org.projog.core.function.math.AbstractArithmeticOperator$PreprocessedUnaryOperator",
+                  c.preprocess(structure("dummy", structure("+", integerNumber(), variable()))).getClass().getName());
+   }
+
+   @Test
+   public void testPreprocess_two_arguments() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
+         @Override
+         public Numeric calculate(Numeric n1, Numeric n2) {
+            return new IntegerNumber(n1.getLong() - n2.getLong() + 42);
+         }
+      };
+      c.setKnowledgeBase(createKnowledgeBase());
+      assertEquals(integerNumber(47), c.preprocess(structure("dummy", integerNumber(8), integerNumber(3))));
+      assertSame(c, c.preprocess(structure("dummy", variable(), variable())));
+      // TODO test PreprocessedBinaryOperator
+      assertEquals("org.projog.core.function.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
+                  c.preprocess(structure("dummy", variable(), structure("+", integerNumber(), variable()))).getClass().getName());
+      assertEquals("org.projog.core.function.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
+                  c.preprocess(structure("dummy", structure("+", integerNumber(), variable()), variable())).getClass().getName());
+      assertEquals("org.projog.core.function.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
+                  c.preprocess(structure("dummy", structure("+", integerNumber(), variable()), structure("+", integerNumber(), variable()))).getClass().getName());
    }
 }

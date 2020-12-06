@@ -38,5 +38,5 @@ public interface ArithmeticOperator {
     * Meaning this object will always have access to a {@code KnowledgeBase} by the time its {@code calculate} method is
     * invoked.
     */
-   void setKnowledgeBase(KnowledgeBase kb);
+   void setKnowledgeBase(KnowledgeBase kb); // TODO remove this method - have separate interface with this method
 }

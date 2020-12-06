@@ -109,6 +109,36 @@ public final class ArithmeticOperators {
       return getArithmeticOperator(key).calculate(args);
    }
 
+   /**
+    * @return null if not found
+    */
+   public ArithmeticOperator getPreprocessedArithmeticOperator(Term argument) {
+      if (argument.getType().isNumeric()) {
+         return (Numeric) argument.getTerm();
+      } else if (argument.getType() == TermType.ATOM || argument.getType() == TermType.STRUCTURE) {
+         PredicateKey key = PredicateKey.createForTerm(argument);
+         return getPreprocessedArithmeticOperator(key, argument);
+      } else {
+         return null;
+      }
+   }
+
+   private ArithmeticOperator getPreprocessedArithmeticOperator(PredicateKey key, Term argument) {
+      if (operatorInstances.containsKey(key) || operatorClassNames.containsKey(key)) {
+         ArithmeticOperator ao = getArithmeticOperator(key);
+         if (ao instanceof PreprocessableArithmeticOperator) {
+            return ((PreprocessableArithmeticOperator) ao).preprocess(argument);
+         } else {
+            return ao;
+         }
+      } else {
+         return null;
+      }
+   }
+
+   /**
+    * @throws ProjogException if not found
+    */
    public ArithmeticOperator getArithmeticOperator(PredicateKey key) {
       ArithmeticOperator e = operatorInstances.get(key);
       if (e != null) {

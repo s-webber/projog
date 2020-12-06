@@ -17,6 +17,8 @@ package org.projog.core.term;
 
 import java.util.Map;
 
+import org.projog.core.KnowledgeBase;
+
 /**
  * Represents a value of the primitive type {@code long} as a {@link Term}.
  * <p>
@@ -129,6 +131,16 @@ public final class IntegerNumber implements Numeric {
    @Override
    public double getDouble() {
       return value;
+   }
+
+   @Override
+   public IntegerNumber calculate(Term... args) {
+      return this;
+   }
+
+   @Override
+   public void setKnowledgeBase(KnowledgeBase kb) {
+      throw new UnsupportedOperationException();
    }
 
    @Override

@@ -38,7 +38,7 @@ import org.projog.core.term.Variable;
 
 public class OnceTest {
    @Test
-   public void testOptimise_cannot_optimise_variable() {
+   public void testPreprocess_cannot_optimise_variable() {
       Once o = new Once();
 
       Term t = Structure.createStructure("once", new Term[] {new Variable("X")});
@@ -48,7 +48,7 @@ public class OnceTest {
    }
 
    @Test
-   public void testOptimise_not_PreprocessablePredicateFactory() {
+   public void testPreprocess_not_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term onceTerm = parseTerm("once(test(a, b)).");
       Term queryArg = onceTerm.getArgument(0);
@@ -74,7 +74,7 @@ public class OnceTest {
    }
 
    @Test
-   public void testOptimise_PreprocessablePredicateFactory() {
+   public void testPreprocess_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term onceTerm = parseTerm("once(test(a, b)).");
       Term queryArg = onceTerm.getArgument(0);

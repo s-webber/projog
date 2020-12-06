@@ -20,10 +20,11 @@ import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import org.projog.core.ArithmeticOperator;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.PreprocessableArithmeticOperator;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
-public abstract class AbstractArithmeticOperator implements ArithmeticOperator {
+public abstract class AbstractArithmeticOperator implements PreprocessableArithmeticOperator {
    private ArithmeticOperators operators;
 
    @Override
@@ -56,5 +57,81 @@ public abstract class AbstractArithmeticOperator implements ArithmeticOperator {
 
    private IllegalArgumentException createWrongNumberOfArgumentsException(int numberOfArguments) {
       throw new IllegalArgumentException("The ArithmeticOperator: " + getClass() + " does next accept the number of arguments: " + numberOfArguments);
+   }
+
+   @Override
+   public ArithmeticOperator preprocess(final Term expression) {
+      Term[] arguments = expression.getArgs();
+      if (arguments.length == 1) {
+         return preprocessUnaryOperator(arguments[0]);
+      } else if (arguments.length == 2) {
+         return preprocessBinaryOperator(arguments[0], arguments[1]);
+      } else {
+         throw createWrongNumberOfArgumentsException(arguments.length);
+      }
+   }
+
+   private ArithmeticOperator preprocessUnaryOperator(final Term argument) {
+      final ArithmeticOperator o = operators.getPreprocessedArithmeticOperator(argument);
+      if (o instanceof Numeric) {
+         return calculate((Numeric) o);
+      } else if (o != null) {
+         return new PreprocessedUnaryOperator(o);
+      } else {
+         return this;
+      }
+   }
+
+   private ArithmeticOperator preprocessBinaryOperator(final Term argument1, Term argument2) {
+      final ArithmeticOperator o1 = operators.getPreprocessedArithmeticOperator(argument1);
+      final ArithmeticOperator o2 = operators.getPreprocessedArithmeticOperator(argument2);
+      if (o1 instanceof Numeric && o2 instanceof Numeric) {
+         return calculate((Numeric) o1, (Numeric) o2);
+      } else if (o1 != null || o2 != null) {
+         return new PreprocessedBinaryOperator(o1, o2);
+      } else {
+         return this;
+      }
+   }
+
+   private final class PreprocessedUnaryOperator implements ArithmeticOperator {
+      final ArithmeticOperator o;
+
+      PreprocessedUnaryOperator(ArithmeticOperator o) {
+         this.o = o;
+      }
+
+      @Override
+      public Numeric calculate(Term... args) {
+         Numeric n = o.calculate(args[0].getArgs());
+         return AbstractArithmeticOperator.this.calculate(n);
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         throw new UnsupportedOperationException();
+      }
+   }
+
+   private final class PreprocessedBinaryOperator implements ArithmeticOperator {
+      final ArithmeticOperator o1;
+      final ArithmeticOperator o2;
+
+      PreprocessedBinaryOperator(ArithmeticOperator o1, ArithmeticOperator o2) {
+         this.o1 = o1;
+         this.o2 = o2;
+      }
+
+      @Override
+      public Numeric calculate(Term... args) {
+         Numeric n1 = o1 == null ? operators.getNumeric(args[0]) : o1.calculate(args[0].getArgs());
+         Numeric n2 = o2 == null ? operators.getNumeric(args[1]) : o2.calculate(args[1].getArgs());
+         return AbstractArithmeticOperator.this.calculate(n1, n2);
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         throw new UnsupportedOperationException();
+      }
    }
 }

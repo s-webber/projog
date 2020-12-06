@@ -60,6 +60,13 @@ public class DecimalFractionTest {
    }
 
    @Test
+   public void testCalculate() {
+      DecimalFraction d1 = new DecimalFraction(0);
+      DecimalFraction d2 = d1.calculate(TermUtils.EMPTY_ARRAY);
+      assertSame(d1, d2);
+   }
+
+   @Test
    public void testGetDouble() {
       assertEquals(0.0, new DecimalFraction(0).getDouble(), DELTA);
       assertEquals(Double.MAX_VALUE, new DecimalFraction(Double.MAX_VALUE).getDouble(), DELTA);

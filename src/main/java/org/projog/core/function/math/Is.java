@@ -17,7 +17,10 @@ package org.projog.core.function.math;
 
 import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
+import org.projog.core.ArithmeticOperator;
 import org.projog.core.ArithmeticOperators;
+import org.projog.core.PredicateFactory;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
@@ -66,7 +69,7 @@ import org.projog.core.term.Term;
  * made to match the number to <code>X</code>. The goal succeeds or fails based on the match.
  * </p>
  */
-public final class Is extends AbstractSingletonPredicate {
+public final class Is extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    private ArithmeticOperators operators;
 
    @Override
@@ -78,5 +81,43 @@ public final class Is extends AbstractSingletonPredicate {
    public boolean evaluate(Term arg1, Term arg2) {
       Numeric n = operators.getNumeric(arg2);
       return arg1.unify(n);
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term arg) {
+      final ArithmeticOperator o = operators.getPreprocessedArithmeticOperator(arg.getArgument(1));
+      if (o == null) {
+         return this;
+      } else if (o instanceof Numeric) {
+         return new Unify((Numeric) o);
+      } else {
+         return new PreprocessedIs(o);
+      }
+   }
+
+   private static final class Unify extends AbstractSingletonPredicate {
+      final Numeric n;
+
+      Unify(Numeric n) {
+         this.n = n;
+      }
+
+      @Override
+      public boolean evaluate(Term arg1, Term arg2) {
+         return arg1.unify(n);
+      }
+   }
+
+   private static final class PreprocessedIs extends AbstractSingletonPredicate {
+      final ArithmeticOperator o;
+
+      PreprocessedIs(ArithmeticOperator o) {
+         this.o = o;
+      }
+
+      @Override
+      public boolean evaluate(Term arg1, Term arg2) {
+         return arg1.unify(o.calculate(arg2.getArgs()));
+      }
    }
 }

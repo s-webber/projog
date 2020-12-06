@@ -52,6 +52,13 @@ public class IntegerNumberTest {
    }
 
    @Test
+   public void testCalculate() {
+      IntegerNumber i1 = new IntegerNumber(0);
+      IntegerNumber i2 = i1.calculate(TermUtils.EMPTY_ARRAY);
+      assertSame(i1, i2);
+   }
+
+   @Test
    public void testGetLong() {
       assertEquals(0, new IntegerNumber(0).getLong());
       assertEquals(Long.MAX_VALUE, new IntegerNumber(Long.MAX_VALUE).getLong());

@@ -16,8 +16,14 @@
 package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
@@ -94,6 +100,59 @@ public class ArithmeticOperatorsTest {
       // assert getArithmeticOperator returns the newly added operator
       assertSame(DummyArithmeticOperatorDefaultConstructor.class, c.getArithmeticOperator(dummyOperatorKey).getClass());
       assertSame(c.getArithmeticOperator(dummyOperatorKey), c.getArithmeticOperator(dummyOperatorKey));
+   }
+
+   @Test
+   public void testGetPreprocessedArithmeticOperator_numeric() {
+      ArithmeticOperators c = createOperators();
+
+      IntegerNumber i = new IntegerNumber(7);
+      ArithmeticOperator preprocessed = c.getPreprocessedArithmeticOperator(i);
+
+      assertSame(i, preprocessed);
+   }
+
+   @Test
+   public void testGetPreprocessedArithmeticOperator_variable() {
+      ArithmeticOperators c = createOperators();
+
+      assertNull(c.getPreprocessedArithmeticOperator(variable()));
+   }
+
+   @Test
+   public void testGetPreprocessedArithmeticOperator_unknown_structure() {
+      ArithmeticOperators c = createOperators();
+
+      Structure expression = structure(dummyOperatorName, integerNumber(7));
+      assertNull(c.getPreprocessedArithmeticOperator(expression));
+   }
+
+   @Test
+   public void testGetPreprocessedArithmeticOperator_operator_not_preprocessable() {
+      ArithmeticOperator mockOperator = mock(ArithmeticOperator.class);
+      ArithmeticOperators c = createOperators();
+      c.addArithmeticOperator(dummyOperatorKey, mockOperator);
+
+      ArithmeticOperator preprocessed = c.getPreprocessedArithmeticOperator(structure(dummyOperatorName, integerNumber(7)));
+
+      assertSame(mockOperator, preprocessed);
+      verifyZeroInteractions(mockOperator);
+   }
+
+   @Test
+   public void testGetPreprocessedArithmeticOperator_operator_preprocessable() {
+      Structure expression = structure(dummyOperatorName, integerNumber(7));
+      PreprocessableArithmeticOperator mockPreprocessableOperator = mock(PreprocessableArithmeticOperator.class);
+      PreprocessableArithmeticOperator mockPreprocessedOperator = mock(PreprocessableArithmeticOperator.class);
+      when(mockPreprocessableOperator.preprocess(expression)).thenReturn(mockPreprocessedOperator);
+      ArithmeticOperators c = createOperators();
+      c.addArithmeticOperator(dummyOperatorKey, mockPreprocessableOperator);
+
+      ArithmeticOperator preprocessed = c.getPreprocessedArithmeticOperator(expression);
+
+      assertSame(mockPreprocessedOperator, preprocessed);
+      verify(mockPreprocessableOperator).preprocess(expression);
+      verifyNoMoreInteractions(mockPreprocessableOperator, mockPreprocessedOperator);
    }
 
    @Test

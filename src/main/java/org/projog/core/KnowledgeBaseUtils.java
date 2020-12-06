@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.projog.core.event.ProjogEventsObservable;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermType;
@@ -128,11 +127,9 @@ public final class KnowledgeBaseUtils {
    public static boolean isSingleAnswer(KnowledgeBase kb, Term term) {
       if (term.getType().isVariable()) {
          return false;
-      } else if (isConjunction(term)) {
-         return isConjunctionWithSingleResult(kb, term);
       } else {
-         PredicateFactory ef = kb.getPredicateFactory(term);
-         return ef instanceof AbstractSingletonPredicate;
+         PredicateFactory ef = kb.getPreprocessedPredicateFactory(term);
+         return !ef.isRetryable();
       }
    }
 
@@ -150,20 +147,6 @@ public final class KnowledgeBaseUtils {
       }
       l.add(0, t);
       return l.toArray(new Term[l.size()]);
-   }
-
-   private static boolean isConjunctionWithSingleResult(KnowledgeBase kb, Term antecedent) {
-      Term[] functions = toArrayOfConjunctions(antecedent);
-      return isAllSingleAnswerFunctions(kb, functions);
-   }
-
-   private static boolean isAllSingleAnswerFunctions(KnowledgeBase kb, Term[] functions) {
-      for (Term t : functions) {
-         if (!isSingleAnswer(kb, t)) {
-            return false;
-         }
-      }
-      return true;
    }
 
    /**

@@ -175,6 +175,8 @@
 ?- pj_add_predicate(sublist/3, 'org.projog.core.function.list.SubList').
 ?- pj_add_predicate(foldl/4, 'org.projog.core.function.list.Fold').
 ?- pj_add_predicate(last/2, 'org.projog.core.function.list.Last').
+?- pj_add_predicate(atomic_list_concat/2, 'org.projog.core.function.list.AtomicListConcat').
+?- pj_add_predicate(atomic_list_concat/3, 'org.projog.core.function.list.AtomicListConcat').
 
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.function.time.GetTime').

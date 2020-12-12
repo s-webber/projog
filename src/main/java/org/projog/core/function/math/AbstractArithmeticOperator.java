@@ -60,7 +60,11 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
    }
 
    @Override
-   public ArithmeticOperator preprocess(final Term expression) {
+   public final ArithmeticOperator preprocess(final Term expression) {
+      if (!isPure()) {
+         return this;
+      }
+
       Term[] arguments = expression.getArgs();
       if (arguments.length == 1) {
          return preprocessUnaryOperator(arguments[0]);
@@ -69,6 +73,17 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       } else {
          throw createWrongNumberOfArgumentsException(arguments.length);
       }
+   }
+
+   /**
+    * Indicates if this operator is pure and so can be preprocessed.
+    * <p>
+    * An operator is pure if multiple calls with identical arguments always produce the same result.
+    *
+    * @return true if pure and so can be preprocessed, else false
+    */
+   protected boolean isPure() {
+      return true;
    }
 
    private ArithmeticOperator preprocessUnaryOperator(final Term argument) {

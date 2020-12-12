@@ -15,6 +15,7 @@
  */
 package org.projog.core.function.math;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
@@ -34,6 +35,7 @@ public class RandomTest {
       ArithmeticOperators operators = KnowledgeBaseUtils.getArithmeticOperators(kb);
       Random r = (Random) operators.getArithmeticOperator(PredicateKey.createForTerm(expression));
 
+      assertFalse(r.isPure());
       assertSame(r, r.preprocess(expression));
       assertSame(r, r.preprocess(expression));
    }

@@ -17,6 +17,7 @@ package org.projog.core.function.math;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.createArgs;
@@ -201,5 +202,24 @@ public class AbstractArithmeticOperatorTest {
                   c.preprocess(structure("dummy", structure("+", integerNumber(), variable()), variable())).getClass().getName());
       assertEquals("org.projog.core.function.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
                   c.preprocess(structure("dummy", structure("+", integerNumber(), variable()), structure("+", integerNumber(), variable()))).getClass().getName());
+   }
+
+   @Test
+   public void testPreprocess_not_pure() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
+         @Override
+         protected boolean isPure() {
+            return false;
+         }
+      };
+      assertSame(c, c.preprocess(structure("dummy", integerNumber(42))));
+      assertSame(c, c.preprocess(structure("dummy", variable())));
+   }
+
+   @Test
+   public void testIsPure() {
+      final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
+      };
+      assertTrue(c.isPure());
    }
 }

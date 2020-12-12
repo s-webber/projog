@@ -15,10 +15,8 @@
  */
 package org.projog.core.function.math;
 
-import org.projog.core.ArithmeticOperator;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Numeric;
-import org.projog.core.term.Term;
 
 /* TEST
  validate_in_range(X) :- Y is random(X), Y>=0, Y<X.
@@ -44,13 +42,9 @@ public final class Random extends AbstractArithmeticOperator {
       return IntegerNumberCache.valueOf((long) (Math.random() * max));
    }
 
-   /**
-    * Never preprocess as this operator is not pure.
-    * <p>
-    * Multiple calls with identical arguments can produce different results.
-    */
+   /** Random is not pure. Multiple calls with the same argument do not produce identical results. */
    @Override
-   public ArithmeticOperator preprocess(final Term expression) {
-      return this;
+   protected boolean isPure() {
+      return false;
    }
 }

@@ -275,9 +275,21 @@ public class TermUtilsTest {
    public void testGetAtomNameException() {
       Structure p = structure("testAtomName", atom());
       try {
-         assertEquals("testAtomName", TermUtils.getAtomName(p));
+         TermUtils.getAtomName(p);
+         fail();
       } catch (ProjogException e) {
          assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
+      }
+   }
+
+   @Test
+   public void assertType() {
+      TermUtils.assertType(atom("testAtomName"), TermType.ATOM);
+      try {
+         TermUtils.assertType(atom("testAtomName"), TermType.LIST);
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Expected LIST but got: ATOM with value: testAtomName", e.getMessage());
       }
    }
 

@@ -155,7 +155,7 @@ public final class TermUtils {
     */
    public static long toLong(final ArithmeticOperators operators, final Term t) {
       final Numeric n = operators.getNumeric(t);
-      if (n.getType() == TermType.INTEGER) {
+      if (n.getType() == TermType.INTEGER) { // TODO use assertType
          return n.getLong();
       } else {
          throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
@@ -170,10 +170,16 @@ public final class TermUtils {
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     */
    public static String getAtomName(final Term t) {
-      if (t.getType() != TermType.ATOM) {
+      if (t.getType() != TermType.ATOM) { // TODO use assertType
          throw new ProjogException("Expected an atom but got: " + t.getType() + " with value: " + t);
       }
       return t.getName();
+   }
+
+   public static void assertType(final Term t, final TermType type) {
+      if (t.getType() != type) {
+         throw new ProjogException("Expected " + type + " but got: " + t.getType() + " with value: " + t);
+      }
    }
 
    public static Variable createAnonymousVariable() {

@@ -156,6 +156,7 @@
 ?- pj_add_predicate(min_list/2, 'org.projog.core.function.list.ExtremumList/minList').
 ?- pj_add_predicate(max_list/2, 'org.projog.core.function.list.ExtremumList/maxList').
 ?- pj_add_predicate(append/3, 'org.projog.core.function.list.Append').
+?- pj_add_predicate(append/2, 'org.projog.core.function.list.AppendListOfLists').
 ?- pj_add_predicate(subtract/3, 'org.projog.core.function.list.SubtractFromList').
 ?- pj_add_predicate(keysort/2, 'org.projog.core.function.list.KeySort').
 ?- pj_add_predicate(flatten/2, 'org.projog.core.function.list.Flatten').

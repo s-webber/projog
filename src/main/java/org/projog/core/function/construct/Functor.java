@@ -94,7 +94,7 @@ public final class Functor extends AbstractSingletonPredicate {
    public boolean evaluate(Term term, Term functor, Term arity) {
       switch (term.getType()) {
          case ATOM:
-            return functor.unify(term) && arity.unify(IntegerNumberCache.valueOf(0));
+            return functor.unify(term) && arity.unify(IntegerNumberCache.ZERO);
          case STRUCTURE:
          case LIST:
          case EMPTY_LIST:

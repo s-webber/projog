@@ -26,6 +26,12 @@ public class IntegerNumberCacheTest {
    private static final int MAX_CACHED_VALUE = 127;
 
    @Test
+   public void testZero() {
+      assertEquals(new IntegerNumber(0), IntegerNumberCache.ZERO);
+      assertSame(IntegerNumberCache.valueOf(0), IntegerNumberCache.ZERO);
+   }
+
+   @Test
    public void testCached() {
       for (int i = MIN_CACHED_VALUE; i <= MAX_CACHED_VALUE; i++) {
          assertSame(IntegerNumberCache.valueOf(i), IntegerNumberCache.valueOf(i));

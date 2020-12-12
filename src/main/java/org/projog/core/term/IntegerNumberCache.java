@@ -16,6 +16,7 @@
 package org.projog.core.term;
 
 public final class IntegerNumberCache {
+   public static final IntegerNumber ZERO = new IntegerNumber(0);
    private static final int MIN_CACHED_VALUE = -128;
    private static final int MAX_CACHED_VALUE = 127;
    private static final int OFFSET = -MIN_CACHED_VALUE;
@@ -24,7 +25,8 @@ public final class IntegerNumberCache {
 
    static {
       for (int i = 0; i < CACHE.length; i++) {
-         CACHE[i] = new IntegerNumber(i - OFFSET);
+         int n = i - OFFSET;
+         CACHE[i] = n == 0 ? ZERO : new IntegerNumber(n);
       }
    }
 

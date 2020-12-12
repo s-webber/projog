@@ -84,7 +84,7 @@ public final class Flag extends AbstractSingletonPredicate {
    private Numeric getOrCreate(PredicateKey pk) {
       Numeric n = flags.get(pk);
       if (n == null) {
-         n = IntegerNumberCache.valueOf(0);
+         n = IntegerNumberCache.ZERO;
          flags.put(pk, n);
       }
       return n;

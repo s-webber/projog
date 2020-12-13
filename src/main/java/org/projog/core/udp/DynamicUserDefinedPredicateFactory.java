@@ -210,10 +210,6 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    private class ImplicationsIterator implements Iterator<ClauseModel> {
       private ClauseActionMetaData previous;
 
-      private ClauseActionMetaData getNext() {
-         return previous == null ? ends[FIRST] : previous.next;
-      }
-
       @Override
       public boolean hasNext() {
          return getNext() != null;
@@ -230,9 +226,19 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          return clauseModel.copy();
       }
 
+      private ClauseActionMetaData getNext() {
+         return previous == null ? ends[FIRST] : previous.next;
+      }
+
       @Override
       public void remove() {
          synchronized (LOCK) {
+            if (hasPrimaryKey) {
+               Term firstArg = previous.clause.getModel().getConsequent().getArgument(0);
+               if (index.remove(firstArg) == null) {
+                  throw new IllegalStateException();
+               }
+            }
             if (previous.previous != null) {
                previous.previous.next = previous.next;
             } else {

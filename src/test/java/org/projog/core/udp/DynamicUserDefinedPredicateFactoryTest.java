@@ -139,13 +139,35 @@ public class DynamicUserDefinedPredicateFactoryTest {
       addLast(dp, "b");
       addLast(dp, "c");
 
+      assertTrue(dp.getPredicate(atom("a")).evaluate());
+      assertTrue(dp.getPredicate(atom("b")).evaluate());
+      assertTrue(dp.getPredicate(atom("c")).evaluate());
+      assertFalse(dp.getPredicate(atom("z")).evaluate());
+
       Iterator<ClauseModel> itr = dp.getImplications();
       itr.next();
       itr.remove();
+
+      assertFalse(dp.getPredicate(atom("a")).evaluate());
+      assertTrue(dp.getPredicate(atom("b")).evaluate());
+      assertTrue(dp.getPredicate(atom("c")).evaluate());
+      assertFalse(dp.getPredicate(atom("z")).evaluate());
+
       itr.next();
       itr.remove();
+
+      assertFalse(dp.getPredicate(atom("a")).evaluate());
+      assertFalse(dp.getPredicate(atom("b")).evaluate());
+      assertTrue(dp.getPredicate(atom("c")).evaluate());
+      assertFalse(dp.getPredicate(atom("z")).evaluate());
+
       itr.next();
       itr.remove();
+
+      assertFalse(dp.getPredicate(atom("a")).evaluate());
+      assertFalse(dp.getPredicate(atom("b")).evaluate());
+      assertFalse(dp.getPredicate(atom("c")).evaluate());
+      assertFalse(dp.getPredicate(atom("z")).evaluate());
 
       assertFalse(dp.getImplications().hasNext());
    }

@@ -16,6 +16,7 @@
 package org.projog.core.udp.interpreter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
@@ -36,8 +37,16 @@ public class Clauses {
    }
 
    public Clauses(KnowledgeBase kb, List<ClauseAction> actions) {
+      if (actions.isEmpty()) {
+         this.numClauses = 0;
+         this.clauses = Collections.emptyList();
+         this.immutableColumns = new int[0];
+         return;
+      }
+
       this.numClauses = actions.size();
       this.clauses = new ArrayList<>(numClauses);
+
       int numArgs = actions.get(0).getModel().getConsequent().getNumberOfArguments();
       boolean[] muttableColumns = new boolean[numArgs];
       int muttableColumnCtr = 0;

@@ -15,6 +15,7 @@
  */
 package org.projog.core.udp;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
@@ -26,10 +27,10 @@ import java.util.List;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseServiceLocator;
 import org.projog.core.KnowledgeBaseUtils;
-import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.event.ProjogEvent;
@@ -205,6 +206,8 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private PredicateFactory createInterpretedPredicateFactoryFromClauses(Clauses clauses) {
       if (clauses.getClauseActions().length == 1) {
          return createSingleClausePredicateFactory(clauses.getClauseActions()[0]);
+      } else if (clauses.getClauseActions().length == 0) {
+         return new NeverSucceedsPredicateFactory();
       } else if (clauses.getImmutableColumns().length == 0) {
          return new NotIndexablePredicateFactory(clauses);
       } else {
@@ -333,6 +336,23 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
+   private final class NeverSucceedsPredicateFactory implements PredicateFactory {
+      @Override
+      public Predicate getPredicate(Term... args) {
+         return PredicateUtils.createFailurePredicate(spyPoint, args);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return false;
+      }
+
+      @Override
+      public void setKnowledgeBase(KnowledgeBase kb) {
+         throw new UnsupportedOperationException();
+      }
+   }
+
    private final class IndexablePredicateFactory implements PreprocessablePredicateFactory {
       private final Indexes index;
 
@@ -357,8 +377,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       @Override
       public PredicateFactory preprocess(Term arg) {
          ClauseAction[] data = index.index(arg.getArgs());
-         List<ClauseAction> result = optimisePredicateFactory(data, arg);
-         System.out.println(arg + " " + result.size() + " " + data.length);
+         List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < index.getClauseCount()) {
             final Clauses clauses = new Clauses(kb, result);
             return createInterpretedPredicateFactoryFromClauses(clauses);
@@ -391,7 +410,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public PredicateFactory preprocess(Term arg) {
-         List<ClauseAction> result = optimisePredicateFactory(data, arg);
+         List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < data.length) {
             final Clauses clauses = new Clauses(kb, result);
             return createInterpretedPredicateFactoryFromClauses(clauses);
@@ -401,7 +420,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private static List<ClauseAction> optimisePredicateFactory(ClauseAction[] data, Term arg) {
+   private static List<ClauseAction> optimisePredicateFactory(KnowledgeBase kb, ClauseAction[] data, Term arg) {
       List<ClauseAction> result = new ArrayList<>();
       Term[] queryArgs = TermUtils.copy(arg.getArgs());
       for (ClauseAction action : data) {
@@ -410,6 +429,10 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
             result.add(action);
          }
          TermUtils.backtrack(queryArgs);
+      }
+      if (result.isEmpty()) {
+         ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, arg + " will never succeed", StaticUserDefinedPredicateFactory.class);
+         getProjogEventsObservable(kb).notifyObservers(event);
       }
       return result;
    }

@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.projog.TestUtils.createClauseModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -28,6 +29,13 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.udp.ClauseModel;
 
 public class ClausesTest {
+   @Test
+   public void testEmpty() {
+      Clauses c = Clauses.createFromModels(TestUtils.createKnowledgeBase(), Collections.<ClauseModel> emptyList());
+      assertEquals(0, c.getClauseActions().length); // TODO use assertEmpty
+      assertEquals(0, c.getImmutableColumns().length); // TODO use assertEmpty
+   }
+
    @Test
    public void testSingleNoArgClause() {
       Clauses c = createClauses("p.");

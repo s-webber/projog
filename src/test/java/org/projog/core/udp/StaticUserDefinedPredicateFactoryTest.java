@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
+import static org.projog.TestUtils.structure;
 
 import java.util.Arrays;
 
@@ -29,6 +30,9 @@ import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.PreprocessablePredicateFactory;
+import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.udp.compiler.CompiledPredicate;
 import org.projog.core.udp.compiler.CompiledTailRecursivePredicate;
@@ -167,6 +171,19 @@ public class StaticUserDefinedPredicateFactoryTest {
       PredicateFactory pf = getActualPredicateFactory(clauses);
       assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$NotIndexablePredicateFactory", pf.getClass().getName());
       assertTrue(pf.isRetryable());
+   }
+
+   @Test
+   public void testNeverSucceedsPredicateFactory() {
+      Term[] clauses = toTerms("p(a,b,c).", "p(1,2,3).", "p(x,y,Z).");
+      PredicateFactory pf = getActualPredicateFactory(clauses);
+      assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory", pf.getClass().getName());
+      assertTrue(pf.isRetryable());
+      Structure term = structure("p", atom("q"), atom("w"), atom("e"));
+      PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
+      assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$NeverSucceedsPredicateFactory", preprocessedPredicateFactory.getClass().getName());
+      assertSame(AbstractSingletonPredicate.FAIL, preprocessedPredicateFactory.getPredicate(term.getArgs()));
+      assertFalse(preprocessedPredicateFactory.isRetryable());
    }
 
    @Test

@@ -15,7 +15,6 @@
  */
 package org.projog.core.udp;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
@@ -430,16 +429,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          }
          TermUtils.backtrack(queryArgs);
       }
-      if (result.isEmpty()) {
-         ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, arg + " will never succeed", StaticUserDefinedPredicateFactory.class);
-         getProjogEventsObservable(kb).notifyObservers(event);
-      }
+      // TODO log warning here - arg + " will never succeed"
       return result;
    }
 
    private static final class ActionIterator implements Iterator<ClauseAction> {
       private final ClauseAction[] clauses;
-      private int pos=0;
+      private int pos = 0;
 
       ActionIterator(ClauseAction[] clauses) {
          this.clauses = clauses;

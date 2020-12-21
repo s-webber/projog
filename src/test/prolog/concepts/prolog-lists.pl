@@ -223,7 +223,6 @@ list_length([X|Xs],A) :- list_length(Xs,B), A is B+1.
 
 %QUERY list_length([],X)
 %ANSWER X=0
-%NO
 %QUERY list_length([a],X)
 %ANSWER X=1
 %NO

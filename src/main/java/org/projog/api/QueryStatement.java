@@ -83,8 +83,10 @@ public final class QueryStatement {
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          this.parsedInput = prologQuery.copy(sharedVariables);
          this.variables = new HashMap<>(sharedVariables.size());
-         for (Variable v : sharedVariables.values()) {
-            variables.put(v.getId(), v);
+         for (Variable variable : sharedVariables.values()) {
+            if (!variable.isAnonymous() && variables.put(variable.getId(), variable) != null) {
+               throw new IllegalStateException("Duplicate variable id: " + variable.getId());
+            }
          }
       }
    }

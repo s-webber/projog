@@ -86,7 +86,6 @@ p([a,b,c]).
 %ANSWER X=b
 %ANSWER X=c
 %ANSWER X=d
-%NO
 
 %QUERY p(X)
 %ANSWER X=a
@@ -255,12 +254,6 @@ p([a,b,c]).
 %
 %OUTPUT
 %ANSWER X=d
-%OUTPUT
-%[1] REDO p(x(a, d))
-%[1] FAIL p(x(a, X))
-%
-%OUTPUT
-%NO
 
 % test trace when argument contains a variable and so will not use index and query does not succeed
 %QUERY p(x(q,X))
@@ -291,10 +284,3 @@ p([a,b,c]).
 %
 %OUTPUT
 %ANSWER X=b
-%OUTPUT
-%[1] REDO p(z(a, b))
-%[1] FAIL p(z(a, X))
-%
-%OUTPUT
-%NO
-

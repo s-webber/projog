@@ -43,6 +43,7 @@ import org.projog.test.ProjogTestRunner.ProjogSupplier;
 import org.projog.test.ProjogTestRunner.TestResults;
 
 /** Uses {@code projog-test} to run Prolog code and compare the results against expectations. */
+@Ignore
 public class PrologTest {
    private static final File EXTRACTED_PROLOG_TESTS_DIR = new File("target/prolog-tests-extracted-from-java");
    private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog");
@@ -67,7 +68,6 @@ public class PrologTest {
       assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationDisabledProjog());
    }
 
-   @Ignore
    @Test
    public void prologTestsCompiledMode() {
       assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationEnabledProjog());
@@ -78,7 +78,6 @@ public class PrologTest {
       assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationDisabledProjog());
    }
 
-   @Ignore
    @Test
    public void extractedTestsCompiledMode() {
       assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationEnabledProjog());

@@ -54,7 +54,7 @@ public final class ListFactory {
     * @param terms contents of the list
     * @return a new {@link List} with the specified terms and a empty list as the final tail element
     */
-   public static Term createList(final Collection<Term> terms) {
+   public static Term createList(final Collection<? extends Term> terms) {
       return createList(terms.toArray(new Term[terms.size()]));
    }
 

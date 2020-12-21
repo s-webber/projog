@@ -61,7 +61,7 @@ public class ProjogConsole implements Observer {
 
    void run(List<String> startupScriptFilenames) throws IOException {
       out.println("Projog Console");
-      out.println("www.projog.org");
+      out.println("projog.org");
 
       consultScripts(startupScriptFilenames);
 
@@ -115,7 +115,7 @@ public class ProjogConsole implements Observer {
 
    private void parseAndExecute(String inputSyntax) {
       try {
-         QueryStatement s = projog.query(inputSyntax);
+         QueryStatement s = projog.createStatement(inputSyntax);
          QueryResult r = s.getResult();
          Set<String> variableIds = r.getVariableIds();
          while (evaluateOnce(r, variableIds) && shouldContinue()) {

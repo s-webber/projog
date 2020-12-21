@@ -24,17 +24,16 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 /**
  * Represents an executing query.
  */
 public final class QueryResult {
-   private final PredicateFactory predicateFactory;
-   private final Term query;
+   private final Predicate predicate;
    private final Map<String, Variable> variables;
-   private final Term[] args;
-   private Predicate predicate;
+   private boolean hasBeenEvaluated;
 
    /**
     * Evaluates a query.
@@ -45,10 +44,18 @@ public final class QueryResult {
     * @see QueryStatement#getResult()
     */
    QueryResult(PredicateFactory predicateFactory, Term query, Map<String, Variable> variables) {
-      this.predicateFactory = predicateFactory;
-      this.query = query;
+      int numArgs = query.getNumberOfArguments();
+      if (numArgs == 0) {
+         this.predicate = predicateFactory.getPredicate(TermUtils.EMPTY_ARRAY);
+      } else {
+         Term[] args = new Term[numArgs];
+         for (int i = 0; i < args.length; i++) {
+            args[i] = query.getArgument(i).getTerm();
+         }
+         this.predicate = predicateFactory.getPredicate(args);
+      }
+
       this.variables = variables;
-      this.args = new Term[query.getNumberOfArguments()];
    }
 
    /**
@@ -64,7 +71,7 @@ public final class QueryResult {
     * @throws PrologException if an error occurs while evaluating the query
     */
    public boolean next() {
-      if (predicate == null) {
+      if (!hasBeenEvaluated) {
          return doFirstEvaluationOfQuery();
       } else if (predicate.couldReevaluationSucceed()) {
          return doRetryEvaluationOfQuery();
@@ -74,10 +81,7 @@ public final class QueryResult {
    }
 
    private boolean doFirstEvaluationOfQuery() {
-      for (int i = 0; i < args.length; i++) {
-         args[i] = query.getArgument(i).getTerm();
-      }
-      predicate = predicateFactory.getPredicate(args);
+      hasBeenEvaluated = true;
       return predicate.evaluate();
    }
 
@@ -97,31 +101,22 @@ public final class QueryResult {
     * @see org.projog.core.Predicate#couldReevaluationSucceed()
     */
    public boolean isExhausted() {
-      if (predicate == null) {
-         return false;
-      }
-      return predicate.couldReevaluationSucceed() == false;
+      return hasBeenEvaluated && predicate.couldReevaluationSucceed() == false;
    }
 
-   /**
-    * Attempts to unify the specified term to the variable with the specified id.
-    * <p>
-    * If the variable is already unified to a term then an attempt will be made to unify the specified term with the
-    * term the variable is currently unified with.
-    *
-    * @param variableId the id of the variable
-    * @param term the term to unify
-    * @return {@code true} if the attempt to unify the specified term to the variable with the specified id was
-    * successful
-    * @throws ProjogException if {@link #next()} has already been called on this object or if no variable with the
-    * specified id exists in the query this object represents
-    */
-   public boolean setTerm(String variableId, Term term) {
-      if (predicate != null) {
-         throw new ProjogException("Calling setTerm(" + variableId + ", " + term + ") after next() has already been called for: " + query);
-      }
-      Term v = getTerm(variableId);
-      return v.unify(term);
+   public String getAtomName(String variableId) {
+      Term term = getTerm(variableId);
+      return TermUtils.getAtomName(term);
+   }
+
+   public double getDouble(String variableId) {
+      Term term = getTerm(variableId);
+      return TermUtils.castToNumeric(term).getDouble();
+   }
+
+   public long getLong(String variableId) {
+      Term term = getTerm(variableId);
+      return TermUtils.castToNumeric(term).getLong();
    }
 
    /**
@@ -135,7 +130,7 @@ public final class QueryResult {
    public Term getTerm(String variableId) {
       Variable v = variables.get(variableId);
       if (v == null) {
-         throw new ProjogException("Do not know about variable named: " + variableId + " in query: " + query);
+         throw new ProjogException("Unknown variable ID: " + variableId);
       }
       return v.getTerm();
    }

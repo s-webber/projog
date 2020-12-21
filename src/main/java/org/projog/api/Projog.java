@@ -189,6 +189,19 @@ public final class Projog {
    }
 
    /**
+    * Populates this objects {@code KnowledgeBase} with clauses read from the specified resource.
+    * <p>
+    * If {@code prologSourceResourceName} refers to an existing file on the file system then that file is used as the
+    * source of the prolog syntax else {@code prologSourceResourceName} is read from the classpath.
+    *
+    * @param resourceName source of the prolog syntax defining clauses to add to the KnowledgeBase
+    * @throws ProjogException if there is any problem parsing the syntax or adding the new clauses to the KnowledgeBase
+    */
+   public void consultResource(String resourceName) {
+      ProjogSourceReader.parseResource(kb, resourceName);
+   }
+
+   /**
     * Reassigns the "standard" input stream.
     * <p>
     * By default the "standard" input stream will be {@code System.in}.
@@ -238,6 +251,10 @@ public final class Projog {
       getArithmeticOperators(kb).addArithmeticOperator(key, operator);
    }
 
+   public QueryPlan createPlan(String prologQuery) {
+      return new QueryPlan(kb, prologQuery);
+   }
+
    /**
     * Creates a {@link QueryStatement} for querying the Projog environment.
     * <p>
@@ -247,7 +264,7 @@ public final class Projog {
     * @return representation of the query parsed from the specified syntax
     * @throws ProjogException if an error occurs parsing {@code prologQuery}
     */
-   public QueryStatement query(String prologQuery) {
+   public QueryStatement createStatement(String prologQuery) {
       return new QueryStatement(kb, prologQuery);
    }
 

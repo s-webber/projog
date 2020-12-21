@@ -36,8 +36,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    </scm>
 
    <properties>
-      <maven.compiler.source>7</maven.compiler.source>
-      <maven.compiler.target>7</maven.compiler.target>
+      <maven.compiler.source>8</maven.compiler.source>
+      <maven.compiler.target>8</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
 
@@ -63,7 +63,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <dependency>
          <groupId>org.mockito</groupId>
          <artifactId>mockito-core</artifactId>
-         <version>2.7.2</version>
+         <version>3.6.28</version>
           <scope>test</scope>
       </dependency>
    </dependencies>

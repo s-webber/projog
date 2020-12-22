@@ -15,6 +15,7 @@
  */
 package org.projog.core.udp;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
@@ -32,8 +33,6 @@ import org.projog.core.PredicateKey;
 import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
@@ -123,9 +122,8 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          } catch (Exception e) {
             // If fail to compile a user-defined predicate to Java - possibly because the predicate is too large -
             // then revert to evaluating the predicate in interpreted mode rather than throwing an exception.
-            ProjogEvent warning = new ProjogEvent(ProjogEventType.WARN,
-                        "Caught exception while compiling " + predicateKey + " to Java so will revert to operating in interpreted mode for this predicate.", this);
-            KnowledgeBaseUtils.getProjogEventsObservable(kb).notifyObservers(warning);
+            getProjogListeners(kb)
+                        .notifyWarn("Caught exception while compiling " + predicateKey + " to Java so will revert to operating in interpreted mode for this predicate.");
          }
       }
 
@@ -429,7 +427,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          }
          TermUtils.backtrack(queryArgs);
       }
-      // TODO log warning here - arg + " will never succeed"
+      if (result.isEmpty()) {
+         getProjogListeners(kb).notifyWarn(arg + " will never succeed");
+      }
       return result;
    }
 

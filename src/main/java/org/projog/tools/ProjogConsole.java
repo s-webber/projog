@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -32,7 +30,7 @@ import org.projog.api.Projog;
 import org.projog.api.QueryResult;
 import org.projog.api.QueryStatement;
 import org.projog.core.ProjogException;
-import org.projog.core.event.ProjogEvent;
+import org.projog.core.event.LoggingProjogListener;
 import org.projog.core.parser.ParserException;
 import org.projog.core.term.Term;
 
@@ -43,7 +41,7 @@ import org.projog.core.term.Term;
  * <p>
  * <img src="doc-files/ProjogConsole.png">
  */
-public class ProjogConsole implements Observer {
+public class ProjogConsole {
    /** Command user can enter to exit the console application. */
    private static final String QUIT_COMMAND = "quit.";
    private static final String CONTINUE_EVALUATING = ";";
@@ -56,7 +54,7 @@ public class ProjogConsole implements Observer {
    ProjogConsole(InputStream in, PrintStream out) {
       this.in = new Scanner(in);
       this.out = out;
-      this.projog = new Projog(this);
+      this.projog = new Projog(new LoggingProjogListener(out));
    }
 
    void run(List<String> startupScriptFilenames) throws IOException {
@@ -84,17 +82,6 @@ public class ProjogConsole implements Observer {
 
    private static boolean isNotEmpty(String input) {
       return input.trim().length() > 0;
-   }
-
-   /**
-    * Observer method that informs user of events generated during the evaluation of goals.
-    */
-   @Override
-   public void update(Observable o, Object arg) {
-      ProjogEvent event = (ProjogEvent) arg;
-      Object source = event.getSource();
-      String id = source == null ? "?" : Integer.toString(source.hashCode());
-      out.println("[" + id + "] " + event.getType() + " " + event.getDetails());
    }
 
    private void consultScripts(List<String> scriptFilenames) {

@@ -25,19 +25,12 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
 import org.junit.Test;
+import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
 import org.projog.core.udp.ClauseModel;
@@ -191,16 +184,10 @@ public class SpyPointsTest {
 
    @Test
    public void testSpyPointUpdatesObserver() {
-      // add an observer to the KnowledgeBase's ProjogEventsObservable
+      // add a listener to the KnowledgeBase's ProjogListeners
       // so we can keep track of ProjogEvent objects created by the SpyPoint
-      final List<Object> events = new ArrayList<>();
-      Observer observer = new Observer() {
-         @Override
-         public void update(Observable o, Object arg) {
-            events.add(arg);
-         }
-      };
-      getProjogEventsObservable(kb).addObserver(observer);
+      final SimpleProjogListener listener = new SimpleProjogListener();
+      getProjogListeners(kb).addListener(listener);
 
       PredicateKey key = createKey("test", 1);
       DynamicUserDefinedPredicateFactory pf = new DynamicUserDefinedPredicateFactory(kb, key);
@@ -217,7 +204,7 @@ public class SpyPointsTest {
       sp.logExit(this, new Term[] {atom("b")}, 1);
       sp.logFail(this, new Term[] {atom("c")});
       sp.logRedo(this, new Term[] {atom("d")});
-      assertTrue(events.isEmpty());
+      assertTrue(listener.isEmpty());
 
       // set the spy point and then make a number of log calls to the spy point -
       // the observer should now be updated with each call in the order they are made
@@ -226,20 +213,15 @@ public class SpyPointsTest {
       sp.logExit(this, new Term[] {list(atom("a"), variable("X"))}, 0);
       sp.logFail(this, new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))});
       sp.logRedo(this, new Term[] {createAnonymousVariable()});
-      assertEquals(4, events.size());
-      assertProjogEvent(events.get(0), ProjogEventType.CALL, "test(z)");
-      assertProjogEvent(events.get(1), ProjogEventType.EXIT, "test([a,X])");
-      assertProjogEvent(events.get(2), ProjogEventType.FAIL, "test(c([], z, 1))");
-      assertProjogEvent(events.get(3), ProjogEventType.REDO, "test(_)");
+      assertEquals(4, listener.size());
+      assertProjogEvent(listener.get(0), "CALL", "test(z)");
+      assertProjogEvent(listener.get(1), "EXIT", "test([a,X])");
+      assertProjogEvent(listener.get(2), "FAIL", "test(c([], z, 1))");
+      assertProjogEvent(listener.get(3), "REDO", "test(_)");
    }
 
-   private void assertProjogEvent(Object o, ProjogEventType t, String expectedMessage) {
-      assertSame(ProjogEvent.class, o.getClass());
-      ProjogEvent e = (ProjogEvent) o;
-      assertSame(t, e.getType());
-      SpyPointEvent spe = (SpyPointEvent) e.getDetails();
-      assertEquals(expectedMessage, spe.toString());
-      assertSame(this, e.getSource());
+   private void assertProjogEvent(String event, String expectedType, String expectedMessage) {
+      assertEquals(expectedType + expectedMessage, event);
    }
 
    private PredicateKey createKey(String name, int numArgs) {

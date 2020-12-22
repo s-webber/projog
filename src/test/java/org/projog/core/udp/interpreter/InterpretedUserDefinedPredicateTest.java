@@ -29,8 +29,6 @@ import static org.projog.TestUtils.array;
 import static org.projog.TestUtils.atom;
 
 import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,8 +40,10 @@ import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.SpyPoints.SpyPoint;
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.SpyPoints.SpyPointEvent;
+import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.ProjogListeners;
+import org.projog.core.event.ProjogListener;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -54,7 +54,7 @@ public class InterpretedUserDefinedPredicateTest {
    private ClauseAction mockAction2;
    private ClauseAction mockAction3;
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
-   private SimpleObserver observer;
+   private SimpleListener listener;
 
    @Before
    public void before() {
@@ -62,9 +62,9 @@ public class InterpretedUserDefinedPredicateTest {
       this.mockAction2 = mock(ClauseAction.class);
       this.mockAction3 = mock(ClauseAction.class);
 
-      this.observer = new SimpleObserver();
-      ProjogEventsObservable observable = new ProjogEventsObservable();
-      observable.addObserver(observer);
+      this.listener = new SimpleListener();
+      ProjogListeners observable = new ProjogListeners();
+      observable.addListener(listener);
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
       this.spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
    }
@@ -80,7 +80,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertAllSucceedOnce();
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
    }
 
    @Test
@@ -89,7 +89,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertAllSucceedOnce();
 
-      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)", listener.result());
       verify(mockAction1).getModel();
       verify(mockAction2).getModel();
       verify(mockAction3).getModel();
@@ -122,7 +122,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertAllFail();
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
    }
 
    @Test
@@ -131,7 +131,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertAllFail();
 
-      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
    }
 
    private void assertAllFail() {
@@ -155,7 +155,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertSecondRuleRepeatableContinueUntilFails();
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
    }
 
    @Test
@@ -166,7 +166,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertEquals(
                   "CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)",
-                  observer.result());
+                  listener.result());
       verify(mockAction1).getModel();
       verify(mockAction2, times(5)).getModel();
       verify(mockAction3).getModel();
@@ -214,7 +214,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertSecondRuleRepeatableContinueUntilReevaluationCannotSucceed();
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
    }
 
    @Test
@@ -225,7 +225,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertEquals(
                   "CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)",
-                  observer.result());
+                  listener.result());
       verify(mockAction1).getModel();
       verify(mockAction2, times(5)).getModel();
       verify(mockAction3).getModel();
@@ -294,7 +294,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertSecondRuntimeException();
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
    }
 
    @Test
@@ -303,7 +303,7 @@ public class InterpretedUserDefinedPredicateTest {
 
       assertSecondRuntimeException();
 
-      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)", listener.result());
       verify(mockAction1).getModel();
       verify(mockAction2).getModel();
    }
@@ -336,14 +336,42 @@ public class InterpretedUserDefinedPredicateTest {
       verifyNoMoreInteractions(mockPredicate);
    }
 
-   private static class SimpleObserver implements Observer {
+   private static class SimpleListener implements ProjogListener {
       final StringBuilder result = new StringBuilder();
 
       @Override
-      public void update(Observable o, Object arg) {
-         ProjogEvent e = (ProjogEvent) arg;
-         result.append(e.getType());
-         result.append(e.getDetails());
+      public void onInfo(String message) {
+         throw new UnsupportedOperationException(message);
+      }
+
+      @Override
+      public void onWarn(String message) {
+         throw new UnsupportedOperationException(message);
+      }
+
+      @Override
+      public void onCall(SpyPointEvent event) {
+         update("CALL", event);
+      }
+
+      @Override
+      public void onRedo(SpyPointEvent event) {
+         update("REDO", event);
+      }
+
+      @Override
+      public void onExit(SpyPointExitEvent event) {
+         update("EXIT", event);
+      }
+
+      @Override
+      public void onFail(SpyPointEvent event) {
+         update("FAIL", event);
+      }
+
+      private void update(String level, SpyPointEvent event) {
+         result.append(level);
+         result.append(event);
       }
 
       String result() {

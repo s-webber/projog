@@ -28,12 +28,10 @@ import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.array;
 import static org.projog.TestUtils.atom;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.CutException;
 import org.projog.core.Predicate;
@@ -41,8 +39,7 @@ import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.SpyPoints.SpyPoint;
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
 import org.projog.core.udp.SingleRetryableRulePredicateFactory.RetryableRulePredicate;
 import org.projog.core.udp.interpreter.ClauseAction;
@@ -53,7 +50,7 @@ public class SingleRetryableRulePredicateFactoryTest {
    private SingleRetryableRulePredicateFactory testObject;
    private Predicate mockPredicate;
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
-   private SimpleObserver observer;
+   private SimpleProjogListener listener;
 
    @Before
    public void before() {
@@ -61,9 +58,9 @@ public class SingleRetryableRulePredicateFactoryTest {
       this.mockAction = mock(ClauseAction.class);
       when(mockAction.getPredicate(queryArgs)).thenReturn(mockPredicate);
 
-      this.observer = new SimpleObserver();
-      ProjogEventsObservable observable = new ProjogEventsObservable();
-      observable.addObserver(observer);
+      this.listener = new SimpleProjogListener();
+      ProjogListeners observable = new ProjogListeners();
+      observable.addListener(listener);
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
       SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
 
@@ -88,7 +85,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       assertTrue(result.evaluate());
       assertTrue(result.evaluate());
       assertFalse(result.evaluate());
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
 
       verify(mockPredicate, times(4)).evaluate();
    }
@@ -101,7 +98,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RetryableRulePredicate result = testObject.getPredicate(queryArgs);
 
       assertFalse(result.evaluate());
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
       verify(mockPredicate).evaluate();
    }
 
@@ -113,7 +110,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RetryableRulePredicate result = testObject.getPredicate(queryArgs);
 
       assertFalse(result.evaluate());
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
       verify(mockPredicate).evaluate();
    }
 
@@ -132,7 +129,7 @@ public class SingleRetryableRulePredicateFactoryTest {
          assertSame(exception, e.getCause());
       }
 
-      assertEquals("", observer.result());
+      assertEquals("", listener.result());
       verify(mockPredicate).evaluate();
       verify(mockAction).getModel();
    }
@@ -148,7 +145,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       assertTrue(result.evaluate());
       assertTrue(result.evaluate());
       assertFalse(result.evaluate());
-      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)EXITtest(a, b, c)REDOtest(a, b, c)FAILtest(a, b, c)", listener.result());
       verify(mockAction, times(3)).getModel();
       verify(mockPredicate, times(4)).evaluate();
    }
@@ -161,7 +158,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RetryableRulePredicate result = testObject.getPredicate(queryArgs);
 
       assertFalse(result.evaluate());
-      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
       verify(mockPredicate).evaluate();
    }
 
@@ -173,7 +170,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RetryableRulePredicate result = testObject.getPredicate(queryArgs);
 
       assertFalse(result.evaluate());
-      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
       verify(mockPredicate).evaluate();
    }
 
@@ -192,7 +189,7 @@ public class SingleRetryableRulePredicateFactoryTest {
          assertSame(exception, e.getCause());
       }
 
-      assertEquals("CALLtest(a, b, c)", observer.result());
+      assertEquals("CALLtest(a, b, c)", listener.result());
       verify(mockPredicate).evaluate();
       verify(mockAction).getModel();
    }
@@ -215,20 +212,5 @@ public class SingleRetryableRulePredicateFactoryTest {
 
       verify(mockPredicate).evaluate();
       verify(mockPredicate, times(2)).couldReevaluationSucceed();
-   }
-
-   private static class SimpleObserver implements Observer {
-      final StringBuilder result = new StringBuilder();
-
-      @Override
-      public void update(Observable o, Object arg) {
-         ProjogEvent e = (ProjogEvent) arg;
-         result.append(e.getType());
-         result.append(e.getDetails());
-      }
-
-      String result() {
-         return result.toString();
-      }
    }
 }

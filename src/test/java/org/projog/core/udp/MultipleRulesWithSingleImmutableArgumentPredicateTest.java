@@ -23,18 +23,15 @@ import static org.junit.Assert.assertTrue;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.structure;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
-import org.projog.core.event.ProjogEvent;
 import org.projog.core.function.SucceedsNeverPredicate;
 import org.projog.core.function.SucceedsOncePredicate;
 import org.projog.core.term.Term;
@@ -94,8 +91,8 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSpyPointEnabled_fails() {
-      final SimpleObserver o = new SimpleObserver();
-      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+      final SimpleProjogListener o = new SimpleProjogListener();
+      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
 
       KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
 
@@ -107,8 +104,8 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSpyPointEnabled_succeedsOnce() {
-      final SimpleObserver o = new SimpleObserver();
-      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+      final SimpleProjogListener o = new SimpleProjogListener();
+      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
 
       KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
 
@@ -121,8 +118,8 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSpyPointEnabled_succeedsMany() {
-      final SimpleObserver o = new SimpleObserver();
-      KnowledgeBaseUtils.getProjogEventsObservable(kb).addObserver(o);
+      final SimpleProjogListener o = new SimpleProjogListener();
+      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
 
       KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
 
@@ -139,20 +136,5 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
       assertFalse(p.couldReevaluationSucceed());
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertEquals("CALLtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)REDOtest(c)EXITtest(c)", o.result());
-   }
-
-   private static class SimpleObserver implements Observer {
-      final StringBuilder result = new StringBuilder();
-
-      @Override
-      public void update(Observable o, Object arg) {
-         ProjogEvent e = (ProjogEvent) arg;
-         result.append(e.getType());
-         result.append(e.getDetails());
-      }
-
-      String result() {
-         return result.toString();
-      }
    }
 }

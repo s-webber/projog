@@ -16,7 +16,6 @@
 package org.projog.core;
 
 import static org.projog.core.CoreUtils.instantiate;
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,8 +24,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.udp.DynamicUserDefinedPredicateFactory;
@@ -208,8 +205,6 @@ public final class KnowledgeBase {
    }
 
    private PredicateFactory unknownPredicate(PredicateKey key) {
-      ProjogEvent event = new ProjogEvent(ProjogEventType.WARN, "Not defined: " + key, this);
-      getProjogEventsObservable(this).notifyObservers(event);
       return new UnknownPredicate(this, key);
    }
 

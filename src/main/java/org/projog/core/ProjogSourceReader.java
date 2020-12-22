@@ -16,7 +16,7 @@
 package org.projog.core;
 
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.KnowledgeBaseUtils.isDynamicFunctionCall;
 import static org.projog.core.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
 
@@ -29,8 +29,6 @@ import java.io.Reader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.term.Term;
 import org.projog.core.udp.ClauseModel;
@@ -130,13 +128,11 @@ public final class ProjogSourceReader {
    }
 
    private static void notifyReadingFromFileSystem(KnowledgeBase kb, File file) {
-      ProjogEvent event = new ProjogEvent(ProjogEventType.INFO, "Reading prolog source in: " + file + " from file system", ProjogSourceReader.class);
-      getProjogEventsObservable(kb).notifyObservers(event);
+      getProjogListeners(kb).notifyInfo("Reading prolog source in: " + file + " from file system");
    }
 
    private static void notifyReadingFromClasspath(KnowledgeBase kb, String resourceName) {
-      ProjogEvent event = new ProjogEvent(ProjogEventType.INFO, "Reading prolog source in: " + resourceName + " from classpath", ProjogSourceReader.class);
-      getProjogEventsObservable(kb).notifyObservers(event);
+      getProjogListeners(kb).notifyInfo("Reading prolog source in: " + resourceName + " from classpath");
    }
 
    private ProjogSourceReader(KnowledgeBase kb) {

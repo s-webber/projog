@@ -31,7 +31,7 @@ import org.junit.Test;
 public class ProjogConsoleTest {
    private static final String ERROR_MESSAGE = "Invalid. Enter ; to continue or q to quit. ";
    private static final String PROMPT = "?- ";
-   private static final String EXPECTED_HEADER = concatenate("[31966667] INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "projog.org", "");
+   private static final String EXPECTED_HEADER = concatenate("INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "projog.org", "");
    private static final String EXPECTED_FOOTER = lineSeparator() + PROMPT;
    private static final String QUIT_COMMAND = concatenate("quit.");
    private static final String YES = "yes (0 ms)";
@@ -92,7 +92,7 @@ public class ProjogConsoleTest {
       File tempFile = createFileToConsult("test(a).", "test(b).", "test(c).");
       String path = tempFile.getPath();
       String input = createInput("consult('" + path.replace("\\", "\\\\") + "').", "trace.", "test(X).", ";", ";");
-      String expected = createExpectedOutput(PROMPT + "[THREAD-ID] INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "",
+      String expected = createExpectedOutput(PROMPT + "INFO Reading prolog source in: " + path + " from file system", "", YES, "", PROMPT, YES, "",
                   PROMPT + "[THREAD-ID] CALL test(X)", "[THREAD-ID] EXIT test(a)", "", "X = a", "", YES + "[THREAD-ID] REDO test(a)", "[THREAD-ID] EXIT test(b)", "", "X = b", "",
                   YES + "[THREAD-ID] REDO test(b)", "[THREAD-ID] EXIT test(c)", "", "X = c", "", YES);
       String actual = getOutput(input);

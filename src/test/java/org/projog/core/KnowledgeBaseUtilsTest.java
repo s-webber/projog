@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
@@ -172,16 +172,16 @@ public class KnowledgeBaseUtilsTest {
    }
 
    @Test
-   public void testGetProjogEventsObservable() {
+   public void testGetProjogListeners() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      ProjogEventsObservable o1 = KnowledgeBaseUtils.getProjogEventsObservable(kb1);
-      ProjogEventsObservable o2 = KnowledgeBaseUtils.getProjogEventsObservable(kb2);
+      ProjogListeners o1 = KnowledgeBaseUtils.getProjogListeners(kb1);
+      ProjogListeners o2 = KnowledgeBaseUtils.getProjogListeners(kb2);
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getProjogEventsObservable(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getProjogEventsObservable(kb2));
+      assertSame(o1, KnowledgeBaseUtils.getProjogListeners(kb1));
+      assertSame(o2, KnowledgeBaseUtils.getProjogListeners(kb2));
    }
 
    @Test

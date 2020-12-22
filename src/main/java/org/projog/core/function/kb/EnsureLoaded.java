@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,13 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.term.TermUtils.getAtomName;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.projog.core.ProjogSourceReader;
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -48,8 +46,7 @@ public final class EnsureLoaded extends AbstractSingletonPredicate {
       String resourceName = getResourceName(arg);
       synchronized (lock) {
          if (loadedResources.contains(resourceName)) {
-            ProjogEvent event = new ProjogEvent(ProjogEventType.INFO, "Already loaded: " + resourceName, this);
-            getProjogEventsObservable(getKnowledgeBase()).notifyObservers(event);
+            getProjogListeners(getKnowledgeBase()).notifyInfo("Already loaded: " + resourceName);
          } else {
             ProjogSourceReader.parseResource(getKnowledgeBase(), resourceName);
             loadedResources.add(resourceName);

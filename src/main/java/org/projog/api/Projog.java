@@ -18,7 +18,7 @@ package org.projog.api;
 import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_METHOD_NAME_PREFIX;
 import static org.projog.core.udp.compiler.CompiledPredicateConstants.RETRY_RULE_METHOD_NAME_PREFIX;
 
@@ -29,7 +29,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Observer;
 
 import org.projog.core.ArithmeticOperator;
 import org.projog.core.KnowledgeBase;
@@ -40,6 +39,7 @@ import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSourceReader;
 import org.projog.core.ProjogSystemProperties;
+import org.projog.core.event.ProjogListener;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
@@ -150,19 +150,20 @@ public final class Projog {
    private final TermFormatter tf;
 
    /**
-    * Constructs a new {@code Projog} object using {@link ProjogSystemProperties} and the specified {@code Observer}s.
+    * Constructs a new {@code Projog} object using {@link ProjogSystemProperties} and the specified
+    * {@code ProjogListener}s.
     */
-   public Projog(Observer... observers) {
-      this(new ProjogSystemProperties(), observers);
+   public Projog(ProjogListener... listeners) {
+      this(new ProjogSystemProperties(), listeners);
    }
 
    /**
-    * Constructs a new {@code Projog} object with the specified {@code ProjogProperties} and {@code Observer}s.
+    * Constructs a new {@code Projog} object with the specified {@code ProjogProperties} and {@code ProjogListener}s.
     */
-   public Projog(ProjogProperties projogProperties, Observer... observers) {
+   public Projog(ProjogProperties projogProperties, ProjogListener... listeners) {
       this.kb = KnowledgeBaseUtils.createKnowledgeBase(projogProperties);
-      for (Observer o : observers) {
-         addObserver(o);
+      for (ProjogListener listener : listeners) {
+         addListener(listener);
       }
       KnowledgeBaseUtils.bootstrap(kb);
       this.tf = new TermFormatter(getOperands(kb));
@@ -269,13 +270,13 @@ public final class Projog {
    }
 
    /**
-    * Registers an {@code Observer} to receive {@link org.projog.core.event.ProjogEvent}s generated during the
-    * evaluation of Prolog goals.
+    * Registers an {@code ProjogListener} to receive notifications of events generated during the evaluation of Prolog
+    * goals.
     *
-    * @param observer an observer to be added
+    * @param listener an listener to be added
     */
-   public void addObserver(Observer observer) {
-      getProjogEventsObservable(kb).addObserver(observer);
+   public void addListener(ProjogListener listener) {
+      getProjogListeners(kb).addListener(listener);
    }
 
    /**

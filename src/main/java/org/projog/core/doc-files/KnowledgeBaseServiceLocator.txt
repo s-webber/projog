@@ -10,7 +10,7 @@ class KnowledgeBaseServiceLocator {
 
 interface ProjogProperties
 
-KnowledgeBaseServiceLocator o-left- ProjogEventsObservable
+KnowledgeBaseServiceLocator o-left- ProjogListeners
 KnowledgeBaseServiceLocator o-up- SpyPoints
 KnowledgeBaseServiceLocator o-up- Operands
 KnowledgeBaseServiceLocator o-- ProjogProperties

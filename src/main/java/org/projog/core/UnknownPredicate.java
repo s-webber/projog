@@ -15,13 +15,15 @@
  */
 package org.projog.core;
 
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
+
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /**
  * Represents all predicates that a {@code KnowledgeBase} has no definition of.
  * <p>
- * Always fails to evaluate successfully.
+ * Always fails to evaluate successfully. TODO update Javadoc to explain actualPredicateFactory
  *
  * @see KnowledgeBase#getPredicateFactory(PredicateKey)
  * @see KnowledgeBase#getPredicateFactory(Term)
@@ -68,7 +70,9 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
       synchronized (key) {
          if (actualPredicateFactory == null) {
             PredicateFactory pf = kb.getPredicateFactory(key);
-            if (!(pf instanceof UnknownPredicate)) {
+            if (pf instanceof UnknownPredicate) {
+               getProjogListeners(kb).notifyWarn("Not defined: " + key);
+            } else {
                actualPredicateFactory = pf;
             }
          }

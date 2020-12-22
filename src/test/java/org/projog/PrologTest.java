@@ -27,15 +27,15 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.projog.api.Projog;
 import org.projog.core.ProjogProperties;
-import org.projog.core.event.ProjogEvent;
+import org.projog.core.SpyPoints.SpyPointEvent;
+import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.ProjogListener;
 import org.projog.test.ProjogTestExtractor;
 import org.projog.test.ProjogTestExtractorConfig;
 import org.projog.test.ProjogTestRunner;
@@ -101,17 +101,45 @@ public class PrologTest {
 
       // create Projog instance with an Observer so can check the events to confirm that the predicate cannot be compiled
       final List<String> events = new ArrayList<>();
-      final Observer observer = new Observer() {
+      final ProjogListener listener = new ProjogListener() {
          @Override
-         public void update(Observable o, Object arg) {
-            ProjogEvent event = (ProjogEvent) arg;
-            events.add(event.getMessage());
+         public void onInfo(String message) {
+            add(message);
+         }
+
+         @Override
+         public void onWarn(String message) {
+            add(message);
+         }
+
+         @Override
+         public void onRedo(SpyPointEvent event) {
+            add(event);
+         }
+
+         @Override
+         public void onFail(SpyPointEvent event) {
+            add(event);
+         }
+
+         @Override
+         public void onExit(SpyPointExitEvent event) {
+            add(event);
+         }
+
+         @Override
+         public void onCall(SpyPointEvent event) {
+            add(event);
+         }
+
+         private void add(Object message) {
+            events.add(message.toString());
          }
       };
       ProjogSupplier projogSupplier = new ProjogSupplier() {
          @Override
          public Projog get() {
-            return new Projog(COMPILATION_ENABLED_PROPERTIES, observer);
+            return new Projog(COMPILATION_ENABLED_PROPERTIES, listener);
          }
       };
 

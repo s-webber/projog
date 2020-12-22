@@ -15,21 +15,17 @@
  */
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogEventsObservable;
+import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.projog.core.event.ProjogEvent;
-import org.projog.core.event.ProjogEventType;
-import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
-import org.projog.core.term.TermUtils;
-import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
@@ -37,7 +33,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  * Collection of spy points.
  * <p>
  * Spy points are useful in the debugging of Prolog programs. When a spy point is set on a predicate a
- * {@link ProjogEventType} is generated every time the predicate is executed, fails or succeeds.
+ * {@link SpyPointEvent} is generated every time the predicate is executed, fails or succeeds.
  * </p>
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code SpyPoints} instance.
@@ -49,40 +45,30 @@ public final class SpyPoints {
    private final Object lock = new Object();
    private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>(); // TODO make concurrent?
    private final KnowledgeBase kb;
-   private final ProjogEventsObservable projogEventsObservable;
+   private final ProjogListeners projogListeners;
    private final TermFormatter termFormatter;
    private boolean traceEnabled;
 
    public SpyPoints(KnowledgeBase kb) {
       this.kb = kb;
-      this.projogEventsObservable = getProjogEventsObservable(kb);
+      this.projogListeners = getProjogListeners(kb);
       this.termFormatter = getTermFormatter(kb);
    }
 
-   public SpyPoints(ProjogEventsObservable observable, TermFormatter termFormatter) { // TODO only used by tests - remove
+   public SpyPoints(ProjogListeners observable, TermFormatter termFormatter) { // TODO only used by tests - remove
       this.kb = null;
-      this.projogEventsObservable = observable;
+      this.projogListeners = observable;
       this.termFormatter = termFormatter;
    }
 
    public void setTraceEnabled(boolean traceEnabled) {
-      synchronized (lock) {
-         this.traceEnabled = traceEnabled;
-         for (SpyPoints.SpyPoint sp : spyPoints.values()) {
-            if (traceEnabled) {
-               sp.enabled = true;
-            } else {
-               sp.enabled = sp.set;
-            }
-         }
-      }
+      this.traceEnabled = traceEnabled;
    }
 
    public void setSpyPoint(PredicateKey key, boolean set) {
       synchronized (lock) {
          SpyPoint sp = getSpyPoint(key);
          sp.set = set;
-         sp.enabled = traceEnabled || sp.set;
       }
    }
 
@@ -99,7 +85,6 @@ public final class SpyPoints {
          SpyPoint spyPoint = spyPoints.get(key);
          if (spyPoint == null) {
             spyPoint = new SpyPoint(key);
-            spyPoint.enabled = traceEnabled;
             spyPoints.put(key, spyPoint);
          }
          return spyPoint;
@@ -112,7 +97,6 @@ public final class SpyPoints {
 
    public class SpyPoint {
       private final PredicateKey key;
-      private boolean enabled;
       private boolean set;
 
       private SpyPoint(PredicateKey key) {
@@ -128,20 +112,29 @@ public final class SpyPoints {
       }
 
       public boolean isEnabled() {
-         return enabled;
+         return set || traceEnabled;
       }
 
-      /** Generates an event of type {@link ProjogEventType#CALL} */
+      /** Notifies listeners of a first attempt to evaluate a goal. */
       public void logCall(Object source, Term[] args) {
-         log(ProjogEventType.CALL, source, args, null);
+         if (isEnabled() == false) {
+            return;
+         }
+
+         projogListeners.notifyCall(new SpyPointEvent(key, args, source));
       }
 
-      /** Generates an event of type {@link ProjogEventType#REDO} */
+      /** Notifies listeners of an attempt to re-evaluate a goal. */
       public void logRedo(Object source, Term[] args) {
-         log(ProjogEventType.REDO, source, args, null);
+         if (isEnabled() == false) {
+            return;
+         }
+
+         projogListeners.notifyRedo(new SpyPointEvent(key, args, source));
       }
 
-      /** Generates an event of type {@link ProjogEventType#EXIT} */
+      /** Notifies listeners of that an attempt to evaluate a goal has succeeded. */
+      @Deprecated
       public void logExit(Object source, Term[] args, int clauseNumber) {
          ClauseModel clauseModel;
          if (clauseNumber != -1) {
@@ -152,44 +145,38 @@ public final class SpyPoints {
          } else {
             clauseModel = null;
          }
-         log(ProjogEventType.EXIT, source, args, clauseModel);
+
+         logExit(source, args, clauseModel);
       }
 
-      /** Generates an event of type {@link ProjogEventType#EXIT} */
+      /** Notifies listeners of that an attempt to evaluate a goal has succeeded. */
       public void logExit(Object source, Term[] args, ClauseModel clause) {
-         log(ProjogEventType.EXIT, source, args, clause);
-      }
-
-      /** Generates an event of type {@link ProjogEventType#FAIL} */
-      public void logFail(Object source, Term[] args) {
-         log(ProjogEventType.FAIL, source, args, null);
-      }
-
-      private void log(ProjogEventType type, Object source, Term[] args, ClauseModel clauseModel) {
          if (isEnabled() == false) {
             return;
          }
 
-         SpyPointEvent spe = new SpyPointEvent(key, args, clauseModel);
-         ProjogEvent pe = new ProjogEvent(type, spe, source);
-         projogEventsObservable.notifyObservers(pe);
+         projogListeners.notifyExit(new SpyPointExitEvent(key, args, source, clause));
+      }
+
+      /** Notifies listeners of that an attempt to evaluate a goal has failed. */
+      public void logFail(Object source, Term[] args) {
+         if (isEnabled() == false) {
+            return;
+         }
+
+         projogListeners.notifyFail(new SpyPointEvent(key, args, source));
       }
    }
 
    public class SpyPointEvent {
       private final PredicateKey key;
       private final Term[] args;
-      private final ClauseModel clauseModel;
+      private final Object source;
 
-      private SpyPointEvent(PredicateKey key, Term[] args, ClauseModel clauseModel) {
+      private SpyPointEvent(PredicateKey key, Term[] args, Object source) {
          this.key = key;
-         for (int i = 0; i < args.length; i++) {
-            if (args[i] == null) {
-               args[i] = new Variable("Variable");
-            }
-         }
-         this.args = TermUtils.copy(args);
-         this.clauseModel = clauseModel;
+         this.args = args;
+         this.source = source;
       }
 
       public PredicateKey getPredicateKey() {
@@ -205,20 +192,26 @@ public final class SpyPoints {
          }
       }
 
-      public ClauseModel getClauseModel() {
-         if (clauseModel == null) {
-            throw new IllegalStateException("No clause specified for event");
-         }
-         return clauseModel;
-      }
-
-      public String getFormattedClause() {
-         return termFormatter.toString(getClauseModel().getOriginal());
+      public int getSourceId() {
+         return source.hashCode();
       }
 
       @Override
       public String toString() {
          return getFormattedTerm();
+      }
+   }
+
+   public class SpyPointExitEvent extends SpyPointEvent {
+      private final ClauseModel clauseModel;
+
+      private SpyPointExitEvent(PredicateKey key, Term[] args, Object source, ClauseModel clauseModel) {
+         super(key, args, source);
+         this.clauseModel = clauseModel;
+      }
+
+      public String getFormattedClause() {
+         return termFormatter.toString(clauseModel.getOriginal());
       }
    }
 }

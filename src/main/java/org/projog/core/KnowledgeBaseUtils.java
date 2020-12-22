@@ -20,7 +20,7 @@ import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.event.ProjogEventsObservable;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermType;
@@ -160,8 +160,8 @@ public final class KnowledgeBaseUtils {
       return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getArgs().length == 2;
    }
 
-   public static ProjogEventsObservable getProjogEventsObservable(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(ProjogEventsObservable.class);
+   public static ProjogListeners getProjogListeners(KnowledgeBase kb) {
+      return getServiceLocator(kb).getInstance(ProjogListeners.class);
    }
 
    public static ProjogProperties getProjogProperties(KnowledgeBase kb) {

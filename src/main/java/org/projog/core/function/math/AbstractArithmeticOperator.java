@@ -18,13 +18,20 @@ package org.projog.core.function.math;
 import org.projog.core.ArithmeticOperator;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseConsumer;
 import org.projog.core.PreprocessableArithmeticOperator;
 import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
-public abstract class AbstractArithmeticOperator implements PreprocessableArithmeticOperator {
+public abstract class AbstractArithmeticOperator implements PreprocessableArithmeticOperator, KnowledgeBaseConsumer {
    private ArithmeticOperators operators;
 
+   /**
+    * Provides a reference to a {@code KnowledgeBase}.
+    * <p>
+    * Meaning this object will always have access to a {@code KnowledgeBase} by the time its {@code calculate} method is
+    * invoked.
+    */
    @Override
    public final void setKnowledgeBase(KnowledgeBase kb) {
       operators = kb.getArithmeticOperators();
@@ -119,11 +126,6 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
          Numeric n = o.calculate(args[0].getArgs());
          return AbstractArithmeticOperator.this.calculate(n);
       }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
-         throw new UnsupportedOperationException();
-      }
    }
 
    private final class PreprocessedBinaryOperator implements ArithmeticOperator {
@@ -140,11 +142,6 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
          Numeric n1 = o1 == null ? operators.getNumeric(args[0]) : o1.calculate(args[0].getArgs());
          Numeric n2 = o2 == null ? operators.getNumeric(args[1]) : o2.calculate(args[1].getArgs());
          return AbstractArithmeticOperator.this.calculate(n1, n2);
-      }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
-         throw new UnsupportedOperationException();
       }
    }
 }

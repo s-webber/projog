@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,16 +31,28 @@ class CoreUtils {
     * invoking the specified method (as a no argument static method) of the specified class.</li>
     * </ol>
     */
+   static <T> T instantiate(KnowledgeBase knowledgeBase, String input) throws ReflectiveOperationException {
+      T result = instantiate(input);
+
+      if (result instanceof KnowledgeBaseConsumer) {
+         ((KnowledgeBaseConsumer) result).setKnowledgeBase(knowledgeBase);
+      }
+
+      return result;
+   }
+
    @SuppressWarnings("unchecked")
-   static <T> T instantiate(String input) throws ReflectiveOperationException {
+   private static <T> T instantiate(String input) throws ReflectiveOperationException {
+      T result;
       int slashPos = input.indexOf('/');
       if (slashPos != -1) {
          String className = input.substring(0, slashPos);
          String methodName = input.substring(slashPos + 1);
          Method m = Class.forName(className).getMethod(methodName);
-         return (T) m.invoke(null);
+         result = (T) m.invoke(null);
       } else {
-         return (T) Class.forName(input).newInstance();
+         result = (T) Class.forName(input).newInstance();
       }
+      return result;
    }
 }

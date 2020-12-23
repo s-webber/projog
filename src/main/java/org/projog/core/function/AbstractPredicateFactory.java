@@ -18,6 +18,7 @@ package org.projog.core.function;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.FileHandles;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseConsumer;
 import org.projog.core.Operands;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -27,7 +28,7 @@ import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
-public abstract class AbstractPredicateFactory implements PredicateFactory {
+public abstract class AbstractPredicateFactory implements PredicateFactory, KnowledgeBaseConsumer {
    private KnowledgeBase knowledgeBase;
 
    @Override
@@ -80,17 +81,6 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
    @Override
    public final void setKnowledgeBase(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
-      init();
-   }
-
-   /**
-    * This method is called by {@link #setKnowledgeBase(KnowledgeBase)}.
-    * <p>
-    * Can be overridden by subclasses to perform initialisation before any calls to {@link #getPredicate(Term...)} are
-    * made. As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
-    * overridden versions will be able to access the {@code KnowledgeBase} using {@link #getKnowledgeBase()}.
-    */
-   protected void init() { // TODO remove
    }
 
    protected final KnowledgeBase getKnowledgeBase() {

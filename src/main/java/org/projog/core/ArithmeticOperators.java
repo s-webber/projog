@@ -155,7 +155,6 @@ public final class ArithmeticOperators {
          ArithmeticOperator operator = operatorInstances.get(key);
          if (operator == null) {
             operator = instantiateArithmeticOperator(operatorClassNames.get(key));
-            operator.setKnowledgeBase(kb);
             operatorInstances.put(key, operator);
          }
          return operator;
@@ -164,7 +163,7 @@ public final class ArithmeticOperators {
 
    private ArithmeticOperator instantiateArithmeticOperator(String className) {
       try {
-         return instantiate(className);
+         return instantiate(kb, className);
       } catch (Exception e) {
          throw new RuntimeException("Could not create new ArithmeticOperator using: " + className, e);
       }

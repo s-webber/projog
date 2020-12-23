@@ -40,15 +40,6 @@ import org.projog.core.term.Term;
  */
 public interface PredicateFactory {
    /**
-    * Provides a reference to a {@code KnowledgeBase}.
-    * <p>
-    * This method will be called by {@link KnowledgeBase#addPredicateFactory(PredicateKey, String)} when this class is
-    * registered with a {@code KnowledgeBase} - meaning this object will always have access to a {@code KnowledgeBase}
-    * by the time its {@code getPredicate} method is invoked.
-    */
-   void setKnowledgeBase(KnowledgeBase kb);
-
-   /**
     * Returns a {@link Predicate} to be used in the evaluation of a goal.
     * <p>
     * <b>Note:</b> It is recommended that implementations of {@code PredicateFactory} also implement an overloaded

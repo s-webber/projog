@@ -36,7 +36,6 @@ import java.io.StringReader;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ArithmeticOperator;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
@@ -115,10 +114,6 @@ public class ProjogTest {
          public Numeric calculate(Term... args) {
             Numeric n = TermUtils.castToNumeric(args[0]);
             return new IntegerNumber(n.getLong() + 7);
-         }
-
-         @Override
-         public void setKnowledgeBase(KnowledgeBase kb) {
          }
       };
       projog.addArithmeticOperator(key, pf);

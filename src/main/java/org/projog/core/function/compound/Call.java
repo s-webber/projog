@@ -18,6 +18,7 @@ package org.projog.core.function.compound;
 import java.util.Arrays;
 
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseConsumer;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -129,7 +130,7 @@ import org.projog.core.term.Term;
  * argument list of the goal represented by the first argument.
  * </p>
  */
-public final class Call implements PredicateFactory {
+public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
    private KnowledgeBase knowledgeBase;
 
    @Override
@@ -147,7 +148,7 @@ public final class Call implements PredicateFactory {
    }
 
    public Predicate getPredicate(Term arg) {
-      return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), arg);
+      return KnowledgeBaseUtils.getPredicate(knowledgeBase, arg);
    }
 
    @Override
@@ -158,9 +159,5 @@ public final class Call implements PredicateFactory {
    @Override
    public void setKnowledgeBase(KnowledgeBase knowledgeBase) {
       this.knowledgeBase = knowledgeBase;
-   }
-
-   protected final KnowledgeBase getKnowledgeBase() {
-      return knowledgeBase;
    }
 }

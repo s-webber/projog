@@ -94,10 +94,6 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
    }
 
    @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-   }
-
-   @Override
    public boolean isRetryable() {
       return true; // TODO
    }

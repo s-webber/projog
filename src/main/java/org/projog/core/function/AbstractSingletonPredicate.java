@@ -18,6 +18,7 @@ package org.projog.core.function;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.FileHandles;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.KnowledgeBaseConsumer;
 import org.projog.core.Operands;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -33,7 +34,7 @@ import org.projog.core.term.TermFormatter;
  * Provides a skeletal implementation of {@link PredicateFactory} and {@link Predicate}. No attempt to find multiple
  * solutions will be made as part of backtracking as {@link #isRetryable()} always returns {@code false}.
  */
-public abstract class AbstractSingletonPredicate implements PredicateFactory {
+public abstract class AbstractSingletonPredicate implements PredicateFactory, KnowledgeBaseConsumer {
    @Deprecated
    public static final SucceedsOncePredicate TRUE = SucceedsOncePredicate.TRUE;
    @Deprecated
@@ -110,7 +111,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory {
     * As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
     * overridden versions will be able to access the {@code KnowledgeBase} using {@link #getKnowledgeBase()}.
     */
-   protected void init() { // TODO remove
+   protected void init() {
    }
 
    protected final KnowledgeBase getKnowledgeBase() {

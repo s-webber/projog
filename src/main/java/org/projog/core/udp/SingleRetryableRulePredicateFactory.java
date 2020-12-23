@@ -16,7 +16,6 @@
 package org.projog.core.udp;
 
 import org.projog.core.CutException;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
@@ -41,11 +40,6 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
    @Override
    public boolean isRetryable() {
       return true;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      throw new UnsupportedOperationException();
    }
 
    public static class RetryableRulePredicate implements Predicate {

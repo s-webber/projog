@@ -17,12 +17,11 @@ package org.projog.core.term;
 
 import java.util.Map;
 
-import org.projog.core.KnowledgeBase;
-
 /**
  * Represents a value of the primitive type {@code double} as a {@link Term}.
  * <p>
- * DecimalFractions are constant; their values cannot be changed after they are created. DecimalFractions have no arguments.
+ * DecimalFractions are constant; their values cannot be changed after they are created. DecimalFractions have no
+ * arguments.
  */
 public final class DecimalFraction implements Numeric {
    private final double value;
@@ -136,11 +135,6 @@ public final class DecimalFraction implements Numeric {
    @Override
    public DecimalFraction calculate(Term... args) {
       return this;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      throw new UnsupportedOperationException();
    }
 
    @Override

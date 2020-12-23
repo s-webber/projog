@@ -81,8 +81,4 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
    public boolean isRetryable() {
       return true;
    }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,7 @@
  */
 package org.projog.core;
 
-import org.projog.core.term.Numeric;
-import org.projog.core.term.Term;
-
-/**
- * Represents a function that returns a single numerical value.
- *
- * @see ArithmeticOperators
- */
-public interface ArithmeticOperator {
-   /**
-    * Returns the result of the calculation using the specified arguments.
-    *
-    * @param args the arguments to use in the calculation
-    * @return the result of the calculation using the specified arguments
-    */
-   Numeric calculate(Term... args);
+public interface KnowledgeBaseConsumer {
+   /** Provides a reference to a {@code KnowledgeBase}. */
+   void setKnowledgeBase(KnowledgeBase knowledgeBase);
 }

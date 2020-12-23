@@ -232,7 +232,7 @@ public class ArithmeticOperatorsTest {
    }
 
    /** ArithmeticOperator used to test that new arithmetic operators can be added to the factory. */
-   public static class DummyArithmeticOperatorDefaultConstructor implements ArithmeticOperator {
+   public static class DummyArithmeticOperatorDefaultConstructor implements ArithmeticOperator, KnowledgeBaseConsumer {
       KnowledgeBase kb;
 
       /**
@@ -256,7 +256,7 @@ public class ArithmeticOperatorsTest {
    }
 
    /** ArithmeticOperator used to test that new arithmetic operators can be created using a static method. */
-   public static class DummyArithmeticOperatorPublicConstructor implements ArithmeticOperator {
+   public static class DummyArithmeticOperatorPublicConstructor implements ArithmeticOperator, KnowledgeBaseConsumer {
       KnowledgeBase kb;
 
       public static DummyArithmeticOperatorPublicConstructor getInstance() {

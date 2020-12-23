@@ -61,11 +61,6 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    }
 
    @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      throw new UnsupportedOperationException();
-   }
-
-   @Override
    public Predicate getPredicate(Term... args) {
       if (hasPrimaryKey) {
          Term firstArg = args[0];

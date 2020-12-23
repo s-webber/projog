@@ -179,8 +179,7 @@ public class Predicates {
 
    private PredicateFactory instantiatePredicateFactory(String className) {
       try {
-         PredicateFactory predicateFactory = instantiate(className);
-         predicateFactory.setKnowledgeBase(kb);
+         PredicateFactory predicateFactory = instantiate(kb, className);
          return predicateFactory;
       } catch (Exception e) {
          throw new RuntimeException("Could not create new PredicateFactory using: " + className, e);

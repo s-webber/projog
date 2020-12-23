@@ -18,7 +18,6 @@ package org.projog.core.function.math;
 import java.util.Arrays;
 
 import org.projog.core.ArithmeticOperator;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.Predicates;
@@ -87,11 +86,6 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
          }
          argsPlusResult[numArgs] = result;
          return argsPlusResult;
-      }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
-         throw new UnsupportedOperationException();
       }
    }
 }

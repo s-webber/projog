@@ -56,11 +56,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       this.implications = new ArrayList<>();
    }
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      throw new UnsupportedOperationException();
-   }
-
    /**
     * Not supported.
     * <p>
@@ -306,11 +301,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public boolean isRetryable() {
          return false;
       }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
-         throw new UnsupportedOperationException();
-      }
    }
 
    private final class IndexablePredicateFactory implements PreprocessablePredicateFactory {
@@ -323,10 +313,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       @Override
       public Predicate getPredicate(Term... args) {
          return createPredicate(args, index.index(args));
-      }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
       }
 
       @Override
@@ -357,10 +343,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       @Override
       public Predicate getPredicate(Term... args) {
          return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, args);
-      }
-
-      @Override
-      public void setKnowledgeBase(KnowledgeBase kb) {
       }
 
       @Override

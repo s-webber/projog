@@ -15,15 +15,10 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
-
 import java.io.PrintStream;
 
-import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermFormatter;
 
 /* TEST
  %QUERY write( 1+1 )
@@ -70,9 +65,6 @@ import org.projog.core.term.TermFormatter;
 public final class Write extends AbstractSingletonPredicate {
    private final boolean addNewLine;
 
-   private TermFormatter termFormatter;
-   private FileHandles fileHandles;
-
    public static Write write() {
       return new Write(false);
    }
@@ -86,24 +78,18 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    @Override
-   protected void init() {
-      termFormatter = getTermFormatter(getKnowledgeBase());
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
-   @Override
    public boolean evaluate(Term arg) {
       writeString(toString(arg));
       return true;
    }
 
    private String toString(Term t) {
-      return termFormatter.toString(t);
+      return getTermFormatter().toString(t);
    }
 
    /** Called directly from compiled predicates generated at runtime. */
    public void writeString(String s) {
-      PrintStream os = fileHandles.getCurrentOutputStream();
+      PrintStream os = getFileHandles().getCurrentOutputStream();
       if (addNewLine) {
          os.println(s);
       } else {

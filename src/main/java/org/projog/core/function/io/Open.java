@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,10 +15,8 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.term.TermUtils.getAtomName;
 
-import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
@@ -40,13 +38,6 @@ public final class Open extends AbstractSingletonPredicate {
    private static final String READ = "read";
    private static final String WRITE = "write";
 
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term fileNameAtom, Term operationAtom, Term variableToAssignTo) {
       String operation = getAtomName(operationAtom);
@@ -65,7 +56,7 @@ public final class Open extends AbstractSingletonPredicate {
 
    private Atom openInput(String fileName) {
       try {
-         return fileHandles.openInput(fileName);
+         return getFileHandles().openInput(fileName);
       } catch (Exception e) {
          throw new ProjogException("Unable to open input for: " + fileName, e);
       }
@@ -73,7 +64,7 @@ public final class Open extends AbstractSingletonPredicate {
 
    private Atom openOutput(String fileName) {
       try {
-         return fileHandles.openOutput(fileName);
+         return getFileHandles().openOutput(fileName);
       } catch (Exception e) {
          throw new ProjogException("Unable to open output for: " + fileName + " " + e, e);
       }

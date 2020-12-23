@@ -15,12 +15,9 @@
  */
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-
 import java.util.Arrays;
 
 import org.projog.core.ArithmeticOperator;
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -52,18 +49,11 @@ import org.projog.core.term.Variable;
  * Allows the predicate defined by <code>X</code> to be used as an arithmetic function.
  */
 public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPredicate {
-   private ArithmeticOperators operators;
-
-   @Override
-   public void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
       final UserDefinedArithmeticOperator arithmeticOperator = new UserDefinedArithmeticOperator(getPredicates(), key);
-      operators.addArithmeticOperator(key, arithmeticOperator);
+      getArithmeticOperators().addArithmeticOperator(key, arithmeticOperator);
       return true;
    }
 

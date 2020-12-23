@@ -15,8 +15,6 @@
  */
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.KnowledgeBaseUtils.isDynamicFunctionCall;
 import static org.projog.core.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
 
@@ -128,11 +126,11 @@ public final class ProjogSourceReader {
    }
 
    private static void notifyReadingFromFileSystem(KnowledgeBase kb, File file) {
-      getProjogListeners(kb).notifyInfo("Reading prolog source in: " + file + " from file system");
+      kb.getProjogListeners().notifyInfo("Reading prolog source in: " + file + " from file system");
    }
 
    private static void notifyReadingFromClasspath(KnowledgeBase kb, String resourceName) {
-      getProjogListeners(kb).notifyInfo("Reading prolog source in: " + resourceName + " from classpath");
+      kb.getProjogListeners().notifyInfo("Reading prolog source in: " + resourceName + " from classpath");
    }
 
    private ProjogSourceReader(KnowledgeBase kb) {
@@ -152,7 +150,7 @@ public final class ProjogSourceReader {
    }
 
    private void parseTerms(Reader reader) {
-      SentenceParser sp = SentenceParser.getInstance(reader, getOperands(kb));
+      SentenceParser sp = SentenceParser.getInstance(reader, kb.getOperands());
       Term t;
       while ((t = sp.parseSentence()) != null) {
          if (isQuestionOrDirectiveFunctionCall(t)) {

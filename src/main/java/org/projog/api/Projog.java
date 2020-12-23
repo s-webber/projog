@@ -15,11 +15,6 @@
  */
 package org.projog.api;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -38,7 +33,6 @@ import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSourceReader;
 import org.projog.core.event.ProjogListener;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
 
 /**
@@ -140,7 +134,6 @@ import org.projog.core.udp.ClauseModel;
  */
 public final class Projog {
    private final KnowledgeBase kb;
-   private final TermFormatter tf;
 
    /**
     * Constructs a new {@code Projog} object using {@link ProjogSystemProperties} and the specified
@@ -159,7 +152,6 @@ public final class Projog {
          addListener(listener);
       }
       KnowledgeBaseUtils.bootstrap(kb);
-      this.tf = new TermFormatter(getOperands(kb));
    }
 
    /**
@@ -201,7 +193,7 @@ public final class Projog {
     * By default the "standard" input stream will be {@code System.in}.
     */
    void setUserInput(InputStream is) {
-      getFileHandles(kb).setUserInput(is);
+      kb.getFileHandles().setUserInput(is);
    }
 
    /**
@@ -210,7 +202,7 @@ public final class Projog {
     * By default the "standard" output stream will be {@code System.out}.
     */
    public void setUserOutput(PrintStream ps) {
-      getFileHandles(kb).setUserOutput(ps);
+      kb.getFileHandles().setUserOutput(ps);
    }
 
    /**
@@ -242,7 +234,7 @@ public final class Projog {
     * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
     */
    public void addArithmeticOperator(PredicateKey key, ArithmeticOperator operator) {
-      getArithmeticOperators(kb).addArithmeticOperator(key, operator);
+      kb.getArithmeticOperators().addArithmeticOperator(key, operator);
    }
 
    public QueryPlan createPlan(String prologQuery) {
@@ -269,7 +261,7 @@ public final class Projog {
     * @param listener an listener to be added
     */
    public void addListener(ProjogListener listener) {
-      getProjogListeners(kb).addListener(listener);
+      kb.getProjogListeners().addListener(listener);
    }
 
    /**
@@ -279,8 +271,8 @@ public final class Projog {
     * @return a string representation of the specified {@code Term}
     * @see org.projog.core.term.TermFormatter#toString(Term)
     */
-   public String toString(Term t) {
-      return tf.toString(t);
+   public String toString(Term t) { // TODO rename to formatTerm
+      return kb.getTermFormatter().toString(t);
    }
 
    /**

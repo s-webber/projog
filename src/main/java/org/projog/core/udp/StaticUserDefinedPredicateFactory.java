@@ -15,9 +15,6 @@
  */
 package org.projog.core.udp;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -55,7 +52,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    public StaticUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
       this.predicateKey = predicateKey;
       this.kb = kb;
-      this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
+      this.spyPoint = kb.getSpyPoints().getSpyPoint(predicateKey);
       this.implications = new ArrayList<>();
    }
 
@@ -394,7 +391,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          TermUtils.backtrack(queryArgs);
       }
       if (result.isEmpty()) {
-         getProjogListeners(kb).notifyWarn(arg + " will never succeed");
+         kb.getProjogListeners().notifyWarn(arg + " will never succeed");
       }
       return result;
    }

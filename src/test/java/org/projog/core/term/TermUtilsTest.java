@@ -27,7 +27,6 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 
 import java.util.Set;
 
@@ -231,7 +230,7 @@ public class TermUtilsTest {
    @Test
    public void testIntegerNumberToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      ArithmeticOperators operators = getArithmeticOperators(kb);
+      ArithmeticOperators operators = kb.getArithmeticOperators();
       assertEquals(Integer.MAX_VALUE, TermUtils.toLong(operators, integerNumber(Integer.MAX_VALUE)));
       assertEquals(1, TermUtils.toLong(operators, integerNumber(1)));
       assertEquals(0, TermUtils.toLong(operators, integerNumber(0)));
@@ -241,7 +240,7 @@ public class TermUtilsTest {
    @Test
    public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      ArithmeticOperators operators = getArithmeticOperators(kb);
+      ArithmeticOperators operators = kb.getArithmeticOperators();
       Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
       assertEquals(21, TermUtils.toLong(operators, arithmeticExpression));
    }
@@ -256,7 +255,7 @@ public class TermUtilsTest {
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
-      ArithmeticOperators operators = getArithmeticOperators(kb);
+      ArithmeticOperators operators = kb.getArithmeticOperators();
       try {
          TermUtils.toLong(operators, t);
          fail();

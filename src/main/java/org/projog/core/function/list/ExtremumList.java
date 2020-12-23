@@ -15,7 +15,6 @@
  */
 package org.projog.core.function.list;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 import static org.projog.core.term.TermUtils.assertType;
 
@@ -79,8 +78,6 @@ import org.projog.core.term.TermType;
 public final class ExtremumList extends AbstractSingletonPredicate {
    private final boolean findMinimum;
 
-   private ArithmeticOperators operators;
-
    public static ExtremumList minList() {
       return new ExtremumList(true);
    }
@@ -94,17 +91,13 @@ public final class ExtremumList extends AbstractSingletonPredicate {
    }
 
    @Override
-   public final void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
-   @Override
    public boolean evaluate(Term input, Term output) {
       if (input.getType() == TermType.EMPTY_LIST) {
          return false;
       }
       assertType(input, TermType.LIST);
 
+      ArithmeticOperators operators = getArithmeticOperators();
       Numeric result = operators.getNumeric(input.getArgument(0));
       Term tail = input.getArgument(1);
       while (tail.getType() != TermType.EMPTY_LIST) {

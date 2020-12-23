@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,13 +16,11 @@
 package org.projog.core.function.debug;
 
 import static org.projog.core.KnowledgeBaseUtils.getPredicateKeysByName;
-import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.List;
 
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
-import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -50,21 +48,15 @@ public final class AlterSpyPoint extends AbstractSingletonPredicate {
    }
 
    private final boolean valueToSetSpyPointTo;
-   private SpyPoints spyPoints;
 
    /**
     * The {@code valueToSetSpyPointTo} parameter specifies whether spy points matched by the {@link #evaluate(Term)}
     * method should be enabled or disabled.
-    * 
+    *
     * @param valueToSetSpyPointTo {@code true} to enable spy points, {@code false} to disable spy points
     */
    private AlterSpyPoint(boolean valueToSetSpyPointTo) {
       this.valueToSetSpyPointTo = valueToSetSpyPointTo;
-   }
-
-   @Override
-   protected void init() {
-      spyPoints = getSpyPoints(getKnowledgeBase());
    }
 
    @Override
@@ -91,6 +83,6 @@ public final class AlterSpyPoint extends AbstractSingletonPredicate {
    }
 
    private void setSpyPoint(PredicateKey key) {
-      spyPoints.setSpyPoint(key, valueToSetSpyPointTo);
+      getSpyPoints().setSpyPoint(key, valueToSetSpyPointTo);
    }
 }

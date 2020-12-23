@@ -21,7 +21,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
@@ -34,7 +33,7 @@ import org.junit.Test;
 import org.projog.core.Operands;
 
 public class TokenParserTest {
-   private final Operands operands = getOperands(createKnowledgeBase());
+   private final Operands operands = createKnowledgeBase().getOperands();
 
    @Test
    public void testAtom() {

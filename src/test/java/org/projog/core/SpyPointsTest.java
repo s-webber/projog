@@ -25,7 +25,6 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.junit.Test;
@@ -187,7 +186,7 @@ public class SpyPointsTest {
       // add a listener to the KnowledgeBase's ProjogListeners
       // so we can keep track of ProjogEvent objects created by the SpyPoint
       final SimpleProjogListener listener = new SimpleProjogListener();
-      getProjogListeners(kb).addListener(listener);
+      kb.getProjogListeners().addListener(listener);
 
       PredicateKey key = createKey("test", 1);
       DynamicUserDefinedPredicateFactory pf = new DynamicUserDefinedPredicateFactory(kb, key);

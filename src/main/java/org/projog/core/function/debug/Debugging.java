@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,9 @@
  */
 package org.projog.core.function.debug;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
-
+import java.io.PrintStream;
 import java.util.Map;
 
-import org.projog.core.FileHandles;
 import org.projog.core.PredicateKey;
 import org.projog.core.SpyPoints;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -35,21 +32,13 @@ import org.projog.core.function.AbstractSingletonPredicate;
  * </p>
  */
 public final class Debugging extends AbstractSingletonPredicate {
-   private SpyPoints spyPoints;
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      spyPoints = getSpyPoints(getKnowledgeBase());
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate() {
-      Map<PredicateKey, SpyPoints.SpyPoint> map = spyPoints.getSpyPoints();
+      PrintStream currentOutputStream = getFileHandles().getCurrentOutputStream();
+      Map<PredicateKey, SpyPoints.SpyPoint> map = getSpyPoints().getSpyPoints();
       for (Map.Entry<PredicateKey, SpyPoints.SpyPoint> e : map.entrySet()) {
          if (e.getValue().isEnabled()) {
-            fileHandles.getCurrentOutputStream().println(e.getKey());
+            currentOutputStream.println(e.getKey());
          }
       }
       return true;

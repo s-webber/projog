@@ -15,7 +15,6 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
 import static org.projog.core.term.TermUtils.getAtomName;
 
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public final class EnsureLoaded extends AbstractSingletonPredicate {
       String resourceName = getResourceName(arg);
       synchronized (lock) {
          if (loadedResources.contains(resourceName)) {
-            getProjogListeners(getKnowledgeBase()).notifyInfo("Already loaded: " + resourceName);
+            getProjogListeners().notifyInfo("Already loaded: " + resourceName);
          } else {
             ProjogSourceReader.parseResource(getKnowledgeBase(), resourceName);
             loadedResources.add(resourceName);

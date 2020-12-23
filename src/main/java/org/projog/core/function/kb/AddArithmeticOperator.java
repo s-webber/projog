@@ -15,10 +15,8 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.TermUtils.getAtomName;
 
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -39,18 +37,11 @@ import org.projog.core.term.Term;
  * implementation of <code>org.projog.core.ArithmeticOperator</code>.
  */
 public final class AddArithmeticOperator extends AbstractSingletonPredicate {
-   private ArithmeticOperators operators;
-
-   @Override
-   public void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);
-      operators.addArithmeticOperator(key, className);
+      getArithmeticOperators().addArithmeticOperator(key, className);
       return true;
    }
 }

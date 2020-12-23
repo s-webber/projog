@@ -15,7 +15,6 @@
  */
 package org.projog.core.function.compare;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 import static org.projog.core.term.TermUtils.toLong;
 
@@ -80,21 +79,15 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Between extends AbstractPredicateFactory {
-   private ArithmeticOperators operators;
-
    @Override
    public Predicate getPredicate(Term low, Term high, Term middle) {
+      ArithmeticOperators operators = getArithmeticOperators();
       if (middle.getType().isVariable()) {
          return new Retryable(middle, toLong(operators, low), toLong(operators, high));
       } else {
          boolean result = NUMERIC_TERM_COMPARATOR.compare(low, middle, operators) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, operators) < 1;
          return AbstractSingletonPredicate.toPredicate(result);
       }
-   }
-
-   @Override
-   protected void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
    }
 
    private static class Retryable implements Predicate {

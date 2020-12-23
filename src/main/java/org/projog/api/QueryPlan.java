@@ -15,8 +15,6 @@
  */
 package org.projog.api;
 
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
-
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
@@ -30,7 +28,7 @@ public class QueryPlan {
 
    QueryPlan(KnowledgeBase kb, String prologQuery) {
       try {
-         SentenceParser sp = SentenceParser.getInstance(prologQuery, getOperands(kb));
+         SentenceParser sp = SentenceParser.getInstance(prologQuery, kb.getOperands());
 
          this.parsedInput = sp.parseSentence();
          this.predicateFactory = kb.getPredicates().getPreprocessedPredicateFactory(parsedInput);

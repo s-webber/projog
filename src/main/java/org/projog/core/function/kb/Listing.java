@@ -15,20 +15,16 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getPredicateKeysByName;
-import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.TermUtils.getAtomName;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.projog.core.FileHandles;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
@@ -68,15 +64,6 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  * </p>
  */
 public final class Listing extends AbstractSingletonPredicate {
-   private TermFormatter termFormatter;
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      termFormatter = getTermFormatter(getKnowledgeBase());
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term arg) {
       String predicateName = getAtomName(arg);
@@ -101,7 +88,7 @@ public final class Listing extends AbstractSingletonPredicate {
    }
 
    private void listClause(ClauseModel clauseModel) {
-      String s = termFormatter.toString(clauseModel.getOriginal());
-      fileHandles.getCurrentOutputStream().println(s);
+      String s = getTermFormatter().toString(clauseModel.getOriginal());
+      getFileHandles().getCurrentOutputStream().println(s);
    }
 }

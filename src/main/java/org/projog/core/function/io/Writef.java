@@ -15,18 +15,12 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermUtils.toLong;
 
 import java.util.List;
 
-import org.projog.core.ArithmeticOperators;
-import org.projog.core.FileHandles;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
@@ -183,18 +177,6 @@ import org.projog.core.term.TermUtils;
  * </p>
  */
 public final class Writef extends AbstractSingletonPredicate {
-   private TermFormatter termFormatter;
-   private FileHandles fileHandles;
-   private ArithmeticOperators operators;
-
-   @Override
-   protected void init() {
-      KnowledgeBase knowledgeBase = getKnowledgeBase();
-      termFormatter = getTermFormatter(knowledgeBase);
-      fileHandles = getFileHandles(knowledgeBase);
-      operators = getArithmeticOperators(knowledgeBase);
-   }
-
    @Override
    public boolean evaluate(Term atom) {
       return evaluate(atom, EMPTY_LIST);
@@ -215,7 +197,7 @@ public final class Writef extends AbstractSingletonPredicate {
    }
 
    private StringBuilder format(final String text, final List<Term> args) {
-      final Formatter f = new Formatter(text, args, termFormatter);
+      final Formatter f = new Formatter(text, args, getTermFormatter());
       while (f.hasMore()) {
          final int c = f.pop();
          if (c == '%') {
@@ -246,11 +228,11 @@ public final class Writef extends AbstractSingletonPredicate {
             output = f.format(arg);
             break;
          case 'n':
-            long charCode = toLong(operators, arg);
+            long charCode = toLong(getArithmeticOperators(), arg);
             output = Character.toString((char) charCode);
             break;
          case 'r':
-            long timesToRepeat = toLong(operators, f.nextArg());
+            long timesToRepeat = toLong(getArithmeticOperators(), f.nextArg());
             output = repeat(f.format(arg), timesToRepeat);
             break;
          case 's':
@@ -366,7 +348,7 @@ public final class Writef extends AbstractSingletonPredicate {
    }
 
    private void print(final StringBuilder sb) {
-      fileHandles.getCurrentOutputStream().print(sb);
+      getFileHandles().getCurrentOutputStream().print(sb);
    }
 
    private static class Formatter {

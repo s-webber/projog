@@ -21,7 +21,6 @@ import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
 import org.junit.Test;
@@ -32,7 +31,7 @@ import org.projog.core.ProjogException;
 
 public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
-   private final ArithmeticOperators operators = getArithmeticOperators(kb);
+   private final ArithmeticOperators operators = kb.getArithmeticOperators();
 
    @Test
    public void testCompareDecimalValues() {

@@ -15,11 +15,9 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.term.TermUtils.getAtomName;
 import static org.projog.core.term.TermUtils.toInt;
 
-import org.projog.core.Operands;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -118,19 +116,12 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Op extends AbstractSingletonPredicate {
-   private Operands operands;
-
-   @Override
-   protected void init() {
-      operands = getOperands(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int precedence = toInt(arg1);
       String associativity = getAtomName(arg2);
       String name = getAtomName(arg3);
-      operands.addOperand(name, associativity, precedence);
+      getOperands().addOperand(name, associativity, precedence);
       return true;
    }
 }

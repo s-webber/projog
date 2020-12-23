@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -92,9 +91,9 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    @Test
    public void testSpyPointEnabled_fails() {
       final SimpleProjogListener o = new SimpleProjogListener();
-      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
+      kb.getProjogListeners().addListener(o);
 
-      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+      kb.getSpyPoints().setTraceEnabled(true);
 
       Predicate p = testObject.getPredicate(atom("z"));
       assertFalse(p.evaluate());
@@ -105,9 +104,9 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    @Test
    public void testSpyPointEnabled_succeedsOnce() {
       final SimpleProjogListener o = new SimpleProjogListener();
-      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
+      kb.getProjogListeners().addListener(o);
 
-      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+      kb.getSpyPoints().setTraceEnabled(true);
 
       Predicate p = testObject.getPredicate(atom("a"));
       assertTrue(p.evaluate());
@@ -119,9 +118,9 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    @Test
    public void testSpyPointEnabled_succeedsMany() {
       final SimpleProjogListener o = new SimpleProjogListener();
-      KnowledgeBaseUtils.getProjogListeners(kb).addListener(o);
+      kb.getProjogListeners().addListener(o);
 
-      KnowledgeBaseUtils.getSpyPoints(kb).setTraceEnabled(true);
+      kb.getSpyPoints().setTraceEnabled(true);
 
       Predicate p = testObject.getPredicate(atom("c"));
       assertTrue(p.evaluate());

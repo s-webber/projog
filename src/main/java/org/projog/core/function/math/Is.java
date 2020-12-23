@@ -15,10 +15,7 @@
  */
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-
 import org.projog.core.ArithmeticOperator;
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
@@ -70,22 +67,15 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class Is extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
-   private ArithmeticOperators operators;
-
-   @Override
-   public void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term arg1, Term arg2) {
-      Numeric n = operators.getNumeric(arg2);
+      Numeric n = getArithmeticOperators().getNumeric(arg2);
       return arg1.unify(n);
    }
 
    @Override
    public PredicateFactory preprocess(Term arg) {
-      final ArithmeticOperator o = operators.getPreprocessedArithmeticOperator(arg.getArgument(1));
+      final ArithmeticOperator o = getArithmeticOperators().getPreprocessedArithmeticOperator(arg.getArgument(1));
       if (o == null) {
          return this;
       } else if (o instanceof Numeric) {

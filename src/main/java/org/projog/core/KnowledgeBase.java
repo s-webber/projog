@@ -15,8 +15,10 @@
  */
 package org.projog.core;
 
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.function.kb.AddPredicateFactory;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 /**
  * Acts as a repository of rules and facts.
@@ -36,18 +38,60 @@ public final class KnowledgeBase {
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 
+   private final ProjogProperties projogProperties;
    private final Predicates predicates;
+   private final ArithmeticOperators arithmeticOperators;
+   private final ProjogListeners projogListeners;
+   private final Operands operands;
+   private final TermFormatter termFormatter;
+   private final SpyPoints spyPoints;
+   private final FileHandles fileHandles;
 
    /**
     * @see KnowledgeBaseUtils#createKnowledgeBase()
     * @see KnowledgeBaseUtils#createKnowledgeBase(ProjogProperties)
     */
-   KnowledgeBase() {
+   KnowledgeBase(ProjogProperties projogProperties) {
+      this.projogProperties = projogProperties;
       this.predicates = new Predicates(this);
       this.predicates.addPredicateFactory(ADD_PREDICATE_KEY, new AddPredicateFactory(this));
+      this.arithmeticOperators = new ArithmeticOperators(this);
+      this.projogListeners = new ProjogListeners();
+      this.operands = new Operands();
+      this.termFormatter = new TermFormatter(operands);
+      this.spyPoints = new SpyPoints(this);
+      this.fileHandles = new FileHandles();
+   }
+
+   public ProjogProperties getProjogProperties() {
+      return projogProperties;
    }
 
    public Predicates getPredicates() {
       return predicates;
+   }
+
+   public ArithmeticOperators getArithmeticOperators() {
+      return arithmeticOperators;
+   }
+
+   public ProjogListeners getProjogListeners() {
+      return projogListeners;
+   }
+
+   public Operands getOperands() {
+      return operands;
+   }
+
+   public TermFormatter getTermFormatter() {
+      return termFormatter;
+   }
+
+   public SpyPoints getSpyPoints() {
+      return spyPoints;
+   }
+
+   public FileHandles getFileHandles() {
+      return fileHandles;
    }
 }

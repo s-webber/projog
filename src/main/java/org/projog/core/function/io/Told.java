@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 package org.projog.core.function.io;
 
 import static org.projog.core.FileHandles.USER_OUTPUT_HANDLE;
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 
 import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
@@ -32,22 +31,16 @@ import org.projog.core.term.Term;
  * The new input stream becomes <code>user_output</code>.
  */
 public final class Told extends AbstractSingletonPredicate {
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate() {
+      FileHandles fileHandles = getFileHandles();
       Term handle = fileHandles.getCurrentOutputHandle();
-      close(handle);
+      close(fileHandles, handle);
       fileHandles.setOutput(USER_OUTPUT_HANDLE);
       return true;
    }
 
-   private void close(Term handle) {
+   private void close(FileHandles fileHandles, Term handle) {
       try {
          fileHandles.close(handle);
       } catch (Exception e) {

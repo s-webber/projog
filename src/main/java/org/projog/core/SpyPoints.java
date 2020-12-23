@@ -15,9 +15,6 @@
  */
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-import static org.projog.core.KnowledgeBaseUtils.getTermFormatter;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
@@ -51,8 +48,8 @@ public final class SpyPoints {
 
    public SpyPoints(KnowledgeBase kb) {
       this.kb = kb;
-      this.projogListeners = getProjogListeners(kb);
-      this.termFormatter = getTermFormatter(kb);
+      this.projogListeners = kb.getProjogListeners();
+      this.termFormatter = kb.getTermFormatter();
    }
 
    public SpyPoints(ProjogListeners observable, TermFormatter termFormatter) { // TODO only used by tests - remove

@@ -15,13 +15,10 @@
  */
 package org.projog.core.function.time;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -42,13 +39,6 @@ import org.projog.core.term.Term;
  * <code>convert_time(X,Y)</code> - converts a timestamp to a textual representation.
  */
 public final class ConvertTime extends AbstractSingletonPredicate {
-   private ArithmeticOperators operators;
-
-   @Override
-   public void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term timestamp, Term text) {
       Date d = createDate(timestamp);
@@ -57,7 +47,7 @@ public final class ConvertTime extends AbstractSingletonPredicate {
    }
 
    private Date createDate(Term timestamp) {
-      return new Date(operators.getNumeric(timestamp).getLong());
+      return new Date(getArithmeticOperators().getNumeric(timestamp).getLong());
    }
 
    private Atom createAtom(Date d) {

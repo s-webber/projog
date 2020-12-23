@@ -15,8 +15,6 @@
  */
 package org.projog.core.udp;
 
-import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
-
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,7 +57,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          this.hasPrimaryKey = true;
          index = new ConcurrentHashMap<>();
       }
-      this.spyPoint = getSpyPoints(kb).getSpyPoint(predicateKey);
+      this.spyPoint = kb.getSpyPoints().getSpyPoint(predicateKey);
    }
 
    @Override

@@ -15,14 +15,10 @@
  */
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseServiceLocator.getServiceLocator;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermType;
 
 /**
@@ -60,8 +56,7 @@ public final class KnowledgeBaseUtils {
     * Constructs a new {@code KnowledgeBase} object using the specified {@link ProjogProperties}
     */
    public static KnowledgeBase createKnowledgeBase(ProjogProperties projogProperties) {
-      KnowledgeBase kb = new KnowledgeBase();
-      getServiceLocator(kb).addInstance(ProjogProperties.class, projogProperties);
+      KnowledgeBase kb = new KnowledgeBase(projogProperties);
       return kb;
    }
 
@@ -77,7 +72,7 @@ public final class KnowledgeBaseUtils {
     * @see ProjogSourceReader#parseResource(KnowledgeBase, String)
     */
    public static void bootstrap(KnowledgeBase kb) {
-      String bootstrapScript = getProjogProperties(kb).getBootstrapScript();
+      String bootstrapScript = kb.getProjogProperties().getBootstrapScript();
       ProjogSourceReader.parseResource(kb, bootstrapScript);
    }
 
@@ -158,33 +153,5 @@ public final class KnowledgeBaseUtils {
    public static boolean isConjunction(Term t) {
       // is relying on assumption that conjunctions are only, and always, represented by a comma
       return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getArgs().length == 2;
-   }
-
-   public static ProjogListeners getProjogListeners(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(ProjogListeners.class);
-   }
-
-   public static ProjogProperties getProjogProperties(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(ProjogProperties.class);
-   }
-
-   public static Operands getOperands(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(Operands.class);
-   }
-
-   public static TermFormatter getTermFormatter(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(TermFormatter.class);
-   }
-
-   public static SpyPoints getSpyPoints(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(SpyPoints.class);
-   }
-
-   public static FileHandles getFileHandles(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(FileHandles.class);
-   }
-
-   public static ArithmeticOperators getArithmeticOperators(KnowledgeBase kb) {
-      return getServiceLocator(kb).getInstance(ArithmeticOperators.class);
    }
 }

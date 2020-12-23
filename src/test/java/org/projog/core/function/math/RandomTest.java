@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateKey;
 import org.projog.core.term.Term;
 
@@ -32,7 +31,7 @@ public class RandomTest {
    public void testNotPreprocessed() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       Term expression = TestUtils.parseSentence("random(" + Long.MAX_VALUE + ").");
-      ArithmeticOperators operators = KnowledgeBaseUtils.getArithmeticOperators(kb);
+      ArithmeticOperators operators = kb.getArithmeticOperators();
       Random r = (Random) operators.getArithmeticOperator(PredicateKey.createForTerm(expression));
 
       assertFalse(r.isPure());

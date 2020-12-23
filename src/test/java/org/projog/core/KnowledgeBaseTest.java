@@ -29,8 +29,6 @@ import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -54,25 +52,25 @@ public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
    private final Predicates predicates = kb.getPredicates();
 
-   /** Check that {@link ProjogSystemProperties} is used by default. */
+   /** Check that {@link ProjogDefaultProperties} is used by default. */
    @Test
    public void testDefaultProjogProperties() {
       KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
-      assertSame(ProjogDefaultProperties.class, getProjogProperties(kb).getClass());
+      assertSame(ProjogDefaultProperties.class, kb.getProjogProperties().getClass());
    }
 
    /** Check that {@link ProjogProperties} is configurable. */
    @Test
    public void testConfiguredProjogProperties() {
       KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
-      assertSame(TestUtils.PROJOG_DEFAULT_PROPERTIES, getProjogProperties(kb));
+      assertSame(TestUtils.PROJOG_DEFAULT_PROPERTIES, kb.getProjogProperties());
    }
 
    /** @see ArithmeticOperatorsTest */
    @Test
    public void testGetNumeric() {
       Structure p = structure("-", integerNumber(7), integerNumber(3));
-      Numeric n = getArithmeticOperators(kb).getNumeric(p);
+      Numeric n = kb.getArithmeticOperators().getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(4, n.getLong());
    }

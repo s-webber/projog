@@ -15,7 +15,6 @@
  */
 package org.projog.core.udp.interpreter;
 
-import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 import static org.projog.core.KnowledgeBaseUtils.toArrayOfConjunctions;
 
 import org.projog.core.KnowledgeBase;
@@ -91,7 +90,7 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
 
    private static SpyPoints.SpyPoint getSpyPoint(KnowledgeBase kb, TailRecursivePredicateMetaData metaData) {
       PredicateKey key = PredicateKey.createForTerm(metaData.getFirstClause().getConsequent());
-      return getSpyPoints(kb).getSpyPoint(key);
+      return kb.getSpyPoints().getSpyPoint(key);
    }
 
    @Override

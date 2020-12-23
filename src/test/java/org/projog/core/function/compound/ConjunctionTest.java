@@ -118,7 +118,7 @@ public class ConjunctionTest {
    @Test
    public void testPreprocess_first_argument_retryable_with_variable() {
       KnowledgeBase kb = createKnowledgeBase();
-      TermFormatter tf = new TermFormatter(kb);
+      TermFormatter tf = kb.getTermFormatter();
       Term term = parseTerm("member(X, [a,b]), Y=X.");
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);

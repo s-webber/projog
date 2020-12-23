@@ -15,11 +15,17 @@
  */
 package org.projog.core.function;
 
+import org.projog.core.ArithmeticOperators;
+import org.projog.core.FileHandles;
 import org.projog.core.KnowledgeBase;
+import org.projog.core.Operands;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.Predicates;
+import org.projog.core.SpyPoints;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 public abstract class AbstractPredicateFactory implements PredicateFactory {
    private KnowledgeBase knowledgeBase;
@@ -84,7 +90,7 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
     * made. As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
     * overridden versions will be able to access the {@code KnowledgeBase} using {@link #getKnowledgeBase()}.
     */
-   protected void init() {
+   protected void init() { // TODO remove
    }
 
    protected final KnowledgeBase getKnowledgeBase() {
@@ -93,5 +99,29 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
 
    protected final Predicates getPredicates() {
       return knowledgeBase.getPredicates();
+   }
+
+   protected final ArithmeticOperators getArithmeticOperators() {
+      return knowledgeBase.getArithmeticOperators();
+   }
+
+   protected final ProjogListeners getProjogListeners() {
+      return knowledgeBase.getProjogListeners();
+   }
+
+   protected final Operands getOperands() {
+      return knowledgeBase.getOperands();
+   }
+
+   protected final TermFormatter getTermFormatter() {
+      return knowledgeBase.getTermFormatter();
+   }
+
+   protected final SpyPoints getSpyPoints() {
+      return knowledgeBase.getSpyPoints();
+   }
+
+   protected final FileHandles getFileHandles() {
+      return knowledgeBase.getFileHandles();
    }
 }

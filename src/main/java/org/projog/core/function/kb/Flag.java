@@ -15,12 +15,9 @@
  */
 package org.projog.core.function.kb;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumberCache;
@@ -59,12 +56,6 @@ import org.projog.core.term.Term;
  */
 public final class Flag extends AbstractSingletonPredicate {
    private final Map<PredicateKey, Numeric> flags = new HashMap<>();
-   private ArithmeticOperators operators;
-
-   @Override
-   public void init() {
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
 
    @Override
    public boolean evaluate(Term key, Term oldValue, Term newValue) {
@@ -91,6 +82,6 @@ public final class Flag extends AbstractSingletonPredicate {
    }
 
    private void put(PredicateKey pk, Term value) {
-      flags.put(pk, operators.getNumeric(value));
+      flags.put(pk, getArithmeticOperators().getNumeric(value));
    }
 }

@@ -15,8 +15,6 @@
  */
 package org.projog.core;
 
-import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -71,7 +69,7 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
          if (actualPredicateFactory == null) {
             PredicateFactory pf = kb.getPredicates().getPredicateFactory(key);
             if (pf instanceof UnknownPredicate) {
-               getProjogListeners(kb).notifyWarn("Not defined: " + key);
+               kb.getProjogListeners().notifyWarn("Not defined: " + key);
             } else {
                actualPredicateFactory = pf;
             }

@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,24 +15,17 @@
  */
 package org.projog.core.term;
 
-import static org.projog.core.KnowledgeBaseUtils.getOperands;
-
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Operands;
 
 /**
  * Produces {@code String} representations of {@link Term} instances.
  * <p>
  * Does take account of operator precedence.
- * 
+ *
  * @see #toString(Term)
  */
 public class TermFormatter {
    private final Operands operands;
-
-   public TermFormatter(KnowledgeBase kb) {
-      this(getOperands(kb));
-   }
 
    public TermFormatter(Operands operands) {
       this.operands = operands;
@@ -45,25 +38,20 @@ public class TermFormatter {
     * between its arguments. This method represents lists as a comma separated sequence of elements enclosed in square
     * brackets.
     * <p>
-    * For example:
-    * 
-    * <pre>
+    * For example: <pre>
     * Term structure = Structure.createStructure("+", new IntegerNumber(1), new IntegerNumber(2));
     * Term list = ListFactory.create(new Term[]{new Atom("a"), Atom("b"), Atom("c")});
     * System.out.println("Structure.toString():      "+structure.toString());
     * System.out.println("Write.toString(structure): "+write.toString(structure));
     * System.out.println("List.toString():           "+list.toString());
     * System.out.println("Write.toString(list):      "+write.toString(list));
-    * </pre>
-    * would print out:
-    * 
-    * <pre>
+    * </pre> would print out: <pre>
     * Structure.toString():      +(1, 2)
     * Write.toString(structure): 1 + 2
     * List.toString():           .(a, .(b, .(c, [])))
     * Write.toString(list):      [a,b,c]
     * </pre>
-    * 
+    *
     * @param t the {@code Term} to represent as a string
     * @return a string representation of the specified {@code Term}
     */

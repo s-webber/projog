@@ -175,90 +175,90 @@ public class KnowledgeBaseUtilsTest {
    public void testGetProjogListeners() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      ProjogListeners o1 = KnowledgeBaseUtils.getProjogListeners(kb1);
-      ProjogListeners o2 = KnowledgeBaseUtils.getProjogListeners(kb2);
+      ProjogListeners o1 = kb1.getProjogListeners();
+      ProjogListeners o2 = kb2.getProjogListeners();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getProjogListeners(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getProjogListeners(kb2));
+      assertSame(o1, kb1.getProjogListeners());
+      assertSame(o2, kb2.getProjogListeners());
    }
 
    @Test
    public void testGetProjogProperties() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      ProjogProperties o1 = KnowledgeBaseUtils.getProjogProperties(kb1);
-      ProjogProperties o2 = KnowledgeBaseUtils.getProjogProperties(kb2);
+      ProjogProperties o1 = kb1.getProjogProperties();
+      ProjogProperties o2 = kb2.getProjogProperties();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getProjogProperties(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getProjogProperties(kb2));
+      assertSame(o1, kb1.getProjogProperties());
+      assertSame(o2, kb2.getProjogProperties());
    }
 
    @Test
    public void testGetOperands() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      Operands o1 = KnowledgeBaseUtils.getOperands(kb1);
-      Operands o2 = KnowledgeBaseUtils.getOperands(kb2);
+      Operands o1 = kb1.getOperands();
+      Operands o2 = kb2.getOperands();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getOperands(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getOperands(kb2));
+      assertSame(o1, kb1.getOperands());
+      assertSame(o2, kb2.getOperands());
    }
 
    @Test
    public void testGetTermFormatter() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      TermFormatter o1 = KnowledgeBaseUtils.getTermFormatter(kb1);
-      TermFormatter o2 = KnowledgeBaseUtils.getTermFormatter(kb2);
+      TermFormatter o1 = kb1.getTermFormatter();
+      TermFormatter o2 = kb2.getTermFormatter();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getTermFormatter(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getTermFormatter(kb2));
+      assertSame(o1, kb1.getTermFormatter());
+      assertSame(o2, kb2.getTermFormatter());
    }
 
    @Test
    public void testGetSpyPoints() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      SpyPoints o1 = KnowledgeBaseUtils.getSpyPoints(kb1);
-      SpyPoints o2 = KnowledgeBaseUtils.getSpyPoints(kb2);
+      SpyPoints o1 = kb1.getSpyPoints();
+      SpyPoints o2 = kb2.getSpyPoints();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getSpyPoints(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getSpyPoints(kb2));
+      assertSame(o1, kb1.getSpyPoints());
+      assertSame(o2, kb2.getSpyPoints());
    }
 
    @Test
    public void testGetFileHandles() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      FileHandles o1 = KnowledgeBaseUtils.getFileHandles(kb1);
-      FileHandles o2 = KnowledgeBaseUtils.getFileHandles(kb2);
+      FileHandles o1 = kb1.getFileHandles();
+      FileHandles o2 = kb2.getFileHandles();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getFileHandles(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getFileHandles(kb2));
+      assertSame(o1, kb1.getFileHandles());
+      assertSame(o2, kb2.getFileHandles());
    }
 
    @Test
    public void testArithmeticOperators() {
       KnowledgeBase kb1 = TestUtils.createKnowledgeBase();
       KnowledgeBase kb2 = TestUtils.createKnowledgeBase();
-      ArithmeticOperators o1 = KnowledgeBaseUtils.getArithmeticOperators(kb1);
-      ArithmeticOperators o2 = KnowledgeBaseUtils.getArithmeticOperators(kb2);
+      ArithmeticOperators o1 = kb1.getArithmeticOperators();
+      ArithmeticOperators o2 = kb2.getArithmeticOperators();
       assertNotNull(o1);
       assertNotNull(o2);
       assertNotSame(o1, o2);
-      assertSame(o1, KnowledgeBaseUtils.getArithmeticOperators(kb1));
-      assertSame(o2, KnowledgeBaseUtils.getArithmeticOperators(kb2));
+      assertSame(o1, kb1.getArithmeticOperators());
+      assertSame(o2, kb2.getArithmeticOperators());
    }
 }

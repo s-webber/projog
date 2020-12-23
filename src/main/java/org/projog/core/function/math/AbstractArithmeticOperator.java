@@ -15,8 +15,6 @@
  */
 package org.projog.core.function.math;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-
 import org.projog.core.ArithmeticOperator;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
@@ -29,7 +27,7 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
 
    @Override
    public final void setKnowledgeBase(KnowledgeBase kb) {
-      operators = getArithmeticOperators(kb);
+      operators = kb.getArithmeticOperators();
    }
 
    @Override

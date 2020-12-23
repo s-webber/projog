@@ -15,13 +15,8 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-
 import java.io.PrintStream;
 
-import org.projog.core.ArithmeticOperators;
-import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -62,19 +57,10 @@ import org.projog.core.term.Term;
  * <code>tab(X)</code> - writes <code>X</code> number of spaces to the output stream.
  */
 public final class Tab extends AbstractSingletonPredicate {
-   private FileHandles fileHandles;
-   private ArithmeticOperators operators;
-
-   @Override
-   protected void init() {
-      fileHandles = getFileHandles(getKnowledgeBase());
-      operators = getArithmeticOperators(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term arg) {
-      long numberOfSpaces = operators.getNumeric(arg).getLong();
-      PrintStream os = fileHandles.getCurrentOutputStream();
+      long numberOfSpaces = getArithmeticOperators().getNumeric(arg).getLong();
+      PrintStream os = getFileHandles().getCurrentOutputStream();
       for (int i = 0; i < numberOfSpaces; i++) {
          os.print(' ');
       }

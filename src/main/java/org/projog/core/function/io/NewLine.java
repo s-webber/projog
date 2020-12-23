@@ -15,9 +15,6 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-
-import org.projog.core.FileHandles;
 import org.projog.core.function.AbstractSingletonPredicate;
 
 /* TEST
@@ -38,16 +35,9 @@ import org.projog.core.function.AbstractSingletonPredicate;
  * </p>
  */
 public final class NewLine extends AbstractSingletonPredicate {
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate() {
-      fileHandles.getCurrentOutputStream().println();
+      getFileHandles().getCurrentOutputStream().println();
       return true;
    }
 }

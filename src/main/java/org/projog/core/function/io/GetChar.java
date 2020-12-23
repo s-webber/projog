@@ -15,9 +15,6 @@
  */
 package org.projog.core.function.io;
 
-import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
-
-import org.projog.core.FileHandles;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
@@ -85,17 +82,10 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class GetChar extends AbstractSingletonPredicate {
-   private FileHandles fileHandles;
-
-   @Override
-   protected void init() {
-      fileHandles = getFileHandles(getKnowledgeBase());
-   }
-
    @Override
    public boolean evaluate(Term argument) {
       try {
-         int c = fileHandles.getCurrentInputStream().read();
+         int c = getFileHandles().getCurrentInputStream().read();
          Atom next = toAtom(c);
          return argument.unify(next);
       } catch (Exception e) {

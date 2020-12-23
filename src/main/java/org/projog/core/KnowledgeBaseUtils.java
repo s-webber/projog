@@ -86,7 +86,7 @@ public final class KnowledgeBaseUtils {
     */
    public static List<PredicateKey> getPredicateKeysByName(KnowledgeBase kb, String predicateName) {
       List<PredicateKey> matchingKeys = new ArrayList<>();
-      for (PredicateKey key : kb.getUserDefinedPredicates().keySet()) {
+      for (PredicateKey key : kb.getPredicates().getUserDefinedPredicates().keySet()) {
          if (predicateName.equals(key.getName())) {
             matchingKeys.add(key);
          }
@@ -98,7 +98,7 @@ public final class KnowledgeBaseUtils {
     * Returns a {@link Predicate} instance for the specified {@link Term}.
     */
    public static Predicate getPredicate(KnowledgeBase kb, Term t) {
-      return kb.getPredicateFactory(t).getPredicate(t.getArgs());
+      return kb.getPredicates().getPredicateFactory(t).getPredicate(t.getArgs());
    }
 
    /**
@@ -128,7 +128,7 @@ public final class KnowledgeBaseUtils {
       if (term.getType().isVariable()) {
          return false;
       } else {
-         PredicateFactory ef = kb.getPreprocessedPredicateFactory(term);
+         PredicateFactory ef = kb.getPredicates().getPreprocessedPredicateFactory(term);
          return !ef.isRetryable();
       }
    }

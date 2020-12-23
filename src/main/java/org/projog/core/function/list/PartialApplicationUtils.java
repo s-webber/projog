@@ -17,10 +17,10 @@ package org.projog.core.function.list;
 
 import static org.projog.core.term.TermUtils.backtrack;
 
-import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.Predicates;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -36,14 +36,14 @@ class PartialApplicationUtils {
       return type == TermType.EMPTY_LIST || type == TermType.LIST;
    }
 
-   static PredicateFactory getPredicateFactory(KnowledgeBase kb, Term partiallyAppliedFunction) {
-      return getPredicateFactory(kb, partiallyAppliedFunction, 1);
+   static PredicateFactory getPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
+      return getPredicateFactory(predicates, partiallyAppliedFunction, 1);
    }
 
-   static PredicateFactory getPredicateFactory(KnowledgeBase kb, Term partiallyAppliedFunction, int numberOfExtraArguments) {
+   static PredicateFactory getPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int numberOfExtraArguments) {
       int numArgs = partiallyAppliedFunction.getNumberOfArguments() + numberOfExtraArguments;
       PredicateKey key = new PredicateKey(partiallyAppliedFunction.getName(), numArgs);
-      return kb.getPredicateFactory(key);
+      return predicates.getPredicateFactory(key);
    }
 
    static Term[] createArguments(Term partiallyAppliedFunction, Term... extraArguments) {

@@ -56,11 +56,11 @@ public class OnceTest {
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
-      kb.addPredicateFactory(key, mockPredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
-      Once o = (Once) kb.getPredicateFactory(onceTerm);
+      Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());
@@ -82,12 +82,12 @@ public class OnceTest {
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
-      kb.addPredicateFactory(key, mockPreprocessablePredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       when(mockPreprocessablePredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
-      Once o = (Once) kb.getPredicateFactory(onceTerm);
+      Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());

@@ -95,7 +95,7 @@ public final class Listing extends AbstractSingletonPredicate {
    }
 
    private Iterator<ClauseModel> getClauses(PredicateKey key) {
-      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getKnowledgeBase().getUserDefinedPredicates();
+      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getPredicates().getUserDefinedPredicates();
       UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
       return userDefinedPredicate.getImplications();
    }

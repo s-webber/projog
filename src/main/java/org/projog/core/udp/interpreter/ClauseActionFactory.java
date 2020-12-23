@@ -48,7 +48,7 @@ public final class ClauseActionFactory {
       Term consequent = model.getConsequent();
       if (consequent.getNumberOfArguments() == 0) {
          // have zero arg rule
-         return isFact ? new AlwaysMatchedFact(model) : new ZeroArgConsequentRule(model, kb.getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new AlwaysMatchedFact(model) : new ZeroArgConsequentRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
       }
 
       // if all non-shared variables then always true
@@ -72,11 +72,11 @@ public final class ClauseActionFactory {
       }
 
       if (!hasSharedVariables && !hasConcreteTerms) {
-         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, kb.getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
       } else if (hasConcreteTerms && !hasVariables) {
-         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, kb.getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
       } else {
-         return isFact ? new MutableFact(model) : new MutableRule(model, kb.getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new MutableFact(model) : new MutableRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
       }
    }
 
@@ -92,7 +92,7 @@ public final class ClauseActionFactory {
       @Override
       public Predicate getPredicate(Term[] input) {
          Term[] consequentArgs = model.getConsequent().getArgs();
-         Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+         Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
                return AbstractSingletonPredicate.FAIL;
@@ -100,7 +100,7 @@ public final class ClauseActionFactory {
          }
 
          Term antecedant = model.getAntecedent().copy(sharedVariables);
-         return kb.getPredicateFactory(antecedant).getPredicate(antecedant.getArgs());
+         return kb.getPredicates().getPredicateFactory(antecedant).getPredicate(antecedant.getArgs());
       }
 
       @Override

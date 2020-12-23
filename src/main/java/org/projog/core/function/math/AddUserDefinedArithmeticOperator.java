@@ -24,6 +24,7 @@ import org.projog.core.ArithmeticOperators;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.Predicates;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Numeric;
@@ -61,7 +62,7 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
    @Override
    public boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
-      final UserDefinedArithmeticOperator arithmeticOperator = new UserDefinedArithmeticOperator(getKnowledgeBase(), key);
+      final UserDefinedArithmeticOperator arithmeticOperator = new UserDefinedArithmeticOperator(getPredicates(), key);
       operators.addArithmeticOperator(key, arithmeticOperator);
       return true;
    }
@@ -71,10 +72,10 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
       final PredicateKey key;
       final PredicateFactory pf;
 
-      UserDefinedArithmeticOperator(KnowledgeBase kb, PredicateKey originalKey) {
+      UserDefinedArithmeticOperator(Predicates p, PredicateKey originalKey) {
          this.numArgs = originalKey.getNumArgs();
          this.key = new PredicateKey(originalKey.getName(), numArgs + 1);
-         this.pf = kb.getPredicateFactory(key);
+         this.pf = p.getPredicateFactory(key);
       }
 
       @Override

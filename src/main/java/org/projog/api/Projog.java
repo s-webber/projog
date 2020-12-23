@@ -226,7 +226,7 @@ public final class Projog {
     * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
     */
    public void addPredicateFactory(PredicateKey key, PredicateFactory predicateFactory) {
-      kb.addPredicateFactory(key, predicateFactory);
+      kb.getPredicates().addPredicateFactory(key, predicateFactory);
    }
 
    /**

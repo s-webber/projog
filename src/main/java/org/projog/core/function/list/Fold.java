@@ -112,7 +112,7 @@ public final class Fold extends AbstractPredicateFactory {
    private PredicateFactory getPredicateFactory(Term atom) {
       String predicateName = TermUtils.getAtomName(atom);
       PredicateKey predicateKey = new PredicateKey(predicateName, 3);
-      return getKnowledgeBase().getPredicateFactory(predicateKey);
+      return getPredicates().getPredicateFactory(predicateKey);
    }
 
    private List<Term> toList(Term values) {

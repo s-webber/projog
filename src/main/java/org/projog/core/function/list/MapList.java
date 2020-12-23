@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,9 +55,9 @@ import org.projog.core.term.Term;
  %FALSE maplist(>=(5), [3,4,5,2,1,6])
  %FALSE maplist(>=(5), [6,3,4,5,2,1])
  %FALSE maplist(>=(5), [3,4,5,6,2,1])
- 
+
  %FALSE maplist(=(p(W)), [p(1),p(2),p(3)])
- 
+
  % First argument must be an atom or structure. Second argument must be a list.
  %FALSE maplist(X, [])
  %FALSE maplist(atom, X)
@@ -65,7 +65,7 @@ import org.projog.core.term.Term;
  % maplist/3 applies the goal to pairs of elements from two lists.
  %TRUE maplist(=, [1,2,3], [1,2,3])
  %FALSE maplist(=, [1,2,3], [4,5,6])
- %FALSE maplist(=, [1,2,3], [1,3,2]) 
+ %FALSE maplist(=, [1,2,3], [1,3,2])
  %QUERY maplist(=, [X,2,3], [1,Y,Z])
  %ANSWER
  % X=1
@@ -74,7 +74,7 @@ import org.projog.core.term.Term;
  %ANSWER
  %QUERY maplist(=, [1,2,3], X)
  %ANSWER X=[1,2,3]
- 
+
  % Note: "checklist" is a synonym for "maplist".
  %TRUE checklist(atom, [a,b,c])
  %FALSE checklist(atom, [a,2,c])
@@ -95,7 +95,7 @@ public final class MapList extends AbstractSingletonPredicate {
          return false;
       }
 
-      final PredicateFactory pf = getPredicateFactory(getKnowledgeBase(), partiallyAppliedFunction);
+      final PredicateFactory pf = getPredicateFactory(getPredicates(), partiallyAppliedFunction);
       for (Term arg : toJavaUtilList(args)) {
          if (!apply(pf, createArguments(partiallyAppliedFunction, arg))) {
             return false;
@@ -132,7 +132,7 @@ public final class MapList extends AbstractSingletonPredicate {
          return false;
       }
 
-      final PredicateFactory pf = getPredicateFactory(getKnowledgeBase(), partiallyAppliedFunction, 2);
+      final PredicateFactory pf = getPredicateFactory(getPredicates(), partiallyAppliedFunction, 2);
       for (int i = 0; i < listSize; i++) {
          if (!apply(pf, createArguments(partiallyAppliedFunction, list1.get(i), list2.get(i)))) {
             return false;

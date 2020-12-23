@@ -150,7 +150,7 @@ public final class Inspect extends AbstractPredicateFactory {
    @Override
    public Predicate getPredicate(Term clauseHead, Term clauseBody) {
       PredicateKey key = PredicateKey.createForTerm(clauseHead);
-      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getKnowledgeBase().getUserDefinedPredicates();
+      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getPredicates().getUserDefinedPredicates();
       UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
       if (userDefinedPredicate == null) {
          return AbstractSingletonPredicate.toPredicate(false);

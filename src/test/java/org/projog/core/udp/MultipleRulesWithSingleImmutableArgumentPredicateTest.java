@@ -54,8 +54,8 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
          ClauseModel clause = ClauseModel.createClauseModel(structure(FUNCTOR, atom(atomName)));
          pf.addLast(clause);
       }
-      kb.addUserDefinedPredicate(pf);
-      assertSame(pf, kb.getPredicateFactory(key));
+      kb.getPredicates().addUserDefinedPredicate(pf);
+      assertSame(pf, kb.getPredicates().getPredicateFactory(key));
       testObject = pf.getActualPredicateFactory();
    }
 

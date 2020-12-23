@@ -18,6 +18,7 @@ package org.projog.core.function;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
+import org.projog.core.Predicates;
 import org.projog.core.term.Term;
 
 public abstract class AbstractPredicateFactory implements PredicateFactory {
@@ -88,5 +89,9 @@ public abstract class AbstractPredicateFactory implements PredicateFactory {
 
    protected final KnowledgeBase getKnowledgeBase() {
       return knowledgeBase;
+   }
+
+   protected final Predicates getPredicates() {
+      return knowledgeBase.getPredicates();
    }
 }

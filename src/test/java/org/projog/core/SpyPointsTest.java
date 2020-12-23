@@ -192,7 +192,7 @@ public class SpyPointsTest {
       PredicateKey key = createKey("test", 1);
       DynamicUserDefinedPredicateFactory pf = new DynamicUserDefinedPredicateFactory(kb, key);
       pf.addFirst(ClauseModel.createClauseModel(structure("test", createAnonymousVariable())));
-      kb.addUserDefinedPredicate(pf);
+      kb.getPredicates().addUserDefinedPredicate(pf);
 
       SpyPoints testObject = new SpyPoints(kb);
       SpyPoints.SpyPoint sp = testObject.getSpyPoint(key);

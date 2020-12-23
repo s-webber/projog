@@ -44,7 +44,7 @@ public class NotTest {
    public void testBacktrackOnSuccess() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("not((X=4, X<3)).");
-      Not n = (Not) kb.getPredicateFactory(term);
+      Not n = (Not) kb.getPredicates().getPredicateFactory(term);
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
@@ -59,7 +59,7 @@ public class NotTest {
    public void testPreprocess_cannot_optimise_variable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("not(X).");
-      Not n = (Not) kb.getPredicateFactory(term);
+      Not n = (Not) kb.getPredicates().getPredicateFactory(term);
 
       PredicateFactory optimised = n.preprocess(term);
 
@@ -75,11 +75,11 @@ public class NotTest {
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
-      kb.addPredicateFactory(key, mockPredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
-      Not n = (Not) kb.getPredicateFactory(notTerm);
+      Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());
@@ -101,12 +101,12 @@ public class NotTest {
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
-      kb.addPredicateFactory(key, mockPreprocessablePredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       when(mockPreprocessablePredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
-      Not n = (Not) kb.getPredicateFactory(notTerm);
+      Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());

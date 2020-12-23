@@ -138,7 +138,7 @@ public final class SpyPoints {
       public void logExit(Object source, Term[] args, int clauseNumber) {
          ClauseModel clauseModel;
          if (clauseNumber != -1) {
-            Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getUserDefinedPredicates();
+            Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getPredicates().getUserDefinedPredicates();
             UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(getPredicateKey());
             // clauseNumber starts at 1 / getClauseModel starts at 0
             clauseModel = userDefinedPredicate.getClauseModel(clauseNumber - 1);

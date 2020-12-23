@@ -61,11 +61,11 @@ public class KnowledgeBaseUtilsTest {
       PredicateKey input[] = {new PredicateKey(predicateName, 0), new PredicateKey(predicateName, 1), new PredicateKey(predicateName, 2), new PredicateKey(predicateName, 3)};
 
       for (PredicateKey key : input) {
-         kb.createOrReturnUserDefinedPredicate(key);
+         kb.getPredicates().createOrReturnUserDefinedPredicate(key);
          // add entries with a different name to the name we are calling getPredicateKeysByName with
          // to check that the method isn't just returning ALL keys
          PredicateKey keyWithDifferentName = new PredicateKey(predicateName + "X", key.getNumArgs());
-         kb.createOrReturnUserDefinedPredicate(keyWithDifferentName);
+         kb.getPredicates().createOrReturnUserDefinedPredicate(keyWithDifferentName);
       }
 
       List<PredicateKey> output = KnowledgeBaseUtils.getPredicateKeysByName(kb, predicateName);

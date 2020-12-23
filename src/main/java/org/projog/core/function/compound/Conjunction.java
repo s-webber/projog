@@ -15,9 +15,9 @@
  */
 package org.projog.core.function.compound;
 
-import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
@@ -136,9 +136,9 @@ import org.projog.core.term.TermUtils;
 public final class Conjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    public Predicate getPredicate(Term arg1, Term arg2) {
-      Predicate firstPredicate = getKnowledgeBase().getPredicateFactory(arg1).getPredicate(arg1.getArgs());
+      Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1.getArgs());
       if (firstPredicate.evaluate()) {
-         return new ConjunctionPredicate(firstPredicate, getKnowledgeBase().getPredicateFactory(arg2), arg2);
+         return new ConjunctionPredicate(firstPredicate, getPredicates().getPredicateFactory(arg2), arg2);
       } else {
          return AbstractSingletonPredicate.FAIL;
       }
@@ -152,8 +152,8 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
          return this;
       }
 
-      PredicateFactory firstPredicateFactory = getKnowledgeBase().getPreprocessedPredicateFactory(firstArg);
-      PredicateFactory secondPredicateFactory = getKnowledgeBase().getPreprocessedPredicateFactory(secondArg);
+      PredicateFactory firstPredicateFactory = getPredicates().getPreprocessedPredicateFactory(firstArg);
+      PredicateFactory secondPredicateFactory = getPredicates().getPreprocessedPredicateFactory(secondArg);
       if (firstPredicateFactory.isRetryable() || secondPredicateFactory.isRetryable()) {
          return new OptimisedRetryableConjuction(firstPredicateFactory, secondPredicateFactory);
       } else {
@@ -232,8 +232,8 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
       @Override
       public boolean couldReevaluationSucceed() {
          return firstPredicate.couldReevaluationSucceed()
-                     || (secondPredicate != null && secondPredicate.couldReevaluationSucceed())
-                     || (copySecondArgument == null && secondPredicateFactory.isRetryable());
+                || (secondPredicate != null && secondPredicate.couldReevaluationSucceed())
+                || (copySecondArgument == null && secondPredicateFactory.isRetryable());
       }
    }
 }

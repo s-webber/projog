@@ -61,7 +61,7 @@ public final class QueryStatement {
          SentenceParser sp = SentenceParser.getInstance(prologQuery, getOperands(kb));
 
          this.parsedInput = sp.parseSentence();
-         this.predicateFactory = kb.getPredicateFactory(parsedInput);
+         this.predicateFactory = kb.getPredicates().getPredicateFactory(parsedInput);
          this.variables = sp.getParsedTermVariables();
 
          if (sp.parseSentence() != null) {

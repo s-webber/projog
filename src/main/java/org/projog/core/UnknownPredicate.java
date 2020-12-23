@@ -69,7 +69,7 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
 
       synchronized (key) {
          if (actualPredicateFactory == null) {
-            PredicateFactory pf = kb.getPredicateFactory(key);
+            PredicateFactory pf = kb.getPredicates().getPredicateFactory(key);
             if (pf instanceof UnknownPredicate) {
                getProjogListeners(kb).notifyWarn("Not defined: " + key);
             } else {

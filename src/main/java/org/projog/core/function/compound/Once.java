@@ -18,9 +18,9 @@ package org.projog.core.function.compound;
 import java.util.Objects;
 
 import org.projog.core.KnowledgeBaseUtils;
-import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -60,7 +60,7 @@ public final class Once extends AbstractSingletonPredicate implements Preprocess
       if (arg.getType().isVariable()) {
          return this;
       } else {
-         return new OptimisedOnce(getKnowledgeBase().getPreprocessedPredicateFactory(arg));
+         return new OptimisedOnce(getPredicates().getPreprocessedPredicateFactory(arg));
       }
    }
 

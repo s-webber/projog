@@ -40,7 +40,7 @@ public class ConjunctionTest {
    public void testPreprocess_cannot_optimise_when_both_arguments_are_variables() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("X, Y.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
       assertSame(c, optimised);
@@ -50,7 +50,7 @@ public class ConjunctionTest {
    public void testPreprocess_cannot_optimise_when_first_argument_is_variable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("X, true.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
       assertSame(c, optimised);
@@ -60,7 +60,7 @@ public class ConjunctionTest {
    public void testPreprocess_cannot_optimise_when_second_argument_is_variable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("true, Y.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
       assertSame(c, optimised);
@@ -70,7 +70,7 @@ public class ConjunctionTest {
    public void testPreprocess_OptimisedSingletonConjuction() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("true, true.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
       assertEquals("org.projog.core.function.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
@@ -82,7 +82,7 @@ public class ConjunctionTest {
    public void testPreprocess_OptimisedSingletonConjuction_with_variables() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("X=6, \\+ atom(X).");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
       assertEquals("org.projog.core.function.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
@@ -100,7 +100,7 @@ public class ConjunctionTest {
    public void testPreprocess_first_argument_retryable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("repeat(2), true.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term.getArgs());
 
@@ -120,7 +120,7 @@ public class ConjunctionTest {
       KnowledgeBase kb = createKnowledgeBase();
       TermFormatter tf = new TermFormatter(kb);
       Term term = parseTerm("member(X, [a,b]), Y=X.");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term.getArgs());
 
@@ -141,7 +141,7 @@ public class ConjunctionTest {
    public void testPreprocess_second_argument_retryable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("true, repeat(2).");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term.getArgs());
 
@@ -160,7 +160,7 @@ public class ConjunctionTest {
    public void testPreprocess_both_arguments_retryable() {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm("member(X, [2,3]), repeat(X).");
-      Conjunction c = (Conjunction) kb.getPredicateFactory(term);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term.getArgs());
 

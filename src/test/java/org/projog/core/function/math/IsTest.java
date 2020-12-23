@@ -39,7 +39,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("X is Y.");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       assertSame(is, is.preprocess(isTerm));
    }
 
@@ -48,7 +48,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("X is 1.");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
       assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
@@ -60,7 +60,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("X is 3 * 7.");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
       assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
@@ -72,7 +72,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("F is C * 9 / 5 + 32.");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$PreprocessedIs", optimised.getClass().getName());
 
@@ -98,7 +98,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("X is abs(-3 * 7).");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
       assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
@@ -110,7 +110,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("X is abs(1+Y).");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$PreprocessedIs", optimised.getClass().getName());
 
@@ -137,7 +137,7 @@ public class IsTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term isTerm = parseTerm("F is C * 9 / 5 + 32.");
 
-      Is is = (Is) kb.getPredicateFactory(isTerm);
+      Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();

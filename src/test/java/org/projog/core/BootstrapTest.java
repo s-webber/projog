@@ -78,7 +78,7 @@ public class BootstrapTest {
    @SuppressWarnings("rawtypes")
    private void assertBuiltInPredicate(Term nameAndArity) throws Exception {
       PredicateKey key = PredicateKey.createFromNameAndArity(nameAndArity);
-      PredicateFactory ef = kb.getPredicateFactory(key);
+      PredicateFactory ef = kb.getPredicates().getPredicateFactory(key);
       assertFinal(ef);
       Class[] methodParameters = getMethodParameters(key);
       if (ef instanceof PredicateFactory) {

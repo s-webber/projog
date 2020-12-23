@@ -49,7 +49,7 @@ public class UnknownPredicateTest {
       assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate(variable()));
 
       // define UnknownPredicateTest/1
-      kb.createOrReturnUserDefinedPredicate(key);
+      kb.getPredicates().createOrReturnUserDefinedPredicate(key);
 
       // assert that new InterpretedUserDefinedPredicate is returned once UnknownPredicateTest/1 defined
       assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(variable()).getClass());
@@ -77,7 +77,7 @@ public class UnknownPredicateTest {
       // create UnknownPredicate for a predicate represented by a mock PredicateFactory (note not a PreprocessablePredicateFactory)
       UnknownPredicate original = new UnknownPredicate(kb, key);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      kb.addPredicateFactory(key, mockPredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
 
       PredicateFactory result = original.preprocess(Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
@@ -93,7 +93,7 @@ public class UnknownPredicateTest {
       // create UnknownPredicate for a predicate represented by a mock PreprocessablePredicateFactory
       UnknownPredicate original = new UnknownPredicate(kb, key);
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
-      kb.addPredicateFactory(key, mockPreprocessablePredicateFactory);
+      kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Term arg = Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")});
       when(mockPreprocessablePredicateFactory.preprocess(arg)).thenReturn(mockPredicateFactory);

@@ -18,9 +18,9 @@ package org.projog.core.function.compound;
 import java.util.Objects;
 
 import org.projog.core.KnowledgeBaseUtils;
-import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
+import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
@@ -86,7 +86,7 @@ public final class Not extends AbstractSingletonPredicate implements Preprocessa
       if (arg.getType().isVariable()) {
          return this;
       } else {
-         return new OptimisedNot(getKnowledgeBase().getPreprocessedPredicateFactory(arg));
+         return new OptimisedNot(getPredicates().getPreprocessedPredicateFactory(arg));
       }
    }
 

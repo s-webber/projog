@@ -64,7 +64,7 @@ public final class PredSort extends AbstractSingletonPredicate {
 
    private PredicateFactory getPredicateFactory(Term predicateName) {
       PredicateKey key = new PredicateKey(getAtomName(predicateName), 3);
-      return getKnowledgeBase().getPredicateFactory(key);
+      return getPredicates().getPredicateFactory(key);
    }
 
    private static final class PredSortComparator implements Comparator<Term> {

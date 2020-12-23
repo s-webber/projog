@@ -73,7 +73,7 @@ public class ClauseActionFactoryTest {
       when(mockPredicateFactory.getPredicate(EMPTY_ARRAY)).thenReturn(mockPredicate1, mockPredicate2);
 
       kb = KnowledgeBaseUtils.createKnowledgeBase();
-      kb.addPredicateFactory(new PredicateKey("test", 0), mockPredicateFactory);
+      kb.getPredicates().addPredicateFactory(new PredicateKey("test", 0), mockPredicateFactory);
    }
 
    @After
@@ -271,12 +271,12 @@ public class ClauseActionFactoryTest {
       PredicateFactory pf1 = mock(PredicateFactory.class);
       Predicate p1 = mock(Predicate.class);
       when(pf1.getPredicate(EMPTY_ARRAY)).thenReturn(p1);
-      kb.addPredicateFactory(new PredicateKey("test1", 0), pf1);
+      kb.getPredicates().addPredicateFactory(new PredicateKey("test1", 0), pf1);
 
       PredicateFactory pf2 = mock(PredicateFactory.class);
       Predicate p2 = mock(Predicate.class);
       when(pf2.getPredicate(EMPTY_ARRAY)).thenReturn(p2);
-      kb.addPredicateFactory(new PredicateKey("test2", 0), pf2);
+      kb.getPredicates().addPredicateFactory(new PredicateKey("test2", 0), pf2);
 
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
       assertSame(p1, a.getPredicate(array(atom("test1"))));
@@ -327,7 +327,7 @@ public class ClauseActionFactoryTest {
    @Test
    public void testZeroArgConsequentRule_getPredicate_antecedent_mutable() {
       PredicateFactory pf = mock(PredicateFactory.class);
-      kb.addPredicateFactory(new PredicateKey("test", 5), pf);
+      kb.getPredicates().addPredicateFactory(new PredicateKey("test", 5), pf);
 
       ArgumentCaptor<Term> captor = ArgumentCaptor.forClass(Term.class);
       Predicate p1 = mock(Predicate.class);

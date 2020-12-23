@@ -15,8 +15,6 @@
  */
 package org.projog.core;
 
-import java.io.File;
-
 import org.projog.api.Projog;
 
 /**
@@ -37,30 +35,10 @@ public interface ProjogProperties {
    String DEFAULT_BOOTSTRAP_SCRIPT = "projog-bootstrap.pl";
 
    /**
-    * Returns {@code true} if user defined predicates should be compiled at runtime.
-    * <p>
-    * Projog is able to convert user defined predicates specified using Prolog syntax into native Java code. Converting
-    * Prolog syntax into Java code offers optimised performance. The generation of the Java code and its compilation
-    * happens at runtime as new clauses are consulted. If runtime compilation is disabled then Projog operates in
-    * "interpreted" mode - this will impact performance but avoid the need of compiling Java code at runtime.
-    *
-    * @return {@code true} if user defined predicates should be compiled at runtime
-    */
-   boolean isRuntimeCompilationEnabled();
-
-   /**
     * Returns the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap(KnowledgeBase)}.
     *
     * @return the name of the resource loaded by {@link KnowledgeBaseUtils#bootstrap(KnowledgeBase)}
     * @see KnowledgeBaseUtils#bootstrap(KnowledgeBase)
     */
    String getBootstrapScript();
-
-   /**
-    * The directory to store Java source code generated at runtime for compiled predicates.
-    *
-    * @return directory to store Java source code generated at runtime, or {@code null} if source code is not to be
-    * written to the file-system
-    */
-   File getCompiledContentOutputDirectory();
 }

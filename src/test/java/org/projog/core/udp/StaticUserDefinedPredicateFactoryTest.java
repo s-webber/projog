@@ -34,8 +34,6 @@ import org.projog.core.PreprocessablePredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
-import org.projog.core.udp.compiler.CompiledPredicate;
-import org.projog.core.udp.compiler.CompiledTailRecursivePredicate;
 import org.projog.core.udp.interpreter.InterpretedTailRecursivePredicateFactory;
 import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
@@ -45,8 +43,7 @@ import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
  * @see org.projog.TestUtils#COMPILATION_ENABLED_PROPERTIES
  */
 public class StaticUserDefinedPredicateFactoryTest {
-   private static final KnowledgeBase COMPILATION_ENABLED_KB = TestUtils.createKnowledgeBase(TestUtils.COMPILATION_ENABLED_PROPERTIES);
-   private static final KnowledgeBase COMPILATION_DISABLED_KB = TestUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
+   private static final KnowledgeBase COMPILATION_DISABLED_KB = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
    private static final String[] RECURSIVE_PREDICATE_SYNTAX = {"concatenate([],L,L).", "concatenate([X|L1],L2,[X|L3]) :- concatenate(L1,L2,L3)."};
    private static final String[] NON_RECURSIVE_PREDICATE_SYNTAX = {"p(X,Y,Z) :- repeat(3), X<Y.", "p(X,Y,Z) :- X is Y+Z.", "p(X,Y,Z) :- X=a."};
 
@@ -126,6 +123,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertIndexablePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
+
    @Test
    public void testSingleFactWithMultipleImmutableArgumentsPredicate() {
       Term clause = TestUtils.parseTerm("p(a,b,c).");
@@ -194,25 +192,9 @@ public class StaticUserDefinedPredicateFactoryTest {
    }
 
    @Test
-   public void testCompiledTailRecursivePredicate() {
-      PredicateFactory pf = getActualPredicateFactory(COMPILATION_ENABLED_KB, toTerms(RECURSIVE_PREDICATE_SYNTAX));
-      assertTrue(pf instanceof CompiledPredicate);
-      assertTrue(pf instanceof CompiledTailRecursivePredicate);
-      assertTrue(pf.isRetryable());
-   }
-
-   @Test
    public void testInterpretedUserDefinedPredicate() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
       assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(createArgs(3)).getClass());
-      assertTrue(pf.isRetryable());
-   }
-
-   @Test
-   public void testCompiledPredicate() {
-      PredicateFactory pf = getActualPredicateFactory(COMPILATION_ENABLED_KB, toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
-      assertTrue(pf instanceof CompiledPredicate);
-      assertFalse(pf instanceof CompiledTailRecursivePredicate);
       assertTrue(pf.isRetryable());
    }
 

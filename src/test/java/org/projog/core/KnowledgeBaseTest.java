@@ -49,6 +49,7 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.udp.UserDefinedPredicateFactory;
+
 public class KnowledgeBaseTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
@@ -56,14 +57,14 @@ public class KnowledgeBaseTest {
    @Test
    public void testDefaultProjogProperties() {
       KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase();
-      assertSame(ProjogSystemProperties.class, getProjogProperties(kb).getClass());
+      assertSame(ProjogDefaultProperties.class, getProjogProperties(kb).getClass());
    }
 
    /** Check that {@link ProjogProperties} is configurable. */
    @Test
    public void testConfiguredProjogProperties() {
-      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
-      assertSame(TestUtils.COMPILATION_DISABLED_PROPERTIES, getProjogProperties(kb));
+      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
+      assertSame(TestUtils.PROJOG_DEFAULT_PROPERTIES, getProjogProperties(kb));
    }
 
    /** @see ArithmeticOperatorsTest */

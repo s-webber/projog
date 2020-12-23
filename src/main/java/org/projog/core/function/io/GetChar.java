@@ -60,6 +60,7 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
+ %NO
 
  force_error :-
     open('get_char_test.tmp', read, Z),

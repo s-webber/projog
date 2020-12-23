@@ -16,7 +16,6 @@
 package org.projog.core.udp;
 
 import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-import static org.projog.core.KnowledgeBaseUtils.getProjogProperties;
 import static org.projog.core.KnowledgeBaseUtils.getSpyPoints;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseServiceLocator;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
@@ -35,7 +33,6 @@ import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
-import org.projog.core.udp.compiler.CompiledPredicateClassGenerator;
 import org.projog.core.udp.interpreter.ClauseAction;
 import org.projog.core.udp.interpreter.Clauses;
 import org.projog.core.udp.interpreter.InterpretedTailRecursivePredicateFactory;
@@ -115,18 +112,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private PredicateFactory createPredicateFactoryFromClauseActions(Clauses clauses) {
       List<ClauseModel> clauseModels = getCopyOfImplications(); // TODO do we need to copy here?
-
-      if (isPredicateSuitableForCompilation(clauseModels)) {
-         try {
-            return createCompiledPredicateFactoryFromClauseActions(clauseModels);
-         } catch (Exception e) {
-            // If fail to compile a user-defined predicate to Java - possibly because the predicate is too large -
-            // then revert to evaluating the predicate in interpreted mode rather than throwing an exception.
-            getProjogListeners(kb)
-                        .notifyWarn("Caught exception while compiling " + predicateKey + " to Java so will revert to operating in interpreted mode for this predicate.");
-         }
-      }
-
       return createInterpretedPredicateFactoryFromClauseActions(clauses, clauseModels);
    }
 
@@ -136,20 +121,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          copyImplications.add(clauseModel.copy());
       }
       return copyImplications;
-   }
-
-   private boolean isPredicateSuitableForCompilation(List<ClauseModel> clauseModels) {
-      if (isInterpretedMode()) {
-         return false;
-      } else if (isCyclic()) {
-         return false;
-      } else {
-         return areClausesSuitableForCompilation(clauseModels);
-      }
-   }
-
-   private boolean isInterpretedMode() {
-      return !getProjogProperties(kb).isRuntimeCompilationEnabled();
    }
 
    /**
@@ -184,11 +155,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          }
       }
       return true;
-   }
-
-   private PredicateFactory createCompiledPredicateFactoryFromClauseActions(List<ClauseModel> clauseModels) {
-      CompiledPredicateClassGenerator g = KnowledgeBaseServiceLocator.getServiceLocator(kb).getInstance(CompiledPredicateClassGenerator.class);
-      return g.generateCompiledPredicate(kb, clauseModels);
    }
 
    private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(Clauses clauses, List<ClauseModel> clauseModels) {

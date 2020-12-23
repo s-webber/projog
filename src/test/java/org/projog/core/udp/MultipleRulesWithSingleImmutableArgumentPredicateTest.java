@@ -47,7 +47,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    public void init() {
       String[] atomNames = {"a", "b", "c", "c", "c", "c", "c", "d", "e", "b", "f"};
 
-      kb = TestUtils.createKnowledgeBase(TestUtils.COMPILATION_DISABLED_PROPERTIES);
+      kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
       PredicateKey key = new PredicateKey(FUNCTOR, 1);
       StaticUserDefinedPredicateFactory pf = new StaticUserDefinedPredicateFactory(kb, key);
       for (String atomName : atomNames) {

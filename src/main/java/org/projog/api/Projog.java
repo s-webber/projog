@@ -19,8 +19,6 @@ import static org.projog.core.KnowledgeBaseUtils.getArithmeticOperators;
 import static org.projog.core.KnowledgeBaseUtils.getFileHandles;
 import static org.projog.core.KnowledgeBaseUtils.getOperands;
 import static org.projog.core.KnowledgeBaseUtils.getProjogListeners;
-import static org.projog.core.udp.compiler.CompiledPredicateConstants.INIT_RULE_METHOD_NAME_PREFIX;
-import static org.projog.core.udp.compiler.CompiledPredicateConstants.RETRY_RULE_METHOD_NAME_PREFIX;
 
 import java.io.File;
 import java.io.InputStream;
@@ -28,25 +26,20 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.projog.core.ArithmeticOperator;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
+import org.projog.core.ProjogDefaultProperties;
 import org.projog.core.ProjogException;
 import org.projog.core.ProjogProperties;
 import org.projog.core.ProjogSourceReader;
-import org.projog.core.ProjogSystemProperties;
 import org.projog.core.event.ProjogListener;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.udp.ClauseModel;
-import org.projog.core.udp.StaticUserDefinedPredicateFactory;
-import org.projog.core.udp.UserDefinedPredicateFactory;
-import org.projog.core.udp.compiler.CompiledPredicateConstants;
-import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
 /**
  * Provides an entry point for other Java code to interact with Projog.
@@ -154,7 +147,7 @@ public final class Projog {
     * {@code ProjogListener}s.
     */
    public Projog(ProjogListener... listeners) {
-      this(new ProjogSystemProperties(), listeners);
+      this(new ProjogDefaultProperties(), listeners);
    }
 
    /**
@@ -326,13 +319,9 @@ public final class Projog {
     */
    public ProjogStackTraceElement[] getStackTrace(Throwable exception) {
       List<ProjogStackTraceElement> result = new ArrayList<>();
-      StackTraceElement[] elements = exception.getStackTrace();
       List<ClauseModel> clauses = getClauses(exception);
-      for (StackTraceElement element : elements) {
-         ProjogStackTraceElement pste = createProjogStackTraceElement(element, clauses);
-         if (pste != null) {
-            result.add(pste);
-         }
+      for (ClauseModel clause : clauses) {
+         result.add(new ProjogStackTraceElement(clause.getPredicateKey(), clause.getOriginal()));
       }
       return result.toArray(new ProjogStackTraceElement[result.size()]);
    }
@@ -344,81 +333,5 @@ public final class Projog {
       } else {
          return new ArrayList<>();
       }
-   }
-
-   private ProjogStackTraceElement createProjogStackTraceElement(StackTraceElement element, List<ClauseModel> clauses) {
-      String className = element.getClassName();
-      String methodName = element.getMethodName();
-      if (isInterpretedMethod(className, methodName)) {
-         ClauseModel m = clauses.remove(0);
-         return createProjogStackTraceElementFromClauseModel(m);
-      } else if (isCompiledPredicate(className) && isRuleEvaluationMethod(methodName)) {
-         return createProjogStackTraceElementFromCompiledPredicate(className, methodName);
-      } else {
-         return null;
-      }
-   }
-
-   private boolean isInterpretedMethod(String className, String methodName) {
-      if (InterpretedUserDefinedPredicate.class.getName().equals(className) && "evaluate".equals(methodName)) {
-         return true;
-      } else if ("org.projog.core.udp.SingleRetryableRulePredicateFactory$RetryableRulePredicate".equals(className) && "evaluate".equals(methodName)) {
-         return true;
-      } else if ("org.projog.core.udp.SingleNonRetryableRulePredicate".equals(className) && "evaluateClause".equals(methodName)) {
-         return true;
-      } else {
-         return false;
-      }
-   }
-
-   private ProjogStackTraceElement createProjogStackTraceElementFromClauseModel(ClauseModel m) {
-      return new ProjogStackTraceElement(m.getPredicateKey(), m.getOriginal());
-   }
-
-   private boolean isCompiledPredicate(String className) {
-      return className.startsWith(CompiledPredicateConstants.COMPILED_PREDICATES_PACKAGE);
-   }
-
-   private boolean isRuleEvaluationMethod(String methodName) {
-      return methodName.startsWith(INIT_RULE_METHOD_NAME_PREFIX) || methodName.startsWith(RETRY_RULE_METHOD_NAME_PREFIX);
-   }
-
-   private ProjogStackTraceElement createProjogStackTraceElementFromCompiledPredicate(String className, String methodName) {
-      int ruleIdx = getRuleIndex(methodName);
-      StaticUserDefinedPredicateFactory compiledPredicate = getCompiledPredicateForClass(className);
-      ClauseModel clauseModel = compiledPredicate.getClauseModel(ruleIdx);
-      PredicateKey key = compiledPredicate.getPredicateKey();
-      Term term = clauseModel.getOriginal();
-      return new ProjogStackTraceElement(key, term);
-   }
-
-   private int getRuleIndex(String methodName) {
-      int beginIndex;
-      if (methodName.startsWith(INIT_RULE_METHOD_NAME_PREFIX)) {
-         beginIndex = INIT_RULE_METHOD_NAME_PREFIX.length();
-      } else {
-         beginIndex = RETRY_RULE_METHOD_NAME_PREFIX.length();
-      }
-      String suffix = methodName.substring(beginIndex);
-      return Integer.parseInt(suffix);
-   }
-
-   private StaticUserDefinedPredicateFactory getCompiledPredicateForClass(String className) {
-      for (Map.Entry<PredicateKey, UserDefinedPredicateFactory> e : kb.getUserDefinedPredicates().entrySet()) {
-         UserDefinedPredicateFactory udp = e.getValue();
-         if (isCompiledPredicateForClass(className, udp)) {
-            return (StaticUserDefinedPredicateFactory) udp;
-         }
-      }
-      return null;
-   }
-
-   private boolean isCompiledPredicateForClass(String className, UserDefinedPredicateFactory udp) {
-      if (udp instanceof StaticUserDefinedPredicateFactory) {
-         StaticUserDefinedPredicateFactory compiledPredicate = (StaticUserDefinedPredicateFactory) udp;
-         PredicateFactory ef = compiledPredicate.getActualPredicateFactory();
-         return className.equals(ef.getClass().getName());
-      }
-      return false;
    }
 }

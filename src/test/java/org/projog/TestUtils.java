@@ -53,18 +53,7 @@ public class TestUtils {
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
    public static final PredicateKey ADD_ARITHMETIC_OPERATOR_KEY = new PredicateKey("pj_add_arithmetic_operator", 2);
    public static final File BOOTSTRAP_FILE = new File("src/main/resources/projog-bootstrap.pl");
-   public static final ProjogProperties COMPILATION_DISABLED_PROPERTIES = new ProjogDefaultProperties() {
-      @Override
-      public boolean isRuntimeCompilationEnabled() {
-         return false;
-      }
-   };
-   public static final ProjogProperties COMPILATION_ENABLED_PROPERTIES = new ProjogDefaultProperties() {
-      @Override
-      public boolean isRuntimeCompilationEnabled() {
-         return true;
-      }
-   };
+   public static final ProjogProperties PROJOG_DEFAULT_PROPERTIES = new ProjogDefaultProperties();
 
    private static final File TEMP_DIR = new File("target");
 

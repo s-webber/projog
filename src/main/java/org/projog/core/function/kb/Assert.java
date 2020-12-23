@@ -88,6 +88,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER/
  %ANSWER/
  %ANSWER/
+ %NO
  %FALSE q(6,3,17)
  %QUERY q(5,2,Q)
  %ANSWER Q=7
@@ -107,6 +108,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  %ANSWER/
  %ANSWER/
  %ANSWER/
+ %NO
  %QUERY asserta((q(X,Y,Z) :- Z is Y-X))
  %ANSWER
  % X=UNINSTANTIATED VARIABLE

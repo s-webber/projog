@@ -16,10 +16,6 @@
 package org.projog;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
-import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -29,10 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.projog.api.Projog;
-import org.projog.core.ProjogProperties;
 import org.projog.core.SpyPoints.SpyPointEvent;
 import org.projog.core.SpyPoints.SpyPointExitEvent;
 import org.projog.core.event.ProjogListener;
@@ -64,30 +58,17 @@ public class PrologTest {
 
    @Test
    public void prologTestsInterpretedMode() {
-      assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationDisabledProjog());
-   }
-
-   @Ignore
-   @Test
-   public void prologTestsCompiledMode() {
-      assertSuccess(SOURCE_PROLOG_TESTS_DIR, compilationEnabledProjog());
+      assertSuccess(SOURCE_PROLOG_TESTS_DIR);
    }
 
    @Test
    public void extractedTestsInterpretedMode() {
-      assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationDisabledProjog());
+      assertSuccess(EXTRACTED_PROLOG_TESTS_DIR);
    }
 
-   @Ignore
+   /** Test that a user-defined predicate with many clauses can be interpreted. */
    @Test
-   public void extractedTestsCompiledMode() {
-      assertSuccess(EXTRACTED_PROLOG_TESTS_DIR, compilationEnabledProjog());
-   }
-
-   /** Test that if a user-defined predicate is too large to compile to Java then Projog reverts to interpreted mode. */
-   @Test
-   public void predicateTooLargeToCompileToJava() throws FileNotFoundException {
-      // write to the file system a script containing a predicate that is too large to compile to Java
+   public void predicateWithManyClauses() throws FileNotFoundException {
       File source = new File("target/predicateTooLargeToCompileToJava.pl");
       try (PrintWriter pw = new PrintWriter(source)) {
          for (int i = 1; i <= 2000; i++) {
@@ -99,7 +80,6 @@ public class PrologTest {
          }
       }
 
-      // create Projog instance with an Observer so can check the events to confirm that the predicate cannot be compiled
       final List<String> events = new ArrayList<>();
       final ProjogListener listener = new ProjogListener() {
          @Override
@@ -136,45 +116,33 @@ public class PrologTest {
             events.add(message.toString());
          }
       };
-      ProjogSupplier projogSupplier = new ProjogSupplier() {
-         @Override
-         public Projog get() {
-            return new Projog(COMPILATION_ENABLED_PROPERTIES, listener);
-         }
-      };
 
       // assert tests pass
-      assertSuccess(source, projogSupplier);
+      assertSuccess(source, new ProjogSupplier() {
+         @Override
+         public Projog get() {
+            return new Projog(listener);
+         }
+      });
 
-      // assert that notification was received that Projog reverted to interpreted mode
-      assertEquals(events.toString(), 3, events.size());
+      // assert that notifications
+      assertEquals(events.toString(), 2, events.size());
       assertEquals("Reading prolog source in: projog-bootstrap.pl from classpath", events.get(0));
       assertEquals("Reading prolog source in: target" + File.separator + "predicateTooLargeToCompileToJava.pl from file system", events.get(1));
-      assertEquals("Caught exception while compiling test/2 to Java so will revert to operating in interpreted mode for this predicate.", events.get(2));
+   }
+
+   private void assertSuccess(File scriptsDir) {
+      assertSuccess(scriptsDir, new ProjogSupplier() {
+         @Override
+         public Projog get() {
+            return new Projog();
+         }
+      });
    }
 
    private void assertSuccess(File scriptsDir, ProjogSupplier projogSupplier) {
       TestResults results = ProjogTestRunner.runTests(scriptsDir, projogSupplier);
       System.out.println(results.getSummary());
       results.assertSuccess();
-   }
-
-   private ProjogSupplier compilationDisabledProjog() {
-      assertFalse(COMPILATION_DISABLED_PROPERTIES.isRuntimeCompilationEnabled());
-      return projog(COMPILATION_DISABLED_PROPERTIES);
-   }
-
-   private ProjogSupplier compilationEnabledProjog() {
-      assertTrue(COMPILATION_ENABLED_PROPERTIES.isRuntimeCompilationEnabled());
-      return projog(COMPILATION_ENABLED_PROPERTIES);
-   }
-
-   private ProjogSupplier projog(final ProjogProperties properties) {
-      return new ProjogSupplier() {
-         @Override
-         public Projog get() {
-            return new Projog(properties);
-         }
-      };
    }
 }

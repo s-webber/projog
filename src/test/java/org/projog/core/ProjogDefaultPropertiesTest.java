@@ -16,8 +16,6 @@
 package org.projog.core;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -27,15 +25,5 @@ public class ProjogDefaultPropertiesTest {
    @Test
    public void testGetBootstrapScript() {
       assertEquals("projog-bootstrap.pl", properties.getBootstrapScript());
-   }
-
-   @Test
-   public void testIsRuntimeCompilationEnabled() {
-      assertFalse(properties.isRuntimeCompilationEnabled());
-   }
-
-   @Test
-   public void testGetCompiledContentOutputDirectory() {
-      assertNull(properties.getCompiledContentOutputDirectory());
    }
 }

@@ -28,12 +28,14 @@ import org.projog.core.function.AbstractPredicateFactory;
  %QUERY print_first_sentence('word1 word2 word3. word4 word5 word6.')
  %OUTPUT word1 word2 word3.
  %ANSWER/
+ %NO
 
  a(x, Y) :- Y = 1, !.
  a(X, Y) :- Y = 2.
 
  %QUERY a(x, Y)
  %ANSWER Y = 1
+ %NO
 
  %QUERY a(y, Y)
  %ANSWER Y = 2

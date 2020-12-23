@@ -21,8 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.COMPILATION_DISABLED_PROPERTIES;
-import static org.projog.TestUtils.COMPILATION_ENABLED_PROPERTIES;
+import static org.projog.TestUtils.PROJOG_DEFAULT_PROPERTIES;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.write;
 
@@ -241,6 +240,22 @@ public class ProjogTest {
       }
    }
 
+   @Test
+   public void testProjogExceptionOnGetResult() {
+      Projog p = createProjog();
+      StringReader sr = new StringReader("a(A) :- b(A). b(Z) :- c(Z, 5). c(X,Y) :- Z is X + Y, Z < 9.");
+      p.consultReader(sr);
+      QueryStatement s = p.createStatement("a(X).");
+      try {
+         // as a/1 only has a single clause then will try to evaluate as part of .getResult(), which is why exception occurs now rather than on a later call to .next()
+         s.getResult();
+         fail();
+      } catch (ProjogException e) {
+         assertSame(ProjogException.class, e.getClass()); // check it is not a sub-class
+         assertEquals("Cannot get Numeric for term: X of type: VARIABLE", e.getMessage());
+      }
+   }
+
    /**
     * Tests a query that fails while it is being evaluated.
     * <p>
@@ -248,13 +263,14 @@ public class ProjogTest {
     * {@link #createQueryResult()}.
     */
    @Test
-   public void testProjogExceptionWhileEvaluatingQueries() {
+   public void testProjogExceptionOnNext() {
       Projog p = createProjog();
-      StringReader sr = new StringReader("a(A) :- b(A). b(Z) :- c(Z, 5). c(X,Y) :- Z is X + Y, Z < 9.");
+      StringReader sr = new StringReader("a(A) :- b(A). a(A) :- A = test. b(Z) :- c(Z, 5). c(X,Y) :- Z is X + Y, Z < 9.");
       p.consultReader(sr);
       QueryStatement s = p.createStatement("a(X).");
       QueryResult r = s.getResult();
       try {
+         // as a/1 only has multiple clauses then not try to evaluate as part of .getResult(), which is why exception only occurs on call to .next()
          r.next();
          fail();
       } catch (ProjogException e) {
@@ -265,14 +281,8 @@ public class ProjogTest {
 
    /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
    @Test
-   public void testIOExceptionWhileEvaluatingQueries_compiledMode() {
-      assertStackTraceOfIOExceptionWhileEvaluatingQueries(COMPILATION_ENABLED_PROPERTIES);
-   }
-
-   /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
-   @Test
-   public void testIOExceptionWhileEvaluatingQueries_interpretedMode() {
-      assertStackTraceOfIOExceptionWhileEvaluatingQueries(COMPILATION_DISABLED_PROPERTIES);
+   public void testIOExceptionWhileEvaluatingQueries() {
+      assertStackTraceOfIOExceptionWhileEvaluatingQueries(PROJOG_DEFAULT_PROPERTIES);
    }
 
    private void assertStackTraceOfIOExceptionWhileEvaluatingQueries(ProjogProperties projogProperties) {
@@ -356,7 +366,7 @@ public class ProjogTest {
 
    /** Returns a new {@link Projog} instance that has been populated with rules from {@link #createTestScript()}. */
    private Projog createProjog() {
-      Projog p = new Projog(COMPILATION_ENABLED_PROPERTIES);
+      Projog p = new Projog();
       p.consultFile(createTestScript());
       return p;
    }

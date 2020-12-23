@@ -1,5 +1,7 @@
+% TODO due to the cut test1 and test4(a) should not re-evaluate until fail
+
 test1 :- true, !.
-%TRUE test1
+%TRUE_NO test1
 
 test2 :- false, !.
 %FALSE test2
@@ -13,3 +15,4 @@ test4(_) :- true.
 %QUERY test4(a)
 %ANSWER/
 %ANSWER/
+%NO

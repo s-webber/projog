@@ -53,7 +53,7 @@ public final class KnowledgeBaseUtils {
     * Constructs a new {@code KnowledgeBase} object using {@link ProjogSystemProperties}
     */
    public static KnowledgeBase createKnowledgeBase() {
-      return createKnowledgeBase(new ProjogSystemProperties());
+      return createKnowledgeBase(new ProjogDefaultProperties());
    }
 
    /**

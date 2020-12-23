@@ -45,6 +45,7 @@ import org.projog.core.function.AbstractPredicateFactory;
  %QUERY read_from_file
  %OUTPUT The first sentence.
  %ANSWER/
+ %NO
  */
 /**
  * <code>repeat</code> - always succeeds.

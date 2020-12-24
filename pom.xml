@@ -11,7 +11,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
   <name>projog-core</name>
   <description>An implementation of the Prolog programming language for the Java platform.</description>
-  <url>http://www.projog.org/</url>
+  <url>http://projog.org</url>
 
   <licenses>
     <license>
@@ -217,7 +217,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
             <version>2.10.3</version>
             <configuration>
                <additionalparam>-Xdoclint:none</additionalparam>
-               <bottom><![CDATA[<a href='http://www.projog.org' title='Prolog programming for the Java platform' target='_blank'>www.projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
+               <bottom><![CDATA[<a href='http://projog.org' title='Prolog programming for the Java platform' target='_blank'>projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
                <doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
                <windowtitle>Projog - a Java based implementation of the Prolog logic programming language.</windowtitle>
             </configuration>

@@ -85,7 +85,7 @@ import org.projog.core.udp.ClauseModel;
  *          System.out.println("X = " + r3.getTerm("X"));
  *       }
  *
- *       // Create and execute a new query that uses a conjunction. See: http://www.projog.org/Conjunction.html
+ *       // Create and execute a new query that uses a conjunction. See: http://projog.org/Conjunction.html
  *       QueryStatement s3 = p.query("test(X, Y), Y<3.");
  *       QueryResult r4 = s3.getResult();
  *       while (r4.next()) {

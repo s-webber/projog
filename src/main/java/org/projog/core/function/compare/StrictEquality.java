@@ -17,6 +17,7 @@ package org.projog.core.function.compare;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 
 /* TEST
  %FALSE X == Y
@@ -62,6 +63,6 @@ import org.projog.core.term.Term;
 public final class StrictEquality extends AbstractSingletonPredicate {
    @Override
    protected boolean evaluate(Term arg1, Term arg2) {
-      return arg1.strictEquality(arg2);
+      return TermUtils.termsEqual(arg1, arg2);
    }
 }

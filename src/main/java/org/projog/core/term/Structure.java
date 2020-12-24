@@ -195,26 +195,6 @@ public final class Structure implements Term {
       }
    }
 
-   /**
-    * Performs a strict comparison of this term to the specified term.
-    * <p>
-    * A {@code Structure} is considered strictly equal to another term if:
-    * <ul>
-    * <li>The other term is of type {@link TermType#STRUCTURE}</li>
-    * <li>The two terms have the equal functors</li>
-    * <li>The two terms have the same number of arguments</li>
-    * <li>All corresponding arguments are strictly equal</li>
-    * </ul>
-    *
-    * @param t the term to compare this term against
-    * @return {@code true} if the given term is strictly equal to this term
-    */
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    @Override
    public void backtrack() {
       if (!immutable) {

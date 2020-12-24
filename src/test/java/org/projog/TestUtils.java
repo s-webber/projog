@@ -17,7 +17,6 @@ package org.projog;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
@@ -207,8 +206,6 @@ public class TestUtils {
    }
 
    public static void assertStrictEquality(Term t1, Term t2, boolean expectedResult) {
-      assertTrue(t1.strictEquality(t2) == expectedResult);
-      assertTrue(t2.strictEquality(t1) == expectedResult);
       assertEquals(expectedResult, TermUtils.termsEqual(t1, t2));
       assertEquals(expectedResult, TermUtils.termsEqual(t2, t1));
       if (expectedResult) {

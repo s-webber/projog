@@ -97,19 +97,6 @@ public final class Atom implements Term {
       }
    }
 
-   /**
-    * Performs a strict comparison of this atom to the specified term.
-    *
-    * @param t the term to compare this atom against
-    * @return {@code true} if the given term represents a {@link TermType#ATOM} with a value equal to the value of this
-    * atom
-    */
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    @Override
    public void backtrack() {
       // do nothing

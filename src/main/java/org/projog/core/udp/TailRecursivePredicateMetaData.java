@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import java.util.List;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.term.TermUtils;
 
 /**
  * Defines the characteristics of a tail recursive user defined predicate.
@@ -42,24 +43,19 @@ import org.projog.core.term.TermType;
  * </ul>
  * </p>
  * <p>
- * Examples of tail recursive predicates suitable for <i>tail recursion optimisation</i>:
- * 
- * <pre>
+ * Examples of tail recursive predicates suitable for <i>tail recursion optimisation</i>: <pre>
  * :- list([]).
  * list([X|Xs]) :- list(Xs).
- * </pre>
- * 
- * <pre>
+ * </pre> <pre>
  * r(N).
  * r(N) :- N > 1, N1 is N-1, r(N1).
  * </pre>
  * </p>
- * 
  * <pre>
  * writeAndRepeat(N) :- write(N), nl.
  * writeAndRepeat(N) :- N > 1, N1 is N-1, writeAndRepeat(N1).
  * </pre>
- * 
+ *
  * @see TailRecursivePredicate
  */
 public final class TailRecursivePredicateMetaData {
@@ -72,7 +68,7 @@ public final class TailRecursivePredicateMetaData {
    /**
     * Returns a new {@code TailRecursivePredicateMetaData} representing the user defined predicate defined by the
     * specified clauses or {@code null} if the predicate is not tail recursive.
-    * 
+    *
     * @param clauses the clauses that the user defined predicate consists of
     * @return a new {@code TailRecursivePredicateMetaData} or {@code null} if the predicate is not tail recursive
     */
@@ -103,7 +99,9 @@ public final class TailRecursivePredicateMetaData {
       Term antecedent = secondTerm.getAntecedent();
       Term[] functions = toArrayOfConjunctions(antecedent);
       Term lastFunction = functions[functions.length - 1];
-      if (lastFunction.getType() == TermType.STRUCTURE && lastFunction.getName().equals(consequent.getName()) && lastFunction.getNumberOfArguments() == consequent.getNumberOfArguments()) {
+      if (lastFunction.getType() == TermType.STRUCTURE
+          && lastFunction.getName().equals(consequent.getName())
+          && lastFunction.getNumberOfArguments() == consequent.getNumberOfArguments()) {
          for (int i = 0; i < functions.length - 1; i++) {
             if (!isSingleAnswer(kb, functions[i])) {
                return false;
@@ -118,7 +116,7 @@ public final class TailRecursivePredicateMetaData {
    private static boolean isTail(Term list, Term term) {
       if (list.getType() == TermType.LIST) {
          Term actualTail = list.getArgument(1);
-         return actualTail.strictEquality(term);
+         return TermUtils.termsEqual(actualTail, term);
       } else {
          return false;
       }

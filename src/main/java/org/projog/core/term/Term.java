@@ -111,19 +111,6 @@ public interface Term {
    boolean unify(Term t);
 
    /**
-    * Performs a strict comparison of this term to the specified term.
-    * <p>
-    * "Strict" equality means that an uninstantiated {@link Variable} will only be considered equal to itself or another
-    * {@code Variable} that is already instantiated to it.
-    *
-    * @param t the term to compare this term against
-    * @return {@code true} if the given term represents a {@code Term} strictly equivalent to this term
-    * @deprecated use {@link TermUtils#termsEqual(Term, Term)}
-    */
-   @Deprecated
-   boolean strictEquality(Term t);
-
-   /**
     * Reverts this term back to its original state prior to any unifications.
     * <p>
     * Makes all {@link Variable}s that this term consists of uninstantiated.
@@ -135,9 +122,9 @@ public interface Term {
    /**
     * Returns {@code true} is this term is immutable.
     * <p>
-    * A term is considered immutable if its value will never change as a result of executing its {@link #unify(Term)}
-    * or {@link #backtrack()} methods. A term will not be considered immutable if it is a {@link Variable} or any of
-    * its arguments are not immutable.
+    * A term is considered immutable if its value will never change as a result of executing its {@link #unify(Term)} or
+    * {@link #backtrack()} methods. A term will not be considered immutable if it is a {@link Variable} or any of its
+    * arguments are not immutable.
     *
     * @return {@code true} is this term is immutable
     */

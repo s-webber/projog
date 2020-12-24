@@ -94,18 +94,6 @@ public final class EmptyList implements Term {
       return TermType.EMPTY_LIST;
    }
 
-   /**
-    * Performs a strict comparison of this term to the specified term.
-    *
-    * @param t the term to compare this term against
-    * @return {@code true} if the given term represents a {@link TermType#EMPTY_LIST}
-    */
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    @Override
    public boolean unify(Term t) {
       TermType tType = t.getType();

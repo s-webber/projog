@@ -168,7 +168,7 @@ public class TermParserTest {
       Term actual = parseTerm(input);
       assertSame(TermType.LIST, actual.getType());
       assertTrue(actual instanceof List);
-      assertTrue(expected.strictEquality(actual));
+      assertEquals(expected, actual);
    }
 
    @Test
@@ -229,7 +229,7 @@ public class TermParserTest {
       assertEquals(expected.getType(), actual.getType());
       assertEquals(expected.getName(), actual.getName());
       assertEquals(expected.toString(), actual.toString());
-      assertTrue(expected.strictEquality(actual));
+      assertEquals(expected, actual);
    }
 
    private void assertVariableTerm(Term expected, String input) {

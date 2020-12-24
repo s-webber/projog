@@ -97,19 +97,6 @@ public final class IntegerNumber implements Numeric {
       }
    }
 
-   /**
-    * Performs a strict comparison of this term to the specified term.
-    *
-    * @param t the term to compare this term against
-    * @return {@code true} if the given term represents a {@link TermType#INTEGER} with a value equal to the value of
-    * this {@code IntegerNumber}
-    */
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    @Override
    public void backtrack() {
       // do nothing

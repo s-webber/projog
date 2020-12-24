@@ -24,6 +24,7 @@ import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
+import org.projog.core.term.TermUtils;
 
 /* TEST
  z(r).
@@ -114,7 +115,7 @@ public final class SetOf extends AbstractPredicateFactory {
                // found correct position - so add
                list.add(i, newTerm);
                return;
-            } else if (comparison == 0 && newTerm.strictEquality(next)) {
+            } else if (comparison == 0 && TermUtils.termsEqual(newTerm, next)) {
                // duplicate - so ignore
                return;
             }

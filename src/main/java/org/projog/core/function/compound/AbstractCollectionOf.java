@@ -125,7 +125,7 @@ abstract class AbstractCollectionOf extends AbstractPredicate {
       public boolean equals(Object o) {
          Key k = (Key) o;
          for (int i = 0; i < terms.size(); i++) {
-            if (!terms.get(i).strictEquality(k.terms.get(i))) {
+            if (!TermUtils.termsEqual(terms.get(i), k.terms.get(i))) {
                return false;
             }
          }

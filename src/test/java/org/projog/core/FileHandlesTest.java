@@ -63,7 +63,7 @@ public class FileHandlesTest {
       FileHandles fh = new FileHandles();
       Term expected = new Atom("user_input");
       Term actual = fh.getCurrentInputHandle();
-      assertTrue(expected.strictEquality(actual));
+      assertEquals(expected, actual);
    }
 
    @Test
@@ -71,7 +71,7 @@ public class FileHandlesTest {
       FileHandles fh = new FileHandles();
       Term expected = new Atom("user_output");
       Term actual = fh.getCurrentOutputHandle();
-      assertTrue(expected.strictEquality(actual));
+      assertEquals(expected, actual);
    }
 
    @Test

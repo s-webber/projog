@@ -121,12 +121,6 @@ public final class Variable implements Term {
       }
    }
 
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    /**
     * Returns {@link TermType#VARIABLE} if uninstantiated else {@link TermType} of instantiated {@link Term}.
     *

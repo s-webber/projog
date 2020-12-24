@@ -140,19 +140,6 @@ public final class List implements Term {
       return t2.unify(t1);
    }
 
-   /**
-    * Performs a strict comparison of this list to the specified term.
-    *
-    * @param t the term to compare this list against
-    * @return {@code true} if the given term represents a {@link TermType#LIST} with a head and tail strictly equal to
-    * the corresponding head and tail of this List object.
-    */
-   @Deprecated
-   @Override
-   public boolean strictEquality(Term t) {
-      return TermUtils.termsEqual(this, t);
-   }
-
    @Override
    public void backtrack() {
       if (!immutable) {

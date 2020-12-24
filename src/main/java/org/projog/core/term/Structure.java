@@ -22,8 +22,6 @@ import java.util.Map;
  * A {@link Term} consisting of a functor (name) and a number of other {@link Term} arguments.
  * <p>
  * Also known as a "compound term".
- * <p>
- * <img src="doc-files/Structure.png">
  */
 public final class Structure implements Term {
    private final String functor;

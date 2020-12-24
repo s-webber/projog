@@ -24,8 +24,6 @@ import java.util.Map;
  * representing any other {@link Term}). {@code Variable}s are not constants. What {@link Term}, if any, a
  * {@code Variable} is instantiated with can vary during its life time. A {@code Variable} becomes instantiated by calls
  * to {@link #unify(Term)} and becomes uninstantiated again by calls to {@link #backtrack()}.
- * <p>
- * <img src="doc-files/Variable.png">
  */
 public final class Variable implements Term {
    public static final String ANONYMOUS_VARIABLE_ID = "_";

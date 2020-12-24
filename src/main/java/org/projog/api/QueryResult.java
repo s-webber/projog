@@ -68,7 +68,7 @@ public final class QueryResult {
     * @return {@code true} if the query was (re)evaluated successfully or {@code false} if there are no more results.
     * Once {@code false} has been returned by {@code next()} the {@code next()} method should no longer be called on
     * that object.
-    * @throws PrologException if an error occurs while evaluating the query
+    * @throws ProjogException if an error occurs while evaluating the query
     */
    public boolean next() {
       if (!hasBeenEvaluated) {

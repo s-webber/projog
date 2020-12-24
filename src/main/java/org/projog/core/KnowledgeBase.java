@@ -24,8 +24,6 @@ import org.projog.core.term.TermFormatter;
  * Acts as a repository of rules and facts.
  * <p>
  * The central object that connects the various components of an instance of the "core" inference engine.
- * <p>
- * <img src="doc-files/KnowledgeBase.png">
  */
 public final class KnowledgeBase {
    /**

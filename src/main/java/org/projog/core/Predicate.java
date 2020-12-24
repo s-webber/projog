@@ -21,7 +21,7 @@ import org.projog.core.term.Term;
  * Represents a goal.
  *
  * @see PredicateFactory
- * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
+ * @see Predicates#addPredicateFactory(PredicateKey, String)
  */
 public interface Predicate {
    /**

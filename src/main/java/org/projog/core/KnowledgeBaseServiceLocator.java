@@ -29,9 +29,6 @@ import java.util.WeakHashMap;
  * {@code KnowledgeBase} can be associated with one, and only one, {@code SpyPoints} - and a {@code SpyPoints} can be
  * associated with one, and only one, {@code KnowledgeBase}.
  * </p>
- * <p>
- * <img src="doc-files/KnowledgeBaseServiceLocator.png">
- * </p>
  */
 public class KnowledgeBaseServiceLocator {
    private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new WeakHashMap<>();

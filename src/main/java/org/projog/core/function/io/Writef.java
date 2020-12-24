@@ -89,6 +89,7 @@ import org.projog.core.term.TermUtils;
  * </p>
  * <p>
  * Supported special character sequences are:
+ * </p>
  * <table>
  * <tr>
  * <th>Sequence</th>
@@ -171,7 +172,6 @@ import org.projog.core.term.TermUtils;
  * <td>Write the next term right-aligned in <i>N</i> columns.</td>
  * </tr>
  * </table>
- * </p>
  * <p>
  * <code>writef(X)</code> produces the same results as <code>writef(X, [])</code>.
  * </p>

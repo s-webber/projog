@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.SpyPoints.SpyPointEvent;
 import org.projog.core.SpyPoints.SpyPointExitEvent;
 
@@ -28,7 +27,7 @@ import org.projog.core.SpyPoints.SpyPointExitEvent;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ProjogListeners} instance.
  *
- * @see KnowledgeBaseUtils#getProjogListeners(KnowledgeBase)
+ * @see KnowledgeBase#getProjogListeners()
  */
 public class ProjogListeners {
    private final Set<ProjogListener> listeners = new HashSet<>();
@@ -46,7 +45,7 @@ public class ProjogListeners {
    /**
     * Deletes an observer from the set of observers of this objects internal {@code Observable}.
     *
-    * @param observer an observer to be deleted
+    * @param listener a listener to be deleted
     * @return <tt>true</tt> if this instance did reference the specified listener
     */
    public boolean deleteListener(ProjogListener listener) {

@@ -99,7 +99,7 @@ import org.projog.core.term.TermType;
 /**
  * <code>atomic_list_concat(List,Separator,Atom)</code> / <code>atomic_list_concat(List,Atom)</code>
  * <p>
- * Concatenates the elements of <code>List<code> and attempts to unify with <code>Atom</code>. If using the 3 argument
+ * Concatenates the elements of <code>List</code> and attempts to unify with <code>Atom</code>. If using the 3 argument
  * version then <code>Separator</code> will be inserted between each element of <code>List</code>.
  */
 public final class AtomicListConcat extends AbstractSingletonPredicate {

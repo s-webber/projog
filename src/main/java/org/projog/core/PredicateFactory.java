@@ -15,7 +15,6 @@
  */
 package org.projog.core;
 
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 
 /**
@@ -36,27 +35,11 @@ import org.projog.core.term.Term;
  * {@link org.projog.core.function.AbstractPredicateFactory}.
  * </p>
  *
- * @see KnowledgeBase#addPredicateFactory(PredicateKey, String)
+ * @see Predicates#addPredicateFactory(PredicateKey, String)
  */
 public interface PredicateFactory {
    /**
     * Returns a {@link Predicate} to be used in the evaluation of a goal.
-    * <p>
-    * <b>Note:</b> It is recommended that implementations of {@code PredicateFactory} also implement an overloaded
-    * version of {@code getPredicate} that, instead of having a single varargs parameter, accepts a number of individual
-    * {@code Term} parameters. The exact number of parameters accepted should be the same as the number of arguments
-    * expected when evaluating the goal this object represents. For example, a {@code PredicateFactory} that does not
-    * expect any arguments should implement {@code getPredicate()} while a {@code PredicateFactory} that expects three
-    * arguments should implement {@code getPredicate(Term, Term, Term)}. The reason why this is recommended is so that
-    * java code generated at runtime for user defined predicates will be able to use the overloaded method rather than
-    * the varargs version and thus avoid the unnecessary overhead of creating a new {@code Term} array for each method
-    * invocation.
-    * </p>
-    * <p>
-    * <b>Note:</b> The above recommendations are <i>not</i> required for subclasses of
-    * {@link AbstractSingletonPredicate}. (As the compiler is aware that
-    * {@link AbstractSingletonPredicate#getPredicate(Term[])} always returns {@code this}.
-    * </p>
     *
     * @param args the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal
@@ -69,7 +52,7 @@ public interface PredicateFactory {
     * <p>
     * Some goals (e.g. {@code X is 1}) are only meant to be evaluated once (the statement is either true or false) while
     * others (e.g. {@code repeat(3)}) are meant to be evaluated multiple times. For instances of {@code Predicate} that
-    * are designed to possibly have {@link #evaluate(Term[])} called on them multiple times for the same individual
+    * are designed to possibly have {@link Predicate#evaluate()} called on them multiple times for the same individual
     * query this method should return {@code true}. For instances of {@code Predicate} that are designed to only be
     * evaluated once per individual query this method should return {@code false}.
     *

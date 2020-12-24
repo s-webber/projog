@@ -33,7 +33,7 @@ import org.projog.core.term.Numeric;
  %NO
  */
 /**
- * <code>random(X)</code> Evaluate to a random integer i for which 0 =< i < X.
+ * <code>random(X)</code> Evaluate to a random integer i for which 0 =&lt; i &lt; X.
  */
 public final class Random extends AbstractArithmeticOperator {
    @Override

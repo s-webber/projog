@@ -118,17 +118,6 @@ public class Predicates {
       }
    }
 
-   /**
-    * Returns the {@code PredicateFactory} associated with the specified {@code Term}.
-    * <p>
-    * If this object has no {@code PredicateFactory} associated with the {@code PredicateKey} of the specified
-    * {@code Term} then {@link UnknownPredicate#UNKNOWN_PREDICATE} is returned.
-    */
-   public PredicateFactory getPredicateFactory(Term term) {
-      PredicateKey key = PredicateKey.createForTerm(term);
-      return getPredicateFactory(key);
-   }
-
    public PredicateFactory getPreprocessedPredicateFactory(Term term) {
       PredicateFactory pf = getPredicateFactory(term);
       if (pf instanceof PreprocessablePredicateFactory) {
@@ -139,10 +128,21 @@ public class Predicates {
    }
 
    /**
+    * Returns the {@code PredicateFactory} associated with the specified {@code Term}.
+    * <p>
+    * If this object has no {@code PredicateFactory} associated with the {@code PredicateKey} of the specified
+    * {@code Term} then a new instance of {@link UnknownPredicate} is returned.
+    */
+   public PredicateFactory getPredicateFactory(Term term) {
+      PredicateKey key = PredicateKey.createForTerm(term);
+      return getPredicateFactory(key);
+   }
+
+   /**
     * Returns the {@code PredicateFactory} associated with the specified {@code PredicateKey}.
     * <p>
-    * If this object has no {@code PredicateFactory} associated with the specified {@code PredicateKey} then
-    * {@link UnknownPredicate#UNKNOWN_PREDICATE} is returned.
+    * If this object has no {@code PredicateFactory} associated with the specified {@code PredicateKey} then a new
+    * instance of {@link UnknownPredicate} is returned.
     */
    public PredicateFactory getPredicateFactory(PredicateKey key) {
       PredicateFactory predicateFactory = getExistingPredicateFactory(key);

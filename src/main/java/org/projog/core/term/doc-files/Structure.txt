@@ -1,9 +1,0 @@
-@startuml Structure.png
-hide members
-
-interface Term
-
-Term <|-- Structure
-Structure o-- Term
-
-@enduml

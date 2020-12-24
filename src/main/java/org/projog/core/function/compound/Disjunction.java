@@ -186,7 +186,7 @@ import org.projog.core.term.Term;
  * <code>((if-&gt;then);else)</code>.
  * </p>
  *
- * @See {@link IfThen}
+ * @see IfThen
  */
 public final class Disjunction extends AbstractPredicateFactory {
    @Override

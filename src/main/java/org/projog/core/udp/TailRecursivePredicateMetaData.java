@@ -30,6 +30,7 @@ import org.projog.core.term.TermUtils;
  * <p>
  * Projog uses the following rules to determine if a user defined predicate is "tail recursive" (and therefore suitable
  * for <i>tail recursion optimisation</i> using a {@link TailRecursivePredicate}):
+ * </p>
  * <ul>
  * <li>The user defined predicate must consist of exactly 2 rules.</li>
  * <li>It must be possible to detect, at the point that the user defined predicate is defined, that the antecedent of
@@ -41,19 +42,18 @@ import org.projog.core.term.TermUtils;
  * must be possible to detect, at the point that the user defined predicate is defined, that all elements prior to the
  * final element of the conjunction will never generate multiple solutions per-query.</li>
  * </ul>
- * </p>
  * <p>
- * Examples of tail recursive predicates suitable for <i>tail recursion optimisation</i>: <pre>
+ * Examples of tail recursive predicates suitable for <i>tail recursion optimisation</i>:
+ * </p>
+ * <pre>
  * :- list([]).
  * list([X|Xs]) :- list(Xs).
  * </pre> <pre>
  * r(N).
- * r(N) :- N > 1, N1 is N-1, r(N1).
- * </pre>
- * </p>
- * <pre>
+ * r(N) :- N &gt; 1, N1 is N-1, r(N1).
+ * </pre> <pre>
  * writeAndRepeat(N) :- write(N), nl.
- * writeAndRepeat(N) :- N > 1, N1 is N-1, writeAndRepeat(N1).
+ * writeAndRepeat(N) :- N &gt; 1, N1 is N-1, writeAndRepeat(N1).
  * </pre>
  *
  * @see TailRecursivePredicate

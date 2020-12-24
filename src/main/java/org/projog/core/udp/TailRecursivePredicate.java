@@ -33,7 +33,6 @@ import org.projog.core.Predicate;
  * For a user defined predicate to be implemented using {@code TailRecursivePredicate} it must be judged as eligible for
  * <i>tail recursion optimisation</i> using the criteria used by {@link TailRecursivePredicateMetaData}.
  * </p>
- * <img src="doc-files/TailRecursivePredicate.png">
  *
  * @see TailRecursivePredicateMetaData
  */

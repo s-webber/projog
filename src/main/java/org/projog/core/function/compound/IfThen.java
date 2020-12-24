@@ -96,7 +96,7 @@ import org.projog.core.udp.PredicateUtils;
  * form <code>((if-&gt;then);else)</code>.
  * </p>
  *
- * @See {@link Disjunction}
+ * @see Disjunction
  */
 public final class IfThen extends AbstractPredicateFactory {
    @Override

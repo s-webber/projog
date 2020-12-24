@@ -224,6 +224,7 @@ import org.projog.core.term.TermUtils;
  * <p>
  * Succeeds if the character represented by <code>X</code> is a member of the character type represented by
  * <code>Y</code>. Supported character types are:
+ * </p>
  * <ul>
  * <li><code>digit</code></li>
  * <li><code>upper</code> - upper case letter</li>
@@ -232,7 +233,6 @@ import org.projog.core.term.TermUtils;
  * <li><code>alnum</code> - letter (upper or lower) or digit</li>
  * <li><code>white</code> - whitespace</li>
  * </ul>
- * </p>
  */
 public final class CharType extends AbstractPredicateFactory {
    private static final Type[] EMPTY_TYPES_ARRAY = new Type[] {};

@@ -23,6 +23,7 @@ import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
+import org.projog.core.term.TermUtils;
 import org.projog.core.udp.ClauseModel;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
@@ -36,7 +37,7 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code SpyPoints} instance.
  * </p>
  *
- * @see KnowledgeBaseUtils#getSpyPoints(KnowledgeBase)
+ * @see KnowledgeBase#getSpyPoints()
  */
 public final class SpyPoints {
    private final Object lock = new Object();
@@ -172,7 +173,7 @@ public final class SpyPoints {
 
       private SpyPointEvent(PredicateKey key, Term[] args, Object source) {
          this.key = key;
-         this.args = args;
+         this.args = TermUtils.copy(args);
          this.source = source;
       }
 
@@ -209,6 +210,10 @@ public final class SpyPoints {
 
       public String getFormattedClause() {
          return termFormatter.formatTerm(clauseModel.getOriginal());
+      }
+
+      public ClauseModel getClauseModel() {
+         return clauseModel;
       }
    }
 }

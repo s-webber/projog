@@ -21,15 +21,15 @@ import org.projog.core.udp.PredicateUtils;
 /**
  * Represents all predicates that a {@code KnowledgeBase} has no definition of.
  * <p>
- * Always fails to evaluate successfully. TODO update Javadoc to explain actualPredicateFactory
+ * Always fails to evaluate successfully.
  *
- * @see KnowledgeBase#getPredicateFactory(PredicateKey)
- * @see KnowledgeBase#getPredicateFactory(Term)
+ * @see Predicates#getPredicateFactory(PredicateKey)
+ * @see Predicates#getPredicateFactory(Term)
  */
 public final class UnknownPredicate implements PreprocessablePredicateFactory {
    private final KnowledgeBase kb;
    private final PredicateKey key;
-   private PredicateFactory actualPredicateFactory;
+   private PredicateFactory actualPredicateFactory; //  TODO update Javadoc to explain actualPredicateFactory
 
    public UnknownPredicate(KnowledgeBase kb, PredicateKey key) {
       this.kb = kb;

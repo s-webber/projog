@@ -30,8 +30,6 @@ import org.projog.core.udp.TailRecursivePredicateMetaData;
  * <p>
  * The user defined predicate must be judged as eligible for <i>tail recursion optimisation</i> using the criteria used
  * by {@link TailRecursivePredicateMetaData}.
- * </p>
- * <img src="doc-files/InterpretedTailRecursivePredicateFactory.png">
  *
  * @see InterpretedTailRecursivePredicateFactory
  * @see TailRecursivePredicateMetaData

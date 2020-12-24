@@ -46,7 +46,7 @@ public final class KnowledgeBaseUtils {
    }
 
    /**
-    * Constructs a new {@code KnowledgeBase} object using {@link ProjogSystemProperties}
+    * Constructs a new {@code KnowledgeBase} object using {@link ProjogDefaultProperties}
     */
    public static KnowledgeBase createKnowledgeBase() {
       return createKnowledgeBase(new ProjogDefaultProperties());
@@ -66,7 +66,7 @@ public final class KnowledgeBaseUtils {
     * This is a way to configure a new {@code KnowledgeBase} (i.e. plugging in {@link ArithmeticOperator} and
     * {@link PredicateFactory} instances).
     * <p>
-    * When using {@link ProjogSystemProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
+    * When using {@link ProjogDefaultProperties} the resource parsed will be {@code projog-bootstrap.pl} (contained in
     * {@code projog-core.jar}).
     *
     * @see ProjogSourceReader#parseResource(KnowledgeBase, String)

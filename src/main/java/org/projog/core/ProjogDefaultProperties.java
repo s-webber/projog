@@ -24,8 +24,6 @@ package org.projog.core;
  * </p>
  * TODO if this project is upgraded from Java 7 then this class can be removed and its functionality implemented as
  * default methods of the ProjogProperties interface.
- *
- * @see ProjogSystemProperties
  */
 public class ProjogDefaultProperties implements ProjogProperties {
    /** Returns {@link #DEFAULT_BOOTSTRAP_SCRIPT} */

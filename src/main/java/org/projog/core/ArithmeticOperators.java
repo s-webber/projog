@@ -34,7 +34,6 @@ import org.projog.core.term.TermUtils;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ArithmeticOperators} instance.
  * </p>
- * <img src="doc-files/ArithmeticOperators.png">
  */
 public final class ArithmeticOperators {
    private final KnowledgeBase kb;

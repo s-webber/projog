@@ -19,8 +19,6 @@ import java.util.Map;
 
 /**
  * The building blocks used to construct Prolog programs and queries.
- * <p>
- * <img src="doc-files/Term.png">
  */
 public interface Term {
    /**

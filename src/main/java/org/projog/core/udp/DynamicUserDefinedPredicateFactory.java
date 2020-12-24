@@ -224,7 +224,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       }
 
       @Override
-      public void remove() {
+      public void remove() { // TODO find way to use index when retracting
          synchronized (LOCK) {
             if (hasPrimaryKey) {
                Term firstArg = previous.clause.getModel().getConsequent().getArgument(0);

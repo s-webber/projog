@@ -36,8 +36,6 @@ import org.projog.core.udp.UserDefinedPredicateFactory;
 
 /**
  * Populates a {@link KnowledgeBase} with clauses parsed from Prolog syntax.
- * <p>
- * <img src="doc-files/ProjogSourceReader.png">
  */
 public final class ProjogSourceReader {
    private final KnowledgeBase kb;

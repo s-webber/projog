@@ -27,7 +27,7 @@ import org.projog.core.ProjogException;
  *
  * @see #compare(Term, Term)
  * @see NumericTermComparator
- * @see Term#strictEquality(Term)
+ * @see TermUtils#termsEqual(Term, Term)
  */
 public final class TermComparator implements Comparator<Term> {
    /**

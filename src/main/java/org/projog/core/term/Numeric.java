@@ -19,8 +19,6 @@ import org.projog.core.ArithmeticOperator;
 
 /**
  * A {@link Term} that has a numerical value.
- * <p>
- * <img src="doc-files/Term.png">
  *
  * @see TermUtils#castToNumeric(Term)
  */

@@ -39,104 +39,12 @@ import org.projog.core.udp.ClauseModel;
  * Provides an entry point for other Java code to interact with Projog.
  * <p>
  * Contains a single instance of {@link org.projog.core.KnowledgeBase}.
- * </p>
- * <h3>Example usage</h3>
- * <p>
- * Contents of {@code ProjogExample.java}:
- * </p>
- * <pre>
- * package com.example;
- *
- * import java.io.File;
- *
- * import org.projog.api.Projog;
- * import org.projog.api.QueryResult;
- * import org.projog.api.QueryStatement;
- * import org.projog.core.term.Atom;
- *
- * public class ProjogExample {
- *    public static void main(String[] args) {
- *       // Create a new Projog instance
- *       Projog p = new Projog();
- *
- *       // Read Prolog facts and rules from a file to populate the "Projog" instance created in step 1.
- *       p.consultFile(new File("src/main/resources/test.pl"));
- *
- *       // Create a query that will use the facts read in step 2.
- *       QueryStatement s1 = p.query("test(X,Y).");
- *
- *       // Execute the query created in step 3.
- *       QueryResult r1 = s1.getResult();
- *       while (r1.next()) {
- *          System.out.println("X = " + r1.getTerm("X") + " Y = " + r1.getTerm("Y"));
- *       }
- *
- *       // Execute the query created in step 3, after specifying a term for one of the variables contained in the query.
- *       QueryResult r2 = s1.getResult();
- *       r2.setTerm("X", new Atom("d"));
- *       while (r2.next()) {
- *          System.out.println("Y = " + r2.getTerm("Y"));
- *       }
- *
- *       // Create and execute a new query that will use the rule read in step 2.
- *       QueryStatement s2 = p.query("testRule(X).");
- *       QueryResult r3 = s2.getResult();
- *       while (r3.next()) {
- *          System.out.println("X = " + r3.getTerm("X"));
- *       }
- *
- *       // Create and execute a new query that uses a conjunction. See: http://projog.org/Conjunction.html
- *       QueryStatement s3 = p.query("test(X, Y), Y<3.");
- *       QueryResult r4 = s3.getResult();
- *       while (r4.next()) {
- *          System.out.println("X = " + r4.getTerm("X") + " Y = " + r4.getTerm("Y"));
- *       }
- *    }
- * }
- * </pre>
- * <p>
- * Contents of {@code test.pl}:
- * </p>
- * <pre>
- * test(a,1).
- * test(b,2).
- * test(c,3).
- * test(d,4).
- * test(e,5).
- * test(f,6).
- * test(g,7).
- * test(h,8).
- * test(i,9).
- *
- * testRule(X) :- test(X, Y), Y mod 2 =:= 0.
- * </pre>
- * <p>
- * Output of running {@code ProjogExample}:
- * </p>
- * <pre>
- * X = a Y = 1
- * X = b Y = 2
- * X = c Y = 3
- * X = d Y = 4
- * X = e Y = 5
- * X = f Y = 6
- * X = g Y = 7
- * X = h Y = 8
- * X = i Y = 9
- * Y = 4
- * X = b
- * X = d
- * X = f
- * X = h
- * X = a Y = 1
- * X = b Y = 2
- * </pre> <img src="doc-files/Projog.png">
  */
 public final class Projog {
    private final KnowledgeBase kb;
 
    /**
-    * Constructs a new {@code Projog} object using {@link ProjogSystemProperties} and the specified
+    * Constructs a new {@code Projog} object using {@link ProjogDefaultProperties} and the specified
     * {@code ProjogListener}s.
     */
    public Projog(ProjogListener... listeners) {
@@ -252,6 +160,10 @@ public final class Projog {
     */
    public QueryStatement createStatement(String prologQuery) {
       return new QueryStatement(kb, prologQuery);
+   }
+
+   public QueryResult executeQuery(String prologQuery) {
+      return new QueryStatement(kb, prologQuery).executeQuery();
    }
 
    public void evaluateOnce(String prologQuery) {

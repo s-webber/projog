@@ -70,18 +70,6 @@ public final class ClauseModel {
       this.antecedent = antecedent;
    }
 
-   /**
-    * Replaced by {@link #getAntecedent()} but marking as deprecated, rather than removing, as is used in
-    * projog-examples.
-    *
-    * @deprecated
-    * @see #getAntecedent
-    */
-   @Deprecated
-   public Term getAntecedant() {
-      return getAntecedent();
-   }
-
    /** Returns the body of the clause. i.e. the bit after the {@code :-} */
    public Term getAntecedent() {
       return antecedent;

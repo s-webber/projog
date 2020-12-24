@@ -34,7 +34,7 @@ import org.projog.core.term.Term;
  * <p>
  * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code FileHandles} instance.
  *
- * @see KnowledgeBaseUtils#getFileHandles(KnowledgeBase)
+ * @see KnowledgeBase#getFileHandles()
  */
 public final class FileHandles {
    /**

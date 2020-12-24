@@ -43,15 +43,15 @@ public final class NumericTermComparator {
     * Returns a negative integer, zero, or a positive integer as the numeric value represented by the first argument is
     * less than, equal to, or greater than the second.
     * <p>
-    * Unlike {@link #compare(Term, Term)} this method will work for arguments that represent arithmetic expressions
-    * (e.g. a {@link Structure} of the form {@code +(1,2)}) as well as {@link Numeric} terms.
+    * Unlike {@link #compare(Numeric, Numeric)} this method will work for arguments that represent arithmetic
+    * expressions (e.g. a {@link Structure} of the form {@code +(1,2)}) as well as {@link Numeric} terms.
     *
     * @param t1 the first term to be compared
     * @param t2 the second term to be compared
     * @return a negative integer, zero, or a positive integer as the first term is less than, equal to, or greater than
     * the second
     * @throws ProjogException if either argument does not represent an arithmetic expression
-    * @see #compare(Term, Term)
+    * @see #compare(Numeric, Numeric)
     * @see ArithmeticOperators#getNumeric(Term)
     */
    public int compare(Term t1, Term t2, ArithmeticOperators operators) {

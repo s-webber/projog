@@ -97,8 +97,6 @@ public final class QueryStatement {
     *
     * @param variableId the id of the variable
     * @param term the term to unify
-    * @return {@code true} if the attempt to unify the specified term to the variable with the specified id was
-    * successful
     * @throws ProjogException if no variable with the specified id exists in the query this object represents
     */
    public void setTerm(String variableId, Term term) {

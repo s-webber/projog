@@ -27,7 +27,7 @@ import org.projog.core.term.TermUtils;
 /**
  * Represents a user defined predicate.
  *
- * @see #evaluate(Term[])
+ * @see #evaluate()
  */
 public final class InterpretedUserDefinedPredicate implements Predicate {
    private final Iterator<ClauseAction> clauseActions;
@@ -60,9 +60,9 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
     * <li>If the body of the clause is not successfully evaluated then the arguments in the query are backtracked.</li>
     * <li>When there are no more clauses left to check then {@code false} is returned.</li>
     * </ul>
-    * Once {@code evaluate(Term[])} has returned {@code true} subsequent invocations of {@code evaluate(Term[])} will
-    * attempt to re-evaluate the antecedent of the previously successfully evaluated clause. If the body of the clause
-    * is successfully re-evaluated then {@code true} is returned. If the body of the clause is not successfully
+    * Once {@code evaluate()} has returned {@code true} subsequent invocations of {@code evaluate()} will attempt to
+    * re-evaluate the antecedent of the previously successfully evaluated clause. If the body of the clause is
+    * successfully re-evaluated then {@code true} is returned. If the body of the clause is not successfully
     * re-evaluated then the arguments in the query are backtracked and the method continues to iterate through the
     * clauses starting with the next clause in the sequence.
     */

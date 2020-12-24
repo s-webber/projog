@@ -65,7 +65,7 @@ public class ProjogTest {
       projog.setUserOutput(new PrintStream(baos));
 
       // when we execute a query that writes to output
-      projog.createStatement("write(hello).").executeQuery().next();
+      projog.evaluateOnce("write(hello).");
 
       // then the new stream should be written to
       assertEquals("hello", new String(baos.toByteArray()));
@@ -79,7 +79,7 @@ public class ProjogTest {
       projog.setUserInput(new ByteArrayInputStream("hello".getBytes()));
 
       // when we execute a query that reads from input
-      QueryResult result = projog.createStatement("read(X).").executeQuery();
+      QueryResult result = projog.executeQuery("read(X).");
       result.next();
 
       // then the new stream should be read from

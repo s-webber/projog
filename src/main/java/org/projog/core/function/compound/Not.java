@@ -70,7 +70,7 @@ import org.projog.core.term.Term;
  */
 public final class Not extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    @Override
-   public boolean evaluate(Term t) {
+   protected boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
       if (!e.evaluate()) {
          t.backtrack();
@@ -98,7 +98,7 @@ public final class Not extends AbstractSingletonPredicate implements Preprocessa
       }
 
       @Override
-      public boolean evaluate(Term arg) {
+      protected boolean evaluate(Term arg) {
          if (!pf.getPredicate(arg.getArgs()).evaluate()) {
             arg.backtrack();
             return true;

@@ -30,7 +30,7 @@ import org.projog.core.term.Term;
  */
 public final class CurrentOutput extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       return argument.unify(getFileHandles().getCurrentOutputHandle());
    }
 }

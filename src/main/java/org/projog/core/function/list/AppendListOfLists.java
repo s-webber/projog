@@ -53,7 +53,7 @@ import org.projog.core.term.TermType;
  */
 public final class AppendListOfLists extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term listOfLists, Term termToUnifyWith) {
+   protected boolean evaluate(Term listOfLists, Term termToUnifyWith) {
       if (listOfLists.getType() == TermType.EMPTY_LIST) {
          return termToUnifyWith.unify(EmptyList.EMPTY_LIST);
       }

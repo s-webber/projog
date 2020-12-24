@@ -57,7 +57,7 @@ public final class RepeatInfinitely extends AbstractPredicateFactory {
    private static final RepeatInfinitelyPredicate SINGLETON = new RepeatInfinitelyPredicate();
 
    @Override
-   public Predicate getPredicate() {
+   protected Predicate getPredicate() {
       return SINGLETON;
    }
 

@@ -135,7 +135,7 @@ import org.projog.core.term.TermUtils;
  */
 public final class Conjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
-   public Predicate getPredicate(Term arg1, Term arg2) {
+   protected Predicate getPredicate(Term arg1, Term arg2) {
       Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1.getArgs());
       if (firstPredicate.evaluate()) {
          return new ConjunctionPredicate(firstPredicate, getPredicates().getPredicateFactory(arg2), arg2);
@@ -171,7 +171,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
       }
 
       @Override
-      public Predicate getPredicate(Term arg1, Term arg2) {
+      protected Predicate getPredicate(Term arg1, Term arg2) {
          Predicate firstPredicate = firstPredicateFactory.getPredicate(arg1.getArgs());
          if (firstPredicate.evaluate()) {
             return new ConjunctionPredicate(firstPredicate, secondPredicateFactory, arg2);
@@ -191,7 +191,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
       }
 
       @Override
-      public boolean evaluate(Term arg1, Term arg2) {
+      protected boolean evaluate(Term arg1, Term arg2) {
          return firstPredicateFactory.getPredicate(arg1.getArgs()).evaluate() && secondPredicateFactory.getPredicate(arg2.getTerm().getArgs()).evaluate();
       }
    }

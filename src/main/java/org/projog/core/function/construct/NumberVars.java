@@ -90,13 +90,13 @@ import org.projog.core.term.Variable;
  */
 public final class NumberVars extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       numberVars(arg, 0);
       return true;
    }
 
    @Override
-   public boolean evaluate(Term arg1, Term arg2, Term arg3) {
+   protected boolean evaluate(Term arg1, Term arg2, Term arg3) {
       long start = TermUtils.castToNumeric(arg2).getLong();
       long end = numberVars(arg1, start);
       return arg3.unify(IntegerNumberCache.valueOf(end));

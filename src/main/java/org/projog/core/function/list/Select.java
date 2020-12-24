@@ -79,7 +79,7 @@ import org.projog.core.term.Term;
  */
 public final class Select extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term element, Term inputList, Term outputList) {
+   protected Predicate getPredicate(Term element, Term inputList, Term outputList) {
       List<Term> list = ListUtils.toJavaUtilList(inputList);
       if (list == null) {
          throw new ProjogException("Expected list but got: " + inputList.getType());

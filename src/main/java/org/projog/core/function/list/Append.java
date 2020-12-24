@@ -212,7 +212,7 @@ import org.projog.core.term.TermType;
  */
 public final class Append extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term prefix, Term suffix, Term concatenated) {
+   protected Predicate getPredicate(Term prefix, Term suffix, Term concatenated) {
       if (prefix.getType().isVariable() && suffix.getType().isVariable()) {
          List<Term> javaUtilList = toJavaUtilList(concatenated);
          if (javaUtilList == null) {

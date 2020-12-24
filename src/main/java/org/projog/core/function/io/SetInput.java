@@ -33,7 +33,7 @@ import org.projog.core.term.Term;
  */
 public final class SetInput extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       getFileHandles().setInput(arg);
       return true;
    }

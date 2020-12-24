@@ -80,7 +80,7 @@ import org.projog.core.term.Term;
  */
 public final class Between extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term low, Term high, Term middle) {
+   protected Predicate getPredicate(Term low, Term high, Term middle) {
       ArithmeticOperators operators = getArithmeticOperators();
       if (middle.getType().isVariable()) {
          return new Retryable(middle, toLong(operators, low), toLong(operators, high));

@@ -91,7 +91,7 @@ public final class ExtremumList extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term input, Term output) {
+   protected boolean evaluate(Term input, Term output) {
       if (input.getType() == TermType.EMPTY_LIST) {
          return false;
       }

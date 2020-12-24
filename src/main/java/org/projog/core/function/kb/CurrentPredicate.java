@@ -54,7 +54,7 @@ import org.projog.core.term.Term;
  */
 public final class CurrentPredicate extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term arg) {
+   protected Predicate getPredicate(Term arg) {
       Set<PredicateKey> keys = getPredicates().getAllDefinedPredicateKeys();
       return new Retryable(arg, keys);
    }

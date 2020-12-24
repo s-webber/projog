@@ -34,7 +34,7 @@ import org.projog.core.term.TermComparator;
  */
 public final class TermGreaterThan extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       return TermComparator.TERM_COMPARATOR.compare(arg1, arg2) > 0;
    }
 }

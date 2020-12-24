@@ -29,7 +29,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
  */
 public final class NoDebug extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       SpyPoints spyPoints = getSpyPoints();
       Map<PredicateKey, SpyPoints.SpyPoint> map = spyPoints.getSpyPoints();
       for (Map.Entry<PredicateKey, SpyPoints.SpyPoint> e : map.entrySet()) {

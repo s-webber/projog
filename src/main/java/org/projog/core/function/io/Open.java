@@ -39,7 +39,7 @@ public final class Open extends AbstractSingletonPredicate {
    private static final String WRITE = "write";
 
    @Override
-   public boolean evaluate(Term fileNameAtom, Term operationAtom, Term variableToAssignTo) {
+   protected boolean evaluate(Term fileNameAtom, Term operationAtom, Term variableToAssignTo) {
       String operation = getAtomName(operationAtom);
       String fileName = getAtomName(fileNameAtom);
       Atom handle;

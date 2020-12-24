@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import org.projog.core.term.Term;
 
  %QUERY arg(2, [a,b,c], X)
  %ANSWER X=[b,c]
- 
+
  %QUERY arg(3, [a,b,c], X)
  %ERROR Cannot get argument at position: 3 from: .(a, .(b, .(c, [])))
  */
@@ -46,7 +46,7 @@ import org.projog.core.term.Term;
  */
 public final class Arg extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2, Term arg3) {
+   protected boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int argIdx = toInt(arg1);
       if (arg2.getNumberOfArguments() < argIdx) {
          throw new ProjogException("Cannot get argument at position: " + argIdx + " from: " + arg2);

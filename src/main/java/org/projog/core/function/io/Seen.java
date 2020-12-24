@@ -32,7 +32,7 @@ import org.projog.core.term.Term;
  */
 public final class Seen extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       FileHandles fileHandles = getFileHandles();
       Term handle = fileHandles.getCurrentInputHandle();
       close(fileHandles, handle);

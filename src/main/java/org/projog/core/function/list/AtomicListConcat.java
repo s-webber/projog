@@ -104,7 +104,7 @@ import org.projog.core.term.TermType;
  */
 public final class AtomicListConcat extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term atomList, Term concatenatedResultAtom) {
+   protected boolean evaluate(Term atomList, Term concatenatedResultAtom) {
       java.util.List<Term> list = toJavaUtilList(atomList);
       StringBuilder sb = new StringBuilder();
       for (Term atom : list) {
@@ -114,7 +114,7 @@ public final class AtomicListConcat extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term atomList, Term separatorAtom, Term concatenatedResultAtom) {
+   protected boolean evaluate(Term atomList, Term separatorAtom, Term concatenatedResultAtom) {
       String separator = getAtomName(separatorAtom);
       if (concatenatedResultAtom.getType() == TermType.ATOM) {
          return atomList.unify(split(concatenatedResultAtom, separator));

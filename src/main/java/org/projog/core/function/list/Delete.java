@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,30 +33,30 @@ import org.projog.core.term.Term;
  %ANSWER X=[a,b]
  %QUERY delete([a,b,c],z,X)
  %ANSWER X=[a,b,c]
- 
+
  %QUERY delete([a,b,X],a,[Y,c])
- %ANSWER 
+ %ANSWER
  % X=c
  % Y=b
  %ANSWER
 
  %QUERY delete([a,b,c],Y,X)
- %ANSWER 
+ %ANSWER
  % X=[a,b,c]
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
  %QUERY delete([a,Y,c],b,X)
- %ANSWER 
+ %ANSWER
  % X=[a,Y,c]
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
  %QUERY delete([a,Y,_],_,X)
- %ANSWER 
+ %ANSWER
  % X=[a,Y,_]
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
  %QUERY W=Y,delete([a,Y,_],W,X)
- %ANSWER 
+ %ANSWER
  % X=[a,_]
  % W=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE
@@ -73,7 +73,7 @@ import org.projog.core.term.Term;
  */
 public final class Delete extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term input, Term element, Term output) {
+   protected boolean evaluate(Term input, Term element, Term output) {
       List<Term> javaList = toJavaUtilList(input);
       if (javaList == null) {
          return false;

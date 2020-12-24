@@ -33,7 +33,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
  */
 public final class Debugging extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       PrintStream currentOutputStream = getFileHandles().getCurrentOutputStream();
       Map<PredicateKey, SpyPoints.SpyPoint> map = getSpyPoints().getSpyPoints();
       for (Map.Entry<PredicateKey, SpyPoints.SpyPoint> e : map.entrySet()) {

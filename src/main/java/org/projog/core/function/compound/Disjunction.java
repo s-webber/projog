@@ -190,7 +190,7 @@ import org.projog.core.term.Term;
  */
 public final class Disjunction extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term firstArg, Term secondArg) {
+   protected Predicate getPredicate(Term firstArg, Term secondArg) {
       if (getPredicates().getPredicateFactory(firstArg) instanceof IfThen) {
          return createIfThenElse(firstArg, secondArg);
       } else {

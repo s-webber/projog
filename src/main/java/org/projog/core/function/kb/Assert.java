@@ -150,7 +150,7 @@ public final class Assert extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term clause) {
+   protected boolean evaluate(Term clause) {
       ClauseModel clauseModel = ClauseModel.createClauseModel(clause);
       PredicateKey key = PredicateKey.createForTerm(clauseModel.getConsequent());
       UserDefinedPredicateFactory userDefinedPredicate = getPredicates().createOrReturnUserDefinedPredicate(key);

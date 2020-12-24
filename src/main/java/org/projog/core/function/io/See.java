@@ -34,7 +34,7 @@ import org.projog.core.term.Term;
  */
 public final class See extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term source) {
+   protected boolean evaluate(Term source) {
       String fileName = getAtomName(source);
       try {
          FileHandles fileHandles = getFileHandles();

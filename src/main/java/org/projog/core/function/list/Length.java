@@ -94,7 +94,7 @@ import org.projog.core.term.TermUtils;
  */
 public final class Length extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(final Term list, final Term expectedLength) {
+   protected Predicate getPredicate(final Term list, final Term expectedLength) {
       boolean firstArgIsVariable = list.getType().isVariable();
       boolean secondArgIsVariable = expectedLength.getType().isVariable();
 

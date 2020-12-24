@@ -178,12 +178,12 @@ import org.projog.core.term.TermUtils;
  */
 public final class Writef extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term atom) {
+   protected boolean evaluate(Term atom) {
       return evaluate(atom, EMPTY_LIST);
    }
 
    @Override
-   public boolean evaluate(Term atom, Term list) {
+   protected boolean evaluate(Term atom, Term list) {
       final String text = TermUtils.getAtomName(atom);
       final List<Term> args = toJavaUtilList(list);
       if (args == null) {

@@ -78,22 +78,21 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       writeString(toString(arg));
       return true;
    }
 
-   private String toString(Term t) {
-      return getTermFormatter().toString(t);
-   }
-
-   /** Called directly from compiled predicates generated at runtime. */
-   public void writeString(String s) {
+   private void writeString(String s) {
       PrintStream os = getFileHandles().getCurrentOutputStream();
       if (addNewLine) {
          os.println(s);
       } else {
          os.print(s);
       }
+   }
+
+   private String toString(Term t) {
+      return getTermFormatter().toString(t);
    }
 }

@@ -113,7 +113,7 @@ import org.projog.core.term.Term;
  */
 public final class SubList extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term partiallyAppliedFunction, Term args, Term filteredOutput) {
+   protected boolean evaluate(Term partiallyAppliedFunction, Term args, Term filteredOutput) {
       if (!isValidArguments(partiallyAppliedFunction, args)) {
          return false;
       }

@@ -136,7 +136,7 @@ import org.projog.core.term.Term;
  */
 public final class UnifyWithOccursCheck extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       return arg1.unify(arg2) && !isCyclic(arg1) && !isCyclic(arg2);
    }
 

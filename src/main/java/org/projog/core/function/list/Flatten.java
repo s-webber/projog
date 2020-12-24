@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import org.projog.core.term.TermType;
 /* TEST
  %QUERY flatten([a,[[b]],[c]], X)
  %ANSWER X=[a,b,c]
- 
+
  %QUERY flatten([a,b,c], X)
  %ANSWER X=[a,b,c]
 
@@ -36,7 +36,7 @@ import org.projog.core.term.TermType;
 
  %QUERY flatten([a], X)
  %ANSWER X=[a]
- 
+
  %QUERY flatten(a, X)
  %ANSWER X=[a]
 
@@ -45,19 +45,19 @@ import org.projog.core.term.TermType;
 
  %QUERY flatten([], X)
  %ANSWER X=[]
- 
+
  %QUERY flatten([a|b], X)
  %ANSWER X=[a,b]
 
  %QUERY flatten([a|[]], X)
  %ANSWER X=[a]
- 
+
  %QUERY flatten([[a|b],[c,d|e],[f|[]],g|h], X)
  %ANSWER X=[a,b,c,d,e,f,g,h]
- 
+
  %QUERY flatten([p([[a]]),[[[p(p(x))]],[p([a,b,c])]]], X)
  %ANSWER X=[p([[a]]),p(p(x)),p([a,b,c])]
- 
+
  %FALSE flatten([a,b,c], [c,b,a])
  %FALSE flatten([a,b,c], [a,[b],c])
  */
@@ -68,7 +68,7 @@ import org.projog.core.term.TermType;
  */
 public final class Flatten extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(final Term original, final Term expected) {
+   protected boolean evaluate(final Term original, final Term expected) {
       final Term flattenedVersion;
       switch (original.getType()) {
          case LIST:
@@ -84,7 +84,7 @@ public final class Flatten extends AbstractSingletonPredicate {
    }
 
    private List<Term> flattenList(final Term input) {
-      List<Term> result = new ArrayList<Term>();
+      List<Term> result = new ArrayList<>();
       Term next = input;
       while (next.getType() == TermType.LIST) {
          Term head = next.getArgument(0);

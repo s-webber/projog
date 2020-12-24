@@ -31,7 +31,7 @@ import org.projog.core.term.Term;
  */
 public final class Close extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       try {
          getFileHandles().close(argument);
          return true;

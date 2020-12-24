@@ -39,12 +39,12 @@ import org.projog.core.term.Term;
  */
 public final class Recorded extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term key, Term value) {
+   protected Predicate getPredicate(Term key, Term value) {
       return getPredicate(key, value, createAnonymousVariable());
    }
 
    @Override
-   public Predicate getPredicate(Term key, Term value, Term reference) {
+   protected Predicate getPredicate(Term key, Term value, Term reference) {
       RecordedDatabase database = getServiceLocator(getKnowledgeBase()).getInstance(RecordedDatabase.class);
       Iterator<Record> itr = getIterator(key, database);
       return new RecordedPredicate(key, value, reference, itr);

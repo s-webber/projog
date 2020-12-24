@@ -58,7 +58,7 @@ public final class Flag extends AbstractSingletonPredicate {
    private final Map<PredicateKey, Numeric> flags = new HashMap<>();
 
    @Override
-   public boolean evaluate(Term key, Term oldValue, Term newValue) {
+   protected boolean evaluate(Term key, Term oldValue, Term newValue) {
       PredicateKey pk = PredicateKey.createForTerm(key);
       synchronized (flags) {
          Numeric n = getOrCreate(pk);

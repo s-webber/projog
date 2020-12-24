@@ -49,7 +49,7 @@ import org.projog.core.term.Term;
  */
 public final class Once extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    @Override
-   public boolean evaluate(Term t) {
+   protected boolean evaluate(Term t) {
       Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
       return e.evaluate();
    }
@@ -72,7 +72,7 @@ public final class Once extends AbstractSingletonPredicate implements Preprocess
       }
 
       @Override
-      public boolean evaluate(Term arg) {
+      protected boolean evaluate(Term arg) {
          return pf.getPredicate(arg.getArgs()).evaluate();
       }
    }

@@ -94,7 +94,7 @@ import org.projog.core.term.TermComparator;
  */
 public final class SetOf extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term template, Term goal, Term bag) {
+   protected Predicate getPredicate(Term template, Term goal, Term bag) {
       return new SetOfPredicate(template, goal, bag, getKnowledgeBase());
    }
 

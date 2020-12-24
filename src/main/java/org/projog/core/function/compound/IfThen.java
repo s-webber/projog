@@ -100,7 +100,7 @@ import org.projog.core.term.Term;
  */
 public final class IfThen extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term conditionTerm, Term thenTerm) {
+   protected Predicate getPredicate(Term conditionTerm, Term thenTerm) {
       Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
       if (conditionPredicate.evaluate()) {
          // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?

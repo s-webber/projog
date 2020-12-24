@@ -40,7 +40,7 @@ import org.projog.core.term.Term;
  */
 public final class ConvertTime extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term timestamp, Term text) {
+   protected boolean evaluate(Term timestamp, Term text) {
       Date d = createDate(timestamp);
       Atom a = createAtom(d);
       return text.unify(a);

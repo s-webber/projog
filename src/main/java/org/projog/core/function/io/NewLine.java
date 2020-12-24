@@ -36,7 +36,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
  */
 public final class NewLine extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       getFileHandles().getCurrentOutputStream().println();
       return true;
    }

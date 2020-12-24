@@ -68,7 +68,7 @@ import org.projog.core.term.Term;
  */
 public final class Is extends AbstractSingletonPredicate implements PreprocessablePredicateFactory {
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       Numeric n = getArithmeticOperators().getNumeric(arg2);
       return arg1.unify(n);
    }

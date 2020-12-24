@@ -214,7 +214,7 @@ public final class TermSplit extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       if (arg1.getType().isVariable()) {
          return evaluateWithVariableFirstArgument(arg1, arg2);
       } else {

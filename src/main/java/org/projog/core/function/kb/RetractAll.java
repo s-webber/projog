@@ -89,7 +89,7 @@ public final class RetractAll extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term t) {
+   protected boolean evaluate(Term t) {
       Predicate p = retractPredicateFactory.getPredicate(t);
       while (p.evaluate()) {
          t.backtrack();

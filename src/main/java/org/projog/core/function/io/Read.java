@@ -35,7 +35,7 @@ import org.projog.core.term.Term;
  */
 public final class Read extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       InputStreamReader isr = new InputStreamReader(getFileHandles().getCurrentInputStream());
       SentenceParser sp = SentenceParser.getInstance(isr, getOperands());
       Term t = sp.parseTerm();

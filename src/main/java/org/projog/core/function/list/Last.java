@@ -53,7 +53,7 @@ import org.projog.core.term.TermType;
  */
 public final class Last extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term list, Term termToUnifyLastElementWith) {
+   protected boolean evaluate(Term list, Term termToUnifyLastElementWith) {
       switch (list.getType()) {
          case LIST:
             return unifyLastElementOfList(list, termToUnifyLastElementWith);

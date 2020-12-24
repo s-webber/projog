@@ -60,7 +60,7 @@ import org.projog.core.term.Term;
  */
 public final class NumericGreaterThanOrEqual extends AbstractNumericComparisonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       return compare(arg1, arg2) > -1;
    }
 }

@@ -85,7 +85,7 @@ import org.projog.core.term.Term;
  */
 public final class GetCode extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       try {
          int c = getFileHandles().getCurrentInputStream().read();
          IntegerNumber next = IntegerNumberCache.valueOf(c);

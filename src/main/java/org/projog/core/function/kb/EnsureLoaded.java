@@ -41,7 +41,7 @@ public final class EnsureLoaded extends AbstractSingletonPredicate {
    private final Set<String> loadedResources = new HashSet<>();
 
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       String resourceName = getResourceName(arg);
       synchronized (lock) {
          if (loadedResources.contains(resourceName)) {

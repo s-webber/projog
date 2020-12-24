@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,11 +27,11 @@ import org.projog.core.term.Term;
 /* TEST
  %QUERY sort([q,w,e,r,t,y], X)
  %ANSWER X = [e,q,r,t,w,y]
- 
+
  %TRUE sort([q,w,e,r,t,y], [e,q,r,t,w,y])
  %FALSE sort([q,w,e,r,t,y], [q,w,e,r,t,y])
  %FALSE sort([q,w,e,r,t,y], [e,q,t,r,w,y])
- 
+
  %QUERY sort([q,w,e,r,t,y], [A,B,C,D,E,F])
  %ANSWER
  % A=e
@@ -50,21 +50,22 @@ import org.projog.core.term.Term;
 
  %FALSE sort(a, X)
  %FALSE sort([a,b,c|T], X)
- 
+
  %QUERY sort([h,e,l,l,o], X)
  %ANSWER X=[e,h,l,o]
- 
+
  %FALSE sort([h,e,l,l,o], [e,h,l,l,o])
  */
 /**
  * <code>sort(X,Y)</code> - sorts a list and removes duplicates.
  * <p>
- * Attempts to unify <code>Y</code> with a sorted version of the list represented by <code>X</code>, with duplicates removed.
+ * Attempts to unify <code>Y</code> with a sorted version of the list represented by <code>X</code>, with duplicates
+ * removed.
  * </p>
  */
 public final class SortAsSet extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term unsorted, Term sorted) {
+   protected boolean evaluate(Term unsorted, Term sorted) {
       List<Term> elements = toSortedJavaUtilList(unsorted);
       if (elements == null) {
          return false;

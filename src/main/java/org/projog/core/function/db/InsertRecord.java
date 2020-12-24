@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,9 +52,9 @@ import org.projog.core.term.Term;
 
  %QUERY recordz(b,q,X)
  %ANSWER X=2
- 
+
  % Note: recordz/2 is equivalent to calling recordz/3 with the third argument as an anonymous variable.
- %TRUE recordz(b,w) 
+ %TRUE recordz(b,w)
 
  %QUERY recorded(b,Y)
  %ANSWER Y=q
@@ -95,12 +95,12 @@ public final class InsertRecord extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term key, Term value) {
+   protected boolean evaluate(Term key, Term value) {
       return evaluate(key, value, createAnonymousVariable());
    }
 
    @Override
-   public boolean evaluate(Term key, Term value, Term reference) {
+   protected boolean evaluate(Term key, Term value, Term reference) {
       if (!reference.getType().isVariable()) {
          return false;
       }

@@ -24,6 +24,7 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.projog.core.term.Atom;
 
 public class WriteTest {
    private static final String TEXT = "hello, world!";
@@ -40,7 +41,7 @@ public class WriteTest {
    public void testWriteString() {
       Write w = Write.write();
       w.setKnowledgeBase(createKnowledgeBase());
-      w.writeString(TEXT);
+      w.evaluate(new Atom(TEXT));
       assertEquals(TEXT, redirectedOut.toString());
    }
 
@@ -48,7 +49,7 @@ public class WriteTest {
    public void testWritelnString() {
       Write w = Write.writeln();
       w.setKnowledgeBase(createKnowledgeBase());
-      w.writeString(TEXT);
+      w.evaluate(new Atom(TEXT));
       assertEquals(TEXT + System.lineSeparator(), redirectedOut.toString());
    }
 

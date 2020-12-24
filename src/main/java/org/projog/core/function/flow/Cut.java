@@ -51,7 +51,7 @@ import org.projog.core.function.AbstractPredicateFactory;
  */
 public final class Cut extends AbstractPredicateFactory {
    @Override
-   public AbstractPredicate getPredicate() {
+   protected AbstractPredicate getPredicate() {
       return new CutPredicate();
    }
 

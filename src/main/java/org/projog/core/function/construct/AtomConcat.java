@@ -141,7 +141,7 @@ import org.projog.core.term.TermType;
  */
 public final class AtomConcat extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term prefix, Term suffix, Term combined) {
+   protected Predicate getPredicate(Term prefix, Term suffix, Term combined) {
       if (prefix.getType().isVariable() && suffix.getType().isVariable()) {
          return new Retryable(prefix, suffix, getAtomName(combined));
       } else {

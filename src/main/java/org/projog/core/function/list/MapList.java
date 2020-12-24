@@ -90,7 +90,7 @@ import org.projog.core.term.Term;
  */
 public final class MapList extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term partiallyAppliedFunction, Term args) {
+   protected boolean evaluate(Term partiallyAppliedFunction, Term args) {
       if (!isValidArguments(partiallyAppliedFunction, args)) {
          return false;
       }
@@ -105,7 +105,7 @@ public final class MapList extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term partiallyAppliedFunction, Term args1, Term args2) {
+   protected boolean evaluate(Term partiallyAppliedFunction, Term args1, Term args2) {
       if (!isAtomOrStructure(partiallyAppliedFunction)) {
          return false;
       }

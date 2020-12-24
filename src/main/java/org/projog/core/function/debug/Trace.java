@@ -28,7 +28,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
  */
 public final class Trace extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       getSpyPoints().setTraceEnabled(true);
       return true;
    }

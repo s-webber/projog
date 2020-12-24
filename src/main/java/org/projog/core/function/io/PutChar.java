@@ -34,7 +34,7 @@ import org.projog.core.term.Term;
  */
 public final class PutChar extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       String textToOutput = getAtomName(argument);
       getFileHandles().getCurrentOutputStream().print(textToOutput);
       return true;

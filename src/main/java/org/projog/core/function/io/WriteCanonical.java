@@ -39,7 +39,7 @@ import org.projog.core.term.Term;
  */
 public final class WriteCanonical extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       getFileHandles().getCurrentOutputStream().print(arg.toString());
       return true;
    }

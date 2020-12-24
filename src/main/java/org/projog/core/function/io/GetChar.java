@@ -83,7 +83,7 @@ import org.projog.core.term.Term;
  */
 public final class GetChar extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term argument) {
+   protected boolean evaluate(Term argument) {
       try {
          int c = getFileHandles().getCurrentInputStream().read();
          Atom next = toAtom(c);

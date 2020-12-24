@@ -60,7 +60,7 @@ public final class AlterSpyPoint extends AbstractSingletonPredicate {
    }
 
    @Override
-   public boolean evaluate(Term t) {
+   protected boolean evaluate(Term t) {
       switch (t.getType()) {
          case ATOM:
             List<PredicateKey> keys = getPredicateKeysByName(getKnowledgeBase(), t.getName());

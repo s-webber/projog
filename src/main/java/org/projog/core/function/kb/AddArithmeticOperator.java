@@ -38,7 +38,7 @@ import org.projog.core.term.Term;
  */
 public final class AddArithmeticOperator extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term functionNameAndArity, Term javaClass) {
+   protected boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);
       getArithmeticOperators().addArithmeticOperator(key, className);

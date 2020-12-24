@@ -90,7 +90,7 @@ import org.projog.core.term.Variable;
  */
 public final class CopyTerm extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2) {
+   protected boolean evaluate(Term arg1, Term arg2) {
       Term copy = arg1.copy(new HashMap<Variable, Variable>());
       return arg2.unify(copy);
    }

@@ -91,7 +91,7 @@ import org.projog.core.term.Term;
  */
 public final class BagOf extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term template, Term goal, Term bag) {
+   protected Predicate getPredicate(Term template, Term goal, Term bag) {
       return new BagOfPredicate(template, goal, bag, getKnowledgeBase());
    }
 

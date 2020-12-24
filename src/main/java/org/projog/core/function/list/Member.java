@@ -58,7 +58,7 @@ import org.projog.core.term.TermType;
  */
 public final class Member extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term element, Term list) {
+   protected Predicate getPredicate(Term element, Term list) {
       // TODO what if partial list? e.g. member(a,[a,b|X])
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
          throw new ProjogException("Expected list but got: " + list);

@@ -49,7 +49,7 @@ import org.projog.core.term.Variable;
  */
 public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       final PredicateKey key = PredicateKey.createFromNameAndArity(arg);
       final UserDefinedArithmeticOperator arithmeticOperator = new UserDefinedArithmeticOperator(getPredicates(), key);
       getArithmeticOperators().addArithmeticOperator(key, arithmeticOperator);

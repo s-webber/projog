@@ -310,7 +310,7 @@ public final class CharType extends AbstractPredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term character, Term type) {
+   protected Predicate getPredicate(Term character, Term type) {
       Term[] characters;
       if (character.getType().isVariable()) {
          characters = ALL_CHARACTERS;

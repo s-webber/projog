@@ -117,7 +117,7 @@ import org.projog.core.term.Term;
  */
 public final class Op extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg1, Term arg2, Term arg3) {
+   protected boolean evaluate(Term arg1, Term arg2, Term arg3) {
       int precedence = toInt(arg1);
       String associativity = getAtomName(arg2);
       String name = getAtomName(arg3);

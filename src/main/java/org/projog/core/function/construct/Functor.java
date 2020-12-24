@@ -91,7 +91,7 @@ import org.projog.core.term.TermType;
  */
 public final class Functor extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term term, Term functor, Term arity) {
+   protected boolean evaluate(Term term, Term functor, Term arity) {
       switch (term.getType()) {
          case ATOM:
             return functor.unify(term) && arity.unify(IntegerNumberCache.ZERO);

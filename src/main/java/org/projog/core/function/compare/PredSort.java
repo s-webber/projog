@@ -49,7 +49,7 @@ import org.projog.core.term.Variable;
  */
 public final class PredSort extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term predicateName, Term input, Term sorted) {
+   protected boolean evaluate(Term predicateName, Term input, Term sorted) {
       List<Term> list = ListUtils.toJavaUtilList(input);
       if (list == null) {
          return false;

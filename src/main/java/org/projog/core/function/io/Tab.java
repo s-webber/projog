@@ -58,7 +58,7 @@ import org.projog.core.term.Term;
  */
 public final class Tab extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term arg) {
+   protected boolean evaluate(Term arg) {
       long numberOfSpaces = getArithmeticOperators().getNumeric(arg).getLong();
       PrintStream os = getFileHandles().getCurrentOutputStream();
       for (int i = 0; i < numberOfSpaces; i++) {

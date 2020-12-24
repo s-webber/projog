@@ -29,7 +29,7 @@ import org.projog.core.function.AbstractSingletonPredicate;
  */
 public final class NoTrace extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate() {
+   protected boolean evaluate() {
       getSpyPoints().setTraceEnabled(false);
       return true;
    }

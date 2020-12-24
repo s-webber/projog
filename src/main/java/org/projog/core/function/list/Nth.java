@@ -152,7 +152,7 @@ public final class Nth extends AbstractPredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term index, Term list, Term element) {
+   protected Predicate getPredicate(Term index, Term list, Term element) {
       if (index.getType().isVariable()) {
          return new Retryable(index, list, element, toJavaUtilList(list));
       } else {

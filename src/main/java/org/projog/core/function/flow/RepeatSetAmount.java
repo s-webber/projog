@@ -59,7 +59,7 @@ import org.projog.core.term.Term;
  */
 public final class RepeatSetAmount extends AbstractPredicateFactory {
    @Override
-   public Predicate getPredicate(Term arg) {
+   protected Predicate getPredicate(Term arg) {
       long n = castToNumeric(arg).getLong();
       return new RepeatSetAmountPredicate(n);
    }

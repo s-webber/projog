@@ -57,7 +57,7 @@ import org.projog.core.term.TermType;
  */
 public final class ConsultList extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term head, Term tail) {
+   protected boolean evaluate(Term head, Term tail) {
       while (true) {
          consult(head);
 

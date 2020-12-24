@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,15 +40,15 @@ import org.projog.core.term.Term;
  %ANSWER X=<
 
  %QUERY compare(X, a, Y)
- %ANSWER 
+ %ANSWER
  % X=>
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
 
  %FALSE compare(=, X, Y)
- 
+
  %QUERY X=Y, compare(=, X, Y)
- %ANSWER 
+ %ANSWER
  % X=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
@@ -65,7 +65,7 @@ import org.projog.core.term.Term;
  */
 public final class Compare extends AbstractSingletonPredicate {
    @Override
-   public boolean evaluate(Term result, Term t1, Term t2) {
+   protected boolean evaluate(Term result, Term t1, Term t2) {
       final int i = TERM_COMPARATOR.compare(t1, t2);
       final String symbol;
       if (i < 0) {

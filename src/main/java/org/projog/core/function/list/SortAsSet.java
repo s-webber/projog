@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 
 /* TEST
  %QUERY sort([q,w,e,r,t,y], X)
@@ -80,7 +81,7 @@ public final class SortAsSet extends AbstractSingletonPredicate {
       Term previous = itr.hasNext() ? itr.next() : null;
       while (itr.hasNext()) {
          Term next = itr.next();
-         if (previous.strictEquality(next)) {
+         if (TermUtils.termsEqual(previous, next)) {
             itr.remove();
          }
          previous = next;

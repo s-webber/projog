@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermUtils;
 
 /* TEST
  %QUERY delete([a,b,c],a,X)
@@ -82,7 +83,7 @@ public final class Delete extends AbstractSingletonPredicate {
       Iterator<Term> itr = javaList.iterator();
       while (itr.hasNext()) {
          Term next = itr.next();
-         if (element.strictEquality(next)) {
+         if (TermUtils.termsEqual(element, next)) {
             itr.remove();
          }
       }

@@ -68,7 +68,7 @@ public class ListFactoryTest {
       final Collection<Term> c = Arrays.asList(args);
       final Term listFromArray = ListFactory.createList(args);
       final Term listFromCollection = ListFactory.createList(c);
-      assertTrue(listFromCollection.strictEquality(listFromArray));
+      assertEquals(listFromCollection, listFromArray);
    }
 
    @Test

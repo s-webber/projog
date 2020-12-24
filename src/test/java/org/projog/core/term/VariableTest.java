@@ -40,10 +40,11 @@ public class VariableTest {
    public void testUnassignedVariableMethods() {
       Variable v = new Variable("X");
 
+      assertEquals(v, v);
       assertEquals("X", v.getId());
       assertEquals("X", v.toString());
       assertSame(v, v.getTerm());
-      assertTrue(v.strictEquality(v));
+      assertTrue(TermUtils.termsEqual(v, v));
 
       try {
          v.getName();
@@ -134,9 +135,9 @@ public class VariableTest {
       Term copy = v.copy(sharedVariables);
       assertEquals(1, sharedVariables.size());
       assertSame(copy, sharedVariables.get(v));
-      assertFalse(v.strictEquality(copy));
+      assertFalse(TermUtils.termsEqual(v, copy));
       assertTrue(v.unify(copy));
-      assertTrue(v.strictEquality(copy));
+      assertTrue(TermUtils.termsEqual(v, copy));
    }
 
    /**
@@ -212,9 +213,8 @@ public class VariableTest {
       assertSame(t.getNumberOfArguments(), v1.getNumberOfArguments());
       assertSame(t.getArgs(), v1.getArgs());
       assertSame(t.getArgument(0), v1.getArgument(0));
-      assertTrue(t.strictEquality(v1));
-      assertTrue(v1.strictEquality(t));
-      assertTrue(v1.strictEquality(v1));
+      assertTrue(TermUtils.termsEqual(t, v1));
+      assertTrue(TermUtils.termsEqual(v1, v1));
       assertTrue(t.unify(v1));
       assertTrue(v1.unify(t));
       assertFalse(v1.unify(atom()));

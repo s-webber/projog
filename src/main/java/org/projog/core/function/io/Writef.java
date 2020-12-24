@@ -374,7 +374,7 @@ public final class Writef extends AbstractSingletonPredicate {
       }
 
       String format(Term t) {
-         return termFormatter.toString(t);
+         return termFormatter.formatTerm(t);
       }
 
       int peek() {

@@ -129,10 +129,10 @@ public class ConjunctionTest {
       assertEquals("org.projog.core.function.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
       assertTrue(predicate.couldReevaluationSucceed());
       assertTrue(predicate.evaluate());
-      assertEquals("member(a, [a,b]) , a = a", tf.toString(term));
+      assertEquals("member(a, [a,b]) , a = a", tf.formatTerm(term));
       assertTrue(predicate.couldReevaluationSucceed());
       assertTrue(predicate.evaluate());
-      assertEquals("member(b, [a,b]) , b = b", tf.toString(term));
+      assertEquals("member(b, [a,b]) , b = b", tf.formatTerm(term));
       assertFalse(predicate.couldReevaluationSucceed());
       assertFalse(predicate.evaluate());
    }

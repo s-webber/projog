@@ -335,10 +335,10 @@ public class ProjogTest {
    }
 
    @Test
-   public void testTermToString() {
+   public void testFormatTerm() {
       Projog p = createProjog();
       Term inputTerm = TestUtils.parseSentence("X is 1 + 1 ; 3 < 5.");
-      assertEquals(write(inputTerm), p.toString(inputTerm));
+      assertEquals(write(inputTerm), p.formatTerm(inputTerm));
    }
 
    private void assertProjogStackTraceElement(ProjogStackTraceElement actual, String expectedKey, String expectedTerm) {

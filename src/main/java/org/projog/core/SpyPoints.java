@@ -185,7 +185,7 @@ public final class SpyPoints {
             return key.getName();
          } else {
             Term term = Structure.createStructure(key.getName(), args);
-            return termFormatter.toString(term);
+            return termFormatter.formatTerm(term);
          }
       }
 
@@ -208,7 +208,7 @@ public final class SpyPoints {
       }
 
       public String getFormattedClause() {
-         return termFormatter.toString(clauseModel.getOriginal());
+         return termFormatter.formatTerm(clauseModel.getOriginal());
       }
    }
 }

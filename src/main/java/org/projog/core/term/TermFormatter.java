@@ -22,7 +22,7 @@ import org.projog.core.Operands;
  * <p>
  * Does take account of operator precedence.
  *
- * @see #toString(Term)
+ * @see #formatTerm(Term)
  */
 public class TermFormatter {
    private final Operands operands;
@@ -55,7 +55,7 @@ public class TermFormatter {
     * @param t the {@code Term} to represent as a string
     * @return a string representation of the specified {@code Term}
     */
-   public String toString(Term t) {
+   public String formatTerm(Term t) {
       StringBuilder sb = new StringBuilder();
       write(t, sb);
       return sb.toString();

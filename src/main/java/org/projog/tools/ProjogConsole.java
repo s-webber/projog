@@ -179,7 +179,7 @@ public class ProjogConsole {
          out.println();
          for (String variableId : variableIds) {
             Term answer = r.getTerm(variableId);
-            String s = projog.toString(answer);
+            String s = projog.formatTerm(answer);
             out.println(variableId + " = " + s);
          }
       }

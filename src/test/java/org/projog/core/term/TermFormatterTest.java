@@ -28,7 +28,7 @@ public class TermFormatterTest {
       Term inputTerm = parseSentence(inputSyntax + ".");
 
       TermFormatter tf = createFormatter();
-      assertEquals(inputSyntax, tf.toString(inputTerm));
+      assertEquals(inputSyntax, tf.formatTerm(inputTerm));
    }
 
    private TermFormatter createFormatter() {

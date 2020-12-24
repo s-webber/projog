@@ -183,7 +183,7 @@ public class TestUtils {
    }
 
    public static String write(Term t) {
-      return createTermFormatter().toString(t);
+      return createTermFormatter().formatTerm(t);
    }
 
    public static TermFormatter createTermFormatter() {

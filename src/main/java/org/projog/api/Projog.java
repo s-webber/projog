@@ -269,10 +269,10 @@ public final class Projog {
     *
     * @param t the {@code Term} to represent as a string
     * @return a string representation of the specified {@code Term}
-    * @see org.projog.core.term.TermFormatter#toString(Term)
+    * @see org.projog.core.term.TermFormatter#formatTerm(Term)
     */
-   public String toString(Term t) { // TODO rename to formatTerm
-      return kb.getTermFormatter().toString(t);
+   public String formatTerm(Term t) {
+      return kb.getTermFormatter().formatTerm(t);
    }
 
    /**
@@ -302,7 +302,7 @@ public final class Projog {
    public void printProjogStackTrace(Throwable exception, PrintStream out) {
       ProjogStackTraceElement[] stackTrace = getStackTrace(exception);
       for (ProjogStackTraceElement e : stackTrace) {
-         out.println(e.getPredicateKey() + " clause: " + toString(e.getTerm()));
+         out.println(e.getPredicateKey() + " clause: " + formatTerm(e.getTerm()));
       }
    }
 

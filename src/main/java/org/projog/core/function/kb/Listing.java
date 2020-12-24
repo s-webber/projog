@@ -88,7 +88,7 @@ public final class Listing extends AbstractSingletonPredicate {
    }
 
    private void listClause(ClauseModel clauseModel) {
-      String s = getTermFormatter().toString(clauseModel.getOriginal());
+      String s = getTermFormatter().formatTerm(clauseModel.getOriginal());
       getFileHandles().getCurrentOutputStream().println(s);
    }
 }

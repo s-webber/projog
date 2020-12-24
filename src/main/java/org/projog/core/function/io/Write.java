@@ -93,6 +93,6 @@ public final class Write extends AbstractSingletonPredicate {
    }
 
    private String toString(Term t) {
-      return getTermFormatter().toString(t);
+      return getTermFormatter().formatTerm(t);
    }
 }

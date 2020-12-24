@@ -80,7 +80,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.TRUE, result);
+      assertSame(PredicateUtils.TRUE, result);
       assertEquals("", listener.result());
    }
 
@@ -91,7 +91,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.FAIL, result);
+      assertSame(PredicateUtils.FALSE, result);
       assertEquals("", listener.result());
    }
 
@@ -102,7 +102,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.FAIL, result);
+      assertSame(PredicateUtils.FALSE, result);
       assertEquals("", listener.result());
    }
 
@@ -131,7 +131,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.TRUE, result);
+      assertSame(PredicateUtils.TRUE, result);
       assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)", listener.result());
       verify(mockAction).getModel();
    }
@@ -143,7 +143,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.FAIL, result);
+      assertSame(PredicateUtils.FALSE, result);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
    }
 
@@ -154,7 +154,7 @@ public class SingleNonRetryableRulePredicateTest {
 
       Predicate result = testObject.getPredicate(queryArgs);
 
-      assertSame(AbstractSingletonPredicate.FAIL, result);
+      assertSame(PredicateUtils.FALSE, result);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
    }
 

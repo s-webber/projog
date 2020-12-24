@@ -31,10 +31,10 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.PreprocessablePredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
+import org.projog.core.udp.PredicateUtils;
 
 public class OnceTest {
    @Test
@@ -64,9 +64,9 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
       verify(mockPredicate, times(3)).evaluate();
@@ -91,9 +91,9 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());

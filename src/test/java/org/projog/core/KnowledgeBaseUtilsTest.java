@@ -30,9 +30,9 @@ import java.util.List;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.event.ProjogListeners;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
+import org.projog.core.udp.PredicateUtils;
 
 public class KnowledgeBaseUtilsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
@@ -77,8 +77,8 @@ public class KnowledgeBaseUtilsTest {
 
    @Test
    public void testGetPredicate() {
-      assertSame(AbstractSingletonPredicate.TRUE, KnowledgeBaseUtils.getPredicate(kb, atom("true")));
-      assertSame(AbstractSingletonPredicate.FAIL, KnowledgeBaseUtils.getPredicate(kb, atom("does_not_exist")));
+      assertSame(PredicateUtils.TRUE, KnowledgeBaseUtils.getPredicate(kb, atom("true")));
+      assertSame(PredicateUtils.FALSE, KnowledgeBaseUtils.getPredicate(kb, atom("does_not_exist")));
    }
 
    @Test

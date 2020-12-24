@@ -23,10 +23,10 @@ import java.util.List;
 
 import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  %TRUE nth0(0, [a,b,c], a)
@@ -157,7 +157,7 @@ public final class Nth extends AbstractPredicateFactory {
          return new Retryable(index, list, element, toJavaUtilList(list));
       } else {
          boolean result = evaluate(index, list, element);
-         return AbstractSingletonPredicate.toPredicate(result);
+         return PredicateUtils.toPredicate(result);
       }
    }
 

@@ -23,12 +23,12 @@ import java.util.Set;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
+import org.projog.core.udp.PredicateUtils;
 
 /**
  * Constructs new {@link ClauseAction} instances.
@@ -95,7 +95,7 @@ public final class ClauseActionFactory {
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
-               return AbstractSingletonPredicate.FAIL;
+               return PredicateUtils.FALSE;
             }
          }
 
@@ -123,7 +123,7 @@ public final class ClauseActionFactory {
 
       @Override
       public Predicate getPredicate(Term[] input) {
-         return AbstractSingletonPredicate.TRUE;
+         return PredicateUtils.TRUE;
       }
 
       @Override
@@ -179,11 +179,11 @@ public final class ClauseActionFactory {
          Term[] consequentArgs = model.getConsequent().getArgs();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i])) {
-               return AbstractSingletonPredicate.FAIL;
+               return PredicateUtils.FALSE;
             }
          }
 
-         return AbstractSingletonPredicate.TRUE;
+         return PredicateUtils.TRUE;
       }
 
       @Override
@@ -211,7 +211,7 @@ public final class ClauseActionFactory {
          Term[] consequentArgs = model.getConsequent().getArgs();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i])) {
-               return AbstractSingletonPredicate.FAIL;
+               return PredicateUtils.FALSE;
             }
          }
 
@@ -248,11 +248,11 @@ public final class ClauseActionFactory {
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
-               return AbstractSingletonPredicate.FAIL;
+               return PredicateUtils.FALSE;
             }
          }
 
-         return AbstractSingletonPredicate.TRUE;
+         return PredicateUtils.TRUE;
       }
 
       @Override
@@ -281,7 +281,7 @@ public final class ClauseActionFactory {
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.length; i++) {
             if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
-               return AbstractSingletonPredicate.FAIL;
+               return PredicateUtils.FALSE;
             }
          }
 

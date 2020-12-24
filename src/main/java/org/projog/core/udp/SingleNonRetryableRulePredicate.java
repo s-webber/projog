@@ -20,7 +20,6 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.interpreter.ClauseAction;
 
@@ -51,15 +50,15 @@ final class SingleNonRetryableRulePredicate implements PredicateFactory {
                spyPoint.logFail(SingleNonRetryableRulePredicate.class, args);
             }
 
-            return AbstractSingletonPredicate.toPredicate(result);
+            return PredicateUtils.toPredicate(result);
          } else {
-            return AbstractSingletonPredicate.toPredicate(clause.getPredicate(args).evaluate());
+            return PredicateUtils.toPredicate(clause.getPredicate(args).evaluate());
          }
       } catch (CutException e) {
          if (spyPoint.isEnabled()) {
             spyPoint.logFail(SingleNonRetryableRulePredicate.class, args);
          }
-         return AbstractSingletonPredicate.FAIL;
+         return PredicateUtils.FALSE;
       } catch (ProjogException pe) {
          pe.addClause(clause.getModel());
          throw pe;

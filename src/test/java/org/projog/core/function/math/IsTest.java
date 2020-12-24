@@ -28,10 +28,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
+import org.projog.core.udp.PredicateUtils;
 
 public class IsTest {
    @Test
@@ -51,7 +51,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
       assertEquals("is(1, 1)", isTerm.toString());
    }
 
@@ -63,7 +63,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
       assertEquals("is(21, *(3, 7))", isTerm.toString());
    }
 
@@ -88,7 +88,7 @@ public class IsTest {
          }
       }
       c.unify(new IntegerNumber(100));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
       assertEquals("is(212, +(/(*(100, 9), 5), 32))", copy.toString());
       assertEquals(new IntegerNumber(212), f.getTerm());
    }
@@ -101,7 +101,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.function.math.Is$Unify", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
       assertEquals("is(21, abs(*(-3, 7)))", isTerm.toString());
    }
 
@@ -126,7 +126,7 @@ public class IsTest {
          }
       }
       y.unify(new IntegerNumber(-7));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
       assertEquals("is(6, abs(+(1, -7)))", copy.toString());
       assertEquals(new IntegerNumber(6), x.getTerm());
    }

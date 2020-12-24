@@ -15,7 +15,7 @@
  */
 package org.projog.core.function.list;
 
-import static org.projog.core.function.AbstractSingletonPredicate.toPredicate;
+import static org.projog.core.udp.PredicateUtils.toPredicate;
 
 import java.util.ArrayList;
 import java.util.List;

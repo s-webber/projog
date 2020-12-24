@@ -17,12 +17,21 @@ package org.projog.core.udp;
 
 import org.projog.core.Predicate;
 import org.projog.core.SpyPoints.SpyPoint;
-import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.function.SucceedsNeverPredicate;
+import org.projog.core.function.SucceedsOncePredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.interpreter.ClauseAction;
 
-final class PredicateUtils {
+public final class PredicateUtils {
+   public static final SucceedsOncePredicate TRUE = SucceedsOncePredicate.SINGLETON;
+
+   public static final SucceedsNeverPredicate FALSE = SucceedsNeverPredicate.SINGLETON;
+
    private PredicateUtils() {
+   }
+
+   public static Predicate toPredicate(boolean result) {
+      return result ? TRUE : FALSE;
    }
 
    static Predicate createSingleClausePredicate(ClauseAction clause, SpyPoint spyPoint, Term[] args) {
@@ -38,6 +47,6 @@ final class PredicateUtils {
          spyPoint.logCall(PredicateUtils.class, args);
          spyPoint.logFail(PredicateUtils.class, args);
       }
-      return AbstractSingletonPredicate.FAIL;
+      return PredicateUtils.FALSE;
    }
 }

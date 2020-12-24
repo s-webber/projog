@@ -27,6 +27,7 @@ import org.projog.TestUtils;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 public class AbstractSingletonPredicateTest {
    private static final Atom ARG1 = atom("a");
@@ -47,7 +48,7 @@ public class AbstractSingletonPredicateTest {
          protected void init() {
             x = getKnowledgeBase();
          }
-      };
+      }
       TestPredicate pf = new TestPredicate();
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       pf.setKnowledgeBase(kb);
@@ -75,10 +76,10 @@ public class AbstractSingletonPredicateTest {
       };
 
       b.set(true);
-      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[0]));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[0]));
 
       b.set(false);
-      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[0]));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[0]));
    }
 
    @Test
@@ -90,9 +91,9 @@ public class AbstractSingletonPredicateTest {
          }
       };
 
-      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1}));
 
-      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG2}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG2}));
    }
 
    @Test
@@ -104,9 +105,9 @@ public class AbstractSingletonPredicateTest {
          }
       };
 
-      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2}));
 
-      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1}));
    }
 
    @Test
@@ -118,9 +119,9 @@ public class AbstractSingletonPredicateTest {
          }
       };
 
-      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3}));
 
-      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1}));
    }
 
    @Test
@@ -132,9 +133,9 @@ public class AbstractSingletonPredicateTest {
          }
       };
 
-      assertSame(AbstractSingletonPredicate.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3, ARG4}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3, ARG4}));
 
-      assertSame(AbstractSingletonPredicate.FAIL, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1, ARG1}));
    }
 
    private void assertIllegalArgumentException(AbstractSingletonPredicate pf, int numberOfArguments) {

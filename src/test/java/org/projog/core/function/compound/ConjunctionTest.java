@@ -29,11 +29,11 @@ import org.junit.Test;
 import org.projog.core.KnowledgeBase;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.Variable;
+import org.projog.core.udp.PredicateUtils;
 
 public class ConjunctionTest {
    @Test
@@ -75,7 +75,7 @@ public class ConjunctionTest {
 
       assertEquals("org.projog.core.function.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
       assertFalse(optimised.isRetryable());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(term.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term.getArgs()));
    }
 
    @Test
@@ -89,7 +89,7 @@ public class ConjunctionTest {
       assertFalse(optimised.isRetryable());
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
       Variable variable = sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());

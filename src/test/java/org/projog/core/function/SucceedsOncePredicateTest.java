@@ -23,11 +23,11 @@ import org.junit.Test;
 public class SucceedsOncePredicateTest {
    @Test
    public void testEvaluates() {
-      assertTrue(SucceedsOncePredicate.TRUE.evaluate());
+      assertTrue(SucceedsOncePredicate.SINGLETON.evaluate());
    }
 
    @Test
    public void testCouldReevaluationSucceed() {
-      assertFalse(SucceedsOncePredicate.TRUE.couldReevaluationSucceed());
+      assertFalse(SucceedsOncePredicate.SINGLETON.couldReevaluationSucceed());
    }
 }

@@ -25,11 +25,11 @@ import java.util.List;
 import org.projog.core.Predicate;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  % Examples of when all three terms are lists:
@@ -221,7 +221,7 @@ public final class Append extends AbstractPredicateFactory {
          return new Retryable(prefix, suffix, javaUtilList);
       } else {
          boolean result = evaluateSingleOutcome(prefix, suffix, concatenated);
-         return AbstractSingletonPredicate.toPredicate(result);
+         return PredicateUtils.toPredicate(result);
       }
    }
 

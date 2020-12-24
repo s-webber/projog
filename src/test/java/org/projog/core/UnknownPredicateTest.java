@@ -27,10 +27,10 @@ import static org.projog.TestUtils.variable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 import org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate;
 
 public class UnknownPredicateTest {
@@ -46,7 +46,7 @@ public class UnknownPredicateTest {
       assertTrue(e.isRetryable());
 
       // assert that FAIL returned when UnknownPredicateTest/1 not yet defined
-      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate(new Term[] {variable()}));
+      assertSame(PredicateUtils.FALSE, e.getPredicate(new Term[] {variable()}));
 
       // define UnknownPredicateTest/1
       kb.getPredicates().createOrReturnUserDefinedPredicate(key);

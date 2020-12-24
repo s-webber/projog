@@ -34,10 +34,10 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.PreprocessablePredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
+import org.projog.core.udp.PredicateUtils;
 
 public class NotTest {
    @Test
@@ -48,7 +48,7 @@ public class NotTest {
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
-      assertSame(AbstractSingletonPredicate.TRUE, n.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, n.getPredicate(copy.getArgs()));
       Variable variable = sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());
@@ -83,9 +83,9 @@ public class NotTest {
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
       verify(mockPredicate, times(3)).evaluate();
@@ -110,9 +110,9 @@ public class NotTest {
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());

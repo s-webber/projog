@@ -21,10 +21,10 @@ import static org.projog.core.term.TermUtils.getAtomName;
 import org.projog.core.Predicate;
 import org.projog.core.ProjogException;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  % Examples of when all three terms are atoms:
@@ -146,7 +146,7 @@ public final class AtomConcat extends AbstractPredicateFactory {
          return new Retryable(prefix, suffix, getAtomName(combined));
       } else {
          boolean result = evaluate(prefix, suffix, combined);
-         return AbstractSingletonPredicate.toPredicate(result);
+         return PredicateUtils.toPredicate(result);
       }
    }
 

@@ -21,9 +21,9 @@ import java.util.Map;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateKey;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.ClauseModel;
+import org.projog.core.udp.PredicateUtils;
 import org.projog.core.udp.UserDefinedPredicateFactory;
 
 /* TEST
@@ -153,7 +153,7 @@ public final class Inspect extends AbstractPredicateFactory {
       Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getPredicates().getUserDefinedPredicates();
       UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
       if (userDefinedPredicate == null) {
-         return AbstractSingletonPredicate.toPredicate(false);
+         return PredicateUtils.toPredicate(false);
       } else {
          return new InspectPredicate(clauseHead, clauseBody, userDefinedPredicate.getImplications());
       }

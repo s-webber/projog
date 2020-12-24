@@ -46,11 +46,11 @@ import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 import org.projog.core.udp.ClauseModel;
+import org.projog.core.udp.PredicateUtils;
 import org.projog.core.udp.interpreter.ClauseActionFactory.AlwaysMatchedFact;
 import org.projog.core.udp.interpreter.ClauseActionFactory.ImmutableConsequentRule;
 import org.projog.core.udp.interpreter.ClauseActionFactory.ImmutableFact;
@@ -92,13 +92,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testAlwaysMatchedFact_getPredicate_no_arguments() {
       AlwaysMatchedFact a = create(AlwaysMatchedFact.class, "p.");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(EMPTY_ARRAY));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(EMPTY_ARRAY));
    }
 
    @Test
    public void testAlwaysMatchedFact_getPredicate_distinct_variable_arguments() {
       AlwaysMatchedFact a = create(AlwaysMatchedFact.class, "p(X,Y,Z).");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(EMPTY_ARRAY));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(EMPTY_ARRAY));
    }
 
    @Test
@@ -110,13 +110,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testImmutableFact_getPredicate_query_args_match_clause() {
       ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
    }
 
    @Test
    public void testImmutableFact_getPredicate_query_args_dont_match_clause() {
       ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("z"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("z"))));
    }
 
    @Test
@@ -126,7 +126,7 @@ public class ClauseActionFactoryTest {
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
       Variable z = new Variable("Z");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(x, y, z)));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(x, y, z)));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
       assertEquals(atom("c"), z.getTerm());
@@ -138,7 +138,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), x, y)));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), x, y)));
       assertEquals(atom("b"), x.getTerm());
       assertEquals(atom("c"), y.getTerm());
    }
@@ -149,7 +149,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(x, y, x)));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(x, y, x)));
    }
 
    @Test
@@ -158,7 +158,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(x, y, x)));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(x, y, x)));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
    }
@@ -172,48 +172,48 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableFact_getPredicate_query_args_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), atom("d"), atom("c"))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), atom("d"), atom("c"))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_dont_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("d"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("d"))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_shared_variable_doesnt_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(x, atom("b"), x)));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(x, atom("b"), x)));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_shared_variable_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,a).");
       Variable x = new Variable("X");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(x, atom("b"), x)));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(x, atom("b"), x)));
       assertEquals(atom("a"), x.getTerm());
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_dont_unify_with_clause_shared_variable() {
       MutableFact a = create(MutableFact.class, "p(X,b,X).");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_unify_with_clause_shared_variable() {
       MutableFact a = create(MutableFact.class, "p(X,b,X).");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("a"))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), atom("b"), atom("a"))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_variable_unifies_with_clause_variable() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), x, atom("c"))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), x, atom("c"))));
       assertSame(TermType.VARIABLE, x.getTerm().getType());
       // assert query variable has been unified with clause variable
       assertNotSame(x, x.getTerm());
@@ -223,7 +223,7 @@ public class ClauseActionFactoryTest {
    public void testMutableFact_getPredicate_query_args_variable_unifies_with_clause_atom() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(AbstractSingletonPredicate.TRUE, a.getPredicate(array(atom("a"), atom("b"), x)));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(array(atom("a"), atom("b"), x)));
       assertEquals(atom("c"), x.getTerm());
    }
 
@@ -247,13 +247,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testVariableAntecedant_getPredicate_unknown_predicate() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("an_unknown_predicate"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("an_unknown_predicate"))));
    }
 
    @Test
    public void testVariableAntecedant_getPredicate_query_args_dont_unify_with_clause() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X,a) :- X.");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("test"), atom("b"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("test"), atom("b"))));
    }
 
    @Test
@@ -398,7 +398,7 @@ public class ClauseActionFactoryTest {
    @Test
    public void testImmutableConsequentRule_getPredicate_query_args_dont_match_clause() {
       ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- test.");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("z"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("z"))));
    }
 
    @Test
@@ -435,7 +435,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(x, y, x)));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(x, y, x)));
    }
 
    @Test
@@ -514,14 +514,14 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableRule_getPredicate_query_args_dont_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,c)  :- test.");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("d"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("d"))));
    }
 
    @Test
    public void testMutableRule_getPredicate_query_args_shared_variable_doesnt_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       Variable x = new Variable("X");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(x, atom("b"), x)));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(x, atom("b"), x)));
    }
 
    @Test
@@ -536,7 +536,7 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableRule_getPredicate_query_args_dont_unify_with_clause_shared_variable() {
       MutableRule a = create(MutableRule.class, "p(X,b,X) :- test.");
-      assertSame(AbstractSingletonPredicate.FAIL, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
    }
 
    @Test

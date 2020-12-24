@@ -18,7 +18,7 @@ package org.projog.core.function;
 import org.projog.core.Predicate;
 
 public class SucceedsOncePredicate implements Predicate {
-   public static final SucceedsOncePredicate TRUE = new SucceedsOncePredicate();
+   public static final SucceedsOncePredicate SINGLETON = new SucceedsOncePredicate();
 
    private SucceedsOncePredicate() {
    }

@@ -42,10 +42,10 @@ import org.projog.core.SpyPoints;
 import org.projog.core.SpyPoints.SpyPoint;
 import org.projog.core.SpyPoints.SpyPointEvent;
 import org.projog.core.SpyPoints.SpyPointExitEvent;
-import org.projog.core.event.ProjogListeners;
 import org.projog.core.event.ProjogListener;
-import org.projog.core.function.AbstractSingletonPredicate;
+import org.projog.core.event.ProjogListeners;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 public class InterpretedUserDefinedPredicateTest {
    private SpyPoints spyPoints;
@@ -98,9 +98,9 @@ public class InterpretedUserDefinedPredicateTest {
    private void assertAllSucceedOnce() {
       InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -137,9 +137,9 @@ public class InterpretedUserDefinedPredicateTest {
    private void assertAllFail() {
       InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.FAIL);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.FAIL);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.FAIL);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
+      when(mockAction2.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
+      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
@@ -179,9 +179,9 @@ public class InterpretedUserDefinedPredicateTest {
       when(mockPredicate.evaluate()).thenReturn(true, true, true, true, true, false);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true, true, true, true, true);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
       when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -238,9 +238,9 @@ public class InterpretedUserDefinedPredicateTest {
       when(mockPredicate.evaluate()).thenReturn(true, true, true, true, true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true, true, true, true, false);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
       when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -274,7 +274,7 @@ public class InterpretedUserDefinedPredicateTest {
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
       when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
 
       assertTrue(testObject.couldReevaluationSucceed());
@@ -315,7 +315,7 @@ public class InterpretedUserDefinedPredicateTest {
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenThrow(exception);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(AbstractSingletonPredicate.TRUE);
+      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
       when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
 
       assertTrue(testObject.couldReevaluationSucceed());

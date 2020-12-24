@@ -18,8 +18,8 @@ package org.projog.core.function.compound;
 import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  if_then_else_test(1).
@@ -106,7 +106,7 @@ public final class IfThen extends AbstractPredicateFactory {
          // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
          return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
       } else {
-         return AbstractSingletonPredicate.toPredicate(false);
+         return PredicateUtils.toPredicate(false);
       }
    }
 }

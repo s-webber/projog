@@ -21,10 +21,10 @@ import static org.projog.core.term.TermUtils.toLong;
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  %TRUE between(1, 5, 1)
@@ -86,7 +86,7 @@ public final class Between extends AbstractPredicateFactory {
          return new Retryable(middle, toLong(operators, low), toLong(operators, high));
       } else {
          boolean result = NUMERIC_TERM_COMPARATOR.compare(low, middle, operators) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, operators) < 1;
-         return AbstractSingletonPredicate.toPredicate(result);
+         return PredicateUtils.toPredicate(result);
       }
    }
 

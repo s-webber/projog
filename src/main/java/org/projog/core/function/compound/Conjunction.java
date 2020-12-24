@@ -22,6 +22,7 @@ import org.projog.core.function.AbstractPredicateFactory;
 import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
+import org.projog.core.udp.PredicateUtils;
 
 /* TEST
  %TRUE true, true
@@ -140,7 +141,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
       if (firstPredicate.evaluate()) {
          return new ConjunctionPredicate(firstPredicate, getPredicates().getPredicateFactory(arg2), arg2);
       } else {
-         return AbstractSingletonPredicate.FAIL;
+         return PredicateUtils.FALSE;
       }
    }
 
@@ -176,7 +177,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
          if (firstPredicate.evaluate()) {
             return new ConjunctionPredicate(firstPredicate, secondPredicateFactory, arg2);
          } else {
-            return AbstractSingletonPredicate.FAIL;
+            return PredicateUtils.FALSE;
          }
       }
    }

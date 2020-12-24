@@ -60,15 +60,15 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSuceedsNever() {
-      assertSame(SucceedsNeverPredicate.FAIL, testObject.getPredicate(new Term[] {atom("z")}));
+      assertSame(SucceedsNeverPredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("z")}));
    }
 
    @Test
    public void testSucceedsOnce() {
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("a")}));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("d")}));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("e")}));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("f")}));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("a")}));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("d")}));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("e")}));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("f")}));
    }
 
    @Test

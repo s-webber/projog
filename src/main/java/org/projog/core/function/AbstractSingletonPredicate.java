@@ -15,6 +15,8 @@
  */
 package org.projog.core.function;
 
+import static org.projog.core.udp.PredicateUtils.toPredicate;
+
 import org.projog.core.ArithmeticOperators;
 import org.projog.core.FileHandles;
 import org.projog.core.KnowledgeBase;
@@ -35,21 +37,12 @@ import org.projog.core.term.TermFormatter;
  * solutions will be made as part of backtracking as {@link #isRetryable()} always returns {@code false}.
  */
 public abstract class AbstractSingletonPredicate implements PredicateFactory, KnowledgeBaseConsumer {
-   @Deprecated
-   public static final SucceedsOncePredicate TRUE = SucceedsOncePredicate.TRUE;
-   @Deprecated
-   public static final SucceedsNeverPredicate FAIL = SucceedsNeverPredicate.FAIL;
-
    private KnowledgeBase knowledgeBase;
 
    @Override
    public final Predicate getPredicate(Term[] args) {
       boolean result = evaluate(args);
       return toPredicate(result);
-   }
-
-   public static Predicate toPredicate(boolean result) { // TODO move to PredicateUtils
-      return result ? TRUE : FAIL;
    }
 
    public final boolean evaluate(Term[] args) {

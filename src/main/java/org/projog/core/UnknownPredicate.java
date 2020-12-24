@@ -15,8 +15,8 @@
  */
 package org.projog.core;
 
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
+import org.projog.core.udp.PredicateUtils;
 
 /**
  * Represents all predicates that a {@code KnowledgeBase} has no definition of.
@@ -41,7 +41,7 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
       instantiatePredicateFactory();
 
       if (actualPredicateFactory == null) {
-         return AbstractSingletonPredicate.FAIL;
+         return PredicateUtils.FALSE;
       } else {
          return actualPredicateFactory.getPredicate(args);
       }

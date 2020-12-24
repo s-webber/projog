@@ -22,11 +22,11 @@ import org.junit.Test;
 public class SucceedsNeverPredicateTest {
    @Test
    public void testEvaluates() {
-      assertFalse(SucceedsNeverPredicate.FAIL.evaluate());
+      assertFalse(SucceedsNeverPredicate.SINGLETON.evaluate());
    }
 
    @Test
    public void testCouldReevaluationSucceed() {
-      assertFalse(SucceedsNeverPredicate.FAIL.couldReevaluationSucceed());
+      assertFalse(SucceedsNeverPredicate.SINGLETON.couldReevaluationSucceed());
    }
 }

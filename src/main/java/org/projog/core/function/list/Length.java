@@ -15,9 +15,9 @@
  */
 package org.projog.core.function.list;
 
-import static org.projog.core.function.AbstractSingletonPredicate.toPredicate;
 import static org.projog.core.term.ListFactory.createListOfLength;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
+import static org.projog.core.udp.PredicateUtils.toPredicate;
 
 import org.projog.core.Predicate;
 import org.projog.core.function.AbstractPredicateFactory;

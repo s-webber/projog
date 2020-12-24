@@ -181,7 +181,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Structure term = structure("p", atom("q"), atom("w"), atom("e"));
       PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
       assertEquals("org.projog.core.udp.StaticUserDefinedPredicateFactory$NeverSucceedsPredicateFactory", preprocessedPredicateFactory.getClass().getName());
-      assertSame(AbstractSingletonPredicate.FAIL, preprocessedPredicateFactory.getPredicate(term.getArgs()));
+      assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(term.getArgs()));
       assertFalse(preprocessedPredicateFactory.isRetryable());
    }
 

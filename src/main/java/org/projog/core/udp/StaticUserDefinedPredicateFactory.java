@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
 import org.projog.core.Predicate;
 import org.projog.core.PredicateFactory;
 import org.projog.core.PredicateKey;
@@ -128,25 +127,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     */
    private boolean isCyclic() {
       return setCompiledPredicateFactoryInvocationCtr > 1;
-   }
-
-   private boolean areClausesSuitableForCompilation(List<ClauseModel> clauseModels) {
-      for (ClauseModel cm : clauseModels) {
-         Term antecedent = cm.getAntecedent();
-         if (!isTermSuitableForCompilation(antecedent)) {
-            return false;
-         }
-      }
-      return true;
-   }
-
-   private boolean isTermSuitableForCompilation(Term antecedent) {
-      for (Term t : KnowledgeBaseUtils.toArrayOfConjunctions(antecedent)) {
-         if (t.getType().isVariable()) {
-            return false;
-         }
-      }
-      return true;
    }
 
    private PredicateFactory createInterpretedPredicateFactoryFromClauseActions(Clauses clauses, List<ClauseModel> clauseModels) {

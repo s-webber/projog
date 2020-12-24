@@ -68,7 +68,7 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingletonPre
       }
 
       @Override
-      public Numeric calculate(Term... args) {
+      public Numeric calculate(Term[] args) {
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);
 

@@ -122,7 +122,7 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       }
 
       @Override
-      public Numeric calculate(Term... args) {
+      public Numeric calculate(Term[] args) {
          Numeric n = o.calculate(args[0].getArgs());
          return AbstractArithmeticOperator.this.calculate(n);
       }
@@ -138,7 +138,7 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       }
 
       @Override
-      public Numeric calculate(Term... args) {
+      public Numeric calculate(Term[] args) {
          Numeric n1 = o1 == null ? operators.getNumeric(args[0]) : o1.calculate(args[0].getArgs());
          Numeric n2 = o2 == null ? operators.getNumeric(args[1]) : o2.calculate(args[1].getArgs());
          return AbstractArithmeticOperator.this.calculate(n1, n2);

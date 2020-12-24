@@ -33,7 +33,7 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
    }
 
    @Override
-   public RetryableRulePredicate getPredicate(Term... args) {
+   public RetryableRulePredicate getPredicate(Term[] args) {
       return new RetryableRulePredicate(clause, spyPoint, args);
    }
 

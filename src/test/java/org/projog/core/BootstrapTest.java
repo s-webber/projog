@@ -28,7 +28,6 @@ import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -81,9 +80,6 @@ public class BootstrapTest {
       PredicateFactory ef = kb.getPredicates().getPredicateFactory(key);
       assertFinal(ef);
       Class[] methodParameters = getMethodParameters(key);
-      if (ef instanceof PredicateFactory) {
-         // TODO assertClassImplementsOptimisedGetPredicateMethod(ef, methodParameters);
-      }
       if (ef instanceof Predicate) {
          assertClassImplementsOptimisedEvaluateMethod(ef, methodParameters);
       }
@@ -101,7 +97,6 @@ public class BootstrapTest {
       assertTrue("Not final: " + c, Modifier.isFinal(c.getModifiers()));
    }
 
-   @SuppressWarnings("rawtypes")
    private Class<?>[] getMethodParameters(PredicateKey key) {
       int numberOfArguments = key.getNumArgs();
       Class<?>[] args = new Class[numberOfArguments];
@@ -109,17 +104,6 @@ public class BootstrapTest {
          args[i] = Term.class;
       }
       return args;
-   }
-
-   @SuppressWarnings("rawtypes")
-   private void assertClassImplementsOptimisedGetPredicateMethod(PredicateFactory ef, Class[] methodParameters) {
-      try {
-         // Test that the getPredicate method has a return type of the actual sub-class rather than Predicate
-         Method m = ef.getClass().getDeclaredMethod("getPredicate", methodParameters);
-         assertSame(ef.getClass() + "'s getPredicate(" + Arrays.toString(methodParameters) + ") method returns " + m.getReturnType(), ef.getClass(), m.getReturnType());
-      } catch (NoSuchMethodException e) {
-         fail("Testing getPredicate method of " + ef.getClass() + " with: " + methodParameters.length + " arguments caused: " + e.toString());
-      }
    }
 
    @SuppressWarnings({"rawtypes", "unchecked"})

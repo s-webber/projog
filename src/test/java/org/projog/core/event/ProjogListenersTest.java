@@ -91,14 +91,6 @@ public class ProjogListenersTest {
          events.add(message);
       }
 
-      public boolean isEmpty() {
-         return events.isEmpty();
-      }
-
-      public String get(int index) {
-         return events.get(index);
-      }
-
       public int size() {
          return events.size();
       }

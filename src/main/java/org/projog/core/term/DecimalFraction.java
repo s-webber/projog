@@ -120,7 +120,7 @@ public final class DecimalFraction implements Numeric {
    }
 
    @Override
-   public DecimalFraction calculate(Term... args) {
+   public DecimalFraction calculate(Term[] args) {
       return this;
    }
 

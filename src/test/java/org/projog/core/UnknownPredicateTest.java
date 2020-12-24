@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.variable;
 
@@ -82,7 +82,7 @@ public class UnknownPredicateTest {
       PredicateFactory result = original.preprocess(Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
       assertSame(mockPredicateFactory, result);
-      verifyZeroInteractions(mockPredicateFactory);
+      verifyNoInteractions(mockPredicateFactory);
    }
 
    @Test

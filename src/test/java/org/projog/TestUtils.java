@@ -214,7 +214,7 @@ public class TestUtils {
       }
    }
 
-   public static void assertClass(Class expected, Object instance) {
+   public static void assertClass(Class<?> expected, Object instance) {
       assertSame(expected, instance.getClass());
    }
 }

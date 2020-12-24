@@ -134,7 +134,7 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public Predicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term[] args) {
       Term goal = args[0];
       if (args.length == 1) {
          return getPredicate(goal);

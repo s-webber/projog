@@ -61,7 +61,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term[] args) {
       if (hasPrimaryKey) {
          Term firstArg = args[0];
          if (firstArg.isImmutable()) {

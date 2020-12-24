@@ -38,7 +38,6 @@ import org.projog.core.ProjogException;
 import org.projog.core.SpyPoints;
 import org.projog.core.SpyPoints.SpyPoint;
 import org.projog.core.event.ProjogListeners;
-import org.projog.core.function.AbstractSingletonPredicate;
 import org.projog.core.term.Term;
 import org.projog.core.udp.interpreter.ClauseAction;
 

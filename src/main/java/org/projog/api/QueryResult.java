@@ -41,7 +41,7 @@ public final class QueryResult {
     * @param PredicateFactory the {@link PredicateFactory} that will be used to evaluate the query
     * @param query represents the query statement being evaluated
     * @param variables collection of variables contained in the query (keyed by variable id)
-    * @see QueryStatement#getResult()
+    * @see QueryStatement#executeQuery()
     */
    QueryResult(PredicateFactory predicateFactory, Term query, Map<String, Variable> variables) {
       int numArgs = query.getNumberOfArguments();

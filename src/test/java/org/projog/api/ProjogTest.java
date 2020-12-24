@@ -65,7 +65,7 @@ public class ProjogTest {
       projog.setUserOutput(new PrintStream(baos));
 
       // when we execute a query that writes to output
-      projog.createStatement("write(hello).").getResult().next();
+      projog.createStatement("write(hello).").executeQuery().next();
 
       // then the new stream should be written to
       assertEquals("hello", new String(baos.toByteArray()));
@@ -79,7 +79,7 @@ public class ProjogTest {
       projog.setUserInput(new ByteArrayInputStream("hello".getBytes()));
 
       // when we execute a query that reads from input
-      QueryResult result = projog.createStatement("read(X).").getResult();
+      QueryResult result = projog.createStatement("read(X).").executeQuery();
       result.next();
 
       // then the new stream should be read from
@@ -96,7 +96,7 @@ public class ProjogTest {
       projog.addPredicateFactory(key, pf);
 
       // confirm that queries can use testAddPredicateFactory/1
-      QueryResult result = projog.createStatement("testAddPredicateFactory(3).").getResult();
+      QueryResult result = projog.createStatement("testAddPredicateFactory(3).").executeQuery();
       assertTrue(result.next());
       assertTrue(result.next());
       assertTrue(result.next());
@@ -119,7 +119,7 @@ public class ProjogTest {
       projog.addArithmeticOperator(key, pf);
 
       // confirm that queries can use testAddPredicateFactory/1
-      QueryResult result = projog.createStatement("X is testArithmeticOperator(3).").getResult();
+      QueryResult result = projog.createStatement("X is testArithmeticOperator(3).").executeQuery();
       assertTrue(result.next());
       assertEquals(10, TermUtils.castToNumeric(result.getTerm("X")).getLong()); // 3 + 7 = 10
    }
@@ -150,7 +150,7 @@ public class ProjogTest {
       QueryStatement s = createQueryStatement();
       Atom a = atom("a");
       s.setTerm("X", a);
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       assertSame(a, r.getTerm("X"));
       assertTrue(r.next());
       assertSame(a, r.getTerm("X"));
@@ -169,7 +169,7 @@ public class ProjogTest {
       QueryStatement s = createQueryStatement();
       Atom z = atom("z");
       s.setTerm("X", z);
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       assertSame(z, r.getTerm("X"));
       assertTrue(r.next());
       assertSame(z, r.getTerm("X"));
@@ -182,7 +182,7 @@ public class ProjogTest {
       QueryStatement s = createQueryStatement();
       Atom y = atom("y");
       s.setTerm("X", y);
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       assertSame(y, r.getTerm("X"));
       assertFalse(r.next());
    }
@@ -243,7 +243,7 @@ public class ProjogTest {
       QueryStatement s = p.createStatement("a(X).");
       try {
          // as a/1 only has a single clause then will try to evaluate as part of .getResult(), which is why exception occurs now rather than on a later call to .next()
-         s.getResult();
+         s.executeQuery();
          fail();
       } catch (ProjogException e) {
          assertSame(ProjogException.class, e.getClass()); // check it is not a sub-class
@@ -263,7 +263,7 @@ public class ProjogTest {
       StringReader sr = new StringReader("a(A) :- b(A). a(A) :- A = test. b(Z) :- c(Z, 5). c(X,Y) :- Z is X + Y, Z < 9.");
       p.consultReader(sr);
       QueryStatement s = p.createStatement("a(X).");
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       try {
          // as a/1 only has multiple clauses then not try to evaluate as part of .getResult(), which is why exception only occurs on call to .next()
          r.next();
@@ -289,7 +289,7 @@ public class ProjogTest {
       StringReader sr = new StringReader(inputSource.toString());
       p.consultReader(sr);
       QueryStatement s = p.createStatement("x('a_directory_that_doesnt_exist/another_directory_that_doesnt_exist/some_file.xyz').");
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       try {
          r.next();
          fail();
@@ -329,7 +329,7 @@ public class ProjogTest {
    public void testQueryContainingCut() {
       Projog p = createProjog();
       QueryStatement s = p.createStatement("repeat, !.");
-      QueryResult r = s.getResult();
+      QueryResult r = s.executeQuery();
       assertTrue(r.next());
       assertFalse(r.next());
    }
@@ -356,7 +356,7 @@ public class ProjogTest {
    private QueryResult createQueryResult() {
       Projog p = createProjog();
       QueryStatement s = p.createStatement("test(X,Y).");
-      return s.getResult();
+      return s.executeQuery();
    }
 
    /** Returns a new {@link Projog} instance that has been populated with rules from {@link #createTestScript()}. */

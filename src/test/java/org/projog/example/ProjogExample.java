@@ -27,24 +27,24 @@ public class ProjogExample {
       Projog p = new Projog();
       p.consultFile(new File("test.pl"));
       QueryStatement s1 = p.createStatement("test(X,Y).");
-      QueryResult r1 = s1.getResult();
+      QueryResult r1 = s1.executeQuery();
       while (r1.next()) {
          System.out.println("X = " + r1.getTerm("X") + " Y = " + r1.getTerm("Y"));
       }
       s1.setTerm("X", new Atom("d"));
-      QueryResult r2 = s1.getResult();
+      QueryResult r2 = s1.executeQuery();
       while (r2.next()) {
          System.out.println("Y = " + r2.getTerm("Y"));
       }
 
       QueryStatement s2 = p.createStatement("testRule(X).");
-      QueryResult r3 = s2.getResult();
+      QueryResult r3 = s2.executeQuery();
       while (r3.next()) {
          System.out.println("X = " + r3.getTerm("X"));
       }
 
       QueryStatement s3 = p.createStatement("test(X, Y), Y<3.");
-      QueryResult r4 = s3.getResult();
+      QueryResult r4 = s3.executeQuery();
       while (r4.next()) {
          System.out.println("X = " + r4.getTerm("X") + " Y = " + r4.getTerm("Y"));
       }

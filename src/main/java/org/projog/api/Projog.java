@@ -254,6 +254,12 @@ public final class Projog {
       return new QueryStatement(kb, prologQuery);
    }
 
+   public void evaluateOnce(String prologQuery) {
+      if (!new QueryStatement(kb, prologQuery).executeQuery().next()) {
+         throw new IllegalStateException("Failed to evaluate: " + prologQuery);
+      }
+   }
+
    /**
     * Registers an {@code ProjogListener} to receive notifications of events generated during the evaluation of Prolog
     * goals.

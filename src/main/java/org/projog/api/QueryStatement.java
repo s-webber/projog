@@ -187,14 +187,14 @@ public final class QueryStatement {
     *
     * @return a new {@link QueryResult} for the query represented by this object.
     */
-   public QueryResult getResult() {
+   public QueryResult executeQuery() {
       // TODO throw exception if already called and not immutable
       return new QueryResult(predicateFactory, parsedInput, variables);
    }
 
    public String findFirstAsAtomName() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          return result.getAtomName(variableId);
       } else {
@@ -204,7 +204,7 @@ public final class QueryStatement {
 
    public double findFirstAsDouble() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          return result.getDouble(variableId);
       } else {
@@ -214,7 +214,7 @@ public final class QueryStatement {
 
    public long findFirstAsLong() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          return result.getLong(variableId);
       } else {
@@ -224,7 +224,7 @@ public final class QueryStatement {
 
    public Term findFirstAsTerm() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          return result.getTerm(variableId);
       } else {
@@ -234,7 +234,7 @@ public final class QueryStatement {
 
    public Optional<String> findFirstAsOptionalAtomName() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          String atomName = result.getAtomName(variableId);
          return Optional.of(atomName);
@@ -245,7 +245,7 @@ public final class QueryStatement {
 
    public Optional<Double> findFirstAsOptionalDouble() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          double value = result.getDouble(variableId);
          return Optional.of(value);
@@ -256,7 +256,7 @@ public final class QueryStatement {
 
    public Optional<Long> findFirstAsOptionalLong() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          long value = result.getLong(variableId);
          return Optional.of(value);
@@ -267,7 +267,7 @@ public final class QueryStatement {
 
    public Optional<Term> findFirstAsOptionalTerm() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       if (result.next()) {
          Term term = result.getTerm(variableId);
          return Optional.of(term);
@@ -278,7 +278,7 @@ public final class QueryStatement {
 
    public List<String> findAllAsAtomName() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       List<String> values = new ArrayList<>();
       while (result.next()) {
          values.add(result.getAtomName(variableId));
@@ -288,7 +288,7 @@ public final class QueryStatement {
 
    public List<Double> findAllAsDouble() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       List<Double> values = new ArrayList<>();
       while (result.next()) {
          values.add(result.getDouble(variableId));
@@ -298,7 +298,7 @@ public final class QueryStatement {
 
    public List<Long> findAllAsLong() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       List<Long> atomNames = new ArrayList<>();
       while (result.next()) {
          atomNames.add(result.getLong(variableId));
@@ -308,7 +308,7 @@ public final class QueryStatement {
 
    public List<Term> findAllAsTerm() {
       String variableId = getSingleVariableId();
-      QueryResult result = getResult();
+      QueryResult result = executeQuery();
       List<Term> terms = new ArrayList<>();
       while (result.next()) {
          terms.add(result.getTerm(variableId));

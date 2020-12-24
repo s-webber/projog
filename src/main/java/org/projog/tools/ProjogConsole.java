@@ -103,7 +103,7 @@ public class ProjogConsole {
    private void parseAndExecute(String inputSyntax) {
       try {
          QueryStatement s = projog.createStatement(inputSyntax);
-         QueryResult r = s.getResult();
+         QueryResult r = s.executeQuery();
          Set<String> variableIds = r.getVariableIds();
          while (evaluateOnce(r, variableIds) && shouldContinue()) {
             // keep evaluating the query

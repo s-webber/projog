@@ -111,7 +111,7 @@ public class ProjogTest {
       PredicateKey key = new PredicateKey("testArithmeticOperator", 1);
       ArithmeticOperator pf = new ArithmeticOperator() {
          @Override
-         public Numeric calculate(Term... args) {
+         public Numeric calculate(Term[] args) {
             Numeric n = TermUtils.castToNumeric(args[0]);
             return new IntegerNumber(n.getLong() + 7);
          }

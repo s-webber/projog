@@ -83,9 +83,9 @@ public class NotTest {
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
       verify(mockPredicate, times(3)).evaluate();
@@ -110,9 +110,9 @@ public class NotTest {
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.function.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());

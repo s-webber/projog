@@ -55,14 +55,14 @@ public interface PredicateFactory {
     * <p>
     * <b>Note:</b> The above recommendations are <i>not</i> required for subclasses of
     * {@link AbstractSingletonPredicate}. (As the compiler is aware that
-    * {@link AbstractSingletonPredicate#getPredicate(Term...)} always returns {@code this}.
+    * {@link AbstractSingletonPredicate#getPredicate(Term[])} always returns {@code this}.
     * </p>
     *
     * @param args the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal
     * @see Predicate#evaluate()
     */
-   Predicate getPredicate(Term... args);
+   Predicate getPredicate(Term[] args);
 
    /**
     * Should instances of this implementation be re-evaluated when backtracking?

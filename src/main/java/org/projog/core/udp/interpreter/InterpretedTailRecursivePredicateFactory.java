@@ -74,7 +74,7 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
    }
 
    @Override
-   public InterpretedTailRecursivePredicate getPredicate(Term... args) {
+   public InterpretedTailRecursivePredicate getPredicate(Term[] args) {
       return new InterpretedTailRecursivePredicate(spyPoint, args, firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
                   secondClausePredicateFactories, secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(args));
    }

@@ -38,7 +38,7 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
    }
 
    @Override
-   public final Numeric calculate(Term... args) {
+   public final Numeric calculate(Term[] args) {
       switch (args.length) {
          case 1:
             Numeric n = operators.getNumeric(args[0]);

@@ -37,7 +37,7 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term[] args) {
       instantiatePredicateFactory();
 
       if (actualPredicateFactory == null) {

@@ -190,7 +190,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term[] args) {
       if (args.length != predicateKey.getNumArgs()) {
          throw new ProjogException("User defined predicate: " + predicateKey + " is being called with the wrong number of arguments: " + args.length + " " + Arrays.toString(args));
       }
@@ -293,7 +293,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private final class NeverSucceedsPredicateFactory implements PredicateFactory {
       @Override
-      public Predicate getPredicate(Term... args) {
+      public Predicate getPredicate(Term[] args) {
          return PredicateUtils.createFailurePredicate(spyPoint, args);
       }
 
@@ -311,7 +311,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term... args) {
+      public Predicate getPredicate(Term[] args) {
          return createPredicate(args, index.index(args));
       }
 
@@ -341,7 +341,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term... args) {
+      public Predicate getPredicate(Term[] args) {
          return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, args);
       }
 

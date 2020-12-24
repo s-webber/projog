@@ -32,7 +32,7 @@ public abstract class AbstractPredicateFactory implements PredicateFactory, Know
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public final Predicate getPredicate(Term... args) {
+   public final Predicate getPredicate(Term[] args) {
       switch (args.length) {
          case 0:
             return getPredicate();

@@ -24,7 +24,7 @@ import org.projog.core.term.Term;
 
 public class CalculatableExample implements ArithmeticOperator {
    @Override
-   public Numeric calculate(Term... args) {
+   public Numeric calculate(Term[] args) {
       Numeric input = castToNumeric(args[0]);
       long rounded = Math.round(input.getDouble());
       return new IntegerNumber(rounded);

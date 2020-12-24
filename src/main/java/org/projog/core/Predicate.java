@@ -37,7 +37,7 @@ public interface Predicate {
     * an individual query, this method should be recalled on backtracking until it returns {@code false}.
     *
     * @return {@code true} if it was possible to satisfy the clause, {@code false} otherwise
-    * @see PredicateFactory#getPredicate(Term...)
+    * @see PredicateFactory#getPredicate(Term[])
     */
    boolean evaluate();
 

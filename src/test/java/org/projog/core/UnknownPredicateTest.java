@@ -46,14 +46,14 @@ public class UnknownPredicateTest {
       assertTrue(e.isRetryable());
 
       // assert that FAIL returned when UnknownPredicateTest/1 not yet defined
-      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate(variable()));
+      assertSame(AbstractSingletonPredicate.FAIL, e.getPredicate(new Term[] {variable()}));
 
       // define UnknownPredicateTest/1
       kb.getPredicates().createOrReturnUserDefinedPredicate(key);
 
       // assert that new InterpretedUserDefinedPredicate is returned once UnknownPredicateTest/1 defined
-      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(variable()).getClass());
-      assertNotSame(e.getPredicate(variable()), e.getPredicate(variable()));
+      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(new Term[] {variable()}).getClass());
+      assertNotSame(e.getPredicate(new Term[] {variable()}), e.getPredicate(new Term[] {variable()}));
    }
 
    @Test

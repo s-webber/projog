@@ -43,7 +43,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory, Kn
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public final Predicate getPredicate(Term... args) {
+   public final Predicate getPredicate(Term[] args) {
       boolean result = evaluate(args);
       return toPredicate(result);
    }
@@ -52,7 +52,7 @@ public abstract class AbstractSingletonPredicate implements PredicateFactory, Kn
       return result ? TRUE : FAIL;
    }
 
-   public final boolean evaluate(Term... args) {
+   public final boolean evaluate(Term[] args) {
       switch (args.length) {
          case 0:
             return evaluate();

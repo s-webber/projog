@@ -239,7 +239,7 @@ public class ArithmeticOperatorsTest {
        * @return an IntegerNumber with a value of the first input argument + 1
        */
       @Override
-      public Numeric calculate(Term... args) {
+      public Numeric calculate(Term[] args) {
          if (kb == null) {
             // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);
@@ -271,7 +271,7 @@ public class ArithmeticOperatorsTest {
        * @return an IntegerNumber with a value of the first input argument + 1
        */
       @Override
-      public Numeric calculate(Term... args) {
+      public Numeric calculate(Term[] args) {
          if (kb == null) {
             // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);

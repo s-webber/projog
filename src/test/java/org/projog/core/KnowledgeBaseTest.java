@@ -370,7 +370,7 @@ public class KnowledgeBaseTest {
       }
 
       @Override
-      public Predicate getPredicate(Term... args) {
+      public Predicate getPredicate(Term[] args) {
          throw new UnsupportedOperationException();
       }
 

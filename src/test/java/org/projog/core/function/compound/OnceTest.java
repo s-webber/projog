@@ -64,9 +64,9 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
       verify(mockPredicate, times(3)).evaluate();
@@ -91,9 +91,9 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.function.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(queryArg));
-      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(queryArg));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.FAIL, optimised.getPredicate(new Term[] {queryArg}));
+      assertSame(AbstractSingletonPredicate.TRUE, optimised.getPredicate(new Term[] {queryArg}));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());

@@ -128,7 +128,7 @@ public final class Fold extends AbstractPredicateFactory {
       for (Term t : values) {
          Term previous = output;
          output = new Variable("FoldAccumulator");
-         Predicate p = pf.getPredicate(previous, t, output);
+         Predicate p = pf.getPredicate(new Term[] {previous, t, output});
          if (!p.evaluate()) {
             return false;
          }
@@ -184,7 +184,7 @@ public final class Fold extends AbstractPredicateFactory {
       private void addNext(Term firstArg, Term rightArg) {
          Variable v = new Variable("FoldAccumulator" + idx);
          accumulators.add(v);
-         predicates.add(pf.getPredicate(firstArg, rightArg, v));
+         predicates.add(pf.getPredicate(new Term[] {firstArg, rightArg, v}));
       }
 
       @Override

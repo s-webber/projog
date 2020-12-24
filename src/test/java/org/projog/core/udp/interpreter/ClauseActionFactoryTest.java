@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -329,7 +330,7 @@ public class ClauseActionFactoryTest {
       PredicateFactory pf = mock(PredicateFactory.class);
       kb.getPredicates().addPredicateFactory(new PredicateKey("test", 5), pf);
 
-      ArgumentCaptor<Term> captor = ArgumentCaptor.forClass(Term.class);
+      ArgumentCaptor<Term[]> captor = ArgumentCaptor.forClass(Term[].class);
       Predicate p1 = mock(Predicate.class);
       Predicate p2 = mock(Predicate.class);
       when(pf.getPredicate(captor.capture())).thenReturn(p1, p2);
@@ -338,21 +339,23 @@ public class ClauseActionFactoryTest {
       assertSame(p1, a.getPredicate(EMPTY_ARRAY));
       assertSame(p2, a.getPredicate(EMPTY_ARRAY));
 
-      List<Term> values = captor.getAllValues();
-      assertEquals(10, values.size());
+      List<Term[]> allValues = captor.getAllValues();
+      assertEquals(2, allValues.size());
 
-      assertEquals(atom("y"), values.get(1));
-      assertSame(values.get(0), values.get(2));
-      assertSame(values.get(0), values.get(3).getArgument(0));
-      assertNotSame(values.get(0), values.get(4));
+      Term[] values1 = allValues.get(0);
+      assertEquals(atom("y"), values1[1]);
+      assertSame(values1[0], values1[2]);
+      assertSame(values1[0], values1[3].getArgument(0));
+      assertNotSame(values1[0], values1[4]);
 
-      assertNotSame(values.get(0), values.get(5));
-      assertSame(values.get(1), values.get(6));
-      assertNotSame(values.get(2), values.get(7));
-      assertNotSame(values.get(3), values.get(8));
-      assertNotSame(values.get(4), values.get(9));
+      Term[] values2 = allValues.get(1);
+      assertNotSame(values1[0], values2[0]);
+      assertSame(values1[1], values2[1]);
+      assertNotSame(values1[2], values2[2]);
+      assertNotSame(values1[3], values2[3]);
+      assertNotSame(values1[4], values2[4]);
 
-      verify(pf, times(2)).getPredicate(captor.capture()); // TODO any(Term[].class)
+      verify(pf, times(2)).getPredicate(any(Term[].class));
       verifyNoMoreInteractions(pf, p1, p2);
    }
 

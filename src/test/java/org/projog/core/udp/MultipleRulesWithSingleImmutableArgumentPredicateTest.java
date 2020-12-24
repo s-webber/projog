@@ -60,26 +60,26 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSuceedsNever() {
-      assertSame(SucceedsNeverPredicate.FAIL, testObject.getPredicate(atom("z")));
+      assertSame(SucceedsNeverPredicate.FAIL, testObject.getPredicate(new Term[] {atom("z")}));
    }
 
    @Test
    public void testSucceedsOnce() {
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("a")));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("d")));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("e")));
-      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(atom("f")));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("a")}));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("d")}));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("e")}));
+      assertSame(SucceedsOncePredicate.TRUE, testObject.getPredicate(new Term[] {atom("f")}));
    }
 
    @Test
    public void testSucceedsMany() {
       assertSucceedsMany(atom("b"), 2);
       assertSucceedsMany(atom("c"), 5);
-      assertNotSame(testObject.getPredicate(atom("b")), testObject.getPredicate(atom("b")));
+      assertNotSame(testObject.getPredicate(new Term[] {atom("b")}), testObject.getPredicate(new Term[] {atom("b")}));
    }
 
    private void assertSucceedsMany(Term arg, int expectedSuccesses) {
-      Predicate p = testObject.getPredicate(arg);
+      Predicate p = testObject.getPredicate(new Term[] {arg});
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass()); // TODO add assertClass to TestUtils
       for (int i = 0; i < expectedSuccesses; i++) {
          assertTrue(p.couldReevaluationSucceed());
@@ -95,7 +95,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(atom("z"));
+      Predicate p = testObject.getPredicate(new Term[] {atom("z")});
       assertFalse(p.evaluate());
       assertSame(SucceedsNeverPredicate.class, p.getClass());
       assertEquals("CALLtest(z)FAILtest(z)", o.result());
@@ -108,7 +108,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(atom("a"));
+      Predicate p = testObject.getPredicate(new Term[] {atom("a")});
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
       assertSame(SucceedsOncePredicate.class, p.getClass());
@@ -122,7 +122,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(atom("c"));
+      Predicate p = testObject.getPredicate(new Term[] {atom("c")});
       assertTrue(p.evaluate());
       assertTrue(p.couldReevaluationSucceed());
       assertTrue(p.evaluate());

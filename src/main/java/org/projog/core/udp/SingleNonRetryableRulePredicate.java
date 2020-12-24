@@ -34,7 +34,7 @@ final class SingleNonRetryableRulePredicate implements PredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term... args) {
+   public Predicate getPredicate(Term[] args) {
       return evaluateClause(clause, spyPoint, args);
    }
 

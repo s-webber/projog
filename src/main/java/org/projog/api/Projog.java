@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,6 +145,19 @@ public final class Projog {
       kb.getArithmeticOperators().addArithmeticOperator(key, operator);
    }
 
+   /**
+    * Creates a {@link QueryPlan} for querying the Projog environment.
+    * <p>
+    * The newly created object represents the query parsed from the specified syntax. A single {@link QueryPlan} can be
+    * used to create multiple {@link QueryStatement} objects.
+    *
+    * @param prologQuery prolog syntax representing a query
+    * @return representation of the query parsed from the specified syntax
+    * @throws ProjogException if an error occurs parsing {@code prologQuery}
+    * @see #createStatement(String)
+    * @see #executeQuery(String)
+    * @see #executeOnce(String)
+    */
    public QueryPlan createPlan(String prologQuery) {
       return new QueryPlan(kb, prologQuery);
    }
@@ -152,20 +165,56 @@ public final class Projog {
    /**
     * Creates a {@link QueryStatement} for querying the Projog environment.
     * <p>
-    * The newly created object represents the query parsed from the specified syntax.
+    * The newly created object represents the query parsed from the specified syntax. Before the query is executed,
+    * values can be assigned to variables in the query by using {@link QueryStatement#setTerm(String, Term)}. The query
+    * can be executed by calling {@link QueryStatement#executeQuery()}. The resulting {@link QueryResult} can be used to
+    * access the result.
+    * <p>
+    * Note: If you do not intend to assign terms to variables then {@link #executeQuery(String)} can be called instead.
+    * </p>
     *
     * @param prologQuery prolog syntax representing a query
     * @return representation of the query parsed from the specified syntax
     * @throws ProjogException if an error occurs parsing {@code prologQuery}
+    * @see #createPlan(String)
+    * @see #executeQuery(String)
+    * @see #executeOnce(String)
     */
    public QueryStatement createStatement(String prologQuery) {
       return new QueryStatement(kb, prologQuery);
    }
 
+   /**
+    * Creates a {@link QueryResult} for querying the Projog environment.
+    * <p>
+    * The newly created object represents the query parsed from the specified syntax. The {@link QueryResult#next()} and
+    * {@link QueryResult#getTerm(String)} methods can be used to evaluate the query and access values unified to the
+    * variables of the query.
+    * </p>
+    *
+    * @param prologQuery prolog syntax representing a query
+    * @return representation of the query parsed from the specified syntax
+    * @throws ProjogException if an error occurs parsing {@code prologQuery}
+    * @see #createPlan(String)
+    * @see #createStatement(String)
+    * @see #executeOnce(String)
+    */
    public QueryResult executeQuery(String prologQuery) {
       return createStatement(prologQuery).executeQuery();
    }
 
+   /**
+    * Executes the given query once.
+    * <p>
+    * The query will only be executed once, even if further solutions could of been found on backtracking.
+    *
+    * @param prologQuery prolog syntax representing a query
+    * @throws ProjogException if an error occurs parsing {@code prologQuery}
+    * @throws IllegalStateException if the query can not be successfully evaluated.
+    * @see #createPlan(String)
+    * @see #createStatement(String)
+    * @see #executeQuery(String)
+    */
    public void executeOnce(String prologQuery) {
       if (!executeQuery(prologQuery).next()) {
          throw new IllegalStateException("Failed to evaluate: " + prologQuery);

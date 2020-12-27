@@ -22,6 +22,14 @@ import org.projog.core.parser.SentenceParser;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 
+/**
+ * Represents a plan for executing a Prolog query.
+ * <p>
+ * A single {@code QueryPlan} can be used to create multiple {@link QueryStatement} objects. If you are intending to
+ * execute the same query multiple times then, for performance reasons, it is recommended to use a {@code QueryPlan}
+ * rather than create multiple {@link QueryStatement} directly. When using a {@code QueryPlan} the Prolog syntax will
+ * only be parsed once and the plan for executing the query will be optimised for performance.
+ */
 public class QueryPlan {
    private final PredicateFactory predicateFactory;
    private final Term parsedInput;
@@ -43,14 +51,46 @@ public class QueryPlan {
       }
    }
 
+   /**
+    * Return a newly created {@link QueryStatement} for the query represented by this plan.
+    * <p>
+    * Before the query is executed, values can be assigned to variables in the query by using
+    * {@link QueryStatement#setTerm(String, Term)}. The query can be executed by calling
+    * {@link QueryStatement#executeQuery()}.
+    * </p>
+    * <p>
+    * Note: If you do not intend to assign terms to variables then {@link #executeQuery()} can be called instead.
+    * </p>
+    *
+    * @see #executeQuery()
+    * @see #executeOnce()
+    */
    public QueryStatement createStatement() {
       return new QueryStatement(predicateFactory, parsedInput);
    }
 
+   /**
+    * Return a newly created {@link QueryResult} for the query represented by this plan.
+    * <p>
+    * The {@link QueryResult#next()} and {@link QueryResult#getTerm(String)} methods can be used to evaluate the query
+    * and access values unified to the variables of the query.
+    *
+    * @see #createStatement()
+    * @see #executeOnce()
+    */
    public QueryResult executeQuery() {
       return createStatement().executeQuery();
    }
 
+   /**
+    * Execute the query represented by this plan.
+    * <p>
+    * The query will only be executed once, even if further solutions could of been found on backtracking.
+    *
+    * @throws IllegalStateException if the query can not be successfully evaluated.
+    * @see #createStatement()
+    * @see #executeQuery()
+    */
    public void executeOnce() {
       if (!executeQuery().next()) {
          throw new IllegalStateException("Failed to evaluate: " + parsedInput);

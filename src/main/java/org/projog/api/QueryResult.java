@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,16 +104,45 @@ public final class QueryResult {
       return hasBeenEvaluated && predicate.couldReevaluationSucceed() == false;
    }
 
+   // TODO add getList?
+
+   /**
+    * Returns the name of the atom instantiated to the variable with the specified id.
+    *
+    * @param variableId the id of the variable from which to return the instantiated term
+    * @return the name of the atom instantiated to the variable with the specified id
+    * @throws ProjogException if no variable with the specified id exists in the query this object represents, or if the
+    * term instantiated to the variable is not an atom
+    * @see #getTerm(String)
+    */
    public String getAtomName(String variableId) {
       Term term = getTerm(variableId);
       return TermUtils.getAtomName(term);
    }
 
+   /**
+    * Returns the {@code double} value instantiated to the variable with the specified id.
+    *
+    * @param variableId the id of the variable from which to return the instantiated term
+    * @return the name of the atom instantiated to the variable with the specified id
+    * @throws ProjogException if no variable with the specified id exists in the query this object represents, or if the
+    * term instantiated to the variable is not a number
+    * @see #getTerm(String)
+    */
    public double getDouble(String variableId) {
       Term term = getTerm(variableId);
       return TermUtils.castToNumeric(term).getDouble();
    }
 
+   /**
+    * Returns the {@code long} value instantiated to the variable with the specified id.
+    *
+    * @param variableId the id of the variable from which to return the instantiated term
+    * @return the value instantiated to the variable with the specified id
+    * @throws ProjogException if no variable with the specified id exists in the query this object represents, or if the
+    * term instantiated to the variable is not a number
+    * @see #getTerm(String)
+    */
    public long getLong(String variableId) {
       Term term = getTerm(variableId);
       return TermUtils.castToNumeric(term).getLong();
@@ -126,6 +155,9 @@ public final class QueryResult {
     * @return the term instantiated to the variable with the specified id (or the {@link org.projog.core.term.Variable}
     * of representing the variable if it is uninstantiated)
     * @throws ProjogException if no variable with the specified id exists in the query this object represents
+    * @see #getAtomName(String)
+    * @see #getDouble(String)
+    * @see #getLong(String)
     */
    public Term getTerm(String variableId) {
       Variable v = variables.get(variableId);

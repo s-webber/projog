@@ -69,6 +69,12 @@ import org.projog.core.term.Term;
  % X=UNINSTANTIATED VARIABLE
  % Z=[p(X, q)]
  %ANSWER
+
+ %QUERY select(a, Result, [x,y,z])
+ %ANSWER Result=[a,x,y,z]
+ %ANSWER Result=[x,a,y,z]
+ %ANSWER Result=[x,y,a,z]
+ %ANSWER Result=[x,y,z,a]
  */
 /**
  * <code>select(X,Y,Z)</code> - removes an element from a list.
@@ -79,22 +85,91 @@ import org.projog.core.term.Term;
  */
 public final class Select extends AbstractPredicateFactory {
    @Override
-   protected Predicate getPredicate(Term element, Term inputList, Term outputList) {
-      List<Term> list = ListUtils.toJavaUtilList(inputList);
-      if (list == null) {
-         throw new ProjogException("Expected list but got: " + inputList.getType());
+   public Predicate getPredicate(Term element, Term inputList, Term outputList) {
+      if (inputList.getType().isVariable()) {
+         List<Term> list = ListUtils.toJavaUtilList(outputList);
+         if (list == null) {
+            throw new ProjogException("Expected list but got: " + outputList.getType());
+         }
+         return new IncludePredicate(element, inputList, outputList, list);
+      } else {
+         List<Term> list = ListUtils.toJavaUtilList(inputList);
+         if (list == null) {
+            throw new ProjogException("Expected list but got: " + inputList.getType());
+         }
+         return new ExcludePredicate(element, inputList, outputList, list);
       }
-      return new SelectPredicate(element, inputList, outputList, list);
    }
 
-   private final class SelectPredicate implements Predicate {
+   private final class IncludePredicate implements Predicate {
+      private final Term element;
+      private final Term variable;
+      private final Term thirdArg;
+      private final List<Term> list;
+      private int ctr;
+
+      private IncludePredicate(Term element, Term variable, Term thirdArg, List<Term> list) {
+         this.element = element;
+         this.variable = variable;
+         this.thirdArg = thirdArg;
+         this.list = list;
+      }
+
+      @Override
+      public boolean evaluate() {
+         while (couldReevaluationSucceed()) {
+            if (retrying()) {
+               element.backtrack();
+               variable.backtrack();
+               thirdArg.backtrack();
+            }
+
+            boolean unified = variable.unify(include(ctr));
+            ctr++;
+            if (unified) {
+               return true;
+            }
+         }
+         return false;
+      }
+
+      @Override
+      public boolean couldReevaluationSucceed() {
+         return ctr < list.size() + 1;
+      }
+
+      private boolean retrying() {
+         return ctr > 0;
+      }
+
+      /**
+       * Create a a new {@code org.projog.core.term.List} based on {@code list} but including the element at index
+       * {@code indexOfElementToInclude}.
+       */
+      private Term include(int indexOfElementToInclude) {
+         final int size = list.size();
+         final List<Term> result = new ArrayList<>(size + 1);
+         for (int i = 0; i < size; i++) {
+            if (i == ctr) {
+               result.add(element);
+            }
+            result.add(list.get(i));
+         }
+         if (size == ctr) {
+            result.add(element);
+         }
+         return ListFactory.createList(result);
+      }
+   }
+
+   private final class ExcludePredicate implements Predicate {
       private final Term element;
       private final Term inputList;
       private final Term outputList;
       private final List<Term> list;
       private int ctr;
 
-      private SelectPredicate(Term element, Term inputList, Term outputList, List<Term> list) {
+      private ExcludePredicate(Term element, Term inputList, Term outputList, List<Term> list) {
          this.element = element;
          this.inputList = inputList;
          this.outputList = outputList;

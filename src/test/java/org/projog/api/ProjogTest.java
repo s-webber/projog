@@ -35,16 +35,16 @@ import java.io.StringReader;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.ArithmeticOperator;
-import org.projog.core.PredicateFactory;
-import org.projog.core.PredicateKey;
 import org.projog.core.ProjogException;
-import org.projog.core.ProjogProperties;
-import org.projog.core.function.flow.RepeatSetAmount;
+import org.projog.core.kb.ProjogProperties;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.math.Numeric;
 import org.projog.core.parser.ParserException;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.builtin.flow.RepeatSetAmount;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -65,7 +65,7 @@ public class ProjogTest {
       projog.setUserOutput(new PrintStream(baos));
 
       // when we execute a query that writes to output
-      projog.evaluateOnce("write(hello).");
+      projog.executeOnce("write(hello).");
 
       // then the new stream should be written to
       assertEquals("hello", new String(baos.toByteArray()));

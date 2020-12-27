@@ -20,8 +20,9 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.projog.core.ArithmeticOperators;
 import org.projog.core.ProjogException;
+import org.projog.core.math.ArithmeticOperators;
+import org.projog.core.math.Numeric;
 
 /**
  * Helper methods for performing common tasks on {@link Term} instances.

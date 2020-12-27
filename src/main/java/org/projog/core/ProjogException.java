@@ -18,12 +18,12 @@ package org.projog.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.udp.ClauseModel;
+import org.projog.core.predicate.udp.ClauseModel;
 
 /**
  * An exception that provides information on an error within the Projog environment.
  * <p>
- * Maintains a collection of all {@link org.projog.core.udp.interpreter.InterpretedUserDefinedPredicate} instances that
+ * Maintains a collection of all {@link org.projog.core.predicate.udp.InterpretedUserDefinedPredicate} instances that
  * form the exception's stack trace.
  */
 public class ProjogException extends RuntimeException {

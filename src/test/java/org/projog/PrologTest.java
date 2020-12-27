@@ -24,12 +24,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.projog.api.Projog;
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
 import org.projog.core.event.ProjogListener;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 import org.projog.test.ProjogTestExtractor;
 import org.projog.test.ProjogTestExtractorConfig;
 import org.projog.test.ProjogTestRunner;
@@ -38,32 +37,27 @@ import org.projog.test.ProjogTestRunner.TestResults;
 
 /** Uses {@code projog-test} to run Prolog code and compare the results against expectations. */
 public class PrologTest {
-   private static final File EXTRACTED_PROLOG_TESTS_DIR = new File("target/prolog-tests-extracted-from-java");
    private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog");
-
-   @BeforeClass
-   public static void extract() {
-      ProjogTestExtractorConfig config = new ProjogTestExtractorConfig();
-      config.setPrologTestsDirectory(EXTRACTED_PROLOG_TESTS_DIR);
-      config.setRequireJavadoc(true);
-      config.setRequireTest(true);
-      config.setFileFilter(new FileFilter() {
-         @Override
-         public boolean accept(File f) {
-            return f.getPath().replace(File.separatorChar, '.').contains("org.projog.core.function");
-         }
-      });
-      ProjogTestExtractor.extractTests(config);
-   }
+   private static final String BUILTIN_PREDICATES_PACKAGE = "org.projog.core.predicate.builtin";
+   private static final File EXTRACTED_PREDICATES_TESTS_DIR = new File("target/prolog-predicate-tests-extracted-from-java");
+   private static final String BUILTIN_OPERATORS_PACKAGE = "org.projog.core.math.builtin";
+   private static final File EXTRACTED_OPERATORS_TESTS_DIR = new File("target/prolog-operator-tests-extracted-from-java");
 
    @Test
-   public void prologTestsInterpretedMode() {
+   public void prologTests() {
       assertSuccess(SOURCE_PROLOG_TESTS_DIR);
    }
 
    @Test
-   public void extractedTestsInterpretedMode() {
-      assertSuccess(EXTRACTED_PROLOG_TESTS_DIR);
+   public void extractedPredicateTests() {
+      extract(EXTRACTED_PREDICATES_TESTS_DIR, BUILTIN_PREDICATES_PACKAGE);
+      assertSuccess(EXTRACTED_PREDICATES_TESTS_DIR);
+   }
+
+   @Test
+   public void extractedOperatorTests() {
+      extract(EXTRACTED_OPERATORS_TESTS_DIR, BUILTIN_OPERATORS_PACKAGE);
+      assertSuccess(EXTRACTED_OPERATORS_TESTS_DIR);
    }
 
    /** Test that a user-defined predicate with many clauses can be interpreted. */
@@ -145,4 +139,20 @@ public class PrologTest {
       System.out.println(results.getSummary());
       results.assertSuccess();
    }
+
+   private static void extract(File outputDir, String packageName) {
+      ProjogTestExtractorConfig config = new ProjogTestExtractorConfig();
+      config.setPrologTestsDirectory(outputDir);
+      config.setRequireJavadoc(true);
+      config.setRequireTest(true);
+      config.setFileFilter(new FileFilter() {
+         @Override
+         public boolean accept(File f) {
+            String name = f.getPath().replace(File.separatorChar, '.');
+            return name.contains(packageName);
+         }
+      });
+      ProjogTestExtractor.extractTests(config);
+   }
+
 }

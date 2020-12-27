@@ -15,12 +15,13 @@
  */
 package org.projog.core.term;
 
-import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+import static org.projog.core.math.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 import static org.projog.core.term.TermUtils.castToNumeric;
 
 import java.util.Comparator;
 
 import org.projog.core.ProjogException;
+import org.projog.core.math.NumericTermComparator;
 
 /**
  * An implementation of {@code Comparator} for comparing instances of {@link Term}.

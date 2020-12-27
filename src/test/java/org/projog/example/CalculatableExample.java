@@ -17,9 +17,9 @@ package org.projog.example;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import org.projog.core.ArithmeticOperator;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.math.Numeric;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Numeric;
 import org.projog.core.term.Term;
 
 public class CalculatableExample implements ArithmeticOperator {

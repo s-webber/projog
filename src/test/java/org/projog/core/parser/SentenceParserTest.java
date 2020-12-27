@@ -25,7 +25,6 @@ import static org.projog.TestUtils.write;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.Operands;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 

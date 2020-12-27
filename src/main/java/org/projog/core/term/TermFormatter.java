@@ -15,7 +15,7 @@
  */
 package org.projog.core.term;
 
-import org.projog.core.Operands;
+import org.projog.core.parser.Operands;
 
 /**
  * Produces {@code String} representations of {@link Term} instances.

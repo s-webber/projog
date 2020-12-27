@@ -15,11 +15,11 @@
  */
 package org.projog.api;
 
-import org.projog.core.KnowledgeBase;
-import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.parser.ParserException;
 import org.projog.core.parser.SentenceParser;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 
 public class QueryPlan {
@@ -45,5 +45,15 @@ public class QueryPlan {
 
    public QueryStatement createStatement() {
       return new QueryStatement(predicateFactory, parsedInput);
+   }
+
+   public QueryResult executeQuery() {
+      return createStatement().executeQuery();
+   }
+
+   public void executeOnce() {
+      if (!executeQuery().next()) {
+         throw new IllegalStateException("Failed to evaluate: " + parsedInput);
+      }
    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package org.projog.core.term;
 
 import java.util.Map;
+
+import org.projog.core.math.Numeric;
 
 /**
  * Represents a value of the primitive type {@code long} as a {@link Term}.

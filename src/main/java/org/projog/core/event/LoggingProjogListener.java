@@ -17,8 +17,8 @@ package org.projog.core.event;
 
 import java.io.PrintStream;
 
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 
 public class LoggingProjogListener implements ProjogListener {
    private final PrintStream out;

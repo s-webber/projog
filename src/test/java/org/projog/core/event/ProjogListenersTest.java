@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 
 public class ProjogListenersTest {
    @Test

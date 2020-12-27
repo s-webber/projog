@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.projog.core.Operands;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;

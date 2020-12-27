@@ -15,7 +15,7 @@
  */
 package org.projog.tools;
 
-import static org.projog.core.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
+import static org.projog.core.kb.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
 import java.io.File;
 import java.io.IOException;

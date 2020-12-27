@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.projog.core.KnowledgeBase;
-import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.parser.ParserException;
 import org.projog.core.parser.SentenceParser;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
@@ -49,7 +49,7 @@ public final class QueryStatement {
    /**
     * Creates a new {@code QueryStatement} representing a query specified by {@code prologQuery}.
     *
-    * @param kb the {@link org.projog.core.KnowledgeBase} to query against
+    * @param kb the {@link org.projog.core.kb.KnowledgeBase} to query against
     * @param prologQuery prolog syntax representing a query (do not prefix with a {@code ?-})
     * @throws ProjogException if an error occurs parsing {@code prologQuery}
     * @see Projog#query(String)

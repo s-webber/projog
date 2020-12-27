@@ -18,14 +18,14 @@ package org.projog.core.event;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.projog.core.KnowledgeBase;
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
+import org.projog.core.kb.KnowledgeBase;
 
 /**
- * Controls the registering and notification of listeners of a {@link org.projog.core.KnowledgeBase}.
+ * Controls the registering and notification of listeners of a {@link org.projog.core.kb.KnowledgeBase}.
  * <p>
- * Each {@link org.projog.core.KnowledgeBase} has a single unique {@code ProjogListeners} instance.
+ * Each {@link org.projog.core.kb.KnowledgeBase} has a single unique {@code ProjogListeners} instance.
  *
  * @see KnowledgeBase#getProjogListeners()
  */

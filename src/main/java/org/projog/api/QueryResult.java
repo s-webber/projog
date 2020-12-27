@@ -19,10 +19,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.projog.core.CutException;
-import org.projog.core.Predicate;
-import org.projog.core.PredicateFactory;
 import org.projog.core.ProjogException;
+import org.projog.core.predicate.CutException;
+import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
@@ -98,7 +98,7 @@ public final class QueryResult {
     * Returns {@code true} if it is known that all possible solutions have been found, else {@code false}.
     *
     * @return {@code true} if it is known that all possible solutions have been found, else {@code false}.
-    * @see org.projog.core.Predicate#couldReevaluationSucceed()
+    * @see org.projog.core.predicate.Predicate#couldReevaluationSucceed()
     */
    public boolean isExhausted() {
       return hasBeenEvaluated && predicate.couldReevaluationSucceed() == false;

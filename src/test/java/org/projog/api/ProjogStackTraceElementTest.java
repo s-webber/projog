@@ -18,7 +18,7 @@ package org.projog.api;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
-import org.projog.core.PredicateKey;
+import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 

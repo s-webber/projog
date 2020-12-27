@@ -30,7 +30,6 @@ import static org.projog.core.parser.TokenType.VARIABLE;
 import java.io.StringReader;
 
 import org.junit.Test;
-import org.projog.core.Operands;
 
 public class TokenParserTest {
    private final Operands operands = createKnowledgeBase().getOperands();

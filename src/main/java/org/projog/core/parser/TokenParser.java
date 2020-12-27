@@ -32,8 +32,6 @@ import static org.projog.core.parser.TokenType.VARIABLE;
 import java.io.BufferedReader;
 import java.io.Reader;
 
-import org.projog.core.Operands;
-
 /**
  * Parses an input stream into discrete 'tokens' that are used to represent Prolog queries and rules.
  *

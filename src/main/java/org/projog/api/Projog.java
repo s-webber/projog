@@ -22,23 +22,23 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.ArithmeticOperator;
-import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
-import org.projog.core.PredicateFactory;
-import org.projog.core.PredicateKey;
-import org.projog.core.ProjogDefaultProperties;
 import org.projog.core.ProjogException;
-import org.projog.core.ProjogProperties;
-import org.projog.core.ProjogSourceReader;
 import org.projog.core.event.ProjogListener;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.kb.KnowledgeBaseUtils;
+import org.projog.core.kb.ProjogDefaultProperties;
+import org.projog.core.kb.ProjogProperties;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.parser.ProjogSourceReader;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.term.Term;
-import org.projog.core.udp.ClauseModel;
 
 /**
  * Provides an entry point for other Java code to interact with Projog.
  * <p>
- * Contains a single instance of {@link org.projog.core.KnowledgeBase}.
+ * Contains a single instance of {@link org.projog.core.kb.KnowledgeBase}.
  */
 public final class Projog {
    private final KnowledgeBase kb;
@@ -163,11 +163,11 @@ public final class Projog {
    }
 
    public QueryResult executeQuery(String prologQuery) {
-      return new QueryStatement(kb, prologQuery).executeQuery();
+      return createStatement(prologQuery).executeQuery();
    }
 
-   public void evaluateOnce(String prologQuery) {
-      if (!new QueryStatement(kb, prologQuery).executeQuery().next()) {
+   public void executeOnce(String prologQuery) {
+      if (!executeQuery(prologQuery).next()) {
          throw new IllegalStateException("Failed to evaluate: " + prologQuery);
       }
    }
@@ -201,7 +201,7 @@ public final class Projog {
     * updating and querying the "core" inference engine.
     *
     * @return the {@link KnowledgeBase} associated with this object.
-    * @see org.projog.core.KnowledgeBaseUtils
+    * @see org.projog.core.kb.KnowledgeBaseUtils
     */
    public KnowledgeBase getKnowledgeBase() {
       return kb;

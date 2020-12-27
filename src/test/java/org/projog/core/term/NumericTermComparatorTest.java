@@ -21,13 +21,15 @@ import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.structure;
-import static org.projog.core.term.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
+import static org.projog.core.math.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.ArithmeticOperators;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.math.ArithmeticOperators;
+import org.projog.core.math.Numeric;
+import org.projog.core.math.NumericTermComparator;
 
 public class NumericTermComparatorTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();

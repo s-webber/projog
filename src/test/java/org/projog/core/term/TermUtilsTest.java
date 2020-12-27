@@ -32,9 +32,9 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.ArithmeticOperators;
-import org.projog.core.KnowledgeBase;
 import org.projog.core.ProjogException;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.math.ArithmeticOperators;
 
 public class TermUtilsTest {
    @Test

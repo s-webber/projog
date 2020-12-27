@@ -15,6 +15,8 @@
  */
 package org.projog.core.term;
 
+import org.projog.core.math.Numeric;
+
 /**
  * Defines the type of terms supported by Projog.
  * 

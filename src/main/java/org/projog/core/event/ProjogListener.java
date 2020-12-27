@@ -15,8 +15,8 @@
  */
 package org.projog.core.event;
 
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 
 public interface ProjogListener {
    /** The event generated when an attempt is first made to evaluate a goal. */

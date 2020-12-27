@@ -25,13 +25,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.projog.core.KnowledgeBase;
-import org.projog.core.KnowledgeBaseUtils;
-import org.projog.core.Operands;
-import org.projog.core.PredicateKey;
-import org.projog.core.ProjogDefaultProperties;
-import org.projog.core.ProjogProperties;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.kb.KnowledgeBaseUtils;
+import org.projog.core.kb.ProjogDefaultProperties;
+import org.projog.core.kb.ProjogProperties;
+import org.projog.core.parser.Operands;
 import org.projog.core.parser.SentenceParser;
+import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
@@ -42,7 +43,6 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
-import org.projog.core.udp.ClauseModel;
 
 /**
  * Helper methods for performing unit tests.

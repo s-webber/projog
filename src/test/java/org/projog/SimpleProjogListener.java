@@ -18,9 +18,9 @@ package org.projog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.projog.core.SpyPoints.SpyPointEvent;
-import org.projog.core.SpyPoints.SpyPointExitEvent;
 import org.projog.core.event.ProjogListener;
+import org.projog.core.event.SpyPoints.SpyPointEvent;
+import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 
 /** Used by tests to monitor events. */
 public class SimpleProjogListener implements ProjogListener {

@@ -15,7 +15,7 @@
  */
 package org.projog.api;
 
-import org.projog.core.PredicateKey;
+import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /**

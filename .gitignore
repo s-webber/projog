@@ -6,6 +6,8 @@
 junit*.properties
 /*.bat
 /*.sh
+dont_commit
+*.xml.versionsBackup
 
 .classpath
 .project

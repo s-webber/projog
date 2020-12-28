@@ -1,7 +1,8 @@
 Getting Started
 <ul>
-<li>You can download the latest Java Development Kit (JDK) from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Oracle</a>.
-    If using Ubuntu you can instead install Java using the command: <code>sudo apt-get install openjdk-7-jdk</code></li>
+<li>You can download the latest Java Development Kit (JDK) from <a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank">Oracle</a>.
+    The minimum version required by Projog is Java 8.
+    If using Ubuntu you can instead install Java using the command: <code>sudo apt-get install openjdk-8-jdk</code></li>
 <li>After you have installed the JDK, from the command line enter <code>java -version</code> to confirm that Java is included in the <code>PATH</code> operating system environment variable which specifies the set of directories where executable programs are located.</li>
 <li>The latest version of Projog can be downloaded from the <a href="downloads.html">downloads page</a>.</li>
 <li>Unzip the projog-@PROJOG_VERSION@.zip file. This can be done using the command: <code>jar xvf projog-@PROJOG_VERSION@.zip</code></li>

@@ -113,16 +113,6 @@ public final class KnowledgeBaseUtils {
    }
 
    /**
-    * Returns {@code true} if the specified {@link Term} represent a {@code dynamic} function call, else {@code false}.
-    * <p>
-    * A {@link Term} is judged to represent a dynamic function call (i.e. a request to mark a user defined predicate as
-    * "dynamic") if it is a structure with a functor of {@code dynamic} and a single argument.
-    */
-   public static boolean isDynamicFunctionCall(Term t) {
-      return "dynamic".equals(t.getName()) && t.getNumberOfArguments() == 1;
-   }
-
-   /**
     * Returns {@code true} if the predicate represented by the specified {@link Term} never succeeds on re-evaluation.
     */
    public static boolean isSingleAnswer(KnowledgeBase kb, Term term) {

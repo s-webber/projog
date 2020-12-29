@@ -32,8 +32,6 @@ import org.projog.TestUtils;
 import org.projog.core.event.ProjogListeners;
 import org.projog.core.event.SpyPoints;
 import org.projog.core.io.FileHandles;
-import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.math.ArithmeticOperators;
 import org.projog.core.parser.Operands;
 import org.projog.core.predicate.PredicateKey;
@@ -100,16 +98,6 @@ public class KnowledgeBaseUtilsTest {
       assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(atom(":-")));
       assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(":-", atom(), atom())));
       assertFalse(KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall(structure(">=", atom())));
-   }
-
-   @Test
-   public void testIsDynamicFunctionCall() {
-      assertTrue(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", atom())));
-      assertTrue(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", structure("=", atom(), atom()))));
-
-      assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(atom("dynamic")));
-      assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure("dynamic", atom(), atom())));
-      assertFalse(KnowledgeBaseUtils.isDynamicFunctionCall(structure(":-", atom())));
    }
 
    @Test

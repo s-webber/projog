@@ -75,7 +75,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       if (compiledPredicateFactory == null) {
          implications.add(clauseModel);
       } else {
-         throw new IllegalStateException(predicateKey + " already compiled so cannot add: " + clauseModel);
+         throw new ProjogException("Cannot append to already defined user defined predicate as it is not dynamic: " + predicateKey + " clause: " + clauseModel.getOriginal());
       }
    }
 

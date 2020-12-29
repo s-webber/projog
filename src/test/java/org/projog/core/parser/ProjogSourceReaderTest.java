@@ -31,8 +31,6 @@ import java.io.PrintStream;
 import org.junit.Test;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.parser.ParserException;
-import org.projog.core.parser.ProjogSourceReader;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
@@ -82,12 +80,17 @@ public class ProjogSourceReaderTest {
 
    @Test
    public void testDynamicKeywordForAlreadyDefinedFunction() {
+      KnowledgeBase kb = createKnowledgeBase();
+
+      File f1 = writeToFile("test_not_dynamic(a,b,c).");
+      ProjogSourceReader.parseFile(kb, f1);
+
+      File f2 = writeToFile("?- dynamic(test_not_dynamic/3)." + "test_not_dynamic(x,y,z).");
       try {
-         File f = writeToFile("test_dynamic(a,b).\n" + "test_dynamic(a,b,c).\n" + "test_dynamic(a,b,c,d).\n" + "?- dynamic(test_dynamic/3).");
-         ProjogSourceReader.parseFile(createKnowledgeBase(), f);
+         ProjogSourceReader.parseFile(kb, f2);
          fail();
       } catch (ProjogException e) {
-         assertMessageContainsText(e, "Cannot declare: test_dynamic/3 as a dynamic predicate when it has already been used.");
+         assertMessageContainsText(e, "Predicate has already been defined and is not dynamic: test_not_dynamic/3");
       }
    }
 
@@ -95,14 +98,14 @@ public class ProjogSourceReaderTest {
    public void testDynamicKeyword() {
       KnowledgeBase kb = createKnowledgeBase();
       File f = writeToFile("?- dynamic(test_dynamic/3).\n"
-                           + "test_dynamic(a,b).\n"
-                           + "test_dynamic(a,b,c).\n"
-                           + "test_dynamic(x,y,z).\n"
-                           + "test_dynamic(q,w,e).\n"
-                           + "test_dynamic(a,b,c,d).\n"
-                           + "test_dynamic2(1,2,3).\n"
-                           + "test_dynamic2(4,5,6).\n"
-                           + "test_dynamic2(7,8,9).");
+                  + "test_dynamic(a,b).\n"
+                  + "test_dynamic(a,b,c).\n"
+                  + "test_dynamic(x,y,z).\n"
+                  + "test_dynamic(q,w,e).\n"
+                  + "test_dynamic(a,b,c,d).\n"
+                  + "test_dynamic2(1,2,3).\n"
+                  + "test_dynamic2(4,5,6).\n"
+                  + "test_dynamic2(7,8,9).");
       ProjogSourceReader.parseFile(kb, f);
 
       assertDynamicUserDefinedPredicate(kb, new PredicateKey("test_dynamic", 3));
@@ -144,7 +147,7 @@ public class ProjogSourceReaderTest {
 
    private void assertMessageContainsText(ProjogException e, String text) {
       int i = e.getMessage().indexOf(text);
-      assertTrue(i > -1);
+      assertTrue(e.getMessage(), i > -1);
    }
 
    private File writeToFile(String contents) {

@@ -37,8 +37,6 @@ import java.util.Set;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
-import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.math.ArithmeticOperatorsTest;
 import org.projog.core.math.Numeric;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
@@ -52,6 +50,7 @@ import org.projog.core.predicate.builtin.bool.Fail;
 import org.projog.core.predicate.builtin.bool.True;
 import org.projog.core.predicate.builtin.compare.Equal;
 import org.projog.core.predicate.builtin.kb.AddPredicateFactory;
+import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.IntegerNumber;
@@ -86,20 +85,33 @@ public class KnowledgeBaseTest {
    }
 
    @Test
-   public void testCannotOverwritePluginPredicate() {
+   public void testCannotOverwritePluginPredicate() { // TODO these assertions are duplicated in PredicatesTest
       Term input = atom("true");
       PredicateKey key = PredicateKey.createForTerm(input);
       try {
          predicates.createOrReturnUserDefinedPredicate(key);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot replace already defined plugin predicate: true/0", e.getMessage());
+         assertEquals("Cannot replace already defined built-in predicate: true/0", e.getMessage());
       }
       try {
          predicates.addUserDefinedPredicate(new StaticUserDefinedPredicateFactory(kb, key));
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot replace already defined plugin predicate: true/0", e.getMessage());
+         assertEquals("Cannot replace already defined built-in predicate: true/0", e.getMessage());
+      }
+      try {
+         PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
+         predicates.addPredicateFactory(key, mockPredicateFactory);
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Already defined: true/0", e.getMessage());
+      }
+      try {
+         predicates.addPredicateFactory(key, "com.example.DummyPredicateFactory");
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Already defined: true/0", e.getMessage());
       }
    }
 
@@ -107,19 +119,33 @@ public class KnowledgeBaseTest {
    public void testGetUserDefinedPredicates() {
       assertTrue(predicates.getUserDefinedPredicates().isEmpty());
 
+      // Create user defined predicate test/0.
       PredicateKey key1 = PredicateKey.createForTerm(atom("test"));
       UserDefinedPredicateFactory udp1 = predicates.createOrReturnUserDefinedPredicate(key1);
       assertSame(key1, udp1.getPredicateKey());
+      assertSame(key1, udp1.getPredicateKey());
       assertEquals(1, predicates.getUserDefinedPredicates().size());
 
+      // Add a clause to the user defined predicate.
+      ClauseModel clause1 = ClauseModel.createClauseModel(TestUtils.parseSentence("test :- write(clause1)."));
+      udp1.addLast(clause1);
+
+      // Retrieve user defined predicate test/0
       PredicateKey key2 = PredicateKey.createForTerm(atom("test"));
       assertSame(udp1, predicates.createOrReturnUserDefinedPredicate(key2));
       assertEquals(1, predicates.getUserDefinedPredicates().size());
 
+      // Create new user defined predicate with same key as already defined version. Add a clause.
       UserDefinedPredicateFactory udp2 = new StaticUserDefinedPredicateFactory(kb, key1);
+      ClauseModel clause2 = ClauseModel.createClauseModel(TestUtils.parseSentence("test :- write(clause2)."));
+      udp2.addLast(clause2);
+
+      // Add new user defined predicate test/0 and confirm previous version has been updated with extra clause.
       predicates.addUserDefinedPredicate(udp2);
       assertEquals(1, predicates.getUserDefinedPredicates().size());
-      assertSame(udp2, predicates.createOrReturnUserDefinedPredicate(key1));
+      assertSame(udp1, predicates.createOrReturnUserDefinedPredicate(key1));
+      assertEquals(clause1.getOriginal(), udp1.getClauseModel(0).getOriginal());
+      assertEquals(clause2.getOriginal(), udp1.getClauseModel(1).getOriginal());
       assertEquals(1, predicates.getUserDefinedPredicates().size());
 
       PredicateKey key3 = PredicateKey.createForTerm(atom("test2"));

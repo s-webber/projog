@@ -17,6 +17,7 @@ package org.projog.core.predicate;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -25,6 +26,7 @@ import java.util.TreeSet;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseUtils;
+import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
@@ -89,6 +91,10 @@ public class Predicates {
    public UserDefinedPredicateFactory createOrReturnUserDefinedPredicate(PredicateKey key) {
       UserDefinedPredicateFactory userDefinedPredicate;
       synchronized (predicatesLock) { // TODO if already in userDefinedPredicates then avoid need to synch
+         if (isExistingJavaPredicate(key)) {
+            throw new ProjogException("Cannot replace already defined built-in predicate: " + key);
+         }
+
          userDefinedPredicate = userDefinedPredicates.get(key);
 
          if (userDefinedPredicate == null) {
@@ -111,11 +117,30 @@ public class Predicates {
    public void addUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
       PredicateKey key = userDefinedPredicate.getPredicateKey();
       synchronized (predicatesLock) {
-         if (isExistingJavaPredicate(key)) { // TODO should this be isExistingPredicate?
-            throw new ProjogException("Cannot replace already defined plugin predicate: " + key);
+         if (isExistingPredicate(key)) {
+            updateExistingPredicate(key, userDefinedPredicate);
+         } else {
+            userDefinedPredicates.put(key, userDefinedPredicate);
          }
+      }
+   }
 
-         userDefinedPredicates.put(key, userDefinedPredicate);
+   private void updateExistingPredicate(PredicateKey key, UserDefinedPredicateFactory userDefinedPredicate) {
+      if (isExistingJavaPredicate(key)) {
+         throw new ProjogException("Cannot replace already defined built-in predicate: " + key);
+      }
+
+      UserDefinedPredicateFactory existingUserDefinedPredicateFactory = userDefinedPredicates.get(key);
+      if (!existingUserDefinedPredicateFactory.isDynamic()) {
+         throw new ProjogException(
+                     "Cannot append to already defined user defined predicate as it is not dynamic. You can set the predicate to dynamic by adding the following line to start of the file that the predicate is defined in:\n?- dynamic("
+                                 + key
+                                 + ").");
+      }
+
+      Iterator<ClauseModel> models = userDefinedPredicate.getImplications();
+      while (models.hasNext()) {
+         existingUserDefinedPredicateFactory.addLast(models.next());
       }
    }
 
@@ -237,10 +262,14 @@ public class Predicates {
    }
 
    private boolean isExistingPredicate(PredicateKey key) {
-      return isExistingJavaPredicate(key) || userDefinedPredicates.containsKey(key);
+      return isExistingJavaPredicate(key) || isExistingUserDefinedPredicate(key);
    }
 
    private boolean isExistingJavaPredicate(PredicateKey key) {
       return javaPredicateClassNames.containsKey(key);
+   }
+
+   private boolean isExistingUserDefinedPredicate(PredicateKey key) {
+      return userDefinedPredicates.containsKey(key);
    }
 }

@@ -132,6 +132,7 @@
 ?- pj_add_predicate(ensure_loaded/1, 'org.projog.core.predicate.builtin.kb.EnsureLoaded').
 ?- pj_add_predicate(flag/3, 'org.projog.core.predicate.builtin.kb.Flag').
 ?- pj_add_predicate(current_predicate/1, 'org.projog.core.predicate.builtin.kb.CurrentPredicate').
+?- pj_add_predicate('/'('dynamic', 1), 'org.projog.core.predicate.builtin.kb.Dynamic').
 
 % db (recorded database)
 ?- pj_add_predicate(erase/1, 'org.projog.core.predicate.builtin.db.Erase').

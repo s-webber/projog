@@ -15,7 +15,6 @@
  */
 package org.projog.core.parser;
 
-import static org.projog.core.kb.KnowledgeBaseUtils.isDynamicFunctionCall;
 import static org.projog.core.kb.KnowledgeBaseUtils.isQuestionOrDirectiveFunctionCall;
 
 import java.io.File;
@@ -33,7 +32,6 @@ import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
@@ -167,34 +165,9 @@ public final class ProjogSourceReader {
     * @param t structure with name of {@code ?-} and a single argument.
     */
    private void processQuestion(Term t) {
-      Term query = t.getArgument(0);
-      if (isDynamicFunctionCall(query)) {
-         declareDynamicPredicate(query.getArgument(0));
-      } else {
-         Predicate e = KnowledgeBaseUtils.getPredicate(kb, query);
-         while (e.evaluate() && e.couldReevaluationSucceed()) {
-            // keep re-evaluating until fail
-         }
-      }
-   }
-
-   /**
-    * Declare a user defined predicate as "dynamic".
-    * <p>
-    * Only user defined predicates declared as "dynamic" can be used with the "asserta", "assertz" and "retract"
-    * commands.
-    *
-    * @param query structure named {@code /} where first argument is name and second is arity.
-    * @throws ProjogException if the user defined predicate has already been read
-    */
-   private void declareDynamicPredicate(Term t) {
-      PredicateKey key = PredicateKey.createFromNameAndArity(t);
-      UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
-      if (userDefinedPredicate == null) {
-         userDefinedPredicate = new DynamicUserDefinedPredicateFactory(kb, key);
-         userDefinedPredicates.put(key, userDefinedPredicate);
-      } else {
-         throw new ProjogException("Cannot declare: " + key + " as a dynamic predicate when it has already been used. Query: " + t);
+      Predicate e = KnowledgeBaseUtils.getPredicate(kb, t.getArgument(0));
+      while (e.evaluate() && e.couldReevaluationSucceed()) {
+         // keep re-evaluating until fail
       }
    }
 

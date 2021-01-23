@@ -48,6 +48,7 @@ public final class QueryStatement {
    private final PredicateFactory predicateFactory;
    private final Term parsedInput;
    private final Map<String, Variable> variables;
+   private boolean invoked;
 
    /**
     * Creates a new {@code QueryStatement} representing a query specified by {@code prologQuery}.
@@ -122,8 +123,13 @@ public final class QueryStatement {
       if (v == null) {
          throw new ProjogException("Do not know about variable named: " + variableId + " in query: " + parsedInput);
       }
-      if (!v.unify(term)) {
-         throw new ProjogException("Cannot unify: " + variableId + " with: " + term);
+      if (!v.getType().isVariable()) {
+         throw new ProjogException("Cannot set: " + variableId + " to: " + term + " as has already been set to: " + v);
+      }
+      boolean unified = v.unify(term);
+      if (!unified) {
+         // should never get here, just checking result of unify(Term) as a sanity check
+         throw new IllegalStateException();
       }
    }
 
@@ -305,16 +311,35 @@ public final class QueryStatement {
     * @return a new {@link QueryResult} for the query represented by this object.
     */
    public QueryResult executeQuery() {
-      // TODO throw exception if already called and not immutable
+      if (invoked) {
+         throw new ProjogException("This QueryStatement has already been evaluated. "
+                     + "If you want to reuse the same query then consider using a QueryPlan. See: Projog.createPlan(String)");
+      }
+      invoked = true;
       return new QueryResult(predicateFactory, parsedInput, variables);
+   }
+
+   /**
+    * Evaluate once the query represented by this statement.
+    * <p>
+    * The query will only be evaluated once, even if further solutions could of been found on backtracking.
+    *
+    * @throws ProjogException if no solution can be found
+    * @see #createStatement()
+    * @see #executeQuery()
+    */
+   public void executeOnce() {
+      if (!executeQuery().next()) {
+         throw new ProjogException("Failed to find a solution for: " + parsedInput);
+      }
    }
 
    /**
     * Execute the query once and return a String representation of the atom the single query variable was unified with.
     *
     * @return the name of the atom the query variable has been unified with as a result of executing the query
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public String findFirstAsAtomName() {
       String variableId = getSingleVariableId();
@@ -322,7 +347,7 @@ public final class QueryStatement {
       if (result.next()) {
          return result.getAtomName(variableId);
       } else {
-         throw new RuntimeException("No results returned");
+         throw noSolutionFound();
       }
    }
 
@@ -331,8 +356,8 @@ public final class QueryStatement {
     * unified with.
     *
     * @return the value the query variable has been unified with as a result of executing the query
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public double findFirstAsDouble() {
       String variableId = getSingleVariableId();
@@ -340,7 +365,7 @@ public final class QueryStatement {
       if (result.next()) {
          return result.getDouble(variableId);
       } else {
-         throw new RuntimeException("No results returned");
+         throw noSolutionFound();
       }
    }
 
@@ -349,8 +374,8 @@ public final class QueryStatement {
     * with.
     *
     * @return the value query variable has been unified with as a result of executing the query
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public long findFirstAsLong() {
       String variableId = getSingleVariableId();
@@ -358,7 +383,7 @@ public final class QueryStatement {
       if (result.next()) {
          return result.getLong(variableId);
       } else {
-         throw new RuntimeException("No results returned");
+         throw noSolutionFound();
       }
    }
 
@@ -366,8 +391,8 @@ public final class QueryStatement {
     * Execute the query once and return the {@code Term} the single query variable was unified with.
     *
     * @return the value query variable has been unified with as a result of executing the query
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public Term findFirstAsTerm() {
       String variableId = getSingleVariableId();
@@ -375,8 +400,12 @@ public final class QueryStatement {
       if (result.next()) {
          return result.getTerm(variableId);
       } else {
-         throw new RuntimeException("No results returned");
+         throw noSolutionFound();
       }
+   }
+
+   private ProjogException noSolutionFound() {
+      return new ProjogException("No solution found.");
    }
 
    /**
@@ -385,8 +414,8 @@ public final class QueryStatement {
     *
     * @return the name of the atom the query variable has been unified with, or an empty optional if the query was not
     * successfully evaluated
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public Optional<String> findFirstAsOptionalAtomName() {
       String variableId = getSingleVariableId();
@@ -405,8 +434,8 @@ public final class QueryStatement {
     *
     * @return the value the query variable has been unified with, or an empty optional if the query was not successfully
     * evaluated
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public Optional<Double> findFirstAsOptionalDouble() {
       String variableId = getSingleVariableId();
@@ -425,8 +454,8 @@ public final class QueryStatement {
     *
     * @return the value the query variable has been unified with, or an empty optional if the query was not successfully
     * evaluated
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public Optional<Long> findFirstAsOptionalLong() {
       String variableId = getSingleVariableId();
@@ -445,8 +474,8 @@ public final class QueryStatement {
     *
     * @return the value the query variable has been unified with, or an empty optional if the query was not successfully
     * evaluated
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public Optional<Term> findFirstAsOptionalTerm() {
       String variableId = getSingleVariableId();
@@ -465,8 +494,8 @@ public final class QueryStatement {
     *
     * @return list of atom names the query variable was been unified with as a result of executing the query until no
     * more solutions were found
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public List<String> findAllAsAtomName() {
       String variableId = getSingleVariableId();
@@ -484,8 +513,8 @@ public final class QueryStatement {
     *
     * @return list of values the query variable was been unified with as a result of executing the query until no more
     * solutions were found
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public List<Double> findAllAsDouble() {
       String variableId = getSingleVariableId();
@@ -503,8 +532,8 @@ public final class QueryStatement {
     *
     * @return list of values the query variable was been unified with as a result of executing the query until no more
     * solutions were found
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public List<Long> findAllAsLong() {
       String variableId = getSingleVariableId();
@@ -522,8 +551,8 @@ public final class QueryStatement {
     *
     * @return list of values the query variable was been unified with as a result of executing the query until no more
     * solutions were found
-    * @throws RuntimeException if the query could not evaluated successfully
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException if the query could not be evaluated successfully
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    public List<Term> findAllAsTerm() {
       String variableId = getSingleVariableId();
@@ -539,7 +568,7 @@ public final class QueryStatement {
     * Returns the ID of the single variable contained in the query this statement represents.
     *
     * @return variable ID
-    * @throws IllegalStateException of there is not exactly one named variable in the query this statement represents
+    * @throws ProjogException of there is not exactly one named variable in the query this statement represents
     */
    private String getSingleVariableId() {
       String id = null;
@@ -547,14 +576,14 @@ public final class QueryStatement {
       for (Map.Entry<String, Variable> e : variables.entrySet()) {
          if (e.getValue().getType().isVariable()) {
             if (id != null) {
-               throw new IllegalStateException("Expected exactly one variable but found " + id + " and " + e.getKey());
+               throw new ProjogException("Expected exactly one uninstantiated variable but found " + id + " and " + e.getKey());
             }
             id = e.getKey();
          }
       }
 
       if (id == null) {
-         throw new IllegalStateException("Expected exactly one variable but found none in " + variables);
+         throw new ProjogException("Expected exactly one uninstantiated variable but found none in: " + parsedInput + " " + variables);
       }
 
       return id;

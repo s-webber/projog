@@ -34,6 +34,7 @@ public final class QueryResult {
    private final Predicate predicate;
    private final Map<String, Variable> variables;
    private boolean hasBeenEvaluated;
+   private boolean hasFailed;
 
    /**
     * Evaluates a query.
@@ -71,25 +72,31 @@ public final class QueryResult {
     * @throws ProjogException if an error occurs while evaluating the query
     */
    public boolean next() {
-      if (!hasBeenEvaluated) {
-         return doFirstEvaluationOfQuery();
-      } else if (predicate.couldReevaluationSucceed()) {
-         return doRetryEvaluationOfQuery();
-      } else {
-         return false;
+      if (hasFailed) {
+         throw new ProjogException("Query has already been exhausted. Last call to QueryResult.next() returned false.");
       }
+
+      boolean result;
+
+      if (!hasBeenEvaluated) {
+         hasBeenEvaluated = true;
+         result = evaluate();
+      } else if (predicate.couldReevaluationSucceed()) {
+         result = evaluate();
+      } else {
+         result = false;
+      }
+
+      hasFailed = !result;
+
+      return result;
    }
 
-   private boolean doFirstEvaluationOfQuery() {
-      hasBeenEvaluated = true;
-      return predicate.evaluate();
-   }
-
-   private boolean doRetryEvaluationOfQuery() {
+   private boolean evaluate() {
       try {
          return predicate.evaluate();
       } catch (CutException e) {
-         // e.g. for a query like: ?- true, !.
+         // e.g. for a query like: "?- true, !."
          return false;
       }
    }
@@ -101,7 +108,7 @@ public final class QueryResult {
     * @see org.projog.core.predicate.Predicate#couldReevaluationSucceed()
     */
    public boolean isExhausted() {
-      return hasBeenEvaluated && predicate.couldReevaluationSucceed() == false;
+      return hasFailed || (hasBeenEvaluated && !predicate.couldReevaluationSucceed());
    }
 
    // TODO add getList?
@@ -150,6 +157,8 @@ public final class QueryResult {
 
    /**
     * Returns the term instantiated to the variable with the specified id.
+    * <p>
+    * {@link #next()} must be called before this method.
     *
     * @param variableId the id of the variable from which to return the instantiated term
     * @return the term instantiated to the variable with the specified id (or the {@link org.projog.core.term.Variable}
@@ -160,9 +169,15 @@ public final class QueryResult {
     * @see #getLong(String)
     */
    public Term getTerm(String variableId) {
+      if (!hasBeenEvaluated) {
+         throw new ProjogException("Query not yet evaluated. Call QueryResult.next() before attempting to get value of variables.");
+      }
+      if (hasFailed) {
+         throw new ProjogException("No more solutions. Last call to QueryResult.next() returned false.");
+      }
       Variable v = variables.get(variableId);
       if (v == null) {
-         throw new ProjogException("Unknown variable ID: " + variableId);
+         throw new ProjogException("Unknown variable ID: " + variableId + ". Query contains the variables: " + getVariableIds());
       }
       return v.getTerm();
    }

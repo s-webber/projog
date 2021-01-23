@@ -15,6 +15,9 @@
  */
 package org.projog.api;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.parser.ParserException;
@@ -83,17 +86,63 @@ public class QueryPlan {
    }
 
    /**
-    * Execute the query represented by this plan.
+    * Evaluate once the query represented by this statement.
     * <p>
-    * The query will only be executed once, even if further solutions could of been found on backtracking.
+    * The query will only be evaluated once, even if further solutions could of been found on backtracking.
     *
-    * @throws IllegalStateException if the query can not be successfully evaluated.
+    * @throws ProjogException if no solution can be found
     * @see #createStatement()
     * @see #executeQuery()
     */
    public void executeOnce() {
-      if (!executeQuery().next()) {
-         throw new IllegalStateException("Failed to evaluate: " + parsedInput);
-      }
+      createStatement().executeOnce();
+   }
+
+   public String findFirstAsAtomName() {
+      return createStatement().findFirstAsAtomName();
+   }
+
+   public double findFirstAsDouble() {
+      return createStatement().findFirstAsDouble();
+   }
+
+   public long findFirstAsLong() {
+      return createStatement().findFirstAsLong();
+   }
+
+   public Term findFirstAsTerm() {
+      return createStatement().findFirstAsTerm();
+   }
+
+   public Optional<String> findFirstAsOptionalAtomName() {
+      return createStatement().findFirstAsOptionalAtomName();
+   }
+
+   public Optional<Double> findFirstAsOptionalDouble() {
+      return createStatement().findFirstAsOptionalDouble();
+   }
+
+   public Optional<Long> findFirstAsOptionalLong() {
+      return createStatement().findFirstAsOptionalLong();
+   }
+
+   public Optional<Term> findFirstAsOptionalTerm() {
+      return createStatement().findFirstAsOptionalTerm();
+   }
+
+   public List<String> findAllAsAtomName() {
+      return createStatement().findAllAsAtomName();
+   }
+
+   public List<Double> findAllAsDouble() {
+      return createStatement().findAllAsDouble();
+   }
+
+   public List<Long> findAllAsLong() {
+      return createStatement().findAllAsLong();
+   }
+
+   public List<Term> findAllAsTerm() {
+      return createStatement().findAllAsTerm();
    }
 }

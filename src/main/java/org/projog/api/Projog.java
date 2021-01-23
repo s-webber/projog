@@ -204,21 +204,18 @@ public final class Projog {
    }
 
    /**
-    * Executes the given query once.
+    * Evaluate once the given query.
     * <p>
-    * The query will only be executed once, even if further solutions could of been found on backtracking.
+    * The query will only be evaluated once, even if further solutions could of been found on backtracking.
     *
     * @param prologQuery prolog syntax representing a query
-    * @throws ProjogException if an error occurs parsing {@code prologQuery}
-    * @throws IllegalStateException if the query can not be successfully evaluated.
+    * @throws ProjogException if an error occurs parsing {@code prologQuery} or no solution can be found for it
     * @see #createPlan(String)
     * @see #createStatement(String)
     * @see #executeQuery(String)
     */
    public void executeOnce(String prologQuery) {
-      if (!executeQuery(prologQuery).next()) {
-         throw new IllegalStateException("Failed to evaluate: " + prologQuery);
-      }
+      createStatement(prologQuery).executeOnce();
    }
 
    /**

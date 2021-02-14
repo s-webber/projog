@@ -31,11 +31,23 @@ import org.projog.core.term.Variable;
 /**
  * Constructs new {@link ClauseAction} instances.
  */
-public final class ClauseActionFactory {
+final class ClauseActionFactory {
+   /**
+    * Returns true if the arguments unify with the consequent of the clause.
+    * <p>
+    * TODO move to another class, e.g. ClauseAction
+    */
+   static boolean isMatch(ClauseAction clause, Term[] queryArgs) {
+      Term[] clauseArgs = TermUtils.copy(clause.getModel().getConsequent().getArgs());
+      boolean match = TermUtils.unify(queryArgs, clauseArgs);
+      TermUtils.backtrack(queryArgs);
+      return match;
+   }
+
    /**
     * Returns a new {@link ClauseAction} based on the specified {@link ClauseModel}.
     */
-   public static ClauseAction createClauseAction(KnowledgeBase kb, ClauseModel model) {
+   static ClauseAction createClauseAction(KnowledgeBase kb, ClauseModel model) {
       Term antecedent = model.getAntecedent();
       if (antecedent.getType().isVariable()) {
          return new VariableAntecedantClauseAction(model, kb);

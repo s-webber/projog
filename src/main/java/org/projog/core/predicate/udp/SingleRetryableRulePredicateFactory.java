@@ -20,9 +20,10 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
-final class SingleRetryableRulePredicateFactory implements PredicateFactory {
+final class SingleRetryableRulePredicateFactory implements PreprocessablePredicateFactory {
    private final ClauseAction clause;
    private final SpyPoints.SpyPoint spyPoint;
 
@@ -80,7 +81,7 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
             }
          } catch (CutException e) {
             if (isSpyPointEnabled) {
-               spyPoint.logFail(SingleNonRetryableRulePredicate.class, args);
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
             }
             return false;
          } catch (ProjogException pe) {
@@ -96,6 +97,15 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
       @Override
       public boolean couldReevaluationSucceed() {
          return p == null || p.couldReevaluationSucceed();
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term arg) {
+      if (ClauseActionFactory.isMatch(clause, arg.getArgs())) {
+         return this;
+      } else {
+         return new NeverSucceedsPredicateFactory(spyPoint);
       }
    }
 }

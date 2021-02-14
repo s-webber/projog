@@ -37,7 +37,7 @@ public final class PredicateUtils {
       if (clause.isRetryable()) {
          return new SingleRetryableRulePredicateFactory.RetryableRulePredicate(clause, spyPoint, args);
       } else {
-         return SingleNonRetryableRulePredicate.evaluateClause(clause, spyPoint, args);
+         return SingleNonRetryableRulePredicateFactory.evaluateClause(clause, spyPoint, args);
       }
    }
 

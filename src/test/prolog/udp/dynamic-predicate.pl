@@ -17,6 +17,22 @@
 %TRUE assert(p(1,2,3))
 %TRUE assert(p(x,y,z))
 
+%TRUE p(a,b,c)
+%TRUE_NO retract(p(a,b,c))
+%FALSE p(a,b,c)
+
+%TRUE p(x,y,z)
+%TRUE retract(p(x,y,z))
+%FALSE p(x,y,z)
+
+%TRUE p(1,2,3)
+%TRUE retract(p(1,2,3))
+%FALSE p(1,2,3)
+
+%TRUE assert(p(a,b,c))
+%TRUE assert(p(1,2,3))
+%TRUE assert(p(x,y,z))
+
 %QUERY p(X,Y,Z)
 %ANSWER
 % X=a
@@ -36,7 +52,7 @@
 
 %TRUE p(a,b,c)
 %TRUE p(1,2,3)
-%TRUE p(a,b,c)
+%TRUE p(x,y,z)
 %FALSE p(a,2,3)
 %FALSE p(a,y,z)
 %FALSE p(1,b,c)
@@ -49,6 +65,15 @@
 %FALSE p(1,y,X)
 %FALSE p(x,X,c)
 %FALSE p(x,2,X)
+%FALSE p(a,X,X)
+%FALSE p(1,X,X)
+%FALSE p(x,X,X)
+%FALSE p(X,b,X)
+%FALSE p(X,2,X)
+%FALSE p(X,y,X)
+%FALSE p(X,X,c)
+%FALSE p(X,X,3)
+%FALSE p(X,X,z)
 
 %QUERY p(a,X,Y)
 %ANSWER
@@ -133,8 +158,11 @@
 %FALSE p(X,y,u)
 
 %TRUE retract(p(w,1,1))
+%FALSE p(w,1,1)
 %TRUE retract(p(x,y,z))
+%FALSE p(x,y,z)
 %TRUE retract(p(1,2,3))
+%FALSE p(1,2,3)
 
 %TRUE p(a,b,c)
 
@@ -152,4 +180,5 @@
 
 %TRUE p(t,y,u)
 %TRUE p(h,j,k)
+%FALSE p(a,b,c)
 

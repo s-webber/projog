@@ -46,10 +46,6 @@ import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.ClauseActionFactory;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.predicate.udp.ClauseActionFactory.AlwaysMatchedFact;
 import org.projog.core.predicate.udp.ClauseActionFactory.ImmutableConsequentRule;
 import org.projog.core.predicate.udp.ClauseActionFactory.ImmutableFact;
@@ -57,6 +53,7 @@ import org.projog.core.predicate.udp.ClauseActionFactory.MutableFact;
 import org.projog.core.predicate.udp.ClauseActionFactory.MutableRule;
 import org.projog.core.predicate.udp.ClauseActionFactory.VariableAntecedantClauseAction;
 import org.projog.core.predicate.udp.ClauseActionFactory.ZeroArgConsequentRule;
+import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -567,6 +564,22 @@ public class ClauseActionFactoryTest {
       assertSame(mockPredicate1, a.getPredicate(array(atom("a"), atom("b"), x)));
       assertEquals(atom("c"), x.getTerm());
       verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+   }
+
+   @Test
+   public void testIsMatch() {
+      MutableFact a = create(MutableFact.class, "p(X,b,Y).");
+      Variable x = new Variable("X");
+
+      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {x, x, x}));
+      assertSame(x, x.getTerm());
+
+      assertFalse(ClauseActionFactory.isMatch(a, new Term[] {x, new Atom("c"), x}));
+      assertSame(x, x.getTerm());
+
+      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {new Atom("a"), new Atom("b"), new Atom("c")}));
+
+      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {new Atom("c"), new Atom("b"), new Atom("a")}));
    }
 
    @SuppressWarnings("unchecked")

@@ -40,13 +40,13 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseAction;
 import org.projog.core.predicate.udp.PredicateUtils;
-import org.projog.core.predicate.udp.SingleNonRetryableRulePredicate;
+import org.projog.core.predicate.udp.SingleNonRetryableRulePredicateFactory;
 import org.projog.core.term.Term;
 
-public class SingleNonRetryableRulePredicateTest {
+public class SingleNonRetryableRulePredicateFactoryTest {
    private SpyPoints spyPoints;
    private ClauseAction mockAction;
-   private SingleNonRetryableRulePredicate testObject;
+   private SingleNonRetryableRulePredicateFactory testObject;
    private Predicate mockPredicate;
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
    private SimpleProjogListener listener;
@@ -63,7 +63,7 @@ public class SingleNonRetryableRulePredicateTest {
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
       SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
 
-      this.testObject = new SingleNonRetryableRulePredicate(mockAction, spyPoint);
+      this.testObject = new SingleNonRetryableRulePredicateFactory(mockAction, spyPoint);
       assertFalse(testObject.isRetryable());
    }
 

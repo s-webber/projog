@@ -18,6 +18,7 @@ package org.projog.core.predicate.udp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.projog.core.ProjogException;
@@ -138,9 +139,17 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       if (clauses.getClauseActions().length == 1) {
          return createSingleClausePredicateFactory(clauses.getClauseActions()[0]);
       } else if (clauses.getClauseActions().length == 0) {
-         return new NeverSucceedsPredicateFactory();
+         return new NeverSucceedsPredicateFactory(spyPoint);
       } else if (clauses.getImmutableColumns().length == 0) {
          return new NotIndexablePredicateFactory(clauses);
+      } else if (clauses.getImmutableColumns().length==1) {
+         Index index = new Indexes(clauses).getOrCreateIndex(1);
+         ClauseAction[] actions = clauses.getClauseActions();
+         if (index.getKeyCount() == actions.length) {
+            return new LinkedHashMapPredicateFactory(clauses);
+         } else {
+            return new SingleIndexPredicateFactory(clauses);
+         }
       } else {
          return new IndexablePredicateFactory(clauses);
       }
@@ -150,7 +159,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       if (clause.isRetryable()) {
          return new SingleRetryableRulePredicateFactory(clause, spyPoint);
       } else {
-         return new SingleNonRetryableRulePredicate(clause, spyPoint);
+         return new SingleNonRetryableRulePredicateFactory(clause, spyPoint);
       }
    }
 
@@ -267,15 +276,104 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class NeverSucceedsPredicateFactory implements PredicateFactory {
+   private final class LinkedHashMapPredicateFactory implements PreprocessablePredicateFactory {
+      private final int argIdx;
+      private final ClauseAction[] actions;
+      private final LinkedHashMap<Term, ClauseAction> map;
+
+      private LinkedHashMapPredicateFactory(Clauses clauses) {
+         this.argIdx = clauses.getImmutableColumns()[0];
+         this.actions = clauses.getClauseActions();
+         this.map = new LinkedHashMap<>(actions.length);
+         for (ClauseAction a : actions) {
+            map.put(a.getModel().getConsequent().getArgument(argIdx), a);
+         }
+      }
+
       @Override
       public Predicate getPredicate(Term[] args) {
-         return PredicateUtils.createFailurePredicate(spyPoint, args);
+         if (args[argIdx].isImmutable()) {
+            ClauseAction action = map.get(args[argIdx]);
+            if (action == null) {
+               return PredicateUtils.createFailurePredicate(spyPoint, args);
+            } else {
+               return PredicateUtils.createSingleClausePredicate(action, spyPoint, args);
+            }
+         } else {
+            return createPredicate(args, actions);
+         }
       }
 
       @Override
       public boolean isRetryable() {
-         return false;
+         return true;
+      }
+
+      @Override
+      public PredicateFactory preprocess(Term arg) {
+         if (arg.getArgument(argIdx).isImmutable()) {
+            ClauseAction action = map.get(arg.getArgument(argIdx));
+            if (action == null) {
+               return new NeverSucceedsPredicateFactory(spyPoint);
+            } else {
+               return createSingleClausePredicateFactory(action);
+            }
+         } else {
+            List<ClauseAction> result = optimisePredicateFactory(kb, actions, arg);
+            if (result.size() < actions.length) {
+               final Clauses clauses = new Clauses(kb, result);
+               return createInterpretedPredicateFactoryFromClauses(clauses);
+            } else {
+               return this;
+            }
+         }
+      }
+   }
+
+   private final class SingleIndexPredicateFactory implements PreprocessablePredicateFactory {
+      private final int argIdx;
+      private final Index index;
+      private final ClauseAction[] actions;
+
+      private SingleIndexPredicateFactory(Clauses clauses) {
+         this.argIdx = clauses.getImmutableColumns()[0];
+         this.index = new Indexes(clauses).getOrCreateIndex(1);
+         this.actions = clauses.getClauseActions();
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         ClauseAction[] data;
+         if (args[argIdx].isImmutable()) {
+            data = index.getMatches(args);
+         } else {
+            data = actions;
+         }
+
+         return createPredicate(args, data);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true;
+      }
+
+      @Override
+      public PredicateFactory preprocess(Term arg) {
+         ClauseAction[] data;
+         if (arg.getArgument(argIdx).isImmutable()) {
+            data = index.getMatches(arg.getArgs());
+         }else {
+            data = actions;
+         }
+
+         List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
+         if (result.size() < actions.length) {
+            final Clauses clauses = new Clauses(kb, result);
+            return createInterpretedPredicateFactoryFromClauses(clauses);
+         } else {
+            return this;
+         }
       }
    }
 
@@ -343,7 +441,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       Term[] queryArgs = TermUtils.copy(arg.getArgs());
       for (ClauseAction action : data) {
          Term[] clauseArgs = TermUtils.copy(action.getModel().getConsequent().getArgs());
-         if (TermUtils.unify(queryArgs, clauseArgs)) {
+         if (ClauseActionFactory.isMatch(action, queryArgs)) {
             result.add(action);
          }
          TermUtils.backtrack(queryArgs);

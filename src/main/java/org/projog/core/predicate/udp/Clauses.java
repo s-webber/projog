@@ -21,12 +21,12 @@ import java.util.List;
 
 import org.projog.core.kb.KnowledgeBase;
 
-public class Clauses {
+class Clauses {
    private final int numClauses;
    private final List<ClauseAction> clauses;
    private final int[] immutableColumns;
 
-   public static Clauses createFromModels(KnowledgeBase kb, List<ClauseModel> models) {
+   static Clauses createFromModels(KnowledgeBase kb, List<ClauseModel> models) {
       List<ClauseAction> actions = new ArrayList<>();
       for (ClauseModel model : models) {
          ClauseAction action = ClauseActionFactory.createClauseAction(kb, model);
@@ -35,7 +35,7 @@ public class Clauses {
       return new Clauses(kb, actions);
    }
 
-   public Clauses(KnowledgeBase kb, List<ClauseAction> actions) {
+   Clauses(KnowledgeBase kb, List<ClauseAction> actions) {
       if (actions.isEmpty()) {
          this.numClauses = 0;
          this.clauses = Collections.emptyList();
@@ -66,11 +66,11 @@ public class Clauses {
       }
    }
 
-   public int[] getImmutableColumns() {
+   int[] getImmutableColumns() {
       return immutableColumns;
    }
 
-   public ClauseAction[] getClauseActions() {
+   ClauseAction[] getClauseActions() {
       return clauses.toArray(new ClauseAction[clauses.size()]);
    }
 }

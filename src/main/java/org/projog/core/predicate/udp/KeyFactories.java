@@ -17,7 +17,7 @@ package org.projog.core.predicate.udp;
 
 import org.projog.core.term.Term;
 
-class KeyFactories {
+final class KeyFactories {
    private static final KeyFactory[] FACTORIES = {
                null,
                new KeyFactory1(),

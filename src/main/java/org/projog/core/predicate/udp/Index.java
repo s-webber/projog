@@ -37,4 +37,8 @@ final class Index {
       Object key = keyFactory.createKey(positions, args);
       return result.getOrDefault(key, NO_MATCHES);
    }
+
+   int getKeyCount() {
+      return result.size();
+   }
 }

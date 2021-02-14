@@ -80,7 +80,7 @@ final class Indexes {
       return bitmask;
    }
 
-   private Index getOrCreateIndex(int bitmask) {
+   public Index getOrCreateIndex(int bitmask) {
       SoftReference<Index> ref = indexes[bitmask];
       Index index = ref != null ? ref.get() : null;
 

@@ -20,13 +20,14 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
-final class SingleNonRetryableRulePredicate implements PredicateFactory {
+final class SingleNonRetryableRulePredicateFactory implements PreprocessablePredicateFactory {
    private final ClauseAction clause;
    private final SpyPoints.SpyPoint spyPoint;
 
-   SingleNonRetryableRulePredicate(ClauseAction clause, SpyPoints.SpyPoint spyPoint) {
+   SingleNonRetryableRulePredicateFactory(ClauseAction clause, SpyPoints.SpyPoint spyPoint) {
       this.clause = clause;
       this.spyPoint = spyPoint;
    }
@@ -39,14 +40,14 @@ final class SingleNonRetryableRulePredicate implements PredicateFactory {
    static Predicate evaluateClause(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term[] args) {
       try {
          if (spyPoint.isEnabled()) {
-            spyPoint.logCall(SingleNonRetryableRulePredicate.class, args);
+            spyPoint.logCall(SingleNonRetryableRulePredicateFactory.class, args);
 
             final boolean result = clause.getPredicate(args).evaluate();
 
             if (result) {
-               spyPoint.logExit(SingleNonRetryableRulePredicate.class, args, clause.getModel());
+               spyPoint.logExit(SingleNonRetryableRulePredicateFactory.class, args, clause.getModel());
             } else {
-               spyPoint.logFail(SingleNonRetryableRulePredicate.class, args);
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
             }
 
             return PredicateUtils.toPredicate(result);
@@ -55,7 +56,7 @@ final class SingleNonRetryableRulePredicate implements PredicateFactory {
          }
       } catch (CutException e) {
          if (spyPoint.isEnabled()) {
-            spyPoint.logFail(SingleNonRetryableRulePredicate.class, args);
+            spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
          }
          return PredicateUtils.FALSE;
       } catch (ProjogException pe) {
@@ -71,5 +72,14 @@ final class SingleNonRetryableRulePredicate implements PredicateFactory {
    @Override
    public boolean isRetryable() {
       return false;
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term arg) {
+      if (ClauseActionFactory.isMatch(clause, arg.getArgs())) {
+         return this;
+      } else {
+         return new NeverSucceedsPredicateFactory(spyPoint);
+      }
    }
 }

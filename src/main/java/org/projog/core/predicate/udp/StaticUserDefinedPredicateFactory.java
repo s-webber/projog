@@ -321,7 +321,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          } else {
             List<ClauseAction> result = optimisePredicateFactory(kb, actions, arg);
             if (result.size() < actions.length) {
-               final Clauses clauses = new Clauses(kb, result);
+               final Clauses clauses = Clauses.createFromActions(kb, result, arg);
                return createInterpretedPredicateFactoryFromClauses(clauses);
             } else {
                return this;
@@ -369,7 +369,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
          List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < actions.length) {
-            final Clauses clauses = new Clauses(kb, result);
+            final Clauses clauses = Clauses.createFromActions(kb, result, arg);
             return createInterpretedPredicateFactoryFromClauses(clauses);
          } else {
             return this;
@@ -399,7 +399,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          ClauseAction[] data = index.index(arg.getArgs());
          List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < index.getClauseCount()) {
-            final Clauses clauses = new Clauses(kb, result);
+            final Clauses clauses = Clauses.createFromActions(kb, result, arg);
             return createInterpretedPredicateFactoryFromClauses(clauses);
          } else {
             return this;
@@ -428,7 +428,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public PredicateFactory preprocess(Term arg) {
          List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < data.length) {
-            final Clauses clauses = new Clauses(kb, result);
+            final Clauses clauses = Clauses.createFromActions(kb, result, arg);
             return createInterpretedPredicateFactoryFromClauses(clauses);
          } else {
             return this;
@@ -440,11 +440,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       List<ClauseAction> result = new ArrayList<>();
       Term[] queryArgs = TermUtils.copy(arg.getArgs());
       for (ClauseAction action : data) {
-         Term[] clauseArgs = TermUtils.copy(action.getModel().getConsequent().getArgs());
          if (ClauseActionFactory.isMatch(action, queryArgs)) {
             result.add(action);
          }
-         TermUtils.backtrack(queryArgs);
       }
       if (result.isEmpty()) {
          kb.getProjogListeners().notifyWarn(arg + " will never succeed");

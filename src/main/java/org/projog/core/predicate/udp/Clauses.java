@@ -20,9 +20,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
+// TODO add Javadoc and review method and variable names
 class Clauses {
-   private final int numClauses;
+   private static final Clauses EMPTY = new Clauses(Collections.emptyList(), new int[0]);
+
    private final List<ClauseAction> clauses;
    private final int[] immutableColumns;
 
@@ -32,25 +36,21 @@ class Clauses {
          ClauseAction action = ClauseActionFactory.createClauseAction(kb, model);
          actions.add(action);
       }
-      return new Clauses(kb, actions);
+      return createFromActions(kb, actions, null);
    }
 
-   Clauses(KnowledgeBase kb, List<ClauseAction> actions) {
+   static Clauses createFromActions(KnowledgeBase kb, List<ClauseAction> actions, Term arg) {
       if (actions.isEmpty()) {
-         this.numClauses = 0;
-         this.clauses = Collections.emptyList();
-         this.immutableColumns = new int[0];
-         return;
+         return EMPTY;
       }
 
-      this.numClauses = actions.size();
-      this.clauses = new ArrayList<>(numClauses);
-
       int numArgs = actions.get(0).getModel().getConsequent().getNumberOfArguments();
-      boolean[] muttableColumns = new boolean[numArgs];
-      int muttableColumnCtr = 0;
+      boolean[] muttableColumns = createArray(numArgs, arg);
+      int muttableColumnCtr = count(muttableColumns);
+
+      List<ClauseAction> clauses = new ArrayList<>(actions.size());
       for (ClauseAction action : actions) {
-         this.clauses.add(action);
+         clauses.add(action);
          for (int i = 0; i < numArgs; i++) {
             if (!muttableColumns[i] && !action.getModel().getConsequent().getArgument(i).isImmutable()) {
                muttableColumns[i] = true;
@@ -58,12 +58,46 @@ class Clauses {
             }
          }
       }
-      this.immutableColumns = new int[numArgs - muttableColumnCtr];
+
+      int[] immutableColumns = new int[numArgs - muttableColumnCtr];
       for (int i = 0, ctr = 0; ctr < immutableColumns.length; i++) {
          if (!muttableColumns[i]) {
             immutableColumns[ctr++] = i;
          }
       }
+
+      return new Clauses(actions, immutableColumns);
+   }
+
+   private static boolean[] createArray(int numArgs, Term query) {
+      boolean[] result = new boolean[numArgs];
+      if (query != null) {
+         for (int i = 0; i < result.length; i++) {
+            Term arg = query.getArgument(i);
+            result[i] = arg.isImmutable() || isAnonymousVariable(arg);
+         }
+      }
+      return result;
+   }
+
+   private static boolean isAnonymousVariable(Term arg) { // TODO move to TermUtils?
+      return arg.getType().isVariable() && ((Variable) arg.getTerm()).isAnonymous();
+   }
+
+   private static int count(boolean[] a) {
+      int ctr = 0;
+      for (int i = 0; i < a.length; i++) {
+         if (a[i]) {
+            ctr++;
+         }
+      }
+      return ctr;
+   }
+
+   private Clauses(List<ClauseAction> actions, int[] immutableColumns) {
+      this.clauses = actions;
+      this.immutableColumns = immutableColumns;
+
    }
 
    int[] getImmutableColumns() {

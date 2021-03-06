@@ -44,7 +44,7 @@ p(e).
 %QUERY meta_data(p(c), X)
 %ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
 %ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$SingleIndexPredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$SingleIndexPredicateFactory
+%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$NotIndexablePredicateFactory
 
 %QUERY p(c)
 %ANSWER/

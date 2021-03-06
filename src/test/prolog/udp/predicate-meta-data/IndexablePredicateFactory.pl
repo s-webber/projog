@@ -103,17 +103,55 @@ p(f, 8).
 %QUERY meta_data(p(c, _), X)
 %ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
 %ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$NotIndexablePredicateFactory
 
-%QUERY p(c, X)
-%ANSWER X=2
-%ANSWER X=3
-%ANSWER X=3
+%QUERY p(c, _)
+%ANSWER/
+%ANSWER/
+%ANSWER/
+
+%QUERY meta_data(p(c, Y), X)
+%ANSWER
+% X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER
+% X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER 
+% X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$SingleIndexPredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
+
+%QUERY p(c, Y)
+%ANSWER Y=2
+%ANSWER Y=3
+%ANSWER Y=3
 
 %QUERY meta_data(p(_, 2), X)
 %ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
 %ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$NotIndexablePredicateFactory
+
+%QUERY p(_, 2)
+%ANSWER/
+%ANSWER/
+%ANSWER/
+
+%QUERY meta_data(p(Y, 2), X)
+%ANSWER
+% X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER
+% X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER
+% X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+%ANSWER
 
 %QUERY p(X, 2)
 %ANSWER X=b
@@ -144,7 +182,29 @@ p(f, 8).
 %QUERY meta_data(p(e(_), _), X)
 %ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
 %ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+
+%QUERY p(e(_), _)
+%ANSWER/
+%ANSWER/
+%ANSWER/
+
+%QUERY meta_data(p(e(Y), Z), X)
+%ANSWER
+% X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER
+% X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%ANSWER
+%ANSWER
+% X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%ANSWER
 
 %QUERY p(e(X), Y)
 %ANSWER

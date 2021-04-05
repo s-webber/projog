@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,26 @@ public class StructureTest {
       assertNotSame(p1, p2);
       assertEquals(p1.toString(), p2.toString());
       assertStrictEquality(p1, p2, true);
+   }
+
+   @Test
+   public void testGetBoundNoVariables() {
+      Structure p = structure("p", atom(), structure("p", atom()), list(integerNumber(), decimalFraction()));
+      assertSame(p, p.getBound());
+   }
+
+   @Test
+   public void testGetBoundUnassignedVariables() {
+      Structure p = structure("p", variable(), structure("p", variable()), list(variable(), variable()));
+      assertSame(p, p.getBound());
+   }
+
+   @Test
+   public void testGetBoundAssignedVariable() {
+      Variable x = variable("X");
+      Structure p = structure("p", atom(), structure("p", atom(), x, integerNumber()), list(integerNumber(), decimalFraction()));
+      x.unify(atom());
+      assertSame(p, p.getBound());
    }
 
    @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,15 @@ import static org.junit.Assert.fail;
 import static org.projog.TestUtils.decimalFraction;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
+@RunWith(DataProviderRunner.class)
 public class DecimalFractionTest {
    private static final double DELTA = 0;
 
@@ -48,6 +53,13 @@ public class DecimalFractionTest {
    public void testGetTerm() {
       DecimalFraction d1 = new DecimalFraction(0);
       DecimalFraction d2 = d1.getTerm();
+      assertSame(d1, d2);
+   }
+
+   @Test
+   public void testGetBound() {
+      DecimalFraction d1 = new DecimalFraction(0);
+      Term d2 = d1.getBound();
       assertSame(d1, d2);
    }
 
@@ -86,13 +98,14 @@ public class DecimalFractionTest {
    }
 
    @Test
-   public void testGetArgument() {
+   @DataProvider({"-1", "0", "1"})
+   public void testGetArgument(int index) {
       try {
          DecimalFraction d = decimalFraction();
-         d.getArgument(0);
+         d.getArgument(index);
          fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: " + index, e.getMessage());
       }
    }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.projog.core.term;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -44,6 +45,7 @@ public class VariableTest {
       assertEquals("X", v.getId());
       assertEquals("X", v.toString());
       assertSame(v, v.getTerm());
+      assertSame(v, v.getBound());
       assertTrue(TermUtils.termsEqual(v, v));
 
       try {
@@ -98,9 +100,12 @@ public class VariableTest {
       assertTrue(y.unify(a));
       assertTrue(x.unify(y));
       assertSame(a, x.getTerm());
+      assertSame(a, x.getBound());
       x.backtrack();
       assertSame(x, x.getTerm());
       assertSame(a, y.getTerm());
+      assertSame(x, x.getBound());
+      assertSame(a, y.getBound());
    }
 
    @Test
@@ -111,6 +116,7 @@ public class VariableTest {
       assertTrue(x.unify(y));
       assertTrue(y.unify(a));
       assertSame(a, x.getTerm());
+      assertSame(a, x.getBound());
    }
 
    @Test
@@ -126,6 +132,44 @@ public class VariableTest {
       assertStrictEquality(x, y, false);
       assertSame(x, x.getTerm());
       assertSame(a, y.getTerm());
+      assertSame(x, x.getBound());
+      assertSame(a, y.getBound());
+   }
+
+   @Test
+   public void testVariableUnifiedToMutableTerm() {
+      Variable x = new Variable("X");
+      Variable y = new Variable("Y");
+      Atom a = new Atom("a");
+      Atom b = new Atom("b");
+      Structure p = structure("p1", structure("p2", x, atom(), x), y);
+
+      Variable result = new Variable("Result");
+      assertSame(result, result.getTerm());
+      assertSame(result, result.getBound());
+
+      assertTrue(result.unify(p));
+      assertSame(p, result.getTerm());
+      assertSame(p, result.getBound());
+
+      assertTrue(x.unify(a));
+      assertNotSame(p, result.getTerm());
+      assertEquals(structure("p1", structure("p2", a, atom(), a), y), result.getTerm());
+      assertSame(p, result.getBound());
+
+      assertTrue(y.unify(b));
+      assertNotSame(p, result.getTerm());
+      assertEquals(structure("p1", structure("p2", a, atom(), a), b), result.getTerm());
+      assertSame(p, result.getBound());
+
+      x.backtrack();
+      y.backtrack();
+      assertSame(p, result.getTerm());
+      assertSame(p, result.getBound());
+
+      result.backtrack();
+      assertSame(result, result.getTerm());
+      assertSame(result, result.getBound());
    }
 
    @Test
@@ -186,6 +230,7 @@ public class VariableTest {
       Variable anon = TermUtils.createAnonymousVariable();
       assertTrue(v.unify(anon));
       assertSame(anon, v.getTerm());
+      assertSame(anon, v.getBound());
    }
 
    @Test
@@ -206,6 +251,7 @@ public class VariableTest {
       assertStrictEquality(v2, t, true);
 
       assertSame(t, v1.getTerm());
+      assertSame(t, v1.getBound());
       assertSame(t, v1.copy(null));
       assertEquals(t.toString(), v1.toString());
       assertSame(t.getName(), v1.getName());
@@ -222,9 +268,11 @@ public class VariableTest {
 
       v2.backtrack();
       assertSame(v2, v1.getTerm());
+      assertSame(v2, v1.getBound());
 
       v1.backtrack();
       assertSame(v1, v1.getTerm());
+      assertSame(v1, v1.getBound());
    }
 
    @Test
@@ -233,6 +281,19 @@ public class VariableTest {
       Structure t = structure("name", v);
       assertTrue(v.unify(t));
 
+      assertSame(t, v.getBound());
+      assertSame(t, t.getBound());
+
+      try {
+         v.copy(new HashMap<>());
+         fail();
+      } catch (StackOverflowError e) {
+      }
+      try {
+         t.copy(new HashMap<>());
+         fail();
+      } catch (StackOverflowError e) {
+      }
       try {
          v.getTerm();
          fail();

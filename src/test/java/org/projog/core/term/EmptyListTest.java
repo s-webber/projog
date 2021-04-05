@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +21,15 @@ import static org.junit.Assert.fail;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
+@RunWith(DataProviderRunner.class)
 public class EmptyListTest {
    @Test
    public void testGetName() {
@@ -43,6 +48,12 @@ public class EmptyListTest {
    }
 
    @Test
+   public void testGetBound() {
+      Term e = EMPTY_LIST.getBound();
+      assertSame(EMPTY_LIST, e);
+   }
+
+   @Test
    public void testGetType() {
       assertSame(TermType.EMPTY_LIST, EMPTY_LIST.getType());
    }
@@ -53,22 +64,18 @@ public class EmptyListTest {
    }
 
    @Test
-   public void testGetArgument() {
+   @DataProvider({"-1", "0", "1"})
+   public void testGetArgument(int index) {
       try {
-         EMPTY_LIST.getArgument(0);
+         EMPTY_LIST.getArgument(index);
          fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: " + index, e.getMessage());
       }
    }
 
    @Test
    public void testGetArgs() {
-      try {
-         EMPTY_LIST.getArgs();
-         fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
-      }
+      assertSame(TermUtils.EMPTY_ARRAY, EMPTY_LIST.getArgs());
    }
 }

@@ -53,7 +53,8 @@ public interface Term {
     *
     * @param index index of the argument to return
     * @return the term at the specified position in this term's arguments
-    * @throws RuntimeException if the index is out of range ({@code index < 0 || index >= getNumberOfArguments()})
+    * @throws ArrayIndexOutOfBoundsException if the index is out of range
+    * ({@code index < 0 || index >= getNumberOfArguments()})
     */
    Term getArgument(int index);
 
@@ -76,6 +77,16 @@ public interface Term {
     * @return a copy of this term
     */
    Term copy(Map<Variable, Variable> sharedVariables);
+
+   /**
+    * Returns the term this object is bound to.
+    * <p>
+    * For anything other than a {@code Variable} this method will return {@code this}. TODO think of a better name and
+    * explanation.
+    */
+   default Term getBound() {
+      return this;
+   }
 
    /**
     * Returns the current instantiated state of this term.

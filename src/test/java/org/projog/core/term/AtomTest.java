@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,15 @@ import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
+@RunWith(DataProviderRunner.class)
 public class AtomTest {
    @Test
    public void testGetName() {
@@ -48,6 +53,13 @@ public class AtomTest {
    }
 
    @Test
+   public void testGetBound() {
+      Atom a = atom();
+      Term b = a.getBound();
+      assertSame(a, b);
+   }
+
+   @Test
    public void testGetType() {
       Atom a = atom();
       assertSame(TermType.ATOM, a.getType());
@@ -60,13 +72,14 @@ public class AtomTest {
    }
 
    @Test
-   public void testGetArgument() {
+   @DataProvider({"-1", "0", "1"})
+   public void testGetArgument(int index) {
       try {
          Atom a = atom();
-         a.getArgument(0);
+         a.getArgument(index);
          fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: " + index, e.getMessage());
       }
    }
 

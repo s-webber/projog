@@ -53,11 +53,11 @@ public final class Atom implements Term {
    }
 
    /**
-    * @throws UnsupportedOperationException as this implementation of {@link Term} has no arguments
+    * @throws ArrayIndexOutOfBoundsException as this implementation of {@link Term} has no arguments
     */
    @Override
    public Term getArgument(int index) {
-      throw new UnsupportedOperationException();
+      throw new ArrayIndexOutOfBoundsException(index);
    }
 
    /**

@@ -34,11 +34,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.projog.TestUtils;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
+@RunWith(DataProviderRunner.class)
 public class ListTest {
    private static final Term head = new Atom("a");
    private static final Term tail = new Atom("b");
@@ -77,13 +82,23 @@ public class ListTest {
    }
 
    @Test
-   public void testGetArgs() {
+   @DataProvider({"-1", "2", "3"})
+   public void testGetArgumentIndexOutOfBounds(int index) {
       try {
-         testList.getArgs();
+         testList.getArgument(index);
          fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: " + index, e.getMessage());
       }
+   }
+
+   @Test
+   public void testGetArgs() {
+      Term[] args = testList.getArgs();
+      assertEquals(2, args.length);
+      assertSame(head, args[0]);
+      assertSame(tail, args[1]);
+      assertNotSame(args, testList.getArgs());
    }
 
    @Test

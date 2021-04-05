@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,9 @@ import java.util.Map;
 public final class EmptyList implements Term {
    /**
     * Singleton instance
+    * <p>
+    * For performance reasons, use t.getType()==TermType.EMPTY_LIST to check if a term is an empty list, rather than
+    * using t.getTerm()==EmptyList.EMPTY_LIST. TODO confirm this is what the code is doing
     */
    public static final EmptyList EMPTY_LIST = new EmptyList();
 
@@ -56,12 +59,9 @@ public final class EmptyList implements Term {
       return true;
    }
 
-   /**
-    * @throws UnsupportedOperationException as this implementation of {@link Term} has no arguments
-    */
    @Override
    public Term[] getArgs() {
-      throw new UnsupportedOperationException();
+      return TermUtils.EMPTY_ARRAY;
    }
 
    @Override
@@ -69,9 +69,12 @@ public final class EmptyList implements Term {
       return 0;
    }
 
+   /**
+    * @throws ArrayIndexOutOfBoundsException as this implementation of {@link Term} has no arguments
+    */
    @Override
    public Term getArgument(int index) {
-      throw new UnsupportedOperationException();
+      throw new ArrayIndexOutOfBoundsException(index);
    }
 
    /**

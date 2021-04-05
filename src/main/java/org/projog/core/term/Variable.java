@@ -158,6 +158,11 @@ public final class Variable implements Term {
       }
    }
 
+   @Override
+   public Term getBound() {
+      return value == null ? this : getValue();
+   }
+
    /**
     * @return itself if this variable is uninstantiated else calls {@link Term#getType()} on the {@link Term} this
     * variable is instantiated with.

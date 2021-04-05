@@ -61,7 +61,7 @@ public final class List implements Term {
 
    @Override
    public Term[] getArgs() {
-      throw new UnsupportedOperationException();
+      return new Term[] {head, tail};
    }
 
    @Override
@@ -71,7 +71,14 @@ public final class List implements Term {
 
    @Override
    public Term getArgument(int index) {
-      return index == 0 ? head : tail;
+      switch (index) {
+         case 0:
+            return head;
+         case 1:
+            return tail;
+         default:
+            throw new ArrayIndexOutOfBoundsException(index);
+      }
    }
 
    /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,15 @@ import static org.junit.Assert.fail;
 import static org.projog.TestUtils.integerNumber;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
+@RunWith(DataProviderRunner.class)
 public class IntegerNumberTest {
    private static final double DELTA = 0;
 
@@ -48,6 +53,13 @@ public class IntegerNumberTest {
    public void testGetTerm() {
       IntegerNumber i1 = new IntegerNumber(0);
       IntegerNumber i2 = i1.getTerm();
+      assertSame(i1, i2);
+   }
+
+   @Test
+   public void testGetBound() {
+      IntegerNumber i1 = new IntegerNumber(0);
+      Term i2 = i1.getBound();
       assertSame(i1, i2);
    }
 
@@ -85,13 +97,14 @@ public class IntegerNumberTest {
    }
 
    @Test
-   public void testGetArgument() {
+   @DataProvider({"-1", "0", "1"})
+   public void testGetArgument(int index) {
       try {
          IntegerNumber i = integerNumber();
-         i.getArgument(0);
+         i.getArgument(index);
          fail();
-      } catch (UnsupportedOperationException e) {
-         // expected
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: " + index, e.getMessage());
       }
    }
 

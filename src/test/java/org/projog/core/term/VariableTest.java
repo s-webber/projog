@@ -234,6 +234,90 @@ public class VariableTest {
    }
 
    @Test
+   public void testUnifyWithSelf() {
+      Variable x = new Variable("X");
+      x.unify(x);
+      assertSame(x, x.getTerm());
+   }
+
+   @Test
+   public void testUnifyPair() {
+      Variable v = new Variable("V");
+      Variable w = new Variable("W");
+      v.unify(w);
+      w.unify(v);
+      assertSame(w, v.getTerm());
+      assertSame(w, v.getTerm());
+   }
+
+   @Test
+   public void testUnifyCyclicChain() {
+      Variable v = new Variable("V");
+      Variable w = new Variable("W");
+      Variable x = new Variable("X");
+      Variable y = new Variable("Y");
+      Variable z = new Variable("Z");
+
+      v.unify(w);
+      w.unify(x);
+      x.unify(y);
+      y.unify(z);
+      z.unify(x);
+
+      assertSame(z, v.getTerm());
+      assertSame(z, w.getTerm());
+      assertSame(z, x.getTerm());
+      assertSame(z, y.getTerm());
+      assertSame(z, z.getTerm());
+
+      v.unify(v);
+      v.unify(x);
+      v.unify(w);
+      v.unify(y);
+      v.unify(z);
+      w.unify(v);
+      w.unify(w);
+      w.unify(x);
+      w.unify(y);
+      w.unify(z);
+      x.unify(v);
+      x.unify(w);
+      x.unify(x);
+      x.unify(y);
+      x.unify(z);
+      y.unify(v);
+      y.unify(w);
+      y.unify(x);
+      y.unify(y);
+      y.unify(z);
+      z.unify(v);
+      z.unify(w);
+      z.unify(x);
+      z.unify(y);
+      z.unify(z);
+
+      assertSame(z, v.getTerm());
+      assertSame(z, w.getTerm());
+      assertSame(z, x.getTerm());
+      assertSame(z, y.getTerm());
+      assertSame(z, z.getTerm());
+
+      Variable u = new Variable("U");
+      u.unify(x);
+      assertSame(z, u.getTerm());
+
+      Variable t = new Variable("T");
+      x.unify(t);
+      assertSame(t, t.getTerm());
+      assertSame(t, u.getTerm());
+      assertSame(t, v.getTerm());
+      assertSame(t, w.getTerm());
+      assertSame(t, x.getTerm());
+      assertSame(t, y.getTerm());
+      assertSame(t, z.getTerm());
+   }
+
+   @Test
    public void testVariableChain() {
       final Variable v1 = variable();
       Variable v2 = v1;

@@ -109,10 +109,11 @@ public final class Variable implements Term {
 
    @Override
    public boolean unify(Term t) {
-      if (value == null) {
-         if (this != t) {
-            value = t;
-         }
+      t = t.getBound();
+      if (t == this || t == value) {
+         return true;
+      } else if (value == null) {
+         value = t;
          return true;
       } else {
          return getValue().unify(t.getTerm());
@@ -190,7 +191,9 @@ public final class Variable implements Term {
                return v.value;
             }
             t = v.value;
-         } while (true);
+         } while (t != value);
+
+         throw new IllegalStateException();
       } else {
          return value;
       }

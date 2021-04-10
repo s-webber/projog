@@ -15,7 +15,9 @@
  */
 package org.projog.core.term;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a data structure with two {@link Term}s - a head and a tail.
@@ -30,7 +32,7 @@ import java.util.Map;
  */
 public final class List implements Term {
    private final Term head;
-   private Term tail;
+   private final Term tail;
    private final boolean immutable;
    private final int hashCode;
 
@@ -98,32 +100,52 @@ public final class List implements Term {
 
    @Override
    public List getTerm() {
-      if (immutable) {
-         return this;
-      } else {
-         Term newHead = head.getTerm();
-         Term newTail = tail.getTerm();
-         if (newHead == head && newTail == tail) {
-            return this;
-         } else {
-            return new List(newHead, newTail);
-         }
-      }
+      return traverse(Term::getTerm);
    }
 
    @Override
    public List copy(Map<Variable, Variable> sharedVariables) {
+      return traverse(t -> t.copy(sharedVariables));
+   }
+
+   /**
+    * Used by {@link #getTerm()} and {@link #copy(Map)} to traverse a list without using recursion.
+    *
+    * @param f the operation to apply to each mutable element of the list
+    * @return the resulting list produced as a result of applying {@link f} to each of the mutable elements
+    */
+   private List traverse(UnaryOperator<Term> f) {
       if (immutable) {
          return this;
-      } else {
-         Term newHead = head.copy(sharedVariables);
-         Term newTail = tail.copy(sharedVariables);
-         if (newHead == head && newTail == tail) {
-            return this;
-         } else {
-            return new List(newHead, newTail);
+      }
+
+      List list = this;
+
+      ArrayList<List> elements = new ArrayList<>();
+      while (!list.immutable && list.tail.getType() == TermType.LIST) {
+         elements.add(list);
+         list = (List) list.tail.getBound();
+      }
+
+      if (!list.immutable) {
+         Term newHead = f.apply(list.head);
+         Term newTail = f.apply(list.tail);
+         if (newHead != list.head || newTail != list.tail) {
+            list = new List(newHead, newTail);
          }
       }
+
+      for (int i = elements.size() - 1; i > -1; i--) {
+         List next = elements.get(i);
+         Term newHead = f.apply(next.head);
+         if (newHead != next.head || list != next.tail) {
+            list = new List(newHead, list);
+         } else {
+            list = next;
+         }
+      }
+
+      return list;
    }
 
    @Override
@@ -149,9 +171,16 @@ public final class List implements Term {
 
    @Override
    public void backtrack() {
-      if (!immutable) {
-         head.backtrack();
-         tail.backtrack();
+      // used to be implemented using recursion but caused stack overflow problems with long lists
+      List list = this;
+      while (!list.immutable) {
+         list.head.backtrack();
+         if (list.tail.getClass() == List.class) {
+            list = (List) list.tail;
+         } else {
+            list.tail.backtrack();
+            return;
+         }
       }
    }
 

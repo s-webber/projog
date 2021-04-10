@@ -45,38 +45,88 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
  */
 @RunWith(DataProviderRunner.class)
 public class ListTest {
-   private static final Term head = new Atom("a");
-   private static final Term tail = new Atom("b");
-   private static final List testList = new List(head, tail);
+   private static final int LONG_LIST_SIZE = 1000;
 
    @Test
    public void testGetName() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertEquals(".", testList.getName());
    }
 
    @Test
    public void testToString() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertEquals(".(a, b)", testList.toString());
    }
 
    @Test
-   public void testGetTerm() {
+   public void testMutableListGetTerm() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       List l = testList.getTerm();
       assertSame(testList, l);
    }
 
    @Test
+   public void testImmutableListGetTerm() {
+      Atom a = new Atom("a");
+      Atom b = new Atom("b");
+      Atom c = new Atom("c");
+      Variable x = new Variable("X");
+      Variable y = new Variable("Y");
+      Variable z = new Variable("Z");
+      List sublist = ListFactory.createList(y, z);
+      List originalList = ListFactory.createList(x, sublist);
+
+      assertSame(originalList, originalList.getTerm());
+
+      x.unify(a);
+
+      assertSame(x, originalList.getArgument(0));
+      assertSame(sublist, originalList.getArgument(1));
+
+      List newList = originalList.getTerm();
+      assertNotSame(originalList, newList);
+      assertSame(a, newList.getArgument(0));
+      assertSame(sublist, newList.getArgument(1));
+
+      z.unify(c);
+
+      newList = originalList.getTerm();
+      assertNotSame(originalList, newList);
+      assertSame(a, newList.getArgument(0));
+      assertNotSame(sublist, newList.getArgument(1));
+      assertSame(y, newList.getArgument(1).getArgument(0));
+      assertSame(c, newList.getArgument(1).getArgument(1));
+
+      x.backtrack();
+      z.backtrack();
+      y.unify(b);
+
+      newList = originalList.getTerm();
+      assertNotSame(originalList, newList);
+      assertSame(x, newList.getArgument(0));
+      assertNotSame(sublist, newList.getArgument(1));
+      assertSame(b, newList.getArgument(1).getArgument(0));
+      assertSame(z, newList.getArgument(1).getArgument(1));
+   }
+
+   @Test
    public void testGetType() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertSame(TermType.LIST, testList.getType());
    }
 
    @Test
    public void testGetNumberOfArguments() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertEquals(2, testList.getNumberOfArguments());
    }
 
    @Test
    public void testGetArgument() {
+      Term head = new Atom("a");
+      Term tail = new Atom("b");
+      List testList = new List(head, tail);
       assertSame(head, testList.getArgument(0));
       assertSame(tail, testList.getArgument(1));
    }
@@ -84,6 +134,7 @@ public class ListTest {
    @Test
    @DataProvider({"-1", "2", "3"})
    public void testGetArgumentIndexOutOfBounds(int index) {
+      List testList = new List(new Atom("a"), new Atom("b"));
       try {
          testList.getArgument(index);
          fail();
@@ -94,6 +145,9 @@ public class ListTest {
 
    @Test
    public void testGetArgs() {
+      Term head = new Atom("a");
+      Term tail = new Atom("b");
+      List testList = new List(head, tail);
       Term[] args = testList.getArgs();
       assertEquals(2, args.length);
       assertSame(head, args[0]);
@@ -103,6 +157,7 @@ public class ListTest {
 
    @Test
    public void testCopyNoVariableElements() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertSame(testList, testList.copy(null));
    }
 
@@ -147,7 +202,75 @@ public class ListTest {
    }
 
    @Test
+   public void testImmutableListCopy() {
+      Atom a = new Atom("a");
+      Atom b = new Atom("b");
+      Atom c = new Atom("c");
+      Variable x = new Variable("X");
+      Variable y = new Variable("Y");
+      Variable z = new Variable("Z");
+      List sublist = ListFactory.createList(y, z);
+      List originalList = ListFactory.createList(x, sublist);
+
+      Map<Variable, Variable> variables = new HashMap<>();
+      List newList = originalList.copy(variables);
+      assertNotSame(originalList, newList);
+      assertSame(variables.get(x), newList.getArgument(0));
+      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
+      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+
+      x.unify(a);
+
+      assertSame(x, originalList.getArgument(0));
+      assertSame(sublist, originalList.getArgument(1));
+
+      variables = new HashMap<>();
+      newList = originalList.copy(variables);
+      assertNotSame(originalList, newList);
+      assertSame(a, newList.getArgument(0));
+      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
+      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+
+      z.unify(c);
+
+      variables = new HashMap<>();
+      newList = originalList.copy(variables);
+      assertNotSame(originalList, newList);
+      assertSame(a, newList.getArgument(0));
+      assertNotSame(sublist, newList.getArgument(1));
+      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
+      assertSame(c, newList.getArgument(1).getArgument(1));
+
+      x.backtrack();
+      z.backtrack();
+      y.unify(b);
+
+      variables = new HashMap<>();
+      newList = originalList.copy(variables);
+      assertNotSame(originalList, newList);
+      assertSame(variables.get(x), newList.getArgument(0));
+      assertNotSame(sublist, newList.getArgument(1));
+      assertSame(b, newList.getArgument(1).getArgument(0));
+      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+   }
+
+   @Test
+   public void testImmutableHeadMutableTailCopy() {
+      Variable x = new Variable("X");
+      Atom a = new Atom("a");
+      Atom b = new Atom("b");
+      List sublist = ListFactory.createList(a, b);
+      List originalList = ListFactory.createList(x, sublist);
+
+      Map<Variable, Variable> variables = new HashMap<>();
+      List newList = originalList.copy(variables);
+      assertSame(variables.get(x), newList.getArgument(0));
+      assertSame(sublist, newList.getArgument(1));
+   }
+
+   @Test
    public void testGetValueNoVariableElements() {
+      List testList = new List(new Atom("a"), new Atom("b"));
       assertSame(testList, testList.getTerm());
    }
 
@@ -205,18 +328,19 @@ public class ListTest {
       assertEquals(".(X, z)", l1.toString());
    }
 
+   /** A long chain of lists where the majority of heads are immutable and all tails are not variables. */
    @Test
    public void testLongList() {
       StringBuilder bigListSyntaxBuilder1 = new StringBuilder("[");
       StringBuilder bigListSyntaxBuilder2 = new StringBuilder("[");
-      for (int i = 0; i < 10000; i++) {
+      for (int i = 0; i < LONG_LIST_SIZE; i++) {
          if (i != 0) {
             bigListSyntaxBuilder1.append(",");
             bigListSyntaxBuilder2.append(",");
          }
          bigListSyntaxBuilder1.append(i);
          // make one element in second list different than first
-         if (i == 789) {
+         if (i == LONG_LIST_SIZE/4) {
             bigListSyntaxBuilder2.append(i - 1);
          } else {
             bigListSyntaxBuilder2.append(i);
@@ -237,6 +361,105 @@ public class ListTest {
       assertMatch(t1, t1, true);
       assertMatch(t1, t2, true);
       assertMatch(t1, t3, false);
+   }
+
+   /** A long chain of lists where all the heads are variables and all tails are not variables. */
+   @Test
+   public void testLongListWithMutableElements() {
+      StringBuilder bigListSyntaxBuilder1 = new StringBuilder("[");
+      StringBuilder bigListSyntaxBuilder2 = new StringBuilder("[");
+      for (int i = 0; i < LONG_LIST_SIZE; i++) {
+         if (i != 0) {
+            bigListSyntaxBuilder1.append(",");
+            bigListSyntaxBuilder2.append(",");
+         }
+         if (i == LONG_LIST_SIZE - 1) {
+            bigListSyntaxBuilder1.append("X");
+         } else {
+            bigListSyntaxBuilder1.append(i);
+         }
+         if (i == LONG_LIST_SIZE - 2) {
+            bigListSyntaxBuilder2.append("Y");
+         } else {
+            bigListSyntaxBuilder2.append(i);
+         }
+      }
+      bigListSyntaxBuilder1.append("]");
+      bigListSyntaxBuilder2.append("]");
+      String bigListSyntax1 = bigListSyntaxBuilder1.toString();
+      String bigListSyntax2 = bigListSyntaxBuilder2.toString();
+      List t1 = (List) TestUtils.parseSentence(bigListSyntax1 + ".");
+      List t2 = (List) TestUtils.parseSentence(bigListSyntax2 + ".");
+      assertSame(t1, t1.getTerm());
+      assertSame(t2, t2.getTerm());
+      assertEquals(bigListSyntax1, TestUtils.write(t1));
+      assertEquals(bigListSyntax2, TestUtils.write(t2));
+      assertStrictEquality(t1, t2, false);
+      assertTrue(t1.unify(t2));
+      assertStrictEquality(t1, t2, true);
+      assertNotSame(t1, t1.getTerm());
+      assertNotSame(t2, t2.getTerm());
+      assertStrictEquality(t1.getTerm(), t2.getTerm(), true);
+      t1.backtrack();
+      t2.backtrack();
+      assertStrictEquality(t1, t2, false);
+
+      List t1Copy = t1.copy(new HashMap<>());
+      assertEquals(bigListSyntax1, TestUtils.write(t1Copy));
+      assertStrictEquality(t1, t1Copy, false);
+      List t2Copy = t2.copy(new HashMap<>());
+      assertEquals(bigListSyntax2, TestUtils.write(t2Copy));
+      assertStrictEquality(t2, t2Copy, false);
+   }
+
+   /**
+    * A long chain of lists where all heads and tails are variables.
+    * <p>
+    * Heads are unified to atoms and tails are unified with the next list in the chain.
+    */
+   @Test
+   public void testLongListWithVariableTails() {
+      Term input = EmptyList.EMPTY_LIST;
+      Term[] atoms = new Term[LONG_LIST_SIZE];
+      Term[] lists = new Term[LONG_LIST_SIZE];
+      for (int i = 0; i < LONG_LIST_SIZE; i++) {
+         Atom atom = new Atom("atom" + i);
+         atoms[i] = atom;
+         Variable head = new Variable("H" + i);
+         head.unify(atom);
+         Variable tail = new Variable("T" + i);
+         tail.unify(input);
+         input = new List(head, tail);
+         lists[i] = input;
+      }
+
+      Term output = input.getTerm();
+      assertNotSame(input, output);
+      assertStrictEquality(input, output, true);
+      for (int i = LONG_LIST_SIZE - 1; i > -1; i--) {
+         assertSame(List.class, output.getClass());
+         assertSame(atoms[i], output.getArgument(0));
+         output = output.getArgument(1);
+      }
+      assertSame(EmptyList.EMPTY_LIST, output);
+
+      Term tail = input.getArgument(1).getBound();
+      input.backtrack();
+      assertSame(TermType.VARIABLE, input.getArgument(0).getType());
+      assertEquals("H" + (LONG_LIST_SIZE - 1), input.getArgument(0).toString());
+      assertSame(TermType.VARIABLE, input.getArgument(1).getType());
+      assertEquals("T" + (LONG_LIST_SIZE - 1), input.getArgument(1).toString());
+
+      boolean first = true;
+      for (int i = LONG_LIST_SIZE - 2; i > -1; i--) {
+         assertSame(first ? List.class : Variable.class, tail.getClass());
+         first = false;
+         assertSame(TermType.LIST, tail.getType());
+         assertSame(atoms[i], tail.getArgument(0).getBound());
+         tail = tail.getArgument(1);
+      }
+      assertSame(Variable.class, tail.getClass());
+      assertSame(EmptyList.EMPTY_LIST, tail.getBound());
    }
 
    @Test

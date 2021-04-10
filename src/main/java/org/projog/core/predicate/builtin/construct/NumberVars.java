@@ -15,14 +15,14 @@
  */
 package org.projog.core.predicate.builtin.construct;
 
-import java.util.LinkedHashMap;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
-import org.projog.core.term.Variable;
 
 /* TEST
 %QUERY numbervars(a,0,Y)
@@ -79,6 +79,28 @@ import org.projog.core.term.Variable;
 % G=$VAR(6)
 % X=p($VAR(0), $VAR(1), p($VAR(2), $VAR(1), $VAR(2), $VAR(3), [$VAR(4),$VAR(0),$VAR(5),$VAR(5),$VAR(6),$VAR(3)]))
 %ANSWER
+
+%QUERY X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,0,Y)
+%ANSWER
+% A = $VAR(0)
+% B = $VAR(1)
+% C = $VAR(2)
+% D = $VAR(3)
+% E = $VAR(4)
+% X = p($VAR(0), $VAR(1), p(x(x(x($VAR(0), p($VAR(2)), $VAR(1), p($VAR(3), $VAR(1)))))), $VAR(4))
+% Y = 5
+%ANSWER
+
+%QUERY X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,-42,Y)
+%ANSWER
+% A = $VAR(-42)
+% B = $VAR(-41)
+% C = $VAR(-40)
+% D = $VAR(-39)
+% E = $VAR(-38)
+% X = p($VAR(-42), $VAR(-41), p(x(x(x($VAR(-42), p($VAR(-40)), $VAR(-41), p($VAR(-39), $VAR(-41)))))), $VAR(-38))
+% Y = -37
+%ANSWER
  */
 /**
  * <code>numbervars(Term,Start,End)</code> - unifies free variables of a term.
@@ -103,13 +125,25 @@ public final class NumberVars extends AbstractSingleResultPredicate {
    }
 
    private long numberVars(Term term, long start) {
-      LinkedHashMap<Variable, Variable> sharedVariables = new LinkedHashMap<>();
-      term.copy(sharedVariables);
+      if (term.isImmutable()) {
+         return start;
+      }
 
+      Deque<Term> stack = new LinkedList<>();
       long ctr = start;
-      for (Variable v : sharedVariables.keySet()) {
-         v.unify(Structure.createStructure("$VAR", new Term[] {IntegerNumberCache.valueOf(ctr)}));
-         ctr++;
+      stack.add(term);
+      while (!stack.isEmpty()) {
+         Term next = stack.removeFirst();
+         if (next.getType().isVariable()) {
+            next.unify(Structure.createStructure("$VAR", new Term[] {IntegerNumberCache.valueOf(ctr++)}));
+         } else {
+            for (int i = next.getNumberOfArguments() - 1; i > -1; i--) {
+               Term child = next.getArgument(i);
+               if (!child.isImmutable()) {
+                  stack.addFirst(child);
+               }
+            }
+         }
       }
       return ctr;
    }

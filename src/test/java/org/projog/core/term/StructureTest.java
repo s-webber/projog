@@ -209,18 +209,35 @@ public class StructureTest {
    }
 
    @Test
-   public void testCopyWithVariables() {
-      Structure p = structure("test", atom(), integerNumber(), decimalFraction(), variable());
-      Structure copy = p.copy(new HashMap<Variable, Variable>());
-      assertNotSame(p, copy);
-      assertEquals("test", copy.getName());
-      assertEquals(TermType.STRUCTURE, copy.getType());
-      assertEquals(p.getNumberOfArguments(), copy.getNumberOfArguments());
-      assertEquals(p.getArgs().length, copy.getArgs().length);
-      assertTrue(p.getArgs()[0] == copy.getArgs()[0]);
-      assertTrue(p.getArgs()[1] == copy.getArgs()[1]);
-      assertTrue(p.getArgs()[2] == copy.getArgs()[2]);
-      assertTrue(p.getArgs()[3] != copy.getArgs()[3]);
+   public void testCopyWithUnassignedVariables() {
+      // create structure where some arguments are variables
+      String name = "test";
+      Atom a = atom();
+      IntegerNumber i = integerNumber();
+      DecimalFraction d = decimalFraction();
+      Variable x = new Variable("X");
+      Variable y = new Variable("Y");
+      Structure original = structure(name, a, x, i, y, d, x);
+
+      // make a copy
+      HashMap<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      Structure copy = original.copy(sharedVariables);
+
+      // compare copy to original
+      assertEquals(2, sharedVariables.size());
+      assertEquals("X", sharedVariables.get(x).getId());
+      assertNotEquals(x, sharedVariables.get(x));
+      assertEquals("Y", sharedVariables.get(y).getId());
+      assertNotEquals(y, sharedVariables.get(y));
+
+      assertEquals(name, copy.getName());
+      assertEquals(6, copy.getNumberOfArguments());
+      assertSame(a, copy.getArgs()[0]);
+      assertSame(sharedVariables.get(x), copy.getArgs()[1]);
+      assertSame(i, copy.getArgs()[2]);
+      assertSame(sharedVariables.get(y), copy.getArgs()[3]);
+      assertSame(d, copy.getArgs()[4]);
+      assertSame(sharedVariables.get(x), copy.getArgs()[5]);
    }
 
    @Test
@@ -268,6 +285,33 @@ public class StructureTest {
       assertTrue(p2.isImmutable());
       assertSame(v, p1.getArgument(1).getArgument(1));
       assertSame(a, p2.getArgument(1).getArgument(1));
+   }
+
+   @Test
+   public void testBacktrack() {
+      Variable x = variable("X");
+      Variable y = variable("Y");
+      Variable z = variable("Z");
+      Atom a1 = atom("test1");
+      Atom a2 = atom("test2");
+      Atom a3 = atom("test3");
+      Structure p1 = structure("p", x, structure("p", a1, y));
+      Structure p2 = structure("p", z);
+      x.unify(p2);
+      y.unify(a2);
+      z.unify(a3);
+
+      assertSame(p2, x.getBound());
+      assertSame(a2, y.getBound());
+      assertSame(a3, z.getBound());
+
+      p1.backtrack();
+
+      // Note that backtracking unbounds X and Y from the "p2" structure
+      // but it doesn't unbound the Z variable of the "p2" structure.
+      assertSame(x, x.getBound());
+      assertSame(y, y.getBound());
+      assertSame(a3, z.getBound());
    }
 
    @Test

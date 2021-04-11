@@ -15,7 +15,6 @@
  */
 package org.projog.core.term;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -83,22 +82,28 @@ public final class ListFactory {
    public static Term createList(Term[] terms, Term tail) {
       int numberOfElements = terms.length;
       if (numberOfElements == 0) {
-         return EmptyList.EMPTY_LIST;
+         return tail;
       }
       Term list = tail;
       for (int i = numberOfElements - 1; i > -1; i--) {
          Term element = terms[i];
-         list = createList(element, list);
+         list = new List(element, list);
       }
       return list;
    }
 
    /** Returns a new list of the specified length where is each element is a variable. */
    public static Term createListOfLength(final int length) {
-      final java.util.List<Term> javaList = new ArrayList<Term>();
-      for (int i = 0; i < length; i++) {
-         javaList.add(new Variable("E" + i));
+      if (length == 0) {
+         return EmptyList.EMPTY_LIST;
+      } else if (length < 0) {
+         throw new IllegalArgumentException("Cannot create list of length: " + length);
+      } else {
+         Term t = EmptyList.EMPTY_LIST;
+         for (int i = length - 1; i > -1; i--) {
+            t = new List(new Variable("E" + i), t);
+         }
+         return t;
       }
-      return createList(javaList);
    }
 }

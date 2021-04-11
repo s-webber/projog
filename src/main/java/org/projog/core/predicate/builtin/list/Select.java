@@ -15,15 +15,14 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
-import org.projog.core.term.ListFactory;
-import org.projog.core.term.ListUtils;
+import org.projog.core.predicate.udp.PredicateUtils;
+import org.projog.core.term.EmptyList;
+import org.projog.core.term.List;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
 /* TEST
  %QUERY select(X,[h,e,l,l,o],Z)
@@ -67,7 +66,7 @@ import org.projog.core.term.Term;
  %ANSWER
  % B=UNINSTANTIATED VARIABLE
  % X=UNINSTANTIATED VARIABLE
- % Z=[p(X, q)]
+ % Z=[p(B, q)]
  %ANSWER
 
  %QUERY select(a, Result, [x,y,z])
@@ -75,6 +74,11 @@ import org.projog.core.term.Term;
  %ANSWER Result=[x,a,y,z]
  %ANSWER Result=[x,y,a,z]
  %ANSWER Result=[x,y,z,a]
+
+ %QUERY select(a, [x|X], [x,y,z])
+ %ANSWER X = [a,y,z]
+ %ANSWER X = [y,a,z]
+ %ANSWER X = [y,z,a]
  */
 /**
  * <code>select(X,Y,Z)</code> - removes an element from a list.
@@ -86,137 +90,86 @@ import org.projog.core.term.Term;
 public final class Select extends AbstractPredicateFactory {
    @Override
    public Predicate getPredicate(Term element, Term inputList, Term outputList) {
-      if (inputList.getType().isVariable()) {
-         List<Term> list = ListUtils.toJavaUtilList(outputList);
-         if (list == null) {
-            throw new ProjogException("Expected list but got: " + outputList.getType());
-         }
-         return new IncludePredicate(element, inputList, outputList, list);
+      // select(X, [Head|Tail], Rest) implemented as: select(Tail, Head, X, Rest)
+      if (inputList.getType() == TermType.LIST) {
+         return new SelectPredicate(inputList.getArgument(1), inputList.getArgument(0), element, outputList);
+      } else if (inputList.getType().isVariable()) {
+         Term head = new Variable("Head");
+         Term tail = new Variable("Tail");
+         Term newList = new List(head, tail);
+         inputList.unify(newList);
+         return new SelectPredicate(tail, head, element, outputList);
       } else {
-         List<Term> list = ListUtils.toJavaUtilList(inputList);
-         if (list == null) {
-            throw new ProjogException("Expected list but got: " + inputList.getType());
-         }
-         return new ExcludePredicate(element, inputList, outputList, list);
+         return PredicateUtils.FALSE;
       }
    }
 
-   private final class IncludePredicate implements Predicate {
-      private final Term element;
-      private final Term variable;
-      private final Term thirdArg;
-      private final List<Term> list;
-      private int ctr;
+   private static final class SelectPredicate implements Predicate {
+      Term firstArg;
+      Term secondArg;
+      final Term thirdArg;
+      Term fourthArg;
+      boolean retrying;
 
-      private IncludePredicate(Term element, Term variable, Term thirdArg, List<Term> list) {
-         this.element = element;
-         this.variable = variable;
+      SelectPredicate(Term firstArg, Term secondArg, Term thirdArg, Term fourthArg) {
+         this.firstArg = firstArg;
+         this.secondArg = secondArg;
          this.thirdArg = thirdArg;
-         this.list = list;
+         this.fourthArg = fourthArg;
       }
 
       @Override
       public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
-            if (retrying()) {
-               element.backtrack();
-               variable.backtrack();
-               thirdArg.backtrack();
-            }
-
-            boolean unified = variable.unify(include(ctr));
-            ctr++;
-            if (unified) {
+         while (true) {
+            //select3_(Tail, Head, Head, Tail).
+            if (!retrying && firstArg.unify(fourthArg) && secondArg.unify(thirdArg)) {
+               retrying = true;
                return true;
             }
+            retrying = false;
+
+            firstArg.backtrack();
+            secondArg.backtrack();
+            thirdArg.backtrack();
+            fourthArg.backtrack();
+
+            // select3_([Head2|Tail], Head, X, [Head|Rest]) :-
+            //   select3_(Tail, Head2, X, Rest).
+            Term tail;
+            Term head2;
+            if (firstArg.getType() == TermType.LIST) {
+               head2 = firstArg.getArgument(0);
+               tail = firstArg.getArgument(1);
+            } else if (firstArg.getType().isVariable()) {
+               head2 = new Variable("Head2");
+               tail = new Variable("Tail");
+               firstArg.unify(new List(head2, tail));
+            } else {
+               return false;
+            }
+
+            Term rest;
+            if (fourthArg.getType() == TermType.LIST) {
+               if (!secondArg.unify(fourthArg.getArgument(0))) {
+                  return false;
+               }
+               rest = fourthArg.getArgument(1);
+            } else if (fourthArg.getType().isVariable()) {
+               rest = new Variable("Rest");
+               fourthArg.unify(new List(secondArg, rest));
+            } else {
+               return false;
+            }
+
+            firstArg = tail.getTerm();
+            secondArg = head2.getTerm();
+            fourthArg = rest.getTerm();
          }
-         return false;
       }
 
       @Override
       public boolean couldReevaluationSucceed() {
-         return ctr < list.size() + 1;
-      }
-
-      private boolean retrying() {
-         return ctr > 0;
-      }
-
-      /**
-       * Create a a new {@code org.projog.core.term.List} based on {@code list} but including the element at index
-       * {@code indexOfElementToInclude}.
-       */
-      private Term include(int indexOfElementToInclude) {
-         final int size = list.size();
-         final List<Term> result = new ArrayList<>(size + 1);
-         for (int i = 0; i < size; i++) {
-            if (i == ctr) {
-               result.add(element);
-            }
-            result.add(list.get(i));
-         }
-         if (size == ctr) {
-            result.add(element);
-         }
-         return ListFactory.createList(result);
-      }
-   }
-
-   private final class ExcludePredicate implements Predicate {
-      private final Term element;
-      private final Term inputList;
-      private final Term outputList;
-      private final List<Term> list;
-      private int ctr;
-
-      private ExcludePredicate(Term element, Term inputList, Term outputList, List<Term> list) {
-         this.element = element;
-         this.inputList = inputList;
-         this.outputList = outputList;
-         this.list = list;
-      }
-
-      @Override
-      public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
-            if (retrying()) {
-               element.backtrack();
-               inputList.backtrack();
-               outputList.backtrack();
-            }
-
-            Term listElement = list.get(ctr);
-            boolean unified = element.unify(listElement) && outputList.unify(exclude(ctr));
-            ctr++;
-            if (unified) {
-               return true;
-            }
-         }
-         return false;
-      }
-
-      @Override
-      public boolean couldReevaluationSucceed() {
-         return ctr < list.size();
-      }
-
-      private boolean retrying() {
-         return ctr > 0;
-      }
-
-      /**
-       * Create a a new {@code org.projog.core.term.List} based on {@code list} but excluding the element at index
-       * {@code indexOfElementToExclude}.
-       */
-      private Term exclude(int indexOfElementToExclude) {
-         final int size = list.size();
-         final List<Term> result = new ArrayList<>(size - 1);
-         for (int i = 0; i < size; i++) {
-            if (i != ctr) {
-               result.add(list.get(i));
-            }
-         }
-         return ListFactory.createList(result);
+         return !retrying || (firstArg != EmptyList.EMPTY_LIST && fourthArg != EmptyList.EMPTY_LIST);
       }
    }
 }

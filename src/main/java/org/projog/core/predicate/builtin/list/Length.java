@@ -17,14 +17,15 @@ package org.projog.core.predicate.builtin.list;
 
 import static org.projog.core.predicate.udp.PredicateUtils.toPredicate;
 import static org.projog.core.term.ListFactory.createListOfLength;
-import static org.projog.core.term.ListUtils.toJavaUtilList;
+import static org.projog.core.term.TermUtils.toInt;
 
+import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
+import org.projog.core.term.TermType;
 
 /* TEST
  %QUERY length([],X)
@@ -36,10 +37,8 @@ import org.projog.core.term.TermUtils;
  %QUERY length([a,b,c],X)
  %ANSWER X=3
 
- %FALSE length([a,b|c],X)
  %FALSE length([a,b],1)
  %FALSE length([a,b],3)
- %FALSE length(abc,3)
 
  %QUERY length(X,0)
  %ANSWER X=[]
@@ -84,6 +83,63 @@ import org.projog.core.term.TermUtils;
  % Y=7
  %ANSWER
  %QUIT
+
+ %QUERY length([a,b|X],Y)
+ %ANSWER
+ % X=[]
+ % Y=2
+ %ANSWER
+ %ANSWER
+ % X=[E0]
+ % Y=3
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1]
+ % Y=4
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1,E2]
+ % Y=5
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1,E2,E3]
+ % Y=6
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1,E2,E3,E4]
+ % Y=7
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1,E2,E3,E4,E5]
+ % Y=8
+ %ANSWER
+ %ANSWER
+ % X=[E0,E1,E2,E3,E4,E5,E6]
+ % Y=9
+ %ANSWER
+ %QUIT
+
+ % TODO fix documentation generator to handle QUIT
+
+ %QUERY length([a,b|X],8)
+ %ANSWER X=[E0,E1,E2,E3,E4,E5]
+ %QUERY length([a,b|X],3)
+ %ANSWER X=[E0]
+ %QUERY length([a,b|X],2)
+ %ANSWER X=[]
+ %FALSE length([a,b|X],1)
+
+ %FALSE length([a,b,c],a)
+
+ %FALSE length(X,X)
+ %FALSE length([a,b,c|X],X)
+
+ %QUERY length(abc,X)
+ %ERROR Expected list but got: ATOM with value: abc
+ %QUERY length([a,b|c],X)
+ %ERROR Expected list but got: LIST with value: .(a, .(b, c))
+ %QUERY length([a,b|X],z)
+ %ERROR Expected Numeric but got: ATOM with value: z
  */
 /**
  * <code>length(X,Y)</code> - determines the length of a list.
@@ -95,35 +151,33 @@ import org.projog.core.term.TermUtils;
 public final class Length extends AbstractPredicateFactory {
    @Override
    protected Predicate getPredicate(final Term list, final Term expectedLength) {
-      boolean firstArgIsVariable = list.getType().isVariable();
-      boolean secondArgIsVariable = expectedLength.getType().isVariable();
-
-      if (firstArgIsVariable && secondArgIsVariable) {
-         return new Retryable(list, expectedLength);
-      } else if (firstArgIsVariable) {
-         final int length = TermUtils.toInt(expectedLength);
-         return toPredicate(list.unify(createListOfLength(length)));
-      } else {
-         return toPredicate(checkLength(list, expectedLength));
+      int actualLength = 0;
+      Term tail = list;
+      while (tail.getType() == TermType.LIST) {
+         actualLength++;
+         tail = tail.getArgument(1);
       }
-   }
 
-   private boolean checkLength(final Term list, final Term expectedLength) {
-      final java.util.List<Term> javaList = toJavaUtilList(list);
-      if (javaList != null) {
-         final IntegerNumber actualLength = IntegerNumberCache.valueOf(javaList.size());
-         return expectedLength.unify(actualLength);
+      if (tail == EmptyList.EMPTY_LIST) {
+         return toPredicate(expectedLength.unify(IntegerNumberCache.valueOf(actualLength)));
+      } else if (!tail.getType().isVariable()) {
+         throw new ProjogException("Expected list but got: " + list.getType() + " with value: " + list);
+      } else if (expectedLength.getType().isVariable()) {
+         return new Retryable(actualLength, tail, expectedLength);
       } else {
-         return false;
+         int requiredLength = toInt(expectedLength) - actualLength;
+         return toPredicate(requiredLength > -1 && tail.unify(createListOfLength(requiredLength)));
       }
    }
 
    private static class Retryable implements Predicate {
-      int i = 0;
+      final int startLength;
       final Term list;
       final Term length;
+      int currentLength = 0;
 
-      private Retryable(Term list, Term length) {
+      private Retryable(int startLength, Term list, Term length) {
+         this.startLength = startLength;
          this.list = list;
          this.length = length;
       }
@@ -132,9 +186,13 @@ public final class Length extends AbstractPredicateFactory {
       public boolean evaluate() {
          list.backtrack();
          length.backtrack();
-         list.unify(createListOfLength(i));
-         length.unify(IntegerNumberCache.valueOf(i));
-         i++;
+         if (!list.unify(createListOfLength(currentLength))) {
+            return false;
+         }
+         if (!length.unify(IntegerNumberCache.valueOf(startLength + currentLength))) {
+            return false;
+         }
+         currentLength++;
          return true;
       }
 

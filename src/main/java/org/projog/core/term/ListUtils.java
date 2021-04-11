@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+ * Copyright 2013 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.projog.core.ProjogException;
+
 /**
  * Helper methods for performing common tasks with Prolog list data structures.
  *
@@ -28,7 +30,7 @@ import java.util.List;
  * @see ListFactory
  * @see TermUtils
  */
-public class ListUtils {
+public final class ListUtils {
    /**
     * Private constructor as all methods are static.
     */
@@ -98,11 +100,12 @@ public class ListUtils {
     * with {@code element} then {@code false} is returned.
     * </p>
     *
-    * @throws IllegalArgumentException if {@code list} is not of type {@code TermType#LIST} or {@code TermType#EMPTY_LIST}
+    * @throws ProjogException if {@code list} is not of type {@code TermType#LIST} or {@code TermType#EMPTY_LIST}
     */
    public static boolean isMember(Term element, Term list) {
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
-         throw new IllegalArgumentException("Expected list but got: " + list);
+         // TODO have InvalidTermTypeException which extends ProjogException
+         throw new ProjogException("Expected list or empty list but got: " + list.getType() + " with value: " + list);
       }
       while (list.getType() == TermType.LIST) {
          if (element.unify(list.getArgument(0))) {
@@ -112,6 +115,13 @@ public class ListUtils {
          list.backtrack();
          list = list.getArgument(1);
       }
-      return false;
+      if (list.getType() == TermType.EMPTY_LIST) {
+         return false;
+      } else if (list.getType().isVariable()) {
+         Term tail = ListFactory.createList(element, new Variable("_"));
+         return list.unify(tail);
+      } else {
+         throw new ProjogException("Expected empty list or variable but got: " + list.getType() + " with value: " + list);
+      }
    }
 }

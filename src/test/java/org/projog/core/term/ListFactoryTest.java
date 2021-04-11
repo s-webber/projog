@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.projog.TestUtils.atom;
 import static org.projog.TestUtils.decimalFraction;
 import static org.projog.TestUtils.integerNumber;
@@ -61,6 +62,12 @@ public class ListFactoryTest {
       assertSame(tail, l);
    }
 
+   @Test
+   public void testCreationWithTailButNoHead() {
+      final Term tail = new Atom("tail");
+      assertSame(tail, ListFactory.createList(new Term[0], tail));
+   }
+
    /** Check {@link ListFactory#createList(Collection)} works the same as {@link ListFactory#createList(Term[])} */
    @Test
    public void testCreationWithJavaCollection() {
@@ -69,6 +76,16 @@ public class ListFactoryTest {
       final Term listFromArray = ListFactory.createList(args);
       final Term listFromCollection = ListFactory.createList(c);
       assertEquals(listFromCollection, listFromArray);
+   }
+
+   @Test
+   public void testCreateListOfLengthNegative() {
+      try {
+         ListFactory.createListOfLength(-1);
+         fail();
+      } catch (IllegalArgumentException e) {
+         assertEquals("Cannot create list of length: -1", e.getMessage());
+      }
    }
 
    @Test

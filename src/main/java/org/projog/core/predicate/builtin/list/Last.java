@@ -15,10 +15,14 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.udp.PredicateUtils;
+import org.projog.core.term.EmptyList;
+import org.projog.core.term.List;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
 /* TEST
  %QUERY last([a,b,c], X)
@@ -39,42 +43,180 @@ import org.projog.core.term.TermType;
  %TRUE last([a,b|[]], b)
 
  %FALSE last([], X)
+ %FALSE last(a, X)
 
- % Note: in some Prolog implementations this query would fail rather than cause an error.
- %QUERY last(a, X)
- %ERROR Expected list but got: a of type: ATOM
-
- % Note: in some Prolog implementations this query would cause Y to be unified with a list with X as the tail.
  %QUERY last(Y, X)
- %ERROR Expected list but got: Y of type: VARIABLE
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Y = [X]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Y = [_,X]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Y = [_,_,X]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Y = [_,_,_,X]
+ %ANSWER
+ %QUIT
+
+ %QUERY Z=[a,b|Tail],last(Z,Last)
+ %ANSWER
+ % Last = b
+ % Tail = []
+ % Z = [a,b]
+ %ANSWER
+ %ANSWER
+ % Last = UNINSTANTIATED VARIABLE
+ % Tail = [Last]
+ % Z = [a,b,Last]
+ %ANSWER
+ %ANSWER
+ % Last = UNINSTANTIATED VARIABLE
+ % Tail = [_,Last]
+ % Z = [a,b,_,Last]
+ %ANSWER
+ %ANSWER
+ % Last = UNINSTANTIATED VARIABLE
+ % Tail = [_,_,Last]
+ % Z = [a,b,_,_,Last]
+ %ANSWER
+ %QUIT
+
+ %QUERY Z=[a,b|Tail],last(Z,a)
+ %ANSWER
+ % Tail = [a]
+ % Z = [a,b,a]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,a]
+ % Z = [a,b,_,a]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,_,a]
+ % Z = [a,b,_,_,a]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,_,_,a]
+ % Z = [a,b,_,_,_,a]
+ %ANSWER
+ %QUIT
+
+ %QUERY Z=[a,b|Tail],last(Z,b)
+ %ANSWER
+ % Tail = []
+ % Z = [a,b]
+ %ANSWER
+ %ANSWER
+ % Tail = [b]
+ % Z = [a,b,b]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,b]
+ % Z = [a,b,_,b]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,_,b]
+ % Z = [a,b,_,_,b]
+ %ANSWER
+ %QUIT
+
+ %QUERY Z=[a,b|Tail],last(Z,z)
+ %ANSWER
+ % Tail = [z]
+ % Z = [a,b,z]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,z]
+ % Z = [a,b,_,z]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,_,z]
+ % Z = [a,b,_,_,z]
+ %ANSWER
+ %ANSWER
+ % Tail = [_,_,_,z]
+ % Z = [a,b,_,_,_,z]
+ %ANSWER
+ %QUIT
  */
 /**
  * <code>last(X,Y)</code> - finds the last element of a list.
  */
-public final class Last extends AbstractSingleResultPredicate {
+public final class Last extends AbstractPredicateFactory {
    @Override
-   protected boolean evaluate(Term list, Term termToUnifyLastElementWith) {
-      switch (list.getType()) {
-         case LIST:
-            return unifyLastElementOfList(list, termToUnifyLastElementWith);
-         case EMPTY_LIST:
-            return false;
-         default:
-            throw new ProjogException("Expected list but got: " + list + " of type: " + list.getType());
+   protected Predicate getPredicate(Term list, Term termToUnifyLastElementWith) {
+      Term tail = list;
+      Term last = list;
+      while (tail.getType() == TermType.LIST) {
+         last = tail;
+         tail = tail.getArgument(1);
+      }
+
+      if (list != tail && tail.getType() == TermType.EMPTY_LIST) {
+         // first arg is a ground list
+         return PredicateUtils.toPredicate(termToUnifyLastElementWith.unify(last.getArgument(0)));
+      } else if (tail.getType().isVariable()) {
+         // first arg is a variable or a list with a variable at the tail
+         return new LastPredicate(last, tail, termToUnifyLastElementWith);
+      } else {
+         // first arg is a list whose tail is not an empty list or variable
+         return PredicateUtils.FALSE;
       }
    }
 
-   private boolean unifyLastElementOfList(Term list, Term termToUnifyLastElementWith) {
-      Term lastElement;
-      do {
-         lastElement = list.getArgument(0);
-         list = list.getArgument(1);
-      } while (list.getType() == TermType.LIST);
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
 
-      if (list.getType() == TermType.EMPTY_LIST) {
-         return termToUnifyLastElementWith.unify(lastElement);
-      } else {
-         return false; // return false if a partial list
+   private static final class LastPredicate implements Predicate {
+      Term last;
+      Term tail;
+      Term termToUnifyLastElementWith;
+      Term newHead;
+      boolean retry;
+
+      LastPredicate(Term last, Term tail, Term termToUnifyLastElementWith) {
+         this.last = last;
+         this.tail = tail;
+         this.termToUnifyLastElementWith = termToUnifyLastElementWith;
+         this.newHead = termToUnifyLastElementWith;
+      }
+
+      @Override
+      public boolean evaluate() {
+         if (!retry) {
+            if (last.getType().isVariable()) {
+               last.unify(new List(termToUnifyLastElementWith, EmptyList.EMPTY_LIST));
+               newHead = new Variable("_");
+               retry = true;
+               return true;
+            }
+            tail.unify(EmptyList.EMPTY_LIST);
+            retry = true;
+            if (termToUnifyLastElementWith.unify(last.getArgument(0))) {
+               return true;
+            }
+         }
+
+         Term newLast = new List(newHead, tail.getTerm());
+         newHead = new Variable("_");
+
+         termToUnifyLastElementWith.backtrack();
+         tail.backtrack();
+         tail.unify(newLast);
+
+         return true;
+      }
+
+      @Override
+      public boolean couldReevaluationSucceed() {
+         return true;
       }
    }
 }

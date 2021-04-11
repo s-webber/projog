@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -33,6 +34,7 @@ import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.ProjogException;
 
 public class ListUtilsTest {
    @Test
@@ -73,12 +75,73 @@ public class ListUtilsTest {
    }
 
    @Test
+   public void testIsMember_variable_tail() {
+      Variable tail = variable();
+      Term list = ListFactory.createList(new Term[] {atom("x"), atom("y"), atom("z")}, tail);
+
+      assertTrue(ListUtils.isMember(atom("x"), list));
+      assertEquals(".(x, .(y, .(z, X)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      assertTrue(ListUtils.isMember(atom("y"), list));
+      assertEquals(".(x, .(y, .(z, X)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      assertTrue(ListUtils.isMember(atom("z"), list));
+      assertEquals(".(x, .(y, .(z, X)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      Atom q = atom("q");
+      assertTrue(ListUtils.isMember(q, list));
+      assertEquals(".(x, .(y, .(z, .(q, _))))", list.toString());
+      assertNotSame(tail, tail.getTerm());
+      assertSame(TermType.LIST, tail.getType());
+      assertSame(q, tail.getArgument(0));
+      assertSame(TermType.VARIABLE, tail.getArgument(1).getType());
+
+      Term newList = list.getTerm();
+      Term newTail = tail.getArgument(1);
+      Atom w = atom("w");
+      assertTrue(ListUtils.isMember(w, newList));
+      assertEquals(".(x, .(y, .(z, .(q, .(w, _)))))", newList.toString());
+      assertNotSame(newTail, newTail.getTerm());
+      assertSame(TermType.LIST, newTail.getType());
+      assertSame(w, newTail.getArgument(0));
+      assertSame(TermType.VARIABLE, newTail.getArgument(1).getType());
+   }
+
+   @Test
+   public void testIsMember_atom_tail() {
+      Atom tail = atom("test");
+      Term list = ListFactory.createList(new Term[] {atom("x"), atom("y"), atom("z")}, tail);
+
+      assertTrue(ListUtils.isMember(atom("x"), list));
+      assertEquals(".(x, .(y, .(z, test)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      assertTrue(ListUtils.isMember(atom("y"), list));
+      assertEquals(".(x, .(y, .(z, test)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      assertTrue(ListUtils.isMember(atom("z"), list));
+      assertEquals(".(x, .(y, .(z, test)))", list.toString());
+      assertSame(tail, tail.getTerm());
+
+      try {
+         assertTrue(ListUtils.isMember(atom("q"), list));
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("Expected empty list or variable but got: ATOM with value: test", e.getMessage());
+      }
+   }
+
+   @Test
    public void testIsMember_InvalidArgumentList() {
       try {
          ListUtils.isMember(atom(), atom("a"));
          fail();
-      } catch (IllegalArgumentException e) {
-         assertEquals("Expected list but got: a", e.getMessage());
+      } catch (ProjogException e) {
+         assertEquals("Expected list or empty list but got: ATOM with value: a", e.getMessage());
       }
    }
 

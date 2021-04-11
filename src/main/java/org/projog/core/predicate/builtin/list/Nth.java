@@ -15,18 +15,17 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermUtils.toInt;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.udp.PredicateUtils;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumberCache;
+import org.projog.core.term.List;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
 /* TEST
  %TRUE nth0(0, [a,b,c], a)
@@ -129,6 +128,169 @@ import org.projog.core.term.Term;
 
  % Note: "nth" is a synonym for "nth1".
  %TRUE nth(2, [a,b,c], b)
+
+ %FALSE nth0(1, [h,e,l,l,o|Y], l)
+ %FALSE nth1(1, [h,e,l,l,o|Y], l)
+
+ %QUERY nth0(X, [h,e,l,l,o|Y], l)
+ %ANSWER
+ % X = 2
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 3
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 5
+ % Y = [l|_5]
+ %ANSWER
+ %ANSWER
+ % X = 6
+ % Y = [_6,l|_5]
+ %ANSWER
+ %ANSWER
+ % X = 7
+ % Y = [_7,_6,l|_5]
+ %ANSWER
+ %QUIT
+
+ %QUERY nth1(X, [h,e,l,l,o|Y], l)
+ %ANSWER
+ % X = 3
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 4
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 6
+ % Y = [l|_6]
+ %ANSWER
+ %ANSWER
+ % X = 7
+ % Y = [_7,l|_6]
+ %ANSWER
+ %ANSWER
+ % X = 8
+ % Y = [_8,_7,l|_6]
+ %ANSWER
+ %QUIT
+
+ %QUERY nth0(8,[a,b,c|X],Y)
+ %ANSWER
+ % X = [E4,E3,E2,E1,E0,Y|T]
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+
+ %QUERY nth1(8,[a,b,c|X],Y)
+ %ANSWER
+ % X = [E3,E2,E1,E0,Y|T]
+ % Y = UNINSTANTIATED VARIABLE
+ %ANSWER
+
+ %QUERY nth0(X,[a,b,c|Y],Z)
+ %ANSWER
+ % X = 0
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = a
+ %ANSWER
+ %ANSWER
+ % X = 1
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = b
+ %ANSWER
+ %ANSWER
+ % X = 2
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = c
+ %ANSWER
+ %ANSWER
+ % X = 3
+ % Y = [Z|_3]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 4
+ % Y = [_4,Z|_3]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 5
+ % Y = [_5,_4,Z|_3]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUIT
+
+ %QUERY nth1(X,[a,b,c|Y],Z)
+ %ANSWER
+ % X = 1
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = a
+ %ANSWER
+ %ANSWER
+ % X = 2
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = b
+ %ANSWER
+ %ANSWER
+ % X = 3
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = c
+ %ANSWER
+ %ANSWER
+ % X = 4
+ % Y = [Z|_4]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 5
+ % Y = [_5,Z|_4]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 6
+ % Y = [_6,_5,Z|_4]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUIT
+
+ %QUERY nth0(X,Y,Z)
+ %ANSWER
+ % X = 0
+ % Y = [Z|_0]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 1
+ % Y = [_1,Z|_0]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 2
+ % Y = [_2,_1,Z|_0]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUIT
+
+ %QUERY nth1(X,Y,Z)
+ %ANSWER
+ % X = 1
+ % Y = [Z|_1]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 2
+ % Y = [_2,Z|_1]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = 3
+ % Y = [_3,_2,Z|_1]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %QUIT
  */
 /**
  * <code>nth0(X,Y,Z)</code> / <code>nth1(X,Y,Z)</code> - examines an element of a list.
@@ -154,58 +316,90 @@ public final class Nth extends AbstractPredicateFactory {
    @Override
    protected Predicate getPredicate(Term index, Term list, Term element) {
       if (index.getType().isVariable()) {
-         return new Retryable(index, list, element, toJavaUtilList(list));
+         return new Retryable(index, list, element);
       } else {
-         boolean result = evaluate(index, list, element);
+         boolean result = evaluate(toInt(index), list, element);
          return PredicateUtils.toPredicate(result);
       }
    }
 
-   private boolean evaluate(Term index, Term list, Term element) {
-      List<Term> l = toJavaUtilList(list);
-      if (l == null) {
-         return false;
+   private boolean evaluate(int index, Term list, Term element) {
+      Term current = list;
+      int requiredIdx = index - startingIdx;
+      int currentIdx = 0;
+      while (current.getType() == TermType.LIST) {
+         if (currentIdx == requiredIdx) {
+            return element.unify(current.getArgument(0));
+         }
+         current = current.getArgument(1);
+         currentIdx++;
       }
 
-      int i = toInt(index);
-      int idx = i - startingIdx;
-      if (isValidIndex(l, idx)) {
-         return element.unify(l.get(idx));
+      if (current == EmptyList.EMPTY_LIST) {
+         return false;
+      } else if (current.getType().isVariable()) {
+         int requiredLength = requiredIdx - currentIdx;
+         if (requiredLength > 0) {
+            Term t = new List(element, new Variable("T"));
+            for (int i = 0; i < requiredLength; i++) {
+               t = new List(new Variable("E" + i), t);
+            }
+            current.unify(t);
+            return true;
+         } else {
+            return false;
+         }
       } else {
          return false;
       }
    }
 
-   private boolean isValidIndex(List<Term> l, int idx) {
-      return idx > -1 && idx < l.size();
-   }
-
    private class Retryable implements Predicate {
       final Term index;
-      final Term list;
+      Term list;
       final Term element;
-      final List<Term> javaUtilList;
       int ctr;
 
-      @SuppressWarnings("unchecked")
-      Retryable(Term index, Term list, Term element, List<Term> javaUtilList) {
+      Retryable(Term index, Term list, Term element) {
          this.index = index;
          this.list = list;
          this.element = element;
-         this.javaUtilList = javaUtilList == null ? Collections.EMPTY_LIST : javaUtilList;
+         this.ctr = startingIdx;
       }
 
       @Override
       public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
+         while (list.getType() == TermType.LIST) {
+            Term oldList = list.getTerm();
             backtrack(index, list, element);
-            Term t = javaUtilList.get(ctr);
-            IntegerNumber n = IntegerNumberCache.valueOf(ctr + startingIdx);
-            ctr++;
-            if (index.unify(n) && element.unify(t)) {
+            if (list.getType().isVariable()) {
+               Term newList = new List(new Variable("_" + ctr), oldList);
+               list.unify(newList);
+               index.unify(IntegerNumberCache.valueOf(ctr++));
                return true;
             }
+
+            Term head = list.getArgument(0);
+            list = list.getArgument(1);
+
+            if (element.unify(head)) {
+               index.unify(IntegerNumberCache.valueOf(ctr++));
+               return true;
+            } else {
+               ctr++;
+            }
          }
+
+         if (list.getType().isVariable()) {
+            backtrack(index, list, element);
+
+            Variable tail = new Variable("_" + ctr);
+            Term newList = new List(element, tail);
+            list.unify(newList);
+            index.unify(IntegerNumberCache.valueOf(ctr++));
+            return true;
+         }
+
          return false;
       }
 
@@ -218,7 +412,7 @@ public final class Nth extends AbstractPredicateFactory {
 
       @Override
       public boolean couldReevaluationSucceed() {
-         return ctr < javaUtilList.size();
+         return list.getType() == TermType.LIST || list.getType().isVariable();
       }
    }
 }

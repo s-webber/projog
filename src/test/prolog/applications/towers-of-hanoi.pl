@@ -21,7 +21,6 @@ inform(X,Y) :-
 %
 %OUTPUT
 %ANSWER/
-%NO
 
 %QUERY hanoi(5)
 %OUTPUT
@@ -59,11 +58,9 @@ inform(X,Y) :-
 %
 %OUTPUT
 %ANSWER/
-%NO
 
 %QUERY hanoi(X)
 %ANSWER X = 0
-%NO
 
 %QUERY hanoi(x)
 %ERROR Cannot find arithmetic operator: x/0

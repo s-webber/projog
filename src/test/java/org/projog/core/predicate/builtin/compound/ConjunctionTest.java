@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -35,6 +36,10 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.Variable;
 
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+
+@RunWith(DataProviderRunner.class)
 public class ConjunctionTest {
    @Test
    public void testPreprocess_cannot_optimise_when_both_arguments_are_variables() {
@@ -87,6 +92,7 @@ public class ConjunctionTest {
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
       assertFalse(optimised.isRetryable());
+      assertFalse(optimised.isAlwaysCutOnBacktrack());
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
@@ -106,6 +112,7 @@ public class ConjunctionTest {
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
       assertTrue(optimised.isRetryable());
+      assertFalse(optimised.isAlwaysCutOnBacktrack());
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
       assertTrue(predicate.couldReevaluationSucceed());
       assertTrue(predicate.evaluate());
@@ -179,5 +186,40 @@ public class ConjunctionTest {
       assertTrue(predicate.evaluate());
       assertFalse(predicate.couldReevaluationSucceed());
       assertFalse(predicate.evaluate());
+   }
+
+   @Test
+   @DataProvider(value = {
+               "!,true.",
+               "true,!.",
+               "!,true,!.",
+               "repeat,!.",
+               "repeat,!,true.",
+               "!,repeat,!.",})
+   public void testIsAlwaysCutOnBacktrack_true(String clause) {
+      KnowledgeBase kb = createKnowledgeBase();
+      Term term = parseTerm(clause);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
+      PredicateFactory optimised = c.preprocess(term);
+      assertTrue(optimised.isAlwaysCutOnBacktrack());
+   }
+
+   @Test
+   @DataProvider(value = {
+               "true,true.",
+               "repeat,repeat.",
+               "true,repeat.",
+               "repeat,true.",
+               "!,repeat.",
+               "true,!,repeat.",
+               "!,true,!,repeat.",
+               "repeat,!,repeat.",
+               "!,repeat,!,repeat.",})
+   public void testIsAlwaysCutOnBacktrack_false(String clause) {
+      KnowledgeBase kb = createKnowledgeBase();
+      Term term = parseTerm(clause);
+      Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
+      PredicateFactory optimised = c.preprocess(term);
+      assertFalse(optimised.isAlwaysCutOnBacktrack());
    }
 }

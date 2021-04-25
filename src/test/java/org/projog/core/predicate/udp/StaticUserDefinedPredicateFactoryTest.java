@@ -45,7 +45,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    private static final String[] NON_RECURSIVE_PREDICATE_SYNTAX = {"p(X,Y,Z) :- repeat(3), X<Y.", "p(X,Y,Z) :- X is Y+Z.", "p(X,Y,Z) :- X=a."};
 
    @Test
-   public void testTrue() {
+   public void testSingleFact() {
       assertSingleRuleAlwaysTruePredicate("p.");
       assertSingleRuleAlwaysTruePredicate("p(_).");
       assertSingleRuleAlwaysTruePredicate("p(X).");
@@ -58,6 +58,32 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertSame(SingleNonRetryableRulePredicateFactory.class, pf.getClass());
       Predicate p = pf.getPredicate(TermUtils.EMPTY_ARRAY);
       assertTrue(p.evaluate());
+      assertFalse(p.couldReevaluationSucceed());
+      assertFalse(pf.isRetryable());
+   }
+
+   @Test
+   public void testSingleNonRetryableRule() {
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- fail.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- true.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- nl.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- write(A), nl.");
+   }
+
+   @Test
+   public void testSingleRuleAlwaysCutsOnBacktrack() {
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- !.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- repeat, !.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- nl, !.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- !, nl.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- nl, !, nl.");
+      assertSingleNonRetryableRulePredicateFactory("p(A,_,C) :- repeat, !, nl.");
+   }
+
+   private void assertSingleNonRetryableRulePredicateFactory(String term) {
+      PredicateFactory pf = getActualPredicateFactory(toTerms(term));
+      assertSame(SingleNonRetryableRulePredicateFactory.class, pf.getClass());
+      Predicate p = pf.getPredicate(TermUtils.EMPTY_ARRAY);
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(pf.isRetryable());
    }
@@ -188,19 +214,25 @@ public class StaticUserDefinedPredicateFactoryTest {
    }
 
    @Test
+   public void testRetryableRule() {
+      PredicateFactory pf = getActualPredicateFactory("x(X) :- var(X), !, repeat.");
+      assertSingleRetryableRulePredicateFactory(pf);
+   }
+
+   @Test
    public void testConjunctionContainingVariables() {
       PredicateFactory pf = getActualPredicateFactory("and(X,Y) :- X, Y.");
-      assertSingleRulePredicateFactory(pf);
+      assertSingleRetryableRulePredicateFactory(pf);
       assertTrue(pf.isRetryable());
    }
 
    @Test
    public void testVariableAntecedent() {
       PredicateFactory pf = getActualPredicateFactory("true(X) :- X.");
-      assertSingleRulePredicateFactory(pf);
+      assertSingleRetryableRulePredicateFactory(pf);
    }
 
-   private static void assertSingleRulePredicateFactory(PredicateFactory p) {
+   private static void assertSingleRetryableRulePredicateFactory(PredicateFactory p) {
       assertSame(SingleRetryableRulePredicateFactory.class, p.getClass());
    }
 

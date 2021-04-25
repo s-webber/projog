@@ -20,6 +20,16 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 
 /* TEST
+ %QUERY repeat
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %ANSWER/
+ %QUIT
+
  write_to_file(X) :-
     open('io_test.tmp', write, Z),
     set_output(Z),
@@ -45,7 +55,6 @@ import org.projog.core.predicate.Predicate;
  %QUERY read_from_file
  %OUTPUT The first sentence.
  %ANSWER/
- %NO
  */
 /**
  * <code>repeat</code> - always succeeds.

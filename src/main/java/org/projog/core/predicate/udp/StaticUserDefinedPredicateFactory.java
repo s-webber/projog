@@ -94,13 +94,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    private void setCompiledPredicateFactory() {
       setCompiledPredicateFactoryInvocationCtr++;
       // TODO always create Clauses here - can we move creation until InterpretedUserDefinedPredicatePredicateFactory
-      final Clauses clauses = Clauses.createFromModels(kb, implications);
-      compiledPredicateFactory = createPredicateFactoryFromClauseActions(clauses);
-   }
-
-   private PredicateFactory createPredicateFactoryFromClauseActions(Clauses clauses) {
+      Clauses clauses = Clauses.createFromModels(kb, implications);
       List<ClauseModel> clauseModels = getCopyOfImplications(); // TODO do we need to copy here?
-      return createInterpretedPredicateFactoryFromClauseActions(clauses, clauseModels);
+      compiledPredicateFactory = createInterpretedPredicateFactoryFromClauseActions(clauses, clauseModels);
    }
 
    private List<ClauseModel> getCopyOfImplications() {
@@ -156,7 +152,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    private PredicateFactory createSingleClausePredicateFactory(ClauseAction clause) {
-      if (clause.isRetryable()) {
+      if (clause.isRetryable() && !clause.isAlwaysCutOnBacktrack()) {
          return new SingleRetryableRulePredicateFactory(clause, spyPoint);
       } else {
          return new SingleNonRetryableRulePredicateFactory(clause, spyPoint);
@@ -172,6 +168,32 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          default:
             return new InterpretedUserDefinedPredicate(new ActionIterator(clauses), spyPoint, args);
       }
+   }
+
+   /**
+    * Returns true if clauses could return more than one result.
+    * <p>
+    * Returns false if use of cut means once a result has been found a subsequent attempt at backtracking will
+    * immediately fail. e.g.: <pre>
+    * p(X) :- var(X), !.
+    * p(1) :- !.
+    * p(7). % OK for last rule not to contain a cut, as long as it is not retryable.
+    * </pre>
+    */
+   private static boolean isClausesRetryable(ClauseAction[] clauses) {
+      int lastIdx = clauses.length-1;
+      ClauseAction last = clauses[lastIdx];
+      if (last.isRetryable() && !last.isAlwaysCutOnBacktrack()) {
+         return true;
+      }
+
+      for (int i = lastIdx - 1; i > -1; i--) {
+         if (!clauses[i].isAlwaysCutOnBacktrack()) {
+            return true;
+         }
+      }
+
+      return false;
    }
 
    @Override
@@ -280,6 +302,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       private final int argIdx;
       private final ClauseAction[] actions;
       private final LinkedHashMap<Term, ClauseAction> map;
+      private final boolean retryable;
 
       private LinkedHashMapPredicateFactory(Clauses clauses) {
          this.argIdx = clauses.getImmutableColumns()[0];
@@ -288,6 +311,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          for (ClauseAction a : actions) {
             map.put(a.getModel().getConsequent().getArgument(argIdx), a);
          }
+         this.retryable = isClausesRetryable(actions);
       }
 
       @Override
@@ -306,7 +330,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public boolean isRetryable() {
-         return true;
+         return retryable;
       }
 
       @Override
@@ -334,11 +358,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       private final int argIdx;
       private final Index index;
       private final ClauseAction[] actions;
+      private final boolean retryable;
 
       private SingleIndexPredicateFactory(Clauses clauses) {
          this.argIdx = clauses.getImmutableColumns()[0];
          this.index = new Indexes(clauses).getOrCreateIndex(1);
          this.actions = clauses.getClauseActions();
+         this.retryable = isClausesRetryable(actions);
       }
 
       @Override
@@ -355,7 +381,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public boolean isRetryable() {
-         return true;
+         return retryable;
       }
 
       @Override
@@ -379,9 +405,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private final class IndexablePredicateFactory implements PreprocessablePredicateFactory {
       private final Indexes index;
+      private final boolean retryable;
 
       private IndexablePredicateFactory(Clauses clauses) {
          this.index = new Indexes(clauses);
+         this.retryable = isClausesRetryable(clauses.getClauseActions());
       }
 
       @Override
@@ -391,7 +419,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public boolean isRetryable() {
-         return true;
+         return retryable;
       }
 
       @Override
@@ -409,19 +437,22 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private final class NotIndexablePredicateFactory implements PreprocessablePredicateFactory {
       private final ClauseAction[] data;
+      private final boolean retryable;
 
       private NotIndexablePredicateFactory(Clauses clauses) {
          this.data = clauses.getClauseActions();
+         this.retryable = isClausesRetryable(data);
       }
 
       @Override
       public Predicate getPredicate(Term[] args) {
+         // TODO or do: return createPredicate(args, data);
          return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, args);
       }
 
       @Override
       public boolean isRetryable() {
-         return true;
+         return retryable;
       }
 
       @Override

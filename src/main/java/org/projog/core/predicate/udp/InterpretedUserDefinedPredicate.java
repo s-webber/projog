@@ -129,6 +129,10 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
 
    @Override
    public boolean couldReevaluationSucceed() {
-      return retryCurrentClauseAction || clauseActions.hasNext();
+      if (currentClause != null && currentClause.isAlwaysCutOnBacktrack()) {
+         return false;
+      } else {
+         return retryCurrentClauseAction || clauseActions.hasNext();
+      }
    }
 }

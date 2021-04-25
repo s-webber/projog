@@ -13,19 +13,37 @@ p3(b, X, y) :- repeat(2).
 p3(X, 3, z).
 
 %QUERY meta_data(p1(_, _, _), X)
-%ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+%ANSWER X = factory_isRetryable : true
+%ANSWER X = factory_isAlwaysCutOnBacktrack : false
+%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = actual_isRetryable : true
+%ANSWER X = actual_isAlwaysCutOnBacktrack : false
+%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = processed_isRetryable : true
+%ANSWER X = processed_isAlwaysCutOnBacktrack : false
 
 %QUERY meta_data(p2(_, _, _), X)
-%ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+%ANSWER X = factory_isRetryable : true
+%ANSWER X = factory_isAlwaysCutOnBacktrack : false
+%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = actual_isRetryable : true
+%ANSWER X = actual_isAlwaysCutOnBacktrack : false
+%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = processed_isRetryable : true
+%ANSWER X = processed_isAlwaysCutOnBacktrack : false
 
 %QUERY meta_data(p3(_, _, _), X)
-%ANSWER X=factory : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X=actual : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X=processed : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+%ANSWER X = factory_isRetryable : true
+%ANSWER X = factory_isAlwaysCutOnBacktrack : false
+%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = actual_isRetryable : true
+%ANSWER X = actual_isAlwaysCutOnBacktrack : false
+%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+%ANSWER X = processed_isRetryable : true
+%ANSWER X = processed_isAlwaysCutOnBacktrack : false
 
 %QUERY p1(X, Y, Z)
 %ANSWER

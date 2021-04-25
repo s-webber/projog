@@ -39,6 +39,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -58,6 +59,9 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+
+@RunWith(DataProviderRunner.class)
 public class ClauseActionFactoryTest {
    private KnowledgeBase kb;
    private PredicateFactory mockPredicateFactory;
@@ -73,6 +77,7 @@ public class ClauseActionFactoryTest {
       when(mockPredicateFactory.getPredicate(EMPTY_ARRAY)).thenReturn(mockPredicate1, mockPredicate2);
 
       kb = KnowledgeBaseUtils.createKnowledgeBase();
+      KnowledgeBaseUtils.bootstrap(kb);
       kb.getPredicates().addPredicateFactory(new PredicateKey("test", 0), mockPredicateFactory);
    }
 
@@ -86,6 +91,12 @@ public class ClauseActionFactoryTest {
    public void testAlwaysMatchedFact_isRetryable() {
       AlwaysMatchedFact a = create(AlwaysMatchedFact.class, "p.");
       assertFalse(a.isRetryable());
+   }
+
+   @Test
+   public void testAlwaysMatchedFact_isAlwaysCutOnBacktrack() {
+      AlwaysMatchedFact a = create(AlwaysMatchedFact.class, "p.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
    }
 
    @Test
@@ -104,6 +115,12 @@ public class ClauseActionFactoryTest {
    public void testImmutableFact_isRetryable() {
       ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
       assertFalse(a.isRetryable());
+   }
+
+   @Test
+   public void testImmutableFact_isAlwaysCutOnBacktrack() {
+      ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
+      assertFalse(a.isAlwaysCutOnBacktrack());
    }
 
    @Test
@@ -166,6 +183,12 @@ public class ClauseActionFactoryTest {
    public void testMutableFact_isRetryable() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       assertFalse(a.isRetryable());
+   }
+
+   @Test
+   public void testMutableFact_isAlwaysCutOnBacktrack() {
+      MutableFact a = create(MutableFact.class, "p(a,X,c).");
+      assertFalse(a.isAlwaysCutOnBacktrack());
    }
 
    @Test
@@ -232,6 +255,12 @@ public class ClauseActionFactoryTest {
       assertTrue(a.isRetryable());
    }
 
+   @Test
+   public void testVariableAntecedant_isAlwaysCutOnBacktrack() {
+      VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+   }
+
    @Test()
    public void testVariableAntecedant_getPredicate_unassigned_variable() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
@@ -294,6 +323,12 @@ public class ClauseActionFactoryTest {
    }
 
    @Test
+   public void testZeroArgConsequentRule_isAlwaysCutOnBacktrack_unknown_predicate() {
+      ZeroArgConsequentRule a = create(ZeroArgConsequentRule.class, "p :- an_unknown_predicate.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+   }
+
+   @Test
    public void testZeroArgConsequentRule_isRetryable_true() {
       when(mockPredicateFactory.isRetryable()).thenReturn(true);
 
@@ -314,6 +349,26 @@ public class ClauseActionFactoryTest {
    }
 
    @Test
+   public void testZeroArgConsequentRule_isAlwaysCutOnBacktrack_true() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(true);
+
+      ZeroArgConsequentRule a = create(ZeroArgConsequentRule.class, "p :- test.");
+      assertTrue(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
+   }
+
+   @Test
+   public void testZeroArgConsequentRule_isAlwaysCutOnBacktrack_false() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(false);
+
+      ZeroArgConsequentRule a = create(ZeroArgConsequentRule.class, "p :- test.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
+   }
+
+   @Test
    public void testZeroArgConsequentRule_getPredicate() {
       ZeroArgConsequentRule a = create(ZeroArgConsequentRule.class, "p :- test.");
       assertSame(mockPredicate1, a.getPredicate(EMPTY_ARRAY));
@@ -323,6 +378,7 @@ public class ClauseActionFactoryTest {
    }
 
    // TODO p :- test(X). p(X) :- test(X). p(a) :- test(X).
+   // TODO testImmutableConsequentRule_getPredicate_antecedent_mutable
 
    @Test
    public void testZeroArgConsequentRule_getPredicate_antecedent_mutable() {
@@ -365,6 +421,12 @@ public class ClauseActionFactoryTest {
    }
 
    @Test
+   public void testImmutableConsequentRule_isAlwaysCutOnBacktrack_unknown_predicate() {
+      ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- an_unknown_predicate.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+   }
+
+   @Test
    public void testImmutableConsequentRule_isRetryable_true() {
       when(mockPredicateFactory.isRetryable()).thenReturn(true);
 
@@ -382,6 +444,26 @@ public class ClauseActionFactoryTest {
       assertFalse(a.isRetryable());
 
       verify(mockPredicateFactory).isRetryable();
+   }
+
+   @Test
+   public void testImmutableConsequentRule_isAlwaysCutOnBacktrack_true() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(true);
+
+      ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- test.");
+      assertTrue(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
+   }
+
+   @Test
+   public void testImmutableConsequentRule_isAlwaysCutOnBacktrack_false() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(false);
+
+      ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- test.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
    }
 
    @Test
@@ -457,6 +539,12 @@ public class ClauseActionFactoryTest {
    }
 
    @Test
+   public void testMutableRule_isAlwaysCutOnBacktrack_unknown_predicate() {
+      MutableRule a = create(MutableRule.class, "p(a,X,c) :- an_unknown_predicate.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+   }
+
+   @Test
    public void testMutableRule_isRetryable_true() {
       when(mockPredicateFactory.isRetryable()).thenReturn(true);
 
@@ -474,6 +562,26 @@ public class ClauseActionFactoryTest {
       assertFalse(a.isRetryable());
 
       verify(mockPredicateFactory).isRetryable();
+   }
+
+   @Test
+   public void testMutableRule_isAlwaysCutOnBacktrack_true() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(true);
+
+      MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
+      assertTrue(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
+   }
+
+   @Test
+   public void testMutableRule_isAlwaysCutOnBacktrack_false() {
+      when(mockPredicateFactory.isAlwaysCutOnBacktrack()).thenReturn(false);
+
+      MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
+      assertFalse(a.isAlwaysCutOnBacktrack());
+
+      verify(mockPredicateFactory).isAlwaysCutOnBacktrack();
    }
 
    @Test
@@ -504,7 +612,7 @@ public class ClauseActionFactoryTest {
 
    @Test
    public void testMutableRule_getPredicate_query_args_unify_with_clause() {
-      MutableRule a = create(MutableRule.class, "p(a,X,c)  :- test.");
+      MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       assertSame(mockPredicate1, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
       assertSame(mockPredicate2, a.getPredicate(array(atom("a"), atom("d"), atom("c"))));
       verify(mockPredicateFactory, times(2)).getPredicate(EMPTY_ARRAY);
@@ -512,7 +620,7 @@ public class ClauseActionFactoryTest {
 
    @Test
    public void testMutableRule_getPredicate_query_args_dont_unify_with_clause() {
-      MutableRule a = create(MutableRule.class, "p(a,X,c)  :- test.");
+      MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       assertSame(PredicateUtils.FALSE, a.getPredicate(array(atom("a"), atom("b"), atom("d"))));
    }
 

@@ -25,4 +25,6 @@ public interface ClauseAction {
    ClauseModel getModel();
 
    boolean isRetryable();
+
+   boolean isAlwaysCutOnBacktrack();
 }

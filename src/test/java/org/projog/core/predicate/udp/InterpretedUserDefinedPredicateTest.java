@@ -44,9 +44,6 @@ import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.InterpretedUserDefinedPredicate;
-import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 public class InterpretedUserDefinedPredicateTest {
@@ -114,8 +111,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.evaluate());
 
       verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).isAlwaysCutOnBacktrack();
       verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).isAlwaysCutOnBacktrack();
       verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).isAlwaysCutOnBacktrack();
    }
 
    @Test
@@ -203,8 +203,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.evaluate());
 
       verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).isAlwaysCutOnBacktrack();
       verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2, times(5)).isAlwaysCutOnBacktrack();
       verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).isAlwaysCutOnBacktrack();
       verify(mockPredicate, times(6)).evaluate();
       verify(mockPredicate, times(5)).couldReevaluationSucceed();
       verifyNoMoreInteractions(mockPredicate);
@@ -262,8 +265,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.evaluate());
 
       verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).isAlwaysCutOnBacktrack();
       verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2, times(5)).isAlwaysCutOnBacktrack();
       verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).isAlwaysCutOnBacktrack();
       verify(mockPredicate, times(5)).evaluate();
       verify(mockPredicate, times(5)).couldReevaluationSucceed();
       verifyNoMoreInteractions(mockPredicate);
@@ -285,6 +291,7 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.evaluate());
 
       verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).isAlwaysCutOnBacktrack();
       verify(mockAction2).getPredicate(queryArgs);
       verify(mockPredicate).evaluate();
       verifyNoMoreInteractions(mockPredicate);
@@ -332,6 +339,7 @@ public class InterpretedUserDefinedPredicateTest {
       }
 
       verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).isAlwaysCutOnBacktrack();
       verify(mockAction2).getPredicate(queryArgs);
       verify(mockAction2).getModel();
       verify(mockPredicate).evaluate();

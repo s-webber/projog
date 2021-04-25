@@ -81,15 +81,24 @@ final class ClauseActionFactory {
          }
       }
 
+      PredicateFactory preprocessedPredicateFactory = kb.getPredicates().getPreprocessedPredicateFactory(antecedent);
       if (!hasSharedVariables && !hasConcreteTerms) {
-         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new AlwaysMatchedFact(model) : new MutableRule(model, preprocessedPredicateFactory);
       } else if (hasConcreteTerms && !hasVariables) {
-         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new ImmutableFact(model) : new ImmutableConsequentRule(model, preprocessedPredicateFactory);
       } else {
-         return isFact ? new MutableFact(model) : new MutableRule(model, kb.getPredicates().getPreprocessedPredicateFactory(antecedent));
+         return isFact ? new MutableFact(model) : new MutableRule(model, preprocessedPredicateFactory);
       }
    }
 
+   /**
+    * Clause where the antecedent is a variable.
+    * <p>
+    * When the antecedent is a variable then the associated predicate factory can only be determined at runtime.
+    * </p>
+    * <p>
+    * e.g. "p(X) :- X."
+    */
    static final class VariableAntecedantClauseAction implements ClauseAction {
       private final ClauseModel model;
       private final KnowledgeBase kb;
@@ -122,8 +131,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return true;
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return false;
+      }
    }
 
+   /**
+    * Clause where all consequent args are distinctly different variables and antecedent is true.
+    * <p>
+    * e.g. "p." or "p(X,Y,Z)."
+    */
    static final class AlwaysMatchedFact implements ClauseAction {
       private final ClauseModel model;
 
@@ -145,8 +164,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return false;
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return false;
+      }
    }
 
+   /**
+    * Clause where the consequent has no args.
+    * <p>
+    * e.g. "p :- test." or "p :- test(_)."
+    */
    static final class ZeroArgConsequentRule implements ClauseAction {
       private final ClauseModel model;
       private final PredicateFactory pf;
@@ -175,8 +204,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return pf.isRetryable();
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return pf.isAlwaysCutOnBacktrack();
+      }
    }
 
+   /**
+    * Clause where the consequent args are all immutable and the antecedent is true.
+    * <p>
+    * e.g. "p(a,b,c)."
+    */
    static final class ImmutableFact implements ClauseAction {
       private final ClauseModel model;
 
@@ -205,8 +244,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return false;
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return false;
+      }
    }
 
+   /**
+    * Clause where the consequent args are all immutable and the antecedent is not true.
+    * <p>
+    * e.g. "p(a,b,c) :- test." or "p(a,b,c) :- test(_)."
+    */
    static final class ImmutableConsequentRule implements ClauseAction {
       private final ClauseModel model;
       private final PredicateFactory pf;
@@ -242,8 +291,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return pf.isRetryable();
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return pf.isAlwaysCutOnBacktrack();
+      }
    }
 
+   /**
+    * Clause where at least one consequent arg is mutable and the antecedent is true.
+    * <p>
+    * e.g. "p(a,_,c)." or "p(X,X)."
+    */
    static final class MutableFact implements ClauseAction {
       private final ClauseModel model;
 
@@ -274,8 +333,18 @@ final class ClauseActionFactory {
       public boolean isRetryable() {
          return false;
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return false;
+      }
    }
 
+   /**
+    * Clause where at least one consequent arg is mutable and the antecedent is not true.
+    * <p>
+    * e.g. "p(a,_,c) :- test." or ""p(X,X) :- test."
+    */
    static final class MutableRule implements ClauseAction {
       private final ClauseModel model;
       private final PredicateFactory pf;
@@ -316,6 +385,11 @@ final class ClauseActionFactory {
       @Override
       public boolean isRetryable() {
          return pf.isRetryable();
+      }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         return pf.isAlwaysCutOnBacktrack();
       }
    }
 

@@ -36,21 +36,25 @@ public final class PredicateMetaData extends AbstractPredicateFactory {
       List<Term> attributes = new ArrayList<>();
 
       PredicateFactory pf = getPredicates().getPredicateFactory(input);
-      attributes.add(toTerm("factory", pf));
+      attributes.addAll(toTerms("factory", pf));
       if (pf instanceof StaticUserDefinedPredicateFactory) {
          PredicateFactory apf = ((StaticUserDefinedPredicateFactory) pf).getActualPredicateFactory();
-         attributes.add(toTerm("actual", apf));
+         attributes.addAll(toTerms("actual", apf));
       }
       if (pf instanceof PreprocessablePredicateFactory) {
          PredicateFactory preprocessed = ((PreprocessablePredicateFactory) pf).preprocess(input);
-         attributes.add(toTerm("processed", preprocessed));
+         attributes.addAll(toTerms("processed", preprocessed));
       }
 
       return new MetaDataPredicate(variable, attributes);
    }
 
-   private Term toTerm(String type, PredicateFactory pf) {
-      return Structure.createStructure(":", new Term[] {new Atom(type), new Atom(pf.getClass().getName())});
+   private List<Term> toTerms(String type, PredicateFactory pf) {
+      List<Term> attributes = new ArrayList<>();
+      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_class"), new Atom(pf.getClass().getName())}));
+      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_isRetryable"), new Atom("" + pf.isRetryable())}));
+      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_isAlwaysCutOnBacktrack"), new Atom("" + pf.isAlwaysCutOnBacktrack())}));
+      return attributes;
    }
 
    private static class MetaDataPredicate implements Predicate {

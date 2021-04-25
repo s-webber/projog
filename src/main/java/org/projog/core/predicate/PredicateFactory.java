@@ -60,4 +60,13 @@ public interface PredicateFactory {
     * backtracking, {@code false} otherwise
     */
    boolean isRetryable();
+
+   /**
+    * Will attempting to re-evaluate this implementation always result in a cut?
+    *
+    * @return {@true} if a cut will always be encountered when attempting to re-evaluate, {@code false} otherwise
+    */
+   default boolean isAlwaysCutOnBacktrack() {
+      return false;
+   }
 }

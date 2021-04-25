@@ -180,6 +180,17 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
             return PredicateUtils.FALSE;
          }
       }
+
+      @Override
+      public boolean isAlwaysCutOnBacktrack() {
+         if (secondPredicateFactory.isAlwaysCutOnBacktrack()) {
+            return true;
+         } else if (firstPredicateFactory.isAlwaysCutOnBacktrack() && !secondPredicateFactory.isRetryable()) {
+            return true;
+         } else {
+            return false;
+         }
+      }
    }
 
    private static final class OptimisedSingletonConjuction extends AbstractSingleResultPredicate {

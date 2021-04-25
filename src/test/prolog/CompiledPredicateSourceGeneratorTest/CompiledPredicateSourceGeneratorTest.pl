@@ -445,7 +445,7 @@ testCutSingleRuleMultipleResults :- repeat(5), !, repeat(3).
 
 testCutSingleRuleSingleResult :- 1<2, !, 2>1.
 
-%TRUE_NO testCutSingleRuleSingleResult
+%TRUE testCutSingleRuleSingleResult
 
 testCutManyRules(X,Y,RuleNo) :- RuleNo=1, X>5, !, Y<7, repeat(3).
 testCutManyRules(X,Y,RuleNo) :- RuleNo=2, X<3, !, Y<7, repeat(7), !, repeat(3), !.
@@ -463,14 +463,12 @@ testCutManyRules(X,Y,RuleNo) :- RuleNo=5, repeat(2).
 
 %QUERY testCutManyRules(2, 6, RuleNo)
 %ANSWER RuleNo=2
-%NO
 
 %FALSE testCutManyRules(2, 7, RuleNo)
 
 %QUERY testCutManyRules(4, 6, RuleNo)
 %ANSWER RuleNo=3
 %ANSWER RuleNo=4
-%NO
 
 %QUERY testCutManyRules(4, 7, RuleNo)
 %ANSWER RuleNo=3
@@ -559,3 +557,4 @@ testCalculatables(A,B,C) :- Z is B+C, A is Z.
 %
 %OUTPUT
 %ANSWER X=10
+

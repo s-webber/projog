@@ -44,6 +44,7 @@ import org.projog.core.term.Term;
     !.
 
  %TRUE write_to_file('ab\tc\r\nxyz')
+
  %QUERY read_from_file
  %OUTPUT
  %97
@@ -59,7 +60,6 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
- %NO
 
  force_error :-
     open('get_code.tmp', read, Z),

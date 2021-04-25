@@ -43,6 +43,7 @@ import org.projog.core.term.Term;
     !.
 
  %TRUE write_to_file('abc\nxyz')
+
  %QUERY read_from_file
  %OUTPUT
  %a
@@ -57,7 +58,6 @@ import org.projog.core.term.Term;
  %
  %OUTPUT
  %ANSWER/
- %NO
 
  force_error :-
     open('get_char_test.tmp', read, Z),

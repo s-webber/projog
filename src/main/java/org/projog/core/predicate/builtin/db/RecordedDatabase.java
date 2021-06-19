@@ -189,11 +189,6 @@ public class RecordedDatabase {
             throw new NoSuchElementException();
          }
       }
-
-      @Override
-      public void remove() {
-         throw new UnsupportedOperationException();
-      }
    }
 
    private static class ChainIterator implements Iterator<Record> {
@@ -228,11 +223,6 @@ public class RecordedDatabase {
          while (current != null && current.deleted) {
             current = current.next;
          }
-      }
-
-      @Override
-      public void remove() {
-         throw new UnsupportedOperationException();
       }
    }
 

@@ -291,11 +291,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          ClauseModel clauseModel = iterator.next();
          return clauseModel.copy();
       }
-
-      @Override
-      public void remove() {
-         throw new UnsupportedOperationException();
-      }
    }
 
    private final class LinkedHashMapPredicateFactory implements PreprocessablePredicateFactory {

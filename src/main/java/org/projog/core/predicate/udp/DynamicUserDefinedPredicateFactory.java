@@ -190,11 +190,6 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          next = next.next;
          return c;
       }
-
-      @Override
-      public void remove() {
-         throw new UnsupportedOperationException();
-      }
    }
 
    private class ImplicationsIterator implements Iterator<ClauseModel> {

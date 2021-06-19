@@ -15,11 +15,11 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
@@ -282,12 +282,13 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
       Term conditionTerm = ifThenTerm.getArgument(0);
       Term thenTerm = ifThenTerm.getArgument(1);
 
-      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
+      Predicates p = getPredicates();
+      Predicate conditionPredicate = p.getPredicate(conditionTerm);
       if (conditionPredicate.evaluate()) {
-         return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
+         return p.getPredicate(thenTerm.getTerm());
       } else {
          conditionTerm.backtrack();
-         return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), elseTerm);
+         return p.getPredicate(elseTerm);
       }
    }
 
@@ -333,7 +334,7 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
 
       private Predicate getPredicate(PredicateFactory pf, Term t) {
          if (pf == null) {
-            return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t.getTerm());
+            return getPredicates().getPredicate(t.getTerm());
          } else {
             return pf.getPredicate(t.getTerm().getArgs());
          }

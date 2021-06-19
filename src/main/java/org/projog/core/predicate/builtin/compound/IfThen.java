@@ -15,7 +15,6 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -105,10 +104,10 @@ import org.projog.core.term.Term;
 public final class IfThen extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    protected Predicate getPredicate(Term conditionTerm, Term thenTerm) {
-      Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
+      Predicate conditionPredicate = getPredicates().getPredicate(conditionTerm);
       if (conditionPredicate.evaluate()) {
          // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-         return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
+         return getPredicates().getPredicate(thenTerm.getTerm());
       } else {
          return PredicateUtils.FALSE;
       }

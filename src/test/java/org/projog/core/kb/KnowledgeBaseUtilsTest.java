@@ -35,7 +35,6 @@ import org.projog.core.io.FileHandles;
 import org.projog.core.math.ArithmeticOperators;
 import org.projog.core.parser.Operands;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
@@ -78,12 +77,6 @@ public class KnowledgeBaseUtilsTest {
       for (PredicateKey key : input) {
          assertTrue(output.contains(key));
       }
-   }
-
-   @Test
-   public void testGetPredicate() {
-      assertSame(PredicateUtils.TRUE, KnowledgeBaseUtils.getPredicate(kb, atom("true")));
-      assertSame(PredicateUtils.FALSE, KnowledgeBaseUtils.getPredicate(kb, atom("does_not_exist")));
    }
 
    @Test

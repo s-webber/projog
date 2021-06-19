@@ -19,7 +19,6 @@ import java.util.Arrays;
 
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseConsumer;
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Structure;
@@ -148,7 +147,7 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
    }
 
    private Predicate getPredicate(Term arg) {
-      return KnowledgeBaseUtils.getPredicate(knowledgeBase, arg);
+      return knowledgeBase.getPredicates().getPredicate(arg);
    }
 
    @Override

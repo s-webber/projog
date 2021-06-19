@@ -17,18 +17,22 @@ package org.projog.core.predicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.projog.TestUtils.atom;
 
 import java.io.StringReader;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.projog.TestUtils;
 import org.projog.api.Projog;
 import org.projog.api.QueryPlan;
 import org.projog.api.QueryResult;
 import org.projog.core.ProjogException;
+import org.projog.core.predicate.udp.PredicateUtils;
 
 /**
  * Tests of attempting to replace or update an already defined predicate.
@@ -358,5 +362,12 @@ public class PredicatesTest {
       assertFalse(r.next());
 
       assertEquals(Arrays.asList("b", "d", "f", "h", "j"), plan.createStatement().findAllAsAtomName());
+   }
+
+   @Test
+   public void testGetPredicate() {
+      Predicates p = TestUtils.createKnowledgeBase().getPredicates();
+      assertSame(PredicateUtils.TRUE, p.getPredicate(atom("true")));
+      assertSame(PredicateUtils.FALSE, p.getPredicate(atom("does_not_exist")));
    }
 }

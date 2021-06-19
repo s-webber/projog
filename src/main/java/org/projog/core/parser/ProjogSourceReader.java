@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
@@ -165,7 +164,7 @@ public final class ProjogSourceReader {
     * @param t structure with name of {@code ?-} and a single argument.
     */
    private void processQuestion(Term t) {
-      Predicate e = KnowledgeBaseUtils.getPredicate(kb, t.getArgument(0));
+      Predicate e = kb.getPredicates().getPredicate(t.getArgument(0));
       while (e.evaluate() && e.couldReevaluationSucceed()) {
          // keep re-evaluating until fail
       }

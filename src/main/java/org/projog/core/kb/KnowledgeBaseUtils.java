@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.parser.ProjogSourceReader;
-import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
@@ -62,8 +61,7 @@ public final class KnowledgeBaseUtils {
     * Constructs a new {@code KnowledgeBase} object using the specified {@link ProjogProperties}
     */
    public static KnowledgeBase createKnowledgeBase(ProjogProperties projogProperties) {
-      KnowledgeBase kb = new KnowledgeBase(projogProperties);
-      return kb;
+      return new KnowledgeBase(projogProperties);
    }
 
    /**
@@ -93,13 +91,6 @@ public final class KnowledgeBaseUtils {
          }
       }
       return matchingKeys;
-   }
-
-   /**
-    * Returns a {@link Predicate} instance for the specified {@link Term}.
-    */
-   public static Predicate getPredicate(KnowledgeBase kb, Term t) {
-      return kb.getPredicates().getPredicateFactory(t).getPredicate(t.getArgs());
    }
 
    /**
@@ -173,6 +164,7 @@ public final class KnowledgeBaseUtils {
       return result;
    }
 
+   // TODO share with KnowledgeBaseServiceLocator.newInstance pass KnowledgeBase to constructor
    @SuppressWarnings("unchecked")
    private static <T> T instantiate(String input) throws ReflectiveOperationException {
       T result;

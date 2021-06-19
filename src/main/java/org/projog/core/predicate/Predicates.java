@@ -63,6 +63,10 @@ public class Predicates {
       this.kb = kb;
    }
 
+   public Predicate getPredicate(Term t) {
+      return getPredicateFactory(t).getPredicate(t.getArgs());
+   }
+
    /**
     * Returns details of all predicates, both user-defined and built-in predicates.
     */

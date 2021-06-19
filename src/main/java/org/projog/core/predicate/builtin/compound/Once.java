@@ -17,7 +17,6 @@ package org.projog.core.predicate.builtin.compound;
 
 import java.util.Objects;
 
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -51,7 +50,7 @@ import org.projog.core.term.Term;
 public final class Once extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
    protected boolean evaluate(Term t) {
-      Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
+      Predicate e = getPredicates().getPredicate(t);
       return e.evaluate();
    }
 

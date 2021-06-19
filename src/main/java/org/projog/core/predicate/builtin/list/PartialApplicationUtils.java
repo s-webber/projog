@@ -21,32 +21,53 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
-// Moved methods to separate class so can be used by both MapList and SubList. If useful then move to TermUtils.
-class PartialApplicationUtils {
-   static boolean isAtomOrStructure(Term arg) {
+// Moved methods to separate class so can be used by both MapList and SubList. TODO move to TermUtils
+public class PartialApplicationUtils {
+   public static boolean isAtomOrStructure(Term arg) {
       TermType type = arg.getType();
       return type == TermType.STRUCTURE || type == TermType.ATOM;
    }
 
-   static boolean isList(Term arg) {
+   public static boolean isList(Term arg) {
       TermType type = arg.getType();
       return type == TermType.EMPTY_LIST || type == TermType.LIST;
    }
 
-   static PredicateFactory getPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
-      return getPredicateFactory(predicates, partiallyAppliedFunction, 1);
+   public static PredicateFactory getCurriedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
+      return getPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, 1);
    }
 
-   static PredicateFactory getPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int numberOfExtraArguments) {
+   public static PredicateFactory getPreprocessedCurriedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
+      return getPreprocessedPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, 1);
+   }
+
+   public static PredicateFactory getPreprocessedPartiallyAppliedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int extraArgs) {
+      Term[] args = new Term[partiallyAppliedFunction.getNumberOfArguments() + extraArgs];
+      for (int i = 0; i < partiallyAppliedFunction.getNumberOfArguments(); i++) {
+         args[i] = partiallyAppliedFunction.getArgument(i);
+      }
+      for (int i = partiallyAppliedFunction.getNumberOfArguments(); i < args.length; i++) {
+         args[i] = new Variable("_");
+      }
+      // TODO check not numeric before calling .getName()
+      Term t = Structure.createStructure(partiallyAppliedFunction.getName(), args);
+      return predicates.getPreprocessedPredicateFactory(t);
+   }
+
+   public static PredicateFactory getPartiallyAppliedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int numberOfExtraArguments) {
       int numArgs = partiallyAppliedFunction.getNumberOfArguments() + numberOfExtraArguments;
+      // TODO check not numeric before calling .getName()
       PredicateKey key = new PredicateKey(partiallyAppliedFunction.getName(), numArgs);
       return predicates.getPredicateFactory(key);
    }
 
-   static Term[] createArguments(Term partiallyAppliedFunction, Term... extraArguments) {
+   // TODO have overloaded version that avoids varargs
+   public static Term[] createArguments(Term partiallyAppliedFunction, Term... extraArguments) {
       int originalNumArgs = partiallyAppliedFunction.getNumberOfArguments();
       Term[] result = new Term[originalNumArgs + extraArguments.length];
 
@@ -61,13 +82,21 @@ class PartialApplicationUtils {
       return result;
    }
 
-   static boolean apply(PredicateFactory pf, Term[] args) {
+   public static boolean apply(PredicateFactory pf, Term[] args) {
       Predicate p = pf.getPredicate(args);
       if (p.evaluate()) {
          return true;
       } else {
          backtrack(args);
          return false;
+      }
+   }
+
+   public static Predicate getPredicate(PredicateFactory pf, Term action, Term... args) {
+      if (action.getNumberOfArguments() == 0) {
+         return pf.getPredicate(args);
+      } else {
+         return pf.getPredicate(createArguments(action, args));
       }
    }
 }

@@ -23,28 +23,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 abstract class AbstractCollectionOf extends AbstractPredicate {
+   private final PredicateFactory pf;
    private final Term template;
    private final Term goal;
    private final Term bag;
-   private final KnowledgeBase kb;
    private List<Variable> variablesNotInTemplate;
    private Iterator<Entry<Key, List<Term>>> itr;
 
-   protected AbstractCollectionOf(Term template, Term goal, Term bag, KnowledgeBase kb) {
+   protected AbstractCollectionOf(PredicateFactory pf, Term template, Term goal, Term bag) {
+      this.pf = pf;
       this.template = template;
       this.goal = goal;
       this.bag = bag;
-      this.kb = kb;
    }
 
    @Override
@@ -72,7 +71,7 @@ abstract class AbstractCollectionOf extends AbstractPredicate {
    private void init(Term template, Term goal) {
       variablesNotInTemplate = getVariablesNotInTemplate(template, goal);
 
-      Predicate predicate = KnowledgeBaseUtils.getPredicate(kb, goal);
+      Predicate predicate = pf.getPredicate(goal.getArgs());
 
       Map<Key, List<Term>> m = new LinkedHashMap<>();
       if (predicate.evaluate()) {

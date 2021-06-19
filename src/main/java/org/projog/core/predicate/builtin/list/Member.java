@@ -15,11 +15,12 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.term.List;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
 /* TEST
  %TRUE_NO member(a, [a,b,c])
@@ -48,6 +49,117 @@ import org.projog.core.term.TermType;
  % X=x(b)
  % Y=b
  %ANSWER
+
+ %QUERY member(X, [a,b,c,a|d])
+ %ANSWER X=a
+ %ANSWER X=b
+ %ANSWER X=c
+ %ANSWER X=a
+ %QUERY member(a, [a,b,c,a|a])
+ %ANSWER/
+ %ANSWER/
+ %QUERY member(a, [a,b,c,a|d])
+ %ANSWER/
+ %ANSWER/
+ %TRUE_NO member(b, [a,b,c,a|d])
+ %TRUE_NO member(c, [a,b,c,a|d])
+ %FALSE member(d, [a,b,c,a|d])
+ %FALSE member(z, [a,b,c,a|d])
+
+ %FALSE member(X, a)
+ %FALSE member(X, p(a,b))
+ %FALSE member(X, 1)
+ %FALSE member(X, 1.5)
+
+ %QUERY member(a, [a,a,a|X])
+ %ANSWER X=UNINSTANTIATED VARIABLE
+ %ANSWER X=UNINSTANTIATED VARIABLE
+ %ANSWER X=UNINSTANTIATED VARIABLE
+ %ANSWER X=[a|_]
+ %ANSWER X=[_,a|_]
+ %ANSWER X=[_,_,a|_]
+ %ANSWER X=[_,_,_,a|_]
+ %QUIT
+ %QUERY member(a, [a,b,c|X])
+ %ANSWER X=UNINSTANTIATED VARIABLE
+ %ANSWER X=[a|_]
+ %ANSWER X=[_,a|_]
+ %ANSWER X=[_,_,a|_]
+ %ANSWER X=[_,_,_,a|_]
+ %QUIT
+ %QUERY member(d, [a,b,c|X])
+ %ANSWER X=[d|_]
+ %ANSWER X=[_,d|_]
+ %ANSWER X=[_,_,d|_]
+ %ANSWER X=[_,_,_,d|_]
+ %QUIT
+ %QUERY member(a, X)
+ %ANSWER X=[a|_]
+ %ANSWER X=[_,a|_]
+ %ANSWER X=[_,_,a|_]
+ %QUIT
+ %QUERY member(X, Y)
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=[X|_]
+ %ANSWER
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=[_,X|_]
+ %ANSWER
+ %ANSWER
+ % X=UNINSTANTIATED VARIABLE
+ % Y=[_,_,X|_]
+ %ANSWER
+ %QUIT
+ %QUERY X=[a,b,c|Z], member(a,X)
+ %ANSWER
+ % X = [a,b,c|Z]
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = [a,b,c,a|_]
+ % Z = [a|_]
+ %ANSWER
+ %ANSWER
+ % X = [a,b,c,_,a|_]
+ % Z = [_,a|_]
+ %ANSWER
+ %ANSWER
+ % X = [a,b,c,_,_,a|_]
+ % Z = [_,_,a|_]
+ %ANSWER
+ %QUIT
+ %QUERY member(p(X),[p(a),p(b),p(c)|Z])
+ %ANSWER
+ % X = a
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = b
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = c
+ % Z = UNINSTANTIATED VARIABLE
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Z = [p(X)|_]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Z = [_,p(X)|_]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Z = [_,_,p(X)|_]
+ %ANSWER
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Z = [_,_,_,p(X)|_]
+ %ANSWER
+ %QUIT
  */
 /**
  * <code>member(E, L)</code> - enumerates members of a list.
@@ -59,10 +171,6 @@ import org.projog.core.term.TermType;
 public final class Member extends AbstractPredicateFactory {
    @Override
    protected Predicate getPredicate(Term element, Term list) {
-      // TODO what if partial list? e.g. member(a,[a,b|X])
-      if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
-         throw new ProjogException("Expected list but got: " + list);
-      }
       return new MemberPredicate(element, list);
    }
 
@@ -70,6 +178,7 @@ public final class Member extends AbstractPredicateFactory {
       private final Term element;
       private final Term originalList;
       private Term currentList;
+      private boolean isTailVariable;
 
       private MemberPredicate(Term element, Term originalList) {
          this.element = element;
@@ -79,8 +188,15 @@ public final class Member extends AbstractPredicateFactory {
 
       @Override
       public boolean evaluate() {
+         if (isTailVariable) {
+            List n = new List(new Variable("_"), currentList.getTerm());
+            currentList.backtrack();
+            currentList.unify(n);
+            return true;
+         }
+
          while (true) {
-            if (couldReevaluationSucceed()) {
+            if (currentList.getType() == TermType.LIST) {
                element.backtrack();
                originalList.backtrack();
                Term head = currentList.getArgument(0);
@@ -88,6 +204,12 @@ public final class Member extends AbstractPredicateFactory {
                if (element.unify(head)) {
                   return true;
                }
+            } else if (currentList.getType().isVariable()) {
+               isTailVariable = true;
+               element.backtrack();
+               List n = new List(element, new Variable("_"));
+               currentList.unify(n);
+               return true;
             } else {
                return false;
             }
@@ -96,7 +218,7 @@ public final class Member extends AbstractPredicateFactory {
 
       @Override
       public boolean couldReevaluationSucceed() {
-         return currentList.getType() == TermType.LIST;
+         return currentList.getType() == TermType.LIST || currentList.getType().isVariable();
       }
    }
 }

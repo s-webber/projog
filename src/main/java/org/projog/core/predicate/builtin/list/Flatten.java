@@ -60,6 +60,13 @@ import org.projog.core.term.TermType;
 
  %FALSE flatten([a,b,c], [c,b,a])
  %FALSE flatten([a,b,c], [a,[b],c])
+
+ %QUERY flatten([a,b,[c|X],d|Y], Z)
+ %ANSWER
+ % X = UNINSTANTIATED VARIABLE
+ % Y = UNINSTANTIATED VARIABLE
+ % Z = [a,b,c,X,d,Y]
+ %ANSWER
  */
 /**
  * <code>flatten(X,Y)</code> - flattens a nested list.

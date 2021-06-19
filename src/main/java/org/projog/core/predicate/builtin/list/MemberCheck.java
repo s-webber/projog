@@ -18,7 +18,13 @@ package org.projog.core.predicate.builtin.list;
 import static org.projog.core.term.ListUtils.isMember;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.term.List;
+import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
+import org.projog.core.term.TermUtils;
 
 /* TEST
  %TRUE memberchk(a, [a,b,c])
@@ -27,7 +33,18 @@ import org.projog.core.term.Term;
 
  %FALSE memberchk(d, [a,b,c])
  %FALSE memberchk(d, [])
+ %FALSE memberchk(X, [])
  %FALSE memberchk([], [])
+
+ %QUERY memberchk(X, [a,b,c|d])
+ %ANSWER X=a
+ %TRUE memberchk(a, [a,b,c|d])
+ %TRUE memberchk(b, [a,b,c|d])
+ %TRUE memberchk(c, [a,b,c|d])
+ %QUERY memberchk(d, [a,b,c|d])
+ %ERROR Expected empty list or variable but got: ATOM with value: d
+ %QUERY memberchk(z, [a,b,c|d])
+ %ERROR Expected empty list or variable but got: ATOM with value: d
 
  %QUERY memberchk(X, [a,b,c])
  %ANSWER X=a
@@ -37,7 +54,24 @@ import org.projog.core.term.Term;
  % X=a
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
-*/
+
+ %QUERY memberchk(p(a,X),[p(x,y),b,p(Y,Y)])
+ %ANSWER
+ % X=a
+ % Y=a
+ %ANSWER
+
+ %QUERY memberchk(a, X)
+ %ANSWER X=[a|_]
+
+ %QUERY memberchk(p(a,X),a)
+ %ERROR Expected list or empty list but got: ATOM with value: a
+
+ %TRUE memberchk(something, [something|_])
+ %TRUE memberchk(anything, [something|_])
+ %QUERY memberchk(anything, [something|X])
+ %ANSWER X=[anything|_]
+ */
 /**
  * <code>memberchk(E, L)</code> - checks is a term is a member of a list.
  * <p>
@@ -46,9 +80,51 @@ import org.projog.core.term.Term;
  * occurrence will be matched.
  * </p>
  */
-public final class MemberCheck extends AbstractSingleResultPredicate {
+public final class MemberCheck extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
    protected boolean evaluate(Term element, Term list) {
-      return isMember(element, list);
+      if (list.getType().isVariable()) {
+         return list.unify(new List(element, TermUtils.createAnonymousVariable()));
+      } else {
+         return isMember(element, list);
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      // TODO if EMPTY_LIST then return a PredicateFactory that always uses PredicateUtils.FALSE.
+      Term prologList = term.getArgument(1);
+      if (prologList.getType() == TermType.LIST && prologList.isImmutable()) {
+         java.util.List<Term> javaList = ListUtils.toJavaUtilList(prologList);
+         if (javaList != null) { // i.e. if not a partial list
+            // TODO if no duplicates then could replace List with LinkedHashSet
+            return new PreprocessedMemberCheck(javaList);
+         }
+      }
+
+      return this;
+   }
+
+   private static class PreprocessedMemberCheck extends AbstractSingleResultPredicate {
+      private final java.util.List<Term> javaList;
+
+      PreprocessedMemberCheck(java.util.List<Term> javaList) {
+         this.javaList = javaList;
+      }
+
+      @Override
+      protected boolean evaluate(Term element, Term notUsed) {
+         if (element.isImmutable()) {
+            return javaList.contains(element);
+         } else {
+            for (Term next : javaList) {
+               if (element.unify(next)) {
+                  return true;
+               }
+               element.backtrack();
+            }
+            return false;
+         }
+      }
    }
 }

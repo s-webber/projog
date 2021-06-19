@@ -17,9 +17,13 @@ package org.projog.core.predicate.builtin.compound;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
+import java.util.Objects;
+
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -91,20 +95,85 @@ import org.projog.core.term.Term;
 %QUERY limit(3, 999)
 %ERROR Expected an atom or a predicate but got a INTEGER with value: 999
 %FALSE limit(3, unknown_predicate)
+
+p(a,1).
+p(a,2).
+p(a,3).
+p(a,4).
+p(a,5).
+p(b,1).
+p(b,2).
+p(b,3).
+p(c,1).
+p(c,3).
+p(d(1),1).
+p(d(2),2).
+p(d(3),2).
+p(d(4),2).
+p(d(5),5).
+
+%QUERY limit(3, p(a,X))
+%ANSWER X=1
+%ANSWER X=2
+%ANSWER X=3
+
+%QUERY limit(6, p(X,2))
+%ANSWER X=a
+%ANSWER X=b
+%ANSWER X=d(2)
+%ANSWER X=d(3)
+%ANSWER X=d(4)
+
+%QUERY limit(7, p(d(X),X))
+%ANSWER X=1
+%ANSWER X=2
+%ANSWER X=5
  */
 /**
  * <code>limit(N, X)</code> - calls the goal represented by a term a maximum number of times.
  * <p>
  * Evaluates the goal represented by <code>X</code> for a maximum of <code>N</code> attempts.
  */
-public final class Limit extends AbstractPredicateFactory
+public final class Limit extends AbstractPredicateFactory implements PreprocessablePredicateFactory
 {
    @Override
    public Predicate getPredicate(Term maxAttempts, Term goal) {
       PredicateFactory pf = getPredicates().getPredicateFactory(goal);
+      return getLimitPredicate(pf, maxAttempts, goal);
+   }
+
+   private static Predicate getLimitPredicate(PredicateFactory pf, Term maxAttempts, Term goal) {
       Predicate p = pf.getPredicate(goal.getArgs());
       long n = castToNumeric(maxAttempts).getLong();
       return new LimitPredicate(p, n);
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(1);
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new OptimisedLimit(getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   private static final class OptimisedLimit implements PredicateFactory {
+      private final PredicateFactory pf;
+
+      OptimisedLimit(PredicateFactory pf) {
+         this.pf = Objects.requireNonNull(pf);
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         return getLimitPredicate(pf, args[0], args[1]);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true;
+      }
    }
 
    private static final class LimitPredicate implements Predicate {

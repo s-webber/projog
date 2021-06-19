@@ -28,12 +28,16 @@ import org.projog.core.term.TermUtils;
 /* TEST
  %QUERY delete([a,b,c],a,X)
  %ANSWER X=[b,c]
+ %QUERY delete([a,a,b,a,b,b,c,b,a],a,X)
+ %ANSWER X=[b,b,b,c,b]
  %QUERY delete([a,b,c],b,X)
  %ANSWER X=[a,c]
  %QUERY delete([a,b,c],c,X)
  %ANSWER X=[a,b]
  %QUERY delete([a,b,c],z,X)
  %ANSWER X=[a,b,c]
+ %QUERY delete([],a,X)
+ %ANSWER X=[]
 
  %QUERY delete([a,b,X],a,[Y,c])
  %ANSWER
@@ -65,6 +69,9 @@ import org.projog.core.term.TermUtils;
 
  %QUERY delete([],a,X)
  %ANSWER X=[]
+
+ % Note: unlike SWI Prolog, fails if the first argument is a partial list.
+ %FALSE delete([a,b,c|X],Y,Z)
  */
 /**
  * <code>delete(X,Y,Z)</code> - remove all occurrences of a term from a list.

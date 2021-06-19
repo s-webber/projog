@@ -17,18 +17,22 @@ package org.projog.core.predicate.builtin.list;
 
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.apply;
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.createArguments;
-import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.getPredicateFactory;
+import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.getCurriedPredicateFactory;
+import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.getPreprocessedCurriedPredicateFactory;
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.isAtomOrStructure;
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.isList;
 import static org.projog.core.term.ListFactory.createList;
-import static org.projog.core.term.ListUtils.toJavaUtilList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 /* TEST
  %TRUE include(atom, [], [])
@@ -96,6 +100,7 @@ import org.projog.core.term.Term;
 
  % First argument must be an atom or structure. Second argument must be a list.
  %FALSE include(X, [], Z)
+ %FALSE include(1, [], Z)
  %FALSE include(atom, X, Z)
 
  % Note: "sublist" is a synonym for "include".
@@ -103,6 +108,25 @@ import org.projog.core.term.Term;
  %ANSWER X=[a,b,c]
  %QUERY sublist(atom, [a,2,c], X)
  %ANSWER X=[a,c]
+
+p(a) :- writeln('rule 1').
+p(b) :- writeln('rule 2').
+p(X) :- atom(X), writeln('rule 3').
+%QUERY include(p,[1,a,2,b,3,c,c,4,c,b,5,a,z,b,b,6], Z)
+%OUTPUT
+%rule 1
+%rule 2
+%rule 3
+%rule 3
+%rule 3
+%rule 2
+%rule 1
+%rule 3
+%rule 2
+%rule 2
+%
+%OUTPUT
+%ANSWER Z=[a,b,c,c,c,b,a,z,b,b]
  */
 /**
  * <code>include(X,Y,Z)</code> - filters a list by a goal.
@@ -111,24 +135,64 @@ import org.projog.core.term.Term;
  * for which the goal <code>X</code> can be successfully applied.
  * </p>
  */
-public final class SubList extends AbstractSingleResultPredicate {
+public final class SubList extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
    protected boolean evaluate(Term partiallyAppliedFunction, Term args, Term filteredOutput) {
-      if (!isValidArguments(partiallyAppliedFunction, args)) {
+      if (isValidArguments(partiallyAppliedFunction, args)) {
+         final PredicateFactory pf = getCurriedPredicateFactory(getPredicates(), partiallyAppliedFunction);
+         return evaluateSubList(pf, partiallyAppliedFunction, args, filteredOutput);
+      } else {
          return false;
       }
+   }
 
+   private static boolean evaluateSubList(PredicateFactory pf, Term partiallyAppliedFunction, Term args, Term filteredOutput) {
       final List<Term> matches = new ArrayList<>();
-      final PredicateFactory pf = getPredicateFactory(getPredicates(), partiallyAppliedFunction);
-      for (Term arg : toJavaUtilList(args)) {
+      Term next = args;
+      while (next.getType() == TermType.LIST) {
+         Term arg = next.getArgument(0);
          if (apply(pf, createArguments(partiallyAppliedFunction, arg))) {
             matches.add(arg);
          }
+         next = next.getArgument(1);
       }
-      return filteredOutput.unify(createList(matches));
+      return next.getType() == TermType.EMPTY_LIST && filteredOutput.unify(createList(matches));
    }
 
    private boolean isValidArguments(Term partiallyAppliedFunction, Term arg) {
       return isAtomOrStructure(partiallyAppliedFunction) && isList(arg);
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(0);
+      if (isAtomOrStructure(goal)) {
+         return new PreprocessedSubList(getPreprocessedCurriedPredicateFactory(getPredicates(), goal));
+      } else {
+         return this;
+      }
+   }
+
+   private static final class PreprocessedSubList implements PredicateFactory {
+      private final PredicateFactory predicateFactory;
+
+      PreprocessedSubList(PredicateFactory predicateFactory) {
+         this.predicateFactory = predicateFactory;
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         Term list = args[1];
+         if (isList(list)) {
+            return PredicateUtils.toPredicate(evaluateSubList(predicateFactory, args[0], list, args[2]));
+         } else {
+            return PredicateUtils.FALSE;
+         }
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return false;
+      }
    }
 }

@@ -22,11 +22,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
@@ -37,6 +41,31 @@ import org.projog.core.term.Variable;
  %FALSE predsort(compare, [s,d,f,a,a,a,z], [s,d,f,a,a,a,z])
 
  %TRUE predsort(compare, [], [])
+
+ compare_desc(X,Y,Z) :- Y@<Z, X='>'.
+ compare_desc(X,Y,Z) :- Y@>Z, X='<'.
+ compare_desc(X,Y,Z) :- Y==Z, X='='.
+
+ compare_desc(asc,X,Y,Z) :- Y@<Z, X='>'.
+ compare_desc(asc,X,Y,Z) :- Y@>Z, X='<'.
+ compare_desc(asc,X,Y,Z) :- Y==Z, X='='.
+ compare_desc(desc,X,Y,Z) :- Y@<Z, X='<'.
+ compare_desc(desc,X,Y,Z) :- Y@>Z, X='>'.
+ compare_desc(desc,X,Y,Z) :- Y==Z, X='='.
+
+ %QUERY predsort(compare_desc, [s,d,f,a,a,a,z], X)
+ %ANSWER X=[z,s,f,d,a,a,a]
+
+ % Note: This behaviour is different than the SWI version. SWI version removes duplicates.
+ %QUERY predsort(compare_desc(asc), [s,d,f,a,a,a,z], X)
+ %ANSWER X=[z,s,f,d,a,a,a]
+
+ compare_retryable('>',_,_).
+ compare_retryable('<',_,_).
+ compare_retryable('=',_,_).
+ % Note: This behaviour is different than the SWI version. SWI version backtracks to find alternative solutions.
+ %QUERY predsort(compare_retryable, [s,z], X)
+ %ANSWER X = [s,z]
  */
 /**
  * <code>predsort(X,Y,Z)</code> - sorts a list using the specified predicate.
@@ -47,38 +76,44 @@ import org.projog.core.term.Variable;
  * has the value <code>=</code>, <code>&lt;</code> or <code>&gt;</code>.
  * </p>
  */
-public final class PredSort extends AbstractSingleResultPredicate {
+public final class PredSort extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+   // The SWI version of this predicate removes duplicates and backtracks to find alternative solutions.
+   // TODO Either change this version to behave the same or update documentation to make it clear how the behaviour of this version differs from SWI.
+
+   /** The arity of the predicate represented by the first argument. */
+   private static final int FIRST_ARG_ARITY = 3;
+
    @Override
    protected boolean evaluate(Term predicateName, Term input, Term sorted) {
+      PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(getPredicates(), predicateName, FIRST_ARG_ARITY);
+      return evaluatePredSort(pf, predicateName, input, sorted);
+   }
+
+   private static boolean evaluatePredSort(PredicateFactory pf, Term predicateName, Term input, Term sorted) {
       List<Term> list = ListUtils.toJavaUtilList(input);
       if (list == null) {
          return false;
       }
 
-      PredicateFactory pf = getPredicateFactory(predicateName);
-
-      Collections.sort(list, new PredSortComparator(pf));
+      Collections.sort(list, new PredSortComparator(pf, predicateName));
 
       return sorted.unify(ListFactory.createList(list));
    }
 
-   private PredicateFactory getPredicateFactory(Term predicateName) {
-      PredicateKey key = new PredicateKey(getAtomName(predicateName), 3);
-      return getPredicates().getPredicateFactory(key);
-   }
-
    private static final class PredSortComparator implements Comparator<Term> {
       private final PredicateFactory pf;
+      private final Term predicateName;
 
-      private PredSortComparator(PredicateFactory pf) {
+      private PredSortComparator(PredicateFactory pf, Term predicateName) {
          this.pf = pf;
+         this.predicateName = predicateName;
       }
 
       @Override
       public int compare(Term o1, Term o2) {
          Variable result = new Variable("PredSortResult");
-         Term[] args = new Term[] {result, o1, o2};
-         if (pf.getPredicate(args).evaluate()) {
+         Predicate p = PartialApplicationUtils.getPredicate(pf, predicateName, result, o1, o2);
+         if (p.evaluate()) {
             String delta = getAtomName(result);
             switch (delta) {
                case "<":
@@ -91,8 +126,40 @@ public final class PredSort extends AbstractSingleResultPredicate {
                   throw new IllegalArgumentException(delta);
             }
          } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException(predicateName + " " + result + " " + o1 + " " + o2); // TODO
          }
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(1);
+      if (goal.getType() == TermType.ATOM) {
+         return new PreprocessedPredSort(PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(getPredicates(), goal, FIRST_ARG_ARITY), goal);
+      } else {
+         return this;
+      }
+   }
+
+   private static class PreprocessedPredSort implements PredicateFactory {
+      private final PredicateFactory pf;
+      private final Term predicateName;
+
+      private PreprocessedPredSort(PredicateFactory pf, Term predicateName) {
+         this.pf = pf;
+         this.predicateName = predicateName;
+      }
+
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         boolean result = evaluatePredSort(pf, predicateName, args[1], args[2]);
+         return PredicateUtils.toPredicate(result);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return false;
       }
    }
 }

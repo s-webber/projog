@@ -17,9 +17,11 @@ package org.projog.core.predicate.builtin.compound;
 
 import java.util.List;
 
-import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -79,6 +81,31 @@ import org.projog.core.term.Term;
  % X=2
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
+
+ p(a,1).
+ p(b,2).
+ p(c,3).
+ p(d,2).
+ p(d,2).
+
+ %QUERY bagof(X, p(X,Y), List)
+ %ANSWER
+ % List = [a]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 1
+ %ANSWER
+ %ANSWER
+ % List = [b,d,d]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 2
+ %ANSWER
+ %ANSWER
+ % List = [c]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 3
+ %ANSWER
+
+ % TODO bagof(X, Y ^ p(X,Y), List)
  */
 /**
  * <code>bagof(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -89,21 +116,49 @@ import org.projog.core.term.Term;
  * variables. The elements in <code>L</code> will appear in the order they were found and may include duplicates. Fails
  * if <code>P</code> has no solutions.
  */
-public final class BagOf extends AbstractPredicateFactory {
+public final class BagOf extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    protected Predicate getPredicate(Term template, Term goal, Term bag) {
-      return new BagOfPredicate(template, goal, bag, getKnowledgeBase());
+      return new BagOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);
    }
 
-   private final class BagOfPredicate extends AbstractCollectionOf {
-      private BagOfPredicate(Term template, Term goal, Term bag, KnowledgeBase kb) {
-         super(template, goal, bag, kb);
+   private static final class BagOfPredicate extends AbstractCollectionOf {
+      private BagOfPredicate(PredicateFactory pf, Term template, Term goal, Term bag) {
+         super(pf, template, goal, bag);
       }
 
       /** "bagof" returns all elements (including duplicates) in the order they were found. */
       @Override
       protected void add(List<Term> l, Term t) {
          l.add(t);
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(1);
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new PreprocessedBagOf(getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   private static class PreprocessedBagOf implements PredicateFactory {
+      private final PredicateFactory pf;
+
+      PreprocessedBagOf(PredicateFactory pf) {
+         this.pf = pf;
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         return new BagOfPredicate(pf, args[0], args[1], args[2]);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true; // TODO
       }
    }
 }

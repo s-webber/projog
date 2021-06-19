@@ -19,9 +19,11 @@ import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
 
 import java.util.List;
 
-import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermUtils;
@@ -83,6 +85,31 @@ import org.projog.core.term.TermUtils;
  % X=2
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
+
+ p(a,1).
+ p(b,2).
+ p(c,3).
+ p(d,2).
+ p(d,2).
+
+ %QUERY setof(X, p(X,Y), List)
+ %ANSWER
+ % List = [a]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 1
+ %ANSWER
+ %ANSWER
+ % List = [b,d]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 2
+ %ANSWER
+ %ANSWER
+ % List = [c]
+ % X = UNINSTANTIATED VARIABLE
+ % Y = 3
+ %ANSWER
+
+ % TODO setof(X, Y ^ p(X,Y), List)
  */
 /**
  * <code>setof(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -93,15 +120,15 @@ import org.projog.core.term.TermUtils;
  * variables. The elements in <code>L</code> will appear in sorted order and will not include duplicates. Fails if
  * <code>P</code> has no solutions.
  */
-public final class SetOf extends AbstractPredicateFactory {
+public final class SetOf extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    protected Predicate getPredicate(Term template, Term goal, Term bag) {
-      return new SetOfPredicate(template, goal, bag, getKnowledgeBase());
+      return new SetOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);
    }
 
-   private final class SetOfPredicate extends AbstractCollectionOf {
-      private SetOfPredicate(Term template, Term goal, Term bag, KnowledgeBase kb) {
-         super(template, goal, bag, kb);
+   private static final class SetOfPredicate extends AbstractCollectionOf {
+      private SetOfPredicate(PredicateFactory pf, Term template, Term goal, Term bag) {
+         super(pf, template, goal, bag);
       }
 
       /** "setof" excludes duplicates and orders elements using {@link TermComparator}. */
@@ -121,6 +148,34 @@ public final class SetOf extends AbstractPredicateFactory {
             }
          }
          list.add(newTerm);
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(1);
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new PreprocessedSetOf(getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   private static class PreprocessedSetOf implements PredicateFactory {
+      private final PredicateFactory pf;
+
+      PreprocessedSetOf(PredicateFactory pf) {
+         this.pf = pf;
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         return new SetOfPredicate(pf, args[0], args[1], args[2]);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true; // TODO
       }
    }
 }

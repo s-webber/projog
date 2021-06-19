@@ -19,9 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
@@ -77,6 +80,9 @@ import org.projog.core.term.Variable;
  % X=UNINSTANTIATED VARIABLE
  % Y=UNINSTANTIATED VARIABLE
  %ANSWER
+
+ %QUERY findall(X,P,L)
+ %ERROR Expected an atom or a predicate but got a VARIABLE with value: P
  */
 /**
  * <code>findall(X,P,L)</code> - find all solutions that satisfy the goal.
@@ -84,10 +90,14 @@ import org.projog.core.term.Variable;
  * <code>findall(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
  * <code>P</code>. Succeeds with <code>L</code> unified to an empty list if <code>P</code> has no solutions.
  */
-public final class FindAll extends AbstractSingleResultPredicate {
+public final class FindAll extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
    protected boolean evaluate(Term template, Term goal, Term output) {
-      final Predicate predicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), goal);
+      return evaluateFindAll(getPredicates().getPredicateFactory(goal), template, goal, output);
+   }
+
+   private static boolean evaluateFindAll(PredicateFactory pf, Term template, Term goal, Term output) {
+      final Predicate predicate = pf.getPredicate(goal.getArgs());
       final Term solutions;
       if (predicate.evaluate()) {
          solutions = createListOfAllSolutions(template, predicate);
@@ -99,7 +109,7 @@ public final class FindAll extends AbstractSingleResultPredicate {
       return output.unify(solutions);
    }
 
-   private Term createListOfAllSolutions(Term template, final Predicate predicate) {
+   private static Term createListOfAllSolutions(Term template, final Predicate predicate) {
       final List<Term> solutions = new ArrayList<>();
       do {
          solutions.add(template.copy(new HashMap<Variable, Variable>()));
@@ -109,7 +119,35 @@ public final class FindAll extends AbstractSingleResultPredicate {
       return output;
    }
 
-   private boolean hasFoundAnotherSolution(final Predicate predicate) {
+   private static boolean hasFoundAnotherSolution(final Predicate predicate) {
       return predicate.couldReevaluationSucceed() && predicate.evaluate();
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.getArgument(1);
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new PreprocessedFindAll(getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   private static class PreprocessedFindAll implements PredicateFactory {
+      private final PredicateFactory pf;
+
+      public PreprocessedFindAll(PredicateFactory pf) {
+         this.pf = pf;
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         return PredicateUtils.toPredicate(evaluateFindAll(pf, args[0], args[1], args[2]));
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return false;
+      }
    }
 }

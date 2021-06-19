@@ -147,7 +147,7 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
       }
    }
 
-   public Predicate getPredicate(Term arg) {
+   private Predicate getPredicate(Term arg) {
       return KnowledgeBaseUtils.getPredicate(knowledgeBase, arg);
    }
 

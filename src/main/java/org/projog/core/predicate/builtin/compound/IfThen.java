@@ -18,6 +18,10 @@ package org.projog.core.predicate.builtin.compound;
 import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.Predicates;
+import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
@@ -98,7 +102,7 @@ import org.projog.core.term.Term;
  *
  * @see Disjunction
  */
-public final class IfThen extends AbstractPredicateFactory {
+public final class IfThen extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    protected Predicate getPredicate(Term conditionTerm, Term thenTerm) {
       Predicate conditionPredicate = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), conditionTerm);
@@ -106,7 +110,45 @@ public final class IfThen extends AbstractPredicateFactory {
          // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
          return KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), thenTerm.getTerm());
       } else {
-         return PredicateUtils.toPredicate(false);
+         return PredicateUtils.FALSE;
+      }
+   }
+
+   @Override
+   public PredicateFactory preprocess(Term term) {
+      Term condition = term.getArgument(0);
+      Term action = term.getArgument(1);
+      if (PartialApplicationUtils.isAtomOrStructure(condition) || PartialApplicationUtils.isAtomOrStructure(action)) {
+         Predicates p = getPredicates();
+         return new OptimisedIfThen(p.getPreprocessedPredicateFactory(condition), p.getPreprocessedPredicateFactory(action));
+      } else {
+         return this;
+      }
+   }
+
+   private static final class OptimisedIfThen implements PredicateFactory {
+      private final PredicateFactory condition;
+      private final PredicateFactory action;
+
+      OptimisedIfThen(PredicateFactory condition, PredicateFactory action) {
+         this.condition = condition;
+         this.action = action;
+      }
+
+      @Override
+      public Predicate getPredicate(Term[] args) {
+         Predicate conditionPredicate = condition.getPredicate(args[0].getArgs());
+         if (conditionPredicate.evaluate()) {
+            // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
+            return action.getPredicate(args[1].getTerm().getArgs());
+         } else {
+            return PredicateUtils.FALSE;
+         }
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return action.isRetryable();
       }
    }
 }

@@ -32,6 +32,25 @@ import org.projog.core.term.Term;
 
  %FALSE subset([a,b,c,d],[a,b,c])
  %FALSE subset([a,b,c],[])
+
+ %QUERY subset([a,b,c,d],[x,y,z|X])
+ %ANSWER X=[a,b,c,d|_]
+ %QUERY subset([a,b,c,d,e,f],[a,b,e,g|X])
+ %ANSWER X=[c,d,f|_]
+
+ %QUERY subset([X,Y,Z],[q,w,e,r,t,y])
+ %ANSWER
+ % X=q
+ % Y=q
+ % Z=q
+ %ANSWER
+
+ %QUERY subset([a,b,Y,Z,d,e,f],[a,b,e,g|X])
+ %ANSWER
+ % X=[d,f|_]
+ % Y=a
+ % Z=a
+ %ANSWER
  */
 /**
  * <code>subset(X,Y)</code> - checks if a set is a subset.
@@ -40,13 +59,14 @@ import org.projog.core.term.Term;
  * represented by <code>Y</code>.
  * </p>
  */
-public final class Subset extends AbstractSingleResultPredicate {
+public final class Subset extends AbstractSingleResultPredicate { // TODO compare to SWI version
    @Override
    protected boolean evaluate(Term subsetTerm, Term set) {
       for (Term element : toJavaUtilList(subsetTerm)) {
          if (!isMember(element, set)) {
             return false;
          }
+         set = set.getTerm();
       }
       return true;
    }

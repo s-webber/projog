@@ -66,6 +66,11 @@ import org.projog.core.term.TermType;
  %ERROR Expected LIST but got: VARIABLE with value: Y
  %QUERY max_list(a, X)
  %ERROR Expected LIST but got: ATOM with value: a
+
+ %QUERY min_list([1,2|Y], X)
+ %ERROR Expected LIST but got: VARIABLE with value: Y
+ %QUERY max_list([1,2|Y], X)
+ %ERROR Expected LIST but got: VARIABLE with value: Y
  */
 /**
  * <code>min_list</code> / <code>max_list</code>

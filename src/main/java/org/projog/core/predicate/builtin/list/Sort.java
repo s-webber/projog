@@ -27,6 +27,9 @@ import org.projog.core.term.Term;
  %QUERY msort([q,w,e,r,t,y], X)
  %ANSWER X = [e,q,r,t,w,y]
 
+ %QUERY msort([q,q,w,y,e,r,r,t,r,y], X)
+ %ANSWER X = [e,q,q,r,r,r,t,w,y,y]
+
  %TRUE msort([q,w,e,r,t,y], [e,q,r,t,w,y])
  %FALSE msort([q,w,e,r,t,y], [q,w,e,r,t,y])
  %FALSE msort([q,w,e,r,t,y], [e,q,t,r,w,y])
@@ -54,6 +57,11 @@ import org.projog.core.term.Term;
  %ANSWER X=[e,h,l,l,o]
 
  %FALSE msort([h,e,l,l,o], [e,h,l,o])
+
+ % Note: unlike SWI Prolog, the following 3 queries will fail rather than cause an error.
+ %FALSE msort(a, X)
+ %FALSE msort(X, [h,e,l,l,o])
+ %FALSE msort([h,e,l,l,o|X], Y)
  */
 /**
  * <code>msort(X,Y)</code> - sorts a list.

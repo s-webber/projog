@@ -38,11 +38,24 @@ import org.projog.core.term.TermType;
  %QUERY append([[a,b,c],[[d,e,f],x,y,z],[1,2,3],[]],X)
  %ANSWER X=[a,b,c,[d,e,f],x,y,z,1,2,3]
 
+ %QUERY append([[a,b,c],[[d,e,f],x,y,z],[1,2,3],[]],[a,b,c,[d,e,f],x|X])
+ %ANSWER X=[y,z,1,2,3]
+
  %QUERY append(a, X)
  %ERROR Expected LIST but got: ATOM with value: a
 
  %QUERY append([a], X)
  %ERROR Expected list but got: ATOM with value: a
+
+ % Note: unlike SWI Prolog, the first argument cannot be a partial list.
+ %QUERY append([[a,b|X],[c,d]], Y)
+ %ERROR Expected list but got: LIST with value: .(a, .(b, X))
+ %QUERY append([[a,b],[c,d|X]], Y)
+ %ERROR Expected list but got: LIST with value: .(c, .(d, X))
+ %QUERY append([[a,b|X],[e,x|Y]], [a,b,c,d,e,x,y,z])
+ %ERROR Expected list but got: LIST with value: .(a, .(b, X))
+ %QUERY append([[a,b|X],[e,x|Y]], [a,b,c,d,e,x,y|Z])
+ %ERROR Expected list but got: LIST with value: .(a, .(b, X))
  */
 /**
  * <code>append(ListOfLists, List)</code> - concatenates a list of lists.

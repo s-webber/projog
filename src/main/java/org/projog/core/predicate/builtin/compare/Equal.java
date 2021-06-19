@@ -35,6 +35,18 @@ import org.projog.core.term.Term;
  %ANSWER
  %TRUE [a,b,c]=[a,b,c]
  %FALSE [a,b,c]=[a,b,d]
+
+ %QUERY [a,b,c]=[X|Y]
+ %ANSWER
+ % X=a
+ % Y=[b,c]
+ %ANSWER
+ %QUERY [X|[b]]=[a,b]
+ %ANSWER X=a
+ %QUERY [a,b,c|X]=[a,b,c,d,e,f,g]
+ %ANSWER X=[d,e,f,g]
+ %TRUE [a,b,c]=[a,b,c|[]]
+ %FALSE [a,b,c]=[X|[]]
  */
 /**
  * <code>X=Y</code> - an equality test.

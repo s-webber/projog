@@ -17,11 +17,11 @@ package org.projog.core.predicate.builtin.compound;
 
 import java.util.Objects;
 
-import org.projog.core.kb.KnowledgeBaseUtils;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -71,8 +71,13 @@ import org.projog.core.term.Term;
 public final class Not extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
    protected boolean evaluate(Term t) {
-      Predicate e = KnowledgeBaseUtils.getPredicate(getKnowledgeBase(), t);
-      if (!e.evaluate()) {
+      PredicateFactory pf = getPredicates().getPredicateFactory(t);
+      return evaluateNot(t, pf);
+   }
+
+   private static boolean evaluateNot(Term t, PredicateFactory pf) {
+      Predicate p = pf.getPredicate(t.getArgs());
+      if (!p.evaluate()) {
          t.backtrack();
          return true;
       } else {
@@ -83,10 +88,10 @@ public final class Not extends AbstractSingleResultPredicate implements Preproce
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg = term.getArgument(0);
-      if (arg.getType().isVariable()) {
-         return this;
-      } else {
+      if (PartialApplicationUtils.isAtomOrStructure(arg)) {
          return new OptimisedNot(getPredicates().getPreprocessedPredicateFactory(arg));
+      } else {
+         return this;
       }
    }
 
@@ -99,12 +104,7 @@ public final class Not extends AbstractSingleResultPredicate implements Preproce
 
       @Override
       protected boolean evaluate(Term arg) {
-         if (!pf.getPredicate(arg.getArgs()).evaluate()) {
-            arg.backtrack();
-            return true;
-         } else {
-            return false;
-         }
+         return evaluateNot(arg, pf);
       }
    }
 }

@@ -22,6 +22,7 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 // TODO shouldn't need to wrap disjunctions in brackets. e.g. should be able to do: once(true;true;fail)
@@ -57,10 +58,10 @@ public final class Once extends AbstractSingleResultPredicate implements Preproc
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg = term.getArgument(0);
-      if (arg.getType().isVariable()) {
-         return this;
-      } else {
+      if (PartialApplicationUtils.isAtomOrStructure(arg)) {
          return new OptimisedOnce(getPredicates().getPreprocessedPredicateFactory(arg));
+      } else {
+         return this;
       }
    }
 

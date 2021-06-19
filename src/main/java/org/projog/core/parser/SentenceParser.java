@@ -424,18 +424,15 @@ public class SentenceParser {
     * Returns a variable with the specified id.
     * <p>
     * If this object already has an instance of {@code Variable} with the specified id then it will be returned else a
-    * new {@code Variable} will be created.
+    * new {@code Variable} will be created. The only exception to this behaviour is when the id equals
+    * {@link Variable#ANONYMOUS_VARIABLE_ID} - in which case a new {@code Variable} will be always be returned.
     */
    private Variable getVariable(String id) {
       if (ANONYMOUS_VARIABLE_ID.equals(id)) {
-         return getAnonymousVariable();
+         return new Variable();
       } else {
          return getNamedVariable(id);
       }
-   }
-
-   private Variable getAnonymousVariable() {
-      return new Variable(ANONYMOUS_VARIABLE_ID);
    }
 
    private Variable getNamedVariable(String id) {

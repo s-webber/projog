@@ -52,7 +52,7 @@ public class PartialApplicationUtils {
          args[i] = partiallyAppliedFunction.getArgument(i);
       }
       for (int i = partiallyAppliedFunction.getNumberOfArguments(); i < args.length; i++) {
-         args[i] = new Variable("_");
+         args[i] = new Variable();
       }
       // TODO check not numeric before calling .getName()
       Term t = Structure.createStructure(partiallyAppliedFunction.getName(), args);

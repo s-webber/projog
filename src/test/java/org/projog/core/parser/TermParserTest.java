@@ -219,6 +219,7 @@ public class TermParserTest {
 
    @Test
    public void testAnonymousVariable() {
+      assertVariableTerm(new Variable(), "_");
       assertVariableTerm(new Variable("_"), "_");
    }
 

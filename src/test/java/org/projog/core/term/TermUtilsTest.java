@@ -17,7 +17,6 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -166,7 +165,7 @@ public class TermUtilsTest {
       Variable x = variable("X");
       Variable y = variable("Y");
       Variable z = variable("Z");
-      Variable anon = TermUtils.createAnonymousVariable();
+      Variable anon = new Variable();
       Variable[] variables = {q, r, s, t, v, w, x, y, z, anon};
       Structure input = structure("p1", x, v, anon, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t),
                   z);
@@ -290,15 +289,6 @@ public class TermUtilsTest {
       } catch (ProjogException e) {
          assertEquals("Expected LIST but got: ATOM with value: testAtomName", e.getMessage());
       }
-   }
-
-   @Test
-   public void testCreateAnonymousVariable() {
-      Term anon = TermUtils.createAnonymousVariable();
-      assertSame(Variable.class, anon.getClass());
-      assertSame(TermType.VARIABLE, anon.getType());
-      assertEquals("_", anon.toString());
-      assertNotSame(anon, TermUtils.createAnonymousVariable());
    }
 
    @Test

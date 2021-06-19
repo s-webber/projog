@@ -118,7 +118,7 @@ public final class ListUtils {
       if (list.getType() == TermType.EMPTY_LIST) {
          return false;
       } else if (list.getType().isVariable()) {
-         Term tail = ListFactory.createList(element, new Variable("_"));
+         Term tail = ListFactory.createList(element, new Variable());
          return list.unify(tail);
       } else {
          throw new ProjogException("Expected empty list or variable but got: " + list.getType() + " with value: " + list);

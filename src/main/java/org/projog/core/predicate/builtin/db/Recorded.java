@@ -16,7 +16,6 @@
 package org.projog.core.predicate.builtin.db;
 
 import static org.projog.core.kb.KnowledgeBaseServiceLocator.getServiceLocator;
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.util.Iterator;
 
@@ -24,6 +23,7 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
 /* TEST
  %FALSE recorded(X,Y,Z)
@@ -40,7 +40,7 @@ import org.projog.core.term.Term;
 public final class Recorded extends AbstractPredicateFactory {
    @Override
    protected Predicate getPredicate(Term key, Term value) {
-      return getPredicate(key, value, createAnonymousVariable());
+      return getPredicate(key, value, new Variable());
    }
 
    @Override

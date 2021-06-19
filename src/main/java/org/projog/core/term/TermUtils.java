@@ -183,10 +183,6 @@ public final class TermUtils {
       }
    }
 
-   public static Variable createAnonymousVariable() {
-      return new Variable("_");
-   }
-
    public static boolean termsEqual(Term a, Term b) {
       return a.getTerm().equals(b.getTerm());
    }

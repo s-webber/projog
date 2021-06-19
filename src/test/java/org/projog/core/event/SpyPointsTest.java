@@ -25,18 +25,17 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.junit.Test;
 import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
-import org.projog.core.event.SpyPoints;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
 public class SpyPointsTest {
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
@@ -193,7 +192,7 @@ public class SpyPointsTest {
 
       PredicateKey key = createKey("test", 1);
       DynamicUserDefinedPredicateFactory pf = new DynamicUserDefinedPredicateFactory(kb, key);
-      pf.addFirst(ClauseModel.createClauseModel(structure("test", createAnonymousVariable())));
+      pf.addFirst(ClauseModel.createClauseModel(structure("test", new Variable())));
       kb.getPredicates().addUserDefinedPredicate(pf);
 
       SpyPoints testObject = new SpyPoints(kb);
@@ -214,7 +213,7 @@ public class SpyPointsTest {
       sp.logCall(this, new Term[] {atom("z")});
       sp.logExit(this, new Term[] {list(atom("a"), variable("X"))}, 0);
       sp.logFail(this, new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))});
-      sp.logRedo(this, new Term[] {createAnonymousVariable()});
+      sp.logRedo(this, new Term[] {new Variable()});
       assertEquals(4, listener.size());
       assertProjogEvent(listener.get(0), "CALL", "test(z)");
       assertProjogEvent(listener.get(1), "EXIT", "test([a,X])");

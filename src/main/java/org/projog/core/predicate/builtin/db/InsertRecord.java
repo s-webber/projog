@@ -16,11 +16,11 @@
 package org.projog.core.predicate.builtin.db;
 
 import static org.projog.core.kb.KnowledgeBaseServiceLocator.getServiceLocator;
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
 /* TEST
  % Example of recorda/3.
@@ -96,7 +96,7 @@ public final class InsertRecord extends AbstractSingleResultPredicate {
 
    @Override
    protected boolean evaluate(Term key, Term value) {
-      return evaluate(key, value, createAnonymousVariable());
+      return evaluate(key, value, new Variable());
    }
 
    @Override

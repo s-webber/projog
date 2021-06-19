@@ -24,7 +24,7 @@ import org.projog.core.term.List;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
-import org.projog.core.term.TermUtils;
+import org.projog.core.term.Variable;
 
 /* TEST
  %TRUE memberchk(a, [a,b,c])
@@ -84,7 +84,7 @@ public final class MemberCheck extends AbstractSingleResultPredicate implements 
    @Override
    protected boolean evaluate(Term element, Term list) {
       if (list.getType().isVariable()) {
-         return list.unify(new List(element, TermUtils.createAnonymousVariable()));
+         return list.unify(new List(element, new Variable()));
       } else {
          return isMember(element, list);
       }

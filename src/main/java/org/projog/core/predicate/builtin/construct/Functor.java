@@ -15,7 +15,6 @@
  */
 package org.projog.core.predicate.builtin.construct;
 
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.ProjogException;
@@ -25,6 +24,7 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
+import org.projog.core.term.Variable;
 
 /* TEST
  %QUERY functor(f(a,b,c(Z)),F,N)
@@ -125,7 +125,7 @@ public final class Functor extends AbstractSingleResultPredicate {
       } else {
          Term[] args = new Term[numArgs];
          for (int i = 0; i < numArgs; i++) {
-            args[i] = createAnonymousVariable();
+            args[i] = new Variable();
          }
          return Structure.createStructure(functor.getName(), args);
       }

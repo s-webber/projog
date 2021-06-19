@@ -227,7 +227,7 @@ public class VariableTest {
    @Test
    public void testUnifyAnonymousVariable() {
       Variable v = variable();
-      Variable anon = TermUtils.createAnonymousVariable();
+      Variable anon = new Variable();
       assertTrue(v.unify(anon));
       assertSame(anon, v.getTerm());
       assertSame(anon, v.getBound());
@@ -403,6 +403,7 @@ public class VariableTest {
    @Test
    public void testAnonymous() {
       assertTrue(new Variable("_").isAnonymous());
+      assertTrue(new Variable().isAnonymous());
    }
 
    @Test
@@ -420,6 +421,7 @@ public class VariableTest {
    @Test
    public void testAnonymousId() {
       assertEquals("_", Variable.ANONYMOUS_VARIABLE_ID);
+      assertEquals("_", new Variable().getId());
    }
 
    @Test

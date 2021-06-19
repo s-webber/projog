@@ -467,7 +467,7 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
       for (int i = 0; i < lists.length; i++) {
          lists[i] = new ArrayList<>(length);
          for (int t = 0; t < length; t++) {
-            lists[i].add(new Variable("_"));
+            lists[i].add(new Variable());
          }
          input[i + 1].unify(ListFactory.createList(lists[i]));
       }

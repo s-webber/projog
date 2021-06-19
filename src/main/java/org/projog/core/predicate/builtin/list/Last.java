@@ -193,7 +193,7 @@ public final class Last extends AbstractPredicateFactory {
          if (!retry) {
             if (last.getType().isVariable()) {
                last.unify(new List(termToUnifyLastElementWith, EmptyList.EMPTY_LIST));
-               newHead = new Variable("_");
+               newHead = new Variable();
                retry = true;
                return true;
             }
@@ -205,7 +205,7 @@ public final class Last extends AbstractPredicateFactory {
          }
 
          Term newLast = new List(newHead, tail.getTerm());
-         newHead = new Variable("_");
+         newHead = new Variable();
 
          termToUnifyLastElementWith.backtrack();
          tail.backtrack();

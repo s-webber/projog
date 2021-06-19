@@ -403,7 +403,7 @@ public final class Reverse extends AbstractPredicateFactory {
                arg4 = arg4.getArgument(1);
             } else if (arg4.getType().isVariable()) {
                Variable v = new Variable("Bound");
-               arg4.unify(new List(new Variable("_"), v));
+               arg4.unify(new List(new Variable(), v));
                arg4 = v;
             } else {
                return false;

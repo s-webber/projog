@@ -189,7 +189,7 @@ public final class Member extends AbstractPredicateFactory {
       @Override
       public boolean evaluate() {
          if (isTailVariable) {
-            List n = new List(new Variable("_"), currentList.getTerm());
+            List n = new List(new Variable(), currentList.getTerm());
             currentList.backtrack();
             currentList.unify(n);
             return true;
@@ -207,7 +207,7 @@ public final class Member extends AbstractPredicateFactory {
             } else if (currentList.getType().isVariable()) {
                isTailVariable = true;
                element.backtrack();
-               List n = new List(element, new Variable("_"));
+               List n = new List(element, new Variable());
                currentList.unify(n);
                return true;
             } else {

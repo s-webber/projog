@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public final class Variable implements Term {
    public static final String ANONYMOUS_VARIABLE_ID = "_";
+
    /**
     * The value by which the variable can be identified
     */
@@ -36,6 +37,13 @@ public final class Variable implements Term {
     * The {@link Term} this object is currently instantiated with (or {@code null} if it is currently uninstantiated)
     */
    private Term value;
+
+   /**
+    * Creates an anonymous variable. The ID of the variable will be an underscore.
+    */
+   public Variable() {
+      this(ANONYMOUS_VARIABLE_ID);
+   }
 
    /**
     * @param id value by which this variable can be identified

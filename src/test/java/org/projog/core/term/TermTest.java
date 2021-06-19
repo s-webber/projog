@@ -26,7 +26,6 @@ import static org.projog.TestUtils.integerNumber;
 import static org.projog.TestUtils.list;
 import static org.projog.TestUtils.structure;
 import static org.projog.TestUtils.variable;
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -194,8 +193,8 @@ public class TermTest {
    @Test
    public void testUnifyAndStrictEqualityWithAnonymousVariable() {
       for (Term t : IMMUTABLE_TERMS) {
-         assertUnify(t, createAnonymousVariable(), true);
-         assertStrictEquality(t, createAnonymousVariable(), false);
+         assertUnify(t, new Variable(), true);
+         assertStrictEquality(t, new Variable(), false);
       }
    }
 

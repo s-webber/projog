@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,6 @@
  */
 package org.projog.core.predicate.builtin.db;
 
-import static org.projog.core.term.TermUtils.createAnonymousVariable;
-
 import java.util.Arrays;
 
 import org.projog.core.predicate.PredicateKey;
@@ -24,6 +22,7 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
+import org.projog.core.term.Variable;
 
 /** Represents a record stored in a {@code RecordedDatabase}. */
 class Record {
@@ -44,7 +43,7 @@ class Record {
          return new Atom(name);
       } else {
          Term[] args = new Term[numArgs];
-         Arrays.fill(args, createAnonymousVariable());
+         Arrays.fill(args, new Variable());
          return Structure.createStructure(name, args);
       }
    }

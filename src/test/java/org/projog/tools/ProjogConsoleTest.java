@@ -31,11 +31,11 @@ import org.junit.Test;
 public class ProjogConsoleTest {
    private static final String ERROR_MESSAGE = "Invalid. Enter ; to continue or q to quit. ";
    private static final String PROMPT = "?- ";
-   private static final String EXPECTED_HEADER = concatenate("INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "projog.org", "");
-   private static final String EXPECTED_FOOTER = lineSeparator() + PROMPT;
-   private static final String QUIT_COMMAND = concatenate("quit.");
    private static final String YES = "yes (0 ms)";
    private static final String NO = "no (0 ms)";
+   private static final String EXPECTED_HEADER = concatenate("INFO Reading prolog source in: projog-bootstrap.pl from classpath", "Projog Console", "projog.org", "");
+   private static final String EXPECTED_FOOTER = lineSeparator() + PROMPT + lineSeparator() + YES + lineSeparator();
+   private static final String QUIT_COMMAND = concatenate("quit.");
 
    @Test
    public void testTrue() throws IOException {

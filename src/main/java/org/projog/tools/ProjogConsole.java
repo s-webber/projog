@@ -32,6 +32,8 @@ import org.projog.api.QueryStatement;
 import org.projog.core.ProjogException;
 import org.projog.core.event.LoggingProjogListener;
 import org.projog.core.parser.ParserException;
+import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /**
@@ -41,18 +43,26 @@ import org.projog.core.term.Term;
  */
 public class ProjogConsole {
    /** Command user can enter to exit the console application. */
-   private static final String QUIT_COMMAND = "quit.";
+   private static final PredicateKey QUIT_COMMAND = new PredicateKey("quit", 0);
    private static final String CONTINUE_EVALUATING = ";";
    private static final String STOP_EVALUATING = "q";
 
    private final Scanner in;
    private final PrintStream out;
    private final Projog projog;
+   private boolean quit;
 
    ProjogConsole(InputStream in, PrintStream out) {
       this.in = new Scanner(in);
       this.out = out;
       this.projog = new Projog(new LoggingProjogListener(out));
+      this.projog.addPredicateFactory(QUIT_COMMAND, new AbstractSingleResultPredicate() {
+         @Override
+         protected boolean evaluate() {
+            quit = true;
+            return true;
+         }
+      });
    }
 
    void run(List<String> startupScriptFilenames) throws IOException {
@@ -61,13 +71,11 @@ public class ProjogConsole {
 
       consultScripts(startupScriptFilenames);
 
-      while (true) {
+      while (!quit) {
          printPrompt();
 
          String inputSyntax = in.nextLine();
-         if (QUIT_COMMAND.equals(inputSyntax)) {
-            return;
-         } else if (isNotEmpty(inputSyntax)) {
+         if (isNotEmpty(inputSyntax)) {
             parseAndExecute(inputSyntax);
          }
       }
@@ -100,7 +108,7 @@ public class ProjogConsole {
 
    private void parseAndExecute(String inputSyntax) {
       try {
-         QueryStatement s = projog.createStatement(inputSyntax);
+         QueryStatement s = projog.createPlan(inputSyntax).createStatement();
          QueryResult r = s.executeQuery();
          Set<String> variableIds = r.getVariableIds();
          while (evaluateOnce(r, variableIds) && shouldContinue()) {
@@ -112,6 +120,7 @@ public class ProjogConsole {
          out.println("Error parsing query:");
          pe.getDescription(out);
       } catch (Throwable e) {
+         e.printStackTrace();
          out.println();
          processThrowable(e);
          projog.printProjogStackTrace(e);

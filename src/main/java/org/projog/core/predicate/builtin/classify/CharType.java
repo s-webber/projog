@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
@@ -333,7 +332,7 @@ public final class CharType extends AbstractPredicateFactory {
       return new CharTypePredicate(character, type, new State(characters, characterTypes));
    }
 
-   private final class CharTypePredicate extends AbstractPredicate {
+   private final class CharTypePredicate implements Predicate {
       private final Term character;
       private final Term type;
       private final State state;

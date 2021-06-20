@@ -15,9 +15,9 @@
  */
 package org.projog.core.predicate.builtin.flow;
 
-import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.CutException;
+import org.projog.core.predicate.Predicate;
 
 /* TEST
  %TRUE_NO repeat, !
@@ -49,11 +49,16 @@ import org.projog.core.predicate.CutException;
  */
 public final class Cut extends AbstractPredicateFactory {
    @Override
-   protected AbstractPredicate getPredicate() {
+   protected Predicate getPredicate() {
       return new CutPredicate();
    }
 
-   private final static class CutPredicate extends AbstractPredicate {
+   @Override
+   public boolean isAlwaysCutOnBacktrack() {
+      return true;
+   }
+
+   private final static class CutPredicate implements Predicate {
       private boolean retried = false;
 
       @Override
@@ -64,10 +69,10 @@ public final class Cut extends AbstractPredicateFactory {
          retried = true;
          return true;
       }
-   }
 
-   @Override
-   public boolean isAlwaysCutOnBacktrack() {
-      return true;
+      @Override
+      public boolean couldReevaluationSucceed() {
+         return true;
+      }
    }
 }

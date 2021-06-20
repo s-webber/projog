@@ -15,7 +15,6 @@
  */
 package org.projog.core.predicate.builtin.flow;
 
-import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 
@@ -70,9 +69,15 @@ public final class RepeatInfinitely extends AbstractPredicateFactory {
       return SINGLETON;
    }
 
-   private static class RepeatInfinitelyPredicate extends AbstractPredicate {
+   private static class RepeatInfinitelyPredicate implements Predicate
+   {
       @Override
       public boolean evaluate() {
+         return true;
+      }
+
+      @Override
+      public boolean couldReevaluationSucceed() {
          return true;
       }
    }

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.ListFactory;
@@ -31,7 +30,7 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
-abstract class AbstractCollectionOf extends AbstractPredicate {
+abstract class AbstractCollectionOf implements Predicate {
    private final PredicateFactory pf;
    private final Term template;
    private final Term goal;

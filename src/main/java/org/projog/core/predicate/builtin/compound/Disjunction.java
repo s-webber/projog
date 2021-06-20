@@ -15,7 +15,6 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.predicate.AbstractPredicate;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -296,7 +295,7 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
       return new DisjunctionPredicate(null, null, firstArg, secondArg);
    }
 
-   private final class DisjunctionPredicate extends AbstractPredicate {
+   private final class DisjunctionPredicate implements Predicate {
       private final PredicateFactory pf1;
       private final PredicateFactory pf2;
       private final Term inputArg1;

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.projog.TestUtils.array;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 
 import org.junit.Before;
 import org.junit.Test;

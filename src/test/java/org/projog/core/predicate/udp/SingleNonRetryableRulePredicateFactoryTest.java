@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.array;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 
 import org.junit.After;
 import org.junit.Before;

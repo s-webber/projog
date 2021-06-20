@@ -24,10 +24,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.projog.TestUtils.decimalFraction;
-import static org.projog.TestUtils.integerNumber;
-import static org.projog.TestUtils.structure;
-import static org.projog.TestUtils.variable;
+import static org.projog.TermFactory.decimalFraction;
+import static org.projog.TermFactory.integerNumber;
+import static org.projog.TermFactory.structure;
+import static org.projog.TermFactory.variable;
 
 import org.junit.Test;
 import org.projog.TestUtils;

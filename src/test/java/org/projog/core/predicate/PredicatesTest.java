@@ -21,7 +21,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 
 import java.io.StringReader;
 import java.util.Arrays;

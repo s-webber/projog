@@ -20,8 +20,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.structure;
+import static org.projog.TermFactory.atom;
+import static org.projog.TermFactory.structure;
 
 import org.junit.Before;
 import org.junit.Test;

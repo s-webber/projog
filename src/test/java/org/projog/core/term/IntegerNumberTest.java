@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.integerNumber;
+import static org.projog.TermFactory.integerNumber;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

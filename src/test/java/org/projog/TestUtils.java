@@ -33,16 +33,9 @@ import org.projog.core.parser.Operands;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.term.Atom;
-import org.projog.core.term.DecimalFraction;
-import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.List;
-import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermUtils;
-import org.projog.core.term.Variable;
 
 /**
  * Helper methods for performing unit tests.
@@ -107,54 +100,6 @@ public class TestUtils {
 
    public static Term[] array(Term... terms) {
       return terms;
-   }
-
-   public static Atom atom() {
-      return atom("test");
-   }
-
-   public static Atom atom(String name) {
-      return new Atom(name);
-   }
-
-   public static Structure structure() {
-      return structure("test", new Term[] {atom()});
-   }
-
-   public static Structure structure(String name, Term... args) {
-      return (Structure) Structure.createStructure(name, args);
-   }
-
-   public static List list(Term... args) {
-      return (List) ListFactory.createList(args);
-   }
-
-   public static IntegerNumber integerNumber() {
-      return integerNumber(1);
-   }
-
-   public static IntegerNumber integerNumber(long i) {
-      return new IntegerNumber(i);
-   }
-
-   public static DecimalFraction decimalFraction() {
-      return decimalFraction(1.0);
-   }
-
-   public static DecimalFraction decimalFraction(double d) {
-      return new DecimalFraction(d);
-   }
-
-   public static Variable variable() {
-      return variable("X");
-   }
-
-   public static Variable variable(String name) {
-      return new Variable(name);
-   }
-
-   public static Term[] createArgs(int numberOfArguments) {
-      return createArgs(numberOfArguments, atom());
    }
 
    public static Term[] createArgs(int numberOfArguments, Term term) {

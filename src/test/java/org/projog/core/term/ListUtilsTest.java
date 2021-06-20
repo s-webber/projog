@@ -22,23 +22,23 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.decimalFraction;
-import static org.projog.TestUtils.integerNumber;
+import static org.projog.TermFactory.atom;
+import static org.projog.TermFactory.decimalFraction;
+import static org.projog.TermFactory.integerNumber;
+import static org.projog.TermFactory.structure;
+import static org.projog.TermFactory.variable;
 import static org.projog.TestUtils.parseTerm;
-import static org.projog.TestUtils.structure;
-import static org.projog.TestUtils.variable;
 import static org.projog.TestUtils.write;
 import static org.projog.core.term.EmptyList.EMPTY_LIST;
 
 import org.junit.Test;
-import org.projog.TestUtils;
+import org.projog.TermFactory;
 import org.projog.core.ProjogException;
 
 public class ListUtilsTest {
    @Test
    public void testIsMember_True() {
-      List list = TestUtils.list(atom("x"), atom("y"), atom("z"));
+      List list = TermFactory.list(atom("x"), atom("y"), atom("z"));
       assertTrue(ListUtils.isMember(atom("x"), list));
       assertTrue(ListUtils.isMember(atom("y"), list));
       assertTrue(ListUtils.isMember(atom("z"), list));
@@ -46,7 +46,7 @@ public class ListUtilsTest {
 
    @Test
    public void testIsMember_Failure() {
-      List list = TestUtils.list(atom("x"), atom("y"), atom("z"));
+      List list = TermFactory.list(atom("x"), atom("y"), atom("z"));
       assertFalse(ListUtils.isMember(atom("w"), list));
    }
 
@@ -58,7 +58,7 @@ public class ListUtilsTest {
    @Test
    public void testIsMember_Variable() {
       Atom x = atom("x");
-      List list = TestUtils.list(x, atom("y"), atom("z"));
+      List list = TermFactory.list(x, atom("y"), atom("z"));
       Variable v = variable();
       assertTrue(ListUtils.isMember(v, list));
       assertSame(x, v.getTerm());

@@ -20,7 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 
 import org.junit.Test;
 import org.projog.core.predicate.udp.KeyFactories;

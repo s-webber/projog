@@ -17,10 +17,10 @@ package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.decimalFraction;
-import static org.projog.TestUtils.integerNumber;
-import static org.projog.TestUtils.structure;
+import static org.projog.TermFactory.atom;
+import static org.projog.TermFactory.decimalFraction;
+import static org.projog.TermFactory.integerNumber;
+import static org.projog.TermFactory.structure;
 import static org.projog.core.math.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 
 import org.junit.Test;

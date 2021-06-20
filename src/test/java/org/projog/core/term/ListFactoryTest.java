@@ -20,11 +20,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.atom;
-import static org.projog.TestUtils.decimalFraction;
-import static org.projog.TestUtils.integerNumber;
-import static org.projog.TestUtils.structure;
-import static org.projog.TestUtils.variable;
+import static org.projog.TermFactory.atom;
+import static org.projog.TermFactory.decimalFraction;
+import static org.projog.TermFactory.integerNumber;
+import static org.projog.TermFactory.structure;
+import static org.projog.TermFactory.variable;
 
 import java.util.Arrays;
 import java.util.Collection;

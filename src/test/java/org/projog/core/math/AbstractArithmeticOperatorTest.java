@@ -19,13 +19,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.createArgs;
 import static org.projog.TestUtils.createKnowledgeBase;
-import static org.projog.TestUtils.decimalFraction;
-import static org.projog.TestUtils.integerNumber;
-import static org.projog.TestUtils.structure;
-import static org.projog.TestUtils.variable;
+import static org.projog.TermFactory.decimalFraction;
+import static org.projog.TermFactory.integerNumber;
+import static org.projog.TermFactory.structure;
+import static org.projog.TermFactory.variable;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;

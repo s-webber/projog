@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.projog.TestUtils.array;
 import static org.projog.TestUtils.assertClass;
-import static org.projog.TestUtils.atom;
+import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.createClauseModel;
 import static org.projog.core.term.TermUtils.EMPTY_ARRAY;
 

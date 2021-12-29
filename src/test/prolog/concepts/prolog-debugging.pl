@@ -14,13 +14,13 @@ p(x, y).
 
 % Run queries - note debug information for both p and p2.
 
-%QUERY p(X)
+%?- p(X)
 %OUTPUT
 %[1] CALL p(X)
 %[1] EXIT p(a)
 %
 %OUTPUT
-%ANSWER X = a
+% X=a
 %OUTPUT
 %[1] REDO p(a)
 %[2] CALL p2(3)
@@ -28,15 +28,15 @@ p(x, y).
 %[1] EXIT p(b)
 %
 %OUTPUT
-%ANSWER X = b
+% X=b
 %OUTPUT
 %[1] REDO p(b)
 %[1] EXIT p(c)
 %
 %OUTPUT
-%ANSWER X = c
+% X=c
 
-%QUERY p(d)
+%?- p(d)
 %OUTPUT
 %[1] CALL p(d)
 %[1] FAIL p(d)
@@ -49,12 +49,12 @@ p(x, y).
 
 % Re-run same queries - note no debug information.
 
-%QUERY p(X)
-%ANSWER X = a
-%ANSWER X = b
-%ANSWER X = c
+%?- p(X)
+% X=a
+% X=b
+% X=c
 
-%FALSE p(d)
+%FAIL p(d)
 
 % Add spypoint
 
@@ -62,37 +62,37 @@ p(x, y).
 
 %TRUE spy(p)
 
-%QUERY debugging
+%?- debugging
 %OUTPUT
 %p/1
 %p/2
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 % Run query - note debug information for p only.
 
-%QUERY p(X)
+%?- p(X)
 %OUTPUT
 %[1] CALL p(X)
 %[1] EXIT p(a)
 %
 %OUTPUT
-%ANSWER X = a
+% X=a
 %OUTPUT
 %[1] REDO p(a)
 %[1] EXIT p(b)
 %
 %OUTPUT
-%ANSWER X = b
+% X=b
 %OUTPUT
 %[1] REDO p(b)
 %[1] EXIT p(c)
 %
 %OUTPUT
-%ANSWER X = c
+% X=c
 
-%QUERY p(d)
+%?- p(d)
 %OUTPUT
 %[1] CALL p(d)
 %[1] FAIL p(d)
@@ -109,14 +109,14 @@ p(x, y).
 
 %TRUE spy(p)
 %TRUE spy(p2)
-%QUERY debugging
+%?- debugging
 %OUTPUT
 %p/1
 %p/2
 %p2/1
 %
 %OUTPUT
-%ANSWER/
+%YES
 %TRUE nodebug
 %TRUE debugging
 
@@ -125,16 +125,16 @@ p(x, y).
 
 %TRUE spy('/'(p,1))
 
-%QUERY debugging
+%?- debugging
 %OUTPUT
 %p/1
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 %TRUE nodebug
 
 % Spy points can only be applied to atoms and structures
 
-%QUERY spy(1)
+%?- spy(1)
 %ERROR Expected an atom or a structure but got a INTEGER with value: 1

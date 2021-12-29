@@ -39,7 +39,7 @@ x(f, 4, Y, Z) :- b(Y), Y<3, b(Z), Z>3.
 
 z :- a(A), b(B), x(A,B,Y,Z), write(A / B / Y / Z), nl, fail.
 
-%QUERY z
+%?- z
 %OUTPUT
 %a / 1 / 4 / 4
 %a / 2 / 1 / 1
@@ -98,72 +98,40 @@ z :- a(A), b(B), x(A,B,Y,Z), write(A / B / Y / Z), nl, fail.
 test1(X,_,Y) :- X>1, !, repeat(3), Y is 3, !, X<4.
 test2(X,Y):- a(X), b(Y), test1(Y, X, Z).
 
-%QUERY b(Y), test1(Y, a, Z)
-%ANSWER
+%?- b(Y), test1(Y, a, Z)
 % Y=2
 % Z=3
-%ANSWER
-%ANSWER
-% Y=3 
+% Y=3
 % Z=3
-%ANSWER
 %NO
 
-%QUERY test2(X,Y)
-%ANSWER
+%?- test2(X,Y)
 % X=a
 % Y=2
-%ANSWER
-%ANSWER
 % X=a
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=b
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=b
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=c
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=c
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=d
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=d
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=e
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=e
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=f
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=f
-% Y=3 
-%ANSWER
-%ANSWER
+% Y=3
 % X=g
-% Y=2 
-%ANSWER
-%ANSWER
+% Y=2
 % X=g
 % Y=3
-%ANSWER
 %NO

@@ -18,75 +18,49 @@ t6(Y,X) :- X is 2, z(Y).
 
 t7(Y,X) :- X is 2, Y=p(1).
 
-%FALSE t1(Z,p(Z))
-%QUERY t1(W,p(Z))
-%ANSWER
+%FAIL t1(Z,p(Z))
+%?- t1(W,p(Z))
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t2(Z,Z)
-%QUERY t2(W,Z)
-%ANSWER
+%FAIL t2(Z,Z)
+%?- t2(W,Z)
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t3(Z,Z)
-%QUERY t3(W,Z)
-%ANSWER
+%FAIL t3(Z,Z)
+%?- t3(W,Z)
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t4(p(Z),Z)
-%QUERY t4(p(Z),W)
-%ANSWER
+%FAIL t4(p(Z),Z)
+%?- t4(p(Z),W)
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t5(Z,Z)
-%QUERY t5(Z,W)
-%ANSWER
+%FAIL t5(Z,Z)
+%?- t5(Z,W)
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t6(Z,Z)
-%QUERY t6(Z,W)
-%ANSWER
+%FAIL t6(Z,Z)
+%?- t6(Z,W)
 % W=2
 % Z=1
-%ANSWER
-%ANSWER
 % W=2
 % Z=3
-%ANSWER
 
-%FALSE t7(p(Z),Z)
-%QUERY t7(p(Z),W)
-%ANSWER
+%FAIL t7(p(Z),Z)
+%?- t7(p(Z),W)
 % W=2
 % Z=1
-%ANSWER

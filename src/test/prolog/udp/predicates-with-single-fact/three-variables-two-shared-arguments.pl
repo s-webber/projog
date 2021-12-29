@@ -1,40 +1,34 @@
 p(X,Y,X).
 
-%FALSE p(a,b,c)
-%FALSE p(a,a,c)
-%FALSE p(a,c,c)
+%FAIL p(a,b,c)
+%FAIL p(a,a,c)
+%FAIL p(a,c,c)
 
 %TRUE p(a,a,a)
 %TRUE p(a,b,a)
 %TRUE p(x,y,x)
 
-%FALSE p(a,c,c)
+%FAIL p(a,c,c)
 
-%QUERY p(a,b,Q)
-%ANSWER Q=a
+%?- p(a,b,Q)
+% Q=a
 
-%QUERY p(Q,b,a)
-%ANSWER Q=a
+%?- p(Q,b,a)
+% Q=a
 
-%QUERY p(A,B,C)
-%ANSWER
+%?- p(A,B,C)
 % A=UNINSTANTIATED VARIABLE
 % B=UNINSTANTIATED VARIABLE
 % C=UNINSTANTIATED VARIABLE
-%ANSWER
 
-%QUERY p(A,B,C), A=7
-%ANSWER
+%?- p(A,B,C), A=7
 % A=7
 % B=UNINSTANTIATED VARIABLE
 % C=7
-%ANSWER
 
-%QUERY D=x(A,B,C), p(A,B,C)
-%ANSWER
+%?- D=x(A,B,C), p(A,B,C)
 % A=UNINSTANTIATED VARIABLE
 % B=UNINSTANTIATED VARIABLE
 % C=UNINSTANTIATED VARIABLE
 % D=x(X, Y, X)
-%ANSWER
 

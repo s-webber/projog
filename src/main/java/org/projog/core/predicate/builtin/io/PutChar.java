@@ -21,8 +21,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>put_char(X)</code> - writes a character.
  * <p>

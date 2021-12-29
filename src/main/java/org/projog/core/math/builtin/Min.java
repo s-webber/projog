@@ -19,35 +19,35 @@ import org.projog.core.math.AbstractArithmeticOperator;
 import org.projog.core.math.Numeric;
 
 /* TEST
- %QUERY X is min(5,5)
- %ANSWER X=5
- %QUERY X is min(7,8)
- %ANSWER X=7
- %QUERY X is min(3,2)
- %ANSWER X=2
- %QUERY X is min(2.5,2.5)
- %ANSWER X=2.5
- %QUERY X is min(2.75,2.5)
- %ANSWER X=2.5
- %QUERY X is min(1,1.5)
- %ANSWER X=1
- %QUERY X is min(2,1.5)
- %ANSWER X=1.5
- %QUERY X is min(-3,2)
- %ANSWER X=-3
- %QUERY X is min(-3,-2)
- %ANSWER X=-3
- %QUERY X is min(-2.5,-2.25)
- %ANSWER X=-2.5
- %QUERY X is min(0,0)
- %ANSWER X=0
- %QUERY X is min(0.0,0.0)
- %ANSWER X=0.0
- %QUERY X is min(0,0.0)
- %ANSWER X=0.0
- %QUERY X is min(0.0,0)
- %ANSWER X=0
- */
+%?- X is min(5,5)
+% X=5
+%?- X is min(7,8)
+% X=7
+%?- X is min(3,2)
+% X=2
+%?- X is min(2.5,2.5)
+% X=2.5
+%?- X is min(2.75,2.5)
+% X=2.5
+%?- X is min(1,1.5)
+% X=1
+%?- X is min(2,1.5)
+% X=1.5
+%?- X is min(-3,2)
+% X=-3
+%?- X is min(-3,-2)
+% X=-3
+%?- X is min(-2.5,-2.25)
+% X=-2.5
+%?- X is min(0,0)
+% X=0
+%?- X is min(0.0,0.0)
+% X=0.0
+%?- X is min(0,0.0)
+% X=0.0
+%?- X is min(0.0,0)
+% X=0
+*/
 /**
  * <code>min</code> - finds the minimum of two numbers.
  */

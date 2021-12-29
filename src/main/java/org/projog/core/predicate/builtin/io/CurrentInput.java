@@ -19,8 +19,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>current_input(X)</code> - match a term to the current input stream.
  * <p>

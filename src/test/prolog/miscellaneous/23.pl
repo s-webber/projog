@@ -6,28 +6,20 @@ x([x,y,x]).
 
 p(X) :- x(Y), y(X,Y).
 
-%QUERY p([A,B,e])
-%ANSWER
+%?- p([A,B,e])
 % A=q
 % B=w
-%ANSWER
 %NO
 
-%QUERY  p([A,B,C])
-%ANSWER
+%?-  p([A,B,C])
 % A=a
 % B=b
 % C=c
-%ANSWER
-%ANSWER
 % A=q
 % B=w
 % C=e
-%ANSWER
-%ANSWER
 % A=x
 % B=y
 % C=x
-%ANSWER
 
 

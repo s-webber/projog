@@ -18,13 +18,13 @@ package org.projog.core.predicate.builtin.io;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 
 /* TEST
- %QUERY write('a'), write('b'), nl, write('c')
- %OUTPUT
- %ab
- %c
- %OUTPUT
- %ANSWER/
- */
+%?- write('a'), write('b'), nl, write('c')
+%OUTPUT
+%ab
+%c
+%OUTPUT
+%YES
+*/
 /**
  * <code>nl</code> - outputs a new line character.
  * <p>

@@ -29,19 +29,19 @@ import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 /* TEST
- squared(X,Y) :- Y is X * X.
+squared(X,Y) :- Y is X * X.
 
- %QUERY squared(3,X)
- %ANSWER X=9
+%?- squared(3,X)
+% X=9
 
- %QUERY X is squared(3)
- %ERROR Cannot find arithmetic operator: squared/1
+%?- X is squared(3)
+%ERROR Cannot find arithmetic operator: squared/1
 
- %TRUE arithmetic_function(squared/1)
+%TRUE arithmetic_function(squared/1)
 
- %QUERY X is squared(3)
- %ANSWER X=9
- */
+%?- X is squared(3)
+% X=9
+*/
 /**
  * <code>arithmetic_function(X)</code> - defines a predicate as an arithmetic function.
  * <p>

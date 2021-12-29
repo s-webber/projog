@@ -20,8 +20,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>close(X)</code> - closes a stream.
  * <p>

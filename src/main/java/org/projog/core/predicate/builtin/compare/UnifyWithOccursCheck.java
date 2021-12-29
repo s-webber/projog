@@ -23,109 +23,95 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %FALSE unify_with_occurs_check(A, f(A))
+%FAIL unify_with_occurs_check(A, f(A))
 
- %FALSE unify_with_occurs_check(f(A), A)
+%FAIL unify_with_occurs_check(f(A), A)
 
- %FALSE unify_with_occurs_check(A, [1, A, 3])
+%FAIL unify_with_occurs_check(A, [1, A, 3])
 
- %FALSE unify_with_occurs_check([1, A, 3], A)
+%FAIL unify_with_occurs_check([1, A, 3], A)
 
- %FALSE unify_with_occurs_check(A, f([1, A, 3]))
+%FAIL unify_with_occurs_check(A, f([1, A, 3]))
 
- %FALSE unify_with_occurs_check(f([1, A, 3]), A)
+%FAIL unify_with_occurs_check(f([1, A, 3]), A)
 
- %FALSE unify_with_occurs_check(A, [1, f(A), 3])
+%FAIL unify_with_occurs_check(A, [1, f(A), 3])
 
- %FALSE unify_with_occurs_check([1, f(A), 3], A)
+%FAIL unify_with_occurs_check([1, f(A), 3], A)
 
- %FALSE unify_with_occurs_check(f(A), f([1, A, 3]))
+%FAIL unify_with_occurs_check(f(A), f([1, A, 3]))
 
- %FALSE unify_with_occurs_check(f([1, A, 3]), f(A))
+%FAIL unify_with_occurs_check(f([1, A, 3]), f(A))
 
- %QUERY unify_with_occurs_check(X, X)
- %ANSWER X=UNINSTANTIATED VARIABLE
+%?- unify_with_occurs_check(X, X)
+% X=UNINSTANTIATED VARIABLE
 
- %QUERY unify_with_occurs_check(X, Y)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- unify_with_occurs_check(X, Y)
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY X=1, unify_with_occurs_check(X, Y)
- %ANSWER
- % X=1
- % Y=1
- %ANSWER
+%?- X=1, unify_with_occurs_check(X, Y)
+% X=1
+% Y=1
 
- %QUERY unify_with_occurs_check(X, Y), Y=2
- %ANSWER
- % X=2
- % Y=2
- %ANSWER
+%?- unify_with_occurs_check(X, Y), Y=2
+% X=2
+% Y=2
 
- %QUERY unify_with_occurs_check(X, f(Y))
- %ANSWER
- % X=f(Y)
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- unify_with_occurs_check(X, f(Y))
+% X=f(Y)
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY unify_with_occurs_check(f(X), Y)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=f(X)
- %ANSWER
+%?- unify_with_occurs_check(f(X), Y)
+% X=UNINSTANTIATED VARIABLE
+% Y=f(X)
 
- %QUERY unify_with_occurs_check(X, [1, Y, 3])
- %ANSWER
- % X=[1,Y,3]
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- unify_with_occurs_check(X, [1, Y, 3])
+% X=[1,Y,3]
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY unify_with_occurs_check([1, X, 3], Y)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=[1,X,3]
- %ANSWER
+%?- unify_with_occurs_check([1, X, 3], Y)
+% X=UNINSTANTIATED VARIABLE
+% Y=[1,X,3]
 
- %TRUE unify_with_occurs_check(a, a)
- %TRUE unify_with_occurs_check(1, 1)
- %TRUE unify_with_occurs_check(1.0, 1.0)
- %TRUE unify_with_occurs_check(1.5, 1.5)
- %TRUE unify_with_occurs_check([], [])
- %TRUE unify_with_occurs_check([a], [a])
- %TRUE unify_with_occurs_check([a, b, c], [a, b, c])
- %TRUE unify_with_occurs_check(p(a), p(a))
- %TRUE unify_with_occurs_check(p(a, b, c), p(a, b, c))
- %FALSE unify_with_occurs_check(a, b)
- %FALSE unify_with_occurs_check(1, 2)
- %FALSE unify_with_occurs_check(1, -1)
- %FALSE unify_with_occurs_check(1, '1')
- %FALSE unify_with_occurs_check(1, 1.0)
- %FALSE unify_with_occurs_check(1.0, -1.0)
- %FALSE unify_with_occurs_check(1.0, 1.5)
- %FALSE unify_with_occurs_check(2, 1+1)
- %FALSE unify_with_occurs_check([a], [x])
- %FALSE unify_with_occurs_check([a, b, c], [a, b, x])
- %FALSE unify_with_occurs_check([a, b, c], [a, x, c])
- %FALSE unify_with_occurs_check([a, b, c], [x, b, c])
- %FALSE unify_with_occurs_check([a, b, c], [a, c, b])
- %FALSE unify_with_occurs_check([a, b, c], [b, a, c])
- %FALSE unify_with_occurs_check([a, b, c], [b, c, a])
- %FALSE unify_with_occurs_check([a, b, c], [c, a, b])
- %FALSE unify_with_occurs_check([a, b, c], [c, b, a])
- %FALSE unify_with_occurs_check(p(a), p(x))
- %FALSE unify_with_occurs_check(p(a, b), p(a))
- %FALSE unify_with_occurs_check(p(a), p(a, b))
- %FALSE unify_with_occurs_check(p(a, b, c), p(a, b, x))
- %FALSE unify_with_occurs_check(p(a, b, c), p(a, x, c))
- %FALSE unify_with_occurs_check(p(a, b, c), p(x, b, c))
- %FALSE unify_with_occurs_check(p(a, b, c), p(a, c, b))
- %FALSE unify_with_occurs_check(p(a, b, c), p(b, a, c))
- %FALSE unify_with_occurs_check(p(a, b, c), p(b, c, a))
- %FALSE unify_with_occurs_check(p(a, b, c), p(c, a, b))
- %FALSE unify_with_occurs_check(p(a, b, c), p(c, b, a))
- */
+%TRUE unify_with_occurs_check(a, a)
+%TRUE unify_with_occurs_check(1, 1)
+%TRUE unify_with_occurs_check(1.0, 1.0)
+%TRUE unify_with_occurs_check(1.5, 1.5)
+%TRUE unify_with_occurs_check([], [])
+%TRUE unify_with_occurs_check([a], [a])
+%TRUE unify_with_occurs_check([a, b, c], [a, b, c])
+%TRUE unify_with_occurs_check(p(a), p(a))
+%TRUE unify_with_occurs_check(p(a, b, c), p(a, b, c))
+%FAIL unify_with_occurs_check(a, b)
+%FAIL unify_with_occurs_check(1, 2)
+%FAIL unify_with_occurs_check(1, -1)
+%FAIL unify_with_occurs_check(1, '1')
+%FAIL unify_with_occurs_check(1, 1.0)
+%FAIL unify_with_occurs_check(1.0, -1.0)
+%FAIL unify_with_occurs_check(1.0, 1.5)
+%FAIL unify_with_occurs_check(2, 1+1)
+%FAIL unify_with_occurs_check([a], [x])
+%FAIL unify_with_occurs_check([a, b, c], [a, b, x])
+%FAIL unify_with_occurs_check([a, b, c], [a, x, c])
+%FAIL unify_with_occurs_check([a, b, c], [x, b, c])
+%FAIL unify_with_occurs_check([a, b, c], [a, c, b])
+%FAIL unify_with_occurs_check([a, b, c], [b, a, c])
+%FAIL unify_with_occurs_check([a, b, c], [b, c, a])
+%FAIL unify_with_occurs_check([a, b, c], [c, a, b])
+%FAIL unify_with_occurs_check([a, b, c], [c, b, a])
+%FAIL unify_with_occurs_check(p(a), p(x))
+%FAIL unify_with_occurs_check(p(a, b), p(a))
+%FAIL unify_with_occurs_check(p(a), p(a, b))
+%FAIL unify_with_occurs_check(p(a, b, c), p(a, b, x))
+%FAIL unify_with_occurs_check(p(a, b, c), p(a, x, c))
+%FAIL unify_with_occurs_check(p(a, b, c), p(x, b, c))
+%FAIL unify_with_occurs_check(p(a, b, c), p(a, c, b))
+%FAIL unify_with_occurs_check(p(a, b, c), p(b, a, c))
+%FAIL unify_with_occurs_check(p(a, b, c), p(b, c, a))
+%FAIL unify_with_occurs_check(p(a, b, c), p(c, a, b))
+%FAIL unify_with_occurs_check(p(a, b, c), p(c, b, a))
+*/
 /**
  * <code>unify_with_occurs_check(X, Y)</code> - an equality test using sound unification.
  * <p>

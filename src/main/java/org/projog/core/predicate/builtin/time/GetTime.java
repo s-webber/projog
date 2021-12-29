@@ -20,10 +20,10 @@ import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Term;
 
 /* TEST
- validate_get_time :- get_time(X), X>1000000000000, get_time(Y), Y>=X.
+validate_get_time :- get_time(X), X>1000000000000, get_time(Y), Y>=X.
 
- %TRUE validate_get_time
- */
+%TRUE validate_get_time
+*/
 /**
  * <code>get_time(X)</code> - gets the current system time.
  * <p>

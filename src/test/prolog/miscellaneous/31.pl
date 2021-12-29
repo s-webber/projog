@@ -1,19 +1,19 @@
 a :- true, !, true, repeat(3).
 a :- true.
 
-%QUERY a
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- a
+%YES
+%YES
+%YES
 %NO
 
 b :- true, repeat(3), !, repeat(3).
 b :- true.
 
-%QUERY b
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- b
+%YES
+%YES
+%YES
 %NO
 
 c1 :- true, true, !.
@@ -65,7 +65,7 @@ d :- true.
 e :- true, true, !, 1>2.
 e :- true.
 
-%FALSE e
+%FAIL e
 
 f :- true, fail, !, 1>2.
 f :- true.

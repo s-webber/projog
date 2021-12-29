@@ -18,25 +18,25 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractBinaryIntegerArithmeticOperator;
 
 /* TEST
- %QUERY X is 13 << 0
- %ANSWER X=13
+%?- X is 13 << 0
+% X=13
 
- %QUERY X is 13 << 1
- %ANSWER X=26
+%?- X is 13 << 1
+% X=26
 
- %QUERY X is 13 << 2
- %ANSWER X=52
+%?- X is 13 << 2
+% X=52
 
- %QUERY X is 13 << 3
- %ANSWER X=104
+%?- X is 13 << 3
+% X=104
 
- %QUERY X is 13 << 4
- %ANSWER X=208
+%?- X is 13 << 4
+% X=208
 
- % Note bit shifting using a negative value gives different results than in some other Prolog implementations.
- %QUERY X is 13 << -1
- %ANSWER X=-9223372036854775808
- */
+% Note bit shifting using a negative value gives different results than in some other Prolog implementations.
+%?- X is 13 << -1
+% X=-9223372036854775808
+*/
 /**
  * <code>&lt;&lt;</code> - left shift bits.
  */

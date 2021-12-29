@@ -27,111 +27,91 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- % Examples of when all three terms are atoms:
- %TRUE atom_concat(abc, def, abcdef)
- %TRUE atom_concat(a, bcdef, abcdef)
- %TRUE atom_concat(abcde, f, abcdef)
- %TRUE atom_concat(abcdef, '', abcdef)
- %TRUE atom_concat('', abcdef, abcdef)
- %TRUE atom_concat('', '', '')
- %FALSE atom_concat(ab, def, abcdef)
- %FALSE atom_concat(abc, ef, abcdef)
+% Examples of when all three terms are atoms:
+%TRUE atom_concat(abc, def, abcdef)
+%TRUE atom_concat(a, bcdef, abcdef)
+%TRUE atom_concat(abcde, f, abcdef)
+%TRUE atom_concat(abcdef, '', abcdef)
+%TRUE atom_concat('', abcdef, abcdef)
+%TRUE atom_concat('', '', '')
+%FAIL atom_concat(ab, def, abcdef)
+%FAIL atom_concat(abc, ef, abcdef)
 
- % Examples of when first term is a variable:
- %QUERY atom_concat(abc, X, abcdef)
- %ANSWER X=def
- %QUERY atom_concat(abcde, X, abcdef)
- %ANSWER X=f
- %QUERY atom_concat(a, X, abcdef)
- %ANSWER X=bcdef
- %QUERY atom_concat('', X, abcdef)
- %ANSWER X=abcdef
- %QUERY atom_concat(abcdef, X, abcdef)
- %ANSWER X=
+% Examples of when first term is a variable:
+%?- atom_concat(abc, X, abcdef)
+% X=def
+%?- atom_concat(abcde, X, abcdef)
+% X=f
+%?- atom_concat(a, X, abcdef)
+% X=bcdef
+%?- atom_concat('', X, abcdef)
+% X=abcdef
+%?- atom_concat(abcdef, X, abcdef)
+% X=
 
- % Examples of when second term is a variable:
- %QUERY atom_concat(X, def, abcdef)
- %ANSWER X=abc
- %QUERY atom_concat(X, f, abcdef)
- %ANSWER X=abcde
- %QUERY atom_concat(X, bcdef, abcdef)
- %ANSWER X=a
- %QUERY atom_concat(X, abcdef, abcdef)
- %ANSWER X=
- %QUERY atom_concat(X, '', abcdef)
- %ANSWER X=abcdef
+% Examples of when second term is a variable:
+%?- atom_concat(X, def, abcdef)
+% X=abc
+%?- atom_concat(X, f, abcdef)
+% X=abcde
+%?- atom_concat(X, bcdef, abcdef)
+% X=a
+%?- atom_concat(X, abcdef, abcdef)
+% X=
+%?- atom_concat(X, '', abcdef)
+% X=abcdef
 
- % Examples of when third term is a variable:
- %QUERY atom_concat(abc, def, X)
- %ANSWER X=abcdef
- %QUERY atom_concat(a, bcdef, X)
- %ANSWER X=abcdef
- %QUERY atom_concat(abcde, f, X)
- %ANSWER X=abcdef
- %QUERY atom_concat(abcdef, '', X)
- %ANSWER X=abcdef
- %QUERY atom_concat('', abcdef, X)
- %ANSWER X=abcdef
- %QUERY atom_concat('', '', X)
- %ANSWER X=
+% Examples of when third term is a variable:
+%?- atom_concat(abc, def, X)
+% X=abcdef
+%?- atom_concat(a, bcdef, X)
+% X=abcdef
+%?- atom_concat(abcde, f, X)
+% X=abcdef
+%?- atom_concat(abcdef, '', X)
+% X=abcdef
+%?- atom_concat('', abcdef, X)
+% X=abcdef
+%?- atom_concat('', '', X)
+% X=
 
- % Examples of when first and second terms are variables:
- %QUERY atom_concat(X, Y, abcdef)
- %ANSWER
- % X=
- % Y=abcdef
- %ANSWER
- %ANSWER
- % X=a
- % Y=bcdef
- %ANSWER
- %ANSWER
- % X=ab
- % Y=cdef
- %ANSWER
- %ANSWER
- % X=abc
- % Y=def
- %ANSWER
- %ANSWER
- % X=abcd
- % Y=ef
- %ANSWER
- %ANSWER
- % X=abcde
- % Y=f
- %ANSWER
- %ANSWER
- % X=abcdef
- % Y=
- %ANSWER
- %QUERY atom_concat(X, Y, a)
- %ANSWER
- % X=
- % Y=a
- %ANSWER
- %ANSWER
- % X=a
- % Y=
- %ANSWER
- %QUERY atom_concat(X, Y, '')
- %ANSWER
- % X=
- % Y=
- %ANSWER
+% Examples of when first and second terms are variables:
+%?- atom_concat(X, Y, abcdef)
+% X=
+% Y=abcdef
+% X=a
+% Y=bcdef
+% X=ab
+% Y=cdef
+% X=abc
+% Y=def
+% X=abcd
+% Y=ef
+% X=abcde
+% Y=f
+% X=abcdef
+% Y=
+%?- atom_concat(X, Y, a)
+% X=
+% Y=a
+% X=a
+% Y=
+%?- atom_concat(X, Y, '')
+% X=
+% Y=
 
- % Examples when combination of term types cause failure:
- %QUERY atom_concat(X, Y, Z)
- %ERROR Expected an atom but got: VARIABLE with value: Z
- %QUERY atom_concat('', Y, Z)
- %ERROR Expected an atom but got: VARIABLE with value: Z
- %QUERY atom_concat(X, '', Z)
- %ERROR Expected an atom but got: VARIABLE with value: Z
- %FALSE atom_concat(a, b, c)
- %FALSE atom_concat(a, '', '')
- %FALSE atom_concat('', b, '')
- %FALSE atom_concat('', '', c)
- */
+% Examples when combination of term types cause failure:
+%?- atom_concat(X, Y, Z)
+%ERROR Expected an atom but got: VARIABLE with value: Z
+%?- atom_concat('', Y, Z)
+%ERROR Expected an atom but got: VARIABLE with value: Z
+%?- atom_concat(X, '', Z)
+%ERROR Expected an atom but got: VARIABLE with value: Z
+%FAIL atom_concat(a, b, c)
+%FAIL atom_concat(a, '', '')
+%FAIL atom_concat('', b, '')
+%FAIL atom_concat('', '', c)
+*/
 /**
  * <code>atom_concat(X, Y, Z)</code> - concatenates atom names.
  * <p>

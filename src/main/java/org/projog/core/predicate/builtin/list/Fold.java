@@ -35,53 +35,53 @@ multiple_result_predicate(X,Y,Z) :-  Z is X*Y.
 
 single_result_predicate(X,Y,Z) :-  Z is X+Y.
 
-%QUERY foldl(single_result_predicate, [2,4,7], 0, X)
-%ANSWER X = 13
+%?- foldl(single_result_predicate, [2,4,7], 0, X)
+% X=13
 
-%QUERY foldl(single_result_predicate, [2,4,7], 42, X)
-%ANSWER X = 55
+%?- foldl(single_result_predicate, [2,4,7], 42, X)
+% X=55
 
 %TRUE foldl(single_result_predicate, [2,4,7], 0, 13)
-%FALSE foldl(single_result_predicate, [2,4,7], 0, 12)
+%FAIL foldl(single_result_predicate, [2,4,7], 0, 12)
 
-%QUERY foldl(single_result_predicate, [], 7, X)
-%ANSWER X=7
+%?- foldl(single_result_predicate, [], 7, X)
+% X=7
 
-%QUERY foldl(single_result_predicate, [3], 7, X)
-%ANSWER X=10
+%?- foldl(single_result_predicate, [3], 7, X)
+% X=10
 
-%QUERY foldl(multiple_result_predicate, [2,4,7], 42, X)
-%ANSWER X=55
-%ANSWER X=336
-%ANSWER X=183
-%ANSWER X=1232
-%ANSWER X=95
-%ANSWER X=616
-%ANSWER X=343
-%ANSWER X=2352
+%?- foldl(multiple_result_predicate, [2,4,7], 42, X)
+% X=55
+% X=336
+% X=183
+% X=1232
+% X=95
+% X=616
+% X=343
+% X=2352
 
-%QUERY foldl(multiple_result_predicate, [1,2,3], 0, X)
-%ANSWER X=6
-%ANSWER X=9
-%ANSWER X=5
-%ANSWER X=6
-%ANSWER X=5
-%ANSWER X=6
-%ANSWER X=3
-%ANSWER X=0
+%?- foldl(multiple_result_predicate, [1,2,3], 0, X)
+% X=6
+% X=9
+% X=5
+% X=6
+% X=5
+% X=6
+% X=3
+% X=0
 
-%QUERY foldl(multiple_result_predicate, [1,2,3], 0, 6)
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- foldl(multiple_result_predicate, [1,2,3], 0, 6)
+%YES
+%YES
+%YES
 %NO
 
-%QUERY foldl(multiple_result_predicate, [], 7, X)
-%ANSWER X=7
+%?- foldl(multiple_result_predicate, [], 7, X)
+% X=7
 
-%QUERY foldl(multiple_result_predicate, [3], 7, X)
-%ANSWER X=10
-%ANSWER X=21
+%?- foldl(multiple_result_predicate, [3], 7, X)
+% X=10
+% X=21
 
 four_arg_predicate(1,X,Y,Z) :-  Z is X+Y.
 four_arg_predicate(2,X,Y,Z) :-  Z is X-Y.
@@ -93,74 +93,62 @@ four_arg_predicate(a,5,3,12).
 four_arg_predicate(a,999,_,99999).
 four_arg_predicate(b,_,_,_).
 
-%QUERY foldl(four_arg_predicate(1), [2,4,7], 0, X)
-%ANSWER X=13
+%?- foldl(four_arg_predicate(1), [2,4,7], 0, X)
+% X=13
 
-%QUERY foldl(four_arg_predicate(2), [2,4,7], 0, X)
-%ANSWER X=5
+%?- foldl(four_arg_predicate(2), [2,4,7], 0, X)
+% X=5
 
-%QUERY foldl(four_arg_predicate(3), [2,4,7], 0, X)
-%ANSWER X=13
-%ANSWER X=1
-%ANSWER X=9
-%ANSWER X=5
-%ANSWER X=13
-%ANSWER X=1
-%ANSWER X=9
-%ANSWER X=5
+%?- foldl(four_arg_predicate(3), [2,4,7], 0, X)
+% X=13
+% X=1
+% X=9
+% X=5
+% X=13
+% X=1
+% X=9
+% X=5
 
-%QUERY foldl(four_arg_predicate(3), [2,4,7], 0, 5)
-%ANSWER/
-%ANSWER/
+%?- foldl(four_arg_predicate(3), [2,4,7], 0, 5)
+%YES
+%YES
 
-%QUERY foldl(four_arg_predicate(a), [B,C], A, X)
-%ANSWER
-% A = 2
-% B = 1
-% C = 5
-% X = 12
-%ANSWER
-%ANSWER
-% A = 2
-% B = 1
-% C = 999
-% X = 99999
-%ANSWER
-%ANSWER
-% A = y
-% B = x
-% C = 5
-% X = 12
-%ANSWER
-%ANSWER
-% A = y
-% B = x
-% C = 999
-% X = 99999
-%ANSWER
-%ANSWER
-% A = 3
-% B = 5
-% C = 999
-% X = 99999
-%ANSWER
-%ANSWER
-% A = UNINSTANTIATED VARIABLE
-% B = 999
-% C = 999
-% X = 99999
-%ANSWER
+%?- foldl(four_arg_predicate(a), [B,C], A, X)
+% A=2
+% B=1
+% C=5
+% X=12
+% A=2
+% B=1
+% C=999
+% X=99999
+% A=y
+% B=x
+% C=5
+% X=12
+% A=y
+% B=x
+% C=999
+% X=99999
+% A=3
+% B=5
+% C=999
+% X=99999
+% A=UNINSTANTIATED VARIABLE
+% B=999
+% C=999
+% X=99999
 
-%FALSE foldl(four_arg_predicate(3), [2,4,7], 0, 14)
+%FAIL foldl(four_arg_predicate(3), [2,4,7], 0, 14)
 
-%FALSE foldl(four_arg_predicate(4), [2,4,7], 0, X)
+%FAIL foldl(four_arg_predicate(4), [2,4,7], 0, X)
 
 % Note: Unlike SWI Prolog, fails on first evaluation if the second argument is not a concrete list.
-%QUERY foldl(single_result_predicate, [2,4,7|T], 0, X)
+%?- foldl(single_result_predicate, [2,4,7|T], 0, X)
 %ERROR Expected concrete list but got: .(2, .(4, .(7, T)))
-%QUERY foldl(single_result_predicate, L, 0, X)
+%?- foldl(single_result_predicate, L, 0, X)
 %ERROR Expected concrete list but got: L
- */
+*/
 /**
  * <code>foldl(PredicateName, Values, Start, Result)</code> - combines elements of a list into a single term.
  * <p>

@@ -5,4 +5,4 @@ test(Coins, ExistingTotal, Target) :-
 
 %TRUE test([4,7,8], 12, 17)
 %TRUE test([4,7,8], 13, 17)
-%FALSE test([4,7,8], 14, 17)
+%FAIL test([4,7,8], 14, 17)

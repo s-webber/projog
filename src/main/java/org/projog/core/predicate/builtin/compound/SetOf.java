@@ -29,88 +29,68 @@ import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- z(r).
- z(t).
- z(y).
+z(r).
+z(t).
+z(y).
 
- x(a,b,c).
- x(q,X,e) :- z(X).
- x(1,2,3).
- x(w,b,c).
- x(d,b,c).
- x(a,b,c).
+x(a,b,c).
+x(q,X,e) :- z(X).
+x(1,2,3).
+x(w,b,c).
+x(d,b,c).
+x(a,b,c).
 
- %QUERY setof(X,x(X,Y,Z),L)
- %ANSWER
- % L=[a,d,w]
- % X=UNINSTANTIATED VARIABLE
- % Y=b
- % Z=c
- %ANSWER
- %ANSWER
- % L=[q]
- % X=UNINSTANTIATED VARIABLE
- % Y=r
- % Z=e
- %ANSWER
- %ANSWER
- % L=[q]
- % X=UNINSTANTIATED VARIABLE
- % Y=t
- % Z=e
- %ANSWER
- %ANSWER
- % L=[q]
- % X=UNINSTANTIATED VARIABLE
- % Y=y
- % Z=e
- %ANSWER
- %ANSWER
- % L=[1]
- % X=UNINSTANTIATED VARIABLE
- % Y=2
- % Z=3
- %ANSWER
+%?- setof(X,x(X,Y,Z),L)
+% L=[a,d,w]
+% X=UNINSTANTIATED VARIABLE
+% Y=b
+% Z=c
+% L=[q]
+% X=UNINSTANTIATED VARIABLE
+% Y=r
+% Z=e
+% L=[q]
+% X=UNINSTANTIATED VARIABLE
+% Y=t
+% Z=e
+% L=[q]
+% X=UNINSTANTIATED VARIABLE
+% Y=y
+% Z=e
+% L=[1]
+% X=UNINSTANTIATED VARIABLE
+% Y=2
+% Z=3
 
- %FALSE setof(X,x(X,y,z),L)
+%FAIL setof(X,x(X,y,z),L)
 
- %QUERY setof(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
- %ANSWER
- % L=[9]
- % X=3
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % L=[4]
- % X=2
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- setof(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
+% L=[9]
+% X=3
+% Y=UNINSTANTIATED VARIABLE
+% L=[4]
+% X=2
+% Y=UNINSTANTIATED VARIABLE
 
- p(a,1).
- p(b,2).
- p(c,3).
- p(d,2).
- p(d,2).
+p(a,1).
+p(b,2).
+p(c,3).
+p(d,2).
+p(d,2).
 
- %QUERY setof(X, p(X,Y), List)
- %ANSWER
- % List = [a]
- % X = UNINSTANTIATED VARIABLE
- % Y = 1
- %ANSWER
- %ANSWER
- % List = [b,d]
- % X = UNINSTANTIATED VARIABLE
- % Y = 2
- %ANSWER
- %ANSWER
- % List = [c]
- % X = UNINSTANTIATED VARIABLE
- % Y = 3
- %ANSWER
+%?- setof(X, p(X,Y), List)
+% List=[a]
+% X=UNINSTANTIATED VARIABLE
+% Y=1
+% List=[b,d]
+% X=UNINSTANTIATED VARIABLE
+% Y=2
+% List=[c]
+% X=UNINSTANTIATED VARIABLE
+% Y=3
 
- % TODO setof(X, Y ^ p(X,Y), List)
- */
+% TODO setof(X, Y ^ p(X,Y), List)
+*/
 /**
  * <code>setof(X,P,L)</code> - find all solutions that satisfy the goal.
  * <p>

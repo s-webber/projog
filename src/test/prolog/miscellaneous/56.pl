@@ -3,23 +3,23 @@ geven(X) :- godd(Y), X is Y+1, X>0.
 godd(1).
 godd(X) :- geven(Y), X is Y+1, X>1.
 
-%QUERY geven(X), !
-%ANSWER X=0
+%?- geven(X), !
+% X=0
 %NO
 
-%QUERY godd(X), !
-%ANSWER X=1
+%?- godd(X), !
+% X=1
 %NO
 
-%QUERY geven(X), X>100, !
-%ANSWER X=102
+%?- geven(X), X>100, !
+% X=102
 %NO
 
-%QUERY godd(X), X>100, !
-%ANSWER X=101
+%?- godd(X), X>100, !
+% X=101
 %NO
 
-%QUERY geven(X), write(X), nl, X>10, !
+%?- geven(X), write(X), nl, X>10, !
 %OUTPUT
 %0
 %2
@@ -30,10 +30,10 @@ godd(X) :- geven(Y), X is Y+1, X>1.
 %12
 %
 %OUTPUT
-%ANSWER X=12
+% X=12
 %NO
 
-%QUERY godd(X), write(X), nl, X>10, !
+%?- godd(X), write(X), nl, X>10, !
 %OUTPUT
 %1
 %3
@@ -43,5 +43,5 @@ godd(X) :- geven(Y), X is Y+1, X>1.
 %11
 %
 %OUTPUT
-%ANSWER X=11
+% X=11
 %NO

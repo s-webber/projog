@@ -2,18 +2,18 @@ x(X,L) :- L = [X|_].
 x(X,L) :- L = [_|X].
 x(X,L) :- L = [X|X].
 
-%QUERY x(a,L)
-%ANSWER L=[a|_]
-%ANSWER L=[_|a]
-%ANSWER L=[a|a]
+%?- x(a,L)
+% L=[a|_]
+% L=[_|a]
+% L=[a|a]
 
-%QUERY x(a,[X,b])
-%ANSWER X=a
+%?- x(a,[X,b])
+% X=a
 %NO
 
-%QUERY x(X,[a|a])
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
+%?- x(X,[a|a])
+% X=a
+% X=a
+% X=a
 
-%FALSE x(a,[b|c])
+%FAIL x(a,[b|c])

@@ -18,8 +18,8 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractBinaryIntegerArithmeticOperator;
 
 /* TEST
- %LINK prolog-arithmetic
- */
+%LINK prolog-arithmetic
+*/
 /**
  * <code>rem</code> - finds the remainder of division of one number by another.
  * <p>

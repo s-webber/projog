@@ -1,66 +1,66 @@
 % Examples of comparing a uninstantiated variable to a whole number.
 
-%QUERY X @< 2
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @< 2
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE 2 @< X
+%FAIL 2 @< X
 
-%QUERY X @=< 2
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @=< 2
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE 2 @=< X
+%FAIL 2 @=< X
 
-%FALSE X @> 2
+%FAIL X @> 2
 
-%QUERY 2 @> X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- 2 @> X
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE X @>= 2
+%FAIL X @>= 2
 
-%QUERY 2 @>= X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- 2 @>= X
+% X=UNINSTANTIATED VARIABLE
 
 % Examples of comparing a uninstantiated variable to an atom.
 
-%QUERY X @< atom
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @< atom
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE atom @< X
+%FAIL atom @< X
 
-%QUERY X @=< atom
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @=< atom
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE atom @=< X
+%FAIL atom @=< X
 
-%FALSE X @> atom
+%FAIL X @> atom
 
-%QUERY atom @> X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- atom @> X
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE X @>= atom
+%FAIL X @>= atom
 
-%QUERY atom @>= X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- atom @>= X
+% X=UNINSTANTIATED VARIABLE
 
 % Examples of comparing a uninstantiated variable to a structure.
 
-%QUERY X @< structure(a,b,c)
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @< structure(a,b,c)
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE structure(a,b,c) @< X
+%FAIL structure(a,b,c) @< X
 
-%QUERY X @=< structure(a,b,c)
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- X @=< structure(a,b,c)
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE structure(a,b,c) @=< X
+%FAIL structure(a,b,c) @=< X
 
-%FALSE X @> structure(a,b,c)
+%FAIL X @> structure(a,b,c)
 
-%QUERY structure(a,b,c) @> X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- structure(a,b,c) @> X
+% X=UNINSTANTIATED VARIABLE
 
-%FALSE X @>= structure(a,b,c)
+%FAIL X @>= structure(a,b,c)
 
-%QUERY structure(a,b,c) @>= X
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- structure(a,b,c) @>= X
+% X=UNINSTANTIATED VARIABLE
 

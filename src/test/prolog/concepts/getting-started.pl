@@ -1,11 +1,11 @@
 % "Hello world" example.
 
-%QUERY write('hello, world'), nl
+%?- write('hello, world'), nl
 %OUTPUT 
 %hello, world
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 % Dynamically populate knowledge base with facts.
 
@@ -16,35 +16,27 @@
 % Query using new facts added to the knowledge base.
 
 %TRUE message(hello, everyone)
-%FALSE message(hi, everyone)
+%FAIL message(hi, everyone)
 
-%QUERY message(X, Y)
-%ANSWER
+%?- message(X, Y)
 % X=hello
 % Y=world
-%ANSWER
-%ANSWER
 % X=hi
 % Y=world
-%ANSWER
-%ANSWER
 % X=hello
 % Y=everyone
-%ANSWER
 
-%QUERY message(hello, Y)
-%ANSWER Y=world
-%ANSWER Y=everyone
+%?- message(hello, Y)
+% Y=world
+% Y=everyone
 
 % Simple example of both unification and arithmetic.
 
-%QUERY W=X, X=1+1, Y is W, Z is -W
-%ANSWER
+%?- W=X, X=1+1, Y is W, Z is -W
 % W=1 + 1
 % X=1 + 1
 % Y=2
 % Z=-2
-%ANSWER
 
 % Populate the knowledge base with clauses read from a file containing Prolog syntax.
 
@@ -52,21 +44,21 @@
 
 % View the definition of hanoi that has just been parsed from the consulted file.
 
-%QUERY listing(hanoi)
+%?- listing(hanoi)
 %OUTPUT
 %hanoi(N) :- move(N, left, centre, right)
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 % Use the clauses loaded from towers-of-hanoi-example.pl in a query.
 
-%QUERY hanoi(2)
+%?- hanoi(2)
 %OUTPUT
 %[move,a,disc,from,the,left,pole,to,the,right,pole]
 %[move,a,disc,from,the,left,pole,to,the,centre,pole]
 %[move,a,disc,from,the,right,pole,to,the,centre,pole]
 %
 %OUTPUT
-%ANSWER/
+%YES
 

@@ -20,12 +20,12 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 
 /* TEST
- %FALSE b@=<a
- %TRUE b@=<b
- %TRUE b@=<c
- %FALSE b@=<1
- %TRUE b@=<b(a)
- */
+%FAIL b@=<a
+%TRUE b@=<b
+%TRUE b@=<c
+%FAIL b@=<1
+%TRUE b@=<b(a)
+*/
 /**
  * <code>X@=&lt;Y</code> - term "less than or equal" test.
  * <p>

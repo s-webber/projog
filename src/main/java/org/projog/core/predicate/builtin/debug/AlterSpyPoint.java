@@ -25,8 +25,8 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-debugging
- */
+%LINK prolog-debugging
+*/
 /**
  * <code>spy(X)</code> / <code>nospy(X)</code> - add or remove a spy point for a predicate.
  * <p>

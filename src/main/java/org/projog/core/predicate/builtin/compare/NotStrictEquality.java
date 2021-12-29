@@ -20,33 +20,27 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %QUERY X \== Y
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- X \== Y
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
 
- %FALSE X \== X
+%FAIL X \== X
 
- %FALSE X=Y, X \== Y, Y=1
+%FAIL X=Y, X \== Y, Y=1
 
- %QUERY X \== Y, Y = 1, X = Y
- %ANSWER
- % X=1
- % Y=1
- %ANSWER
+%?- X \== Y, Y = 1, X = Y
+% X=1
+% Y=1
 
- %QUERY append([A|B],C) \== append(X,Y)
- %ANSWER
- % A=UNINSTANTIATED VARIABLE
- % B=UNINSTANTIATED VARIABLE
- % C=UNINSTANTIATED VARIABLE
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- append([A|B],C) \== append(X,Y)
+% A=UNINSTANTIATED VARIABLE
+% B=UNINSTANTIATED VARIABLE
+% C=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
 
- %FALSE append([A|B],C) \== append([A|B],C)
- */
+%FAIL append([A|B],C) \== append([A|B],C)
+*/
 /**
  * <code>X\==Y</code> - a strict equality test.
  * <p>

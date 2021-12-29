@@ -22,56 +22,56 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
- write_to_file(X) :-
-    open('get_code.tmp', write, Z),
-    set_output(Z),
-    writef(X),
-    close(Z),
-    set_output('user_output').
+write_to_file(X) :-
+   open('get_code.tmp', write, Z),
+   set_output(Z),
+   writef(X),
+   close(Z),
+   set_output('user_output').
 
- read_from_file :-
-    open('get_code.tmp', read, Z),
-    set_input(Z),
-    print_contents,
-    close(Z).
+read_from_file :-
+   open('get_code.tmp', read, Z),
+   set_input(Z),
+   print_contents,
+   close(Z).
 
- print_contents :-
-    repeat,
-    get_code(C),
-    write(C),
-    nl,
-    C =:= -1,
-    !.
+print_contents :-
+   repeat,
+   get_code(C),
+   write(C),
+   nl,
+   C =:= -1,
+   !.
 
- %TRUE write_to_file('ab\tc\r\nxyz')
+%TRUE write_to_file('ab\tc\r\nxyz')
 
- %QUERY read_from_file
- %OUTPUT
- %97
- %98
- %9
- %99
- %13
- %10
- %120
- %121
- %122
- %-1
- %
- %OUTPUT
- %ANSWER/
+%?- read_from_file
+%OUTPUT
+%97
+%98
+%9
+%99
+%13
+%10
+%120
+%121
+%122
+%-1
+%
+%OUTPUT
+%YES
 
- force_error :-
-    open('get_code.tmp', read, Z),
-    set_input(Z),
-    close(Z),
-    print_contents.
+force_error :-
+   open('get_code.tmp', read, Z),
+   set_input(Z),
+   close(Z),
+   print_contents.
 
- %QUERY force_error
- %ERROR Could not read next character from input stream
+%?- force_error
+%ERROR Could not read next character from input stream
 
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>get_code(X)</code> - reads the next character from the input stream.
  * <p>

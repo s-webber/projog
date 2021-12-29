@@ -22,14 +22,14 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY X is sum(1, 1)
- %ERROR Cannot find arithmetic operator: sum/2
+%?- X is sum(1, 1)
+%ERROR Cannot find arithmetic operator: sum/2
 
- %TRUE pj_add_arithmetic_operator(sum/2, 'org.projog.core.math.builtin.Add')
+%TRUE pj_add_arithmetic_operator(sum/2, 'org.projog.core.math.builtin.Add')
 
- %QUERY X is sum(1, 1)
- %ANSWER X=2
- */
+%?- X is sum(1, 1)
+% X=2
+*/
 /**
  * <code>pj_add_arithmetic_operator(X,Y)</code> - defines a Java class as an arithmetic operator.
  * <p>

@@ -19,35 +19,35 @@ import org.projog.core.math.AbstractArithmeticOperator;
 import org.projog.core.math.Numeric;
 
 /* TEST
- %QUERY X is max(5,5)
- %ANSWER X=5
- %QUERY X is max(7,8)
- %ANSWER X=8
- %QUERY X is max(3,2)
- %ANSWER X=3
- %QUERY X is max(2.5,2.5)
- %ANSWER X=2.5
- %QUERY X is max(2.75,2.5)
- %ANSWER X=2.75
- %QUERY X is max(1,1.5)
- %ANSWER X=1.5
- %QUERY X is max(2,1.5)
- %ANSWER X=2
- %QUERY X is max(-3,2)
- %ANSWER X=2
- %QUERY X is max(-3,-2)
- %ANSWER X=-2
- %QUERY X is max(-2.5,-2.25)
- %ANSWER X=-2.25
- %QUERY X is max(0,0)
- %ANSWER X=0
- %QUERY X is max(0.0,0.0)
- %ANSWER X=0.0
- %QUERY X is max(0,0.0)
- %ANSWER X=0.0
- %QUERY X is max(0.0,0)
- %ANSWER X=0
- */
+%?- X is max(5,5)
+% X=5
+%?- X is max(7,8)
+% X=8
+%?- X is max(3,2)
+% X=3
+%?- X is max(2.5,2.5)
+% X=2.5
+%?- X is max(2.75,2.5)
+% X=2.75
+%?- X is max(1,1.5)
+% X=1.5
+%?- X is max(2,1.5)
+% X=2
+%?- X is max(-3,2)
+% X=2
+%?- X is max(-3,-2)
+% X=-2
+%?- X is max(-2.5,-2.25)
+% X=-2.25
+%?- X is max(0,0)
+% X=0
+%?- X is max(0.0,0.0)
+% X=0.0
+%?- X is max(0,0.0)
+% X=0.0
+%?- X is max(0.0,0)
+% X=0
+*/
 /**
  * <code>max</code> - finds the maximum of two numbers.
  */

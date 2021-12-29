@@ -24,8 +24,8 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>see(X)</code> - opens a file and sets it as the current input stream.
  * <p>

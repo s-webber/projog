@@ -29,33 +29,33 @@ import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
- test(X) :- X < 3.
- test(X) :- X > 9.
- test(X) :- X = 5.
- %QUERY listing(test)
- %OUTPUT
- %test(X) :- X < 3
- %test(X) :- X > 9
- %test(X) :- X = 5
- %
- %OUTPUT
- %ANSWER/
+test(X) :- X < 3.
+test(X) :- X > 9.
+test(X) :- X = 5.
+%?- listing(test)
+%OUTPUT
+%test(X) :- X < 3
+%test(X) :- X > 9
+%test(X) :- X = 5
+%
+%OUTPUT
+%YES
 
- overloaded_predicate_name(X) :- X = this_rule_has_one_argument.
- overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments, X = Y.
- %QUERY listing(overloaded_predicate_name)
- %OUTPUT
- %overloaded_predicate_name(X) :- X = this_rule_has_one_argument
- %overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments , X = Y
- %
- %OUTPUT
- %ANSWER/
+overloaded_predicate_name(X) :- X = this_rule_has_one_argument.
+overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments, X = Y.
+%?- listing(overloaded_predicate_name)
+%OUTPUT
+%overloaded_predicate_name(X) :- X = this_rule_has_one_argument
+%overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments , X = Y
+%
+%OUTPUT
+%YES
 
- %TRUE listing(predicate_name_that_doesnt_exist_in_knowledge_base)
+%TRUE listing(predicate_name_that_doesnt_exist_in_knowledge_base)
 
- %QUERY listing(X)
- %ERROR Expected an atom but got: VARIABLE with value: X
- */
+%?- listing(X)
+%ERROR Expected an atom but got: VARIABLE with value: X
+*/
 /**
  * <code>listing(X)</code> - outputs current clauses.
  * <p>

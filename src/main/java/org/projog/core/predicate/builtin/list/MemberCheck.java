@@ -27,51 +27,47 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %TRUE memberchk(a, [a,b,c])
- %TRUE memberchk(b, [a,b,c])
- %TRUE memberchk(c, [a,b,c])
+%TRUE memberchk(a, [a,b,c])
+%TRUE memberchk(b, [a,b,c])
+%TRUE memberchk(c, [a,b,c])
 
- %FALSE memberchk(d, [a,b,c])
- %FALSE memberchk(d, [])
- %FALSE memberchk(X, [])
- %FALSE memberchk([], [])
+%FAIL memberchk(d, [a,b,c])
+%FAIL memberchk(d, [])
+%FAIL memberchk(X, [])
+%FAIL memberchk([], [])
 
- %QUERY memberchk(X, [a,b,c|d])
- %ANSWER X=a
- %TRUE memberchk(a, [a,b,c|d])
- %TRUE memberchk(b, [a,b,c|d])
- %TRUE memberchk(c, [a,b,c|d])
- %QUERY memberchk(d, [a,b,c|d])
- %ERROR Expected empty list or variable but got: ATOM with value: d
- %QUERY memberchk(z, [a,b,c|d])
- %ERROR Expected empty list or variable but got: ATOM with value: d
+%?- memberchk(X, [a,b,c|d])
+% X=a
+%TRUE memberchk(a, [a,b,c|d])
+%TRUE memberchk(b, [a,b,c|d])
+%TRUE memberchk(c, [a,b,c|d])
+%?- memberchk(d, [a,b,c|d])
+%ERROR Expected empty list or variable but got: ATOM with value: d
+%?- memberchk(z, [a,b,c|d])
+%ERROR Expected empty list or variable but got: ATOM with value: d
 
- %QUERY memberchk(X, [a,b,c])
- %ANSWER X=a
+%?- memberchk(X, [a,b,c])
+% X=a
 
- %QUERY memberchk(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
- %ANSWER
- % X=a
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- memberchk(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
+% X=a
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY memberchk(p(a,X),[p(x,y),b,p(Y,Y)])
- %ANSWER
- % X=a
- % Y=a
- %ANSWER
+%?- memberchk(p(a,X),[p(x,y),b,p(Y,Y)])
+% X=a
+% Y=a
 
- %QUERY memberchk(a, X)
- %ANSWER X=[a|_]
+%?- memberchk(a, X)
+% X=[a|_]
 
- %QUERY memberchk(p(a,X),a)
- %ERROR Expected list or empty list but got: ATOM with value: a
+%?- memberchk(p(a,X),a)
+%ERROR Expected list or empty list but got: ATOM with value: a
 
- %TRUE memberchk(something, [something|_])
- %TRUE memberchk(anything, [something|_])
- %QUERY memberchk(anything, [something|X])
- %ANSWER X=[anything|_]
- */
+%TRUE memberchk(something, [something|_])
+%TRUE memberchk(anything, [something|_])
+%?- memberchk(anything, [something|X])
+% X=[anything|_]
+*/
 /**
  * <code>memberchk(E, L)</code> - checks is a term is a member of a list.
  * <p>

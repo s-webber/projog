@@ -21,55 +21,55 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 /* TEST
- write_to_file(X) :-
-    open('get_char_test.tmp', write, Z),
-    set_output(Z),
-    writef(X),
-    close(Z),
-    set_output('user_output').
+write_to_file(X) :-
+   open('get_char_test.tmp', write, Z),
+   set_output(Z),
+   writef(X),
+   close(Z),
+   set_output('user_output').
 
- read_from_file :-
-    open('get_char_test.tmp', read, Z),
-    set_input(Z),
-    print_contents,
-    close(Z).
+read_from_file :-
+   open('get_char_test.tmp', read, Z),
+   set_input(Z),
+   print_contents,
+   close(Z).
 
- print_contents :-
-    repeat,
-    get_char(C),
-    write(C),
-    nl,
-    C=='end_of_file',
-    !.
+print_contents :-
+   repeat,
+   get_char(C),
+   write(C),
+   nl,
+   C=='end_of_file',
+   !.
 
- %TRUE write_to_file('abc\nxyz')
+%TRUE write_to_file('abc\nxyz')
 
- %QUERY read_from_file
- %OUTPUT
- %a
- %b
- %c
- %
- %
- %x
- %y
- %z
- %end_of_file
- %
- %OUTPUT
- %ANSWER/
+%?- read_from_file
+%OUTPUT
+%a
+%b
+%c
+%
+%
+%x
+%y
+%z
+%end_of_file
+%
+%OUTPUT
+%YES
 
- force_error :-
-    open('get_char_test.tmp', read, Z),
-    set_input(Z),
-    close(Z),
-    print_contents.
+force_error :-
+   open('get_char_test.tmp', read, Z),
+   set_input(Z),
+   close(Z),
+   print_contents.
 
- %QUERY force_error
- %ERROR Could not read next character from input stream
+%?- force_error
+%ERROR Could not read next character from input stream
 
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>get_char(X)</code> - reads the next character from the input stream.
  * <p>

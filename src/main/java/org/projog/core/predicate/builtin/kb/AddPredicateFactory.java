@@ -23,15 +23,15 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE pj_add_predicate(xyz/1, 'org.projog.core.predicate.builtin.compound.Call')
+%TRUE pj_add_predicate(xyz/1, 'org.projog.core.predicate.builtin.compound.Call')
 
- %TRUE xyz(true)
- %QUERY xyz(repeat(3))
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %FALSE xyz(fail)
- */
+%TRUE xyz(true)
+%?- xyz(repeat(3))
+%YES
+%YES
+%YES
+%FAIL xyz(fail)
+*/
 /**
  * <code>pj_add_predicate(X,Y)</code> - defines a Java class as a built-in predicate.
  * <p>

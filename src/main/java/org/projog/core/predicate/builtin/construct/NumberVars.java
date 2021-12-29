@@ -25,23 +25,18 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
-%QUERY numbervars(a,0,Y)
-%ANSWER Y=0
+%?- numbervars(a,0,Y)
+% Y=0
 
-%QUERY numbervars(X,0,Y)
-%ANSWER
+%?- numbervars(X,0,Y)
 % X=$VAR(0)
 % Y=1
-%ANSWER
 
-%QUERY numbervars(X,42,Y)
-%ANSWER
+%?- numbervars(X,42,Y)
 % X=$VAR(42)
 % Y=43
-%ANSWER
 
-%QUERY X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X,0,Y)
-%ANSWER
+%?- X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X,0,Y)
 % A=$VAR(0)
 % B=$VAR(1)
 % C=$VAR(2)
@@ -51,10 +46,8 @@ import org.projog.core.term.TermUtils;
 % G=$VAR(6)
 % X=p($VAR(0), $VAR(1), p($VAR(2), $VAR(1), $VAR(2), $VAR(3), [$VAR(4),$VAR(0),$VAR(5),$VAR(5),$VAR(6),$VAR(3)]))
 % Y=7
-%ANSWER
 
-%QUERY X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X,42,Y)
-%ANSWER
+%?- X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X,42,Y)
 % A=$VAR(42)
 % B=$VAR(43)
 % C=$VAR(44)
@@ -64,12 +57,10 @@ import org.projog.core.term.TermUtils;
 % G=$VAR(48)
 % X=p($VAR(42), $VAR(43), p($VAR(44), $VAR(43), $VAR(44), $VAR(45), [$VAR(46),$VAR(42),$VAR(47),$VAR(47),$VAR(48),$VAR(45)]))
 % Y=49
-%ANSWER
 
 % numbervars(X) operates in the same way as numbervars(X,0,_)
 
-%QUERY X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X)
-%ANSWER
+%?- X=p(A,B,p(C,B,C,D,[E,A,F,F,G,D])), numbervars(X)
 % A=$VAR(0)
 % B=$VAR(1)
 % C=$VAR(2)
@@ -78,30 +69,25 @@ import org.projog.core.term.TermUtils;
 % F=$VAR(5)
 % G=$VAR(6)
 % X=p($VAR(0), $VAR(1), p($VAR(2), $VAR(1), $VAR(2), $VAR(3), [$VAR(4),$VAR(0),$VAR(5),$VAR(5),$VAR(6),$VAR(3)]))
-%ANSWER
 
-%QUERY X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,0,Y)
-%ANSWER
-% A = $VAR(0)
-% B = $VAR(1)
-% C = $VAR(2)
-% D = $VAR(3)
-% E = $VAR(4)
-% X = p($VAR(0), $VAR(1), p(x(x(x($VAR(0), p($VAR(2)), $VAR(1), p($VAR(3), $VAR(1)))))), $VAR(4))
-% Y = 5
-%ANSWER
+%?- X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,0,Y)
+% A=$VAR(0)
+% B=$VAR(1)
+% C=$VAR(2)
+% D=$VAR(3)
+% E=$VAR(4)
+% X=p($VAR(0), $VAR(1), p(x(x(x($VAR(0), p($VAR(2)), $VAR(1), p($VAR(3), $VAR(1)))))), $VAR(4))
+% Y=5
 
-%QUERY X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,-42,Y)
-%ANSWER
-% A = $VAR(-42)
-% B = $VAR(-41)
-% C = $VAR(-40)
-% D = $VAR(-39)
-% E = $VAR(-38)
-% X = p($VAR(-42), $VAR(-41), p(x(x(x($VAR(-42), p($VAR(-40)), $VAR(-41), p($VAR(-39), $VAR(-41)))))), $VAR(-38))
-% Y = -37
-%ANSWER
- */
+%?- X=p(A,B,p(x(x(x(A,p(C),B,p(D,B))))),E), numbervars(X,-42,Y)
+% A=$VAR(-42)
+% B=$VAR(-41)
+% C=$VAR(-40)
+% D=$VAR(-39)
+% E=$VAR(-38)
+% X=p($VAR(-42), $VAR(-41), p(x(x(x($VAR(-42), p($VAR(-40)), $VAR(-41), p($VAR(-39), $VAR(-41)))))), $VAR(-38))
+% Y=-37
+*/
 /**
  * <code>numbervars(Term,Start,End)</code> - unifies free variables of a term.
  * <p>

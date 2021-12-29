@@ -18,48 +18,48 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractBinaryArithmeticOperator;
 
 /* TEST
- %QUERY X is 2 ** 1
- %ANSWER X = 2
+%?- X is 2 ** 1
+% X=2
 
- %QUERY X is 2 ** 2
- %ANSWER X = 4
+%?- X is 2 ** 2
+% X=4
 
- %QUERY X is 2 ** 5
- %ANSWER X = 32
+%?- X is 2 ** 5
+% X=32
 
- %QUERY X is 5 ** 3
- %ANSWER X = 125
+%?- X is 5 ** 3
+% X=125
 
- %QUERY X is 5.0 ** 3
- %ANSWER X = 125.0
+%?- X is 5.0 ** 3
+% X=125.0
 
- %QUERY X is 5 ** 3.0
- %ANSWER X = 125.0
+%?- X is 5 ** 3.0
+% X=125.0
 
- %QUERY X is 5.0 ** 3.0
- %ANSWER X = 125.0
+%?- X is 5.0 ** 3.0
+% X=125.0
 
- %QUERY X is 2 + 5 ** 3 - 1
- %ANSWER X = 126
+%?- X is 2 + 5 ** 3 - 1
+% X=126
 
- %QUERY X is -2 ** 2
- %ANSWER X = 4
+%?- X is -2 ** 2
+% X=4
 
- % Note: in some Prolog implementations the result would be 0.25
- %QUERY X is -2 ** -2
- %ANSWER X = 0
+% Note: in some Prolog implementations the result would be 0.25
+%?- X is -2 ** -2
+% X=0
 
- % Note: in some Prolog implementations the result would be 0.25
- %QUERY X is 2 ** -2
- %ANSWER X = 0
+% Note: in some Prolog implementations the result would be 0.25
+%?- X is 2 ** -2
+% X=0
 
- %QUERY X is 0.5 ** 2
- %ANSWER X = 0.25
+%?- X is 0.5 ** 2
+% X=0.25
 
- % Note: "^" is a synonym for "**".
- %QUERY X is 3^7
- %ANSWER X = 2187
- */
+% Note: "^" is a synonym for "**".
+%?- X is 3^7
+% X=2187
+*/
 /**
  * <code>**</code> - calculates the result of the first argument raised to the power of the second argument.
  */

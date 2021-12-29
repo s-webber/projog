@@ -20,38 +20,34 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %FALSE X == Y
- %FALSE _ == _
+%FAIL X == Y
+%FAIL _ == _
 
- %QUERY X == X
- %ANSWER X=UNINSTANTIATED VARIABLE
+%?- X == X
+% X=UNINSTANTIATED VARIABLE
 
- %QUERY _1 == _1
- %ANSWER _1=UNINSTANTIATED VARIABLE
+%?- _1 == _1
+% _1=UNINSTANTIATED VARIABLE
 
- %QUERY X = Y, X == Y, Y = 1
- %ANSWER
- % X=1
- % Y=1
- %ANSWER
+%?- X = Y, X == Y, Y = 1
+% X=1
+% Y=1
 
- %FALSE X == Y, Y = 1, X = Y
+%FAIL X == Y, Y = 1, X = Y
 
- %TRUE a=a
- %TRUE 1=1
- %TRUE 1.0=1.0
- %FALSE 1=1.0
- %TRUE '+'(1,2)=1+2
+%TRUE a=a
+%TRUE 1=1
+%TRUE 1.0=1.0
+%FAIL 1=1.0
+%TRUE '+'(1,2)=1+2
 
- %FALSE append([A|B],C) == append(X,Y)
+%FAIL append([A|B],C) == append(X,Y)
 
- %QUERY append([A|B],C) == append([A|B],C)
- %ANSWER
- % A=UNINSTANTIATED VARIABLE
- % B=UNINSTANTIATED VARIABLE
- % C=UNINSTANTIATED VARIABLE
- %ANSWER
- */
+%?- append([A|B],C) == append([A|B],C)
+% A=UNINSTANTIATED VARIABLE
+% B=UNINSTANTIATED VARIABLE
+% C=UNINSTANTIATED VARIABLE
+*/
 /**
  * <code>X==Y</code> - a strict equality test.
  * <p>

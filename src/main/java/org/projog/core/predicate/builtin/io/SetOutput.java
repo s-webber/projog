@@ -19,8 +19,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>set_output(X)</code> - sets the current output.
  * <p>

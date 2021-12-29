@@ -25,61 +25,47 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %QUERY select(X,[h,e,l,l,o],Z)
- %ANSWER
- % X=h
- % Z=[e,l,l,o]
- %ANSWER
- %ANSWER
- % X=e
- % Z=[h,l,l,o]
- %ANSWER
- %ANSWER
- % X=l
- % Z=[h,e,l,o]
- %ANSWER
- %ANSWER
- % X=l
- % Z=[h,e,l,o]
- %ANSWER
- %ANSWER
- % X=o
- % Z=[h,e,l,l]
- %ANSWER
+%?- select(X,[h,e,l,l,o],Z)
+% X=h
+% Z=[e,l,l,o]
+% X=e
+% Z=[h,l,l,o]
+% X=l
+% Z=[h,e,l,o]
+% X=l
+% Z=[h,e,l,o]
+% X=o
+% Z=[h,e,l,l]
 
- %QUERY select(l,[h,e,l,l,o],Z)
- %ANSWER Z=[h,e,l,o]
- %ANSWER Z=[h,e,l,o]
- %NO
+%?- select(l,[h,e,l,l,o],Z)
+% Z=[h,e,l,o]
+% Z=[h,e,l,o]
+%NO
 
- %QUERY select(l,[h,e,l,l,o],[h,e,l,o])
- %ANSWER/
- %ANSWER/
- %NO
+%?- select(l,[h,e,l,l,o],[h,e,l,o])
+%YES
+%YES
+%NO
 
- %QUERY select(p(a,B),[p(X,q), p(a,X)],Z)
- %ANSWER
- % B=q
- % X=a
- % Z=[p(a, a)]
- %ANSWER
- %ANSWER
- % B=UNINSTANTIATED VARIABLE
- % X=UNINSTANTIATED VARIABLE
- % Z=[p(B, q)]
- %ANSWER
+%?- select(p(a,B),[p(X,q), p(a,X)],Z)
+% B=q
+% X=a
+% Z=[p(a, a)]
+% B=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Z=[p(B, q)]
 
- %QUERY select(a, Result, [x,y,z])
- %ANSWER Result=[a,x,y,z]
- %ANSWER Result=[x,a,y,z]
- %ANSWER Result=[x,y,a,z]
- %ANSWER Result=[x,y,z,a]
+%?- select(a, Result, [x,y,z])
+% Result=[a,x,y,z]
+% Result=[x,a,y,z]
+% Result=[x,y,a,z]
+% Result=[x,y,z,a]
 
- %QUERY select(a, [x|X], [x,y,z])
- %ANSWER X = [a,y,z]
- %ANSWER X = [y,a,z]
- %ANSWER X = [y,z,a]
- */
+%?- select(a, [x|X], [x,y,z])
+% X=[a,y,z]
+% X=[y,a,z]
+% X=[y,z,a]
+*/
 /**
  * <code>select(X,Y,Z)</code> - removes an element from a list.
  * <p>

@@ -22,37 +22,33 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY compare(X, a, z)
- %ANSWER X=<
+%?- compare(X, a, z)
+% X=<
 
- %QUERY compare(X, a, a)
- %ANSWER X==
+%?- compare(X, a, a)
+% X==
 
- %QUERY compare(X, z, a)
- %ANSWER X=>
+%?- compare(X, z, a)
+% X=>
 
- %FALSE compare(<, z, a)
+%FAIL compare(<, z, a)
 
- %TRUE compare(>, z, a)
+%TRUE compare(>, z, a)
 
- % All floating point numbers are less than all integers
- %QUERY compare(X, 1.0, 1)
- %ANSWER X=<
+% All floating point numbers are less than all integers
+%?- compare(X, 1.0, 1)
+% X=<
 
- %QUERY compare(X, a, Y)
- %ANSWER
- % X=>
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- compare(X, a, Y)
+% X=>
+% Y=UNINSTANTIATED VARIABLE
 
- %FALSE compare(=, X, Y)
+%FAIL compare(=, X, Y)
 
- %QUERY X=Y, compare(=, X, Y)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- */
+%?- X=Y, compare(=, X, Y)
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+*/
 /**
  * <code>compare(X,Y,Z)</code> - compares arguments.
  * <p>

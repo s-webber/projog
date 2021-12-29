@@ -1,9 +1,9 @@
-%QUERY open('target/39test.pl', write, Z), set_output(Z), write('?- asserta(test).'), close(Z)
-%ANSWER Z=target/39test.pl_output_handle
+%?- open('target/39test.pl', write, Z), set_output(Z), write('?- asserta(test).'), close(Z)
+% Z=target/39test.pl_output_handle
 
-%FALSE test
+%FAIL test
 
-%QUERY consult('target/39test')
+%?- consult('target/39test')
 %ERROR Could not read prolog source from resource: target/39test
 
 %TRUE consult('target/39test.pl')
@@ -14,18 +14,18 @@
 
 %TRUE ensure_loaded('target/39test')
 
-%QUERY test
-%ANSWER/
-%ANSWER/
+%?- test
+%YES
+%YES
 
 %TRUE ensure_loaded('target/39test.pl')
 
-%QUERY test
-%ANSWER/
-%ANSWER/
+%?- test
+%YES
+%YES
 
-%QUERY ensure_loaded('target/doesntexist')
+%?- ensure_loaded('target/doesntexist')
 %ERROR Could not read prolog source from resource: target/doesntexist.pl
 
-%QUERY ensure_loaded('target/39test.pro')
+%?- ensure_loaded('target/39test.pro')
 %ERROR Could not read prolog source from resource: target/39test.pro

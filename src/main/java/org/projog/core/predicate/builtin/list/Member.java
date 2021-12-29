@@ -23,144 +23,110 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %TRUE_NO member(a, [a,b,c])
- %TRUE_NO member(b, [a,b,c])
- %TRUE member(c, [a,b,c])
+%TRUE_NO member(a, [a,b,c])
+%TRUE_NO member(b, [a,b,c])
+%TRUE member(c, [a,b,c])
 
- %FALSE member(d, [a,b,c])
- %FALSE member(d, [])
- %FALSE member([], [])
+%FAIL member(d, [a,b,c])
+%FAIL member(d, [])
+%FAIL member([], [])
 
- %QUERY member(X, [a,b,c])
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
+%?- member(X, [a,b,c])
+% X=a
+% X=b
+% X=c
 
- %QUERY member(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
- %ANSWER
- % X=a
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=z
- % Y=b
- %ANSWER
- %ANSWER
- % X=x(b)
- % Y=b
- %ANSWER
+%?- member(p(X,b), [p(a,b), p(z,Y), p(x(Y), Y)])
+% X=a
+% Y=UNINSTANTIATED VARIABLE
+% X=z
+% Y=b
+% X=x(b)
+% Y=b
 
- %QUERY member(X, [a,b,c,a|d])
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
- %ANSWER X=a
- %QUERY member(a, [a,b,c,a|a])
- %ANSWER/
- %ANSWER/
- %QUERY member(a, [a,b,c,a|d])
- %ANSWER/
- %ANSWER/
- %TRUE_NO member(b, [a,b,c,a|d])
- %TRUE_NO member(c, [a,b,c,a|d])
- %FALSE member(d, [a,b,c,a|d])
- %FALSE member(z, [a,b,c,a|d])
+%?- member(X, [a,b,c,a|d])
+% X=a
+% X=b
+% X=c
+% X=a
+%?- member(a, [a,b,c,a|a])
+%YES
+%YES
+%?- member(a, [a,b,c,a|d])
+%YES
+%YES
+%TRUE_NO member(b, [a,b,c,a|d])
+%TRUE_NO member(c, [a,b,c,a|d])
+%FAIL member(d, [a,b,c,a|d])
+%FAIL member(z, [a,b,c,a|d])
 
- %FALSE member(X, a)
- %FALSE member(X, p(a,b))
- %FALSE member(X, 1)
- %FALSE member(X, 1.5)
+%FAIL member(X, a)
+%FAIL member(X, p(a,b))
+%FAIL member(X, 1)
+%FAIL member(X, 1.5)
 
- %QUERY member(a, [a,a,a|X])
- %ANSWER X=UNINSTANTIATED VARIABLE
- %ANSWER X=UNINSTANTIATED VARIABLE
- %ANSWER X=UNINSTANTIATED VARIABLE
- %ANSWER X=[a|_]
- %ANSWER X=[_,a|_]
- %ANSWER X=[_,_,a|_]
- %ANSWER X=[_,_,_,a|_]
- %QUIT
- %QUERY member(a, [a,b,c|X])
- %ANSWER X=UNINSTANTIATED VARIABLE
- %ANSWER X=[a|_]
- %ANSWER X=[_,a|_]
- %ANSWER X=[_,_,a|_]
- %ANSWER X=[_,_,_,a|_]
- %QUIT
- %QUERY member(d, [a,b,c|X])
- %ANSWER X=[d|_]
- %ANSWER X=[_,d|_]
- %ANSWER X=[_,_,d|_]
- %ANSWER X=[_,_,_,d|_]
- %QUIT
- %QUERY member(a, X)
- %ANSWER X=[a|_]
- %ANSWER X=[_,a|_]
- %ANSWER X=[_,_,a|_]
- %QUIT
- %QUERY member(X, Y)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=[X|_]
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=[_,X|_]
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=[_,_,X|_]
- %ANSWER
- %QUIT
- %QUERY X=[a,b,c|Z], member(a,X)
- %ANSWER
- % X = [a,b,c|Z]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = [a,b,c,a|_]
- % Z = [a|_]
- %ANSWER
- %ANSWER
- % X = [a,b,c,_,a|_]
- % Z = [_,a|_]
- %ANSWER
- %ANSWER
- % X = [a,b,c,_,_,a|_]
- % Z = [_,_,a|_]
- %ANSWER
- %QUIT
- %QUERY member(p(X),[p(a),p(b),p(c)|Z])
- %ANSWER
- % X = a
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = b
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = c
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Z = [p(X)|_]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Z = [_,p(X)|_]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Z = [_,_,p(X)|_]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Z = [_,_,_,p(X)|_]
- %ANSWER
- %QUIT
- */
+%?- member(a, [a,a,a|X])
+% X=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% X=[a|_]
+% X=[_,a|_]
+% X=[_,_,a|_]
+% X=[_,_,_,a|_]
+%QUIT
+%?- member(a, [a,b,c|X])
+% X=UNINSTANTIATED VARIABLE
+% X=[a|_]
+% X=[_,a|_]
+% X=[_,_,a|_]
+% X=[_,_,_,a|_]
+%QUIT
+%?- member(d, [a,b,c|X])
+% X=[d|_]
+% X=[_,d|_]
+% X=[_,_,d|_]
+% X=[_,_,_,d|_]
+%QUIT
+%?- member(a, X)
+% X=[a|_]
+% X=[_,a|_]
+% X=[_,_,a|_]
+%QUIT
+%?- member(X, Y)
+% X=UNINSTANTIATED VARIABLE
+% Y=[X|_]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,X|_]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,_,X|_]
+%QUIT
+%?- X=[a,b,c|Z], member(a,X)
+% X=[a,b,c|Z]
+% Z=UNINSTANTIATED VARIABLE
+% X=[a,b,c,a|_]
+% Z=[a|_]
+% X=[a,b,c,_,a|_]
+% Z=[_,a|_]
+% X=[a,b,c,_,_,a|_]
+% Z=[_,_,a|_]
+%QUIT
+%?- member(p(X),[p(a),p(b),p(c)|Z])
+% X=a
+% Z=UNINSTANTIATED VARIABLE
+% X=b
+% Z=UNINSTANTIATED VARIABLE
+% X=c
+% Z=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Z=[p(X)|_]
+% X=UNINSTANTIATED VARIABLE
+% Z=[_,p(X)|_]
+% X=UNINSTANTIATED VARIABLE
+% Z=[_,_,p(X)|_]
+% X=UNINSTANTIATED VARIABLE
+% Z=[_,_,_,p(X)|_]
+%QUIT
+*/
 /**
  * <code>member(E, L)</code> - enumerates members of a list.
  * <p>

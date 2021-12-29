@@ -18,32 +18,32 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractUnaryArithmeticOperator;
 
 /* TEST
- %QUERY X is abs(-1)
- %ANSWER X=1
- 
- %QUERY X is abs(1)
- %ANSWER X=1
- 
- %QUERY X is abs(0)
- %ANSWER X=0
+%?- X is abs(-1)
+% X=1
 
- %QUERY X is abs(43.138)
- %ANSWER X=43.138
- 
- %QUERY X is abs(-832.24)
- %ANSWER X=832.24
-  
- %QUERY X is abs(9223372036854775807)
- %ANSWER X=9223372036854775807
+%?- X is abs(1)
+% X=1
 
- %QUERY X is abs(-9223372036854775807)
- %ANSWER X=9223372036854775807
+%?- X is abs(0)
+% X=0
+
+%?- X is abs(43.138)
+% X=43.138
+
+%?- X is abs(-832.24)
+% X=832.24
  
- % Note: As this functionality is implemented using java.lang.Math.abs(), when called with an integer argument that is equal to the value of java.lang.Long.MIN_VALUE 
- % (i.e. the most negative representable long value) the result is that same value, which is negative.
- %QUERY X is abs(-9223372036854775808)
- %ANSWER X=-9223372036854775808
- */
+%?- X is abs(9223372036854775807)
+% X=9223372036854775807
+
+%?- X is abs(-9223372036854775807)
+% X=9223372036854775807
+
+% Note: As this functionality is implemented using java.lang.Math.abs(), when called with an integer argument that is equal to the value of java.lang.Long.MIN_VALUE 
+% (i.e. the most negative representable long value) the result is that same value, which is negative.
+%?- X is abs(-9223372036854775808)
+% X=-9223372036854775808
+*/
 /**
  * <code>abs</code> - returns the absolute value of a numeric argument.
  */

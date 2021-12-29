@@ -4,8 +4,8 @@ d(c).
 
 p(X, X) :- d(_).
 
-%FALSE p(x, y)
-%QUERY p(z, X)
-%ANSWER X=z
-%ANSWER X=z
-%ANSWER X=z
+%FAIL p(x, y)
+%?- p(z, X)
+% X=z
+% X=z
+% X=z

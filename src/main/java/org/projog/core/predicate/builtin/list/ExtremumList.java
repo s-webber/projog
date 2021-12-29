@@ -25,53 +25,53 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %FALSE min_list([], X)
- %FALSE max_list([], X)
+%FAIL min_list([], X)
+%FAIL max_list([], X)
 
- %TRUE min_list([1,2,3], 1)
- %FALSE min_list([1,2,3], 2)
- %FALSE min_list([1,2,3], 3)
+%TRUE min_list([1,2,3], 1)
+%FAIL min_list([1,2,3], 2)
+%FAIL min_list([1,2,3], 3)
 
- %FALSE max_list([1,2,3], 1)
- %FALSE max_list([1,2,3], 2)
- %TRUE max_list([1,2,3], 3)
+%FAIL max_list([1,2,3], 1)
+%FAIL max_list([1,2,3], 2)
+%TRUE max_list([1,2,3], 3)
 
- %TRUE min_list([7], 7)
- %TRUE max_list([7], 7)
+%TRUE min_list([7], 7)
+%TRUE max_list([7], 7)
 
- %TRUE min_list([2*7], 14)
- %FALSE min_list([2*7], 2*7)
- %FALSE min_list([14], 2*7)
+%TRUE min_list([2*7], 14)
+%FAIL min_list([2*7], 2*7)
+%FAIL min_list([14], 2*7)
 
- %TRUE max_list([2*7], 14)
- %FALSE min_list([2*7], 2*7)
- %FALSE max_list([14], 2*7)
+%TRUE max_list([2*7], 14)
+%FAIL min_list([2*7], 2*7)
+%FAIL max_list([14], 2*7)
 
- %QUERY min_list([11*2, 7*3, 92/4], X)
- %ANSWER X=21
- %QUERY max_list([11*2, 7*3, 92/4], X)
- %ANSWER X=23
+%?- min_list([11*2, 7*3, 92/4], X)
+% X=21
+%?- max_list([11*2, 7*3, 92/4], X)
+% X=23
 
- %QUERY min_list([Y], X)
- %ERROR Cannot get Numeric for term: Y of type: VARIABLE
- %QUERY max_list([[1]], X)
- %ERROR Cannot get Numeric for term: .(1, []) of type: LIST
+%?- min_list([Y], X)
+%ERROR Cannot get Numeric for term: Y of type: VARIABLE
+%?- max_list([[1]], X)
+%ERROR Cannot get Numeric for term: .(1, []) of type: LIST
 
- %QUERY min_list([a], X)
- %ERROR Cannot find arithmetic operator: a/0
- %QUERY max_list([q(1,2)], X)
- %ERROR Cannot find arithmetic operator: q/2
+%?- min_list([a], X)
+%ERROR Cannot find arithmetic operator: a/0
+%?- max_list([q(1,2)], X)
+%ERROR Cannot find arithmetic operator: q/2
 
- %QUERY min_list(Y, X)
- %ERROR Expected LIST but got: VARIABLE with value: Y
- %QUERY max_list(a, X)
- %ERROR Expected LIST but got: ATOM with value: a
+%?- min_list(Y, X)
+%ERROR Expected LIST but got: VARIABLE with value: Y
+%?- max_list(a, X)
+%ERROR Expected LIST but got: ATOM with value: a
 
- %QUERY min_list([1,2|Y], X)
- %ERROR Expected LIST but got: VARIABLE with value: Y
- %QUERY max_list([1,2|Y], X)
- %ERROR Expected LIST but got: VARIABLE with value: Y
- */
+%?- min_list([1,2|Y], X)
+%ERROR Expected LIST but got: VARIABLE with value: Y
+%?- max_list([1,2|Y], X)
+%ERROR Expected LIST but got: VARIABLE with value: Y
+*/
 /**
  * <code>min_list</code> / <code>max_list</code>
  * <p>

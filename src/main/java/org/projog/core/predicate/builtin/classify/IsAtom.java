@@ -20,13 +20,13 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE atom(abc)
- %FALSE atom(1)
- %FALSE atom(X)
- %FALSE atom(_)
- %FALSE atom(a(b,c))
- %FALSE atom([a,b,c])
- */
+%TRUE atom(abc)
+%FAIL atom(1)
+%FAIL atom(X)
+%FAIL atom(_)
+%FAIL atom(a(b,c))
+%FAIL atom([a,b,c])
+*/
 /**
  * <code>atom(X)</code> - checks that a term is an atom.
  * <p>

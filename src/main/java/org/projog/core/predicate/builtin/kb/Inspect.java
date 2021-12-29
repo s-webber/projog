@@ -27,88 +27,68 @@ import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
- % Examples of using "clause":
- test(a,b) :- true.
- test(1,2) :- true.
- test(A,B,C) :- true.
- test([_|Y],p(1)) :- true.
- %QUERY clause(test(X,Y), Z)
- %ANSWER
- % X=a
- % Y=b
- % Z=true
- %ANSWER
- %ANSWER
- % X=1
- % Y=2
- % Z=true
- %ANSWER
- %ANSWER
- % X=[_|Y]
- % Y=p(1)
- % Z=true
- %ANSWER
+% Examples of using "clause":
+test(a,b) :- true.
+test(1,2) :- true.
+test(A,B,C) :- true.
+test([_|Y],p(1)) :- true.
+%?- clause(test(X,Y), Z)
+% X=a
+% Y=b
+% Z=true
+% X=1
+% Y=2
+% Z=true
+% X=[_|Y]
+% Y=p(1)
+% Z=true
 
- %TRUE clause(test(a,b,c), true)
- %TRUE clause(test(1,2,3), true)
- %FALSE clause(tset(1,2,3), true)
+%TRUE clause(test(a,b,c), true)
+%TRUE clause(test(1,2,3), true)
+%FAIL clause(tset(1,2,3), true)
 
- % Examples of using "retract":
+% Examples of using "retract":
 
- %TRUE assertz(p(a,b,c))
- %TRUE assertz(p(1,2,3))
- %TRUE assertz(p(a,c,e))
+%TRUE assertz(p(a,b,c))
+%TRUE assertz(p(1,2,3))
+%TRUE assertz(p(a,c,e))
 
- %FALSE retract(p(x,y,z))
- %FALSE retract(p(a,b,e))
+%FAIL retract(p(x,y,z))
+%FAIL retract(p(a,b,e))
 
- %QUERY p(X,Y,Z)
- %ANSWER
- % X=a
- % Y=b
- % Z=c
- %ANSWER
- %ANSWER
- % X=1
- % Y=2
- % Z=3
- %ANSWER
- %ANSWER
- % X=a
- % Y=c
- % Z=e
- %ANSWER
+%?- p(X,Y,Z)
+% X=a
+% Y=b
+% Z=c
+% X=1
+% Y=2
+% Z=3
+% X=a
+% Y=c
+% Z=e
 
- %QUERY retract(p(a,Y,Z))
- %ANSWER
- % Y=b
- % Z=c
- %ANSWER
- %ANSWER
- % Y=c
- % Z=e
- %ANSWER
+%?- retract(p(a,Y,Z))
+% Y=b
+% Z=c
+% Y=c
+% Z=e
 
- %QUERY p(X,Y,Z)
- %ANSWER
- % X=1
- % Y=2
- % Z=3
- %ANSWER
+%?- p(X,Y,Z)
+% X=1
+% Y=2
+% Z=3
 
- %QUERY retract(p(X,Y,Z))
- %ANSWER
- % X=1
- % Y=2
- % Z=3
- %ANSWER
+%?- retract(p(X,Y,Z))
+% X=1
+% Y=2
+% Z=3
 
- %FALSE p(X,Y,Z)
+%FAIL p(X,Y,Z)
 
- % Argument must be suitably instantiated that the predicate of the clause can be determined.
- %QUERY retract(X)
- %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
- */
+% Argument must be suitably instantiated that the predicate of the clause can be determined.
+%?- retract(X)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+*/
 /**
  * <code>clause(X,Y)</code> / <code>retract(X)</code> - matches terms to existing clauses.
  * <p>

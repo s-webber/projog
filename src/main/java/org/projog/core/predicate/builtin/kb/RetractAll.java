@@ -20,58 +20,46 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE assertz(x(1,a))
- %TRUE assertz(x(2,b))
- %TRUE assertz(x(3,a))
+%TRUE assertz(x(1,a))
+%TRUE assertz(x(2,b))
+%TRUE assertz(x(3,a))
 
- %TRUE assertz(y(1,a))
+%TRUE assertz(y(1,a))
 
- %QUERY x(X,Y)
- %ANSWER
- % X=1
- % Y=a
- %ANSWER
- %ANSWER
- % X=2
- % Y=b
- %ANSWER
- %ANSWER
- % X=3
- % Y=a
- %ANSWER
+%?- x(X,Y)
+% X=1
+% Y=a
+% X=2
+% Y=b
+% X=3
+% Y=a
 
- %QUERY y(X,Y)
- %ANSWER
- % X=1
- % Y=a
- %ANSWER
+%?- y(X,Y)
+% X=1
+% Y=a
 
- %TRUE retractall(x(_,a))
+%TRUE retractall(x(_,a))
 
- %QUERY x(X,Y)
- %ANSWER
- % X=2
- % Y=b
- %ANSWER
+%?- x(X,Y)
+% X=2
+% Y=b
 
- %QUERY y(X,Y)
- %ANSWER
- % X=1
- % Y=a
- %ANSWER
+%?- y(X,Y)
+% X=1
+% Y=a
 
- %TRUE retractall(x(_,_))
+%TRUE retractall(x(_,_))
 
- %FALSE x(X,Y)
+%FAIL x(X,Y)
 
- % Succeeds even if there are no facts to remove
- %TRUE retractall(x(_,_))
- %TRUE retractall(xyz(_))
+% Succeeds even if there are no facts to remove
+%TRUE retractall(x(_,_))
+%TRUE retractall(xyz(_))
 
- % Argument must be suitably instantiated that the predicate of the clause can be determined.
- %QUERY retractall(X)
- %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
- */
+% Argument must be suitably instantiated that the predicate of the clause can be determined.
+%?- retractall(X)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+*/
 /**
  * <code>retractall(X)</code> - remove clauses from the knowledge base.
  * <p>

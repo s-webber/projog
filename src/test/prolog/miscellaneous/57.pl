@@ -18,7 +18,7 @@ o2(X) :- o1(X).
 o1(1).
 o1(X) :- e2(Y), X is Y+1, X>1.
 
-%QUERY e(X), write(X), nl, X>20, !
+%?- e(X), write(X), nl, X>20, !
 %OUTPUT
 %0
 %2
@@ -31,10 +31,10 @@ o1(X) :- e2(Y), X is Y+1, X>1.
 %24
 %
 %OUTPUT
-%ANSWER X=24
+% X=24
 %NO
 
-%QUERY o(X), write(X), nl, X>20, !
+%?- o(X), write(X), nl, X>20, !
 %OUTPUT
 %1
 %5
@@ -46,10 +46,10 @@ o1(X) :- e2(Y), X is Y+1, X>1.
 %23
 %
 %OUTPUT
-%ANSWER X=23
+% X=23
 %NO
 
-%QUERY e1(X), write(X), nl, X>10, !
+%?- e1(X), write(X), nl, X>10, !
 %OUTPUT
 %0
 %2
@@ -60,10 +60,10 @@ o1(X) :- e2(Y), X is Y+1, X>1.
 %12
 %
 %OUTPUT
-%ANSWER X=12
+% X=12
 %NO
 
-%QUERY o1(X), write(X), nl, X>10, !
+%?- o1(X), write(X), nl, X>10, !
 %OUTPUT
 %1
 %3
@@ -73,5 +73,5 @@ o1(X) :- e2(Y), X is Y+1, X>1.
 %11
 %
 %OUTPUT
-%ANSWER X=11
+% X=11
 %NO

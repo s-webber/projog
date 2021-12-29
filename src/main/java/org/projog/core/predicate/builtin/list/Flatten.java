@@ -25,49 +25,47 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %QUERY flatten([a,[[b]],[c]], X)
- %ANSWER X=[a,b,c]
+%?- flatten([a,[[b]],[c]], X)
+% X=[a,b,c]
 
- %QUERY flatten([a,b,c], X)
- %ANSWER X=[a,b,c]
+%?- flatten([a,b,c], X)
+% X=[a,b,c]
 
- %QUERY flatten([[[[a]]],[],[],[]], X)
- %ANSWER X=[a]
+%?- flatten([[[[a]]],[],[],[]], X)
+% X=[a]
 
- %QUERY flatten([a], X)
- %ANSWER X=[a]
+%?- flatten([a], X)
+% X=[a]
 
- %QUERY flatten(a, X)
- %ANSWER X=[a]
+%?- flatten(a, X)
+% X=[a]
 
- %QUERY flatten([[[[]]],[],[],[]], X)
- %ANSWER X=[]
+%?- flatten([[[[]]],[],[],[]], X)
+% X=[]
 
- %QUERY flatten([], X)
- %ANSWER X=[]
+%?- flatten([], X)
+% X=[]
 
- %QUERY flatten([a|b], X)
- %ANSWER X=[a,b]
+%?- flatten([a|b], X)
+% X=[a,b]
 
- %QUERY flatten([a|[]], X)
- %ANSWER X=[a]
+%?- flatten([a|[]], X)
+% X=[a]
 
- %QUERY flatten([[a|b],[c,d|e],[f|[]],g|h], X)
- %ANSWER X=[a,b,c,d,e,f,g,h]
+%?- flatten([[a|b],[c,d|e],[f|[]],g|h], X)
+% X=[a,b,c,d,e,f,g,h]
 
- %QUERY flatten([p([[a]]),[[[p(p(x))]],[p([a,b,c])]]], X)
- %ANSWER X=[p([[a]]),p(p(x)),p([a,b,c])]
+%?- flatten([p([[a]]),[[[p(p(x))]],[p([a,b,c])]]], X)
+% X=[p([[a]]),p(p(x)),p([a,b,c])]
 
- %FALSE flatten([a,b,c], [c,b,a])
- %FALSE flatten([a,b,c], [a,[b],c])
+%FAIL flatten([a,b,c], [c,b,a])
+%FAIL flatten([a,b,c], [a,[b],c])
 
- %QUERY flatten([a,b,[c|X],d|Y], Z)
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = UNINSTANTIATED VARIABLE
- % Z = [a,b,c,X,d,Y]
- %ANSWER
- */
+%?- flatten([a,b,[c|X],d|Y], Z)
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=[a,b,c,X,d,Y]
+*/
 /**
  * <code>flatten(X,Y)</code> - flattens a nested list.
  * <p>

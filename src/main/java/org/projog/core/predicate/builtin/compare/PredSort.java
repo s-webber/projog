@@ -34,39 +34,39 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %QUERY predsort(compare, [s,d,f,a,a,a,z], X)
- %ANSWER X=[a,a,a,d,f,s,z]
+%?- predsort(compare, [s,d,f,a,a,a,z], X)
+% X=[a,a,a,d,f,s,z]
 
- %TRUE predsort(compare, [s,d,f,a,a,a,z], [a,a,a,d,f,s,z])
- %FALSE predsort(compare, [s,d,f,a,a,a,z], [s,d,f,a,a,a,z])
+%TRUE predsort(compare, [s,d,f,a,a,a,z], [a,a,a,d,f,s,z])
+%FAIL predsort(compare, [s,d,f,a,a,a,z], [s,d,f,a,a,a,z])
 
- %TRUE predsort(compare, [], [])
+%TRUE predsort(compare, [], [])
 
- compare_desc(X,Y,Z) :- Y@<Z, X='>'.
- compare_desc(X,Y,Z) :- Y@>Z, X='<'.
- compare_desc(X,Y,Z) :- Y==Z, X='='.
+compare_desc(X,Y,Z) :- Y@<Z, X='>'.
+compare_desc(X,Y,Z) :- Y@>Z, X='<'.
+compare_desc(X,Y,Z) :- Y==Z, X='='.
 
- compare_desc(asc,X,Y,Z) :- Y@<Z, X='>'.
- compare_desc(asc,X,Y,Z) :- Y@>Z, X='<'.
- compare_desc(asc,X,Y,Z) :- Y==Z, X='='.
- compare_desc(desc,X,Y,Z) :- Y@<Z, X='<'.
- compare_desc(desc,X,Y,Z) :- Y@>Z, X='>'.
- compare_desc(desc,X,Y,Z) :- Y==Z, X='='.
+compare_desc(asc,X,Y,Z) :- Y@<Z, X='>'.
+compare_desc(asc,X,Y,Z) :- Y@>Z, X='<'.
+compare_desc(asc,X,Y,Z) :- Y==Z, X='='.
+compare_desc(desc,X,Y,Z) :- Y@<Z, X='<'.
+compare_desc(desc,X,Y,Z) :- Y@>Z, X='>'.
+compare_desc(desc,X,Y,Z) :- Y==Z, X='='.
 
- %QUERY predsort(compare_desc, [s,d,f,a,a,a,z], X)
- %ANSWER X=[z,s,f,d,a,a,a]
+%?- predsort(compare_desc, [s,d,f,a,a,a,z], X)
+% X=[z,s,f,d,a,a,a]
 
- % Note: This behaviour is different than the SWI version. SWI version removes duplicates.
- %QUERY predsort(compare_desc(asc), [s,d,f,a,a,a,z], X)
- %ANSWER X=[z,s,f,d,a,a,a]
+% Note: This behaviour is different than the SWI version. SWI version removes duplicates.
+%?- predsort(compare_desc(asc), [s,d,f,a,a,a,z], X)
+% X=[z,s,f,d,a,a,a]
 
- compare_retryable('>',_,_).
- compare_retryable('<',_,_).
- compare_retryable('=',_,_).
- % Note: This behaviour is different than the SWI version. SWI version backtracks to find alternative solutions.
- %QUERY predsort(compare_retryable, [s,z], X)
- %ANSWER X = [s,z]
- */
+compare_retryable('>',_,_).
+compare_retryable('<',_,_).
+compare_retryable('=',_,_).
+% Note: This behaviour is different than the SWI version. SWI version backtracks to find alternative solutions.
+%?- predsort(compare_retryable, [s,z], X)
+% X=[s,z]
+*/
 /**
  * <code>predsort(X,Y,Z)</code> - sorts a list using the specified predicate.
  * <p>

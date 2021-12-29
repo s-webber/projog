@@ -27,52 +27,42 @@ brother(A,B) :- siblings(A,B), male(B).
 %TRUE father(homer,bart)
 %TRUE father(homer,lisa)
 %TRUE father(homer,maggie)
-%FALSE father(homer,rod)
-%FALSE father(homer,ralph)
+%FAIL father(homer,rod)
+%FAIL father(homer,ralph)
 
 % Question using a variable.
 
-%QUERY father(homer,C)
-%ANSWER C=bart
-%ANSWER C=lisa
-%ANSWER C=maggie
+%?- father(homer,C)
+% C=bart
+% C=lisa
+% C=maggie
 
-%QUERY father(ned,C)
-%ANSWER C=rod
-%ANSWER C=todd
+%?- father(ned,C)
+% C=rod
+% C=todd
 
 % Question using two variables - evaluation of the query uses backtracking to find multiple solutions.
 
-%QUERY father(F,C)
-%ANSWER 
+%?- father(F,C)
 % F=homer
 % C=bart
-%ANSWER
-%ANSWER 
 % F=homer
 % C=lisa
-%ANSWER 
-%ANSWER 
 % F=homer
 % C=maggie
-%ANSWER 
-%ANSWER 
 % F=ned
 % C=rod
-%ANSWER 
-%ANSWER 
 % F=ned
 % C=todd
-%ANSWER 
 
-%QUERY parents(homer,marge,C)
-%ANSWER C=bart
-%ANSWER C=lisa
-%ANSWER C=maggie
+%?- parents(homer,marge,C)
+% C=bart
+% C=lisa
+% C=maggie
 
-%QUERY brother(lisa,X)
-%ANSWER X=bart
+%?- brother(lisa,X)
+% X=bart
 %NO
-%QUERY brother(bart,X)
-%ANSWER X=bart
+%?- brother(bart,X)
+% X=bart
 %NO

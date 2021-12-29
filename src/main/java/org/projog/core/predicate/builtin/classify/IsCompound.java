@@ -19,16 +19,16 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE compound(a(b,c))
- %TRUE compound(1+1)
- %TRUE compound([a,b,c])
- %FALSE compound([])
- %FALSE compound(abc)
- %FALSE compound(1)
- %FALSE compound(1.5)
- %FALSE compound(X)
- %FALSE compound(_)
- */
+%TRUE compound(a(b,c))
+%TRUE compound(1+1)
+%TRUE compound([a,b,c])
+%FAIL compound([])
+%FAIL compound(abc)
+%FAIL compound(1)
+%FAIL compound(1.5)
+%FAIL compound(X)
+%FAIL compound(_)
+*/
 /**
  * <code>compound(X)</code> - checks that a term is a compound term.
  * <p>

@@ -26,20 +26,20 @@ import org.projog.core.term.Term;
 
 // TODO shouldn't need to wrap disjunctions in brackets. e.g. should be able to do: once(true;true;fail)
 /* TEST
- %TRUE once(repeat)
- %TRUE once(true)
- %TRUE once((true,true,true))
- %TRUE once((true;true;true))
- %TRUE once((fail;true;true))
- %TRUE once((true;fail;true))
- %TRUE once((true;true;fail))
- %FALSE once(fail)
- %FALSE once((fail;fail;fail))
- %FALSE once((fail,fail,fail))
- %FALSE once((true,true,fail))
- %FALSE once((true,fail,true))
- %FALSE once((fail,true,true))
- */
+%TRUE once(repeat)
+%TRUE once(true)
+%TRUE once((true,true,true))
+%TRUE once((true;true;true))
+%TRUE once((fail;true;true))
+%TRUE once((true;fail;true))
+%TRUE once((true;true;fail))
+%FAIL once(fail)
+%FAIL once((fail;fail;fail))
+%FAIL once((fail,fail,fail))
+%FAIL once((true,true,fail))
+%FAIL once((true,fail,true))
+%FAIL once((fail,true,true))
+*/
 /**
  * <code>once(X)</code> - calls the goal represented by a term.
  * <p>

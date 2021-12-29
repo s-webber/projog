@@ -24,323 +24,221 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %TRUE reverse([a],[a])
- %TRUE reverse([a,b,c],[c,b,a])
- %QUERY reverse([a,b,c],X)
- %ANSWER X=[c,b,a]
- %QUERY reverse(X,[a,b,c])
- %ANSWER X=[c,b,a]
+%TRUE reverse([a],[a])
+%TRUE reverse([a,b,c],[c,b,a])
+%?- reverse([a,b,c],X)
+% X=[c,b,a]
+%?- reverse(X,[a,b,c])
+% X=[c,b,a]
 
- %TRUE reverse([],[])
- %QUERY reverse([],X)
- %ANSWER X=[]
- %QUERY reverse(X,[])
- %ANSWER X=[]
+%TRUE reverse([],[])
+%?- reverse([],X)
+% X=[]
+%?- reverse(X,[])
+% X=[]
 
- %FALSE reverse([a,b,c],[])
- %FALSE reverse([a,b,c],[a,b,c])
- %FALSE reverse([a,b,c],[d,c,b,a])
- %FALSE reverse([a,b,c,d],[c,b,a])
- %FALSE reverse([a,b,c],'abc')
- %FALSE reverse('abc',X)
+%FAIL reverse([a,b,c],[])
+%FAIL reverse([a,b,c],[a,b,c])
+%FAIL reverse([a,b,c],[d,c,b,a])
+%FAIL reverse([a,b,c,d],[c,b,a])
+%FAIL reverse([a,b,c],'abc')
+%FAIL reverse('abc',X)
 
- %FALSE reverse([a,b|c],X)
+%FAIL reverse([a,b|c],X)
 
- %QUERY reverse([a|X], Y)
- %ANSWER
- % X = []
- % Y = [a]
- %ANSWER
- %ANSWER
- % X = [_]
- % Y = [_,a]
- %ANSWER
- %ANSWER
- % X = [_,_]
- % Y = [_,_,a]
- %ANSWER
- %ANSWER
- % X = [_,_,_]
- % Y = [_,_,_,a]
- %ANSWER
- %QUIT
+%?- reverse([a|X], Y)
+% X=[]
+% Y=[a]
+% X=[_]
+% Y=[_,a]
+% X=[_,_]
+% Y=[_,_,a]
+% X=[_,_,_]
+% Y=[_,_,_,a]
+%QUIT
 
- %QUERY reverse([z,x,x,c,b|X],[a,b,c|Y])
- %ANSWER
- % X = [a]
- % Y = [x,x,z]
- %ANSWER
- %ANSWER
- % X = [c,b,a]
- % Y = [b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,c,b,a]
- % Y = [_,b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,_,c,b,a]
- % Y = [_,_,b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,_,_,c,b,a]
- % Y = [_,_,_,b,c,x,x,z]
- %ANSWER
- %QUIT
+%?- reverse([z,x,x,c,b|X],[a,b,c|Y])
+% X=[a]
+% Y=[x,x,z]
+% X=[c,b,a]
+% Y=[b,c,x,x,z]
+% X=[_,c,b,a]
+% Y=[_,b,c,x,x,z]
+% X=[_,_,c,b,a]
+% Y=[_,_,b,c,x,x,z]
+% X=[_,_,_,c,b,a]
+% Y=[_,_,_,b,c,x,x,z]
+%QUIT
 
- %QUERY reverse([a,b,c|Y],[z,x,x,c,b|X])
- %ANSWER
- % X = [a]
- % Y = [x,x,z]
- %ANSWER
- %ANSWER
- % X = [c,b,a]
- % Y = [b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,c,b,a]
- % Y = [_,b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,_,c,b,a]
- % Y = [_,_,b,c,x,x,z]
- %ANSWER
- %ANSWER
- % X = [_,_,_,c,b,a]
- % Y = [_,_,_,b,c,x,x,z]
- %ANSWER
- %QUIT
+%?- reverse([a,b,c|Y],[z,x,x,c,b|X])
+% X=[a]
+% Y=[x,x,z]
+% X=[c,b,a]
+% Y=[b,c,x,x,z]
+% X=[_,c,b,a]
+% Y=[_,b,c,x,x,z]
+% X=[_,_,c,b,a]
+% Y=[_,_,b,c,x,x,z]
+% X=[_,_,_,c,b,a]
+% Y=[_,_,_,b,c,x,x,z]
+%QUIT
 
- %QUERY reverse([c,b,a|X],[c,b,a|Y])
- %ANSWER
- % X = [b,c]
- % Y = [b,c]
- %ANSWER
- %ANSWER
- % X = [a,b,c]
- % Y = [a,b,c]
- %ANSWER
- %ANSWER
- % X = [_,a,b,c]
- % Y = [_,a,b,c]
- %ANSWER
- %ANSWER
- % X = [_,_,a,b,c]
- % Y = [_,_,a,b,c]
- %ANSWER
- %ANSWER
- % X = [_,_,_,a,b,c]
- % Y = [_,_,_,a,b,c]
- %ANSWER
- %QUIT
+%?- reverse([c,b,a|X],[c,b,a|Y])
+% X=[b,c]
+% Y=[b,c]
+% X=[a,b,c]
+% Y=[a,b,c]
+% X=[_,a,b,c]
+% Y=[_,a,b,c]
+% X=[_,_,a,b,c]
+% Y=[_,_,a,b,c]
+% X=[_,_,_,a,b,c]
+% Y=[_,_,_,a,b,c]
+%QUIT
 
- %QUERY reverse([b,c|X],[a,b,c|Y])
- %ANSWER
- % X = [b,a]
- % Y = [b]
- %ANSWER
- %ANSWER
- % X = [c,b,a]
- % Y = [c,b]
- %ANSWER
- %ANSWER
- % X = [_,c,b,a]
- % Y = [_,c,b]
- %ANSWER
- %ANSWER
- % X = [_,_,c,b,a]
- % Y = [_,_,c,b]
- %ANSWER
- %ANSWER
- % X = [_,_,_,c,b,a]
- % Y = [_,_,_,c,b]
- %ANSWER
- %QUIT
+%?- reverse([b,c|X],[a,b,c|Y])
+% X=[b,a]
+% Y=[b]
+% X=[c,b,a]
+% Y=[c,b]
+% X=[_,c,b,a]
+% Y=[_,c,b]
+% X=[_,_,c,b,a]
+% Y=[_,_,c,b]
+% X=[_,_,_,c,b,a]
+% Y=[_,_,_,c,b]
+%QUIT
 
- %QUERY reverse([a,b,c|Y],[b,c|X])
- %ANSWER
- % X = [b,a]
- % Y = [b]
- %ANSWER
- %ANSWER
- % X = [c,b,a]
- % Y = [c,b]
- %ANSWER
- %ANSWER
- % X = [_,c,b,a]
- % Y = [_,c,b]
- %ANSWER
- %ANSWER
- % X = [_,_,c,b,a]
- % Y = [_,_,c,b]
- %ANSWER
- %ANSWER
- % X = [_,_,_,c,b,a]
- % Y = [_,_,_,c,b]
- %ANSWER
- %QUIT
+%?- reverse([a,b,c|Y],[b,c|X])
+% X=[b,a]
+% Y=[b]
+% X=[c,b,a]
+% Y=[c,b]
+% X=[_,c,b,a]
+% Y=[_,c,b]
+% X=[_,_,c,b,a]
+% Y=[_,_,c,b]
+% X=[_,_,_,c,b,a]
+% Y=[_,_,_,c,b]
+%QUIT
 
- %QUERY X=[d,c|Q],Y=[a,b,c|R],reverse(X,Y)
- %ANSWER
- % Q = [b,a]
- % R = [d]
- % X = [d,c,b,a]
- % Y = [a,b,c,d]
- %ANSWER
- %ANSWER
- % Q = [c,b,a]
- % R = [c,d]
- % X = [d,c,c,b,a]
- % Y = [a,b,c,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,c,b,a]
- % R = [_,c,d]
- % X = [d,c,_,c,b,a]
- % Y = [a,b,c,_,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,_,c,b,a]
- % R = [_,_,c,d]
- % X = [d,c,_,_,c,b,a]
- % Y = [a,b,c,_,_,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,_,_,c,b,a]
- % R = [_,_,_,c,d]
- % X = [d,c,_,_,_,c,b,a]
- % Y = [a,b,c,_,_,_,c,d]
- %ANSWER
- %QUIT
+%?- X=[d,c|Q],Y=[a,b,c|R],reverse(X,Y)
+% Q=[b,a]
+% R=[d]
+% X=[d,c,b,a]
+% Y=[a,b,c,d]
+% Q=[c,b,a]
+% R=[c,d]
+% X=[d,c,c,b,a]
+% Y=[a,b,c,c,d]
+% Q=[_,c,b,a]
+% R=[_,c,d]
+% X=[d,c,_,c,b,a]
+% Y=[a,b,c,_,c,d]
+% Q=[_,_,c,b,a]
+% R=[_,_,c,d]
+% X=[d,c,_,_,c,b,a]
+% Y=[a,b,c,_,_,c,d]
+% Q=[_,_,_,c,b,a]
+% R=[_,_,_,c,d]
+% X=[d,c,_,_,_,c,b,a]
+% Y=[a,b,c,_,_,_,c,d]
+%QUIT
 
- %QUERY X=[d,c|Q],Y=[a,b,c|R],reverse(Y,X)
- %ANSWER
- % Q = [b,a]
- % R = [d]
- % X = [d,c,b,a]
- % Y = [a,b,c,d]
- %ANSWER
- %ANSWER
- % Q = [c,b,a]
- % R = [c,d]
- % X = [d,c,c,b,a]
- % Y = [a,b,c,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,c,b,a]
- % R = [_,c,d]
- % X = [d,c,_,c,b,a]
- % Y = [a,b,c,_,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,_,c,b,a]
- % R = [_,_,c,d]
- % X = [d,c,_,_,c,b,a]
- % Y = [a,b,c,_,_,c,d]
- %ANSWER
- %ANSWER
- % Q = [_,_,_,c,b,a]
- % R = [_,_,_,c,d]
- % X = [d,c,_,_,_,c,b,a]
- % Y = [a,b,c,_,_,_,c,d]
- %ANSWER
- %QUIT
+%?- X=[d,c|Q],Y=[a,b,c|R],reverse(Y,X)
+% Q=[b,a]
+% R=[d]
+% X=[d,c,b,a]
+% Y=[a,b,c,d]
+% Q=[c,b,a]
+% R=[c,d]
+% X=[d,c,c,b,a]
+% Y=[a,b,c,c,d]
+% Q=[_,c,b,a]
+% R=[_,c,d]
+% X=[d,c,_,c,b,a]
+% Y=[a,b,c,_,c,d]
+% Q=[_,_,c,b,a]
+% R=[_,_,c,d]
+% X=[d,c,_,_,c,b,a]
+% Y=[a,b,c,_,_,c,d]
+% Q=[_,_,_,c,b,a]
+% R=[_,_,_,c,d]
+% X=[d,c,_,_,_,c,b,a]
+% Y=[a,b,c,_,_,_,c,d]
+%QUIT
 
- %QUERY X=[e,d|Q],Y=[a,b,c|R],reverse(X,Y)
- %ANSWER
- % Q = [c,b,a]
- % R = [d,e]
- % X = [e,d,c,b,a]
- % Y = [a,b,c,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,c,b,a]
- % R = [_,d,e]
- % X = [e,d,_,c,b,a]
- % Y = [a,b,c,_,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,_,c,b,a]
- % R = [_,_,d,e]
- % X = [e,d,_,_,c,b,a]
- % Y = [a,b,c,_,_,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,_,_,c,b,a]
- % R = [_,_,_,d,e]
- % X = [e,d,_,_,_,c,b,a]
- % Y = [a,b,c,_,_,_,d,e]
- %ANSWER
- %QUIT
+%?- X=[e,d|Q],Y=[a,b,c|R],reverse(X,Y)
+% Q=[c,b,a]
+% R=[d,e]
+% X=[e,d,c,b,a]
+% Y=[a,b,c,d,e]
+% Q=[_,c,b,a]
+% R=[_,d,e]
+% X=[e,d,_,c,b,a]
+% Y=[a,b,c,_,d,e]
+% Q=[_,_,c,b,a]
+% R=[_,_,d,e]
+% X=[e,d,_,_,c,b,a]
+% Y=[a,b,c,_,_,d,e]
+% Q=[_,_,_,c,b,a]
+% R=[_,_,_,d,e]
+% X=[e,d,_,_,_,c,b,a]
+% Y=[a,b,c,_,_,_,d,e]
+%QUIT
 
- %QUERY X=[e,d|Q],Y=[a,b,c|R],reverse(Y,X)
- %ANSWER
- % Q = [c,b,a]
- % R = [d,e]
- % X = [e,d,c,b,a]
- % Y = [a,b,c,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,c,b,a]
- % R = [_,d,e]
- % X = [e,d,_,c,b,a]
- % Y = [a,b,c,_,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,_,c,b,a]
- % R = [_,_,d,e]
- % X = [e,d,_,_,c,b,a]
- % Y = [a,b,c,_,_,d,e]
- %ANSWER
- %ANSWER
- % Q = [_,_,_,c,b,a]
- % R = [_,_,_,d,e]
- % X = [e,d,_,_,_,c,b,a]
- % Y = [a,b,c,_,_,_,d,e]
- %ANSWER
- %QUIT
+%?- X=[e,d|Q],Y=[a,b,c|R],reverse(Y,X)
+% Q=[c,b,a]
+% R=[d,e]
+% X=[e,d,c,b,a]
+% Y=[a,b,c,d,e]
+% Q=[_,c,b,a]
+% R=[_,d,e]
+% X=[e,d,_,c,b,a]
+% Y=[a,b,c,_,d,e]
+% Q=[_,_,c,b,a]
+% R=[_,_,d,e]
+% X=[e,d,_,_,c,b,a]
+% Y=[a,b,c,_,_,d,e]
+% Q=[_,_,_,c,b,a]
+% R=[_,_,_,d,e]
+% X=[e,d,_,_,_,c,b,a]
+% Y=[a,b,c,_,_,_,d,e]
+%QUIT
 
- %QUERY reverse([a,b,c|Y],[X|Z])
- %ANSWER
- % X = c
- % Y = []
- % Z = [b,a]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [X]
- % Z = [c,b,a]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [_,X]
- % Z = [_,c,b,a]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [_,_,X]
- % Z = [_,_,c,b,a]
- %ANSWER
- %QUIT
+%?- reverse([a,b,c|Y],[X|Z])
+% X=c
+% Y=[]
+% Z=[b,a]
+% X=UNINSTANTIATED VARIABLE
+% Y=[X]
+% Z=[c,b,a]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,X]
+% Z=[_,c,b,a]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,_,X]
+% Z=[_,_,c,b,a]
+%QUIT
 
- %QUERY reverse([a,b|X],[a,b|X])
- %ANSWER X = [a]
- %ANSWER X = [b,a]
- %ANSWER X = [X,b,a]
- %ANSWER X = [X,X,b,a]
- %ANSWER X = [X,X,X,b,a]
- %QUIT
+%?- reverse([a,b|X],[a,b|X])
+% X=[a]
+% X=[b,a]
+% X=[X,b,a]
+% X=[X,X,b,a]
+% X=[X,X,X,b,a]
+%QUIT
 
- %QUERY reverse(X,X), numbervars(X)
- %ANSWER X=[]
- %ANSWER X=[$VAR(0)]
- %ANSWER X=[$VAR(0),$VAR(0)]
- %ANSWER X=[$VAR(0),$VAR(1),$VAR(0)]
- %ANSWER X=[$VAR(0),$VAR(1),$VAR(1),$VAR(0)]
- %ANSWER X=[$VAR(0),$VAR(1),$VAR(2),$VAR(1),$VAR(0)]
- %ANSWER X=[$VAR(0),$VAR(1),$VAR(2),$VAR(2),$VAR(1),$VAR(0)]
- %QUIT
- */
+%?- reverse(X,X), numbervars(X)
+% X=[]
+% X=[$VAR(0)]
+% X=[$VAR(0),$VAR(0)]
+% X=[$VAR(0),$VAR(1),$VAR(0)]
+% X=[$VAR(0),$VAR(1),$VAR(1),$VAR(0)]
+% X=[$VAR(0),$VAR(1),$VAR(2),$VAR(1),$VAR(0)]
+% X=[$VAR(0),$VAR(1),$VAR(2),$VAR(2),$VAR(1),$VAR(0)]
+%QUIT
+*/
 /**
  * <code>reverse(X,Y)</code> - reverses the order of elements in a list.
  * <p>

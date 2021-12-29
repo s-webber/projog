@@ -26,25 +26,25 @@ import org.projog.core.term.Term;
 /* TEST
 %TRUE_NO current_predicate(!/0)
 
-%QUERY current_predicate(!/X)
-%ANSWER X = 0
+%?- current_predicate(!/X)
+% X=0
 %NO
 
-%FALSE current_predicate(!/1)
+%FAIL current_predicate(!/1)
 
-%FALSE current_predicate(doesnt_exist/1)
+%FAIL current_predicate(doesnt_exist/1)
 
-%QUERY current_predicate(call/X)
-%ANSWER X = 1
-%ANSWER X = 2
-%ANSWER X = 3
-%ANSWER X = 4
-%ANSWER X = 5
-%ANSWER X = 6
-%ANSWER X = 7
-%ANSWER X = 8
-%ANSWER X = 9
-%ANSWER X = 10
+%?- current_predicate(call/X)
+% X=1
+% X=2
+% X=3
+% X=4
+% X=5
+% X=6
+% X=7
+% X=8
+% X=9
+% X=10
 %NO
 */
 /**

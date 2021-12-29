@@ -22,8 +22,8 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.TermType;
 
 /* TEST
- %LINK prolog-arithmetic
- */
+%LINK prolog-arithmetic
+*/
 /**
  * <code>/</code> - performs division.
  */

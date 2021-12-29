@@ -24,17 +24,17 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY convert_time(0, X)
- %ANSWER X=1970-01-01T00:00:00.000+0000
- %TRUE convert_time(0, '1970-01-01T00:00:00.000+0000')
+%?- convert_time(0, X)
+% X=1970-01-01T00:00:00.000+0000
+%TRUE convert_time(0, '1970-01-01T00:00:00.000+0000')
 
- %QUERY convert_time(1000*60*60*24*500+(1000*60*72), X)
- %ANSWER X=1971-05-16T01:12:00.000+0000
- %TRUE convert_time(1000*60*60*24*500+(1000*60*72), '1971-05-16T01:12:00.000+0000')
+%?- convert_time(1000*60*60*24*500+(1000*60*72), X)
+% X=1971-05-16T01:12:00.000+0000
+%TRUE convert_time(1000*60*60*24*500+(1000*60*72), '1971-05-16T01:12:00.000+0000')
 
- %QUERY convert_time(9223372036854775807, X)
- %ANSWER X=292278994-08-17T07:12:55.807+0000
- */
+%?- convert_time(9223372036854775807, X)
+% X=292278994-08-17T07:12:55.807+0000
+*/
 /**
  * <code>convert_time(X,Y)</code> - converts a timestamp to a textual representation.
  */

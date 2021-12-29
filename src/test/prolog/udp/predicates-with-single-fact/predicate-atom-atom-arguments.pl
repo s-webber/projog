@@ -1,14 +1,12 @@
 p(p(a),b,a).
 
-%FALSE p(p(X),X,a)
-%FALSE p(p(X),X,X)
+%FAIL p(p(X),X,a)
+%FAIL p(p(X),X,X)
 
-%QUERY p(p(X),b,X)
-%ANSWER X=a
+%?- p(p(X),b,X)
+% X=a
 
-%QUERY p(p(X),Y,X)
-%ANSWER
+%?- p(p(X),Y,X)
 % X=a
 % Y=b
-%ANSWER
 

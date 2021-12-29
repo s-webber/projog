@@ -29,43 +29,37 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %QUERY keysort([a - 1,b - 3,c - 2], X)
- %ANSWER X=[a - 1,b - 3,c - 2]
+%?- keysort([a - 1,b - 3,c - 2], X)
+% X=[a - 1,b - 3,c - 2]
 
- %QUERY keysort([c - 2,a - 1,b - 3], X)
- %ANSWER X=[a - 1,b - 3,c - 2]
+%?- keysort([c - 2,a - 1,b - 3], X)
+% X=[a - 1,b - 3,c - 2]
 
- %TRUE keysort([c - 2,a - 1,b - 3], [a - 1,b - 3,c - 2])
- %FALSE keysort([c - 2,a - 1,b - 3], [c - 2,a - 1,b - 3])
+%TRUE keysort([c - 2,a - 1,b - 3], [a - 1,b - 3,c - 2])
+%FAIL keysort([c - 2,a - 1,b - 3], [c - 2,a - 1,b - 3])
 
- % Duplicates are <i>not</i> removed.
- %QUERY keysort([a - 1,a - 9,a - 1,z - 1, q - 3, z - 1], X)
- %ANSWER X=[a - 1,a - 9,a - 1,q - 3,z - 1,z - 1]
+% Duplicates are <i>not</i> removed.
+%?- keysort([a - 1,a - 9,a - 1,z - 1, q - 3, z - 1], X)
+% X=[a - 1,a - 9,a - 1,q - 3,z - 1,z - 1]
 
- % Keys are sorted using the standard ordering of terms.
- %QUERY keysort([Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure(a) - v,[list] - v], X)
- %ANSWER
- % X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
- % Variable=UNINSTANTIATED VARIABLE
- %ANSWER
+% Keys are sorted using the standard ordering of terms.
+%?- keysort([Variable - v,1.0 - v,1 - v,atom - v, [] - v,structure(a) - v,[list] - v], X)
+% X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
+% Variable=UNINSTANTIATED VARIABLE
 
- %QUERY keysort([[list] - v,structure(a) - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v], X)
- %ANSWER
- % X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
- % Variable=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- keysort([[list] - v,structure(a) - v,[] - v,atom - v,1 - v,1.0 - v,Variable - v], X)
+% X=[Variable - v,1.0 - v,1 - v,[] - v,atom - v,structure(a) - v,[list] - v]
+% Variable=UNINSTANTIATED VARIABLE
 
- % Both the first and second arguments can contain variables.
- %QUERY keysort([c - Q,a - W,b - E],[R - 1,T - 2,Y - 3])
- %ANSWER
- % Q=3
- % W=1
- % E=2
- % R=a
- % T=b
- % Y=c
- %ANSWER
- */
+% Both the first and second arguments can contain variables.
+%?- keysort([c - Q,a - W,b - E],[R - 1,T - 2,Y - 3])
+% Q=3
+% W=1
+% E=2
+% R=a
+% T=b
+% Y=c
+*/
 /**
  * <code>keysort(X,Y)</code> - sorts a list of key/value pairs.
  * <p>

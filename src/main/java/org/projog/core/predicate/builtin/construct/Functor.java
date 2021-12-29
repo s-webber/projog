@@ -27,61 +27,53 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %QUERY functor(f(a,b,c(Z)),F,N)
- %ANSWER
- % Z=UNINSTANTIATED VARIABLE
- % F=f
- % N=3
- %ANSWER
+%?- functor(f(a,b,c(Z)),F,N)
+% Z=UNINSTANTIATED VARIABLE
+% F=f
+% N=3
 
- %QUERY functor(a+b,F,N)
- %ANSWER
- % F=+
- % N=2
- %ANSWER
+%?- functor(a+b,F,N)
+% F=+
+% N=2
 
- %QUERY functor([a,b,c],F,N)
- %ANSWER
- % F=.
- % N=2
- %ANSWER
+%?- functor([a,b,c],F,N)
+% F=.
+% N=2
 
- %QUERY functor(atom,F,N)
- %ANSWER
- % F=atom
- % N=0
- %ANSWER
+%?- functor(atom,F,N)
+% F=atom
+% N=0
 
- %QUERY functor(X,x,0)
- %ANSWER X=x
+%?- functor(X,x,0)
+% X=x
 
- %QUERY functor(X,x,1)
- %ANSWER X=x(_)
+%?- functor(X,x,1)
+% X=x(_)
 
- %QUERY functor(X,x,2)
- %ANSWER X=x(_, _)
+%?- functor(X,x,2)
+% X=x(_, _)
 
- %QUERY functor(X,x,3)
- %ANSWER X=x(_, _, _)
+%?- functor(X,x,3)
+% X=x(_, _, _)
 
- %TRUE functor(x,x,0)
- %FALSE functor(x,x,3)
+%TRUE functor(x,x,0)
+%FAIL functor(x,x,3)
 
- %TRUE functor(x(1,2,3),x,3)
- %FALSE functor(x(1,2,3),y,3)
- %FALSE functor(x(1,2,3),x,0)
- %FALSE functor(x(1,2,3),x,1)
- %FALSE functor(x(1,2,3),x,2)
- %FALSE functor(x(1,2,3),x,4)
+%TRUE functor(x(1,2,3),x,3)
+%FAIL functor(x(1,2,3),y,3)
+%FAIL functor(x(1,2,3),x,0)
+%FAIL functor(x(1,2,3),x,1)
+%FAIL functor(x(1,2,3),x,2)
+%FAIL functor(x(1,2,3),x,4)
 
- %FALSE functor([a,b,c],'.',3)
- %FALSE functor([a,b,c],a,Z)
+%FAIL functor([a,b,c],'.',3)
+%FAIL functor([a,b,c],a,Z)
 
- copy(Old, New) :- functor(Old, F, N), functor(New, F, N).
+copy(Old, New) :- functor(Old, F, N), functor(New, F, N).
 
- %QUERY copy(sentence(a,b), X)
- %ANSWER X = sentence(_, _)
- */
+%?- copy(sentence(a,b), X)
+% X=sentence(_, _)
+*/
 /**
  * <code>functor(T,F,N)</code>
  * <p>

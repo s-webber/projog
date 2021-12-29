@@ -20,20 +20,20 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE float(1.0)
- %TRUE float(-1.0)
- %TRUE float(0.0)
- %FALSE float(1)
- %FALSE float(-1)
- %FALSE float(0)
- %FALSE float('1')
- %FALSE float('1.0')
- %FALSE float(a)
- %FALSE float(p(1.0,2.0,3.0))
- %FALSE float([1.0,2.0,3.0])
- %FALSE float([])
- %FALSE float(X)
- %FALSE float(_)
+%TRUE float(1.0)
+%TRUE float(-1.0)
+%TRUE float(0.0)
+%FAIL float(1)
+%FAIL float(-1)
+%FAIL float(0)
+%FAIL float('1')
+%FAIL float('1.0')
+%FAIL float(a)
+%FAIL float(p(1.0,2.0,3.0))
+%FAIL float([1.0,2.0,3.0])
+%FAIL float([])
+%FAIL float(X)
+%FAIL float(_)
 */
 /**
  * <code>float(X)</code> - checks that a term is a floating point number.

@@ -1,36 +1,36 @@
 writeAndRepeat(N) :- write(N), nl.
 writeAndRepeat(N) :- N > 1, N1 is N-1, writeAndRepeat(N1).
 
-%QUERY writeAndRepeat(0)
+%?- writeAndRepeat(0)
 %OUTPUT
 %0
 %
 %OUTPUT
-%ANSWER/
+%YES
 %NO
 
-%QUERY writeAndRepeat(1)
+%?- writeAndRepeat(1)
 %OUTPUT
 %1
 %
 %OUTPUT
-%ANSWER/
+%YES
 %NO
 
-%QUERY writeAndRepeat(3)
+%?- writeAndRepeat(3)
 %OUTPUT
 %3
 %
 %OUTPUT
-%ANSWER/
+%YES
 %OUTPUT
 %2
 %
 %OUTPUT
-%ANSWER/
+%YES
 %OUTPUT
 %1
 %
 %OUTPUT
-%ANSWER/
+%YES
 %NO

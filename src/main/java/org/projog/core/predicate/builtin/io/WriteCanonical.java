@@ -19,13 +19,13 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY write_canonical( 1+1 )
- %OUTPUT +(1, 1)
- %ANSWER/
- %QUERY write_canonical( '+'(1,1) )
- %OUTPUT +(1, 1)
- %ANSWER/
- */
+%?- write_canonical( 1+1 )
+%OUTPUT +(1, 1)
+%YES
+%?- write_canonical( '+'(1,1) )
+%OUTPUT +(1, 1)
+%YES
+*/
 /**
  * <code>write_canonical(X)</code> - writes a term to the output stream.
  * <p>

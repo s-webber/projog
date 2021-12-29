@@ -20,14 +20,14 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE is_list([1.0,2.0,3.0])
- %TRUE is_list([])
- %TRUE is_list([a|[]])
+%TRUE is_list([1.0,2.0,3.0])
+%TRUE is_list([])
+%TRUE is_list([a|[]])
 
- %FALSE is_list([a|b])
- %FALSE is_list([a|X])
- %FALSE is_list(X)
- */
+%FAIL is_list([a|b])
+%FAIL is_list([a|X])
+%FAIL is_list(X)
+*/
 /**
  * <code>is_list(X)</code> - checks that a term is a list.
  * <p>

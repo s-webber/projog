@@ -1,10 +1,10 @@
 p(a).
 
-%FALSE p(z)
-%FALSE p(a,a)
+%FAIL p(z)
+%FAIL p(a,a)
 
 %TRUE p(a)
 
-%QUERY p(X)
-%ANSWER X=a
+%?- p(X)
+% X=a
 

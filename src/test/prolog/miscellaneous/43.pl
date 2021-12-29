@@ -1,15 +1,15 @@
 x(L,L).
 x([X|Xs],Ys) :- x(Xs,Ys).
 
-%QUERY x([a,b,c], X)
-%ANSWER X=[a,b,c]
-%ANSWER X=[b,c]
-%ANSWER X=[c]
-%ANSWER X=[]
+%?- x([a,b,c], X)
+% X=[a,b,c]
+% X=[b,c]
+% X=[c]
+% X=[]
 %NO
 
-%FALSE x([a,b,c], [a,c])
+%FAIL x([a,b,c], [a,c])
 
-%QUERY x(a, X)
-%ANSWER X=a
+%?- x(a, X)
+% X=a
 %NO

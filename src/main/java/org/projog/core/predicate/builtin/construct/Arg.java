@@ -22,20 +22,20 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY arg(2, a(b,c(d)), X)
- %ANSWER X=c(d)
+%?- arg(2, a(b,c(d)), X)
+% X=c(d)
 
- %QUERY arg(1, a+(b+c), X )
- %ANSWER X=a
+%?- arg(1, a+(b+c), X )
+% X=a
 
- %FALSE arg(1, a+(b+c), b)
+%FAIL arg(1, a+(b+c), b)
 
- %QUERY arg(2, [a,b,c], X)
- %ANSWER X=[b,c]
+%?- arg(2, [a,b,c], X)
+% X=[b,c]
 
- %QUERY arg(3, [a,b,c], X)
- %ERROR Cannot get argument at position: 3 from: .(a, .(b, .(c, [])))
- */
+%?- arg(3, [a,b,c], X)
+%ERROR Cannot get argument at position: 3 from: .(a, .(b, .(c, [])))
+*/
 /**
  * <code>arg(N,T,A)</code> - allows access to an argument of a structure.
  * <p>

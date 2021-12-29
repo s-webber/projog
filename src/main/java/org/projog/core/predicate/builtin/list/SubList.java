@@ -35,84 +35,80 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE include(atom, [], [])
- %TRUE include(atom, [a], [a])
- %QUERY include(atom, [X], [])
- %ANSWER X=UNINSTANTIATED VARIABLE
- %TRUE include(atom, [1], [])
- %TRUE include(integer, [1], [1])
+%TRUE include(atom, [], [])
+%TRUE include(atom, [a], [a])
+%?- include(atom, [X], [])
+% X=UNINSTANTIATED VARIABLE
+%TRUE include(atom, [1], [])
+%TRUE include(integer, [1], [1])
 
- %QUERY include(atom, [a,a,a], X)
- %ANSWER X=[a,a,a]
+%?- include(atom, [a,a,a], X)
+% X=[a,a,a]
 
- %QUERY include(atom, [a,b,c],X)
- %ANSWER X=[a,b,c]
+%?- include(atom, [a,b,c],X)
+% X=[a,b,c]
 
 
- %QUERY include(atom, [1,b,c], X)
- %ANSWER X=[b,c]
+%?- include(atom, [1,b,c], X)
+% X=[b,c]
 
- %QUERY include(atom, [a,2,c], X)
- %ANSWER X=[a,c]
+%?- include(atom, [a,2,c], X)
+% X=[a,c]
 
- %QUERY include(atom, [a,b,3], X)
- %ANSWER X=[a,b]
+%?- include(atom, [a,b,3], X)
+% X=[a,b]
 
- %QUERY include(atom, [a,2,3], X)
- %ANSWER X=[a]
+%?- include(atom, [a,2,3], X)
+% X=[a]
 
- %QUERY include(atom, [1,b,3], X)
- %ANSWER X=[b]
+%?- include(atom, [1,b,3], X)
+% X=[b]
 
- %QUERY include(atom, [1,2,c], X)
- %ANSWER X=[c]
+%?- include(atom, [1,2,c], X)
+% X=[c]
 
- %QUERY include(atom, [1,2,3], X)
- %ANSWER X=[]
+%?- include(atom, [1,2,3], X)
+% X=[]
 
- %TRUE include(<(0), [5,6,1,8,7,4,2,9,3], [5,6,1,8,7,4,2,9,3])
- %QUERY include(<(0), [5,6,1,8,7,4,2,9,3], X)
- %ANSWER X=[5,6,1,8,7,4,2,9,3]
- %QUERY include(>(5), [5,6,1,8,7,4,2,9,3], X)
- %ANSWER X=[1,4,2,3]
- %QUERY include(>(7), [5,6,1,8,7,4,2,9,3], X)
- %ANSWER X=[5,6,1,4,2,3]
- %TRUE include(>(7), [5,6,1,8,7,4,2,9,3], [5,6,1,4,2,3])
- %QUERY include(=(7), [5,6,1,8,7,4,2,9,3], X)
- %ANSWER X=[7]
- %QUERY include(=(0), [5,6,1,8,7,4,2,9,3], X)
- %ANSWER X=[]
+%TRUE include(<(0), [5,6,1,8,7,4,2,9,3], [5,6,1,8,7,4,2,9,3])
+%?- include(<(0), [5,6,1,8,7,4,2,9,3], X)
+% X=[5,6,1,8,7,4,2,9,3]
+%?- include(>(5), [5,6,1,8,7,4,2,9,3], X)
+% X=[1,4,2,3]
+%?- include(>(7), [5,6,1,8,7,4,2,9,3], X)
+% X=[5,6,1,4,2,3]
+%TRUE include(>(7), [5,6,1,8,7,4,2,9,3], [5,6,1,4,2,3])
+%?- include(=(7), [5,6,1,8,7,4,2,9,3], X)
+% X=[7]
+%?- include(=(0), [5,6,1,8,7,4,2,9,3], X)
+% X=[]
 
- %QUERY include(=(p(W)), [p(1),p(2),p(3)], Z)
- %ANSWER
- % W=1
- % Z=[p(1)]
- %ANSWER
- %QUERY include(=(p(1,A,3)), [p(W,a,4), p(X,b,3), p(X,Y,3), p(Z,c,3)], B)
- %ANSWER
- % A=b
- % B=[p(1, b, 3),p(1, b, 3)]
- % W=UNINSTANTIATED VARIABLE
- % X=1
- % Y=b
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- include(=(p(W)), [p(1),p(2),p(3)], Z)
+% W=1
+% Z=[p(1)]
+%?- include(=(p(1,A,3)), [p(W,a,4), p(X,b,3), p(X,Y,3), p(Z,c,3)], B)
+% A=b
+% B=[p(1, b, 3),p(1, b, 3)]
+% W=UNINSTANTIATED VARIABLE
+% X=1
+% Y=b
+% Z=UNINSTANTIATED VARIABLE
 
- % First argument must be an atom or structure. Second argument must be a list.
- %FALSE include(X, [], Z)
- %FALSE include(1, [], Z)
- %FALSE include(atom, X, Z)
+% First argument must be an atom or structure. Second argument must be a list.
+%FAIL include(X, [], Z)
+%FAIL include(1, [], Z)
+%FAIL include(atom, X, Z)
 
- % Note: "sublist" is a synonym for "include".
- %QUERY sublist(atom, [a,b,c], X)
- %ANSWER X=[a,b,c]
- %QUERY sublist(atom, [a,2,c], X)
- %ANSWER X=[a,c]
+% Note: "sublist" is a synonym for "include".
+%?- sublist(atom, [a,b,c], X)
+% X=[a,b,c]
+%?- sublist(atom, [a,2,c], X)
+% X=[a,c]
 
 p(a) :- writeln('rule 1').
 p(b) :- writeln('rule 2').
 p(X) :- atom(X), writeln('rule 3').
-%QUERY include(p,[1,a,2,b,3,c,c,4,c,b,5,a,z,b,b,6], Z)
+%?- include(p,[1,a,2,b,3,c,c,4,c,b,5,a,z,b,b,6], Z)
 %OUTPUT
 %rule 1
 %rule 2
@@ -126,8 +122,8 @@ p(X) :- atom(X), writeln('rule 3').
 %rule 2
 %
 %OUTPUT
-%ANSWER Z=[a,b,c,c,c,b,a,z,b,b]
- */
+% Z=[a,b,c,c,c,b,a,z,b,b]
+*/
 /**
  * <code>include(X,Y,Z)</code> - filters a list by a goal.
  * <p>

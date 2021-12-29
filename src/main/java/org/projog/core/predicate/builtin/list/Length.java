@@ -28,119 +28,87 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %QUERY length([],X)
- %ANSWER X=0
- %QUERY length([a],X)
- %ANSWER X=1
- %QUERY length([a,b],X)
- %ANSWER X=2
- %QUERY length([a,b,c],X)
- %ANSWER X=3
+%?- length([],X)
+% X=0
+%?- length([a],X)
+% X=1
+%?- length([a,b],X)
+% X=2
+%?- length([a,b,c],X)
+% X=3
 
- %FALSE length([a,b],1)
- %FALSE length([a,b],3)
+%FAIL length([a,b],1)
+%FAIL length([a,b],3)
 
- %QUERY length(X,0)
- %ANSWER X=[]
+%?- length(X,0)
+% X=[]
 
- %QUERY length(X,1)
- %ANSWER X=[E0]
+%?- length(X,1)
+% X=[E0]
 
- %QUERY length(X,3)
- %ANSWER X=[E0,E1,E2]
+%?- length(X,3)
+% X=[E0,E1,E2]
 
- %QUERY length(X,Y)
- %ANSWER
- % X=[]
- % Y=0
- %ANSWER
- %ANSWER
- % X=[E0]
- % Y=1
- %ANSWER
- %ANSWER
- % X=[E0,E1]
- % Y=2
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2]
- % Y=3
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3]
- % Y=4
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4]
- % Y=5
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4,E5]
- % Y=6
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4,E5,E6]
- % Y=7
- %ANSWER
- %QUIT
+%?- length(X,Y)
+% X=[]
+% Y=0
+% X=[E0]
+% Y=1
+% X=[E0,E1]
+% Y=2
+% X=[E0,E1,E2]
+% Y=3
+% X=[E0,E1,E2,E3]
+% Y=4
+% X=[E0,E1,E2,E3,E4]
+% Y=5
+% X=[E0,E1,E2,E3,E4,E5]
+% Y=6
+% X=[E0,E1,E2,E3,E4,E5,E6]
+% Y=7
+%QUIT
 
- %QUERY length([a,b|X],Y)
- %ANSWER
- % X=[]
- % Y=2
- %ANSWER
- %ANSWER
- % X=[E0]
- % Y=3
- %ANSWER
- %ANSWER
- % X=[E0,E1]
- % Y=4
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2]
- % Y=5
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3]
- % Y=6
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4]
- % Y=7
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4,E5]
- % Y=8
- %ANSWER
- %ANSWER
- % X=[E0,E1,E2,E3,E4,E5,E6]
- % Y=9
- %ANSWER
- %QUIT
+%?- length([a,b|X],Y)
+% X=[]
+% Y=2
+% X=[E0]
+% Y=3
+% X=[E0,E1]
+% Y=4
+% X=[E0,E1,E2]
+% Y=5
+% X=[E0,E1,E2,E3]
+% Y=6
+% X=[E0,E1,E2,E3,E4]
+% Y=7
+% X=[E0,E1,E2,E3,E4,E5]
+% Y=8
+% X=[E0,E1,E2,E3,E4,E5,E6]
+% Y=9
+%QUIT
 
- % TODO fix documentation generator to handle QUIT
+% TODO fix documentation generator to handle QUIT
 
- %QUERY length([a,b|X],8)
- %ANSWER X=[E0,E1,E2,E3,E4,E5]
- %QUERY length([a,b|X],3)
- %ANSWER X=[E0]
- %QUERY length([a,b|X],2)
- %ANSWER X=[]
- %FALSE length([a,b|X],1)
+%?- length([a,b|X],8)
+% X=[E0,E1,E2,E3,E4,E5]
+%?- length([a,b|X],3)
+% X=[E0]
+%?- length([a,b|X],2)
+% X=[]
+%FAIL length([a,b|X],1)
 
- %FALSE length([a,b,c],a)
+%FAIL length([a,b,c],a)
 
- %FALSE length(X,X)
- %FALSE length([a,b,c|X],X)
+%FAIL length(X,X)
+%FAIL length([a,b,c|X],X)
 
- %QUERY length(abc,X)
- %ERROR Expected list but got: ATOM with value: abc
- %QUERY length([a,b|c],X)
- %ERROR Expected list but got: LIST with value: .(a, .(b, c))
- %QUERY length([a,b|X],z)
- %ERROR Expected Numeric but got: ATOM with value: z
- */
+%?- length(abc,X)
+%ERROR Expected list but got: ATOM with value: abc
+%?- length([a,b|c],X)
+%ERROR Expected list but got: LIST with value: .(a, .(b, c))
+%?- length([a,b|X],z)
+%ERROR Expected Numeric but got: ATOM with value: z
+*/
 /**
  * <code>length(X,Y)</code> - determines the length of a list.
  * <p>

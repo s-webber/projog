@@ -19,16 +19,16 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE nonvar(abc)
- %TRUE nonvar(1)
- %TRUE nonvar(a(b,c))
- %TRUE nonvar([a,b,c])
- %QUERY X=1, nonvar(X)
- %ANSWER X=1
- %FALSE nonvar(X)
- %FALSE X=Y, nonvar(X)
- %FALSE nonvar(_)
- */
+%TRUE nonvar(abc)
+%TRUE nonvar(1)
+%TRUE nonvar(a(b,c))
+%TRUE nonvar([a,b,c])
+%?- X=1, nonvar(X)
+% X=1
+%FAIL nonvar(X)
+%FAIL X=Y, nonvar(X)
+%FAIL nonvar(_)
+*/
 /**
  * <code>nonvar(X)</code> - checks that a term is not an uninstantiated variable.
  * <p>

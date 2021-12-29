@@ -22,37 +22,37 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY repeat(3), write('hello, world'), nl
- %OUTPUT
- %hello, world
- %
- %OUTPUT
- %ANSWER/
- %OUTPUT
- %hello, world
- %
- %OUTPUT
- %ANSWER/
- %OUTPUT
- %hello, world
- %
- %OUTPUT
- %ANSWER/
+%?- repeat(3), write('hello, world'), nl
+%OUTPUT
+%hello, world
+%
+%OUTPUT
+%YES
+%OUTPUT
+%hello, world
+%
+%OUTPUT
+%YES
+%OUTPUT
+%hello, world
+%
+%OUTPUT
+%YES
 
- %QUERY repeat(1)
- %ANSWER/
- %QUERY repeat(2)
- %ANSWER/
- %ANSWER/
- %QUERY repeat(3)
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %FALSE repeat(0)
- %FALSE repeat(-1)
+%?- repeat(1)
+%YES
+%?- repeat(2)
+%YES
+%YES
+%?- repeat(3)
+%YES
+%YES
+%YES
+%FAIL repeat(0)
+%FAIL repeat(-1)
 
- %QUERY repeat(X)
- %ERROR Expected Numeric but got: VARIABLE with value: X
+%?- repeat(X)
+%ERROR Expected Numeric but got: VARIABLE with value: X
 */
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.

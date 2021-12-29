@@ -20,28 +20,28 @@ p5(X) :- p4(X).
 % would need to add optimise method to clause action
 p6 :- p5(x).
 
-%QUERY p5(X)
+%?- p5(X)
 %OUTPUT bdi
-%ANSWER X=x
+% X=x
 %OUTPUT afh
-%ANSWER X=y
+% X=y
 %OUTPUT ceg
-%ANSWER X=z
+% X=z
 
-%QUERY p5(x)
+%?- p5(x)
 %OUTPUT bdi
-%ANSWER/
+%YES
 
-%QUERY p5(y)
+%?- p5(y)
 %OUTPUT afh
-%ANSWER/
+%YES
 
-%QUERY p5(z)
+%?- p5(z)
 %OUTPUT ceg
-%ANSWER/
+%YES
 
-%FALSE p5(w)
+%FAIL p5(w)
 
-%QUERY p6
+%?- p6
 %OUTPUT bdi
-%ANSWER/
+%YES

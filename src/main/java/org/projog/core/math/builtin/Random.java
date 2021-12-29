@@ -20,19 +20,19 @@ import org.projog.core.math.Numeric;
 import org.projog.core.term.IntegerNumberCache;
 
 /* TEST
- validate_in_range(X) :- Y is random(X), Y>=0, Y<X.
+validate_in_range(X) :- Y is random(X), Y>=0, Y<X.
 
- %TRUE validate_in_range(3), validate_in_range(7), validate_in_range(100)
+%TRUE validate_in_range(3), validate_in_range(7), validate_in_range(100)
 
- %QUERY X is random(1)
- %ANSWER X=0
+%?- X is random(1)
+% X=0
 
- test_max_random(X) :- X is random(9223372036854775807), X>=0, X<9223372036854775807.
+test_max_random(X) :- X is random(9223372036854775807), X>=0, X<9223372036854775807.
 
- %QUERY test_max_random(X), test_max_random(Y), integer(X), integer(Y), X=\=Y, write(here), fail
- %OUTPUT here
- %NO
- */
+%?- test_max_random(X), test_max_random(Y), integer(X), integer(Y), X=\=Y, write(here), fail
+%OUTPUT here
+%NO
+*/
 /**
  * <code>random(X)</code> Evaluate to a random integer i for which 0 =&lt; i &lt; X.
  */

@@ -25,97 +25,91 @@ import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE call(true)
- %FALSE call(fail)
- %QUERY X = true, call(X)
- %ANSWER X = true
- %FALSE X = fail, call(X)
+%TRUE call(true)
+%FAIL call(fail)
+%?- X = true, call(X)
+% X=true
+%FAIL X = fail, call(X)
 
- test(a).
- test(b).
- test(c).
+test(a).
+test(b).
+test(c).
 
- %QUERY X = test(Y), call(X)
- %ANSWER
- % X = test(a)
- % Y = a
- %ANSWER
- %ANSWER
- % X = test(b)
- % Y = b
- %ANSWER
- %ANSWER
- % X = test(c)
- % Y = c
- %ANSWER
+%?- X = test(Y), call(X)
+% X=test(a)
+% Y=a
+% X=test(b)
+% Y=b
+% X=test(c)
+% Y=c
 
- testCall(X) :- call(X).
+testCall(X) :- call(X).
 
- %FALSE testCall(fail)
- %TRUE testCall(true)
- %QUERY testCall((true ; true))
- %ANSWER/
- %ANSWER/
+%FAIL testCall(fail)
+%TRUE testCall(true)
+%?- testCall((true ; true))
+%YES
+%YES
 
- % Note: "time" is a synonym for "call".
- %TRUE time(true)
- %FALSE time(fail)
- %QUERY time(repeat(3))
- %ANSWER/
- %ANSWER/
- %ANSWER/
+% Note: "time" is a synonym for "call".
+%TRUE time(true)
+%FAIL time(fail)
+%?- time(repeat(3))
+%YES
+%YES
+%YES
 
- test(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
-   write(V1), write(' '),
-   write(V2), write(' '),
-   write(V3), write(' '),
-   write(V4), write(' '),
-   write(V5), write(' '),
-   write(V6), write(' '),
-   write(V7), write(' '),
-   write(V8), write(' '),
-   write(V9).
+test(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
+  write(V1), write(' '),
+  write(V2), write(' '),
+  write(V3), write(' '),
+  write(V4), write(' '),
+  write(V5), write(' '),
+  write(V6), write(' '),
+  write(V7), write(' '),
+  write(V8), write(' '),
+  write(V9).
 
-%QUERY call(test(1,2,3,4,5,6,7,8,9))
+%?- call(test(1,2,3,4,5,6,7,8,9))
 %OUTPUT 1 2 3 4 5 6 7 8 9
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3,4,5,6,7,8), q)
+%?- call(test(1,2,3,4,5,6,7,8), q)
 %OUTPUT 1 2 3 4 5 6 7 8 q
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3,4,5,6,7), q, w)
+%?- call(test(1,2,3,4,5,6,7), q, w)
 %OUTPUT 1 2 3 4 5 6 7 q w
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3,4,5,6), q, w, e)
+%?- call(test(1,2,3,4,5,6), q, w, e)
 %OUTPUT 1 2 3 4 5 6 q w e
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3,4,5), q, w, e, r)
+%?- call(test(1,2,3,4,5), q, w, e, r)
 %OUTPUT 1 2 3 4 5 q w e r
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3,4), q, w, e, r, t)
+%?- call(test(1,2,3,4), q, w, e, r, t)
 %OUTPUT 1 2 3 4 q w e r t
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2,3), q, w, e, r, t, y)
+%?- call(test(1,2,3), q, w, e, r, t, y)
 %OUTPUT 1 2 3 q w e r t y
-%ANSWER/
+%YES
 
-%QUERY call(test(1,2), q, w, e, r, t, y, u)
+%?- call(test(1,2), q, w, e, r, t, y, u)
 %OUTPUT 1 2 q w e r t y u
-%ANSWER/
+%YES
 
-%QUERY call(test(1), q, w, e, r, t, y, u, i)
+%?- call(test(1), q, w, e, r, t, y, u, i)
 %OUTPUT 1 q w e r t y u i
-%ANSWER/
+%YES
 
-%QUERY call(test, q, w, e, r, t, y, u, i, o)
+%?- call(test, q, w, e, r, t, y, u, i, o)
 %OUTPUT q w e r t y u i o
-%ANSWER/
- */
+%YES
+*/
 /**
  * <code>call(X)</code> - calls the goal represented by a term.
  * <p>

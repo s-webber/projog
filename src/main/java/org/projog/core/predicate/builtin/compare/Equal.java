@@ -19,35 +19,31 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE a=a
- %FALSE a=b
- %QUERY a=X
- %ANSWER X=a
- %FALSE 2=1+1
- %FALSE p(b,c)=p(b,d)
- %FALSE p(b,c)=p(c,b)
- %QUERY p(b,c)=p(b,X)
- %ANSWER X=c
- %QUERY p(Y,c)=p(b,X)
- %ANSWER
- % Y=b
- % X=c
- %ANSWER
- %TRUE [a,b,c]=[a,b,c]
- %FALSE [a,b,c]=[a,b,d]
+%TRUE a=a
+%FAIL a=b
+%?- a=X
+% X=a
+%FAIL 2=1+1
+%FAIL p(b,c)=p(b,d)
+%FAIL p(b,c)=p(c,b)
+%?- p(b,c)=p(b,X)
+% X=c
+%?- p(Y,c)=p(b,X)
+% Y=b
+% X=c
+%TRUE [a,b,c]=[a,b,c]
+%FAIL [a,b,c]=[a,b,d]
 
- %QUERY [a,b,c]=[X|Y]
- %ANSWER
- % X=a
- % Y=[b,c]
- %ANSWER
- %QUERY [X|[b]]=[a,b]
- %ANSWER X=a
- %QUERY [a,b,c|X]=[a,b,c,d,e,f,g]
- %ANSWER X=[d,e,f,g]
- %TRUE [a,b,c]=[a,b,c|[]]
- %FALSE [a,b,c]=[X|[]]
- */
+%?- [a,b,c]=[X|Y]
+% X=a
+% Y=[b,c]
+%?- [X|[b]]=[a,b]
+% X=a
+%?- [a,b,c|X]=[a,b,c,d,e,f,g]
+% X=[d,e,f,g]
+%TRUE [a,b,c]=[a,b,c|[]]
+%FAIL [a,b,c]=[X|[]]
+*/
 /**
  * <code>X=Y</code> - an equality test.
  * <p>

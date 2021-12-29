@@ -18,8 +18,8 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractUnaryArithmeticOperator;
 
 /* TEST
- %LINK prolog-arithmetic
- */
+%LINK prolog-arithmetic
+*/
 /**
  * <code>-</code> - minus operator.
  */

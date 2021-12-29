@@ -5,28 +5,22 @@ p(a, X, Y) :- Y is X+1.
 p(b, X, Y) :- Y is X-1.
 p(c, X, Y) :- Y is X*2.
 
-%QUERY p(a,5,Y)
-%ANSWER Y=6
+%?- p(a,5,Y)
+% Y=6
 
-%QUERY p(b,5,Y)
-%ANSWER Y=4
+%?- p(b,5,Y)
+% Y=4
 
-%QUERY p(c,5,Y)
-%ANSWER Y=10
+%?- p(c,5,Y)
+% Y=10
 
-%FALSE p(z,5,Y)
+%FAIL p(z,5,Y)
 
-%QUERY p(X,5,Y)
-%ANSWER
+%?- p(X,5,Y)
 % X=a
 % Y=6
-%ANSWER
-%ANSWER
 % X=b
 % Y=4
-%ANSWER
-%ANSWER
 % X=c
 % Y=10
-%ANSWER
 

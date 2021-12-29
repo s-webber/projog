@@ -25,77 +25,73 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE atomic_list_concat([a,b,c], abc)
- %FALSE atomic_list_concat([a,b,c], xyz)
+%TRUE atomic_list_concat([a,b,c], abc)
+%FAIL atomic_list_concat([a,b,c], xyz)
 
- %QUERY atomic_list_concat([a,b,c], X)
- %ANSWER X=abc
+%?- atomic_list_concat([a,b,c], X)
+% X=abc
 
- %TRUE atomic_list_concat([a,b,c], -, 'a-b-c')
- %FALSE atomic_list_concat([a,b,c], 'x-y-z')
+%TRUE atomic_list_concat([a,b,c], -, 'a-b-c')
+%FAIL atomic_list_concat([a,b,c], 'x-y-z')
 
- %QUERY atomic_list_concat([a,b,c], -, X)
- %ANSWER X=a-b-c
+%?- atomic_list_concat([a,b,c], -, X)
+% X=a-b-c
 
- %QUERY atomic_list_concat(X, -, 'a-b-c')
- %ANSWER X=[a,b,c]
+%?- atomic_list_concat(X, -, 'a-b-c')
+% X=[a,b,c]
 
- %QUERY atomic_list_concat([X,Y,Z], -, 'a-b-c')
- %ANSWER
- % X=a
- % Y=b
- % Z=c
- %ANSWER
+%?- atomic_list_concat([X,Y,Z], -, 'a-b-c')
+% X=a
+% Y=b
+% Z=c
 
- %QUERY atomic_list_concat([X,Y,Z], -, '6-12-9'), atom(X), atom(Y), atom(Z)
- %ANSWER
- % X=6
- % Y=12
- % Z=9
- %ANSWER
+%?- atomic_list_concat([X,Y,Z], -, '6-12-9'), atom(X), atom(Y), atom(Z)
+% X=6
+% Y=12
+% Z=9
 
- %TRUE atomic_list_concat([], '')
- %TRUE atomic_list_concat([''], -, '')
+%TRUE atomic_list_concat([], '')
+%TRUE atomic_list_concat([''], -, '')
 
- %TRUE atomic_list_concat(['1','2','3'], '123')
- %FALSE atomic_list_concat(['1','2','3'], 123)
+%TRUE atomic_list_concat(['1','2','3'], '123')
+%FAIL atomic_list_concat(['1','2','3'], 123)
 
- %QUERY atomic_list_concat([Y], X)
- %ERROR Expected an atom but got: VARIABLE with value: Y
+%?- atomic_list_concat([Y], X)
+%ERROR Expected an atom but got: VARIABLE with value: Y
 
- %QUERY atomic_list_concat([1], X)
- %ERROR Expected an atom but got: INTEGER with value: 1
+%?- atomic_list_concat([1], X)
+%ERROR Expected an atom but got: INTEGER with value: 1
 
- %QUERY atomic_list_concat([p(a)], X)
- %ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%?- atomic_list_concat([p(a)], X)
+%ERROR Expected an atom but got: STRUCTURE with value: p(a)
 
- %QUERY atomic_list_concat([[a]], X)
- %ERROR Expected an atom but got: LIST with value: .(a, [])
+%?- atomic_list_concat([[a]], X)
+%ERROR Expected an atom but got: LIST with value: .(a, [])
 
- %QUERY atomic_list_concat([Y], -, X)
- %ERROR Expected an atom but got: VARIABLE with value: Y
+%?- atomic_list_concat([Y], -, X)
+%ERROR Expected an atom but got: VARIABLE with value: Y
 
- %QUERY atomic_list_concat([1], -, X)
- %ERROR Expected an atom but got: INTEGER with value: 1
+%?- atomic_list_concat([1], -, X)
+%ERROR Expected an atom but got: INTEGER with value: 1
 
- %QUERY atomic_list_concat([p(a)], -, X)
- %ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%?- atomic_list_concat([p(a)], -, X)
+%ERROR Expected an atom but got: STRUCTURE with value: p(a)
 
- %QUERY atomic_list_concat([[a]], -, X)
- %ERROR Expected an atom but got: LIST with value: .(a, [])
+%?- atomic_list_concat([[a]], -, X)
+%ERROR Expected an atom but got: LIST with value: .(a, [])
 
- %QUERY atomic_list_concat([a], Y, X)
- %ERROR Expected an atom but got: VARIABLE with value: Y
+%?- atomic_list_concat([a], Y, X)
+%ERROR Expected an atom but got: VARIABLE with value: Y
 
- %QUERY atomic_list_concat([a], 1, X)
- %ERROR Expected an atom but got: INTEGER with value: 1
+%?- atomic_list_concat([a], 1, X)
+%ERROR Expected an atom but got: INTEGER with value: 1
 
- %QUERY atomic_list_concat([a], p(a), X)
- %ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%?- atomic_list_concat([a], p(a), X)
+%ERROR Expected an atom but got: STRUCTURE with value: p(a)
 
- %QUERY atomic_list_concat([a], [a], X)
- %ERROR Expected an atom but got: LIST with value: .(a, [])
- */
+%?- atomic_list_concat([a], [a], X)
+%ERROR Expected an atom but got: LIST with value: .(a, [])
+*/
 /**
  * <code>atomic_list_concat(List,Separator,Atom)</code> / <code>atomic_list_concat(List,Atom)</code>
  * <p>

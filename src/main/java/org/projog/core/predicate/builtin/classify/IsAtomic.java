@@ -20,13 +20,13 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %TRUE atomic(abc)
- %TRUE atomic(1)
- %FALSE atomic(X)
- %FALSE atomic(_)
- %FALSE atomic(a(b,c))
- %FALSE atomic([a,b,c])
- */
+%TRUE atomic(abc)
+%TRUE atomic(1)
+%FAIL atomic(X)
+%FAIL atomic(_)
+%FAIL atomic(a(b,c))
+%FAIL atomic([a,b,c])
+*/
 /**
  * <code>atomic(X)</code> - checks that a term is atomic.
  * <p>

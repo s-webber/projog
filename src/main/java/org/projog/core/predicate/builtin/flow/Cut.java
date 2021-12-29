@@ -20,27 +20,27 @@ import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 
 /* TEST
- %TRUE_NO repeat, !
+%TRUE_NO repeat, !
 
- print_first_sentence(X) :-
-    atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
+print_first_sentence(X) :-
+   atom_chars(X, Chars), member(Next, Chars), write(Next), Next=='.', !.
 
- %QUERY print_first_sentence('word1 word2 word3. word4 word5 word6.')
- %OUTPUT word1 word2 word3.
- %ANSWER/
+%?- print_first_sentence('word1 word2 word3. word4 word5 word6.')
+%OUTPUT word1 word2 word3.
+%YES
 
- a(x, Y) :- Y = 1, !.
- a(X, Y) :- Y = 2.
+a(x, Y) :- Y = 1, !.
+a(X, Y) :- Y = 2.
 
- %QUERY a(x, Y)
- %ANSWER Y = 1
+%?- a(x, Y)
+% Y=1
 
- %QUERY a(y, Y)
- %ANSWER Y = 2
+%?- a(y, Y)
+% Y=2
 
- %QUERY a(z, Y)
- %ANSWER Y = 2
- */
+%?- a(z, Y)
+% Y=2
+*/
 /**
  * <code>!</code> - the "cut".
  * <p>

@@ -23,22 +23,16 @@ q2('i').
 
 lastquery(X,Y,Z) :- F = 1, A = B, test_repeat(1), C = D, test_repeat(F), C = X, test_repeat(F), A = Y, test_repeat(F), E = A, F = B, p(D), Z is D + F.
 
-%QUERY lastquery(X,Y,Z)
-%ANSWER
+%?- lastquery(X,Y,Z)
 % X=1
 % Y=1
 % Z=2
-%ANSWER
-%ANSWER
 % X=10
 % Y=1
 % Z=11
-%ANSWER
-%ANSWER
 % X=100
 % Y=1
 % Z=101
-%ANSWER
 %NO
 
 test1(X) :- test2(X).
@@ -117,10 +111,10 @@ test999(X) :- lastquery(A, B, X).
 %TRUE_NO test1(2)
 %TRUE_NO test1(11)
 %TRUE_NO test1(101)
-%FALSE test1(3)
+%FAIL test1(3)
 
-%QUERY test1(X)
-%ANSWER X=2
-%ANSWER X=11
-%ANSWER X=101
+%?- test1(X)
+% X=2
+% X=11
+% X=101
 %NO

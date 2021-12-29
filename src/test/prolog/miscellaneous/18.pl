@@ -6,9 +6,9 @@ p(5).
 
 test(V) :- p(T), V is T*T.
 
-%QUERY test(X)
-%ANSWER X=1
-%ANSWER X=4
-%ANSWER X=9
-%ANSWER X=16
-%ANSWER X=25
+%?- test(X)
+% X=1
+% X=4
+% X=9
+% X=16
+% X=25

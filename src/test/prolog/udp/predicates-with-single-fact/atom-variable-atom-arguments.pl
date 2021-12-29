@@ -1,30 +1,26 @@
 p(a,X,c).
 
-%FALSE p(a,X,a)
-%FALSE p(c,X,c)
-%FALSE p(x,X,z)
-%FALSE p(x,y,z)
-%FALSE p(a,c,a)
-%FALSE p(c,a,c)
+%FAIL p(a,X,a)
+%FAIL p(c,X,c)
+%FAIL p(x,X,z)
+%FAIL p(x,y,z)
+%FAIL p(a,c,a)
+%FAIL p(c,a,c)
 
 %TRUE p(a,a,c)
 %TRUE p(a,c,c)
 %TRUE p(a,b,c)
 %TRUE p(a,z,c)
 
-%QUERY p(A,B,C)
-%ANSWER 
+%?- p(A,B,C)
 % A=a
 % B=UNINSTANTIATED VARIABLE
 % C=c
-%ANSWER 
 
-%QUERY p(a,Q,c)
-%ANSWER Q=UNINSTANTIATED VARIABLE
+%?- p(a,Q,c)
+% Q=UNINSTANTIATED VARIABLE
 
-%QUERY p(a,Q,c),W=[Q]
-%ANSWER
+%?- p(a,Q,c),W=[Q]
 % Q=UNINSTANTIATED VARIABLE
 % W=[X]
-%ANSWER
 

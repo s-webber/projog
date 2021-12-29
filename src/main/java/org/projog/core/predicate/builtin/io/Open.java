@@ -23,8 +23,8 @@ import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>open(X,Y,Z)</code> - opens a file.
  * <p>

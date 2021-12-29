@@ -25,27 +25,27 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY flag(p(a), X, 2)
- %ANSWER X=0
- %QUERY flag(p(a), X, X*10)
- %ANSWER X=2
- %FALSE flag(p(a), 2, 7)
- %QUERY flag(p(a), X, 5)
- %ANSWER X=20
- %TRUE flag(p(b), 5, 7)
+%?- flag(p(a), X, 2)
+% X=0
+%?- flag(p(a), X, X*10)
+% X=2
+%FAIL flag(p(a), 2, 7)
+%?- flag(p(a), X, 5)
+% X=20
+%TRUE flag(p(b), 5, 7)
 
- %FALSE flag(p, 1, 1)
- %TRUE flag(p, 0, 1)
+%FAIL flag(p, 1, 1)
+%TRUE flag(p, 0, 1)
 
- %QUERY flag(a(a), X, 25)
- %ANSWER X=0
- %QUERY flag(a(b), X, X+1)
- %ANSWER X=25
- %QUERY flag(a(c), X, X+1)
- %ANSWER X=26
- %FALSE flag(a(d), 26, 33)
- %TRUE flag(a(d), 27, 33)
- */
+%?- flag(a(a), X, 25)
+% X=0
+%?- flag(a(b), X, X+1)
+% X=25
+%?- flag(a(c), X, X+1)
+% X=26
+%FAIL flag(a(d), 26, 33)
+%TRUE flag(a(d), 27, 33)
+*/
 /**
  * <code>flag(X,Y,Z)</code> - associates a key with a value.
  * <p>

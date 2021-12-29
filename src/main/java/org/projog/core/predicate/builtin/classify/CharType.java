@@ -32,192 +32,192 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %FALSE char_type(a, digit)
- %TRUE char_type(a, lower)
- %FALSE char_type(a, upper)
- %TRUE char_type(a, alpha)
- %TRUE char_type(a, alnum)
- %FALSE char_type(a, white)
+%FAIL char_type(a, digit)
+%TRUE char_type(a, lower)
+%FAIL char_type(a, upper)
+%TRUE char_type(a, alpha)
+%TRUE char_type(a, alnum)
+%FAIL char_type(a, white)
 
- %FALSE char_type('A', digit)
- %FALSE char_type('A', lower)
- %TRUE char_type('A', upper)
- %TRUE char_type('A', alpha)
- %TRUE char_type('A', alnum)
- %FALSE char_type('A', white)
+%FAIL char_type('A', digit)
+%FAIL char_type('A', lower)
+%TRUE char_type('A', upper)
+%TRUE char_type('A', alpha)
+%TRUE char_type('A', alnum)
+%FAIL char_type('A', white)
 
- %TRUE char_type('1', digit)
- %FALSE char_type('1', lower)
- %FALSE char_type('1', upper)
- %FALSE char_type('1', alpha)
- %TRUE char_type('1', alnum)
- %FALSE char_type('1', white)
+%TRUE char_type('1', digit)
+%FAIL char_type('1', lower)
+%FAIL char_type('1', upper)
+%FAIL char_type('1', alpha)
+%TRUE char_type('1', alnum)
+%FAIL char_type('1', white)
 
- %FALSE char_type(' ', digit)
- %FALSE char_type(' ', lower)
- %FALSE char_type(' ', upper)
- %FALSE char_type(' ', alpha)
- %FALSE char_type(' ', alnum)
- %TRUE char_type(' ', white)
+%FAIL char_type(' ', digit)
+%FAIL char_type(' ', lower)
+%FAIL char_type(' ', upper)
+%FAIL char_type(' ', alpha)
+%FAIL char_type(' ', alnum)
+%TRUE char_type(' ', white)
 
- %FALSE char_type('\\t ', digit)
- %FALSE char_type('\\t', lower)
- %FALSE char_type('\\t', upper)
- %FALSE char_type('\\t', alpha)
- %FALSE char_type('\\t', alnum)
- %TRUE char_type('\\t', white)
+%FAIL char_type('\\t ', digit)
+%FAIL char_type('\\t', lower)
+%FAIL char_type('\\t', upper)
+%FAIL char_type('\\t', alpha)
+%FAIL char_type('\\t', alnum)
+%TRUE char_type('\\t', white)
 
- %QUERY char_type(z, X)
- %ANSWER X=alnum
- %ANSWER X=alpha
- %ANSWER X=lower
- %NO
+%?- char_type(z, X)
+% X=alnum
+% X=alpha
+% X=lower
+%NO
 
- %QUERY char_type(X, digit)
- %ANSWER X=0
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=4
- %ANSWER X=5
- %ANSWER X=6
- %ANSWER X=7
- %ANSWER X=8
- %ANSWER X=9
- %NO
+%?- char_type(X, digit)
+% X=0
+% X=1
+% X=2
+% X=3
+% X=4
+% X=5
+% X=6
+% X=7
+% X=8
+% X=9
+%NO
 
- %QUERY char_type(X, upper)
- %ANSWER X=A
- %ANSWER X=B
- %ANSWER X=C
- %ANSWER X=D
- %ANSWER X=E
- %ANSWER X=F
- %ANSWER X=G
- %ANSWER X=H
- %ANSWER X=I
- %ANSWER X=J
- %ANSWER X=K
- %ANSWER X=L
- %ANSWER X=M
- %ANSWER X=N
- %ANSWER X=O
- %ANSWER X=P
- %ANSWER X=Q
- %ANSWER X=R
- %ANSWER X=S
- %ANSWER X=T
- %ANSWER X=U
- %ANSWER X=V
- %ANSWER X=W
- %ANSWER X=X
- %ANSWER X=Y
- %ANSWER X=Z
- %NO
+%?- char_type(X, upper)
+% X=A
+% X=B
+% X=C
+% X=D
+% X=E
+% X=F
+% X=G
+% X=H
+% X=I
+% X=J
+% X=K
+% X=L
+% X=M
+% X=N
+% X=O
+% X=P
+% X=Q
+% X=R
+% X=S
+% X=T
+% X=U
+% X=V
+% X=W
+% X=X
+% X=Y
+% X=Z
+%NO
 
- %QUERY char_type(X, lower)
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
- %ANSWER X=d
- %ANSWER X=e
- %ANSWER X=f
- %ANSWER X=g
- %ANSWER X=h
- %ANSWER X=i
- %ANSWER X=j
- %ANSWER X=k
- %ANSWER X=l
- %ANSWER X=m
- %ANSWER X=n
- %ANSWER X=o
- %ANSWER X=p
- %ANSWER X=q
- %ANSWER X=r
- %ANSWER X=s
- %ANSWER X=t
- %ANSWER X=u
- %ANSWER X=v
- %ANSWER X=w
- %ANSWER X=x
- %ANSWER X=y
- %ANSWER X=z
- %NO
+%?- char_type(X, lower)
+% X=a
+% X=b
+% X=c
+% X=d
+% X=e
+% X=f
+% X=g
+% X=h
+% X=i
+% X=j
+% X=k
+% X=l
+% X=m
+% X=n
+% X=o
+% X=p
+% X=q
+% X=r
+% X=s
+% X=t
+% X=u
+% X=v
+% X=w
+% X=x
+% X=y
+% X=z
+%NO
 
- %QUERY char_type(X, alnum)
- %ANSWER X=0
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=4
- %ANSWER X=5
- %ANSWER X=6
- %ANSWER X=7
- %ANSWER X=8
- %ANSWER X=9
- %ANSWER X=A
- %ANSWER X=B
- %ANSWER X=C
- %ANSWER X=D
- %ANSWER X=E
- %ANSWER X=F
- %ANSWER X=G
- %ANSWER X=H
- %ANSWER X=I
- %ANSWER X=J
- %ANSWER X=K
- %ANSWER X=L
- %ANSWER X=M
- %ANSWER X=N
- %ANSWER X=O
- %ANSWER X=P
- %ANSWER X=Q
- %ANSWER X=R
- %ANSWER X=S
- %ANSWER X=T
- %ANSWER X=U
- %ANSWER X=V
- %ANSWER X=W
- %ANSWER X=X
- %ANSWER X=Y
- %ANSWER X=Z
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
- %ANSWER X=d
- %ANSWER X=e
- %ANSWER X=f
- %ANSWER X=g
- %ANSWER X=h
- %ANSWER X=i
- %ANSWER X=j
- %ANSWER X=k
- %ANSWER X=l
- %ANSWER X=m
- %ANSWER X=n
- %ANSWER X=o
- %ANSWER X=p
- %ANSWER X=q
- %ANSWER X=r
- %ANSWER X=s
- %ANSWER X=t
- %ANSWER X=u
- %ANSWER X=v
- %ANSWER X=w
- %ANSWER X=x
- %ANSWER X=y
- %ANSWER X=z
- %NO
+%?- char_type(X, alnum)
+% X=0
+% X=1
+% X=2
+% X=3
+% X=4
+% X=5
+% X=6
+% X=7
+% X=8
+% X=9
+% X=A
+% X=B
+% X=C
+% X=D
+% X=E
+% X=F
+% X=G
+% X=H
+% X=I
+% X=J
+% X=K
+% X=L
+% X=M
+% X=N
+% X=O
+% X=P
+% X=Q
+% X=R
+% X=S
+% X=T
+% X=U
+% X=V
+% X=W
+% X=X
+% X=Y
+% X=Z
+% X=a
+% X=b
+% X=c
+% X=d
+% X=e
+% X=f
+% X=g
+% X=h
+% X=i
+% X=j
+% X=k
+% X=l
+% X=m
+% X=n
+% X=o
+% X=p
+% X=q
+% X=r
+% X=s
+% X=t
+% X=u
+% X=v
+% X=w
+% X=x
+% X=y
+% X=z
+%NO
 
- white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail.
- %QUERY white_test
- %OUTPUT
- %>\t<
- %> <
- %
- %OUTPUT
- %NO
- */
+white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail.
+%?- white_test
+%OUTPUT
+%>\t<
+%> <
+%
+%OUTPUT
+%NO
+*/
 /**
  * <code>char_type(X,Y)</code> - classifies characters.
  * <p>

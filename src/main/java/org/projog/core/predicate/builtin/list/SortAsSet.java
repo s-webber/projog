@@ -26,37 +26,35 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %QUERY sort([q,w,e,r,t,y], X)
- %ANSWER X = [e,q,r,t,w,y]
+%?- sort([q,w,e,r,t,y], X)
+% X=[e,q,r,t,w,y]
 
- %TRUE sort([q,w,e,r,t,y], [e,q,r,t,w,y])
- %FALSE sort([q,w,e,r,t,y], [q,w,e,r,t,y])
- %FALSE sort([q,w,e,r,t,y], [e,q,t,r,w,y])
+%TRUE sort([q,w,e,r,t,y], [e,q,r,t,w,y])
+%FAIL sort([q,w,e,r,t,y], [q,w,e,r,t,y])
+%FAIL sort([q,w,e,r,t,y], [e,q,t,r,w,y])
 
- %QUERY sort([q,w,e,r,t,y], [A,B,C,D,E,F])
- %ANSWER
- % A=e
- % B=q
- % C=r
- % D=t
- % E=w
- % F=y
- %ANSWER
+%?- sort([q,w,e,r,t,y], [A,B,C,D,E,F])
+% A=e
+% B=q
+% C=r
+% D=t
+% E=w
+% F=y
 
- %QUERY sort([], X)
- %ANSWER X=[]
+%?- sort([], X)
+% X=[]
 
- %QUERY sort([a], X)
- %ANSWER X=[a]
+%?- sort([a], X)
+% X=[a]
 
- %FALSE sort(a, X)
- %FALSE sort([a,b,c|T], X)
+%FAIL sort(a, X)
+%FAIL sort([a,b,c|T], X)
 
- %QUERY sort([h,e,l,l,o], X)
- %ANSWER X=[e,h,l,o]
+%?- sort([h,e,l,l,o], X)
+% X=[e,h,l,o]
 
- %FALSE sort([h,e,l,l,o], [e,h,l,l,o])
- */
+%FAIL sort([h,e,l,l,o], [e,h,l,l,o])
+*/
 /**
  * <code>sort(X,Y)</code> - sorts a list and removes duplicates.
  * <p>

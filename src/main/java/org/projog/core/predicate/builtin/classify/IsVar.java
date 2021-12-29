@@ -19,20 +19,18 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %FALSE var(abc)
- %FALSE var(1)
- %FALSE var(a(b,c))
- %FALSE var([a,b,c])
- %FALSE X=1, var(X)
- %QUERY var(X)
- %ANSWER X=UNINSTANTIATED VARIABLE
- %QUERY X=Y, var(X)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %TRUE var(_)
- */
+%FAIL var(abc)
+%FAIL var(1)
+%FAIL var(a(b,c))
+%FAIL var([a,b,c])
+%FAIL X=1, var(X)
+%?- var(X)
+% X=UNINSTANTIATED VARIABLE
+%?- X=Y, var(X)
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+%TRUE var(_)
+*/
 /**
  * <code>var(X)</code> - checks that a term is an uninstantiated variable.
  * <p>

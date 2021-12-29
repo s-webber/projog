@@ -25,8 +25,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %LINK prolog-io
- */
+%LINK prolog-io
+*/
 /**
  * <code>ensure_loaded(X)</code> - reads clauses and goals from a file.
  * <p>

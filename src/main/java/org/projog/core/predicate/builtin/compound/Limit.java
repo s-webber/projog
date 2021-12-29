@@ -27,74 +27,74 @@ import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
-%QUERY limit(3, repeat)
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- limit(3, repeat)
+%YES
+%YES
+%YES
 
-%FALSE limit(-1, true)
-%FALSE limit(0, true)
+%FAIL limit(-1, true)
+%FAIL limit(0, true)
 %TRUE limit(1, true)
 %TRUE limit(2, true)
 
-%FALSE limit(-1, fail)
-%FALSE limit(0, fail)
-%FALSE limit(1, fail)
-%FALSE limit(2, fail)
+%FAIL limit(-1, fail)
+%FAIL limit(0, fail)
+%FAIL limit(1, fail)
+%FAIL limit(2, fail)
 
 %TRUE assert(p(a)), assert(p(b)), assert(p(c))
 
-%FALSE limit(-1, p(X))
+%FAIL limit(-1, p(X))
 
-%FALSE limit(0, p(X))
+%FAIL limit(0, p(X))
 
-%QUERY limit(1, p(X))
-%ANSWER X=a
+%?- limit(1, p(X))
+% X=a
 
-%QUERY limit(2, p(X))
-%ANSWER X=a
-%ANSWER X=b
+%?- limit(2, p(X))
+% X=a
+% X=b
 
-%QUERY limit(3, p(X))
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=c
+%?- limit(3, p(X))
+% X=a
+% X=b
+% X=c
 
-%QUERY limit(4, p(X))
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=c
+%?- limit(4, p(X))
+% X=a
+% X=b
+% X=c
 
-%QUERY X=a, limit(3, p(X))
-%ANSWER X=a
+%?- X=a, limit(3, p(X))
+% X=a
 
-%QUERY X=b, limit(3, p(X))
-%ANSWER X=b
+%?- X=b, limit(3, p(X))
+% X=b
 
-%QUERY X=c, limit(3, p(X))
-%ANSWER X=c
+%?- X=c, limit(3, p(X))
+% X=c
 
-%FALSE X=d, limit(3, p(X))
+%FAIL X=d, limit(3, p(X))
 
-%FALSE X=fail, limit(3, X)
+%FAIL X=fail, limit(3, X)
 
-%QUERY X=true, limit(3, X)
-%ANSWER X=true
+%?- X=true, limit(3, X)
+% X=true
 
-%QUERY X=repeat, limit(3, X)
-%ANSWER X=repeat
-%ANSWER X=repeat
-%ANSWER X=repeat
+%?- X=repeat, limit(3, X)
+% X=repeat
+% X=repeat
+% X=repeat
 
-%QUERY limit(a, true)
+%?- limit(a, true)
 %ERROR Expected Numeric but got: ATOM with value: a
-%QUERY limit(X, true)
+%?- limit(X, true)
 %ERROR Expected Numeric but got: VARIABLE with value: X
-%QUERY limit(3, X)
+%?- limit(3, X)
 %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
-%QUERY limit(3, 999)
+%?- limit(3, 999)
 %ERROR Expected an atom or a predicate but got a INTEGER with value: 999
-%FALSE limit(3, unknown_predicate)
+%FAIL limit(3, unknown_predicate)
 
 p(a,1).
 p(a,2).
@@ -112,23 +112,23 @@ p(d(3),2).
 p(d(4),2).
 p(d(5),5).
 
-%QUERY limit(3, p(a,X))
-%ANSWER X=1
-%ANSWER X=2
-%ANSWER X=3
+%?- limit(3, p(a,X))
+% X=1
+% X=2
+% X=3
 
-%QUERY limit(6, p(X,2))
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=d(2)
-%ANSWER X=d(3)
-%ANSWER X=d(4)
+%?- limit(6, p(X,2))
+% X=a
+% X=b
+% X=d(2)
+% X=d(3)
+% X=d(4)
 
-%QUERY limit(7, p(d(X),X))
-%ANSWER X=1
-%ANSWER X=2
-%ANSWER X=5
- */
+%?- limit(7, p(d(X),X))
+% X=1
+% X=2
+% X=5
+*/
 /**
  * <code>limit(N, X)</code> - calls the goal represented by a term a maximum number of times.
  * <p>

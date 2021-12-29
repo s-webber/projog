@@ -1,114 +1,98 @@
-%FALSE p(X,Y,Z)
+%FAIL p(X,Y,Z)
 
 %TRUE assert(p(a,b,c))
 
-%QUERY p(X,Y,Z)
-%ANSWER
+%?- p(X,Y,Z)
 % X=a
 % Y=b
 % Z=c
-%ANSWER
 
 %TRUE p(a,b,c)
-%FALSE p(z,b,c)
-%FALSE p(a,z,c)
-%FALSE p(a,b,z)
+%FAIL p(z,b,c)
+%FAIL p(a,z,c)
+%FAIL p(a,b,z)
 
 %TRUE assert(p(1,2,3))
 %TRUE assert(p(x,y,z))
 
 %TRUE p(a,b,c)
 %TRUE_NO retract(p(a,b,c))
-%FALSE p(a,b,c)
+%FAIL p(a,b,c)
 
 %TRUE p(x,y,z)
 %TRUE retract(p(x,y,z))
-%FALSE p(x,y,z)
+%FAIL p(x,y,z)
 
 %TRUE p(1,2,3)
 %TRUE retract(p(1,2,3))
-%FALSE p(1,2,3)
+%FAIL p(1,2,3)
 
 %TRUE assert(p(a,b,c))
 %TRUE assert(p(1,2,3))
 %TRUE assert(p(x,y,z))
 
-%QUERY p(X,Y,Z)
-%ANSWER
+%?- p(X,Y,Z)
 % X=a
 % Y=b
 % Z=c
-%ANSWER
-%ANSWER
 % X=1
 % Y=2
 % Z=3
-%ANSWER
-%ANSWER
 % X=x
 % Y=y
 % Z=z
-%ANSWER
 
 %TRUE p(a,b,c)
 %TRUE p(1,2,3)
 %TRUE p(x,y,z)
-%FALSE p(a,2,3)
-%FALSE p(a,y,z)
-%FALSE p(1,b,c)
-%FALSE p(1,y,z)
-%FALSE p(x,b,c)
-%FALSE p(x,2,3)
-%FALSE p(a,X,3)
-%FALSE p(a,y,X)
-%FALSE p(1,X,c)
-%FALSE p(1,y,X)
-%FALSE p(x,X,c)
-%FALSE p(x,2,X)
-%FALSE p(a,X,X)
-%FALSE p(1,X,X)
-%FALSE p(x,X,X)
-%FALSE p(X,b,X)
-%FALSE p(X,2,X)
-%FALSE p(X,y,X)
-%FALSE p(X,X,c)
-%FALSE p(X,X,3)
-%FALSE p(X,X,z)
+%FAIL p(a,2,3)
+%FAIL p(a,y,z)
+%FAIL p(1,b,c)
+%FAIL p(1,y,z)
+%FAIL p(x,b,c)
+%FAIL p(x,2,3)
+%FAIL p(a,X,3)
+%FAIL p(a,y,X)
+%FAIL p(1,X,c)
+%FAIL p(1,y,X)
+%FAIL p(x,X,c)
+%FAIL p(x,2,X)
+%FAIL p(a,X,X)
+%FAIL p(1,X,X)
+%FAIL p(x,X,X)
+%FAIL p(X,b,X)
+%FAIL p(X,2,X)
+%FAIL p(X,y,X)
+%FAIL p(X,X,c)
+%FAIL p(X,X,3)
+%FAIL p(X,X,z)
 
-%QUERY p(a,X,Y)
-%ANSWER
+%?- p(a,X,Y)
 % X=b
 % Y=c
-%ANSWER
 
-%QUERY p(1,X,Y)
-%ANSWER
+%?- p(1,X,Y)
 % X=2
 % Y=3
-%ANSWER
 
-%QUERY p(x,X,Y)
-%ANSWER
+%?- p(x,X,Y)
 % X=y
 % Y=z
-%ANSWER
 
-%QUERY p(X,b,c)
-%ANSWER X=a
+%?- p(X,b,c)
+% X=a
 %NO
 
-%QUERY p(X,2,3)
-%ANSWER X=1
+%?- p(X,2,3)
+% X=1
 %NO
 
-%QUERY p(X,y,z)
-%ANSWER X=x
+%?- p(X,y,z)
+% X=x
 
-%QUERY assert(p(q,X,Y))
-%ANSWER
+%?- assert(p(q,X,Y))
 % X=UNINSTANTIATED VARIABLE
 % Y=UNINSTANTIATED VARIABLE
-%ANSWER
 
 %TRUE p(a,b,c)
 %TRUE p(1,2,3)
@@ -116,8 +100,8 @@
 %TRUE p(q,w,e)
 %TRUE p(q,2,3)
 
-%QUERY assert(p(w,X,X))
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- assert(p(w,X,X))
+% X=UNINSTANTIATED VARIABLE
 
 %TRUE p(a,b,c)
 %TRUE p(1,2,3)
@@ -125,16 +109,16 @@
 %TRUE p(q,w,e)
 %TRUE p(q,2,3)
 %TRUE p(w,2,2)
-%FALSE p(w,2,3)
+%FAIL p(w,2,3)
 
-%QUERY p(w,7,X)
-%ANSWER X=7
+%?- p(w,7,X)
+% X=7
 
-%QUERY p(w,X,9)
-%ANSWER X=9
+%?- p(w,X,9)
+% X=9
 
-%QUERY assert(p(X,y,u))
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- assert(p(X,y,u))
+% X=UNINSTANTIATED VARIABLE
 
 %TRUE_NO p(a,b,c)
 %TRUE_NO p(1,2,3)
@@ -145,24 +129,24 @@
 %TRUE_NO p(w,1,1)
 %TRUE p(z,y,u)
 
-%QUERY retract(p(X,y,u))
-%ANSWER X=q
-%ANSWER X=UNINSTANTIATED VARIABLE
+%?- retract(p(X,y,u))
+% X=q
+% X=UNINSTANTIATED VARIABLE
 
 %TRUE_NO p(a,b,c)
 %TRUE_NO p(1,2,3)
 %TRUE_NO p(x,y,z)
 %TRUE p(w,1,1)
-%FALSE p(q,w,e)
-%FALSE p(q,e,e)
-%FALSE p(X,y,u)
+%FAIL p(q,w,e)
+%FAIL p(q,e,e)
+%FAIL p(X,y,u)
 
 %TRUE retract(p(w,1,1))
-%FALSE p(w,1,1)
+%FAIL p(w,1,1)
 %TRUE retract(p(x,y,z))
-%FALSE p(x,y,z)
+%FAIL p(x,y,z)
 %TRUE retract(p(1,2,3))
-%FALSE p(1,2,3)
+%FAIL p(1,2,3)
 
 %TRUE p(a,b,c)
 
@@ -173,12 +157,12 @@
 %TRUE retract(p(d,f,g))
 %TRUE retract(p(a,b,c))
 
-%FALSE p(X,Y,Z)
+%FAIL p(X,Y,Z)
 
 %TRUE assert(p(t,y,u))
 %TRUE assert(p(h,j,k))
 
 %TRUE p(t,y,u)
 %TRUE p(h,j,k)
-%FALSE p(a,b,c)
+%FAIL p(a,b,c)
 

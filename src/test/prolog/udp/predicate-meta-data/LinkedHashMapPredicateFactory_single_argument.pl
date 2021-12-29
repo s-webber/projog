@@ -8,81 +8,81 @@ p(d(2)).
 p(d(3)).
 p(e).
 
-%QUERY meta_data(p(_), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p(_), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY p(X)
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=b
-%ANSWER X=c
-%ANSWER X=d(1)
-%ANSWER X=d(2)
-%ANSWER X=d(3)
-%ANSWER X=e
+%?- p(X)
+% X=a
+% X=b
+% X=b
+% X=c
+% X=d(1)
+% X=d(2)
+% X=d(3)
+% X=e
 
-%QUERY meta_data(p(a), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.SingleNonRetryableRulePredicateFactory
-%ANSWER X = processed_isRetryable : false
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p(a), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.SingleNonRetryableRulePredicateFactory
+% X=processed_isRetryable : false
+% X=processed_isAlwaysCutOnBacktrack : false
 
 %TRUE p(a)
 
-%QUERY meta_data(p(b), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.SingleRetryableRulePredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p(b), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.SingleRetryableRulePredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY p(b)
-%ANSWER/
-%ANSWER/
+%?- p(b)
+%YES
+%YES
 
-%QUERY meta_data(p(z), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.NeverSucceedsPredicateFactory
-%ANSWER X = processed_isRetryable : false
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p(z), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.NeverSucceedsPredicateFactory
+% X=processed_isRetryable : false
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%FALSE p(z)
+%FAIL p(z)
 
-%QUERY meta_data(p(d(_)), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p(d(_)), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY p(d(X))
-%ANSWER X=1
-%ANSWER X=2
-%ANSWER X=3
+%?- p(d(X))
+% X=1
+% X=2
+% X=3
 

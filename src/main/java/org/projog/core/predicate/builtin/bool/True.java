@@ -18,8 +18,8 @@ package org.projog.core.predicate.builtin.bool;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 
 /* TEST
- %TRUE true
- */
+%TRUE true
+*/
 /**
  * <code>true</code> - always succeeds.
  * <p>

@@ -21,30 +21,30 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY write( 1+1 )
- %OUTPUT 1 + 1
- %ANSWER/
+%?- write( 1+1 )
+%OUTPUT 1 + 1
+%YES
 
- %QUERY write( '+'(1,1) )
- %OUTPUT 1 + 1
- %ANSWER/
+%?- write( '+'(1,1) )
+%OUTPUT 1 + 1
+%YES
 
- %QUERY write(hello), nl, write(world), nl
- %OUTPUT
- %hello
- %world
- %
- %OUTPUT
- %ANSWER/
+%?- write(hello), nl, write(world), nl
+%OUTPUT
+%hello
+%world
+%
+%OUTPUT
+%YES
 
- %QUERY writeln(hello), writeln(world)
- %OUTPUT
- %hello
- %world
- %
- %OUTPUT
- %ANSWER/
-  */
+%?- writeln(hello), writeln(world)
+%OUTPUT
+%hello
+%world
+%
+%OUTPUT
+%YES
+*/
 /**
  * <code>write(X)</code> - writes a term to the output stream.
  * <p>

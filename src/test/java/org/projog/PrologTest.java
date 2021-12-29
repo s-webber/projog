@@ -32,12 +32,12 @@ import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 import org.projog.test.ProjogTestExtractor;
 import org.projog.test.ProjogTestExtractorConfig;
 import org.projog.test.ProjogTestRunner;
-import org.projog.test.ProjogTestRunner.ProjogSupplier;
 import org.projog.test.ProjogTestRunner.TestResults;
+import org.projog.test.ProjogTestRunnerConfig;
 
 /** Uses {@code projog-test} to run Prolog code and compare the results against expectations. */
 public class PrologTest {
-   private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog");
+   private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog/dont_commit");
    private static final String BUILTIN_PREDICATES_PACKAGE = "org.projog.core.predicate.builtin";
    private static final File EXTRACTED_PREDICATES_TESTS_DIR = new File("target/prolog-predicate-tests-extracted-from-java");
    private static final String BUILTIN_OPERATORS_PACKAGE = "org.projog.core.math.builtin";
@@ -64,13 +64,14 @@ public class PrologTest {
    @Test
    public void predicateWithManyClauses() throws FileNotFoundException {
       File source = new File("target/predicateTooLargeToCompileToJava.pl");
+      int numClauses = 2000;
       try (PrintWriter pw = new PrintWriter(source)) {
-         for (int i = 1; i <= 2000; i++) {
+         for (int i = 1; i <= numClauses; i++) {
             pw.println("test(X,Y):-Y is X+" + i + ".");
          }
-         pw.println("%QUERY test(7,Y)");
-         for (int i = 1; i <= 2000; i++) {
-            pw.println("%ANSWER Y=" + (7 + i));
+         pw.println("%?- test(7,Y)");
+         for (int i = 1; i <= numClauses; i++) {
+            pw.println("% Y=" + (7 + i));
          }
       }
 
@@ -112,9 +113,9 @@ public class PrologTest {
       };
 
       // assert tests pass
-      assertSuccess(source, new ProjogSupplier() {
+      assertSuccess(source, new ProjogTestRunnerConfig() {
          @Override
-         public Projog get() {
+         public Projog createProjog() {
             return new Projog(listener);
          }
       });
@@ -126,15 +127,15 @@ public class PrologTest {
    }
 
    private void assertSuccess(File scriptsDir) {
-      assertSuccess(scriptsDir, new ProjogSupplier() {
+      assertSuccess(scriptsDir, new ProjogTestRunnerConfig() {
          @Override
-         public Projog get() {
-            return new Projog();
+         public boolean isParallel() {
+            return true;
          }
       });
    }
 
-   private void assertSuccess(File scriptsDir, ProjogSupplier projogSupplier) {
+   private void assertSuccess(File scriptsDir, ProjogTestRunnerConfig projogSupplier) {
       TestResults results = ProjogTestRunner.runTests(scriptsDir, projogSupplier);
       System.out.println(results.getSummary());
       results.assertSuccess();

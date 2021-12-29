@@ -18,30 +18,30 @@ package org.projog.core.math.builtin;
 import org.projog.core.math.AbstractBinaryIntegerArithmeticOperator;
 
 /* TEST
- %QUERY X is 3 /\ 3
- %ANSWER X=3
- 
- %QUERY X is 3 /\ 7
- %ANSWER X=3
- 
- %QUERY X is 3 /\ 6
- %ANSWER X=2
+%?- X is 3 /\ 3
+% X=3
 
- %QUERY X is 3 /\ 8
- %ANSWER X=0
+%?- X is 3 /\ 7
+% X=3
 
- %QUERY X is 43 /\ 27
- %ANSWER X=11
+%?- X is 3 /\ 6
+% X=2
 
- %QUERY X is 27 /\ 43
- %ANSWER X=11
+%?- X is 3 /\ 8
+% X=0
 
- %QUERY X is 43 /\ 0
- %ANSWER X=0
+%?- X is 43 /\ 27
+% X=11
 
- %QUERY X is 0 /\ 0
- %ANSWER X=0
- */
+%?- X is 27 /\ 43
+% X=11
+
+%?- X is 43 /\ 0
+% X=0
+
+%?- X is 0 /\ 0
+% X=0
+*/
 /**
  * <code>/\</code> - performs bitwise addition.
  */

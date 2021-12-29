@@ -36,351 +36,299 @@ import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 /* TEST
- %TRUE maplist(atom, [])
- %TRUE maplist(atom, [a])
- %FALSE maplist(atom, [X])
- %FALSE maplist(atom, [1])
- %TRUE maplist(integer, [1])
+%TRUE maplist(atom, [])
+%TRUE maplist(atom, [a])
+%FAIL maplist(atom, [X])
+%FAIL maplist(atom, [1])
+%TRUE maplist(integer, [1])
 
- %TRUE maplist(atom, [a,a,a])
- %TRUE maplist(atom, [a,b,c])
- %FALSE maplist(atom, [1,b,c])
- %FALSE maplist(atom, [a,2,c])
- %FALSE maplist(atom, [a,b,3])
- %FALSE maplist(atom, [a,2,3])
- %FALSE maplist(atom, [1,b,3])
- %FALSE maplist(atom, [1,2,c])
- %FALSE maplist(atom, [1,2,3])
+%TRUE maplist(atom, [a,a,a])
+%TRUE maplist(atom, [a,b,c])
+%FAIL maplist(atom, [1,b,c])
+%FAIL maplist(atom, [a,2,c])
+%FAIL maplist(atom, [a,b,3])
+%FAIL maplist(atom, [a,2,3])
+%FAIL maplist(atom, [1,b,3])
+%FAIL maplist(atom, [1,2,c])
+%FAIL maplist(atom, [1,2,3])
 
- %FALSE maplist(>(0), [3,4,2,1])
- %FALSE maplist(<(5), [3,4,2,1])
- %TRUE maplist(<(0), [3,4,2,1])
- %TRUE maplist(>(5), [3,4,2,1])
- %FALSE maplist(>(5), [3,4,5,2,1])
- %TRUE maplist(>=(5), [3,4,5,2,1])
- %FALSE maplist(>=(5), [3,4,5,2,1,6])
- %FALSE maplist(>=(5), [6,3,4,5,2,1])
- %FALSE maplist(>=(5), [3,4,5,6,2,1])
+%FAIL maplist(>(0), [3,4,2,1])
+%FAIL maplist(<(5), [3,4,2,1])
+%TRUE maplist(<(0), [3,4,2,1])
+%TRUE maplist(>(5), [3,4,2,1])
+%FAIL maplist(>(5), [3,4,5,2,1])
+%TRUE maplist(>=(5), [3,4,5,2,1])
+%FAIL maplist(>=(5), [3,4,5,2,1,6])
+%FAIL maplist(>=(5), [6,3,4,5,2,1])
+%FAIL maplist(>=(5), [3,4,5,6,2,1])
 
- %FALSE maplist(=(p(W)), [p(1),p(2),p(3)])
+%FAIL maplist(=(p(W)), [p(1),p(2),p(3)])
 
- % First argument must be an atom or structure. Second argument must be a list.
- %FALSE maplist(X, [])
- %FALSE maplist(atom, X)
+% First argument must be an atom or structure. Second argument must be a list.
+%FAIL maplist(X, [])
+%FAIL maplist(atom, X)
 
- % maplist/3 applies the goal to pairs of elements from two lists.
- %TRUE maplist(=, [1,2,3], [1,2,3])
- %FALSE maplist(=, [1,2,3], [4,5,6])
- %FALSE maplist(=, [1,2,3], [1,3,2])
- %QUERY maplist(=, [X,2,3], [1,Y,Z])
- %ANSWER
- % X=1
- % Y=2
- % Z=3
- %ANSWER
- %QUERY maplist(=, [1,2,3], X)
- %ANSWER X=[1,2,3]
- %QUERY maplist(=, X, [1,2,3])
- %ANSWER X=[1,2,3]
+% maplist/3 applies the goal to pairs of elements from two lists.
+%TRUE maplist(=, [1,2,3], [1,2,3])
+%FAIL maplist(=, [1,2,3], [4,5,6])
+%FAIL maplist(=, [1,2,3], [1,3,2])
+%?- maplist(=, [X,2,3], [1,Y,Z])
+% X=1
+% Y=2
+% Z=3
+%?- maplist(=, [1,2,3], X)
+% X=[1,2,3]
+%?- maplist(=, X, [1,2,3])
+% X=[1,2,3]
 
- % Note: "checklist" is a synonym for "maplist".
- %TRUE checklist(atom, [a,b,c])
- %FALSE checklist(atom, [a,2,c])
- %TRUE checklist(=, [1,2,3], [1,2,3])
- %FALSE checklist(=, [1,2,3], [4,5,6])
+% Note: "checklist" is a synonym for "maplist".
+%TRUE checklist(atom, [a,b,c])
+%FAIL checklist(atom, [a,2,c])
+%TRUE checklist(=, [1,2,3], [1,2,3])
+%FAIL checklist(=, [1,2,3], [4,5,6])
 
- p(a,X,Y) :- X=Y.
- p(b,1,1).
- p(b,2,2).
- p(b,3,4).
- p(c,1,1).
- p(c,2,2).
- p(c,3,4).
- p(c,1,1).
- p(c,2,2).
- p(c,3,4).
- %TRUE maplist(p(a), [1,2,3], [1,2,3])
- %FALSE maplist(p(a), [1,2,3], [1,2,4])
- %FALSE maplist(p(b), [1,2,3], [1,2,3])
- %TRUE_NO maplist(p(b), [1,2,3], [1,2,4])
- %QUERY maplist(p(c), [1,2,3], [1,2,4])
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %NO
- %FALSE maplist(p(z), [1,2,3], [1,2,3])
- %TRUE maplist(p(z), [], [])
- %QUERY maplist(p(c,1), [1,1])
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
+p(a,X,Y) :- X=Y.
+p(b,1,1).
+p(b,2,2).
+p(b,3,4).
+p(c,1,1).
+p(c,2,2).
+p(c,3,4).
+p(c,1,1).
+p(c,2,2).
+p(c,3,4).
+%TRUE maplist(p(a), [1,2,3], [1,2,3])
+%FAIL maplist(p(a), [1,2,3], [1,2,4])
+%FAIL maplist(p(b), [1,2,3], [1,2,3])
+%TRUE_NO maplist(p(b), [1,2,3], [1,2,4])
+%?- maplist(p(c), [1,2,3], [1,2,4])
+%YES
+%YES
+%YES
+%YES
+%YES
+%YES
+%YES
+%YES
+%NO
+%FAIL maplist(p(z), [1,2,3], [1,2,3])
+%TRUE maplist(p(z), [], [])
+%?- maplist(p(c,1), [1,1])
+%YES
+%YES
+%YES
+%YES
 
- %QUERY maplist(append, [[a,b],[c,d]], [[1,2],[3,4]], X)
- %ANSWER X=[[a,b,1,2],[c,d,3,4]]
+%?- maplist(append, [[a,b],[c,d]], [[1,2],[3,4]], X)
+% X=[[a,b,1,2],[c,d,3,4]]
 
- %QUERY maplist(append, X, Y, [[a,b,c,d],[1,2,3,4]])
- %ANSWER
- % X = [[],[]]
- % Y = [[a,b,c,d],[1,2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[],[1]]
- % Y = [[a,b,c,d],[2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[],[1,2]]
- % Y = [[a,b,c,d],[3,4]]
- %ANSWER
- %ANSWER
- % X = [[],[1,2,3]]
- % Y = [[a,b,c,d],[4]]
- %ANSWER
- %ANSWER
- % X = [[],[1,2,3,4]]
- % Y = [[a,b,c,d],[]]
- %ANSWER
- %ANSWER
- % X = [[a],[]]
- % Y = [[b,c,d],[1,2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a],[1]]
- % Y = [[b,c,d],[2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a],[1,2]]
- % Y = [[b,c,d],[3,4]]
- %ANSWER
- %ANSWER
- % X = [[a],[1,2,3]]
- % Y = [[b,c,d],[4]]
- %ANSWER
- %ANSWER
- % X = [[a],[1,2,3,4]]
- % Y = [[b,c,d],[]]
- %ANSWER
- %ANSWER
- % X = [[a,b],[]]
- % Y = [[c,d],[1,2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b],[1]]
- % Y = [[c,d],[2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b],[1,2]]
- % Y = [[c,d],[3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b],[1,2,3]]
- % Y = [[c,d],[4]]
- %ANSWER
- %ANSWER
- % X = [[a,b],[1,2,3,4]]
- % Y = [[c,d],[]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c],[]]
- % Y = [[d],[1,2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c],[1]]
- % Y = [[d],[2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c],[1,2]]
- % Y = [[d],[3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c],[1,2,3]]
- % Y = [[d],[4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c],[1,2,3,4]]
- % Y = [[d],[]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c,d],[]]
- % Y = [[],[1,2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c,d],[1]]
- % Y = [[],[2,3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c,d],[1,2]]
- % Y = [[],[3,4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c,d],[1,2,3]]
- % Y = [[],[4]]
- %ANSWER
- %ANSWER
- % X = [[a,b,c,d],[1,2,3,4]]
- % Y = [[],[]]
- %ANSWER
+%?- maplist(append, X, Y, [[a,b,c,d],[1,2,3,4]])
+% X=[[],[]]
+% Y=[[a,b,c,d],[1,2,3,4]]
+% X=[[],[1]]
+% Y=[[a,b,c,d],[2,3,4]]
+% X=[[],[1,2]]
+% Y=[[a,b,c,d],[3,4]]
+% X=[[],[1,2,3]]
+% Y=[[a,b,c,d],[4]]
+% X=[[],[1,2,3,4]]
+% Y=[[a,b,c,d],[]]
+% X=[[a],[]]
+% Y=[[b,c,d],[1,2,3,4]]
+% X=[[a],[1]]
+% Y=[[b,c,d],[2,3,4]]
+% X=[[a],[1,2]]
+% Y=[[b,c,d],[3,4]]
+% X=[[a],[1,2,3]]
+% Y=[[b,c,d],[4]]
+% X=[[a],[1,2,3,4]]
+% Y=[[b,c,d],[]]
+% X=[[a,b],[]]
+% Y=[[c,d],[1,2,3,4]]
+% X=[[a,b],[1]]
+% Y=[[c,d],[2,3,4]]
+% X=[[a,b],[1,2]]
+% Y=[[c,d],[3,4]]
+% X=[[a,b],[1,2,3]]
+% Y=[[c,d],[4]]
+% X=[[a,b],[1,2,3,4]]
+% Y=[[c,d],[]]
+% X=[[a,b,c],[]]
+% Y=[[d],[1,2,3,4]]
+% X=[[a,b,c],[1]]
+% Y=[[d],[2,3,4]]
+% X=[[a,b,c],[1,2]]
+% Y=[[d],[3,4]]
+% X=[[a,b,c],[1,2,3]]
+% Y=[[d],[4]]
+% X=[[a,b,c],[1,2,3,4]]
+% Y=[[d],[]]
+% X=[[a,b,c,d],[]]
+% Y=[[],[1,2,3,4]]
+% X=[[a,b,c,d],[1]]
+% Y=[[],[2,3,4]]
+% X=[[a,b,c,d],[1,2]]
+% Y=[[],[3,4]]
+% X=[[a,b,c,d],[1,2,3]]
+% Y=[[],[4]]
+% X=[[a,b,c,d],[1,2,3,4]]
+% Y=[[],[]]
 
 nine_arg_predicate(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
-  write(V1), write(' '),
-  write(V2), write(' '),
-  write(V3), write(' '),
-  write(V4), write(' '),
-  write(V5), write(' '),
-  write(V6), write(' '),
-  write(V7), write(' '),
-  write(V8), write(' '),
-  write(V9), nl.
+ write(V1), write(' '),
+ write(V2), write(' '),
+ write(V3), write(' '),
+ write(V4), write(' '),
+ write(V5), write(' '),
+ write(V6), write(' '),
+ write(V7), write(' '),
+ write(V8), write(' '),
+ write(V9), nl.
 
-%QUERY maplist(nine_arg_predicate(1,2,3,4,5,6,7,8),[q,w])
+%?- maplist(nine_arg_predicate(1,2,3,4,5,6,7,8),[q,w])
 %OUTPUT
 %1 2 3 4 5 6 7 8 q
 %1 2 3 4 5 6 7 8 w
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2,3,4,5,6,7),[q,w],[e,r])
+%?- maplist(nine_arg_predicate(1,2,3,4,5,6,7),[q,w],[e,r])
 %OUTPUT
 %1 2 3 4 5 6 7 q e
 %1 2 3 4 5 6 7 w r
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2,3,4,5,6),[q,w],[e,r],[t,y])
+%?- maplist(nine_arg_predicate(1,2,3,4,5,6),[q,w],[e,r],[t,y])
 %OUTPUT
 %1 2 3 4 5 6 q e t
 %1 2 3 4 5 6 w r y
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2,3,4,5),[q,w],[e,r],[t,y],[u,i])
+%?- maplist(nine_arg_predicate(1,2,3,4,5),[q,w],[e,r],[t,y],[u,i])
 %OUTPUT
 %1 2 3 4 5 q e t u
 %1 2 3 4 5 w r y i
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2,3,4),[q,w],[e,r],[t,y],[u,i],[o,p])
+%?- maplist(nine_arg_predicate(1,2,3,4),[q,w],[e,r],[t,y],[u,i],[o,p])
 %OUTPUT
 %1 2 3 4 q e t u o
 %1 2 3 4 w r y i p
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2,3),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s])
+%?- maplist(nine_arg_predicate(1,2,3),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s])
 %OUTPUT
 %1 2 3 q e t u o a
 %1 2 3 w r y i p s
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1,2),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f])
+%?- maplist(nine_arg_predicate(1,2),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f])
 %OUTPUT
 %1 2 q e t u o a d
 %1 2 w r y i p s f
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate(1),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h])
+%?- maplist(nine_arg_predicate(1),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h])
 %OUTPUT
 %1 q e t u o a d g
 %1 w r y i p s f h
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY maplist(nine_arg_predicate,[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h],[j,k])
+%?- maplist(nine_arg_predicate,[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h],[j,k])
 %OUTPUT
 %q e t u o a d g j
 %w r y i p s f h k
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3,4,5,6,7,8),[q,w])
+%?- checklist(nine_arg_predicate(1,2,3,4,5,6,7,8),[q,w])
 %OUTPUT
 %1 2 3 4 5 6 7 8 q
 %1 2 3 4 5 6 7 8 w
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3,4,5,6,7),[q,w],[e,r])
+%?- checklist(nine_arg_predicate(1,2,3,4,5,6,7),[q,w],[e,r])
 %OUTPUT
 %1 2 3 4 5 6 7 q e
 %1 2 3 4 5 6 7 w r
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3,4,5,6),[q,w],[e,r],[t,y])
+%?- checklist(nine_arg_predicate(1,2,3,4,5,6),[q,w],[e,r],[t,y])
 %OUTPUT
 %1 2 3 4 5 6 q e t
 %1 2 3 4 5 6 w r y
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3,4,5),[q,w],[e,r],[t,y],[u,i])
+%?- checklist(nine_arg_predicate(1,2,3,4,5),[q,w],[e,r],[t,y],[u,i])
 %OUTPUT
 %1 2 3 4 5 q e t u
 %1 2 3 4 5 w r y i
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3,4),[q,w],[e,r],[t,y],[u,i],[o,p])
+%?- checklist(nine_arg_predicate(1,2,3,4),[q,w],[e,r],[t,y],[u,i],[o,p])
 %OUTPUT
 %1 2 3 4 q e t u o
 %1 2 3 4 w r y i p
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2,3),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s])
+%?- checklist(nine_arg_predicate(1,2,3),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s])
 %OUTPUT
 %1 2 3 q e t u o a
 %1 2 3 w r y i p s
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1,2),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f])
+%?- checklist(nine_arg_predicate(1,2),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f])
 %OUTPUT
 %1 2 q e t u o a d
 %1 2 w r y i p s f
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate(1),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h])
+%?- checklist(nine_arg_predicate(1),[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h])
 %OUTPUT
 %1 q e t u o a d g
 %1 w r y i p s f h
 %
 %OUTPUT
-%ANSWER/
+%YES
 
-%QUERY checklist(nine_arg_predicate,[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h],[j,k])
+%?- checklist(nine_arg_predicate,[q,w],[e,r],[t,y],[u,i],[o,p],[a,s],[d,f],[g,h],[j,k])
 %OUTPUT
 %q e t u o a d g j
 %w r y i p s f h k
 %
 %OUTPUT
-%ANSWER/
- */
+%YES
+*/
 /**
  * <code>maplist(X,Y)</code> / <code>maplist(X,Y,Z)</code> - determines if a goal succeeds against elements of a list.
  * <p>

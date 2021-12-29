@@ -23,25 +23,25 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- % Add three records to the recorded database.
- %TRUE recordz(k,a,_), recordz(k,b,_), recordz(k,c,_)
+% Add three records to the recorded database.
+%TRUE recordz(k,a,_), recordz(k,b,_), recordz(k,c,_)
 
- % Confirm the records have been added.
- %QUERY recorded(k,X)
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
+% Confirm the records have been added.
+%?- recorded(k,X)
+% X=a
+% X=b
+% X=c
 
- % Erase (i.e. remove) a record.
- %QUERY recorded(k,b,X), erase(X)
- %ANSWER X=1
- %NO
+% Erase (i.e. remove) a record.
+%?- recorded(k,b,X), erase(X)
+% X=1
+%NO
 
- % Confirm the record has been removed.
- %QUERY recorded(k,X)
- %ANSWER X=a
- %ANSWER X=c
- */
+% Confirm the record has been removed.
+%?- recorded(k,X)
+% X=a
+% X=c
+*/
 /**
  * <code>erase(X)</code> - removes a record from the recorded database.
  * <p>

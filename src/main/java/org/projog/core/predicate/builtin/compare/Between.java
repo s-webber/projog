@@ -27,45 +27,45 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE between(1, 5, 1)
- %TRUE between(1, 5, 2)
- %TRUE between(1, 5, 3)
- %TRUE between(1, 5, 4)
- %TRUE between(1, 5, 5)
+%TRUE between(1, 5, 1)
+%TRUE between(1, 5, 2)
+%TRUE between(1, 5, 3)
+%TRUE between(1, 5, 4)
+%TRUE between(1, 5, 5)
 
- %FALSE between(1, 5, 0)
- %FALSE between(1, 5, -1)
- %FALSE between(1, 5, -9223372036854775808)
+%FAIL between(1, 5, 0)
+%FAIL between(1, 5, -1)
+%FAIL between(1, 5, -9223372036854775808)
 
- %FALSE between(1, 5, 6)
- %FALSE between(1, 5, 7)
- %FALSE between(1, 5, 9223372036854775807)
+%FAIL between(1, 5, 6)
+%FAIL between(1, 5, 7)
+%FAIL between(1, 5, 9223372036854775807)
 
- %TRUE between(-9223372036854775808, 9223372036854775807, -9223372036854775808)
- %TRUE between(-9223372036854775808, 9223372036854775807, -1)
- %TRUE between(-9223372036854775808, 9223372036854775807, 0)
- %TRUE between(-9223372036854775808, 9223372036854775807, 1)
- %TRUE between(-9223372036854775808, 9223372036854775807, 9223372036854775807)
+%TRUE between(-9223372036854775808, 9223372036854775807, -9223372036854775808)
+%TRUE between(-9223372036854775808, 9223372036854775807, -1)
+%TRUE between(-9223372036854775808, 9223372036854775807, 0)
+%TRUE between(-9223372036854775808, 9223372036854775807, 1)
+%TRUE between(-9223372036854775808, 9223372036854775807, 9223372036854775807)
 
- %QUERY between(1, 1, X)
- %ANSWER X=1
+%?- between(1, 1, X)
+% X=1
 
- %QUERY between(1, 2, X)
- %ANSWER X=1
- %ANSWER X=2
+%?- between(1, 2, X)
+% X=1
+% X=2
 
- %QUERY between(1, 5, X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=4
- %ANSWER X=5
+%?- between(1, 5, X)
+% X=1
+% X=2
+% X=3
+% X=4
+% X=5
 
- %FALSE between(5, 1, X)
+%FAIL between(5, 1, X)
 
- %TRUE between(5-2, 2+3, 2*2)
- %FALSE between(5-2, 2+3, 8-6)
- */
+%TRUE between(5-2, 2+3, 2*2)
+%FAIL between(5-2, 2+3, 8-6)
+*/
 /**
  * <code>between(X,Y,Z)</code> - checks if a number is within a specified range.
  * <p>

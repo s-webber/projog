@@ -25,71 +25,55 @@ import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 /* TEST
- if_then_else_test(1).
- if_then_else_test(2).
- if_then_else_test(3).
+if_then_else_test(1).
+if_then_else_test(2).
+if_then_else_test(3).
 
- %TRUE 2>1 -> true
- %FALSE 2<1 -> true
- %FALSE 2>1 -> fail
+%TRUE 2>1 -> true
+%FAIL 2<1 -> true
+%FAIL 2>1 -> fail
 
- %QUERY if_then_else_test(X) -> if_then_else_test(X)
- %ANSWER X=1
+%?- if_then_else_test(X) -> if_then_else_test(X)
+% X=1
 
- %QUERY if_then_else_test(X) -> if_then_else_test(Y)
- %ANSWER
- % X=1
- % Y=1
- %ANSWER
- %ANSWER
- % X=1
- % Y=2
- %ANSWER
- %ANSWER
- % X=1
- % Y=3
- %ANSWER
+%?- if_then_else_test(X) -> if_then_else_test(Y)
+% X=1
+% Y=1
+% X=1
+% Y=2
+% X=1
+% Y=3
 
- %QUERY true -> X=a ; X=b
- %ANSWER X=a
+%?- true -> X=a ; X=b
+% X=a
 
- %QUERY fail -> X=a ; X=b
- %ANSWER X=b
+%?- fail -> X=a ; X=b
+% X=b
 
- %QUERY (X=a, 1<2) -> Y=b; Y=c
- %ANSWER
- % X=a
- % Y=b
- %ANSWER
+%?- (X=a, 1<2) -> Y=b; Y=c
+% X=a
+% Y=b
 
- %QUERY (X=a, 1>2) -> Y=b; Y=c
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=c
- %ANSWER
+%?- (X=a, 1>2) -> Y=b; Y=c
+% X=UNINSTANTIATED VARIABLE
+% Y=c
 
- %QUERY if_then_else_test(X) -> if_then_else_test(X) ; if_then_else_test(X)
- %ANSWER X=1
+%?- if_then_else_test(X) -> if_then_else_test(X) ; if_then_else_test(X)
+% X=1
 
- %QUERY (if_then_else_test(X), fail) -> if_then_else_test(X) ; if_then_else_test(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
+%?- (if_then_else_test(X), fail) -> if_then_else_test(X) ; if_then_else_test(X)
+% X=1
+% X=2
+% X=3
 
- %QUERY if_then_else_test(X) -> if_then_else_test(Y) ; Y=b
- %ANSWER
- % X=1
- % Y=1
- %ANSWER
- %ANSWER
- % X=1
- % Y=2
- %ANSWER
- %ANSWER
- % X=1
- % Y=3
- %ANSWER
- */
+%?- if_then_else_test(X) -> if_then_else_test(Y) ; Y=b
+% X=1
+% Y=1
+% X=1
+% Y=2
+% X=1
+% Y=3
+*/
 /**
  * <code>X-&gt;Y</code> - if <code>X</code> succeeds then <code>Y</code> is evaluated.
  * <p>

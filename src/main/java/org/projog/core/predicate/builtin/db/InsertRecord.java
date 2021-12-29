@@ -23,43 +23,39 @@ import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 /* TEST
- % Example of recorda/3.
+% Example of recorda/3.
 
- %QUERY recorda(a,q,X)
- %ANSWER X=0
+%?- recorda(a,q,X)
+% X=0
 
- % Note: recorda/2 is equivalent to calling recorda/3 with the third argument as an anonymous variable.
- %TRUE recorda(a,w)
+% Note: recorda/2 is equivalent to calling recorda/3 with the third argument as an anonymous variable.
+%TRUE recorda(a,w)
 
- %QUERY recorded(X,Y,Z)
- %ANSWER
- % X=a
- % Y=w
- % Z=1
- %ANSWER
- %ANSWER
- % X=a
- % Y=q
- % Z=0
- %ANSWER
+%?- recorded(X,Y,Z)
+% X=a
+% Y=w
+% Z=1
+% X=a
+% Y=q
+% Z=0
 
- % Note: recorded/2 is equivalent to calling recorded/3 with the third argument as an anonymous variable.
- %QUERY recorded(a,Y)
- %ANSWER Y=w
- %ANSWER Y=q
+% Note: recorded/2 is equivalent to calling recorded/3 with the third argument as an anonymous variable.
+%?- recorded(a,Y)
+% Y=w
+% Y=q
 
- % Example of recordz/3.
+% Example of recordz/3.
 
- %QUERY recordz(b,q,X)
- %ANSWER X=2
+%?- recordz(b,q,X)
+% X=2
 
- % Note: recordz/2 is equivalent to calling recordz/3 with the third argument as an anonymous variable.
- %TRUE recordz(b,w)
+% Note: recordz/2 is equivalent to calling recordz/3 with the third argument as an anonymous variable.
+%TRUE recordz(b,w)
 
- %QUERY recorded(b,Y)
- %ANSWER Y=q
- %ANSWER Y=w
- */
+%?- recorded(b,Y)
+% Y=q
+% Y=w
+*/
 /**
  * <code>recorda(X,Y,Z)</code> / <code>recordz(X,Y,Z)</code> - associates a term with a key.
  * <p>

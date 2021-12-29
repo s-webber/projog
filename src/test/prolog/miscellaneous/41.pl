@@ -1,14 +1,14 @@
 x([X], X).
 x([X|Xs], Y) :- x(Xs, Y).
 
-%QUERY x([a,b,c], Y)
-%ANSWER Y=c
+%?- x([a,b,c], Y)
+% Y=c
 %NO 
-%QUERY x([a,b,c], c)
-%ANSWER/
+%?- x([a,b,c], c)
+%YES
 %NO
-%FALSE x([a,b,c], a)
-%FALSE x([a,b,c], b)
-%FALSE x([a,b,c], d)
-%FALSE x([], Y)
-%FALSE x(c, Y)
+%FAIL x([a,b,c], a)
+%FAIL x([a,b,c], b)
+%FAIL x([a,b,c], d)
+%FAIL x([], Y)
+%FAIL x(c, Y)

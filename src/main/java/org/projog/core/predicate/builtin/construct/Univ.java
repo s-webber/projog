@@ -26,56 +26,52 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- %QUERY p(a,b,c) =.. X
- %ANSWER X=[p,a,b,c]
+%?- p(a,b,c) =.. X
+% X=[p,a,b,c]
 
- %TRUE p(a,b,c) =.. [p,a,b,c]
+%TRUE p(a,b,c) =.. [p,a,b,c]
 
- %FALSE p(a,b,c) =.. [p,x,y,z]
+%FAIL p(a,b,c) =.. [p,x,y,z]
 
- %FALSE p(a,b,c) =.. []
+%FAIL p(a,b,c) =.. []
 
- %QUERY [a,b,c,d] =.. X
- %ANSWER X=[.,a,[b,c,d]]
+%?- [a,b,c,d] =.. X
+% X=[.,a,[b,c,d]]
 
- %QUERY [a,b,c,d] =.. [X|Y]
- %ANSWER
- % X=.
- % Y=[a,[b,c,d]]
- %ANSWER
+%?- [a,b,c,d] =.. [X|Y]
+% X=.
+% Y=[a,[b,c,d]]
 
- %QUERY X =.. [a,b,c,d]
- %ANSWER X=a(b, c, d)
+%?- X =.. [a,b,c,d]
+% X=a(b, c, d)
 
- %QUERY X =.. [a,[b,c],d]
- %ANSWER X=a([b,c], d)
+%?- X =.. [a,[b,c],d]
+% X=a([b,c], d)
 
- %QUERY a+b =.. X
- %ANSWER X=[+,a,b]
+%?- a+b =.. X
+% X=[+,a,b]
 
- %QUERY a+b =.. [+, X, Y]
- %ANSWER
- % X=a
- % Y=b
- %ANSWER
+%?- a+b =.. [+, X, Y]
+% X=a
+% Y=b
 
- %TRUE a =.. [a]
+%TRUE a =.. [a]
 
- %FALSE a =.. [b]
+%FAIL a =.. [b]
 
- %FALSE p =.. [p,x,y,z]
+%FAIL p =.. [p,x,y,z]
 
- %FALSE p(a,b,c) =.. [p]
+%FAIL p(a,b,c) =.. [p]
 
- %QUERY X =.. [a]
- %ANSWER X=a
+%?- X =.. [a]
+% X=a
 
- %QUERY a+b =.. '+ X Y'
- %ERROR Expected second argument to be a variable or a list but got a ATOM with value: + X Y
+%?- a+b =.. '+ X Y'
+%ERROR Expected second argument to be a variable or a list but got a ATOM with value: + X Y
 
- %QUERY X =.. Y
- %ERROR Both arguments are variables: X and: Y
- */
+%?- X =.. Y
+%ERROR Both arguments are variables: X and: Y
+*/
 /**
  * <code>X=..L</code> - "univ".
  * <p>

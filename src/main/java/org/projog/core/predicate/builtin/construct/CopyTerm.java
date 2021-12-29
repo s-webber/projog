@@ -22,65 +22,51 @@ import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 /* TEST
-%QUERY copy_term(X, Y), X \== Y
-%ANSWER
+%?- copy_term(X, Y), X \== Y
 % X=UNINSTANTIATED VARIABLE
 % Y=UNINSTANTIATED VARIABLE
-%ANSWER
 
-%QUERY copy_term(X, Y), X=a, Y=b
-%ANSWER
+%?- copy_term(X, Y), X=a, Y=b
 % X=a
 % Y=b
-%ANSWER
 
-%QUERY X=a, copy_term(X, Y)
-%ANSWER
+%?- X=a, copy_term(X, Y)
 % X=a
 % Y=a
-%ANSWER
 
-%QUERY X=p(A,B,p(C)), copy_term(X, Y), A=1, B=2, C=3
-%ANSWER
+%?- X=p(A,B,p(C)), copy_term(X, Y), A=1, B=2, C=3
 % A=1
 % B=2
 % C=3
 % X=p(1, 2, p(3))
 % Y=p(A, B, p(C))
-%ANSWER
 
-%QUERY X=p(A,B,p(3)), copy_term(X, Y), Y=p(1,2,p(C))
-%ANSWER
+%?- X=p(A,B,p(3)), copy_term(X, Y), Y=p(1,2,p(C))
 % A=UNINSTANTIATED VARIABLE
 % B=UNINSTANTIATED VARIABLE
 % C=3
 % X=p(A, B, p(3))
 % Y=p(1, 2, p(3))
-%ANSWER
 
-%QUERY X=[A,B,C], copy_term(X, Y), A=1, B=2, C=3
-%ANSWER
+%?- X=[A,B,C], copy_term(X, Y), A=1, B=2, C=3
 % A=1
 % B=2
 % C=3
 % X=[1,2,3]
 % Y=[A,B,C]
-%ANSWER
 
 %TRUE copy_term(a, a)
-%FALSE copy_term(a, b)
+%FAIL copy_term(a, b)
 %TRUE copy_term(p(1,2,p(3)), p(1,2,p(3)))
-%FALSE copy_term(p(1,2,p(3)), p(1,2,p(4)))
+%FAIL copy_term(p(1,2,p(3)), p(1,2,p(4)))
 
-%QUERY X=p(A,B,3), copy_term(X, p(1,E,F)), B=b, E=e
-%ANSWER
+%?- X=p(A,B,3), copy_term(X, p(1,E,F)), B=b, E=e
 % A=UNINSTANTIATED VARIABLE
 % B=b
 % E=e
 % F=3
 % X=p(A, b, 3)
-%ANSWER
- */
+*/
 /**
  * <code>copy_term(X,Y)</code> - makes a copy of a term.
  * <p>

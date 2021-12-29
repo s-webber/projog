@@ -26,53 +26,43 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %QUERY delete([a,b,c],a,X)
- %ANSWER X=[b,c]
- %QUERY delete([a,a,b,a,b,b,c,b,a],a,X)
- %ANSWER X=[b,b,b,c,b]
- %QUERY delete([a,b,c],b,X)
- %ANSWER X=[a,c]
- %QUERY delete([a,b,c],c,X)
- %ANSWER X=[a,b]
- %QUERY delete([a,b,c],z,X)
- %ANSWER X=[a,b,c]
- %QUERY delete([],a,X)
- %ANSWER X=[]
+%?- delete([a,b,c],a,X)
+% X=[b,c]
+%?- delete([a,a,b,a,b,b,c,b,a],a,X)
+% X=[b,b,b,c,b]
+%?- delete([a,b,c],b,X)
+% X=[a,c]
+%?- delete([a,b,c],c,X)
+% X=[a,b]
+%?- delete([a,b,c],z,X)
+% X=[a,b,c]
+%?- delete([],a,X)
+% X=[]
 
- %QUERY delete([a,b,X],a,[Y,c])
- %ANSWER
- % X=c
- % Y=b
- %ANSWER
+%?- delete([a,b,X],a,[Y,c])
+% X=c
+% Y=b
 
- %QUERY delete([a,b,c],Y,X)
- %ANSWER
- % X=[a,b,c]
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY delete([a,Y,c],b,X)
- %ANSWER
- % X=[a,Y,c]
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY delete([a,Y,_],_,X)
- %ANSWER
- % X=[a,Y,_]
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY W=Y,delete([a,Y,_],W,X)
- %ANSWER
- % X=[a,_]
- % W=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- delete([a,b,c],Y,X)
+% X=[a,b,c]
+% Y=UNINSTANTIATED VARIABLE
+%?- delete([a,Y,c],b,X)
+% X=[a,Y,c]
+% Y=UNINSTANTIATED VARIABLE
+%?- delete([a,Y,_],_,X)
+% X=[a,Y,_]
+% Y=UNINSTANTIATED VARIABLE
+%?- W=Y,delete([a,Y,_],W,X)
+% X=[a,_]
+% W=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY delete([],a,X)
- %ANSWER X=[]
+%?- delete([],a,X)
+% X=[]
 
- % Note: unlike SWI Prolog, fails if the first argument is a partial list.
- %FALSE delete([a,b,c|X],Y,Z)
- */
+% Note: unlike SWI Prolog, fails if the first argument is a partial list.
+%FAIL delete([a,b,c|X],Y,Z)
+*/
 /**
  * <code>delete(X,Y,Z)</code> - remove all occurrences of a term from a list.
  * <p>

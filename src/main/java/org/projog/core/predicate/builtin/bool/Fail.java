@@ -18,28 +18,28 @@ package org.projog.core.predicate.builtin.bool;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 
 /* TEST
- %FALSE fail
+%FAIL fail
 
- a(1).
- a(2).
- a(3).
+a(1).
+a(2).
+a(3).
 
- test :- a(X), a(Y), write(Y), write(' '), write(X), nl, fail.
+test :- a(X), a(Y), write(Y), write(' '), write(X), nl, fail.
 
- %QUERY test
- %OUTPUT
- %1 1
- %2 1
- %3 1
- %1 2
- %2 2
- %3 2
- %1 3
- %2 3
- %3 3
- %
- %OUTPUT
- */
+%?- test
+%OUTPUT
+%1 1
+%2 1
+%3 1
+%1 2
+%2 2
+%3 2
+%1 3
+%2 3
+%3 3
+%
+%OUTPUT
+*/
 /**
  * <code>fail</code> - always fails.
  * <p>

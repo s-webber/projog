@@ -21,38 +21,38 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY write(start), tab(1), write(finish)
- %OUTPUT start finish
- %ANSWER/
+%?- write(start), tab(1), write(finish)
+%OUTPUT start finish
+%YES
 
- %QUERY write(start), tab(2), write(finish)
- %OUTPUT start  finish
- %ANSWER/
+%?- write(start), tab(2), write(finish)
+%OUTPUT start  finish
+%YES
 
- %QUERY write(start), tab(3), write(finish)
- %OUTPUT start   finish
- %ANSWER/
+%?- write(start), tab(3), write(finish)
+%OUTPUT start   finish
+%YES
 
- %QUERY write(start), tab(32), write(finish)
- %OUTPUT start                                finish
- %ANSWER/
+%?- write(start), tab(32), write(finish)
+%OUTPUT start                                finish
+%YES
 
- %QUERY write(start), tab(3+4), write(finish)
- %OUTPUT start       finish
- %ANSWER/
+%?- write(start), tab(3+4), write(finish)
+%OUTPUT start       finish
+%YES
 
- %QUERY write(start), tab(0), write(finish)
- %OUTPUT startfinish
- %ANSWER/
+%?- write(start), tab(0), write(finish)
+%OUTPUT startfinish
+%YES
 
- %QUERY write(start), tab(-1), write(finish)
- %OUTPUT startfinish
- %ANSWER/
+%?- write(start), tab(-1), write(finish)
+%OUTPUT startfinish
+%YES
 
- %QUERY write(start), tab(3.5), write(finish)
- %OUTPUT start   finish
- %ANSWER/
- */
+%?- write(start), tab(3.5), write(finish)
+%OUTPUT start   finish
+%YES
+*/
 /**
  * <code>tab(X)</code> - writes <code>X</code> number of spaces to the output stream.
  */

@@ -19,18 +19,16 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE abc \= def
+%TRUE abc \= def
 
- %FALSE X \= Y
+%FAIL X \= Y
 
- %FALSE p(X,b) \= p(a,Y)
+%FAIL p(X,b) \= p(a,Y)
 
- %QUERY p(X,b,c) \= p(a,Y,z)
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
- */
+%?- p(X,b,c) \= p(a,Y,z)
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+*/
 /**
  * <code>X \= Y</code> - checks whether two terms cannot be unified.
  * <p>

@@ -31,59 +31,49 @@ import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 /* TEST
- z(r).
- z(t).
- z(y).
+z(r).
+z(t).
+z(y).
 
- x(a,b,c).
- x(q,X,e) :- z(X).
- x(1,2,3).
- x(w,b,c).
- x(d,b,c).
- x(a,b,c).
+x(a,b,c).
+x(q,X,e) :- z(X).
+x(1,2,3).
+x(w,b,c).
+x(d,b,c).
+x(a,b,c).
 
- %QUERY findall(X,x(X,Y,Z),L)
- %ANSWER
- % L=[a,q,q,q,1,w,d,a]
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- findall(X,x(X,Y,Z),L)
+% L=[a,q,q,q,1,w,d,a]
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
 
- %QUERY findall(X,x(X,y,z),L)
- %ANSWER
- % L=[]
- % X=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- findall(X,x(X,y,z),L)
+% L=[]
+% X=UNINSTANTIATED VARIABLE
 
- q(a(W)).
- q(C).
- q(1).
- y(X) :- X = o(T,R), q(T), q(R).
+q(a(W)).
+q(C).
+q(1).
+y(X) :- X = o(T,R), q(T), q(R).
 
- %QUERY findall(X,y(X),L)
- %ANSWER
- % L = [o(a(W), a(W)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
- % X=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- findall(X,y(X),L)
+% L=[o(a(W), a(W)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
+% X=UNINSTANTIATED VARIABLE
 
- %QUERY findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
- %ANSWER
- % L=[o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
- % H=o(a(q), a(z))
- % X=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- findall(X,y(X),L), L=[H|_], H=o(a(q),a(z))
+% L=[o(a(q), a(z)),o(a(W), R),o(a(W), 1),o(T, a(W)),o(T, R),o(T, 1),o(1, a(W)),o(1, R),o(1, 1)]
+% H=o(a(q), a(z))
+% X=UNINSTANTIATED VARIABLE
 
- %QUERY findall(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
- %ANSWER
- % L=[9,4,9]
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- %ANSWER
+%?- findall(Y, (member(X,[6,3,7,2,5,4,3]), X<4, Y is X*X), L)
+% L=[9,4,9]
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY findall(X,P,L)
- %ERROR Expected an atom or a predicate but got a VARIABLE with value: P
- */
+%?- findall(X,P,L)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: P
+*/
 /**
  * <code>findall(X,P,L)</code> - find all solutions that satisfy the goal.
  * <p>

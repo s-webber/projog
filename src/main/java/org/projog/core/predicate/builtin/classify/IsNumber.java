@@ -19,23 +19,23 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %TRUE number(1)
- %TRUE number(-1)
- %TRUE number(0)
- %TRUE number(0.0)
- %TRUE number(1.0)
- %TRUE number(-1.0)
- %FALSE number('1')
- %FALSE number('1.0')
- %FALSE number(1+1)
- %FALSE number(a)
- %FALSE number(p(1,2,3))
- %FALSE number([1,2,3])
- %FALSE number([a,b,c])
- %FALSE number([])
- %FALSE number(X)
- %FALSE number(_)
- */
+%TRUE number(1)
+%TRUE number(-1)
+%TRUE number(0)
+%TRUE number(0.0)
+%TRUE number(1.0)
+%TRUE number(-1.0)
+%FAIL number('1')
+%FAIL number('1.0')
+%FAIL number(1+1)
+%FAIL number(a)
+%FAIL number(p(1,2,3))
+%FAIL number([1,2,3])
+%FAIL number([a,b,c])
+%FAIL number([])
+%FAIL number(X)
+%FAIL number(_)
+*/
 /**
  * <code>number(X)</code> - checks that a term is numeric.
  * <p>

@@ -25,125 +25,85 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %QUERY last([a,b,c], X)
- %ANSWER X=c
+%?- last([a,b,c], X)
+% X=c
 
- %QUERY last([q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m], X)
- %ANSWER X=m
+%?- last([q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m], X)
+% X=m
 
- %QUERY last([a], X)
- %ANSWER X=a
+%?- last([a], X)
+% X=a
 
- %FALSE last([a,b,c], a)
- %FALSE last([a,b,c], b)
- %TRUE last([a,b,c], c)
- %FALSE last([a,b,c], d)
+%FAIL last([a,b,c], a)
+%FAIL last([a,b,c], b)
+%TRUE last([a,b,c], c)
+%FAIL last([a,b,c], d)
 
- %FALSE last([a,b|c], X)
- %TRUE last([a,b|[]], b)
+%FAIL last([a,b|c], X)
+%TRUE last([a,b|[]], b)
 
- %FALSE last([], X)
- %FALSE last(a, X)
+%FAIL last([], X)
+%FAIL last(a, X)
 
- %QUERY last(Y, X)
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [X]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [_,X]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [_,_,X]
- %ANSWER
- %ANSWER
- % X = UNINSTANTIATED VARIABLE
- % Y = [_,_,_,X]
- %ANSWER
- %QUIT
+%?- last(Y, X)
+% X=UNINSTANTIATED VARIABLE
+% Y=[X]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,X]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,_,X]
+% X=UNINSTANTIATED VARIABLE
+% Y=[_,_,_,X]
+%QUIT
 
- %QUERY Z=[a,b|Tail],last(Z,Last)
- %ANSWER
- % Last = b
- % Tail = []
- % Z = [a,b]
- %ANSWER
- %ANSWER
- % Last = UNINSTANTIATED VARIABLE
- % Tail = [Last]
- % Z = [a,b,Last]
- %ANSWER
- %ANSWER
- % Last = UNINSTANTIATED VARIABLE
- % Tail = [_,Last]
- % Z = [a,b,_,Last]
- %ANSWER
- %ANSWER
- % Last = UNINSTANTIATED VARIABLE
- % Tail = [_,_,Last]
- % Z = [a,b,_,_,Last]
- %ANSWER
- %QUIT
+%?- Z=[a,b|Tail],last(Z,Last)
+% Last=b
+% Tail=[]
+% Z=[a,b]
+% Last=UNINSTANTIATED VARIABLE
+% Tail=[Last]
+% Z=[a,b,Last]
+% Last=UNINSTANTIATED VARIABLE
+% Tail=[_,Last]
+% Z=[a,b,_,Last]
+% Last=UNINSTANTIATED VARIABLE
+% Tail=[_,_,Last]
+% Z=[a,b,_,_,Last]
+%QUIT
 
- %QUERY Z=[a,b|Tail],last(Z,a)
- %ANSWER
- % Tail = [a]
- % Z = [a,b,a]
- %ANSWER
- %ANSWER
- % Tail = [_,a]
- % Z = [a,b,_,a]
- %ANSWER
- %ANSWER
- % Tail = [_,_,a]
- % Z = [a,b,_,_,a]
- %ANSWER
- %ANSWER
- % Tail = [_,_,_,a]
- % Z = [a,b,_,_,_,a]
- %ANSWER
- %QUIT
+%?- Z=[a,b|Tail],last(Z,a)
+% Tail=[a]
+% Z=[a,b,a]
+% Tail=[_,a]
+% Z=[a,b,_,a]
+% Tail=[_,_,a]
+% Z=[a,b,_,_,a]
+% Tail=[_,_,_,a]
+% Z=[a,b,_,_,_,a]
+%QUIT
 
- %QUERY Z=[a,b|Tail],last(Z,b)
- %ANSWER
- % Tail = []
- % Z = [a,b]
- %ANSWER
- %ANSWER
- % Tail = [b]
- % Z = [a,b,b]
- %ANSWER
- %ANSWER
- % Tail = [_,b]
- % Z = [a,b,_,b]
- %ANSWER
- %ANSWER
- % Tail = [_,_,b]
- % Z = [a,b,_,_,b]
- %ANSWER
- %QUIT
+%?- Z=[a,b|Tail],last(Z,b)
+% Tail=[]
+% Z=[a,b]
+% Tail=[b]
+% Z=[a,b,b]
+% Tail=[_,b]
+% Z=[a,b,_,b]
+% Tail=[_,_,b]
+% Z=[a,b,_,_,b]
+%QUIT
 
- %QUERY Z=[a,b|Tail],last(Z,z)
- %ANSWER
- % Tail = [z]
- % Z = [a,b,z]
- %ANSWER
- %ANSWER
- % Tail = [_,z]
- % Z = [a,b,_,z]
- %ANSWER
- %ANSWER
- % Tail = [_,_,z]
- % Z = [a,b,_,_,z]
- %ANSWER
- %ANSWER
- % Tail = [_,_,_,z]
- % Z = [a,b,_,_,_,z]
- %ANSWER
- %QUIT
- */
+%?- Z=[a,b|Tail],last(Z,z)
+% Tail=[z]
+% Z=[a,b,z]
+% Tail=[_,z]
+% Z=[a,b,_,z]
+% Tail=[_,_,z]
+% Z=[a,b,_,_,z]
+% Tail=[_,_,_,z]
+% Z=[a,b,_,_,_,z]
+%QUIT
+*/
 /**
  * <code>last(X,Y)</code> - finds the last element of a list.
  */

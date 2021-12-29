@@ -23,12 +23,12 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
 /* TEST
- write_to_file(Filename, Contents) :-
-    open(Filename, write, Z),
-    set_output(Z),
-    writef(Contents),
-    close(Z),
-    set_output('user_output').
+write_to_file(Filename, Contents) :-
+   open(Filename, write, Z),
+   set_output(Z),
+   writef(Contents),
+   close(Z),
+   set_output('user_output').
 
 %TRUE write_to_file('consult_list_example_1.tmp', 'test1.')
 %TRUE write_to_file('consult_list_example_2.tmp', 'test2.')
@@ -37,21 +37,21 @@ import org.projog.core.term.TermType;
 %TRUE write_to_file('consult_list_example_5.tmp', 'test5.')
 %TRUE write_to_file('consult_list_example_6.tmp', 'test6.')
 
-%FALSE test1
+%FAIL test1
 %TRUE ['consult_list_example_1.tmp']
 %TRUE test1
 
-%FALSE test2
-%FALSE test3
+%FAIL test2
+%FAIL test3
 %TRUE ['consult_list_example_2.tmp', 'consult_list_example_3.tmp']
 %TRUE test2, test3
 
-%FALSE test4
-%FALSE test5
-%FALSE test6
+%FAIL test4
+%FAIL test5
+%FAIL test6
 %TRUE ['consult_list_example_4.tmp', 'consult_list_example_5.tmp', 'consult_list_example_6.tmp']
 %TRUE test4, test5, test6
- */
+*/
 /**
  * Read clauses and goals from a list of files.
  */

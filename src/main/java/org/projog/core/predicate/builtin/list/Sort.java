@@ -24,45 +24,43 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY msort([q,w,e,r,t,y], X)
- %ANSWER X = [e,q,r,t,w,y]
+%?- msort([q,w,e,r,t,y], X)
+% X=[e,q,r,t,w,y]
 
- %QUERY msort([q,q,w,y,e,r,r,t,r,y], X)
- %ANSWER X = [e,q,q,r,r,r,t,w,y,y]
+%?- msort([q,q,w,y,e,r,r,t,r,y], X)
+% X=[e,q,q,r,r,r,t,w,y,y]
 
- %TRUE msort([q,w,e,r,t,y], [e,q,r,t,w,y])
- %FALSE msort([q,w,e,r,t,y], [q,w,e,r,t,y])
- %FALSE msort([q,w,e,r,t,y], [e,q,t,r,w,y])
+%TRUE msort([q,w,e,r,t,y], [e,q,r,t,w,y])
+%FAIL msort([q,w,e,r,t,y], [q,w,e,r,t,y])
+%FAIL msort([q,w,e,r,t,y], [e,q,t,r,w,y])
 
- %QUERY msort([q,w,e,r,t,y], [A,B,C,D,E,F])
- %ANSWER
- % A=e
- % B=q
- % C=r
- % D=t
- % E=w
- % F=y
- %ANSWER
+%?- msort([q,w,e,r,t,y], [A,B,C,D,E,F])
+% A=e
+% B=q
+% C=r
+% D=t
+% E=w
+% F=y
 
- %QUERY msort([], X)
- %ANSWER X=[]
+%?- msort([], X)
+% X=[]
 
- %QUERY msort([a], X)
- %ANSWER X=[a]
+%?- msort([a], X)
+% X=[a]
 
- %FALSE msort(a, X)
- %FALSE msort([a,b,c|T], X)
+%FAIL msort(a, X)
+%FAIL msort([a,b,c|T], X)
 
- %QUERY msort([h,e,l,l,o], X)
- %ANSWER X=[e,h,l,l,o]
+%?- msort([h,e,l,l,o], X)
+% X=[e,h,l,l,o]
 
- %FALSE msort([h,e,l,l,o], [e,h,l,o])
+%FAIL msort([h,e,l,l,o], [e,h,l,o])
 
- % Note: unlike SWI Prolog, the following 3 queries will fail rather than cause an error.
- %FALSE msort(a, X)
- %FALSE msort(X, [h,e,l,l,o])
- %FALSE msort([h,e,l,l,o|X], Y)
- */
+% Note: unlike SWI Prolog, the following 3 queries will fail rather than cause an error.
+%FAIL msort(a, X)
+%FAIL msort(X, [h,e,l,l,o])
+%FAIL msort([h,e,l,l,o|X], Y)
+*/
 /**
  * <code>msort(X,Y)</code> - sorts a list.
  * <p>

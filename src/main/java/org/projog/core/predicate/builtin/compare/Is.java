@@ -23,42 +23,40 @@ import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY X is 3
- %ANSWER X=3
- %QUERY X is 3+2
- %ANSWER X=5
- %QUERY X is 3.5+2.25
- %ANSWER X=5.75
- %TRUE 5 is 5
- %FALSE 5 is 6
- %TRUE 5 is 4+1
- %FALSE 5 is 4+2
+%?- X is 3
+% X=3
+%?- X is 3+2
+% X=5
+%?- X is 3.5+2.25
+% X=5.75
+%TRUE 5 is 5
+%FAIL 5 is 6
+%TRUE 5 is 4+1
+%FAIL 5 is 4+2
 
- %QUERY X is Y
- %ERROR Cannot get Numeric for term: Y of type: VARIABLE
+%?- X is Y
+%ERROR Cannot get Numeric for term: Y of type: VARIABLE
 
- %QUERY Z=1+1, Y=9-Z, X is Y
- %ANSWER
- % X=7
- % Y=9 - (1 + 1)
- % Z = 1 + 1
- %ANSWER
+%?- Z=1+1, Y=9-Z, X is Y
+% X=7
+% Y=9 - (1 + 1)
+% Z=1 + 1
 
- %QUERY X is _
- %ERROR Cannot get Numeric for term: _ of type: VARIABLE
+%?- X is _
+%ERROR Cannot get Numeric for term: _ of type: VARIABLE
 
- %QUERY X is sum(1,2)
- %ERROR Cannot find arithmetic operator: sum/2
+%?- X is sum(1,2)
+%ERROR Cannot find arithmetic operator: sum/2
 
- %QUERY X is ten
- %ERROR Cannot find arithmetic operator: ten/0
+%?- X is ten
+%ERROR Cannot find arithmetic operator: ten/0
 
- %QUERY X is []
- %ERROR Cannot get Numeric for term: [] of type: EMPTY_LIST
+%?- X is []
+%ERROR Cannot get Numeric for term: [] of type: EMPTY_LIST
 
- %QUERY X is [1,2,3]
- %ERROR Cannot get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
- */
+%?- X is [1,2,3]
+%ERROR Cannot get Numeric for term: .(1, .(2, .(3, []))) of type: LIST
+*/
 /**
  * <code>X is Y</code> - evaluate arithmetic expression.
  * <p>

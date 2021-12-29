@@ -21,81 +21,81 @@ import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.TermType;
 
 /* TEST
-%QUERY X is integer(7.0)
-%ANSWER X=7
-%QUERY X is integer(7.1)
-%ANSWER X=7
-%QUERY X is integer(7.2)
-%ANSWER X=7
-%QUERY X is integer(7.3)
-%ANSWER X=7
-%QUERY X is integer(7.4)
-%ANSWER X=7
-%QUERY X is integer(7.49999)
-%ANSWER X=7
-%QUERY X is integer(7.5)
-%ANSWER X=8
-%QUERY X is integer(7.50001)
-%ANSWER X=8
-%QUERY X is integer(7.6)
-%ANSWER X=8
-%QUERY X is integer(7.7)
-%ANSWER X=8
-%QUERY X is integer(7.8)
-%ANSWER X=8
-%QUERY X is integer(7.9)
-%ANSWER X=8
-%QUERY X is integer(8.0)
-%ANSWER X=8
+%?- X is integer(7.0)
+% X=7
+%?- X is integer(7.1)
+% X=7
+%?- X is integer(7.2)
+% X=7
+%?- X is integer(7.3)
+% X=7
+%?- X is integer(7.4)
+% X=7
+%?- X is integer(7.49999)
+% X=7
+%?- X is integer(7.5)
+% X=8
+%?- X is integer(7.50001)
+% X=8
+%?- X is integer(7.6)
+% X=8
+%?- X is integer(7.7)
+% X=8
+%?- X is integer(7.8)
+% X=8
+%?- X is integer(7.9)
+% X=8
+%?- X is integer(8.0)
+% X=8
 
-%QUERY X is integer(-7.0)
-%ANSWER X=-7
-%QUERY X is integer(-7.1)
-%ANSWER X=-7
-%QUERY X is integer(-7.2)
-%ANSWER X=-7
-%QUERY X is integer(-7.3)
-%ANSWER X=-7
-%QUERY X is integer(-7.4)
-%ANSWER X=-7
-%QUERY X is integer(-7.49999)
-%ANSWER X=-7
+%?- X is integer(-7.0)
+% X=-7
+%?- X is integer(-7.1)
+% X=-7
+%?- X is integer(-7.2)
+% X=-7
+%?- X is integer(-7.3)
+% X=-7
+%?- X is integer(-7.4)
+% X=-7
+%?- X is integer(-7.49999)
+% X=-7
 % Note: in some Prolog implementations the result of "integer(-7.5)" would be -8
-%QUERY X is integer(-7.5)
-%ANSWER X=-7
-%QUERY X is integer(-7.50001)
-%ANSWER X=-8
-%QUERY X is integer(-7.6)
-%ANSWER X=-8
-%QUERY X is integer(-7.7)
-%ANSWER X=-8
-%QUERY X is integer(-7.8)
-%ANSWER X=-8
-%QUERY X is integer(-7.9)
-%ANSWER X=-8
-%QUERY X is integer(-8.0)
-%ANSWER X=-8
+%?- X is integer(-7.5)
+% X=-7
+%?- X is integer(-7.50001)
+% X=-8
+%?- X is integer(-7.6)
+% X=-8
+%?- X is integer(-7.7)
+% X=-8
+%?- X is integer(-7.8)
+% X=-8
+%?- X is integer(-7.9)
+% X=-8
+%?- X is integer(-8.0)
+% X=-8
 
-%QUERY X is integer(1.25+6.25)
-%ANSWER X=8
+%?- X is integer(1.25+6.25)
+% X=8
 
-%QUERY X is integer(1.25+6.24)
-%ANSWER X=7
+%?- X is integer(1.25+6.24)
+% X=7
 
-%QUERY X is integer(0.0)
-%ANSWER X=0
+%?- X is integer(0.0)
+% X=0
 
-%QUERY X is integer(7)
-%ANSWER X=7
+%?- X is integer(7)
+% X=7
 
-%QUERY X is integer(-7)
-%ANSWER X=-7
+%?- X is integer(-7)
+% X=-7
 
-%QUERY X is integer(9223372036854775806)
-%ANSWER X=9223372036854775806
-%QUERY X is integer(-9223372036854775807)
-%ANSWER X=-9223372036854775807
- */
+%?- X is integer(9223372036854775806)
+% X=9223372036854775806
+%?- X is integer(-9223372036854775807)
+% X=-9223372036854775807
+*/
 /**
  * <code>integer(X)</code> - round X to the nearest integer value.
  */

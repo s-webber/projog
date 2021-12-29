@@ -23,8 +23,8 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateKey;
 
 /* TEST
- %LINK prolog-debugging
- */
+%LINK prolog-debugging
+*/
 /**
  * <code>debugging</code> - lists current spy points.
  * <p>

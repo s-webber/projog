@@ -18,8 +18,8 @@ package org.projog.core.predicate.builtin.debug;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 
 /* TEST
- %LINK prolog-debugging
- */
+%LINK prolog-debugging
+*/
 /**
  * <code>trace</code> - enables exhaustive tracing.
  * <p>

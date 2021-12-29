@@ -22,56 +22,56 @@ import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY dynamic(true/0)
- %ERROR Cannot replace already defined built-in predicate: true/0
+%?- dynamic(true/0)
+%ERROR Cannot replace already defined built-in predicate: true/0
 
- %QUERY dynamic(is/2)
- %ERROR Cannot replace already defined built-in predicate: is/2
+%?- dynamic(is/2)
+%ERROR Cannot replace already defined built-in predicate: is/2
 
- %TRUE dynamic(test/2)
+%TRUE dynamic(test/2)
 
- %TRUE write_to_file('dynamic1.tmp', 'test(a,1). test(b,2). test(c,3). test(d,4). test(e,5). testRule(X) :- test(X, Y), Y mod 2 =:= 0.')
- %TRUE consult('dynamic1.tmp')
- %QUERY testRule(X)
- %ANSWER X=b
- %ANSWER X=d
- %NO
+%TRUE write_to_file('dynamic1.tmp', 'test(a,1). test(b,2). test(c,3). test(d,4). test(e,5). testRule(X) :- test(X, Y), Y mod 2 =:= 0.')
+%TRUE consult('dynamic1.tmp')
+%?- testRule(X)
+% X=b
+% X=d
+%NO
 
- %TRUE write_to_file('dynamic2.tmp', 'test(f,6). test(g,7). test(h,8).')
- %TRUE consult('dynamic2.tmp')
- %QUERY testRule(X)
- %ANSWER X=b
- %ANSWER X=d
- %ANSWER X=f
- %ANSWER X=h
+%TRUE write_to_file('dynamic2.tmp', 'test(f,6). test(g,7). test(h,8).')
+%TRUE consult('dynamic2.tmp')
+%?- testRule(X)
+% X=b
+% X=d
+% X=f
+% X=h
 
- %TRUE assertz(test(x,180))
- %TRUE asserta(test(y,42))
+%TRUE assertz(test(x,180))
+%TRUE asserta(test(y,42))
 
- %QUERY testRule(X)
- %ANSWER X=y
- %ANSWER X=b
- %ANSWER X=d
- %ANSWER X=f
- %ANSWER X=h
- %ANSWER X=x
+%?- testRule(X)
+% X=y
+% X=b
+% X=d
+% X=f
+% X=h
+% X=x
 
- % Not OK to call dynamic/1 on a predicate that has already been defined and is not marked as dynamic.
- %TRUE write_to_file('dynamic3.tmp', 'not_dynamic(1,2,3).')
- %TRUE consult('dynamic3.tmp')
- %QUERY dynamic(not_dynamic/3)
- %ERROR Predicate has already been defined and is not dynamic: not_dynamic/3
+% Not OK to call dynamic/1 on a predicate that has already been defined and is not marked as dynamic.
+%TRUE write_to_file('dynamic3.tmp', 'not_dynamic(1,2,3).')
+%TRUE consult('dynamic3.tmp')
+%?- dynamic(not_dynamic/3)
+%ERROR Predicate has already been defined and is not dynamic: not_dynamic/3
 
- % OK to call dynamic/1 on a predicate that has already been marked as dynamic.
- %TRUE dynamic(test/2)
+% OK to call dynamic/1 on a predicate that has already been marked as dynamic.
+%TRUE dynamic(test/2)
 
- write_to_file(Filename, Contents) :-
-    open(Filename, write, Z),
-    set_output(Z),
-    writef(Contents),
-    close(Z),
-    set_output('user_output').
- */
+write_to_file(Filename, Contents) :-
+   open(Filename, write, Z),
+   set_output(Z),
+   writef(Contents),
+   close(Z),
+   set_output('user_output').
+*/
 /**
  * <code>dynamic/1</code> - indicates that a user defined predicate is dynamic.
  * <p>

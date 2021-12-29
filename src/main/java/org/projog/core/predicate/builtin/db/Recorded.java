@@ -26,11 +26,11 @@ import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 /* TEST
- %FALSE recorded(X,Y,Z)
+%FAIL recorded(X,Y,Z)
 
- % Note: recorded/2 is equivalent to calling recorded/3 with the third argument as an anonymous variable.
- %FALSE recorded(X,Y)
- */
+% Note: recorded/2 is equivalent to calling recorded/3 with the third argument as an anonymous variable.
+%FAIL recorded(X,Y)
+*/
 /**
  * <code>recorded(X,Y,Z)</code> - checks if a term is associated with a key.
  * <p>

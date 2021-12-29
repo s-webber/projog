@@ -12,102 +12,78 @@ p3(a, 1, x).
 p3(b, X, y) :- repeat(2).
 p3(X, 3, z).
 
-%QUERY meta_data(p1(_, _, _), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p1(_, _, _), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY meta_data(p2(_, _, _), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p2(_, _, _), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY meta_data(p3(_, _, _), X)
-%ANSWER X = factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
-%ANSWER X = factory_isRetryable : true
-%ANSWER X = factory_isAlwaysCutOnBacktrack : false
-%ANSWER X = actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = actual_isRetryable : true
-%ANSWER X = actual_isAlwaysCutOnBacktrack : false
-%ANSWER X = processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
-%ANSWER X = processed_isRetryable : true
-%ANSWER X = processed_isAlwaysCutOnBacktrack : false
+%?- meta_data(p3(_, _, _), X)
+% X=factory_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory
+% X=factory_isRetryable : true
+% X=factory_isAlwaysCutOnBacktrack : false
+% X=actual_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=actual_isRetryable : true
+% X=actual_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$LinkedHashMapPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
-%QUERY p1(X, Y, Z)
-%ANSWER
+%?- p1(X, Y, Z)
 % X=a
 % Y=1
 % Z=x
-%ANSWER
-%ANSWER
 % X=b
 % Y=UNINSTANTIATED VARIABLE
 % Z=y
-%ANSWER
-%ANSWER
 % X=b
 % Y=UNINSTANTIATED VARIABLE
 % Z=y
-%ANSWER
-%ANSWER
 % X=c
 % Y=3
 % Z=UNINSTANTIATED VARIABLE
-%ANSWER
 
-%QUERY p2(X, Y, Z)
-%ANSWER
+%?- p2(X, Y, Z)
 % X=a
 % Y=1
 % Z=x
-%ANSWER
-%ANSWER
 % X=UNINSTANTIATED VARIABLE
 % Y=2
 % Z=y
-%ANSWER
-%ANSWER
 % X=UNINSTANTIATED VARIABLE
 % Y=2
 % Z=y
-%ANSWER
-%ANSWER
 % X=c
 % Y=3
 % Z=UNINSTANTIATED VARIABLE
-%ANSWER
 
-%QUERY p3(X, Y, Z)
-%ANSWER
+%?- p3(X, Y, Z)
 % X=a
 % Y=1
 % Z=x
-%ANSWER
-%ANSWER
 % X=b
 % Y=UNINSTANTIATED VARIABLE
 % Z=y
-%ANSWER
-%ANSWER
 % X=b
 % Y=UNINSTANTIATED VARIABLE
 % Z=y
-%ANSWER
-%ANSWER
 % X=UNINSTANTIATED VARIABLE
 % Y=3
 % Z=z
-%ANSWER
 

@@ -25,42 +25,36 @@ import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
- %FALSE \+ true
- %TRUE \+ fail
+%FAIL \+ true
+%TRUE \+ fail
 
- % Note: "not" is a synonym for "\+".
- %FALSE not(true)
- %TRUE not(fail)
+% Note: "not" is a synonym for "\+".
+%FAIL not(true)
+%TRUE not(fail)
 
- %QUERY \+ [A,B,C,9]=[1,2,3,4], A=6, B=7, C=8
- %ANSWER
- % A=6
- % B=7
- % C=8
- %ANSWER
+%?- \+ [A,B,C,9]=[1,2,3,4], A=6, B=7, C=8
+% A=6
+% B=7
+% C=8
 
- %QUERY \+ ((X=Y,1>2)), X=1, Y=2
- %ANSWER
- % X=1
- % Y=2
- %ANSWER
+%?- \+ ((X=Y,1>2)), X=1, Y=2
+% X=1
+% Y=2
 
- test1(X,Y) :- \+ ((X=Y,1>2)), X=1, Y=2.
+test1(X,Y) :- \+ ((X=Y,1>2)), X=1, Y=2.
 
- %QUERY test1(X,Y)
- %ANSWER
- % X=1
- % Y=2
- %ANSWER
+%?- test1(X,Y)
+% X=1
+% Y=2
 
- test2(X) :- \+ \+ X=1, X=2.
+test2(X) :- \+ \+ X=1, X=2.
 
- %QUERY test2(X)
- %ANSWER X=2
+%?- test2(X)
+% X=2
 
- %FALSE test2(1)
- %FALSE test2(2)
- */
+%FAIL test2(1)
+%FAIL test2(2)
+*/
 /**
  * <code>\+ X</code> - "not".
  * <p>

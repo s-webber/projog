@@ -24,156 +24,138 @@ import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY true; true
- %ANSWER/
- %ANSWER/
- %TRUE_NO true; fail
- %TRUE fail; true
- %FALSE fail; fail
+%?- true; true
+%YES
+%YES
+%TRUE_NO true; fail
+%TRUE fail; true
+%FAIL fail; fail
 
- %QUERY true; true; true
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %TRUE_NO true; fail; fail
- %TRUE_NO fail; true; fail
- %TRUE fail; fail; true
- %QUERY true; true; fail
- %ANSWER/
- %ANSWER/
- %NO
- %QUERY true; fail; true
- %ANSWER/
- %ANSWER/
- %QUERY fail; true; true
- %ANSWER/
- %ANSWER/
- %FALSE fail; fail; fail
+%?- true; true; true
+%YES
+%YES
+%YES
+%TRUE_NO true; fail; fail
+%TRUE_NO fail; true; fail
+%TRUE fail; fail; true
+%?- true; true; fail
+%YES
+%YES
+%NO
+%?- true; fail; true
+%YES
+%YES
+%?- fail; true; true
+%YES
+%YES
+%FAIL fail; fail; fail
 
- a :- true.
- b :- true.
- c :- true.
- d :- true.
- %QUERY a;b;c
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %QUERY a;b;z
- %ANSWER/
- %ANSWER/
- %NO
- %QUERY a;y;c
- %ANSWER/
- %ANSWER/
- %TRUE_NO a;y;z
- %QUERY x;b;c
- %ANSWER/
- %ANSWER/
- %TRUE_NO x;b;z
- %TRUE x;y;c
- %FALSE x;y;z
+a :- true.
+b :- true.
+c :- true.
+d :- true.
+%?- a;b;c
+%YES
+%YES
+%YES
+%?- a;b;z
+%YES
+%YES
+%NO
+%?- a;y;c
+%YES
+%YES
+%TRUE_NO a;y;z
+%?- x;b;c
+%YES
+%YES
+%TRUE_NO x;b;z
+%TRUE x;y;c
+%FAIL x;y;z
 
- p2(1) :- true.
- p2(2) :- true.
- p2(3) :- true.
+p2(1) :- true.
+p2(2) :- true.
+p2(3) :- true.
 
- p3(a) :- true.
- p3(b) :- true.
- p3(c) :- true.
+p3(a) :- true.
+p3(b) :- true.
+p3(c) :- true.
 
- p4(1, b, [a,b,c]) :- true.
- p4(3, c, [1,2,3]) :- true.
- p4(X, Y, [q,w,e,r,t,y]) :- true.
+p4(1, b, [a,b,c]) :- true.
+p4(3, c, [1,2,3]) :- true.
+p4(X, Y, [q,w,e,r,t,y]) :- true.
 
- p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
+p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
 
- %QUERY p1(X, Y, Z)
- %ANSWER
- % X=1
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=2
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=3
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=a
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=b
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=c
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X=1
- % Y=b
- % Z=[a,b,c]
- %ANSWER
- %ANSWER
- % X=3
- % Y=c
- % Z=[1,2,3]
- %ANSWER
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=[q,w,e,r,t,y]
- %ANSWER
+%?- p1(X, Y, Z)
+% X=1
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+% X=2
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+% X=3
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Y=a
+% Z=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Y=b
+% Z=UNINSTANTIATED VARIABLE
+% X=UNINSTANTIATED VARIABLE
+% Y=c
+% Z=UNINSTANTIATED VARIABLE
+% X=1
+% Y=b
+% Z=[a,b,c]
+% X=3
+% Y=c
+% Z=[1,2,3]
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=[q,w,e,r,t,y]
 
- %QUERY p2(X); p2(X); p2(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
+%?- p2(X); p2(X); p2(X)
+% X=1
+% X=2
+% X=3
+% X=1
+% X=2
+% X=3
+% X=1
+% X=2
+% X=3
 
- %QUERY p2(X); p3(X); p2(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
+%?- p2(X); p3(X); p2(X)
+% X=1
+% X=2
+% X=3
+% X=a
+% X=b
+% X=c
+% X=1
+% X=2
+% X=3
 
- %QUERY X=12; X=27; X=56
- %ANSWER X=12
- %ANSWER X=27
- %ANSWER X=56
+%?- X=12; X=27; X=56
+% X=12
+% X=27
+% X=56
 
- %QUERY p2(X); X=12; p3(X); X=27; p2(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %ANSWER X=12
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
- %ANSWER X=27
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- */
+%?- p2(X); X=12; p3(X); X=27; p2(X)
+% X=1
+% X=2
+% X=3
+% X=12
+% X=a
+% X=b
+% X=c
+% X=27
+% X=1
+% X=2
+% X=3
+*/
 /**
  * <code>X;Y</code> - disjunction.
  * <p>

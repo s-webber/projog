@@ -31,16 +31,16 @@ p([a,b]).
 p([b,a]).
 p([a,b,c]).
 
-%FALSE p(c)
-%FALSE p(1.0)
-%FALSE p(2)
-%FALSE p(7)
-%FALSE p(7.6)
-%FALSE p(z(a,c))
-%FALSE p(q(a,b))
-%FALSE p([b])
-%FALSE p([a,c,b])
-%FALSE p([a,b,c,d])
+%FAIL p(c)
+%FAIL p(1.0)
+%FAIL p(2)
+%FAIL p(7)
+%FAIL p(7.6)
+%FAIL p(z(a,c))
+%FAIL p(q(a,b))
+%FAIL p([b])
+%FAIL p([a,c,b])
+%FAIL p([a,b,c,d])
 
 %TRUE p(b)
 %TRUE p('2')
@@ -56,147 +56,147 @@ p([a,b,c]).
 %TRUE p([a,b])
 %TRUE p([b,a])
 
-%QUERY p(a)
-%ANSWER/
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- p(a)
+%YES
+%YES
+%YES
+%YES
 
-%QUERY p(1)
-%ANSWER/
-%ANSWER/
+%?- p(1)
+%YES
+%YES
 
-%QUERY p(7.5)
-%ANSWER/
-%ANSWER/
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- p(7.5)
+%YES
+%YES
+%YES
+%YES
+%YES
 
-%QUERY p(z(a,b))
-%ANSWER/
-%ANSWER/
-%ANSWER/
+%?- p(z(a,b))
+%YES
+%YES
+%YES
 
-%QUERY p([a,b,c])
-%ANSWER/
-%ANSWER/
+%?- p([a,b,c])
+%YES
+%YES
 
-%QUERY p(x(a,X))
-%ANSWER X=b
-%ANSWER X=c
-%ANSWER X=d
+%?- p(x(a,X))
+% X=b
+% X=c
+% X=d
 
-%QUERY p(X)
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=2
-%ANSWER X=1
-%ANSWER X=0
-%ANSWER X=-1
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.0
-%ANSWER X=[]
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=1
-%ANSWER X=z(a, b)
-%ANSWER X=y(a, b)
-%ANSWER X=x(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=x(a, c)
-%ANSWER X=x(a, d)
-%ANSWER X=x(a, b, c)
-%ANSWER X=z(a, b)
-%ANSWER X=a
-%ANSWER X=[a]
-%ANSWER X=[a,b,c]
-%ANSWER X=[a,b]
-%ANSWER X=[b,a]
-%ANSWER X=[a,b,c]
+%?- p(X)
+% X=a
+% X=b
+% X=2
+% X=1
+% X=0
+% X=-1
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.0
+% X=[]
+% X=a
+% X=a
+% X=1
+% X=z(a, b)
+% X=y(a, b)
+% X=x(a, b)
+% X=z(a, b)
+% X=x(a, c)
+% X=x(a, d)
+% X=x(a, b, c)
+% X=z(a, b)
+% X=a
+% X=[a]
+% X=[a,b,c]
+% X=[a,b]
+% X=[b,a]
+% X=[a,b,c]
 
-%QUERY p(X), p(X)
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=b
-%ANSWER X=2
-%ANSWER X=1
-%ANSWER X=1
-%ANSWER X=0
-%ANSWER X=-1
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.5
-%ANSWER X=7.0
-%ANSWER X=[]
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=1
-%ANSWER X=1
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=y(a, b)
-%ANSWER X=x(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=x(a, c)
-%ANSWER X=x(a, d)
-%ANSWER X=x(a, b, c)
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=z(a, b)
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=a
-%ANSWER X=[a]
-%ANSWER X=[a,b,c]
-%ANSWER X=[a,b,c]
-%ANSWER X=[a,b]
-%ANSWER X=[b,a]
-%ANSWER X=[a,b,c]
-%ANSWER X=[a,b,c]
+%?- p(X), p(X)
+% X=a
+% X=a
+% X=a
+% X=a
+% X=b
+% X=2
+% X=1
+% X=1
+% X=0
+% X=-1
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.5
+% X=7.0
+% X=[]
+% X=a
+% X=a
+% X=a
+% X=a
+% X=a
+% X=a
+% X=a
+% X=a
+% X=1
+% X=1
+% X=z(a, b)
+% X=z(a, b)
+% X=z(a, b)
+% X=y(a, b)
+% X=x(a, b)
+% X=z(a, b)
+% X=z(a, b)
+% X=z(a, b)
+% X=x(a, c)
+% X=x(a, d)
+% X=x(a, b, c)
+% X=z(a, b)
+% X=z(a, b)
+% X=z(a, b)
+% X=a
+% X=a
+% X=a
+% X=a
+% X=[a]
+% X=[a,b,c]
+% X=[a,b,c]
+% X=[a,b]
+% X=[b,a]
+% X=[a,b,c]
+% X=[a,b,c]
 
 %TRUE trace
 
 % test trace when fails
-%QUERY p(z)
+%?- p(z)
 %OUTPUT
 %[1] CALL p(z)
 %[1] FAIL p(z)
@@ -205,58 +205,58 @@ p([a,b,c]).
 %NO
 
 % test trace when succeeds once
-%QUERY p(b)
+%?- p(b)
 %OUTPUT
 %[1] CALL p(b)
 %[1] EXIT p(b)
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 % test trace when succeeds multiple times
-%QUERY p(z(a,b))
+%?- p(z(a,b))
 %OUTPUT
 %[1] CALL p(z(a, b))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER/
+%YES
 %OUTPUT
 %[1] REDO p(z(a, b))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER/
+%YES
 %OUTPUT
 %[1] REDO p(z(a, b))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER/
+%YES
 
 % test trace when argument contains a variable and so will not use index
-%QUERY p(x(a,X))
+%?- p(x(a,X))
 %OUTPUT
 %[1] CALL p(x(a, X))
 %[1] EXIT p(x(a, b))
 %
 %OUTPUT
-%ANSWER X=b
+% X=b
 %OUTPUT
 %[1] REDO p(x(a, b))
 %[1] EXIT p(x(a, c))
 %
 %OUTPUT
-%ANSWER X=c
+% X=c
 %OUTPUT
 %[1] REDO p(x(a, c))
 %[1] EXIT p(x(a, d))
 %
 %OUTPUT
-%ANSWER X=d
+% X=d
 
 % test trace when argument contains a variable and so will not use index and query does not succeed
-%QUERY p(x(q,X))
+%?- p(x(q,X))
 %OUTPUT
 %[1] CALL p(x(q, X))
 %[1] FAIL p(x(q, X))
@@ -265,22 +265,22 @@ p([a,b,c]).
 %NO
 
 % another test of trace when argument contains a variable and so will not use index
-%QUERY p(z(a,X))
+%?- p(z(a,X))
 %OUTPUT
 %[1] CALL p(z(a, X))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER X=b
+% X=b
 %OUTPUT
 %[1] REDO p(z(a, b))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER X=b
+% X=b
 %OUTPUT
 %[1] REDO p(z(a, b))
 %[1] EXIT p(z(a, b))
 %
 %OUTPUT
-%ANSWER X=b
+% X=b

@@ -28,59 +28,59 @@ import org.projog.core.term.TermFormatter;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %QUERY writef('%s%n %t%r', [[h,e,l,l,o], 44, world, !, 3])
- %OUTPUT hello, world!!!
- %ANSWER/
+%?- writef('%s%n %t%r', [[h,e,l,l,o], 44, world, !, 3])
+%OUTPUT hello, world!!!
+%YES
 
- %QUERY writef('.%7l.\\n.%7l.\\n.%7l.\\n.%7l.\\n.%7l.', [a, abc, abcd, abcdefg, abcdefgh])
- %OUTPUT
- %.a      .
- %.abc    .
- %.abcd   .
- %.abcdefg.
- %.abcdefgh.
- %OUTPUT
- %ANSWER/
+%?- writef('.%7l.\\n.%7l.\\n.%7l.\\n.%7l.\\n.%7l.', [a, abc, abcd, abcdefg, abcdefgh])
+%OUTPUT
+%.a      .
+%.abc    .
+%.abcd   .
+%.abcdefg.
+%.abcdefgh.
+%OUTPUT
+%YES
 
- %QUERY writef('.%7r.\\n.%7r.\\n.%7r.\\n.%7r.\\n.%7r.', [a, abc, abcd, abcdefg, abcdefgh])
- %OUTPUT
- %.      a.
- %.    abc.
- %.   abcd.
- %.abcdefg.
- %.abcdefgh.
- %OUTPUT
- %ANSWER/
+%?- writef('.%7r.\\n.%7r.\\n.%7r.\\n.%7r.\\n.%7r.', [a, abc, abcd, abcdefg, abcdefgh])
+%OUTPUT
+%.      a.
+%.    abc.
+%.   abcd.
+%.abcdefg.
+%.abcdefgh.
+%OUTPUT
+%YES
 
- %QUERY writef('.%7c.\\n.%7c.\\n.%7c.\\n.%7c.\\n.%7c.', [a, abc, abcd, abcdefg, abcdefgh])
- %OUTPUT
- %.   a   .
- %.  abc  .
- %. abcd  .
- %.abcdefg.
- %.abcdefgh.
- %OUTPUT
- %ANSWER/
+%?- writef('.%7c.\\n.%7c.\\n.%7c.\\n.%7c.\\n.%7c.', [a, abc, abcd, abcdefg, abcdefgh])
+%OUTPUT
+%.   a   .
+%.  abc  .
+%. abcd  .
+%.abcdefg.
+%.abcdefgh.
+%OUTPUT
+%YES
 
- %QUERY writef('%w %d', [1+1, 1+1])
- %OUTPUT 1 + 1 +(1, 1)
- %ANSWER/
+%?- writef('%w %d', [1+1, 1+1])
+%OUTPUT 1 + 1 +(1, 1)
+%YES
 
- %QUERY writef('\\%\\%%q\\\\\\\\\\r\\n\\u0048',[abc])
- %OUTPUT
- %%%abc\\
- %H
- %OUTPUT
- %ANSWER/
+%?- writef('\\%\\%%q\\\\\\\\\\r\\n\\u0048',[abc])
+%OUTPUT
+%%%abc\\
+%H
+%OUTPUT
+%YES
 
- % Note: calling writef with only 1 argument is the same as calling it with an empty list for the second argument:
- %QUERY writef('\\u0048\\u0065\\u006C\\u006c\\u006F', [])
- %OUTPUT Hello
- %ANSWER/
- %QUERY writef('\\u0048\\u0065\\u006C\\u006c\\u006F')
- %OUTPUT Hello
- %ANSWER/
- */
+% Note: calling writef with only 1 argument is the same as calling it with an empty list for the second argument:
+%?- writef('\\u0048\\u0065\\u006C\\u006c\\u006F', [])
+%OUTPUT Hello
+%YES
+%?- writef('\\u0048\\u0065\\u006C\\u006c\\u006F')
+%OUTPUT Hello
+%YES
+*/
 /**
  * <code>writef(X,Y)</code> - writes formatted text to the output stream.
  * <p>

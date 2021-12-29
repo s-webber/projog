@@ -25,107 +25,85 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
 /* TEST
- %TRUE true, true
- %FALSE true, fail
- %FALSE fail, true
- %FALSE fail, fail
+%TRUE true, true
+%FAIL true, fail
+%FAIL fail, true
+%FAIL fail, fail
 
- %TRUE true, true, true
- %FALSE true, fail, fail
- %FALSE fail, true, fail
- %FALSE fail, fail, true
- %FALSE true, true, fail
- %FALSE true, fail, true
- %FALSE fail, true, true
- %FALSE fail, fail, fail
+%TRUE true, true, true
+%FAIL true, fail, fail
+%FAIL fail, true, fail
+%FAIL fail, fail, true
+%FAIL true, true, fail
+%FAIL true, fail, true
+%FAIL fail, true, true
+%FAIL fail, fail, fail
 
- b :- true.
- c :- true.
- d :- true.
- y :- true.
- a :- b,c,d.
- x :- y,z.
- %TRUE a
- %FALSE x
+b :- true.
+c :- true.
+d :- true.
+y :- true.
+a :- b,c,d.
+x :- y,z.
+%TRUE a
+%FAIL x
 
- p2(1) :- true.
- p2(2) :- true.
- p2(3) :- true.
+p2(1) :- true.
+p2(2) :- true.
+p2(3) :- true.
 
- p3(a) :- true.
- p3(b) :- true.
- p3(c) :- true.
+p3(a) :- true.
+p3(b) :- true.
+p3(c) :- true.
 
- p4(1, b, [a,b,c]) :- true.
- p4(3, c, [1,2,3]) :- true.
- p4(X, Y, [q,w,e,r,t,y]) :- true.
+p4(1, b, [a,b,c]) :- true.
+p4(3, c, [1,2,3]) :- true.
+p4(X, Y, [q,w,e,r,t,y]) :- true.
 
- p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
+p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
 
- %QUERY p1(X, Y, Z)
- %ANSWER
- % X=1
- % Y=a
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=1
- % Y=b
- % Z=[a,b,c]
- %ANSWER
- %ANSWER
- % X=1
- % Y=b
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=1
- % Y=c
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=2
- % Y=a
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=2
- % Y=b
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=2
- % Y=c
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=3
- % Y=a
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=3
- % Y=b
- % Z=[q,w,e,r,t,y]
- %ANSWER
- %ANSWER
- % X=3
- % Y=c
- % Z=[1,2,3]
- %ANSWER
- %ANSWER
- % X=3
- % Y=c
- % Z=[q,w,e,r,t,y]
- %ANSWER
+%?- p1(X, Y, Z)
+% X=1
+% Y=a
+% Z=[q,w,e,r,t,y]
+% X=1
+% Y=b
+% Z=[a,b,c]
+% X=1
+% Y=b
+% Z=[q,w,e,r,t,y]
+% X=1
+% Y=c
+% Z=[q,w,e,r,t,y]
+% X=2
+% Y=a
+% Z=[q,w,e,r,t,y]
+% X=2
+% Y=b
+% Z=[q,w,e,r,t,y]
+% X=2
+% Y=c
+% Z=[q,w,e,r,t,y]
+% X=3
+% Y=a
+% Z=[q,w,e,r,t,y]
+% X=3
+% Y=b
+% Z=[q,w,e,r,t,y]
+% X=3
+% Y=c
+% Z=[1,2,3]
+% X=3
+% Y=c
+% Z=[q,w,e,r,t,y]
 
- %QUERY p2(X), p2(X), p2(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
+%?- p2(X), p2(X), p2(X)
+% X=1
+% X=2
+% X=3
 
- %FALSE p2(X), p3(X), p2(X)
- */
+%FAIL p2(X), p3(X), p2(X)
+*/
 /**
  * <code>X,Y</code> - conjunction.
  * <p>

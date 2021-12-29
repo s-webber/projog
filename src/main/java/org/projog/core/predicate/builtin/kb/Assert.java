@@ -22,107 +22,97 @@ import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
- %QUERY X=p(1), asserta(X), asserta(p(2)), asserta(p(3))
- %ANSWER X=p(1)
- %QUERY p(X)
- %ANSWER X=3
- %ANSWER X=2
- %ANSWER X=1
+%?- X=p(1), asserta(X), asserta(p(2)), asserta(p(3))
+% X=p(1)
+%?- p(X)
+% X=3
+% X=2
+% X=1
 
- %QUERY retract(p(X))
- %ANSWER X=3
- %ANSWER X=2
- %ANSWER X=1
- %FALSE p(X)
+%?- retract(p(X))
+% X=3
+% X=2
+% X=1
+%FAIL p(X)
 
- %QUERY X=p(1), assertz(X), assertz(p(2)), assertz(p(3))
- %ANSWER X=p(1)
- %QUERY p(X)
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
+%?- X=p(1), assertz(X), assertz(p(2)), assertz(p(3))
+% X=p(1)
+%?- p(X)
+% X=1
+% X=2
+% X=3
 
- %QUERY retract(p(X))
- %ANSWER X=1
- %ANSWER X=2
- %ANSWER X=3
- %FALSE p(X)
+%?- retract(p(X))
+% X=1
+% X=2
+% X=3
+%FAIL p(X)
 
- % Note: "assert" is a synonym for "assertz".
- %FALSE z(X)
- %TRUE assert(z(a)), assert(z(b)), assert(z(c))
- %QUERY z(X)
- %ANSWER X=a
- %ANSWER X=b
- %ANSWER X=c
+% Note: "assert" is a synonym for "assertz".
+%FAIL z(X)
+%TRUE assert(z(a)), assert(z(b)), assert(z(c))
+%?- z(X)
+% X=a
+% X=b
+% X=c
 
- % rules can be asserted, but have to be surrounded by brackets
- %FALSE q(X,Y,Z)
- %QUERY assert((q(X,Y,Z) :- Z is X+Y))
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY assert((q(X,Y,Z) :- Z is X-Y))
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY assert((q(X,Y,Z) :- Z is X*Y, repeat(3)))
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY assert((q(X,Y,Z) :- Z is -X))
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %TRUE_NO q(6,3,9)
- %QUERY q(6,3,18)
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %NO
- %FALSE q(6,3,17)
- %QUERY q(5,2,Q)
- %ANSWER Q=7
- %ANSWER Q=3
- %ANSWER Q=10
- %ANSWER Q=10
- %ANSWER Q=10
- %ANSWER Q=-5
- %QUERY q(6,7,Q)
- %ANSWER Q=13
- %ANSWER Q=-1
- %ANSWER Q=42
- %ANSWER Q=42
- %ANSWER Q=42
- %ANSWER Q=-6
- %QUERY q(8,4,32)
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %NO
- %QUERY asserta((q(X,Y,Z) :- Z is Y-X))
- %ANSWER
- % X=UNINSTANTIATED VARIABLE
- % Y=UNINSTANTIATED VARIABLE
- % Z=UNINSTANTIATED VARIABLE
- %ANSWER
- %QUERY q(5,2,Q)
- %ANSWER Q=-3
- %ANSWER Q=7
- %ANSWER Q=3
- %ANSWER Q=10
- %ANSWER Q=10
- %ANSWER Q=10
- %ANSWER Q=-5
- */
+% rules can be asserted, but have to be surrounded by brackets
+%FAIL q(X,Y,Z)
+%?- assert((q(X,Y,Z) :- Z is X+Y))
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%?- assert((q(X,Y,Z) :- Z is X-Y))
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%?- assert((q(X,Y,Z) :- Z is X*Y, repeat(3)))
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%?- assert((q(X,Y,Z) :- Z is -X))
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%TRUE_NO q(6,3,9)
+%?- q(6,3,18)
+%YES
+%YES
+%YES
+%NO
+%FAIL q(6,3,17)
+%?- q(5,2,Q)
+% Q=7
+% Q=3
+% Q=10
+% Q=10
+% Q=10
+% Q=-5
+%?- q(6,7,Q)
+% Q=13
+% Q=-1
+% Q=42
+% Q=42
+% Q=42
+% Q=-6
+%?- q(8,4,32)
+%YES
+%YES
+%YES
+%NO
+%?- asserta((q(X,Y,Z) :- Z is Y-X))
+% X=UNINSTANTIATED VARIABLE
+% Y=UNINSTANTIATED VARIABLE
+% Z=UNINSTANTIATED VARIABLE
+%?- q(5,2,Q)
+% Q=-3
+% Q=7
+% Q=3
+% Q=10
+% Q=10
+% Q=10
+% Q=-5
+*/
 /**
  * <code>asserta(X)</code> / <code>assertz(X)</code> - adds a clause to the knowledge base.
  * <p>

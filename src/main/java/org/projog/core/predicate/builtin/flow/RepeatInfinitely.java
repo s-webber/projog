@@ -19,42 +19,42 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 
 /* TEST
- %QUERY repeat
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %ANSWER/
- %QUIT
+%?- repeat
+%YES
+%YES
+%YES
+%YES
+%YES
+%YES
+%YES
+%QUIT
 
- write_to_file(X) :-
-    open('io_test.tmp', write, Z),
-    set_output(Z),
-    write(X),
-    close(Z),
-    set_output('user_output').
+write_to_file(X) :-
+   open('io_test.tmp', write, Z),
+   set_output(Z),
+   write(X),
+   close(Z),
+   set_output('user_output').
 
- read_from_file :-
-    open('io_test.tmp', read, Z),
-    set_input(Z),
-    print_first_sentence,
-    close(Z).
+read_from_file :-
+   open('io_test.tmp', read, Z),
+   set_input(Z),
+   print_first_sentence,
+   close(Z).
 
- print_first_sentence :-
-    repeat,
-    get_char(C),
-    write(C),
-    C=='.',
-    !.
+print_first_sentence :-
+   repeat,
+   get_char(C),
+   write(C),
+   C=='.',
+   !.
 
- %TRUE write_to_file('The first sentence. The second sentence.')
+%TRUE write_to_file('The first sentence. The second sentence.')
 
- %QUERY read_from_file
- %OUTPUT The first sentence.
- %ANSWER/
- */
+%?- read_from_file
+%OUTPUT The first sentence.
+%YES
+*/
 /**
  * <code>repeat</code> - always succeeds.
  * <p>

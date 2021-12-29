@@ -28,270 +28,190 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /* TEST
- %TRUE nth0(0, [a,b,c], a)
- %TRUE nth1(1, [a,b,c], a)
- %TRUE nth0(1, [a,b,c], b)
- %TRUE nth1(2, [a,b,c], b)
- %TRUE nth0(2, [a,b,c], c)
- %TRUE nth1(3, [a,b,c], c)
+%TRUE nth0(0, [a,b,c], a)
+%TRUE nth1(1, [a,b,c], a)
+%TRUE nth0(1, [a,b,c], b)
+%TRUE nth1(2, [a,b,c], b)
+%TRUE nth0(2, [a,b,c], c)
+%TRUE nth1(3, [a,b,c], c)
 
- %FALSE nth0(-1, [a,b,c], a)
- %FALSE nth0(1, [a,b,c], a)
- %FALSE nth0(5, [a,b,c], a)
+%FAIL nth0(-1, [a,b,c], a)
+%FAIL nth0(1, [a,b,c], a)
+%FAIL nth0(5, [a,b,c], a)
 
- %QUERY nth0(0, [a,b,c], X)
- %ANSWER X=a
- %QUERY nth0(1, [a,b,c], X)
- %ANSWER X=b
- %QUERY nth0(2, [a,b,c], X)
- %ANSWER X=c
+%?- nth0(0, [a,b,c], X)
+% X=a
+%?- nth0(1, [a,b,c], X)
+% X=b
+%?- nth0(2, [a,b,c], X)
+% X=c
 
- %FALSE nth0(-1, [a,b,c], X)
- %FALSE nth0(3, [a,b,c], X)
+%FAIL nth0(-1, [a,b,c], X)
+%FAIL nth0(3, [a,b,c], X)
 
- %QUERY nth0(X, [h,e,l,l,o], e)
- %ANSWER X=1
- %NO
- %QUERY nth0(X, [h,e,l,l,o], l)
- %ANSWER X=2
- %ANSWER X=3
- %NO
- %FALSE nth0(X, [h,e,l,l,o], z)
+%?- nth0(X, [h,e,l,l,o], e)
+% X=1
+%NO
+%?- nth0(X, [h,e,l,l,o], l)
+% X=2
+% X=3
+%NO
+%FAIL nth0(X, [h,e,l,l,o], z)
 
- %QUERY nth0(X, [h,e,l,l,o], Y)
- %ANSWER
- % X=0
- % Y=h
- %ANSWER
- %ANSWER
- % X=1
- % Y=e
- %ANSWER
- %ANSWER
- % X=2
- % Y=l
- %ANSWER
- %ANSWER
- % X=3
- % Y=l
- %ANSWER
- %ANSWER
- % X=4
- % Y=o
- %ANSWER
+%?- nth0(X, [h,e,l,l,o], Y)
+% X=0
+% Y=h
+% X=1
+% Y=e
+% X=2
+% Y=l
+% X=3
+% Y=l
+% X=4
+% Y=o
 
- %FALSE nth1(0, [a,b,c], a)
- %FALSE nth1(2, [a,b,c], a)
- %FALSE nth1(4, [a,b,c], a)
+%FAIL nth1(0, [a,b,c], a)
+%FAIL nth1(2, [a,b,c], a)
+%FAIL nth1(4, [a,b,c], a)
 
- %QUERY nth1(1, [a,b,c], X)
- %ANSWER X=a
- %QUERY nth1(2, [a,b,c], X)
- %ANSWER X=b
- %QUERY nth1(3, [a,b,c], X)
- %ANSWER X=c
+%?- nth1(1, [a,b,c], X)
+% X=a
+%?- nth1(2, [a,b,c], X)
+% X=b
+%?- nth1(3, [a,b,c], X)
+% X=c
 
- %FALSE nth1(-1, [a,b,c], X)
- %FALSE nth1(0, [a,b,c], X)
- %FALSE nth1(4, [a,b,c], X)
+%FAIL nth1(-1, [a,b,c], X)
+%FAIL nth1(0, [a,b,c], X)
+%FAIL nth1(4, [a,b,c], X)
 
- %QUERY nth1(X, [h,e,l,l,o], e)
- %ANSWER X=2
- %NO
- %QUERY nth1(X, [h,e,l,l,o], l)
- %ANSWER X=3
- %ANSWER X=4
- %NO
- %FALSE nth1(X, [h,e,l,l,o], z)
+%?- nth1(X, [h,e,l,l,o], e)
+% X=2
+%NO
+%?- nth1(X, [h,e,l,l,o], l)
+% X=3
+% X=4
+%NO
+%FAIL nth1(X, [h,e,l,l,o], z)
 
- %QUERY nth1(X, [h,e,l,l,o], Y)
- %ANSWER
- % X=1
- % Y=h
- %ANSWER
- %ANSWER
- % X=2
- % Y=e
- %ANSWER
- %ANSWER
- % X=3
- % Y=l
- %ANSWER
- %ANSWER
- % X=4
- % Y=l
- %ANSWER
- %ANSWER
- % X=5
- % Y=o
- %ANSWER
+%?- nth1(X, [h,e,l,l,o], Y)
+% X=1
+% Y=h
+% X=2
+% Y=e
+% X=3
+% Y=l
+% X=4
+% Y=l
+% X=5
+% Y=o
 
- % Note: "nth" is a synonym for "nth1".
- %TRUE nth(2, [a,b,c], b)
+% Note: "nth" is a synonym for "nth1".
+%TRUE nth(2, [a,b,c], b)
 
- %FALSE nth0(1, [h,e,l,l,o|Y], l)
- %FALSE nth1(1, [h,e,l,l,o|Y], l)
+%FAIL nth0(1, [h,e,l,l,o|Y], l)
+%FAIL nth1(1, [h,e,l,l,o|Y], l)
 
- %QUERY nth0(X, [h,e,l,l,o|Y], l)
- %ANSWER
- % X = 2
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 3
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 5
- % Y = [l|_5]
- %ANSWER
- %ANSWER
- % X = 6
- % Y = [_6,l|_5]
- %ANSWER
- %ANSWER
- % X = 7
- % Y = [_7,_6,l|_5]
- %ANSWER
- %QUIT
+%?- nth0(X, [h,e,l,l,o|Y], l)
+% X=2
+% Y=UNINSTANTIATED VARIABLE
+% X=3
+% Y=UNINSTANTIATED VARIABLE
+% X=5
+% Y=[l|_5]
+% X=6
+% Y=[_6,l|_5]
+% X=7
+% Y=[_7,_6,l|_5]
+%QUIT
 
- %QUERY nth1(X, [h,e,l,l,o|Y], l)
- %ANSWER
- % X = 3
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 4
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 6
- % Y = [l|_6]
- %ANSWER
- %ANSWER
- % X = 7
- % Y = [_7,l|_6]
- %ANSWER
- %ANSWER
- % X = 8
- % Y = [_8,_7,l|_6]
- %ANSWER
- %QUIT
+%?- nth1(X, [h,e,l,l,o|Y], l)
+% X=3
+% Y=UNINSTANTIATED VARIABLE
+% X=4
+% Y=UNINSTANTIATED VARIABLE
+% X=6
+% Y=[l|_6]
+% X=7
+% Y=[_7,l|_6]
+% X=8
+% Y=[_8,_7,l|_6]
+%QUIT
 
- %QUERY nth0(8,[a,b,c|X],Y)
- %ANSWER
- % X = [E4,E3,E2,E1,E0,Y|T]
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
+%?- nth0(8,[a,b,c|X],Y)
+% X=[E4,E3,E2,E1,E0,Y|T]
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY nth1(8,[a,b,c|X],Y)
- %ANSWER
- % X = [E3,E2,E1,E0,Y|T]
- % Y = UNINSTANTIATED VARIABLE
- %ANSWER
+%?- nth1(8,[a,b,c|X],Y)
+% X=[E3,E2,E1,E0,Y|T]
+% Y=UNINSTANTIATED VARIABLE
 
- %QUERY nth0(X,[a,b,c|Y],Z)
- %ANSWER
- % X = 0
- % Y = UNINSTANTIATED VARIABLE
- % Z = a
- %ANSWER
- %ANSWER
- % X = 1
- % Y = UNINSTANTIATED VARIABLE
- % Z = b
- %ANSWER
- %ANSWER
- % X = 2
- % Y = UNINSTANTIATED VARIABLE
- % Z = c
- %ANSWER
- %ANSWER
- % X = 3
- % Y = [Z|_3]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 4
- % Y = [_4,Z|_3]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 5
- % Y = [_5,_4,Z|_3]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %QUIT
+%?- nth0(X,[a,b,c|Y],Z)
+% X=0
+% Y=UNINSTANTIATED VARIABLE
+% Z=a
+% X=1
+% Y=UNINSTANTIATED VARIABLE
+% Z=b
+% X=2
+% Y=UNINSTANTIATED VARIABLE
+% Z=c
+% X=3
+% Y=[Z|_3]
+% Z=UNINSTANTIATED VARIABLE
+% X=4
+% Y=[_4,Z|_3]
+% Z=UNINSTANTIATED VARIABLE
+% X=5
+% Y=[_5,_4,Z|_3]
+% Z=UNINSTANTIATED VARIABLE
+%QUIT
 
- %QUERY nth1(X,[a,b,c|Y],Z)
- %ANSWER
- % X = 1
- % Y = UNINSTANTIATED VARIABLE
- % Z = a
- %ANSWER
- %ANSWER
- % X = 2
- % Y = UNINSTANTIATED VARIABLE
- % Z = b
- %ANSWER
- %ANSWER
- % X = 3
- % Y = UNINSTANTIATED VARIABLE
- % Z = c
- %ANSWER
- %ANSWER
- % X = 4
- % Y = [Z|_4]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 5
- % Y = [_5,Z|_4]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 6
- % Y = [_6,_5,Z|_4]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %QUIT
+%?- nth1(X,[a,b,c|Y],Z)
+% X=1
+% Y=UNINSTANTIATED VARIABLE
+% Z=a
+% X=2
+% Y=UNINSTANTIATED VARIABLE
+% Z=b
+% X=3
+% Y=UNINSTANTIATED VARIABLE
+% Z=c
+% X=4
+% Y=[Z|_4]
+% Z=UNINSTANTIATED VARIABLE
+% X=5
+% Y=[_5,Z|_4]
+% Z=UNINSTANTIATED VARIABLE
+% X=6
+% Y=[_6,_5,Z|_4]
+% Z=UNINSTANTIATED VARIABLE
+%QUIT
 
- %QUERY nth0(X,Y,Z)
- %ANSWER
- % X = 0
- % Y = [Z|_0]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 1
- % Y = [_1,Z|_0]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 2
- % Y = [_2,_1,Z|_0]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %QUIT
+%?- nth0(X,Y,Z)
+% X=0
+% Y=[Z|_0]
+% Z=UNINSTANTIATED VARIABLE
+% X=1
+% Y=[_1,Z|_0]
+% Z=UNINSTANTIATED VARIABLE
+% X=2
+% Y=[_2,_1,Z|_0]
+% Z=UNINSTANTIATED VARIABLE
+%QUIT
 
- %QUERY nth1(X,Y,Z)
- %ANSWER
- % X = 1
- % Y = [Z|_1]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 2
- % Y = [_2,Z|_1]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %ANSWER
- % X = 3
- % Y = [_3,_2,Z|_1]
- % Z = UNINSTANTIATED VARIABLE
- %ANSWER
- %QUIT
- */
+%?- nth1(X,Y,Z)
+% X=1
+% Y=[Z|_1]
+% Z=UNINSTANTIATED VARIABLE
+% X=2
+% Y=[_2,Z|_1]
+% Z=UNINSTANTIATED VARIABLE
+% X=3
+% Y=[_3,_2,Z|_1]
+% Z=UNINSTANTIATED VARIABLE
+%QUIT
+*/
 /**
  * <code>nth0(X,Y,Z)</code> / <code>nth1(X,Y,Z)</code> - examines an element of a list.
  * <p>

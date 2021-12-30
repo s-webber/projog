@@ -100,7 +100,7 @@ public final class Projog {
     * <p>
     * By default the "standard" input stream will be {@code System.in}.
     */
-   void setUserInput(InputStream is) {
+   public void setUserInput(InputStream is) {
       kb.getFileHandles().setUserInput(is);
    }
 

@@ -1,0 +1,42 @@
+@startuml ProjogConsole.png
+hide members
+
+'package "java.io" #DDDDDD {
+'class PrintStream
+'}
+
+interface ProjogListener {
++onCall(SpyPointEvent);
++onRedo(SpyPointEvent);
++onExit(SpyPointExitEvent);
++onFail(SpyPointEvent);
++onWarn(String);
++onInfo(String);
+}
+
+'class SpyPointEvent {
+'+getPredicateKey()
+'+getFormattedTerm()
+'+getSourceId()
+'}
+
+'class SpyPointExitEvent {
+'+getFormattedClause()
+'+getClauseModel()
+'}
+
+ProjogConsole o-down- Projog
+Projog o-down- KnowledgeBase
+KnowledgeBase o-down- ProjogListeners
+ProjogListeners o-right- ProjogListener
+ProjogListener <|-up- LoggingProjogListener
+'LoggingProjogListener o-right- PrintStream
+ProjogConsole o-down- LoggingProjogListener
+
+
+'SpyPointEvent <|-- SpyPointExitEvent
+
+show ProjogListener method
+'show SpyPointEvent method
+'show SpyPointExitEvent method
+@enduml

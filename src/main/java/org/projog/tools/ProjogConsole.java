@@ -40,6 +40,8 @@ import org.projog.core.term.Term;
  * Command line interface to Prolog.
  * <p>
  * Provides a mechanism for users to interact with Projog via a read-evaluate-print loop (REPL).
+ * </p>
+ * <img src="doc-files/ProjogConsole.png">
  */
 public class ProjogConsole {
    /** Command user can enter to exit the console application. */

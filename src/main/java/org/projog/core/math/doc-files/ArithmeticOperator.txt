@@ -1,0 +1,48 @@
+@startuml ArithmeticOperator.png
+hide members
+
+interface ArithmeticOperator {
++calculate(Term[])
+}
+
+abstract AbstractArithmeticOperator
+
+abstract AbstractUnaryArithmeticOperator {
+#calculate(Numeric)
+#calculateDouble(double)
+#calculateLong(long)
+}
+
+abstract AbstractBinaryArithmeticOperator {
+#calculate(Numeric, Numeric)
+#calculateDouble(double, double)
+#calculateLong(long, long)
+}
+
+abstract AbstractBinaryIntegerArithmeticOperator {
+#calculate(Numeric, Numeric)
+#calculateLong(long, long)
+}
+
+ArithmeticOperator <|-- AbstractArithmeticOperator
+
+AbstractArithmeticOperator <|-- AbstractUnaryArithmeticOperator
+
+AbstractArithmeticOperator <|-- AbstractBinaryArithmeticOperator
+AbstractArithmeticOperator <|-- AbstractBinaryIntegerArithmeticOperator
+
+AbstractUnaryArithmeticOperator <|-- Abs
+AbstractUnaryArithmeticOperator <|-- Minus
+
+AbstractBinaryArithmeticOperator <|-- Add
+AbstractBinaryArithmeticOperator <|-- Multiply
+AbstractBinaryArithmeticOperator <|-- Subtract
+
+AbstractBinaryIntegerArithmeticOperator <|-- BitwiseAnd
+AbstractBinaryIntegerArithmeticOperator <|-- IntegerDivide
+AbstractBinaryIntegerArithmeticOperator <|-- Modulo
+
+show ArithmeticOperator method
+'show AbstractUnaryArithmeticOperator method
+'show AbstractBinaryArithmeticOperator method
+@enduml

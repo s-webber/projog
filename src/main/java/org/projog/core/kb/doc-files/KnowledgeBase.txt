@@ -1,0 +1,38 @@
+@startuml KnowledgeBase.png
+hide members
+
+class KnowledgeBase {
++getProjogProperties()
++getPredicates()
++getArithmeticOperators()
++getProjogListeners()
++getOperands()
++getTermFormatter()
++getSpyPoints()
++getFileHandles()
+}
+
+interface ProjogProperties
+interface ArithmeticOperator
+interface PredicateFactory
+interface ProjogListener
+
+KnowledgeBase o-left- ProjogProperties
+KnowledgeBase o-left- Predicates
+KnowledgeBase o-up- ArithmeticOperators
+KnowledgeBase o-right- ProjogListeners
+KnowledgeBase o-up- FileHandles
+KnowledgeBase o-down- TermFormatter
+KnowledgeBase o-right- SpyPoints
+KnowledgeBase o-down- Operands
+ProjogProperties <|-- ProjogDefaultProperties
+ArithmeticOperators o-left- ArithmeticOperator
+Predicates o-down- PredicateFactory
+ProjogListeners o-up- ProjogListener
+SpyPoints o-down- SpyPoint
+TermFormatter o-right- Operands
+SpyPoints o-- ProjogListeners
+
+show KnowledgeBase method
+
+@enduml

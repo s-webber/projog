@@ -39,6 +39,8 @@ import org.projog.core.term.Term;
  * Provides an entry point for other Java code to interact with Projog.
  * <p>
  * Contains a single instance of {@link org.projog.core.kb.KnowledgeBase}.
+ * </p>
+ * <img src="doc-files/Projog.png">
  */
 public final class Projog {
    private final KnowledgeBase kb;

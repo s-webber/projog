@@ -31,6 +31,7 @@ import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
+/** Acts as a repository of rules and facts. */
 public class Predicates {
    /**
     * Used to coordinate access to {@link javaPredicateClassNames}, {@link #javaPredicateInstances} and

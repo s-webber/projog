@@ -26,8 +26,8 @@ import java.util.WeakHashMap;
  * Associates arbitrary objects with a {@code KnowledgeBase}.
  * <p>
  * Provides a way to implement a one-to-one relationship between a {@code KnowledgeBase} and its services. i.e. A
- * {@code KnowledgeBase} can be associated with one, and only one, {@code SpyPoints} - and a {@code SpyPoints} can be
- * associated with one, and only one, {@code KnowledgeBase}.
+ * {@code KnowledgeBase} can be associated with one, and only one, {@code RecordedDatabase} - and a
+ * {@code RecordedDatabase} can be associated with one, and only one, {@code KnowledgeBase}.
  * </p>
  */
 public class KnowledgeBaseServiceLocator {

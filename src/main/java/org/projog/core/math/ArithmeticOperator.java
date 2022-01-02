@@ -19,6 +19,9 @@ import org.projog.core.term.Term;
 
 /**
  * Represents a function that returns a single numerical value.
+ * <p>
+ * <img src="doc-files/ArithmeticOperator.png">
+ * </p>
  *
  * @see ArithmeticOperators
  */

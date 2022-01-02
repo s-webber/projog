@@ -1,0 +1,92 @@
+@startuml Projog.png
+hide members
+
+class Projog {
++consultFile(File)
++consultReader(Reader)
++consultResource(String)
++setUserInput(InputStream)
++setUserOutput(PrintStream)
++addPredicateFactory(PredicateKey, PredicateFactory)
++addArithmeticOperator(PredicateKey, ArithmeticOperator)
++createPlan(String)
++createStatement(String)
++executeQuery(String)
++executeOnce(String)
++addListener(ProjogListener)
++formatTerm(Term)
++getKnowledgeBase()
++printProjogStackTrace(Throwable)
++printProjogStackTrace(Throwable, PrintStream)
++getStackTrace(Throwable)
+}
+
+class QueryPlan {
++createStatement()
++executeQuery()
++executeOnce()
++findFirstAsAtomName()
++findFirstAsDouble()
++findFirstAsLong()
++findFirstAsTerm()
++findFirstAsOptionalAtomName()
++findFirstAsOptionalDouble()
++findFirstAsOptionalLong()
++findFirstAsOptionalTerm()
++findAllAsAtomName()
++findAllAsDouble()
++findAllAsLong()
++findAllAsTerm()
+}
+
+class QueryStatement {
++setTerm(String, Term)
++setAtomName(String, String)
++setDouble(String, double)
++setLong(String, long)
++setListOfAtomNames(String, String...)
++setListOfAtomNames(String, List<String>)
++setListOfDoubles(String, double...)
++setListOfDoubles(String, List<Double>)
++setListOfLongs(String, long...)
++setListOfLongs(String, List<Long>)
++setListOfTerms(String, Term...)
++setListOfTerms(String, List<? extends Term>)
++executeQuery()
++executeOnce()
++findFirstAsAtomName()
++findFirstAsDouble()
++findFirstAsLong()
++findFirstAsTerm()
++findFirstAsOptionalAtomName()
++findFirstAsOptionalDouble()
++findFirstAsOptionalLong()
++findFirstAsOptionalTerm()
++findAllAsAtomName()
++findAllAsDouble()
++findAllAsLong()
++findAllAsTerm()
+}
+
+class QueryResult {
++next()
++isExhausted()
++getAtomName(String)
++getDouble(String)
++getLong(String)
++getTerm(String)
++getVariableIds()
+}
+
+Projog o-right- KnowledgeBase
+Projog .left.> ProjogSourceReader
+Projog .down.> QueryPlan
+Projog .down.> QueryStatement
+QueryPlan ..> QueryStatement
+QueryStatement .down.> QueryResult
+
+show Projog method
+show QueryPlan method
+show QueryStatement method
+show QueryResult method
+@enduml

@@ -325,7 +325,6 @@ public final class QueryStatement {
     * The query will only be evaluated once, even if further solutions could of been found on backtracking.
     *
     * @throws ProjogException if no solution can be found
-    * @see #createStatement()
     * @see #executeQuery()
     */
    public void executeOnce() {

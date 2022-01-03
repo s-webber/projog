@@ -16,7 +16,7 @@ Projog can be used as a stand-alone console application or embedded in your Java
 - [Calling Prolog from Java](http://projog.org/calling-prolog-from-java.html)
 - [Extending Prolog using Java](http://projog.org/extending-prolog-with-java.html)
 - Example applications: [Prolog Expert System](https://github.com/s-webber/prolog-expert-system) and [Prolog Wumpus World](https://github.com/s-webber/prolog-wumpus-world)
-- [Class diagrams](http://projog.org/projog-class-diagrams.html) and [design decisions](http://projog.org/projog-design-decisions.html)
+- [Class diagrams](http://projog.org/class-diagrams.html) and [design decisions](http://projog.org/design-decisions.html)
 
 ## Quick Start Guide
 

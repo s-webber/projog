@@ -24,6 +24,11 @@ import java.util.Map;
 import org.projog.core.predicate.udp.KeyFactories.KeyFactory;
 import org.projog.core.term.Term;
 
+/**
+ * Supports term indexing of user defined predicates.
+ * <p>
+ * See: https://en.wikipedia.org/wiki/Prolog#Term_indexing
+ */
 final class Indexes {
    /**
     * Maximum number of arguments of a clause that will be considered indexable.
@@ -146,8 +151,8 @@ final class Indexes {
    // only used by tests
    int countReferences() {
       int ctr = 0;
-      for (int i = 0; i < indexes.length; i++) {
-         if (indexes[i] != null) {
+      for (SoftReference<Index> index : indexes) {
+         if (index != null) {
             ctr++;
          }
       }
@@ -157,8 +162,8 @@ final class Indexes {
    // only used by tests
    int countClearedReferences() {
       int ctr = 0;
-      for (int i = 0; i < indexes.length; i++) {
-         if (indexes[i] != null && indexes[i].get() == null) {
+      for (SoftReference<Index> index : indexes) {
+         if (index != null && index.get() == null) {
             ctr++;
          }
       }

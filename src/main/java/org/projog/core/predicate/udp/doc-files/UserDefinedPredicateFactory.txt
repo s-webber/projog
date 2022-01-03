@@ -1,0 +1,22 @@
+@startuml UserDefinedPredicateFactory.png
+hide members
+
+interface UserDefinedPredicateFactory {
+}
+
+DynamicUserDefinedPredicateFactory <|-up- UserDefinedPredicateFactory
+StaticUserDefinedPredicateFactory <|-up- UserDefinedPredicateFactory
+
+DynamicUserDefinedPredicateFactory ..> InterpretedUserDefinedPredicate
+
+StaticUserDefinedPredicateFactory ..> NotIndexablePredicateFactory
+NotIndexablePredicateFactory ..> InterpretedUserDefinedPredicate
+
+StaticUserDefinedPredicateFactory ..> IndexablePredicateFactory
+IndexablePredicateFactory ..> InterpretedUserDefinedPredicate
+IndexablePredicateFactory o-- Indexes
+
+StaticUserDefinedPredicateFactory ..> InterpretedTailRecursivePredicateFactory
+InterpretedTailRecursivePredicateFactory ..> InterpretedTailRecursivePredicate
+
+@enduml

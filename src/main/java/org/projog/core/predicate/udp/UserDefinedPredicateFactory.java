@@ -24,6 +24,8 @@ import org.projog.core.predicate.PredicateKey;
  * Maintains a record of the clauses that define a user defined predicate.
  * <p>
  * A user defined predicate is a predicate that is constructed from Prolog syntax consulted at runtime.
+ * </p>
+ * <img src="doc-files/UserDefinedPredicateFactory.png">
  */
 public interface UserDefinedPredicateFactory extends PredicateFactory {
    /**

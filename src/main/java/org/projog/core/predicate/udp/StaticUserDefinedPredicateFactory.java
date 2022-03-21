@@ -57,11 +57,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     * <p>
     * It is not possible to add a clause to the beginning of a <i>static</i> user defined predicate.
     *
-    * @throws UnsupportedOperationException
+    * @throws ProjogException
     */
    @Override
    public void addFirst(ClauseModel clauseModel) {
-      throw new UnsupportedOperationException();
+      throw new ProjogException("Cannot add clause to already defined user defined predicate as it is not dynamic: " + predicateKey + " clause: " + clauseModel.getOriginal());
    }
 
    /**
@@ -76,7 +76,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       if (compiledPredicateFactory == null) {
          implications.add(clauseModel);
       } else {
-         throw new ProjogException("Cannot append to already defined user defined predicate as it is not dynamic: " + predicateKey + " clause: " + clauseModel.getOriginal());
+         throw new ProjogException("Cannot add clause to already defined user defined predicate as it is not dynamic: " + predicateKey + " clause: " + clauseModel.getOriginal());
       }
    }
 
@@ -138,7 +138,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          return new NeverSucceedsPredicateFactory(spyPoint);
       } else if (clauses.getImmutableColumns().length == 0) {
          return new NotIndexablePredicateFactory(clauses);
-      } else if (clauses.getImmutableColumns().length==1) {
+      } else if (clauses.getImmutableColumns().length == 1) {
          Index index = new Indexes(clauses).getOrCreateIndex(1);
          ClauseAction[] actions = clauses.getClauseActions();
          if (index.getKeyCount() == actions.length) {
@@ -181,7 +181,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     * </pre>
     */
    private static boolean isClausesRetryable(ClauseAction[] clauses) {
-      int lastIdx = clauses.length-1;
+      int lastIdx = clauses.length - 1;
       ClauseAction last = clauses[lastIdx];
       if (last.isRetryable() && !last.isAlwaysCutOnBacktrack()) {
          return true;
@@ -384,7 +384,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          ClauseAction[] data;
          if (arg.getArgument(argIdx).isImmutable()) {
             data = index.getMatches(arg.getArgs());
-         }else {
+         } else {
             data = actions;
          }
 

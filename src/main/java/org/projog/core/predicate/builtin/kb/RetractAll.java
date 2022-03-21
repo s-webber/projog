@@ -59,6 +59,18 @@ import org.projog.core.term.Term;
 % Argument must be suitably instantiated that the predicate of the clause can be determined.
 %?- retractall(X)
 %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+
+%?- retractall(true)
+%ERROR Cannot inspect clauses of built-in predicate: true/0
+%?- retractall(is(1,2))
+%ERROR Cannot inspect clauses of built-in predicate: is/2
+
+non_dynamic_predicate(1,2,3).
+%?- retractall(non_dynamic_predicate(1,2,3))
+%ERROR Cannot retract clause from user defined predicate as it is not dynamic: non_dynamic_predicate/3
+%?- retractall(non_dynamic_predicate(_,_,_))
+%ERROR Cannot retract clause from user defined predicate as it is not dynamic: non_dynamic_predicate/3
+%TRUE retractall(non_dynamic_predicate(4,5,6))
 */
 /**
  * <code>retractall(X)</code> - remove clauses from the knowledge base.

@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.projog.TestUtils;
+import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -230,6 +231,40 @@ public class StaticUserDefinedPredicateFactoryTest {
    public void testVariableAntecedent() {
       PredicateFactory pf = getActualPredicateFactory("true(X) :- X.");
       assertSingleRetryableRulePredicateFactory(pf);
+   }
+
+   @Test
+   public void testAddFirst() {
+      KnowledgeBase kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
+      Term t = TestUtils.parseSentence("test(X).");
+      ClauseModel clauseModel = ClauseModel.createClauseModel(t);
+      StaticUserDefinedPredicateFactory f = new StaticUserDefinedPredicateFactory(kb, PredicateKey.createForTerm(t));
+      try {
+         f.addFirst(clauseModel);
+      } catch (ProjogException e) {
+         assertEquals("Cannot add clause to already defined user defined predicate as it is not dynamic: test/1 clause: test(X)", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testAddLast() {
+      KnowledgeBase kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
+      Term t = TestUtils.parseSentence("test(a).");
+      StaticUserDefinedPredicateFactory f = new StaticUserDefinedPredicateFactory(kb, PredicateKey.createForTerm(t));
+
+      // ok to add clause as predicate not yet compiled
+      ClauseModel firstClause = ClauseModel.createClauseModel(t);
+      f.addLast(firstClause);
+
+      f.compile();
+
+      // no longer ok to add clause as predicate has been compiled
+      ClauseModel secondClause = ClauseModel.createClauseModel(TestUtils.parseSentence("test(z)."));
+      try {
+         f.addFirst(secondClause);
+      } catch (ProjogException e) {
+         assertEquals("Cannot add clause to already defined user defined predicate as it is not dynamic: test/1 clause: test(z)", e.getMessage());
+      }
    }
 
    private static void assertSingleRetryableRulePredicateFactory(PredicateFactory p) {

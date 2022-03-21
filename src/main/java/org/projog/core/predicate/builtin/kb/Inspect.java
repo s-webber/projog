@@ -16,11 +16,13 @@
 package org.projog.core.predicate.builtin.kb;
 
 import java.util.Iterator;
-import java.util.Map;
 
+import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.UnknownPredicate;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
@@ -85,9 +87,31 @@ test([_|Y],p(1)) :- true.
 
 %FAIL p(X,Y,Z)
 
+% retract and clause will fail if predicate does not exist
+%FAIL retract(unknown_predicate(1,2,3))
+%FAIL clause(unknown_predicate(1,2,3),X)
+
 % Argument must be suitably instantiated that the predicate of the clause can be determined.
 %?- retract(X)
 %ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+%?- clause(X,Y)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+
+%?- retract(true)
+%ERROR Cannot inspect clauses of built-in predicate: true/0
+%?- clause(true,X)
+%ERROR Cannot inspect clauses of built-in predicate: true/0
+%?- retract(is(1,2))
+%ERROR Cannot inspect clauses of built-in predicate: is/2
+%?- clause(is(1,2),X)
+%ERROR Cannot inspect clauses of built-in predicate: is/2
+
+non_dynamic_predicate(1,2,3).
+%?- retract(non_dynamic_predicate(1,2,3))
+%ERROR Cannot retract clause from user defined predicate as it is not dynamic: non_dynamic_predicate/3
+%?- retract(non_dynamic_predicate(_,_,_))
+%ERROR Cannot retract clause from user defined predicate as it is not dynamic: non_dynamic_predicate/3
+%FAIL retract(non_dynamic_predicate(4,5,6))
 */
 /**
  * <code>clause(X,Y)</code> / <code>retract(X)</code> - matches terms to existing clauses.
@@ -129,13 +153,15 @@ public final class Inspect extends AbstractPredicateFactory {
 
    @Override
    protected Predicate getPredicate(Term clauseHead, Term clauseBody) {
-      PredicateKey key = PredicateKey.createForTerm(clauseHead);
-      Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = getPredicates().getUserDefinedPredicates();
-      UserDefinedPredicateFactory userDefinedPredicate = userDefinedPredicates.get(key);
-      if (userDefinedPredicate == null) {
-         return PredicateUtils.toPredicate(false);
-      } else {
+      PredicateFactory predicateFactory = getPredicates().getPredicateFactory(clauseHead);
+      if (predicateFactory instanceof UserDefinedPredicateFactory) {
+         UserDefinedPredicateFactory userDefinedPredicate = (UserDefinedPredicateFactory) predicateFactory;
          return new InspectPredicate(clauseHead, clauseBody, userDefinedPredicate.getImplications());
+      } else if (predicateFactory instanceof UnknownPredicate) {
+         return PredicateUtils.FALSE;
+      } else {
+         PredicateKey key = PredicateKey.createForTerm(clauseHead);
+         throw new ProjogException("Cannot inspect clauses of built-in predicate: " + key);
       }
    }
 
@@ -163,12 +189,20 @@ public final class Inspect extends AbstractPredicateFactory {
             ClauseModel clauseModel = implications.next();
             if (unifiable(clauseHead, clauseBody, clauseModel)) {
                if (doRemoveMatches) {
-                  implications.remove();
+                  remove();
                }
                return true;
             }
          }
          return false;
+      }
+
+      private void remove() {
+         try {
+            implications.remove();
+         } catch (UnsupportedOperationException e) {
+            throw new ProjogException("Cannot retract clause from user defined predicate as it is not dynamic: " + PredicateKey.createForTerm(clauseHead));
+         }
       }
 
       private void backtrack(Term clauseHead, Term clauseBody) {

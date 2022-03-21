@@ -134,10 +134,8 @@ public class PredicatesTest {
          projog.consultReader(new StringReader("test(c, d)."));
          fail();
       } catch (ProjogException e) {
-         assertEquals(
-                     "Cannot append to already defined user defined predicate as it is not dynamic. You can set the predicate to dynamic by adding the following line to start of the file that the predicate is defined in:\n"
-                                 + "?- dynamic(test/2).",
-                                 e.getCause().getMessage());
+         String expected = "Cannot append to already defined user defined predicate as it is not dynamic. You can set the predicate to dynamic by adding the following line to start of the file that the predicate is defined in:\n?- dynamic(test/2).";
+         assertEquals(expected, e.getCause().getMessage());
       }
    }
 
@@ -169,7 +167,7 @@ public class PredicatesTest {
          projog.executeOnce("assert(test(a, b)).");
          fail();
       } catch (ProjogException e) {
-         assertEquals("Cannot append to already defined user defined predicate as it is not dynamic: test/2 clause: test(a, b)", e.getMessage());
+         assertEquals("Cannot add clause to already defined user defined predicate as it is not dynamic: test/2 clause: test(a, b)", e.getMessage());
       }
    }
 

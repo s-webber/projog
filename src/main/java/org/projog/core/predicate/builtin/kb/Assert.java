@@ -112,6 +112,29 @@ import org.projog.core.term.Term;
 % Q=10
 % Q=10
 % Q=-5
+
+% Argument must be suitably instantiated that the predicate of the clause can be determined.
+%?- asserta(X)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+%?- assertz(X)
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+
+%?- asserta((p :- 7))
+%ERROR Expected an atom or a predicate but got a INTEGER with value: 7
+%?- assertz(9)
+%ERROR Expected an atom or a predicate but got a INTEGER with value: 9
+
+%?- asserta(true)
+%ERROR Cannot replace already defined built-in predicate: true/0
+%?- assertz(is(1,2))
+%ERROR Cannot replace already defined built-in predicate: is/2
+
+non_dynamic_predicate(1,2,3).
+
+%?- asserta(non_dynamic_predicate(4,5,6))
+%ERROR Cannot add clause to already defined user defined predicate as it is not dynamic: non_dynamic_predicate/3 clause: non_dynamic_predicate(4, 5, 6)
+%?- assertz(non_dynamic_predicate(4,5,6))
+%ERROR Cannot add clause to already defined user defined predicate as it is not dynamic: non_dynamic_predicate/3 clause: non_dynamic_predicate(4, 5, 6)
 */
 /**
  * <code>asserta(X)</code> / <code>assertz(X)</code> - adds a clause to the knowledge base.

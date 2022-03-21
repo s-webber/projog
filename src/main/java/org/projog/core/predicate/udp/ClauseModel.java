@@ -17,9 +17,11 @@ package org.projog.core.predicate.udp;
 
 import static org.projog.core.kb.KnowledgeBaseUtils.IMPLICATION_PREDICATE_NAME;
 
+import org.projog.core.ProjogException;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 import org.projog.core.term.TermUtils;
 
 /**
@@ -38,6 +40,11 @@ public final class ClauseModel {
    private final Term antecedent;
 
    public static ClauseModel createClauseModel(Term original) {
+      TermType type = original.getType();
+      if (type != TermType.STRUCTURE && type != TermType.ATOM) {
+         throw new ProjogException("Expected an atom or a predicate but got a " + type + " with value: " + original);
+      }
+
       final Term consequent;
       final Term antecedent;
 
@@ -54,7 +61,7 @@ public final class ClauseModel {
          } else if (implicationArgs.length == 1) {
             antecedent = TRUE;
          } else {
-            throw new RuntimeException();
+            throw new RuntimeException(); // TODO throw ProjogException
          }
       } else {
          consequent = original;

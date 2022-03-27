@@ -194,6 +194,19 @@
 ?- pj_add_predicate(atomic_list_concat/2, 'org.projog.core.predicate.builtin.list.AtomicListConcat').
 ?- pj_add_predicate(atomic_list_concat/3, 'org.projog.core.predicate.builtin.list.AtomicListConcat').
 
+% clp
+?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.ClpIn').
+?- pj_add_predicate(ins/2, 'org.projog.core.predicate.builtin.clp.ClpIn').
+?- pj_add_predicate('#<'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/lessThan').
+?- pj_add_predicate('#>'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/greaterThan').
+?- pj_add_predicate('#=<'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/lessThanOrEqualTo').
+?- pj_add_predicate('#>='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/greaterThanOrEqualTo').
+?- pj_add_predicate('#='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/equalTo').
+?- pj_add_predicate('#\\='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/notEqualTo').
+?- pj_add_predicate(label/1, 'org.projog.core.predicate.builtin.clp.ClpResolve').
+?- pj_add_predicate(all_different/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
+?- pj_add_predicate(all_distinct/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
+
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.predicate.builtin.time.GetTime').
 ?- pj_add_predicate(convert_time/2, 'org.projog.core.predicate.builtin.time.ConvertTime').
@@ -249,6 +262,15 @@
 ?- op(700, xfx, '\\=').
 ?- op(700, xfx, '\\==').
 ?- op(700, xfx, is).
+?- op(700, xfx, in).
+?- op(700, xfx, ins).
+?- op(700, xfx, '#=').
+?- op(700, xfx, '#\\=').
+?- op(700, xfx, '#<').
+?- op(700, xfx, '#>').
+?- op(700, xfx, '#=<').
+?- op(700, xfx, '#>=').
+?- op(600, xfy, '..').
 ?- op(600, xfy, ':').
 ?- op(500, yfx, '+').
 ?- op(500, yfx, '-').

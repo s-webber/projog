@@ -1,12 +1,12 @@
 /*
- * Copyright 2013-2014 S. Webber
- * 
+ * Copyright 2013 S. Webber
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,24 +19,26 @@ import org.projog.core.math.Numeric;
 
 /**
  * Defines the type of terms supported by Projog.
- * 
+ *
  * @see Term#getType()
  */
 public enum TermType {
    /** @see Variable */
    VARIABLE(false, false, true, 1),
+   /** Constraint Logic Programming variable */
+   CLP_VARIABLE(false, false, false, 2),
    /** @see DecimalFraction */
-   FRACTION(false, true, false, 2),
+   FRACTION(false, true, false, 3),
    /** @see IntegerNumber */
-   INTEGER(false, true, false, 3),
+   INTEGER(false, true, false, 4),
    /** @see EmptyList */
-   EMPTY_LIST(false, false, false, 4),
+   EMPTY_LIST(false, false, false, 5),
    /** @see Atom */
-   ATOM(false, false, false, 5),
+   ATOM(false, false, false, 6),
    /** @see Structure */
-   STRUCTURE(true, false, false, 6),
+   STRUCTURE(true, false, false, 7),
    /** @see List */
-   LIST(true, false, false, 6);
+   LIST(true, false, false, 8);
 
    private final boolean isStructure;
    private final boolean isNumeric;
@@ -73,7 +75,7 @@ public enum TermType {
 
    /**
     * Used to consistently order {@link Term}s of different types.
-    * 
+    *
     * @return precedence of this type
     * @see TermComparator#compare(Term, Term)
     */

@@ -37,7 +37,7 @@ import org.projog.test.ProjogTestRunnerConfig;
 
 /** Uses {@code projog-test} to run Prolog code and compare the results against expectations. */
 public class PrologTest {
-   private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog/dont_commit");
+   private static final File SOURCE_PROLOG_TESTS_DIR = new File("src/test/prolog");
    private static final String BUILTIN_PREDICATES_PACKAGE = "org.projog.core.predicate.builtin";
    private static final File EXTRACTED_PREDICATES_TESTS_DIR = new File("target/prolog-predicate-tests-extracted-from-java");
    private static final String BUILTIN_OPERATORS_PACKAGE = "org.projog.core.math.builtin";
@@ -155,5 +155,4 @@ public class PrologTest {
       });
       ProjogTestExtractor.extractTests(config);
    }
-
 }

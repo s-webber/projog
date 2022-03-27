@@ -91,8 +91,8 @@ public final class IntegerNumber implements Numeric {
    public boolean unify(Term t) {
       TermType tType = t.getType();
       if (tType == TermType.INTEGER) {
-         return value == ((IntegerNumber) t.getTerm()).value;
-      } else if (tType.isVariable()) {
+         return value == ((Numeric) t.getTerm()).getLong();
+      } else if (tType.isVariable() || tType == TermType.CLP_VARIABLE) {
          return t.unify(this);
       } else {
          return false;
@@ -129,13 +129,12 @@ public final class IntegerNumber implements Numeric {
    public boolean equals(Object o) {
       if (o == this) {
          return true;
+      } else if (o instanceof Numeric) {
+         Numeric n = (Numeric) o;
+         return n.isImmutable() && n.getType() == TermType.INTEGER && value == n.getLong();
+      } else {
+         return false;
       }
-
-      if (o.getClass() == IntegerNumber.class) {
-         return value == ((IntegerNumber) o).value;
-      }
-
-      return false;
    }
 
    @Override

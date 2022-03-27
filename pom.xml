@@ -29,7 +29,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       </developer>
    </developers>
 
-  <scm>
+   <scm>
     <connection>scm:git:git://github.com/s-webber/projog.git</connection>
     <developerConnection>scm:git:ssh://github.com:s-webber/projog.git</developerConnection>
     <url>http://github.com/s-webber/projog/tree/master</url>
@@ -42,6 +42,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    </properties>
 
    <dependencies>
+      <dependency>
+         <groupId>org.projog</groupId>
+         <artifactId>projog-clp</artifactId>
+         <version>0.1.0</version>
+      </dependency>
       <dependency>
          <groupId>org.projog</groupId>
          <artifactId>projog-test</artifactId>

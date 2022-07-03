@@ -25,6 +25,7 @@ import org.projog.clp.Expression;
 import org.projog.clp.LessThan;
 import org.projog.clp.LessThanOrEqualTo;
 import org.projog.clp.NotEqualTo;
+import org.projog.core.kb.KnowledgeBaseServiceLocator;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
 
@@ -74,9 +75,9 @@ import org.projog.core.term.Term;
 %FAIL 9#=<8
 
 %?- X#=a
-%ERROR Invalid term for a CLP expression: a
+%ERROR Cannot find CLP expression: a/0
 %?- X#=1/2
-%ERROR Invalid term for a CLP expression: /(1, 2)
+%ERROR Cannot find CLP expression: //2
 */
 /**
  * CLP comparison predicates.
@@ -116,6 +117,7 @@ public final class ClpAddConstraint extends AbstractSingleResultPredicate {
    }
 
    private final BiFunction<Expression, Expression, Constraint> constraintGenerator;
+   private ClpExpressions expressions;
 
    private ClpAddConstraint(BiFunction<Expression, Expression, Constraint> constraintGenerator) {
       this.constraintGenerator = constraintGenerator;
@@ -124,12 +126,17 @@ public final class ClpAddConstraint extends AbstractSingleResultPredicate {
    @Override
    public boolean evaluate(Term x, Term y) {
       Set<ClpVariable> vars = new HashSet<>();
-      Expression left = ExpressionFactory.toExpression(x, vars);
-      Expression right = ExpressionFactory.toExpression(y, vars);
+      Expression left = expressions.toExpression(x, vars);
+      Expression right = expressions.toExpression(y, vars);
       Constraint rule = constraintGenerator.apply(left, right);
       for (ClpVariable c : vars) {
          c.addConstraint(rule);
       }
       return new CoreConstraintStore(rule).resolve();
+   }
+
+   @Override
+   protected void init() {
+      expressions = KnowledgeBaseServiceLocator.getServiceLocator(getKnowledgeBase()).getInstance(ClpExpressions.class);
    }
 }

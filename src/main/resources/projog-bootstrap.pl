@@ -206,6 +206,10 @@
 ?- pj_add_predicate(label/1, 'org.projog.core.predicate.builtin.clp.ClpResolve').
 ?- pj_add_predicate(all_different/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
 ?- pj_add_predicate(all_distinct/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
+?- pj_add_predicate(pj_add_clp_expression/2, 'org.projog.core.predicate.builtin.clp.AddClpExpressionFactory').
+?- pj_add_clp_expression('+'/2, 'org.projog.core.predicate.builtin.clp.ClpExpression/add').
+?- pj_add_clp_expression('/'('-', 2), 'org.projog.core.predicate.builtin.clp.ClpExpression/subtract').
+?- pj_add_clp_expression('*'/2, 'org.projog.core.predicate.builtin.clp.ClpExpression/multiply').
 
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.predicate.builtin.time.GetTime').

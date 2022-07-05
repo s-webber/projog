@@ -17,27 +17,37 @@ package org.projog.core.predicate.builtin.clp;
 
 import java.util.function.Function;
 
-import org.projog.clp.Add;
 import org.projog.clp.Expression;
-import org.projog.clp.Multiply;
-import org.projog.clp.Subtract;
+import org.projog.clp.math.Absolute;
+import org.projog.clp.math.Add;
+import org.projog.clp.math.Minus;
+import org.projog.clp.math.Multiply;
+import org.projog.clp.math.Subtract;
 
-public class ClpExpression implements ClpExpressionFactory {
+public class CommonExpression implements ExpressionFactory {
    private final Function<Expression[], Expression> function;
 
-   public static ClpExpressionFactory add() {
-      return new ClpExpression(args -> new Add(args[0], args[1]));
+   public static ExpressionFactory add() {
+      return new CommonExpression(args -> new Add(args[0], args[1]));
    }
 
-   public static ClpExpressionFactory subtract() {
-      return new ClpExpression(args -> new Subtract(args[0], args[1]));
+   public static ExpressionFactory subtract() {
+      return new CommonExpression(args -> new Subtract(args[0], args[1]));
    }
 
-   public static ClpExpressionFactory multiply() {
-      return new ClpExpression(args -> new Multiply(args[0], args[1]));
+   public static ExpressionFactory multiply() {
+      return new CommonExpression(args -> new Multiply(args[0], args[1]));
    }
 
-   private ClpExpression(Function<Expression[], Expression> function) {
+   public static ExpressionFactory absolute() {
+      return new CommonExpression(args -> new Absolute(args[0]));
+   }
+
+   public static ExpressionFactory minus() {
+      return new CommonExpression(args -> new Minus(args[0]));
+   }
+
+   private CommonExpression(Function<Expression[], Expression> function) {
       this.function = function;
    }
 

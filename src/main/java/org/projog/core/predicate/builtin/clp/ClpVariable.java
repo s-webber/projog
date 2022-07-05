@@ -27,9 +27,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.projog.clp.Constraint;
+import org.projog.clp.ConstraintResult;
 import org.projog.clp.ConstraintStore;
 import org.projog.clp.Expression;
 import org.projog.clp.ExpressionResult;
+import org.projog.clp.LeafExpression;
+import org.projog.clp.ReadConstraintStore;
 import org.projog.clp.VariableState;
 import org.projog.core.ProjogException;
 import org.projog.core.math.Numeric;
@@ -38,7 +41,10 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 /** A {@code Term} that could represent a number of possible numeric values. */
-final class ClpVariable implements Numeric, Expression {
+final class ClpVariable implements Numeric, LeafExpression {
+   private static final int TRUE = 1;
+   private static final int FALSE = 0;
+
    private ClpVariable child;
    private final VariableState state;
    private final List<Constraint> rules;
@@ -112,7 +118,7 @@ final class ClpVariable implements Numeric, Expression {
 
    @Override
    public boolean isImmutable() {
-      return child == null && state.isSingleValue();
+      return child == null && !state.isCorrupt() && state.isSingleValue();
    }
 
    @Override
@@ -182,7 +188,7 @@ final class ClpVariable implements Numeric, Expression {
       long value = castToNumeric(t).getLong();
       ClpVariable copy = copy();
       CoreConstraintStore environment = new CoreConstraintStore();
-      if (copy.setMin(environment, value) == ExpressionResult.FAILED || copy.setMax(environment, value) == ExpressionResult.FAILED) {
+      if (copy.setMin(environment, value) == ExpressionResult.INVALID || copy.setMax(environment, value) == ExpressionResult.INVALID) {
          return false;
       } else {
          return environment.resolve();
@@ -195,12 +201,12 @@ final class ClpVariable implements Numeric, Expression {
    }
 
    @Override
-   public long getMin(ConstraintStore s) {
+   public long getMin(ReadConstraintStore s) {
       return getState().getMin();
    }
 
    @Override
-   public long getMax(ConstraintStore s) {
+   public long getMax(ReadConstraintStore s) {
       return getState().getMax();
    }
 
@@ -220,15 +226,57 @@ final class ClpVariable implements Numeric, Expression {
    }
 
    @Override
+   public ConstraintResult enforce(ConstraintStore s) {
+      long min = getMin(s);
+      long max = getMax(s);
+      if (min > TRUE || max < FALSE) {
+         throw new IllegalStateException("Expected 0 or 1");
+      } else if (s.setValue(this, TRUE) == ExpressionResult.INVALID) {
+         return ConstraintResult.FAILED;
+      } else {
+         return ConstraintResult.MATCHED;
+      }
+   }
+
+   @Override
+   public ConstraintResult prevent(ConstraintStore s) {
+      long min = getMin(s);
+      long max = getMax(s);
+      if (min > TRUE || max < FALSE) {
+         throw new IllegalStateException("Expected 0 or 1");
+      } else if (s.setValue(this, FALSE) == ExpressionResult.INVALID) {
+         return ConstraintResult.FAILED;
+      } else {
+         return ConstraintResult.MATCHED;
+      }
+   }
+
+   @Override
+   public ConstraintResult reify(ReadConstraintStore s) {
+      long min = getMin(s);
+      long max = getMax(s);
+
+      if (min != max) {
+         return ConstraintResult.UNRESOLVED;
+      } else if (min == TRUE) {
+         return ConstraintResult.MATCHED;
+      } else if (min == FALSE) {
+         return ConstraintResult.FAILED;
+      } else {
+         throw new IllegalStateException("Expected 0 or 1 but got " + min);
+      }
+   }
+
+   @Override
    public void walk(Consumer<Expression> r) {
       r.accept(this);
    }
 
    @Override
-   public Expression replace(Function<Expression, Expression> f) {
-      Expression e = f.apply(this);
-      if (e != null) {
-         return e;
+   public LeafExpression replace(Function<LeafExpression, LeafExpression> function) {
+      LeafExpression r = function.apply(this);
+      if (r != null) {
+         return r;
       }
       return this;
    }

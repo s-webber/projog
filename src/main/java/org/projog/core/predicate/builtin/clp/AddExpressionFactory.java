@@ -26,7 +26,7 @@ import org.projog.core.term.Term;
 %?- 7 #= sum(X, 4)
 %ERROR Cannot find CLP expression: sum/2
 
-%TRUE pj_add_clp_expression(sum/2, 'org.projog.core.predicate.builtin.clp.ClpExpression/add')
+%TRUE pj_add_clp_expression(sum/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/add')
 
 %?- 7 #= sum(X, 4)
 % X=3
@@ -37,19 +37,19 @@ import org.projog.core.term.Term;
  * <code>X</code> represents the name and arity of the expression. <code>Y</code> represents the full class name of an
  * implementation of <code>org.projog.core.predicate.builtin.clp.ExpressionFactory</code>.
  */
-public final class AddClpExpressionFactory extends AbstractSingleResultPredicate {
-   private ClpExpressions expressions;
+public final class AddExpressionFactory extends AbstractSingleResultPredicate {
+   private ExpressionFactories expressions;
 
    @Override
    protected boolean evaluate(Term functionNameAndArity, Term javaClass) {
       PredicateKey key = PredicateKey.createFromNameAndArity(functionNameAndArity);
       String className = getAtomName(javaClass);
-      expressions.addClpExpressionFactory(key, className);
+      expressions.addExpressionFactory(key, className);
       return true;
    }
 
    @Override
    protected void init() {
-      expressions = KnowledgeBaseServiceLocator.getServiceLocator(getKnowledgeBase()).getInstance(ClpExpressions.class);
+      expressions = KnowledgeBaseServiceLocator.getServiceLocator(getKnowledgeBase()).getInstance(ExpressionFactories.class);
    }
 }

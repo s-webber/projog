@@ -1,0 +1,4 @@
+Eight Queens
+<p>
+The goal of the <a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">eight queens puzzle</a> is to place eight chess queens on an 8x8 chessboard so that no two queens share the same row, column or diagonal.
+</p>

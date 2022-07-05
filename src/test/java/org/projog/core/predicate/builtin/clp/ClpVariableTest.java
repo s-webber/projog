@@ -17,6 +17,7 @@ package org.projog.core.predicate.builtin.clp;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -34,10 +35,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.projog.clp.ClpConstraintStore;
 import org.projog.clp.Constraint;
 import org.projog.clp.ConstraintResult;
 import org.projog.clp.Expression;
 import org.projog.clp.ExpressionResult;
+import org.projog.clp.LeafExpression;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
@@ -535,27 +538,27 @@ public class ClpVariableTest {
       CoreConstraintStore environment = new CoreConstraintStore();
       v.setMin(environment, 7);
 
-      assertSame(ExpressionResult.UPDATED, v.setMax(environment, 15));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 15));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMax(environment, 15));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 15));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMax(environment, 16));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 16));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.UPDATED, v.setMax(environment, 8));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 8));
       assertEquals(7, v.getMin(environment));
       assertEquals(8, v.getMax(environment));
 
-      assertSame(ExpressionResult.UPDATED, v.setMax(environment, 7));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 7));
       assertEquals(7, v.getMin(environment));
       assertEquals(7, v.getMax(environment));
 
-      assertSame(ExpressionResult.FAILED, v.setMax(environment, 6));
+      assertSame(ExpressionResult.INVALID, v.setMax(environment, 6));
    }
 
    @Test
@@ -564,27 +567,27 @@ public class ClpVariableTest {
       CoreConstraintStore environment = new CoreConstraintStore();
       v.setMax(environment, 15);
 
-      assertSame(ExpressionResult.UPDATED, v.setMin(environment, 7));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 7));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMin(environment, 7));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 7));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMin(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 6));
       assertEquals(7, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.UPDATED, v.setMin(environment, 14));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 14));
       assertEquals(14, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.UPDATED, v.setMin(environment, 15));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 15));
       assertEquals(15, v.getMin(environment));
       assertEquals(15, v.getMax(environment));
 
-      assertSame(ExpressionResult.FAILED, v.setMin(environment, 16));
+      assertSame(ExpressionResult.INVALID, v.setMin(environment, 16));
    }
 
    @Test
@@ -594,34 +597,34 @@ public class ClpVariableTest {
       v.setMin(environment, 6);
       v.setMax(environment, 9);
 
-      assertSame(ExpressionResult.UPDATED, v.setNot(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 6));
       assertEquals(7, v.getMin(environment));
       assertEquals(9, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setNot(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 6));
       assertEquals(7, v.getMin(environment));
       assertEquals(9, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setNot(environment, 5));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 5));
       assertEquals(7, v.getMin(environment));
       assertEquals(9, v.getMax(environment));
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setNot(environment, 10));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 10));
       assertEquals(7, v.getMin(environment));
       assertEquals(9, v.getMax(environment));
       assertEquals("7..9", v.toString());
 
-      assertSame(ExpressionResult.UPDATED, v.setNot(environment, 8));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 8));
       assertEquals(7, v.getMin(environment));
       assertEquals(9, v.getMax(environment));
       assertEquals("{7, 9}", v.toString());
 
-      assertSame(ExpressionResult.UPDATED, v.setNot(environment, 9));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 9));
       assertEquals(7, v.getMin(environment));
       assertEquals(7, v.getMax(environment));
       assertEquals("7", v.toString());
 
-      assertSame(ExpressionResult.FAILED, v.setNot(environment, 7));
+      assertSame(ExpressionResult.INVALID, v.setNot(environment, 7));
    }
 
    @Test
@@ -632,7 +635,7 @@ public class ClpVariableTest {
       when(constraint.enforce(environment)).thenReturn(ConstraintResult.FAILED);
       v.addConstraint(constraint);
 
-      assertSame(ExpressionResult.UPDATED, v.setMin(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, 6));
 
       verifyNoMoreInteractions(constraint);
 
@@ -651,7 +654,7 @@ public class ClpVariableTest {
       when(constraint.enforce(environment)).thenReturn(ConstraintResult.MATCHED);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.UPDATED, v.setNot(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 6));
 
       verifyNoMoreInteractions(constraint);
 
@@ -668,7 +671,7 @@ public class ClpVariableTest {
       when(constraint.enforce(environment)).thenReturn(ConstraintResult.UNRESOLVED);
       v.addConstraint(constraint);
 
-      assertSame(ExpressionResult.UPDATED, v.setMax(environment, 6));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, 6));
 
       verifyNoMoreInteractions(constraint);
 
@@ -684,7 +687,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.addConstraint(constraint);
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMin(environment, Long.MIN_VALUE));
+      assertSame(ExpressionResult.VALID, v.setMin(environment, Long.MIN_VALUE));
 
       environment.resolve();
 
@@ -698,7 +701,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setMax(environment, Long.MAX_VALUE));
+      assertSame(ExpressionResult.VALID, v.setMax(environment, Long.MAX_VALUE));
 
       environment.resolve();
 
@@ -714,7 +717,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setNot(environment, 11));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 11));
 
       environment.resolve();
 
@@ -730,7 +733,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.NO_CHANGE, v.setNot(environment, 11));
+      assertSame(ExpressionResult.VALID, v.setNot(environment, 11));
 
       environment.resolve();
 
@@ -745,7 +748,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.FAILED, v.setMin(environment, 6));
+      assertSame(ExpressionResult.INVALID, v.setMin(environment, 6));
 
       environment.resolve();
 
@@ -760,7 +763,7 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.FAILED, v.setMax(environment, 6));
+      assertSame(ExpressionResult.INVALID, v.setMax(environment, 6));
 
       environment.resolve();
 
@@ -776,11 +779,181 @@ public class ClpVariableTest {
       Constraint constraint = mock(Constraint.class);
       v.getTerm().addConstraint(constraint);
 
-      assertSame(ExpressionResult.FAILED, v.setNot(environment, 6));
+      assertSame(ExpressionResult.INVALID, v.setNot(environment, 6));
 
       environment.resolve();
 
       verifyNoMoreInteractions(constraint);
+   }
+
+   @Test
+   public void testReifyMatched() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 1);
+      v.setMax(environment, 1);
+      assertSame(ConstraintResult.MATCHED, v.reify(environment));
+   }
+
+   @Test
+   public void testReifyFailed() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 0);
+      v.setMax(environment, 0);
+      assertSame(ConstraintResult.FAILED, v.reify(environment));
+   }
+
+   @Test
+   public void testReifyUnresolved() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 0);
+      v.setMax(environment, 1);
+      assertSame(ConstraintResult.UNRESOLVED, v.reify(environment));
+   }
+
+   @Test
+   public void testReifyToHigh() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 2);
+      v.setMax(environment, 2);
+      try {
+         v.reify(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1 but got 2", e.getMessage());
+      }
+
+   }
+
+   @Test
+   public void testReifyToLow() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, -1);
+      v.setMax(environment, -1);
+      try {
+         v.reify(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1 but got -1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testEnforceMatched() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 1);
+      v.setMax(environment, 1);
+      assertSame(ConstraintResult.MATCHED, v.enforce(environment));
+   }
+
+   @Test
+   public void testEnforceMatchedAndUpdated() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, Long.MIN_VALUE);
+      v.setMax(environment, Long.MAX_VALUE);
+      assertSame(ConstraintResult.MATCHED, v.enforce(environment));
+      assertEquals(1, v.getMin(environment));
+      assertEquals(1, v.getMax(environment));
+   }
+
+   @Test
+   public void testEnforceFailed() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 0);
+      v.setMax(environment, 0);
+      assertSame(ConstraintResult.FAILED, v.enforce(environment));
+   }
+
+   @Test
+   public void testEnforceToHigh() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 2);
+      v.setMax(environment, 2);
+      try {
+         v.enforce(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testEnforceToLow() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, -1);
+      v.setMax(environment, -1);
+      try {
+         v.enforce(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testPreventMatched() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 0);
+      v.setMax(environment, 0);
+      assertSame(ConstraintResult.MATCHED, v.prevent(environment));
+   }
+
+   @Test
+   public void testPreventMatchedAndUpdated() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, Long.MIN_VALUE);
+      v.setMax(environment, Long.MAX_VALUE);
+      assertSame(ConstraintResult.MATCHED, v.prevent(environment));
+      assertEquals(0, v.getMin(environment));
+      assertEquals(0, v.getMax(environment));
+   }
+
+   @Test
+   public void testPreventFailed() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 1);
+      v.setMax(environment, 1);
+      assertSame(ConstraintResult.FAILED, v.prevent(environment));
+   }
+
+   @Test
+   public void testPreventToHigh() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, 2);
+      v.setMax(environment, 2);
+      try {
+         v.prevent(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testPreventToLow() {
+      ClpVariable v = new ClpVariable();
+      CoreConstraintStore environment = new CoreConstraintStore();
+      v.setMin(environment, -1);
+      v.setMax(environment, -1);
+      try {
+         v.prevent(environment);
+         fail();
+      } catch (IllegalStateException e) {
+         assertEquals("Expected 0 or 1", e.getMessage());
+      }
    }
 
    @Test
@@ -803,7 +976,7 @@ public class ClpVariableTest {
       // given
       ClpVariable testObject = new ClpVariable();
       @SuppressWarnings("unchecked")
-      Function<Expression, Expression> function = mock(Function.class);
+      Function<LeafExpression, LeafExpression> function = mock(Function.class);
       when(testObject.replace(function)).thenReturn(null);
 
       // when
@@ -819,9 +992,9 @@ public class ClpVariableTest {
    public void testReplace_replacement() {
       // given
       ClpVariable testObject = new ClpVariable();
-      Expression expectedReplacement = mock(Expression.class);
+      org.projog.clp.Variable expectedReplacement = new ClpConstraintStore.Builder().createVariable();
       @SuppressWarnings("unchecked")
-      Function<Expression, Expression> function = mock(Function.class);
+      Function<LeafExpression, LeafExpression> function = mock(Function.class);
       when(testObject.replace(function)).thenReturn(expectedReplacement);
 
       // when
@@ -830,7 +1003,7 @@ public class ClpVariableTest {
 
       // then
       verify(function).apply(testObject);
-      verifyNoMoreInteractions(expectedReplacement, function);
+      verifyNoMoreInteractions(function);
    }
 
    @Test
@@ -919,7 +1092,7 @@ public class ClpVariableTest {
    }
 
    @Test
-   public void testTemCompare() {
+   public void testTermCompare() {
       ClpVariable clpVariable1 = new ClpVariable();
       ClpVariable clpVariable2 = new ClpVariable();
       clpVariable2.setMin(new CoreConstraintStore(), 8);
@@ -942,5 +1115,189 @@ public class ClpVariableTest {
       list.sort(TermComparator.TERM_COMPARATOR);
 
       assertEquals(list, Arrays.asList(v1, clpVariable1, d7, d10, i7, clpVariable2, v2, i10, el, a, l, s));
+   }
+
+   @Test
+   public void testUnboundDoesNotEqualClpVariable() {
+      ClpVariable v = new ClpVariable();
+
+      assertTrue(v.equals(v));
+      assertFalse(v.equals(new ClpVariable()));
+   }
+
+   @Test
+   public void testUnboundDoesNotEqualInteger() {
+      IntegerNumber i = new IntegerNumber(7);
+      ClpVariable v = new ClpVariable();
+
+      assertFalse(v.equals(i));
+      assertFalse(i.equals(v));
+   }
+
+   @Test
+   public void testUnboundDoesNotEqualIntegerMatchingMin() {
+      IntegerNumber i = new IntegerNumber(7);
+
+      ClpVariable v = new ClpVariable();
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      v.setMin(new CoreConstraintStore(), i.getLong());
+      v.setMax(new CoreConstraintStore(), i.getLong() + 1);
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      assertFalse(v.isImmutable());
+      assertFalse(v.getTerm().isImmutable());
+
+      assertFalse(v.equals(i));
+      assertFalse(i.equals(v));
+
+      assertFalse(v.getTerm().equals(i));
+      assertFalse(i.equals(v.getTerm()));
+   }
+
+   @Test
+   public void testUnboundDoesNotEqualIntegerMatchingMax() {
+      IntegerNumber i = new IntegerNumber(7);
+
+      ClpVariable v = new ClpVariable();
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      v.setMin(new CoreConstraintStore(), i.getLong() - 1);
+      v.setMax(new CoreConstraintStore(), i.getLong());
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      assertFalse(v.isImmutable());
+      assertFalse(v.getTerm().isImmutable());
+
+      assertFalse(v.equals(i));
+      assertFalse(i.equals(v));
+
+      assertFalse(v.getTerm().equals(i));
+      assertFalse(i.equals(v.getTerm()));
+   }
+
+   @Test
+   public void testBoundNotEqualsInteger() {
+      IntegerNumber i = new IntegerNumber(7);
+
+      ClpVariable v = new ClpVariable();
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      v.setMin(new CoreConstraintStore(), i.getLong() + 1);
+      v.setMax(new CoreConstraintStore(), i.getLong() + 1);
+      assertSame(TermType.INTEGER, v.getType());
+      assertFalse(v.isImmutable());
+      assertTrue(v.getTerm().isImmutable());
+
+      assertFalse(v.equals(i));
+      assertFalse(i.equals(v));
+
+      assertFalse(v.getTerm().equals(i));
+      assertFalse(i.equals(v.getTerm()));
+      assertNotEquals(i.hashCode(), v.getTerm().hashCode());
+   }
+
+   @Test
+   public void testBoundEqualsInteger() {
+      IntegerNumber i = new IntegerNumber(7);
+
+      ClpVariable v = new ClpVariable();
+      assertSame(TermType.CLP_VARIABLE, v.getType());
+      v.setMin(new CoreConstraintStore(), i.getLong());
+      v.setMax(new CoreConstraintStore(), i.getLong());
+      assertSame(TermType.INTEGER, v.getType());
+      assertFalse(v.isImmutable());
+      assertTrue(v.getTerm().isImmutable());
+
+      assertFalse(v.equals(i));
+      assertFalse(i.equals(v));
+
+      assertTrue(v.getTerm().equals(i));
+      assertTrue(i.equals(v.getTerm()));
+      assertEquals(i.hashCode(), v.getTerm().hashCode());
+   }
+
+   @Test
+   public void testBoundDoesNotEqualClpVariableMatchingMin() {
+      int value = 42;
+
+      ClpVariable v1 = new ClpVariable();
+      v1.setMin(new CoreConstraintStore(), value);
+      v1.setMax(new CoreConstraintStore(), value);
+
+      ClpVariable v2 = new ClpVariable();
+      v2.setMin(new CoreConstraintStore(), value);
+      v2.setMax(new CoreConstraintStore(), value + 1);
+
+      assertFalse(v1.equals(v2));
+      assertFalse(v2.equals(v1));
+
+      assertFalse(v1.equals(v2.getTerm()));
+      assertFalse(v2.equals(v1.getTerm()));
+
+      assertFalse(v1.getTerm().equals(v2.getTerm()));
+      assertFalse(v2.getTerm().equals(v1.getTerm()));
+   }
+
+   @Test
+   public void testBoundDoesNotEqualClpVariableMatchingMax() {
+      int value = 42;
+
+      ClpVariable v1 = new ClpVariable();
+      v1.setMin(new CoreConstraintStore(), value);
+      v1.setMax(new CoreConstraintStore(), value);
+
+      ClpVariable v2 = new ClpVariable();
+      v2.setMin(new CoreConstraintStore(), value - 1);
+      v2.setMax(new CoreConstraintStore(), value);
+
+      assertFalse(v1.equals(v2));
+      assertFalse(v2.equals(v1));
+
+      assertFalse(v1.equals(v2.getTerm()));
+      assertFalse(v2.equals(v1.getTerm()));
+
+      assertFalse(v1.getTerm().equals(v2.getTerm()));
+      assertFalse(v2.getTerm().equals(v1.getTerm()));
+   }
+
+   @Test
+   public void testBoundNotEqualsClpVariable() {
+      int value = 42;
+
+      ClpVariable v1 = new ClpVariable();
+      v1.setMin(new CoreConstraintStore(), value);
+      v1.setMax(new CoreConstraintStore(), value);
+
+      ClpVariable v2 = new ClpVariable();
+      v2.setMin(new CoreConstraintStore(), value + 1);
+      v2.setMax(new CoreConstraintStore(), value + 1);
+
+      assertFalse(v1.equals(v2));
+      assertFalse(v2.equals(v1));
+
+      assertFalse(v1.equals(v2.getTerm()));
+      assertFalse(v2.equals(v1.getTerm()));
+
+      assertFalse(v1.getTerm().equals(v2.getTerm()));
+      assertFalse(v2.getTerm().equals(v1.getTerm()));
+   }
+
+   @Test
+   public void testBoundEqualsClpVariable() {
+      int value = 42;
+
+      ClpVariable v1 = new ClpVariable();
+      v1.setMin(new CoreConstraintStore(), value);
+      v1.setMax(new CoreConstraintStore(), value);
+
+      ClpVariable v2 = new ClpVariable();
+      v2.setMin(new CoreConstraintStore(), value);
+      v2.setMax(new CoreConstraintStore(), value);
+
+      assertFalse(v1.equals(v2));
+      assertFalse(v2.equals(v1));
+
+      assertFalse(v1.equals(v2.getTerm()));
+      assertFalse(v2.equals(v1.getTerm()));
+
+      assertTrue(v1.getTerm().equals(v2.getTerm()));
+      assertTrue(v2.getTerm().equals(v1.getTerm()));
+      assertEquals(v1.getTerm().hashCode(), v2.getTerm().hashCode());
    }
 }

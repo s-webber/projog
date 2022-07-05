@@ -24,7 +24,7 @@ import java.util.List;
 import org.projog.clp.Constraint;
 import org.projog.clp.Expression;
 import org.projog.clp.FixedValue;
-import org.projog.clp.NotEqualTo;
+import org.projog.clp.compare.NotEqualTo;
 import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.EmptyList;
@@ -70,7 +70,7 @@ import org.projog.core.term.TermType;
 /**
  * <code>all_different([X,Y,Z])</code> - enforce that none of the given CLP variables share the same value.
  */
-public final class ClpDistinct extends AbstractSingleResultPredicate {
+public final class Distinct extends AbstractSingleResultPredicate {
    @Override
    public boolean evaluate(Term arg) {
       List<Expression> expressions = getOrCreateVariables(arg);

@@ -1,0 +1,4 @@
+Cryptarithmetic
+<p>
+<a href="https://en.wikipedia.org/wiki/Verbal_arithmetic">Cryptarithmetic</a> puzzles consist of a mathematical equation whose digits are represented by letters of the alphabet. The goal is to identify the value of each letter.
+</p>

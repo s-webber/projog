@@ -18,8 +18,8 @@ package org.projog.core.predicate.builtin.clp;
 import static org.projog.core.term.TermUtils.assertType;
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import org.projog.clp.ExpressionResult;
 import org.projog.clp.VariableState;
+import org.projog.clp.VariableStateResult;
 import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.EmptyList;
@@ -94,7 +94,7 @@ import org.projog.core.term.TermType;
 /**
  * <code>X in 1..4</code> / <code>[X,Y,Z] ins 1..4</code> - restrict CLP variables to a range of values.
  */
-public final class ClpIn extends AbstractSingleResultPredicate {
+public final class In extends AbstractSingleResultPredicate {
    @Override
    public boolean evaluate(Term t, Term range) {
       assertRange(range);
@@ -150,6 +150,6 @@ public final class ClpIn extends AbstractSingleResultPredicate {
       }
 
       VariableState s = c.getState();
-      return s.setMin(min) != ExpressionResult.FAILED && s.setMax(max) != ExpressionResult.FAILED && new CoreConstraintStore(c.getConstraints()).resolve();
+      return s.setMin(min) != VariableStateResult.FAILED && s.setMax(max) != VariableStateResult.FAILED && new CoreConstraintStore(c.getConstraints()).resolve();
    }
 }

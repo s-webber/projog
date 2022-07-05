@@ -108,7 +108,7 @@ import org.projog.core.term.TermType;
 /**
  * <code>label([X])</code> - assigns concrete values to the given CLP variables.
  */
-public final class ClpResolve extends AbstractPredicateFactory {
+public final class Resolve extends AbstractPredicateFactory {
    @Override
    public Predicate getPredicate(Term arg) {
       ClpConstraintStore.Builder builder = new ClpConstraintStore.Builder();

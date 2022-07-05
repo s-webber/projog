@@ -39,7 +39,7 @@ import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Variable;
 
-public class ClpExpressionsTest {
+public class ExpressionFactoriesTest {
    private static final Structure DUMMY_TERM = structure("dummy_clp_expression", integerNumber(7));
    private static final PredicateKey DUMMY_KEY = PredicateKey.createForTerm(DUMMY_TERM);
 
@@ -47,7 +47,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionClpVariable() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
       ClpVariable v = new ClpVariable();
       Set<ClpVariable> vars = new HashSet<>();
 
@@ -58,7 +58,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionVariable() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
       Variable projogVariable = new Variable();
       Set<ClpVariable> vars = new HashSet<>();
 
@@ -70,7 +70,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionIntegerNumber() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
       IntegerNumber i = integerNumber(42);
 
       FixedValue expression = (FixedValue) expressions.toExpression(i, Collections.emptySet());
@@ -79,7 +79,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionDecimalFraction() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
       DecimalFraction d = new DecimalFraction(1.5);
 
       try {
@@ -92,7 +92,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionUnknownAtom() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
       Atom a = new Atom("a");
 
       try {
@@ -105,7 +105,7 @@ public class ClpExpressionsTest {
 
    @Test
    public void testToExpressionPredicate() {
-      ClpExpressions expressions = new ClpExpressions(kb);
+      ExpressionFactories expressions = new ExpressionFactories(kb);
 
       // try to use CLP expression factory by a name that there is no match for (expect exception)
       try {
@@ -116,7 +116,7 @@ public class ClpExpressionsTest {
       }
 
       // add new CLP expression factory
-      expressions.addClpExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
+      expressions.addExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
 
       // assert that the factory is now using the newly added CLP expression factory
       Expression expression = expressions.toExpression(DUMMY_TERM, Collections.emptySet());
@@ -125,18 +125,18 @@ public class ClpExpressionsTest {
 
    @Test
    public void testAddDuplicate() {
-      ClpExpressions expressions = new ClpExpressions(kb);
-      expressions.addClpExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
+      ExpressionFactories expressions = new ExpressionFactories(kb);
+      expressions.addExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
 
       try {
-         expressions.addClpExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
+         expressions.addExpressionFactory(DUMMY_KEY, DummyClpExpressionDefaultConstructor.class.getName());
          fail();
       } catch (ProjogException e) {
          assertEquals("Already defined CLP expression: dummy_clp_expression/1", e.getMessage());
       }
    }
 
-   public static class DummyClpExpressionDefaultConstructor implements ClpExpressionFactory {
+   public static class DummyClpExpressionDefaultConstructor implements ExpressionFactory {
       private final static Expression DUMMY_EXPRESSION = new FixedValue(180);
 
       @Override

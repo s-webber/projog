@@ -20,11 +20,11 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.projog.clp.Constraint;
-import org.projog.clp.EqualTo;
 import org.projog.clp.Expression;
-import org.projog.clp.LessThan;
-import org.projog.clp.LessThanOrEqualTo;
-import org.projog.clp.NotEqualTo;
+import org.projog.clp.compare.EqualTo;
+import org.projog.clp.compare.LessThan;
+import org.projog.clp.compare.LessThanOrEqualTo;
+import org.projog.clp.compare.NotEqualTo;
 import org.projog.core.kb.KnowledgeBaseServiceLocator;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
@@ -80,7 +80,7 @@ import org.projog.core.term.Term;
 %ERROR Cannot find CLP expression: //2
 */
 /**
- * CLP comparison predicates.
+ * CLP predicates for comparing numeric values.
  * <p>
  * <ul>
  * <li><code>#=</code> equal to</li>
@@ -91,35 +91,35 @@ import org.projog.core.term.Term;
  * <li><code>#=&lt;</code> less than or equal to</li>
  * </ul>
  */
-public final class ClpAddConstraint extends AbstractSingleResultPredicate {
-   public static ClpAddConstraint equalTo() {
-      return new ClpAddConstraint(EqualTo::new);
+public final class NumericConstraintPredicate extends AbstractSingleResultPredicate implements ConstraintFactory {
+   public static NumericConstraintPredicate equalTo() {
+      return new NumericConstraintPredicate(EqualTo::new);
    }
 
-   public static ClpAddConstraint notEqualTo() {
-      return new ClpAddConstraint(NotEqualTo::new);
+   public static NumericConstraintPredicate notEqualTo() {
+      return new NumericConstraintPredicate(NotEqualTo::new);
    }
 
-   public static ClpAddConstraint lessThan() {
-      return new ClpAddConstraint(LessThan::new);
+   public static NumericConstraintPredicate lessThan() {
+      return new NumericConstraintPredicate(LessThan::new);
    }
 
-   public static ClpAddConstraint greaterThan() {
-      return new ClpAddConstraint((left, right) -> new LessThan(right, left));
+   public static NumericConstraintPredicate greaterThan() {
+      return new NumericConstraintPredicate((left, right) -> new LessThan(right, left));
    }
 
-   public static ClpAddConstraint lessThanOrEqualTo() {
-      return new ClpAddConstraint(LessThanOrEqualTo::new);
+   public static NumericConstraintPredicate lessThanOrEqualTo() {
+      return new NumericConstraintPredicate(LessThanOrEqualTo::new);
    }
 
-   public static ClpAddConstraint greaterThanOrEqualTo() {
-      return new ClpAddConstraint((left, right) -> new LessThanOrEqualTo(right, left));
+   public static NumericConstraintPredicate greaterThanOrEqualTo() {
+      return new NumericConstraintPredicate((left, right) -> new LessThanOrEqualTo(right, left));
    }
 
    private final BiFunction<Expression, Expression, Constraint> constraintGenerator;
-   private ClpExpressions expressions;
+   private ExpressionFactories expressions;
 
-   private ClpAddConstraint(BiFunction<Expression, Expression, Constraint> constraintGenerator) {
+   private NumericConstraintPredicate(BiFunction<Expression, Expression, Constraint> constraintGenerator) {
       this.constraintGenerator = constraintGenerator;
    }
 
@@ -137,6 +137,11 @@ public final class ClpAddConstraint extends AbstractSingleResultPredicate {
 
    @Override
    protected void init() {
-      expressions = KnowledgeBaseServiceLocator.getServiceLocator(getKnowledgeBase()).getInstance(ClpExpressions.class);
+      expressions = KnowledgeBaseServiceLocator.getServiceLocator(getKnowledgeBase()).getInstance(ExpressionFactories.class);
+   }
+
+   @Override
+   public Constraint createConstraint(Term[] args, Set<ClpVariable> vars) {
+      return constraintGenerator.apply(expressions.toExpression(args[0], vars), expressions.toExpression(args[1], vars));
    }
 }

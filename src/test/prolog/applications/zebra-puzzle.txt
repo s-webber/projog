@@ -1,0 +1,31 @@
+Zebra Puzzle
+<p>
+The <a href="https://en.wikipedia.org/wiki/Zebra_Puzzle">zebra puzzle</a> is a well-known logic puzzle. The puzzle is sometimes referred to as Einstein's Puzzle or Einstein's Riddle.
+</p>
+<p>
+Facts:
+<ol>
+<li>There are five houses.</li>
+<li>The Englishman lives in the red house.</li>
+<li>The Spaniard owns the dog.</li>
+<li>Coffee is drunk in the green house.</li>
+<li>The Ukrainian drinks tea.</li>
+<li>The green house is immediately to the right of the ivory house.</li>
+<li>The Old Gold smoker owns snails.</li>
+<li>Kools are smoked in the yellow house.</li>
+<li>Milk is drunk in the middle house.</li>
+<li>The Norwegian lives in the first house.</li>
+<li>The man who smokes Chesterfields lives in the house next to the man with the fox.</li>
+<li>Kools are smoked in the house next to the house where the horse is kept.</li>
+<li>The Lucky Strike smoker drinks orange juice.</li>
+<li>The Japanese smokes Parliaments.</li>
+<li>The Norwegian lives next to the blue house.</li>
+</ol>
+</p>
+<p>
+Questions:
+<ol>
+<li>Who drinks water?</li>
+<li>Who owns the zebra?</li>
+</ol>
+</p>

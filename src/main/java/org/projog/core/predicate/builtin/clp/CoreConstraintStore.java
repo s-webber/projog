@@ -27,6 +27,7 @@ import org.projog.clp.ConstraintStore;
 import org.projog.clp.Expression;
 import org.projog.clp.ExpressionResult;
 import org.projog.clp.VariableState;
+import org.projog.clp.VariableStateResult;
 
 /** An implementation of {@code ConstraintStore} for use in Projog. */
 final class CoreConstraintStore implements ConstraintStore {
@@ -91,16 +92,16 @@ final class CoreConstraintStore implements ConstraintStore {
    }
 
    // TODO can this be more efficient? copying ClpVariable every time and backtracking on failure
-   private ExpressionResult update(Expression id, Function<VariableState, ExpressionResult> f) {
+   private ExpressionResult update(Expression id, Function<VariableState, VariableStateResult> f) {
       ClpVariable original = ((ClpVariable) id).getTerm();
       ClpVariable copy = original.copy();
-      ExpressionResult r = f.apply(copy.getState());
-      if (r == ExpressionResult.UPDATED) {
+      VariableStateResult r = f.apply(copy.getState());
+      if (r == VariableStateResult.UPDATED) {
          addConstraints(copy);
-      } else if (r == ExpressionResult.FAILED) {
+      } else if (r == VariableStateResult.FAILED) {
          original.backtrack();
       }
-      return r;
+      return r == VariableStateResult.FAILED ? ExpressionResult.INVALID : ExpressionResult.VALID;
    }
 
    private void addConstraints(ClpVariable copy) {

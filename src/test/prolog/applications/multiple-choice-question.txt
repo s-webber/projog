@@ -1,0 +1,12 @@
+Multiple Choice Question
+<p>
+Which answer in this list is the correct answer to this question?
+<ol>
+<li>All of the below.</li>
+<li>None of the below.</li>
+<li>All of the above.</li>
+<li>One of the above.</li>
+<li>None of the above.</li>
+<li>None of the above.</li>
+</ol>
+</p>

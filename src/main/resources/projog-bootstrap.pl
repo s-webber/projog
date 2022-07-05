@@ -197,21 +197,30 @@
 ?- pj_add_predicate(pairs_values/2, 'org.projog.core.predicate.builtin.list.PairsElements/values').
 
 % clp
-?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.ClpIn').
-?- pj_add_predicate(ins/2, 'org.projog.core.predicate.builtin.clp.ClpIn').
-?- pj_add_predicate('#<'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/lessThan').
-?- pj_add_predicate('#>'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/greaterThan').
-?- pj_add_predicate('#=<'/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/lessThanOrEqualTo').
-?- pj_add_predicate('#>='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/greaterThanOrEqualTo').
-?- pj_add_predicate('#='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/equalTo').
-?- pj_add_predicate('#\\='/2, 'org.projog.core.predicate.builtin.clp.ClpAddConstraint/notEqualTo').
-?- pj_add_predicate(label/1, 'org.projog.core.predicate.builtin.clp.ClpResolve').
-?- pj_add_predicate(all_different/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
-?- pj_add_predicate(all_distinct/1, 'org.projog.core.predicate.builtin.clp.ClpDistinct').
-?- pj_add_predicate(pj_add_clp_expression/2, 'org.projog.core.predicate.builtin.clp.AddClpExpressionFactory').
-?- pj_add_clp_expression('+'/2, 'org.projog.core.predicate.builtin.clp.ClpExpression/add').
-?- pj_add_clp_expression('/'('-', 2), 'org.projog.core.predicate.builtin.clp.ClpExpression/subtract').
-?- pj_add_clp_expression('*'/2, 'org.projog.core.predicate.builtin.clp.ClpExpression/multiply').
+?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.In').
+?- pj_add_predicate(ins/2, 'org.projog.core.predicate.builtin.clp.In').
+?- pj_add_predicate(label/1, 'org.projog.core.predicate.builtin.clp.Resolve').
+?- pj_add_predicate(all_different/1, 'org.projog.core.predicate.builtin.clp.Distinct').
+?- pj_add_predicate(all_distinct/1, 'org.projog.core.predicate.builtin.clp.Distinct').
+?- pj_add_predicate('#<'/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/lessThan').
+?- pj_add_predicate('#>'/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/greaterThan').
+?- pj_add_predicate('#=<'/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/lessThanOrEqualTo').
+?- pj_add_predicate('#>='/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/greaterThanOrEqualTo').
+?- pj_add_predicate('#='/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/equalTo').
+?- pj_add_predicate('#\\='/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/notEqualTo').
+?- pj_add_predicate('#<==>'/2, 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/equivalent').
+?- pj_add_predicate('#==>'/2, 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/leftImpliesRight').
+?- pj_add_predicate('#<=='/2, 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/rightImpliesLeft').
+?- pj_add_predicate('#/\\'/2, 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/and').
+?- pj_add_predicate('#\\/'/2, 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/or').
+?- pj_add_predicate('/'('#\\', 2), 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/xor').
+?- pj_add_predicate('/'('#\\', 1), 'org.projog.core.predicate.builtin.clp.BooleanConstraintPredicate/not').
+?- pj_add_predicate(pj_add_clp_expression/2, 'org.projog.core.predicate.builtin.clp.AddExpressionFactory').
+?- pj_add_clp_expression('+'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/add').
+?- pj_add_clp_expression('/'('-', 2), 'org.projog.core.predicate.builtin.clp.CommonExpression/subtract').
+?- pj_add_clp_expression('*'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/multiply').
+?- pj_add_clp_expression('abs'/1, 'org.projog.core.predicate.builtin.clp.CommonExpression/absolute').
+?- pj_add_clp_expression('/'('-', 1), 'org.projog.core.predicate.builtin.clp.CommonExpression/minus').
 
 % time
 ?- pj_add_predicate(get_time/1, 'org.projog.core.predicate.builtin.time.GetTime').
@@ -276,6 +285,13 @@
 ?- op(700, xfx, '#>').
 ?- op(700, xfx, '#=<').
 ?- op(700, xfx, '#>=').
+?- op(760, yfx, '#<==>').
+?- op(750, xfy, '#==>').
+?- op(750, xfy, '#<==').
+?- op(720, yfx, '#/\\').
+?- op(740, yfx, '#\\/').
+?- op(730, xfy, '#\\').
+?- op(710, fy, '#\\').
 ?- op(600, xfy, '..').
 ?- op(600, xfy, ':').
 ?- op(500, yfx, '+').

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 S. Webber
+ * Copyright 2022 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 
 /**
- * Maintains a collection of {@link ClpExpressionFactory} instances.
+ * Maintains a collection of {@link ExpressionFactory} instances.
  * <p>
  * This class provides a mechanism for "plugging in" or "injecting" implementations of {@code org.projog.clp.Expression}
  * at runtime. This mechanism provides an easy way to configure and extend the CLP expressions supported by Projog.
@@ -39,25 +39,24 @@ import org.projog.core.term.Term;
  * Each {@link org.projog.core.kb.KnowledgeBase} has at most one unique {@code ClpExpressions} instance.
  * </p>
  */
-public final class ClpExpressions {
+public final class ExpressionFactories {
    private final KnowledgeBase kb;
    private final Object lock = new Object();
    private final Map<PredicateKey, String> factoryClassNames = new HashMap<>();
-   private final Map<PredicateKey, ClpExpressionFactory> factoryInstances = new HashMap<>();
+   private final Map<PredicateKey, ExpressionFactory> factoryInstances = new HashMap<>();
 
-   public ClpExpressions(KnowledgeBase kb) {
+   public ExpressionFactories(KnowledgeBase kb) {
       this.kb = kb;
    }
 
    /**
-    * Associates a {@link ClpExpressionFactory} with this {@code KnowledgeBase}.
+    * Associates a {@link ExpressionFactory} with this {@code KnowledgeBase}.
     *
-    * @param key The name and arity to associate the {@code ClpExpressionFactory} with.
-    * @param operatorClassName The class name of the {@code ClpExpressionFactory} to be associated with {@code key}.
-    * @throws ProjogException if there is already a {@code ClpExpressionFactory} associated with the
-    * {@code PredicateKey}
+    * @param key The name and arity to associate the {@code ExpressionFactory} with.
+    * @param operatorClassName The class name of the {@code ExpressionFactory} to be associated with {@code key}.
+    * @throws ProjogException if there is already a {@code ExpressionFactory} associated with the {@code PredicateKey}
     */
-   public void addClpExpressionFactory(PredicateKey key, String operatorClassName) {
+   public void addExpressionFactory(PredicateKey key, String operatorClassName) {
       synchronized (lock) {
          if (factoryClassNames.containsKey(key)) {
             throw new ProjogException("Already defined CLP expression: " + key);
@@ -83,7 +82,7 @@ public final class ClpExpressions {
          case ATOM:
          case STRUCTURE:
             PredicateKey key = PredicateKey.createForTerm(t);
-            ClpExpressionFactory factory = getExpressionFactory(key);
+            ExpressionFactory factory = getExpressionFactory(key);
             Expression[] args = new Expression[t.getNumberOfArguments()];
             for (int i = 0; i < args.length; i++) {
                args[i] = toExpression(t.getArgument(i), vars);
@@ -94,8 +93,8 @@ public final class ClpExpressions {
       }
    }
 
-   private ClpExpressionFactory getExpressionFactory(PredicateKey key) {
-      ClpExpressionFactory e = factoryInstances.get(key);
+   private ExpressionFactory getExpressionFactory(PredicateKey key) {
+      ExpressionFactory e = factoryInstances.get(key);
       if (e != null) {
          return e;
       } else if (factoryClassNames.containsKey(key)) {
@@ -105,9 +104,9 @@ public final class ClpExpressions {
       }
    }
 
-   private ClpExpressionFactory instantiateExpressionFactory(PredicateKey key) {
+   private ExpressionFactory instantiateExpressionFactory(PredicateKey key) {
       synchronized (lock) {
-         ClpExpressionFactory factory = factoryInstances.get(key);
+         ExpressionFactory factory = factoryInstances.get(key);
          if (factory == null) {
             factory = instantiateExpressionFactory(factoryClassNames.get(key));
             factoryInstances.put(key, factory);
@@ -116,11 +115,11 @@ public final class ClpExpressions {
       }
    }
 
-   private ClpExpressionFactory instantiateExpressionFactory(String className) {
+   private ExpressionFactory instantiateExpressionFactory(String className) {
       try {
          return KnowledgeBaseUtils.instantiate(kb, className);
       } catch (Exception e) {
-         throw new RuntimeException("Could not create new ClpExpressionFactory using: " + className, e);
+         throw new RuntimeException("Could not create new ExpressionFactory using: " + className, e);
       }
    }
 }

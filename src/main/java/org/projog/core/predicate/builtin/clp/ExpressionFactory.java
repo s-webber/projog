@@ -17,6 +17,6 @@ package org.projog.core.predicate.builtin.clp;
 
 import org.projog.clp.Expression;
 
-public interface ClpExpressionFactory {
+public interface ExpressionFactory {
    Expression createExpression(Expression[] args);
 }

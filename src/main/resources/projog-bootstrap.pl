@@ -193,6 +193,8 @@
 ?- pj_add_predicate(last/2, 'org.projog.core.predicate.builtin.list.Last').
 ?- pj_add_predicate(atomic_list_concat/2, 'org.projog.core.predicate.builtin.list.AtomicListConcat').
 ?- pj_add_predicate(atomic_list_concat/3, 'org.projog.core.predicate.builtin.list.AtomicListConcat').
+?- pj_add_predicate(pairs_keys/2, 'org.projog.core.predicate.builtin.list.PairsElements/keys').
+?- pj_add_predicate(pairs_values/2, 'org.projog.core.predicate.builtin.list.PairsElements/values').
 
 % clp
 ?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.ClpIn').

@@ -16,6 +16,7 @@
 package org.projog.core.predicate.builtin.list;
 
 import static java.util.Collections.sort;
+import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.isKeyValuePair;
 import static org.projog.core.term.ListFactory.createList;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
@@ -26,7 +27,6 @@ import java.util.List;
 import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermType;
 
 /* TEST
 %?- keysort([a - 1,b - 3,c - 2], X)
@@ -69,7 +69,6 @@ import org.projog.core.term.TermType;
  * used to sort the elements contained in <code>X</code>. (Note: duplicates are <i>not</i> removed.)
  */
 public final class KeySort extends AbstractSingleResultPredicate {
-   private static final String KEY_VALUE_PAIR_FUNCTOR = "-";
    private static final Comparator<Term> KEY_VALUE_PAIR_COMPARATOR = new Comparator<Term>() {
       @Override
       public int compare(Term kvp1, Term kvp2) {
@@ -90,14 +89,10 @@ public final class KeySort extends AbstractSingleResultPredicate {
 
    private boolean assertKeyValuePairs(List<Term> elements) {
       for (Term t : elements) {
-         if (!assertKeyValuePair(t)) {
+         if (!isKeyValuePair(t)) {
             throw new ProjogException("Expected every element of list to be a compound term with a functor of - and two arguments but got: " + t);
          }
       }
       return true;
-   }
-
-   private boolean assertKeyValuePair(Term t) {
-      return t.getType() == TermType.STRUCTURE && KEY_VALUE_PAIR_FUNCTOR.equals(t.getName()) && t.getNumberOfArguments() == 2;
    }
 }

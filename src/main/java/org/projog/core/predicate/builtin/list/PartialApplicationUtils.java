@@ -28,6 +28,8 @@ import org.projog.core.term.Variable;
 
 // Moved methods to separate class so can be used by both MapList and SubList. TODO move to TermUtils
 public class PartialApplicationUtils {
+   private static final String KEY_VALUE_PAIR_FUNCTOR = "-";
+
    public static boolean isAtomOrStructure(Term arg) {
       TermType type = arg.getType();
       return type == TermType.STRUCTURE || type == TermType.ATOM;
@@ -98,5 +100,9 @@ public class PartialApplicationUtils {
       } else {
          return pf.getPredicate(createArguments(action, args));
       }
+   }
+
+   static boolean isKeyValuePair(Term t) {
+      return t.getType() == TermType.STRUCTURE && KEY_VALUE_PAIR_FUNCTOR.equals(t.getName()) && t.getNumberOfArguments() == 2;
    }
 }

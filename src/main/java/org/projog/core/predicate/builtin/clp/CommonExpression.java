@@ -20,11 +20,14 @@ import java.util.function.Function;
 import org.projog.clp.Expression;
 import org.projog.clp.math.Absolute;
 import org.projog.clp.math.Add;
+import org.projog.clp.math.Divide;
+import org.projog.clp.math.Maximum;
+import org.projog.clp.math.Minimum;
 import org.projog.clp.math.Minus;
 import org.projog.clp.math.Multiply;
 import org.projog.clp.math.Subtract;
 
-public class CommonExpression implements ExpressionFactory {
+public final class CommonExpression implements ExpressionFactory {
    private final Function<Expression[], Expression> function;
 
    public static ExpressionFactory add() {
@@ -37,6 +40,18 @@ public class CommonExpression implements ExpressionFactory {
 
    public static ExpressionFactory multiply() {
       return new CommonExpression(args -> new Multiply(args[0], args[1]));
+   }
+
+   public static ExpressionFactory divide() {
+      return new CommonExpression(args -> new Divide(args[0], args[1]));
+   }
+
+   public static ExpressionFactory minimum() {
+      return new CommonExpression(args -> new Minimum(args[0], args[1]));
+   }
+
+   public static ExpressionFactory maximum() {
+      return new CommonExpression(args -> new Maximum(args[0], args[1]));
    }
 
    public static ExpressionFactory absolute() {

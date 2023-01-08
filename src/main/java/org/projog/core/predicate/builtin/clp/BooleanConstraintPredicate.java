@@ -91,9 +91,6 @@ import org.projog.core.term.Term;
 % Y = 1
 %NO
 
-%?- X in 2..3, X#<==>Y
-%NO
-
 %?- X in 4..5, Y in 5..6, Z#<==> X#<Y, label([X,Y,Z])
 % X = 4
 % Y = 5
@@ -108,6 +105,12 @@ import org.projog.core.term.Term;
 % Y = 6
 % Z = 1
 %NO
+
+%?- X in 2..3, X#<==>Y
+%NO
+
+%?- X #<==> append(_,_,_)
+%ERROR Cannot create CLP constraint from term: append(_, _, _)
 */
 /**
  * CLP predicates for comparing boolean values.
@@ -194,7 +197,11 @@ public final class BooleanConstraintPredicate implements PredicateFactory, Const
          case STRUCTURE:
             PredicateKey key = PredicateKey.createForTerm(t);
             PredicateFactory factory = predicates.getPredicateFactory(key);
-            return ((ConstraintFactory) factory).createConstraint(t.getArgs(), vars);
+            if (factory instanceof ConstraintFactory) {
+               return ((ConstraintFactory) factory).createConstraint(t.getArgs(), vars);
+            } else {
+               throw new ProjogException("Cannot create CLP constraint from term: " + t);
+            }
          default:
             throw new ProjogException("Cannot get CLP expression for term: " + t + " of type: " + t.getType());
       }

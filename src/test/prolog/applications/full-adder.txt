@@ -1,0 +1,18 @@
+Full Adder
+<p>
+A <a href="https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder">full adder</a> adds three binary numbers.
+</p>
+<p>
+The truth table for a full adder is:
+<table style="border: 1px solid black">
+<tr><th>Input 1</th><th>Input 2</th><th>Input 3</th><th>Output 1</th><th>Output 2</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+</p>

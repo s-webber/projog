@@ -219,6 +219,9 @@
 ?- pj_add_clp_expression('+'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/add').
 ?- pj_add_clp_expression('/'('-', 2), 'org.projog.core.predicate.builtin.clp.CommonExpression/subtract').
 ?- pj_add_clp_expression('*'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/multiply').
+?- pj_add_clp_expression('//'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/divide').
+?- pj_add_clp_expression('min'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/minimum').
+?- pj_add_clp_expression('max'/2, 'org.projog.core.predicate.builtin.clp.CommonExpression/maximum').
 ?- pj_add_clp_expression('abs'/1, 'org.projog.core.predicate.builtin.clp.CommonExpression/absolute').
 ?- pj_add_clp_expression('/'('-', 1), 'org.projog.core.predicate.builtin.clp.CommonExpression/minus').
 

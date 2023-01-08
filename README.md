@@ -23,9 +23,9 @@ Projog can be used as a stand-alone console application or embedded in your Java
 The following commands will download Projog and start the console:
 
 ```sh
-$ wget http://projog.org/downloads/projog-0.7.0.zip
-$ jar xvf projog-0.7.0.zip
-$ cd projog-0.7.0
+$ wget http://projog.org/downloads/projog-0.8.0.zip
+$ jar xvf projog-0.8.0.zip
+$ cd projog-0.8.0
 $ chmod u+x projog-console.sh
 $ ./projog-console.sh
 ```
@@ -57,7 +57,7 @@ To include Projog within your project, just add this dependency to your `pom.xml
 <dependency>
    <groupId>org.projog</groupId>
    <artifactId>projog-core</artifactId>
-   <version>0.7.0</version>
+   <version>0.8.0</version>
 </dependency>
 ```
 

@@ -41,18 +41,15 @@ public final class Structure implements Term {
     *
     * @param functor the name of the new term
     * @param args arguments for the new term
-    * @return either a new {@link Structure}, a new {@link List} or {@link EmptyList#EMPTY_LIST}
+    * @return either a new {@link Structure} or a new {@link List}
     */
    public static Term createStructure(String functor, Term[] args) {
       if (args.length == 0) {
          throw new IllegalArgumentException("Cannot create structure with no arguments");
       }
 
-      if (ListFactory.LIST_PREDICATE_NAME.equals(functor)) {
-         if (args.length == 2) {
-            return ListFactory.createList(args[0], args[1]);
-         }
-         functor = ListFactory.LIST_PREDICATE_NAME;
+      if (ListFactory.LIST_PREDICATE_NAME.equals(functor) && args.length == 2) {
+         return ListFactory.createList(args[0], args[1]);
       }
 
       return new Structure(functor, args, isImmutable(args));

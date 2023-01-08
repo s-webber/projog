@@ -25,7 +25,6 @@ import static org.projog.core.parser.Delimiters.isListOpenBracket;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
-import static org.projog.core.parser.TokenType.QUOTED_ATOM;
 import static org.projog.core.parser.TokenType.SYMBOL;
 import static org.projog.core.parser.TokenType.VARIABLE;
 
@@ -175,7 +174,7 @@ class TokenParser {
             if (!isQuote(c)) {
                // found closing '
                parser.rewind();
-               return createToken(sb, QUOTED_ATOM);
+               return createToken(sb, ATOM);
             }
          } else if (isEscapeSequencePrefix(c)) {
             c = parseEscapeSequence();

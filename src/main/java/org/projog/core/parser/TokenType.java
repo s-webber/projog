@@ -18,9 +18,10 @@ package org.projog.core.parser;
 /** @see TokenParser */
 enum TokenType {
    ATOM,
-   QUOTED_ATOM,
    INTEGER,
    FLOAT,
+   VARIABLE,
+   STRUCTURE,
    SYMBOL,
-   VARIABLE
+   EMPTY_LIST
 }

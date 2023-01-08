@@ -17,6 +17,7 @@ package org.projog.core.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -223,6 +224,24 @@ public class TermParserTest {
       assertVariableTerm(new Variable("_"), "_");
    }
 
+   // Check if a term appears twice in a single sentence whether two Term objects are created or if the same instance is referenced twice.
+   // Currently only certain integer terms are cached.
+   // A possible future performance improvement would be to enable caching for all terms.
+   @Test
+   public void testNoCache() {
+      Term t = parseTerm("p(1,a,0.5)=p(a,0.5,1).");
+
+      // the integer number 1 will be reused due to th use of IntegerNumberCache
+      assertEquals(t.getArgument(0).getArgument(0), t.getArgument(1).getArgument(2));
+      assertSame(t.getArgument(0).getArgument(0), t.getArgument(1).getArgument(2));
+
+      assertEquals(t.getArgument(0).getArgument(1), t.getArgument(1).getArgument(0));
+      assertNotSame(t.getArgument(0).getArgument(1), t.getArgument(1).getArgument(0));
+
+      assertEquals(t.getArgument(0).getArgument(2), t.getArgument(1).getArgument(1));
+      assertNotSame(t.getArgument(0).getArgument(2), t.getArgument(1).getArgument(1));
+   }
+
    private void assertNonVariableTerm(Term expected, String input) {
       Term actual = parseTerm(input);
       assertNotNull(actual);
@@ -249,7 +268,6 @@ public class TermParserTest {
       } catch (ParserException e) {
          // expected
       } catch (Exception e) {
-         e.printStackTrace();
          fail("parsing: " + source + " caused: " + e);
       }
    }

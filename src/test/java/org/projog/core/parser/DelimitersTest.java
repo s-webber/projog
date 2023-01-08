@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isListOpenBracket(atom("[")));
       assertFalse(Delimiters.isListOpenBracket(symbol("]")));
       assertFalse(Delimiters.isListOpenBracket(symbol("(")));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertFalse(Delimiters.isListOpenBracket(null));
    }
 
    @Test
@@ -46,7 +46,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isListCloseBracket(atom("]")));
       assertFalse(Delimiters.isListCloseBracket(symbol("[")));
       assertFalse(Delimiters.isListCloseBracket(symbol(")")));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertFalse(Delimiters.isListCloseBracket(null));
    }
 
    @Test
@@ -55,7 +55,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isPredicateOpenBracket(atom("(")));
       assertFalse(Delimiters.isPredicateOpenBracket(symbol(")")));
       assertFalse(Delimiters.isPredicateOpenBracket(symbol("[")));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertFalse(Delimiters.isPredicateOpenBracket(null));
    }
 
    @Test
@@ -64,7 +64,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isPredicateCloseBracket(atom(")")));
       assertFalse(Delimiters.isPredicateCloseBracket(symbol("(")));
       assertFalse(Delimiters.isPredicateCloseBracket(symbol("]")));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertFalse(Delimiters.isPredicateCloseBracket(null));
    }
 
    @Test
@@ -73,7 +73,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isListTail(atom("|")));
       assertFalse(Delimiters.isListTail(symbol("[")));
       assertFalse(Delimiters.isListTail(symbol("]")));
-      assertFalse(Delimiters.isArgumentSeperator(null));
+      assertFalse(Delimiters.isListTail(null));
    }
 
    @Test
@@ -82,7 +82,7 @@ public class DelimitersTest {
       assertFalse(Delimiters.isSentenceTerminator(atom(".")));
       assertFalse(Delimiters.isSentenceTerminator(symbol("..=")));
       assertFalse(Delimiters.isSentenceTerminator(symbol(",")));
-      assertFalse(Delimiters.isArgumentSeperator(symbol(null)));
+      assertFalse(Delimiters.isSentenceTerminator(null));
    }
 
    @Test

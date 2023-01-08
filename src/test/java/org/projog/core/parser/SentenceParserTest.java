@@ -44,19 +44,20 @@ public class SentenceParserTest {
 
    @Test
    public void testIncompletePredicateSyntax() {
-      error(":- X is p("); // no )
-      error(":- X is p(a, b"); // no )
-      error(":- X is p(a b"); // no ,
+      error(":- X is p(."); // no )
+      error(":- X is p()."); // no arguments
+      error(":- X is p(a, b."); // no )
+      error(":- X is p(a b)."); // no ,
    }
 
    @Test
    public void testInvalidListSyntax() {
-      error(":- X is ["); // no ]
-      error(":- X is [a b"); // no , or |
-      error(":- X is [a, b"); // no ]
-      error(":- X is [a, b |"); // no tail
-      error(":- X is [a, b | ]"); // no tail
-      error(":- X is [a, b | c, d]"); // 2 args after |
+      error(":- X is [."); // no ]
+      error(":- X is [a b."); // no , or |
+      error(":- X is [a, b."); // no ]
+      error(":- X is [a, b |."); // no tail
+      error(":- X is [a, b | ]."); // no tail
+      error(":- X is [a, b | c, d]."); // 2 args after |
    }
 
    @Test

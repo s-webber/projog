@@ -24,7 +24,7 @@ import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
-import static org.projog.core.parser.TokenType.QUOTED_ATOM;
+import static org.projog.core.parser.TokenType.SYMBOL;
 import static org.projog.core.parser.TokenType.VARIABLE;
 
 import java.io.StringReader;
@@ -46,11 +46,21 @@ public class TokenParserTest {
 
    @Test
    public void testQuotedAtom() {
-      assertTokenType("'abcdefg'", "abcdefg", QUOTED_ATOM);
-      assertTokenType("''", "", QUOTED_ATOM);
-      assertTokenType("''''", "'", QUOTED_ATOM);
-      assertTokenType("''''''''''", "''''", QUOTED_ATOM);
-      assertTokenType("'q 1 \" 0.5 | '' @#~'", "q 1 \" 0.5 | ' @#~", QUOTED_ATOM);
+      assertTokenType("'abcdefg'", "abcdefg", ATOM);
+      assertTokenType("'@'", "@", ATOM);
+      assertTokenType("','", ",", ATOM);
+      assertTokenType("''", "", ATOM);
+      assertTokenType("''''", "'", ATOM);
+      assertTokenType("''''''''''", "''''", ATOM);
+      assertTokenType("'q 1 \" 0.5 | '' @#~'", "q 1 \" 0.5 | ' @#~", ATOM);
+   }
+
+   @Test
+   public void testSymbol() {
+      assertTokenType("@", "@", SYMBOL);
+      assertTokenType("@$%", "@$%", SYMBOL);
+      assertTokenType(",", ",", SYMBOL);
+      assertTokenType(".", ".", SYMBOL);
    }
 
    @Test
@@ -221,9 +231,9 @@ public class TokenParserTest {
    @Test
    public void testRewindException() {
       TokenParser tp = create("a b c");
-      assertEquals("a", tp.next().value);
+      assertEquals("a", tp.next().getName());
       Token b = tp.next();
-      assertEquals("b", b.value);
+      assertEquals("b", b.getName());
       tp.rewind(b);
       assertSame(b, tp.next());
       tp.rewind(b);
@@ -232,9 +242,9 @@ public class TokenParserTest {
       assertRewindException(tp, "b");
       assertRewindException(tp, "a");
 
-      assertEquals("b", tp.next().value);
+      assertEquals("b", tp.next().getName());
       Token c = tp.next();
-      assertEquals("c", c.value);
+      assertEquals("c", c.getName());
 
       // check that the value specified in call to rewind has to be the last value parsed
       assertRewindException(tp, "b");
@@ -272,8 +282,8 @@ public class TokenParserTest {
       TokenParser p = create(syntax);
       assertTrue(p.hasNext());
       Token token = p.next();
-      assertEquals(value, token.value);
-      assertSame(type, token.type);
+      assertEquals(value, token.getName());
+      assertSame(type, token.getType());
       assertFalse(p.hasNext());
    }
 
@@ -281,7 +291,7 @@ public class TokenParserTest {
       TokenParser tp = create(sentence);
       for (String w : tokens) {
          Token next = tp.next();
-         assertEquals(w, next.value);
+         assertEquals(w, next.getName());
          tp.rewind(next);
          assertSame(next, tp.next());
       }

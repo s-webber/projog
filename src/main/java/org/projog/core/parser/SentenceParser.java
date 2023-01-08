@@ -31,16 +31,17 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
-import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 /**
@@ -67,29 +68,29 @@ public class SentenceParser {
     */
    private final HashMap<String, Variable> variables = new HashMap<>();
    /**
-    * Terms created, during the parsing of the current sentence, that were represented using infix notation.
+    * Tokens created, during the parsing of the current sentence, that were represented using infix notation.
     * <p>
     * Example of infix notation: <code>X = 1</code> where the predicate name <code>=</code> is positioned between its
     * two arguments <code>X</code> and <code>1</code>.
     * <p>
-    * The reason these need to be kept a record of is, when the sentence has been fully read, the individual terms can
+    * The reason these need to be kept a record of is, when the sentence has been fully read, the individual tokens can
     * be reordered to conform to operator precedence.
     * <p>
     * e.g. <code>1+2/3</code> will get ordered like: <code>+(1, /(2, 3))</code> while <code>1/2+3</code> will be ordered
     * like: <code>+(/(1, 2), 3)</code>.
     */
-   private final TermIdentitySet parsedInfixTerms = new TermIdentitySet();
+   private final Set<Token> parsedInfixTokens = new HashSet<>();
    /**
-    * Terms created, during the parsing of the current sentence, that were enclosed in brackets.
+    * Tokens created, during the parsing of the current sentence, that were enclosed in brackets.
     * <p>
-    * The reason this information needs to be stored is so that the parser knows to <i>not</i> reorder these terms as
-    * part of the reordering of infix terms that occurs once the sentence is fully read. i.e. Using brackets to
-    * explicitly define the ordering of terms overrules the default operator precedence of infix terms.
+    * The reason this information needs to be stored is so that the parser knows to <i>not</i> reorder these tokens as
+    * part of the reordering of infix tokens that occurs once the sentence is fully read. i.e. Using brackets to
+    * explicitly define the ordering of tokens overrules the default operator precedence of infix tokens.
     * <p>
     * e.g. Although <code>1/2+3</code> will be ordered like: <code>+(/(1, 2), 3)</code>, <code>1/(2+3)</code> (i.e.
     * where <code>2+3</code> is enclosed in brackets) will be ordered like: <code>/(1, +(2, 3))</code>.
     */
-   private final TermIdentitySet bracketedTerms = new TermIdentitySet();
+   private final Set<Token> bracketedTokens = new HashSet<>();
 
    /**
     * Returns a new {@code SentenceParser} will parse the specified {@code String} using the specified {@code Operands}.
@@ -154,16 +155,17 @@ public class SentenceParser {
    public Term parseTerm() {
       if (parser.hasNext()) {
          resetState();
-         return getTerm(Integer.MAX_VALUE);
+         Token t = getToken(Integer.MAX_VALUE);
+         return toTerm(t);
       } else {
          return null;
       }
    }
 
    private void resetState() {
-      parsedInfixTerms.clear();
+      parsedInfixTokens.clear();
       variables.clear();
-      bracketedTerms.clear();
+      bracketedTokens.clear();
    }
 
    /**
@@ -180,100 +182,104 @@ public class SentenceParser {
    }
 
    /**
-    * Creates a {@link Term} from Prolog syntax read from this object's {@link CharacterParser}.
+    * Creates a {@link Token} from Prolog syntax read from this object's {@link CharacterParser}.
     */
-   private Term getTerm(int maxLevel) {
-      final Term firstArg = getPossiblePrefixArgument(maxLevel);
+   private Token getToken(int maxLevel) {
+      final Token firstArg = getPossiblePrefixArgument(maxLevel);
       if (parser.hasNext()) {
-         return getTerm(firstArg, maxLevel, maxLevel, true);
+         return getToken(firstArg, maxLevel, maxLevel, true);
       } else {
          return firstArg;
       }
    }
 
    /**
-    * Recursively called to combine individual terms into a composite term.
+    * Recursively called to combine individual tokens into a composite token.
     * <p>
-    * While the parsing of the individual terms is performed, priority of the operands they represent needs to be
-    * considered to make sure the terms are ordered correctly (due to different operand precedence it is not always the
-    * case that the terms will be ordered in the resulting composite term in the same order they were parsed from the
+    * While the parsing of the individual tokens is performed, priority of the operands they represent needs to be
+    * considered to make sure the tokens are ordered correctly (due to different operand precedence it is not always the
+    * case that the tokens will be ordered in the resulting composite Token in the same order they were parsed from the
     * input stream).
     *
-    * @param currentTerm represents the current state of the process to parse a complete term
-    * @param currentLevel the current priority/precedence/level of terms being parsed - if an operand represented by a
-    * term retrieved by this method has a higher priority then reordering needs to take place to position the term in
-    * the right position in relation to the other terms that exist within the {@code currentTerm} structure (in order to
-    * maintain the correct priority)
+    * @param currentToken represents the current state of the process to parse a complete token
+    * @param currentLevel the current priority/precedence/level of tokens being parsed - if an operand represented by a
+    * Token retrieved by this method has a higher priority then reordering needs to take place to position the Token in
+    * the right position in relation to the other tokens that exist within the {@code currentToken} structure (in order
+    * to maintain the correct priority)
     * @param maxLevel the maximum priority/precedence/level of operands to parse - if an operand represented by the next
-    * term retrieved by this method has a higher priority then it is ignored for now ({@code currentTerm} is returned
-    * "as-is"}.
+    * Token retrieved by this method has a higher priority then it is ignored for now ({@code currentToken} is returned
+    * "as-is").
     * @param {@code true} if this method is being called by another method, {@code false} if it is being called
     * recursively by itself.
     */
-   private Term getTerm(final Term currentTerm, final int currentLevel, final int maxLevel, final boolean isFirst) {
+   private Token getToken(final Token currentToken, final int currentLevel, final int maxLevel, final boolean isFirst) {
       final Token nextToken = popValue();
-      final String next = nextToken.value;
+      final String next = nextToken.getName();
       if (operands.postfix(next) && operands.getPostfixPriority(next) <= currentLevel) {
-         Term postfixTerm = addPostfixOperand(next, currentTerm);
-         return getTerm(postfixTerm, currentLevel, maxLevel, false);
+         Token postfixToken = addPostfixOperand(next, currentToken);
+         return getToken(postfixToken, currentLevel, maxLevel, false);
       } else if (!operands.infix(next)) {
          // could be '.' if end of sentence
          // or ',', '|', ']' or ')' if parsing list or predicate
          // or could be an error
          parser.rewind(nextToken);
-         return currentTerm;
+         return currentToken;
       }
 
       final int level = operands.getInfixPriority(next);
       if (level > maxLevel) {
          parser.rewind(nextToken);
-         return currentTerm;
+         return currentToken;
       }
 
-      final Term secondArg = getPossiblePrefixArgument(level);
+      final Token secondArg = getPossiblePrefixArgument(level);
 
       if (isFirst) {
-         final Term t = Structure.createStructure(next, new Term[] {currentTerm, secondArg});
-         return getTerm(t, level, maxLevel, false);
+         final Token t = createStructure(next, new Token[] {currentToken, secondArg});
+         return getToken(t, level, maxLevel, false);
       } else if (level < currentLevel) {
-         // compare previous.getArgs()[1] to level -
-         // keep going until find right level to add this term to
-         Term t = currentTerm;
-         while (isParsedInfixTerms(t.getArgs()[1]) && getInfixLevel(t.getArgs()[1]) > level) {
-            if (bracketedTerms.contains(t.getArgs()[1])) {
+         // compare previous.getArgument(1) to level -
+         // keep going until find right level to add this Token to
+         Token t = currentToken;
+         while (isParsedInfixToken(t.getArgument(1)) && getInfixLevel(t.getArgument(1)) > level) {
+            if (bracketedTokens.contains(t.getArgument(1))) {
                break;
             }
-            t = t.getArgs()[1];
+            t = t.getArgument(1);
          }
-         Term predicate = Structure.createStructure(next, new Term[] {t.getArgs()[1], secondArg});
-         parsedInfixTerms.add(predicate);
-         t.getArgs()[1] = predicate;
-         return getTerm(currentTerm, currentLevel, maxLevel, false);
+         Token predicate = createStructure(next, new Token[] {t.getArgument(1), secondArg});
+         parsedInfixTokens.add(predicate);
+         t.setArgument(1, predicate);
+         return getToken(currentToken, currentLevel, maxLevel, false);
       } else {
          if (level == currentLevel) {
             if (operands.xfx(next)) {
-               throw newParserException("Operand " + next + " has same precedence level as preceding operand: " + currentTerm);
+               throw newParserException("Operand " + next + " has same precedence level as preceding operand: " + currentToken);
             }
          }
-         Term predicate = Structure.createStructure(next, new Term[] {currentTerm, secondArg});
-         parsedInfixTerms.add(predicate);
-         return getTerm(predicate, level, maxLevel, false);
+         Token predicate = createStructure(next, new Token[] {currentToken, secondArg});
+         parsedInfixTokens.add(predicate);
+         return getToken(predicate, level, maxLevel, false);
       }
    }
 
+   private Token createStructure(String name, Token[] tokens) {
+      return new Token(name, TokenType.STRUCTURE, tokens);
+   }
+
    /**
-    * Parses and returns a {@code Term}.
+    * Parses and returns a {@code Token}.
     * <p>
-    * If the parsed {@code Term} represents a prefix operand, then the subsequent term is also parsed so it can be used
-    * as an argument in the returned structure.
+    * If the parsed {@code Token} represents a prefix operand, then the subsequent Token is also parsed so it can be
+    * used as an argument in the returned structure.
     *
-    * @param currentLevel the current priority level of terms being parsed (if the parsed term represents a prefix
+    * @param currentLevel the current priority level of tokens being parsed (if the parsed Token represents a prefix
     * operand, then the operand cannot have a higher priority than {@code currentLevel} (a {@code ParserException} will
     * be thrown if does).
     */
-   private Term getPossiblePrefixArgument(int currentLevel) {
+   private Token getPossiblePrefixArgument(int currentLevel) {
       final Token token = popValue();
-      final String value = token.value;
+      final String value = token.getName();
       if (operands.prefix(value) && parser.isFollowedByTerm()) {
          if (value.equals(MINUS_SIGN) && isFollowedByNumber()) {
             return getNegativeNumber();
@@ -288,60 +294,56 @@ public class SentenceParser {
          // can contain operators of <i>the same</i> or lower level of priority
          // while a "x" means that the argument can <i>only</i> contain operators of a lower priority.
          if (operands.fx(value)) {
-            // -1 to only parse terms of a lower priority than the current prefix operator.
+            // -1 to only parse tokens of a lower priority than the current prefix operator.
             prefixLevel--;
          }
 
-         Term argument = getTerm(prefixLevel);
-         return createPrefixTerm(value, argument);
+         Token argument = getToken(prefixLevel);
+         return createPrefixToken(value, argument);
       } else {
          parser.rewind(token);
-         return getDiscreteTerm();
+         return getDiscreteToken();
       }
    }
 
-   private Term getNegativeNumber() {
+   private Token getNegativeNumber() {
       final Token token = popValue();
-      final String value = "-" + token.value;
-      if (token.type == TokenType.INTEGER) {
-         return toIntegerNumber(value);
-      } else {
-         return toDecimalFraction(value);
-      }
+      final String value = "-" + token.getName();
+      return new Token(value, token.getType());
    }
 
    /**
-    * Returns a new {@code Term} representing the specified prefix operand and argument.
+    * Returns a new {@code Token} representing the specified prefix operand and argument.
     */
-   private Term createPrefixTerm(String prefixOperandName, Term argument) {
-      return Structure.createStructure(prefixOperandName, new Term[] {argument});
+   private Token createPrefixToken(String prefixOperandName, Token argument) {
+      return createStructure(prefixOperandName, new Token[] {argument});
    }
 
    /**
-    * Add a term, representing a post-fix operand, in the appropriate point of a composite term.
+    * Add a token, representing a post-fix operand, in the appropriate point of a composite token.
     * <p>
-    * The correct position of the post-fix operand within the composite term (and so what the post-fix operands actual
+    * The correct position of the post-fix operand within the composite Token (and so what the post-fix operands actual
     * argument will be) is determined by operand priority.
     *
-    * @param original a composite term representing the current state of parsing the current sentence
-    * @param postfixOperand a term which represents a post-fix operand
+    * @param original a composite Token representing the current state of parsing the current sentence
+    * @param postfixOperand a Token which represents a post-fix operand
     */
-   private Term addPostfixOperand(String postfixOperand, Term original) {
+   private Token addPostfixOperand(String postfixOperand, Token original) {
       int level = operands.getPostfixPriority(postfixOperand);
       if (original.getNumberOfArguments() == 2) {
          boolean higherLevelInfixOperand = operands.infix(original.getName()) && getInfixLevel(original) > level;
          if (higherLevelInfixOperand) {
             String name = original.getName();
-            Term firstArg = original.getArgument(0);
-            Term newSecondArg = addPostfixOperand(postfixOperand, original.getArgument(1));
-            return Structure.createStructure(name, new Term[] {firstArg, newSecondArg});
+            Token firstArg = original.getArgument(0);
+            Token newSecondArg = addPostfixOperand(postfixOperand, original.getArgument(1));
+            return createStructure(name, new Token[] {firstArg, newSecondArg});
          }
       } else if (original.getNumberOfArguments() == 1) {
          if (operands.prefix(original.getName())) {
             if (getPrefixLevel(original) > level) {
                String name = original.getName();
-               Term newFirstArg = addPostfixOperand(postfixOperand, original.getArgument(0));
-               return Structure.createStructure(name, new Term[] {newFirstArg});
+               Token newFirstArg = addPostfixOperand(postfixOperand, original.getArgument(0));
+               return createStructure(name, new Token[] {newFirstArg});
             }
          } else if (operands.postfix(original.getName())) {
             int levelToCompareTo = getPostfixLevel(original);
@@ -351,39 +353,43 @@ public class SentenceParser {
             }
          }
       }
-      return Structure.createStructure(postfixOperand, new Term[] {original});
+      return createStructure(postfixOperand, new Token[] {original});
    }
 
-   private Term getDiscreteTerm() {
+   private Token getDiscreteToken() {
       final Token token = popValue();
       if (isListOpenBracket(token)) {
          return parseList();
       } else if (isPredicateOpenBracket(token)) {
-         return getTermInBrackets();
+         return getTokenInBrackets();
+      } else if (token.getType() == TokenType.SYMBOL || token.getType() == TokenType.ATOM) {
+         return getAtomOrStructure(token.getName());
       } else {
-         switch (token.type) {
-            case ATOM:
-            case QUOTED_ATOM:
-            case SYMBOL:
-               return getAtomOrStructure(token.value);
-            case INTEGER:
-               return toIntegerNumber(token.value);
-            case FLOAT:
-               return toDecimalFraction(token.value);
-            case VARIABLE:
-               return getVariable(token.value);
-            default:
-               throw new IllegalArgumentException();
-         }
+         return token;
       }
    }
 
-   private IntegerNumber toIntegerNumber(final String value) {
-      return new IntegerNumber(parseLong(value));
-   }
-
-   private DecimalFraction toDecimalFraction(final String value) {
-      return new DecimalFraction(parseDouble(value));
+   private Term toTerm(Token token) {
+      switch (token.getType()) {
+         case ATOM:
+            return new Atom(token.getName());
+         case INTEGER:
+            return IntegerNumberCache.valueOf(parseLong(token.getName()));
+         case FLOAT:
+            return new DecimalFraction(parseDouble(token.getName()));
+         case VARIABLE:
+            return getVariable(token.getName());
+         case STRUCTURE:
+            Term[] args = new Term[token.getNumberOfArguments()];
+            for (int i = 0; i < args.length; i++) {
+               args[i] = toTerm(token.getArgument(i));
+            }
+            return Structure.createStructure(token.getName(), args);
+         case EMPTY_LIST:
+            return EmptyList.EMPTY_LIST;
+         default:
+            throw new RuntimeException("Unexpected token type: " + token.getType() + " with value: " + token);
+      }
    }
 
    /**
@@ -392,7 +398,7 @@ public class SentenceParser {
     * If the next character read from the parser is a {@code (} then a newly created {@code Structure} is returned else
     * a newly created {@code Atom} is returned.
     */
-   private Term getAtomOrStructure(String name) {
+   private Token getAtomOrStructure(String name) {
       Token token = parser.hasNext() ? peekValue() : null;
       if (isPredicateOpenBracket(token)) {
          popValue(); //skip opening bracket
@@ -400,15 +406,15 @@ public class SentenceParser {
             throw newParserException("No arguments specified for structure: " + name);
          }
 
-         ArrayList<Term> args = new ArrayList<>();
+         ArrayList<Token> args = new ArrayList<>();
 
-         Term t = getCommaSeparatedArgument();
+         Token t = getCommaSeparatedArgument();
          args.add(t);
 
          do {
             token = popValue();
             if (isPredicateCloseBracket(token)) {
-               return Structure.createStructure(name, toArray(args));
+               return createStructure(name, toArray(args));
             } else if (isArgumentSeperator(token)) {
                args.add(getCommaSeparatedArgument());
             } else {
@@ -416,7 +422,7 @@ public class SentenceParser {
             }
          } while (true);
       } else {
-         return new Atom(name);
+         return new Token(name, TokenType.ATOM);
       }
    }
 
@@ -444,10 +450,10 @@ public class SentenceParser {
       return v;
    }
 
-   /** Returns a newly created {@code List} with elements read from the parser. */
-   private Term parseList() {
-      ArrayList<Term> args = new ArrayList<>();
-      Term tail = EmptyList.EMPTY_LIST;
+   /** Returns a newly created {@code Token} representing a Prolog list with elements read from the parser. */
+   private Token parseList() {
+      ArrayList<Token> args = new ArrayList<>();
+      Token tail = new Token(null, TokenType.EMPTY_LIST);
 
       while (true) {
          Token token = popValue();
@@ -455,7 +461,7 @@ public class SentenceParser {
             break;
          }
          parser.rewind(token);
-         Term arg = getCommaSeparatedArgument();
+         Token arg = getCommaSeparatedArgument();
          args.add(arg);
 
          token = popValue(); // | ] or ,
@@ -472,7 +478,13 @@ public class SentenceParser {
             throw newParserException("While parsing list expected ] | or , but got: " + token);
          }
       }
-      return ListFactory.createList(toArray(args), tail);
+
+      Token list = tail;
+      for (int i = args.size() - 1; i > -1; i--) {
+         Token element = args.get(i);
+         list = createStructure(ListFactory.LIST_PREDICATE_NAME, new Token[] {element, list});
+      }
+      return list;
    }
 
    /**
@@ -481,31 +493,31 @@ public class SentenceParser {
     * As a comma would indicate a delimiter in a sequence of arguments, we only want to continue parsing up to the point
     * of any comma. i.e. Any parsed comma should not be considered as part of the argument currently being parsed.
     */
-   private Term getCommaSeparatedArgument() {
+   private Token getCommaSeparatedArgument() {
       // Call getArgument with a priority/precedence/level of one less than the priority of a comma -
-      // as we only want to continue parsing terms that have a lower priority level than that.
+      // as we only want to continue parsing tokens that have a lower priority level than that.
       // The reason this is slightly complicated is because of the overloaded use of a comma in Prolog -
       // as well as acting as a delimiter in a sequence of arguments for a list or structure,
       // a comma is also a predicate in its own right (as a conjunction).
       if (operands.infix(",")) {
-         return getTerm(operands.getInfixPriority(",") - 1);
+         return getToken(operands.getInfixPriority(",") - 1);
       } else {
-         return getTerm(Integer.MAX_VALUE);
+         return getToken(Integer.MAX_VALUE);
       }
    }
 
-   private Term getTermInBrackets() {
-      // As we are at the starting point for parsing a term contained in brackets
+   private Token getTokenInBrackets() {
+      // As we are at the starting point for parsing a Token contained in brackets
       // (and as it being in brackets means we can parse it in isolation without
-      // considering the priority of any surrounding terms outside the brackets)
+      // considering the priority of any surrounding tokens outside the brackets)
       // we call getArgument with the highest possible priority.
-      Term t = getTerm(Integer.MAX_VALUE);
-      final Token token = popValue();
-      if (!isPredicateCloseBracket(token)) {
-         throw newParserException("Expected ) but got: " + token + " after " + t);
+      Token token = getToken(Integer.MAX_VALUE);
+      Token next = popValue();
+      if (!isPredicateCloseBracket(next)) {
+         throw newParserException("Expected ) but got: " + next + " after " + token);
       }
-      bracketedTerms.add(t);
-      return t;
+      bracketedTokens.add(token);
+      return token;
    }
 
    private Token popValue() {
@@ -520,33 +532,33 @@ public class SentenceParser {
 
    private boolean isFollowedByNumber() {
       Token token = popValue();
-      TokenType tt = token.type;
+      TokenType tt = token.getType();
       parser.rewind(token);
       return tt == TokenType.INTEGER || tt == TokenType.FLOAT;
    }
 
    /**
-    * Has the specified term already been parsed, and included as an argument in an infix operand, as part of parsing
+    * Has the specified Token already been parsed, and included as an argument in an infix operand, as part of parsing
     * the current sentence?
     */
-   private boolean isParsedInfixTerms(Term t) {
-      return parsedInfixTerms.contains(t);
+   private boolean isParsedInfixToken(Token t) {
+      return parsedInfixTokens.contains(t);
    }
 
-   private int getPrefixLevel(Term t) {
+   private int getPrefixLevel(Token t) {
       return operands.getPrefixPriority(t.getName());
    }
 
-   private int getInfixLevel(Term t) {
+   private int getInfixLevel(Token t) {
       return operands.getInfixPriority(t.getName());
    }
 
-   private int getPostfixLevel(Term t) {
+   private int getPostfixLevel(Token t) {
       return operands.getPostfixPriority(t.getName());
    }
 
-   private Term[] toArray(ArrayList<Term> al) {
-      return al.toArray(TermUtils.EMPTY_ARRAY);
+   private Token[] toArray(ArrayList<Token> al) {
+      return al.toArray(new Token[al.size()]);
    }
 
    /** Returns a new {@link ParserException} with the specified message. */

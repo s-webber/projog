@@ -155,7 +155,7 @@ p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
 % X=1
 % X=2
 % X=3
-*/
+ */
 /**
  * <code>X;Y</code> - disjunction.
  * <p>
@@ -181,6 +181,9 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
          if (getPredicates().getPredicateFactory(arg1) instanceof IfThen) {
             Term conditionTerm = arg1.getArgument(0);
             Term thenTerm = arg1.getArgument(1);
+            if (conditionTerm.getType().isVariable() || thenTerm.getType().isVariable()) {
+               return this;
+            }
             PredicateFactory condition = getPredicates().getPreprocessedPredicateFactory(conditionTerm);
             PredicateFactory thenPf = getPredicates().getPreprocessedPredicateFactory(thenTerm);
             PredicateFactory elsePf = getPredicates().getPreprocessedPredicateFactory(arg2);

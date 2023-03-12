@@ -230,6 +230,8 @@
 ?- pj_add_predicate(get_time/1, 'org.projog.core.predicate.builtin.time.GetTime').
 ?- pj_add_predicate(convert_time/2, 'org.projog.core.predicate.builtin.time.ConvertTime').
 
+?- pj_add_predicate(dif/2, 'org.projog.core.predicate.builtin.reif.Dif').
+
 % numerical operations
 ?- pj_add_arithmetic_operator('+'/2, 'org.projog.core.math.builtin.Add').
 ?- pj_add_arithmetic_operator('/'('-', 1), 'org.projog.core.math.builtin.Minus').

@@ -148,6 +148,7 @@
 ?- pj_add_predicate(repeat/0, 'org.projog.core.predicate.builtin.flow.RepeatInfinitely').
 ?- pj_add_predicate(repeat/1, 'org.projog.core.predicate.builtin.flow.RepeatSetAmount').
 ?- pj_add_predicate('!'/0, 'org.projog.core.predicate.builtin.flow.Cut').
+?- pj_add_predicate(throw/1, 'org.projog.core.predicate.builtin.flow.Throw').
 
 % list
 ?- pj_add_predicate(length/2, 'org.projog.core.predicate.builtin.list.Length').

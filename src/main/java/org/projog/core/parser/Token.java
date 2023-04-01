@@ -15,8 +15,10 @@
  */
 package org.projog.core.parser;
 
+import java.util.Arrays;
+
 /** @see TokenParser#next() */
-class Token {
+final class Token {
    private static final Token[] EMPTY_ARGS = new Token[0];
 
    private final String value;
@@ -41,12 +43,12 @@ class Token {
       return type;
    }
 
-   Token getArgument(int i) {
-      return args[i];
+   Token[] getArguments() {
+      return args;
    }
 
-   void setArgument(int i, Token t) {
-      args[i] = t;
+   Token getArgument(int i) {
+      return args[i];
    }
 
    int getNumberOfArguments() {
@@ -55,6 +57,6 @@ class Token {
 
    @Override
    public String toString() {
-      return value;
+      return value + (args.length == 0 ? "" : (" " + Arrays.toString(args)));
    }
 }

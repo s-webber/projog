@@ -38,7 +38,7 @@ public final class Read extends AbstractSingleResultPredicate {
    protected boolean evaluate(Term argument) {
       InputStreamReader isr = new InputStreamReader(getFileHandles().getCurrentInputStream());
       SentenceParser sp = SentenceParser.getInstance(isr, getOperands());
-      Term t = sp.parseTerm();
+      Term t = sp.parseSentence();
       return argument.unify(t);
    }
 }

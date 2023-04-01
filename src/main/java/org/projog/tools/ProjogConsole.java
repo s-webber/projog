@@ -122,7 +122,6 @@ public class ProjogConsole {
          out.println("Error parsing query:");
          pe.getDescription(out);
       } catch (Throwable e) {
-         e.printStackTrace();
          out.println();
          processThrowable(e);
          projog.printProjogStackTrace(e);

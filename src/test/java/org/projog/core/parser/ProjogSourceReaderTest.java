@@ -51,7 +51,7 @@ public class ProjogSourceReaderTest {
 
    @Test
    public void testParserException() {
-      String message = "While parsing arguments of test_dynamic expected ) or , but got: d";
+      String message = "No suitable operands found in: c d";
       String lineWithSyntaxError = "test_dynamic(a,b,c d). % Line 3";
       try {
          File f = writeToFile("test_dynamic(a,b).\n" + "test_dynamic(a,b,c).\n" + lineWithSyntaxError + "\n" + "test_dynamic(a,b,c,d,e).");
@@ -62,7 +62,7 @@ public class ProjogSourceReaderTest {
          assertEquals(message + " Line: " + lineWithSyntaxError, p.getMessage());
          assertEquals(lineWithSyntaxError, p.getLine());
          assertEquals(3, p.getLineNumber());
-         assertEquals(20, p.getColumnNumber());
+         assertEquals(22, p.getColumnNumber());
          assertParserExceptionDescription(p, message, lineWithSyntaxError);
       }
    }
@@ -73,9 +73,9 @@ public class ProjogSourceReaderTest {
       p.getDescription(out);
       out.close();
       String[] lines = os.toString().split("\n");
+      assertEquals(2, lines.length);
       assertEquals(message, lines[0].trim());
       assertEquals(line, lines[1].trim());
-      assertEquals("^", lines[2].trim());
    }
 
    @Test
@@ -98,14 +98,14 @@ public class ProjogSourceReaderTest {
    public void testDynamicKeyword() {
       KnowledgeBase kb = createKnowledgeBase();
       File f = writeToFile("?- dynamic(test_dynamic/3).\n"
-                  + "test_dynamic(a,b).\n"
-                  + "test_dynamic(a,b,c).\n"
-                  + "test_dynamic(x,y,z).\n"
-                  + "test_dynamic(q,w,e).\n"
-                  + "test_dynamic(a,b,c,d).\n"
-                  + "test_dynamic2(1,2,3).\n"
-                  + "test_dynamic2(4,5,6).\n"
-                  + "test_dynamic2(7,8,9).");
+                           + "test_dynamic(a,b).\n"
+                           + "test_dynamic(a,b,c).\n"
+                           + "test_dynamic(x,y,z).\n"
+                           + "test_dynamic(q,w,e).\n"
+                           + "test_dynamic(a,b,c,d).\n"
+                           + "test_dynamic2(1,2,3).\n"
+                           + "test_dynamic2(4,5,6).\n"
+                           + "test_dynamic2(7,8,9).");
       ProjogSourceReader.parseFile(kb, f);
 
       assertDynamicUserDefinedPredicate(kb, new PredicateKey("test_dynamic", 3));

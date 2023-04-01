@@ -111,6 +111,18 @@ class TokenParser {
       rewound = true;
    }
 
+   boolean isImmediatelyFollowedByBracket(boolean rewind) { // TODO test
+      if (parser.getNext() == '(') {
+         if (rewind) {
+            parser.rewind();
+         }
+         return true;
+      } else {
+         parser.rewind();
+         return false;
+      }
+   }
+
    /** Does the next value to be parsed represent a term (rather than a delimiter) */
    boolean isFollowedByTerm() {
       skipWhitespaceAndComments();

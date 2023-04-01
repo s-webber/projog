@@ -110,16 +110,19 @@ final class DefiniteClauseGrammerConvertor {
       Term newAntecedent;
       if (newSequence.isEmpty()) {
          newAntecedent = null;
-      } else {
+      } else if (newSequence.size() == 1) {
          newAntecedent = newSequence.get(0);
-         for (int i = 1; i < newSequence.size(); i++) {
-            newAntecedent = Structure.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newAntecedent, newSequence.get(i)});
+      } else {
+         newAntecedent = newSequence.get(newSequence.size() - 1);
+         for (int i = newSequence.size() - 2; i > -1; i--) {
+            newAntecedent = Structure.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newSequence.get(i), newAntecedent});
          }
       }
 
       if (previousList != null) {
          previous = appendToEndOfList(previousList, previous);
       }
+
       Term newConsequent = createNewPredicate(consequent, previous, lastArg);
 
       if (newAntecedent == null) {

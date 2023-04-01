@@ -118,8 +118,11 @@ public class TestUtils {
    }
 
    public static Term parseTerm(String source) {
+      if (!source.endsWith(".")) {
+         source = source + ".";
+      }
       SentenceParser sp = createSentenceParser(source);
-      return sp.parseTerm();
+      return sp.parseSentence();
    }
 
    public static ClauseModel createClauseModel(String prologSentenceSytax) {

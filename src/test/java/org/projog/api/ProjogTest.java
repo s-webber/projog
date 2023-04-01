@@ -63,7 +63,7 @@ public class ProjogTest {
       Projog projog = new Projog();
 
       // given the user input has been reassigned to a new stream
-      projog.setUserInput(new ByteArrayInputStream("hello".getBytes()));
+      projog.setUserInput(new ByteArrayInputStream("hello.".getBytes()));
 
       // when we execute a query that reads from input
       QueryResult result = projog.executeQuery("read(X).");
@@ -144,7 +144,7 @@ public class ProjogTest {
          projog.executeOnce("true, true, fail.");
          fail();
       } catch (ProjogException projogException) {
-         assertEquals("Failed to find a solution for: ,(,(true, true), fail)", projogException.getMessage());
+         assertEquals("Failed to find a solution for: ,(true, ,(true, fail))", projogException.getMessage());
       }
    }
 

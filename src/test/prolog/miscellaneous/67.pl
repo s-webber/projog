@@ -13,28 +13,28 @@
 %X=(
 
 %?- X=(, true
-%ERROR Expected ) but got: true after , Line: X=(, true.
+%ERROR Unexpected end of stream Line: X=(, true.
 
 %?- X=p()
-%ERROR No arguments specified for structure: p Line: X=p().
+%ERROR No arguments to parse Line: X=p().
 
 %?- X=p(a, b c)
-%ERROR While parsing arguments of p expected ) or , but got: c Line: X=p(a, b c).
+%ERROR No suitable operands found in: b c Line: X=p(a, b c).
 
 %?- X=[a,b
-%ERROR While parsing list expected ] | or , but got: . Line: X=[a,b.
+%ERROR Unexpected end of stream Line: X=[a,b.
 
 %?- X=[a,b c]
-%ERROR While parsing list expected ] | or , but got: c Line: X=[a,b c].
+%ERROR No suitable operands found in: b c Line: X=[a,b c].
 
 %?- X=[a,b|c,d]
-%ERROR Expected ] to mark end of list after tail but got: , Line: X=[a,b|c,d].
+%ERROR Operator priority clash. , (1000) conflicts with previous priority (1000) Line: X=[a,b|c,d].
 
 %?- X=[a,b|c|d]
-%ERROR Expected ] to mark end of list after tail but got: | Line: X=[a,b|c|d].
+%ERROR No suitable operands found in: c | d Line: X=[a,b|c|d].
 
 %?- X=(a b)
-%ERROR Expected ) but got: b after a Line: X=(a b).
+%ERROR No suitable operands found in: a b Line: X=(a b).
 
 %?- X='.'
 %X=.

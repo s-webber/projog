@@ -155,7 +155,7 @@ public class SentenceParserTest {
 
    @Test
    public void testConjunction() {
-      assertParse("a, b, c.", "a , b , c", ",(,(a, b), c)");
+      assertParse("a, b, c.", "a , b , c", ",(a, ,(b, c))");
    }
 
    @Test
@@ -186,7 +186,7 @@ public class SentenceParserTest {
 
    @Test
    public void testBrackets6() {
-      assertParse("X = ( A = 1 , B = 2 , C = 3).", "X = (A = 1 , B = 2 , C = 3)", "=(X, ,(,(=(A, 1), =(B, 2)), =(C, 3)))");
+      assertParse("X = ( A = 1 , B = 2 , C = 3).", "X = (A = 1 , B = 2 , C = 3)", "=(X, ,(=(A, 1), ,(=(B, 2), =(C, 3))))");
    }
 
    @Test
@@ -211,12 +211,22 @@ public class SentenceParserTest {
 
    @Test
    public void testParsingBrackets11() {
-      assertParse("a :- (b, c ; e), f.", "a :- b , c ; e , f", ":-(a, ,(;(,(b, c), e), f))");
+      assertParse("a :- (b, c ; e), f.", "a :- (b , c ; e) , f", ":-(a, ,(;(,(b, c), e), f))");
    }
 
    @Test
    public void testParsingBrackets12() {
-      assertParse("a :- z, (b, c ; e), f.", "a :- z , (b , c ; e) , f", ":-(a, ,(,(z, ;(,(b, c), e)), f))");
+      assertParse("a :- z, (b, c ; e), f.", "a :- z , (b , c ; e) , f", ":-(a, ,(z, ,(;(,(b, c), e), f)))");
+   }
+
+   @Test
+   public void testParsingBrackets13() {
+      assertParse("X = (a :- ','(b, c), d).", "X = (a :- b , c , d)", "=(X, :-(a, ,(,(b, c), d)))");
+   }
+
+   @Test
+   public void testParsingBrackets14() {
+      assertParse("X = (a :- b, ','(c, d)).", "X = (a :- b , c , d)", "=(X, :-(a, ,(b, ,(c, d))))");
    }
 
    @Test
@@ -330,13 +340,24 @@ public class SentenceParserTest {
       check("X = >(+(1,1),-2)", "=(X, >(+(1, 1), -2))");
    }
 
+   @Test
+   public void testComplexSentence() {
+      assertParse(":-(=(A,B,C),;(->(==(A,B),=(C,true)),;(->(\\=(A,B),=(C,false)),;(','(=(C,true),=(A,B)),','(=(C,false),dif(A,B)))))).",
+                  "=(A, B, C) :- A == B -> C = true ; A \\= B -> C = false ; C = true , A = B ; C = false , dif(A, B)",
+                  ":-(=(A, B, C), ;(->(==(A, B), =(C, true)), ;(->(\\=(A, B), =(C, false)), ;(,(=(C, true), =(A, B)), ,(=(C, false), dif(A, B))))))");
+
+      assertParse("=(A, B, C) :- A == B -> C = true ; A \\= B -> C = false ; C = true , A = B ; C = false , dif(A, B).",
+                  "=(A, B, C) :- A == B -> C = true ; A \\= B -> C = false ; C = true , A = B ; C = false , dif(A, B)",
+                  ":-(=(A, B, C), ;(->(==(A, B), =(C, true)), ;(->(\\=(A, B), =(C, false)), ;(,(=(C, true), =(A, B)), ,(=(C, false), dif(A, B))))))");
+   }
+
    private void checkEquation(String input, String expected) {
       check(input, expected);
 
       // apply same extra tests just because is easy to do...
       check("X is " + input, "is(X, " + expected + ")");
       String conjunction = "X is " + input + ", Y is " + input + ", Z is " + input;
-      String expectedConjunctionResult = ",(,(is(X, " + expected + "), is(Y, " + expected + ")), is(Z, " + expected + "))";
+      String expectedConjunctionResult = ",(is(X, " + expected + "), ,(is(Y, " + expected + "), is(Z, " + expected + ")))";
       check(conjunction, expectedConjunctionResult);
       check("?- " + conjunction, "?-(" + expectedConjunctionResult + ")");
       check("test(X, Y, Z) :- " + conjunction, ":-(test(X, Y, Z), " + expectedConjunctionResult + ")");

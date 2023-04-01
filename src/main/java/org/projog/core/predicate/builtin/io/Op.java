@@ -90,7 +90,7 @@ import org.projog.core.term.Term;
 
 % Example of combining post and prefix operators where the prefix operator has the higher precedence.
 
-%TRUE op(700, fy, 'fyExampleB')
+%TRUE op(699, fy, 'fyExampleB')
 
 %?- X = fyExampleB a yfExample, write_canonical(X), nl
 %OUTPUT
@@ -102,10 +102,10 @@ import org.projog.core.term.Term;
 % Examples of how an "x" in an associativity (i.e. "fx" or "xf") means that the argument can contain operators of only a lower level of priority than the operator represented by "f".
 
 %?- X = a xfExample xfExample
-%ERROR Invalid postfix: xfExample 500 and term: xfExample 500 Line: X = a xfExample xfExample.
+%ERROR Operator priority clash. xfExample (500) conflicts with previous priority (500) Line: X = a xfExample xfExample.
 
 %?- X = fxExample fxExample a
-%ERROR Invalid prefix: fxExample level: 650 greater than current level: 649 Line: X = fxExample fxExample a.
+%ERROR Operator priority clash. fxExample (650) conflicts with previous priority (650) Line: X = fxExample fxExample a.
 */
 /**
  * <code>op(X,Y,Z)</code>

@@ -20,18 +20,24 @@ import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseSentence;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+
+@RunWith(DataProviderRunner.class)
 public class TermFormatterTest {
+   private static final TermFormatter TERM_FORMATTER = createKnowledgeBase().getTermFormatter();
+
    @Test
-   public void testTermToString() {
-      String inputSyntax = "?- X = -1 + 1.684 , p(1, 7.3, [_,[]|c])";
+   @DataProvider({
+               "?- X = -1 + 1.684 , p(1, 7.3, [_,[]|c])", //
+               "a :- z , (b , c ; e) , f", //
+               "X = (1 :- 2) * (3 :- 4)", //
+               "X = (?- 1) * (?- 2)"})
+   public void testFormatTerm(String inputSyntax) {
       Term inputTerm = parseSentence(inputSyntax + ".");
 
-      TermFormatter tf = createFormatter();
-      assertEquals(inputSyntax, tf.formatTerm(inputTerm));
-   }
-
-   private TermFormatter createFormatter() {
-      return createKnowledgeBase().getTermFormatter();
+      assertEquals(inputSyntax, TERM_FORMATTER.formatTerm(inputTerm));
    }
 }

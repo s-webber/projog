@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.TailRecursivePredicateMetaData;
 import org.projog.core.term.Term;
 
 public class TailRecursivePredicateMetaDataTest {
@@ -77,6 +75,12 @@ public class TailRecursivePredicateMetaDataTest {
    public void testRepeatWithSingleResultConjunction() {
       setClauses("writeNewLineAndRepeat(N) :- write(N), nl.", "writeNewLineAndRepeat(N) :- N > 1, N1 is N-1, writeNewLineAndRepeat(N1).");
       assertMultipleResultsTailRecursive("writeNewLineAndRepeat(10000).");
+   }
+
+   @Test
+   public void testFirstClauseNoBody() { // Example from src/test/prolog/miscellaneous/42.pl
+      setClauses("x([]).", "x([[X|Xs]|Ys]) :- writef('%t %t', [X, Xs]), nl, x(Ys).");
+      assertSingleResultTailRecursive("x([[a,b,c],[q,w,e,r,t,y],[x,y,z]]).");
    }
 
    @Test

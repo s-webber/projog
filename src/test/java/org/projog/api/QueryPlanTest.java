@@ -146,7 +146,7 @@ public class QueryPlanTest {
          p.executeOnce();
          fail();
       } catch (ProjogException projogException) {
-         assertEquals("Failed to find a solution for: ,(,(true, true), fail)", projogException.getMessage());
+         assertEquals("Failed to find a solution for: ,(true, ,(true, fail))", projogException.getMessage());
       }
    }
 }

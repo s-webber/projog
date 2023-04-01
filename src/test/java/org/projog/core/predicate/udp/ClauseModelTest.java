@@ -38,7 +38,7 @@ public class ClauseModelTest {
 
    @Test
    public void testConjunctionImplication() {
-      assertClauseModel("a :- b, c, d.", "a", ",(,(b, c), d)");
+      assertClauseModel("a :- b, c, d.", "a", ",(b, ,(c, d))");
    }
 
    @Test

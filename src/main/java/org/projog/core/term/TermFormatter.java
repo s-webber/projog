@@ -120,60 +120,156 @@ public class TermFormatter {
    }
 
    private boolean isInfixOperator(Term t) {
-      return t.getType() == TermType.STRUCTURE && t.getArgs().length == 2 && operands.infix(t.getName());
+      return t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 2 && operands.infix(t.getName());
    }
 
    private void writeInfixOperator(Term p, StringBuilder sb) {
-      Term[] args = p.getArgs();
-      write(args[0], sb);
-      sb.append(' ').append(p.getName()).append(' ');
-      // if second argument is an infix operand then add brackets around it so:
-      //  ?-(,(fail, ;(fail, true)))
-      // appears as:
-      //  ?- fail , (fail ; true)
-      // not:
-      //  ?- fail , fail ; true
-      if (isInfixOperator(args[1]) && isEqualOrLowerPriority(p, args[1])) {
+      Term first = p.getArgument(0);
+      Term second = p.getArgument(1);
+      int priority = operands.getInfixPriority(p.getName());
+
+      if (shouldLeftArgumentBeBracketed(first, p, priority)) {
          sb.append('(');
-         writeInfixOperator(args[1], sb);
+         write(first, sb);
          sb.append(')');
       } else {
-         write(args[1], sb);
+         write(first, sb);
+      }
+
+      sb.append(' ').append(p.getName()).append(' ');
+
+      if (shouldRightArgumentBeBracketed(second, p, priority)) {
+         sb.append('(');
+         write(second, sb);
+         sb.append(')');
+      } else {
+         write(second, sb);
       }
    }
 
-   private boolean isEqualOrLowerPriority(Term p1, Term p2) {
-      return operands.getInfixPriority(p1.getName()) <= operands.getInfixPriority(p2.getName());
+   private boolean shouldLeftArgumentBeBracketed(Term next, Term parentInfixTerm, int parentInfixPriority) {
+      if (!next.getType().isStructure()) {
+         return false;
+      }
+
+      int nextPriority = getPriority(next);
+
+      if (nextPriority == parentInfixPriority) {
+         if (next.getNumberOfArguments() == 2) {
+            if (operands.xfx(next.getName()) || operands.xfx(parentInfixTerm.getName())) {
+               return true;
+            }
+            if (operands.yfx(next.getName()) && operands.xfy(parentInfixTerm.getName())) {
+               return true;
+            }
+         } else if (next.getNumberOfArguments() == 1 && operands.prefix(next.getName())) {
+            if (operands.xfx(parentInfixTerm.getName())) {
+               return true;
+            }
+            if (operands.fx(next.getName()) && operands.xfy(parentInfixTerm.getName())) {
+               return true;
+            }
+         }
+         return false;
+      } else {
+         return nextPriority > parentInfixPriority;
+      }
+   }
+
+   private boolean shouldRightArgumentBeBracketed(Term next, Term parentInfixTerm, int parentInfixPriority) {
+      if (!next.getType().isStructure()) {
+         return false;
+      }
+
+      int nextPriority = getPriority(next);
+
+      if (parentInfixPriority == nextPriority) {
+         if (next.getNumberOfArguments() == 2) {
+            if (operands.xfx(next.getName()) || operands.xfx(parentInfixTerm.getName())) {
+               return true;
+            }
+            if (operands.yfx(parentInfixTerm.getName())) {
+               return true;
+            }
+         } else if (next.getNumberOfArguments() == 1 && operands.postfix(next.getName())) {
+            if (operands.xfx(parentInfixTerm.getName())) {
+               return true;
+            }
+            if (operands.xf(next.getName()) && operands.yfx(parentInfixTerm.getName())) {
+               return true;
+            }
+         }
+         return false;
+      } else {
+         return nextPriority > parentInfixPriority;
+      }
    }
 
    private boolean isPrefixOperator(Term t) {
-      return t.getType() == TermType.STRUCTURE && t.getArgs().length == 1 && operands.prefix(t.getName());
+      return t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 1 && operands.prefix(t.getName());
    }
 
    private void writePrefixOperator(Term p, StringBuilder sb) {
       sb.append(p.getName()).append(' ');
-      write(p.getArgs()[0], sb);
+
+      int p1 = operands.getPrefixPriority(p.getName());
+      int p2 = getPriority(p.getArgument(0));
+      if (p1 < p2 || (p1 == p2 && (operands.fx(p.getName()) || !canBePreceededByEqualPriority(p.getArgument(0))))) {
+         sb.append('(');
+         write(p.getArgument(0), sb);
+         sb.append(')');
+      } else {
+         write(p.getArgument(0), sb);
+      }
    }
 
    private boolean isPostfixOperator(Term t) {
-      return t.getType() == TermType.STRUCTURE && t.getArgs().length == 1 && operands.postfix(t.getName());
+      return t.getType() == TermType.STRUCTURE && t.getNumberOfArguments() == 1 && operands.postfix(t.getName());
    }
 
    private void writePostfixOperator(Term p, StringBuilder sb) {
-      write(p.getArgs()[0], sb);
+      int p1 = operands.getPostfixPriority(p.getName());
+      int p2 = getPriority(p.getArgument(0));
+      if (p1 < p2 || (p1 == p2 && (operands.xf(p.getName()) || !canBePreceededByEqualPriority(p.getArgument(0))))) {
+         sb.append('(');
+         write(p.getArgument(0), sb);
+         sb.append(')');
+      } else {
+         write(p.getArgument(0), sb);
+      }
+
       sb.append(' ').append(p.getName());
+   }
+
+   private boolean canBePreceededByEqualPriority(Term next) {
+      if (next.getNumberOfArguments() == 2 && operands.infix(next.getName())) {
+         return operands.xfy(next.getName());
+      } else {
+         return true;
+      }
+   }
+
+   private int getPriority(Term next) {
+      if (next.getNumberOfArguments() == 2 && operands.infix(next.getName())) {
+         return operands.getInfixPriority(next.getName());
+      } else if (next.getNumberOfArguments() == 1 && operands.prefix(next.getName())) {
+         return operands.getPrefixPriority(next.getName());
+      } else if (next.getNumberOfArguments() == 1 && operands.postfix(next.getName())) {
+         return operands.getPostfixPriority(next.getName());
+      } else {
+         return -1;
+      }
    }
 
    private void writeNonOperatorPredicate(Term p, StringBuilder sb) {
       String name = p.getName();
-      Term[] args = p.getArgs();
       sb.append(name);
       sb.append("(");
-      for (int i = 0; i < args.length; i++) {
+      for (int i = 0; i < p.getNumberOfArguments(); i++) {
          if (i != 0) {
             sb.append(", ");
          }
-         write(args[i], sb);
+         write(p.getArgument(i), sb);
       }
       sb.append(")");
    }

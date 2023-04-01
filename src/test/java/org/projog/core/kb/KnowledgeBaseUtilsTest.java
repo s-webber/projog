@@ -146,9 +146,9 @@ public class KnowledgeBaseUtilsTest {
       Term t = TestUtils.parseSentence("a, b(1,2,3), c.");
       Term[] conjunctions = KnowledgeBaseUtils.toArrayOfConjunctions(t);
       assertEquals(3, conjunctions.length);
-      assertSame(t.getArgument(0).getArgument(0), conjunctions[0]);
-      assertSame(t.getArgument(0).getArgument(1), conjunctions[1]);
-      assertSame(t.getArgument(1), conjunctions[2]);
+      assertSame(t.getArgument(0), conjunctions[0]);
+      assertSame(t.getArgument(1).getArgument(0), conjunctions[1]);
+      assertSame(t.getArgument(1).getArgument(1), conjunctions[2]);
    }
 
    @Test

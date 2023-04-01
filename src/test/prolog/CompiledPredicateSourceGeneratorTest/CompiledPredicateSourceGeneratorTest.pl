@@ -158,7 +158,7 @@ testTailRecursiveAppend([X | Xs], Ys, [X | Zs]) :- testTailRecursiveAppend(Xs, Y
 %TRUE testTailRecursiveAppend([a,b,c,d,e],[f,g,h],[a,b,c,d,e,f,g,h])
 %FAIL testTailRecursiveAppend([a,b,c,d,e],[f,g,h],[a,b,c,d,e,f,g,x])
 %FAIL testTailRecursiveAppend([a,b,c,d,e],[f,g,h],[a,b,c,d,e,f,g,h,i])
-%FAIL testTailRecursiveAppend([a,b,c,d,e],[f,g,h],[a,b,c,d,e,f,g,])
+%FAIL testTailRecursiveAppend([a,b,c,d,e],[f,g,h],[a,b,c,d,e,f,g])
 
 testTailRecursiveRepeat(N). 
 testTailRecursiveRepeat(N) :- N > 1, N1 is N-1, testTailRecursiveRepeat(N1).

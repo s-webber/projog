@@ -17,7 +17,7 @@ package org.projog.core.parser;
 
 import static org.projog.core.parser.TokenType.SYMBOL;
 
-class Delimiters {
+final class Delimiters { //TODO remove unused methods
    private static final char ARGUMENT_SEPARATOR = ',';
    private static final char PREDICATE_OPENING_BRACKET = '(';
    private static final char PREDICATE_CLOSING_BRACKET = ')';
@@ -25,6 +25,9 @@ class Delimiters {
    private static final char LIST_CLOSING_BRACKET = ']';
    private static final char LIST_TAIL = '|';
    private static final char PERIOD = '.';
+
+   private Delimiters() {
+   }
 
    static boolean isDelimiter(String s) {
       return s != null && s.length() == 1 && isDelimiter(s.charAt(0));

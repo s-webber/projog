@@ -124,10 +124,10 @@ public final class KnowledgeBaseUtils {
    public static Term[] toArrayOfConjunctions(Term t) {
       List<Term> l = new ArrayList<>();
       while (isConjunction(t)) {
-         l.add(0, t.getArgs()[1]);
-         t = t.getArgs()[0];
+         l.add(t.getArgs()[0]);
+         t = t.getArgs()[1];
       }
-      l.add(0, t);
+      l.add(t);
       return l.toArray(new Term[l.size()]);
    }
 

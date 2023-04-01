@@ -21,7 +21,14 @@ enum TokenType {
    INTEGER,
    FLOAT,
    VARIABLE,
-   STRUCTURE,
+   NAMED_BRACKET,
+   OPERAND_AND_ARGUMENTS,
    SYMBOL,
-   EMPTY_LIST
+   UNNAMED_BRACKET,
+   EMPTY_LIST,
+   LIST;
+
+   boolean isPossibleOperand() {
+      return this == ATOM || this == SYMBOL;
+   }
 }

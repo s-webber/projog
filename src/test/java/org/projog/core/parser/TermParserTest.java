@@ -156,7 +156,7 @@ public class TermParserTest {
       testList("[ a, b, c | d ]", new Term[] {a, b, c}, d);
       testList("[a,b,c|[d,e,f]]", new Term[] {a, b, c, d, e, f}, null);
       testList("[a,b,c|[d,e|f]]", new Term[] {a, b, c, d, e}, f);
-      testList("[a,b,c|[]]]", new Term[] {a, b, c}, null);
+      testList("[a,b,c|[]]", new Term[] {a, b, c}, null);
    }
 
    private void testList(String input, Term[] expectedArgs, Term expectedTail) {

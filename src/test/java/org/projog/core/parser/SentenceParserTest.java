@@ -47,7 +47,10 @@ public class SentenceParserTest {
       error(":- X is p(."); // no )
       error(":- X is p()."); // no arguments
       error(":- X is p(a, b."); // no )
+      error(":- X is p(a, b))."); // extra )
       error(":- X is p(a b)."); // no ,
+      error(":- X is p(, a, b)."); // leading , before first arg
+      error(":- X is p(a, b,)."); // trailing , after last arg
    }
 
    @Test
@@ -349,6 +352,16 @@ public class SentenceParserTest {
       assertParse("=(A, B, C) :- A == B -> C = true ; A \\= B -> C = false ; C = true , A = B ; C = false , dif(A, B).",
                   "=(A, B, C) :- A == B -> C = true ; A \\= B -> C = false ; C = true , A = B ; C = false , dif(A, B)",
                   ":-(=(A, B, C), ;(->(==(A, B), =(C, true)), ;(->(\\=(A, B), =(C, false)), ;(,(=(C, true), =(A, B)), ,(=(C, false), dif(A, B))))))");
+   }
+
+   @Test
+   public void testCommasInPredicateArguments() {
+      check("p(','(1,2))", "p(,(1, 2))");
+      check("p(','(1+2))", "p(,(+(1, 2)))");
+      check("p(1,(2+3))", "p(1, +(2, 3))");
+      check("p(1,','(2,3))", "p(1, ,(2, 3))");
+      check("p(1,','(2+3))", "p(1, ,(+(2, 3)))");
+      check("p(1,2','(3+4),5)", "p(1, 2, +(3, 4), 5)");
    }
 
    private void checkEquation(String input, String expected) {

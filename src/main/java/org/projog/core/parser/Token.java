@@ -24,15 +24,35 @@ final class Token {
    private final String value;
    private final TokenType type;
    private final Token[] args;
+   private final String line;
+   private final int lineNumber;
+   private final int columnNumber;
 
-   Token(String value, TokenType type) {
-      this(value, type, EMPTY_ARGS);
+   Token(String value, TokenType type, String line, int lineNumber, int columnNumber) {
+      this.value = value;
+      this.type = type;
+      this.args = EMPTY_ARGS;
+      this.line = line;
+      this.lineNumber = lineNumber;
+      this.columnNumber = columnNumber;
    }
 
    Token(String value, TokenType type, Token[] args) {
       this.value = value;
       this.type = type;
       this.args = args;
+      this.line = "";
+      this.lineNumber = 0;
+      this.columnNumber = 0;
+   }
+
+   Token(Token parent, TokenType type, Token[] args) {
+      this.value = parent.value;
+      this.type = type;
+      this.args = args;
+      this.line = parent.line;
+      this.lineNumber = parent.lineNumber;
+      this.columnNumber = parent.columnNumber;
    }
 
    String getName() {
@@ -58,5 +78,17 @@ final class Token {
    @Override
    public String toString() {
       return value + (args.length == 0 ? "" : (" " + Arrays.toString(args)));
+   }
+
+   public int getLineNumber() {
+      return lineNumber;
+   }
+
+   public int getColumnNumber() {
+      return columnNumber;
+   }
+
+   public String getLine() {
+      return line;
    }
 }

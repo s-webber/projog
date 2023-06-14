@@ -177,7 +177,7 @@ public class QueryStatementTest {
          new QueryStatement(kb, "X");
          fail();
       } catch (ParserException e) {
-         assertEquals("Unexpected end of stream Line: X", e.getMessage());
+         assertEquals("No . to indicate end of sentence Line: X", e.getMessage());
       }
    }
 

@@ -21,7 +21,6 @@ import static java.lang.Character.isLowerCase;
 import static java.lang.Character.isUpperCase;
 import static java.lang.Character.isWhitespace;
 import static org.projog.core.parser.Delimiters.isDelimiter;
-import static org.projog.core.parser.Delimiters.isListOpenBracket;
 import static org.projog.core.parser.TokenType.ATOM;
 import static org.projog.core.parser.TokenType.FLOAT;
 import static org.projog.core.parser.TokenType.INTEGER;
@@ -123,15 +122,8 @@ class TokenParser {
       }
    }
 
-   /** Does the next value to be parsed represent a term (rather than a delimiter) */
-   boolean isFollowedByTerm() {
-      skipWhitespaceAndComments();
-      int nextChar = parser.peek();
-      return isListOpenBracket(nextChar) || !isDelimiter(nextChar);
-   }
-
    /** Returns a new {@link ParserException} with the specified message. */
-   ParserException newParserException(String message) {
+   private ParserException newParserException(String message) {
       throw new ParserException(message, parser);
    }
 
@@ -431,11 +423,11 @@ class TokenParser {
       return c == '\\';
    }
 
-   private static Token createToken(StringBuilder value, TokenType type) {
+   private Token createToken(StringBuilder value, TokenType type) {
       return createToken(value.toString(), type);
    }
 
-   private static Token createToken(String value, TokenType type) {
-      return new Token(value, type);
+   private Token createToken(String value, TokenType type) {
+      return new Token(value, type, parser.getLine(), parser.getLineNumber(), parser.getColumnNumber());
    }
 }

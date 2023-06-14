@@ -214,19 +214,6 @@ public class TokenParserTest {
       assertParse("/*\n\n*\n/\n*/a/*/b*c/d/*e*/f", "a", "f");
    }
 
-   @Test
-   public void testFollowedByTerm() {
-      TokenParser tp = create("?- , [ abc )");
-      tp.next();
-      assertFalse(tp.isFollowedByTerm());
-      tp.next();
-      assertTrue(tp.isFollowedByTerm());
-      tp.next();
-      assertTrue(tp.isFollowedByTerm());
-      tp.next();
-      assertFalse(tp.isFollowedByTerm());
-   }
-
    /** @see {@link TokenParser#rewind(String)} */
    @Test
    public void testRewindException() {
@@ -263,7 +250,7 @@ public class TokenParserTest {
 
    private void assertRewindException(TokenParser tp, String value) {
       try {
-         tp.rewind(new Token(value, TokenType.ATOM));
+         tp.rewind(new Token(value, TokenType.ATOM, new Token[0]));
          fail();
       } catch (IllegalArgumentException e) {
          // expected

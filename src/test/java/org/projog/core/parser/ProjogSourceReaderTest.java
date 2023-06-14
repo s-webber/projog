@@ -51,7 +51,7 @@ public class ProjogSourceReaderTest {
 
    @Test
    public void testParserException() {
-      String message = "No suitable operands found in: c d";
+      String message = "No suitable operands";
       String lineWithSyntaxError = "test_dynamic(a,b,c d). % Line 3";
       try {
          File f = writeToFile("test_dynamic(a,b).\n" + "test_dynamic(a,b,c).\n" + lineWithSyntaxError + "\n" + "test_dynamic(a,b,c,d,e).");
@@ -62,20 +62,21 @@ public class ProjogSourceReaderTest {
          assertEquals(message + " Line: " + lineWithSyntaxError, p.getMessage());
          assertEquals(lineWithSyntaxError, p.getLine());
          assertEquals(3, p.getLineNumber());
-         assertEquals(22, p.getColumnNumber());
-         assertParserExceptionDescription(p, message, lineWithSyntaxError);
+         assertEquals(20, p.getColumnNumber());
+         String[] lines = getDescription((ParserException) e.getCause());
+         assertEquals(3, lines.length);
+         assertEquals(message, lines[0].trim());
+         assertEquals("test_dynamic(a,b,c d). % Line 3", lines[1].trim());
+         assertEquals("                   ^", lines[2]);
       }
    }
 
-   private void assertParserExceptionDescription(ParserException p, String message, String line) {
+   private String[] getDescription(ParserException p) {
       ByteArrayOutputStream os = new ByteArrayOutputStream();
       PrintStream out = new PrintStream(os);
       p.getDescription(out);
       out.close();
-      String[] lines = os.toString().split("\n");
-      assertEquals(2, lines.length);
-      assertEquals(message, lines[0].trim());
-      assertEquals(line, lines[1].trim());
+      return os.toString().replace("\r\n", "\n").split("\n");
    }
 
    @Test

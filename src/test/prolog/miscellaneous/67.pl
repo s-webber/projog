@@ -13,28 +13,28 @@
 %X=(
 
 %?- X=(, true
-%ERROR Unexpected end of stream Line: X=(, true.
+%ERROR No matching ) for ( Line: X=(, true.
 
 %?- X=p()
 %ERROR No arguments to parse Line: X=p().
 
 %?- X=p(a, b c)
-%ERROR No suitable operands found in: b c Line: X=p(a, b c).
+%ERROR No suitable operands Line: X=p(a, b c).
 
 %?- X=[a,b
-%ERROR Unexpected end of stream Line: X=[a,b.
+%ERROR No matching ] for [ Line: X=[a,b.
 
 %?- X=[a,b c]
-%ERROR No suitable operands found in: b c Line: X=[a,b c].
+%ERROR No suitable operands Line: X=[a,b c].
 
 %?- X=[a,b|c,d]
-%ERROR Operator priority clash. , (1000) conflicts with previous priority (1000) Line: X=[a,b|c,d].
+%ERROR Expected ] Line: X=[a,b|c,d].
 
 %?- X=[a,b|c|d]
-%ERROR No suitable operands found in: c | d Line: X=[a,b|c|d].
+%ERROR Expected ] Line: X=[a,b|c|d].
 
 %?- X=(a b)
-%ERROR No suitable operands found in: a b Line: X=(a b).
+%ERROR No suitable operands Line: X=(a b).
 
 %?- X='.'
 %X=.
@@ -50,3 +50,27 @@
 
 %?- 1 : 2 = 1 : X
 %X=2
+
+%?- X=p(','(1,2)), write_canonical(X)
+%OUTPUT p(,(1, 2))
+%X=p(1 , 2)
+
+%?- X=p(1,','(1+2)), write_canonical(X)
+%OUTPUT p(1, ,(+(1, 2)))
+%X=p(1, ,(1 + 2))
+
+%?- X=p(1,(2+3)), write_canonical(X)
+%OUTPUT p(1, +(2, 3))
+%X=p(1, 2 + 3)
+
+%?- X=p(1,','(2,3)), write_canonical(X)
+%OUTPUT p(1, ,(2, 3))
+%X=p(1, 2 , 3)
+
+%?- X=p(1,','(2+3)), write_canonical(X)
+%OUTPUT p(1, ,(+(2, 3)))
+%X=p(1, ,(2 + 3))
+
+%?- X=p(1,2','(3+4),5), write_canonical(X)
+%OUTPUT p(1, 2, +(3, 4), 5)
+%X=p(1, 2, 3 + 4, 5)

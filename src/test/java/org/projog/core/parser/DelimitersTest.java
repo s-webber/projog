@@ -101,10 +101,10 @@ public class DelimitersTest {
    }
 
    private Token symbol(String value) {
-      return new Token(value, TokenType.SYMBOL);
+      return new Token(value, TokenType.SYMBOL, new Token[0]);
    }
 
    private Token atom(String value) {
-      return new Token(value, TokenType.ATOM);
+      return new Token(value, TokenType.ATOM, new Token[0]);
    }
 }

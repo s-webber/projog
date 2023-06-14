@@ -30,6 +30,14 @@ public class ParserException extends ProjogException {
    private final int lineNumber;
    private final int columnNumber;
 
+   ParserException(String message, Token token) {
+      super(message + " Line: " + token.getLine());
+      this.message = message;
+      this.line = token.getLine();
+      this.lineNumber = token.getLineNumber();
+      this.columnNumber = token.getColumnNumber();
+   }
+
    ParserException(String message, CharacterParser parser) {
       this(message, parser, null);
    }
@@ -73,5 +81,9 @@ public class ParserException extends ProjogException {
    public void getDescription(PrintStream out) {
       out.println(message);
       out.println(getLine());
+      for (int c = 0; c < getColumnNumber() - 1; c++) {
+         out.print(' ');
+      }
+      out.println("^");
    }
 }

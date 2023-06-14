@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
@@ -45,8 +44,89 @@ import org.projog.core.term.Variable;
  * @see Operands
  */
 public class SentenceParser {
+   private static final int DEFAULT_TOKEN_ARRAY_LENGTH = 32;
    private static final int COMMA_PRIORITY = 1000;
-   private static final Token EMPTY_LIST_TOKEN = new Token(null, TokenType.EMPTY_LIST);
+   private static final Token EMPTY_LIST_TOKEN = new Token((String) null, TokenType.EMPTY_LIST, new Token[0]);
+   private static final Terminator SENTENCE_TERMINATOR = new Terminator() {
+      @Override
+      public boolean terminate(Token t, TokenParser parser) {
+         // need to check if '.' is followed by a '(' as don't want to terminate when encounter '.(1,2)'
+         return Delimiters.isSentenceTerminator(t) && !parser.isImmediatelyFollowedByBracket(true);
+      }
+
+      @Override
+      public boolean rewindOnTermination() {
+         return false;
+      }
+
+      @Override
+      public int maxPriority() {
+         return Integer.MAX_VALUE;
+      }
+
+      @Override
+      public boolean faiIfPriorityEqual() {
+         return false;
+      }
+
+      @Override
+      public String message() {
+         return "No . to indicate end of sentence";
+      }
+   };
+   private static final Terminator LIST_TERMINATOR = new Terminator() {
+      @Override
+      public boolean terminate(Token t, TokenParser parser) {
+         return t.getType() == TokenType.SYMBOL && (",".equals(t.getName()) || "|".equals(t.getName()) || "]".equals(t.getName()));
+      }
+
+      @Override
+      public boolean rewindOnTermination() {
+         return true;
+      }
+
+      @Override
+      public int maxPriority() {
+         return COMMA_PRIORITY;
+      }
+
+      @Override
+      public boolean faiIfPriorityEqual() {
+         return true;
+      }
+
+      @Override
+      public String message() {
+         return "No matching ] for [";
+      }
+   };
+   private static final Terminator BRACKET_TERMINATOR = new Terminator() {
+      @Override
+      public boolean terminate(Token t, TokenParser parser) {
+         return Delimiters.isPredicateCloseBracket(t);
+      }
+
+      @Override
+      public boolean rewindOnTermination() {
+         return false;
+      }
+
+      @Override
+      public int maxPriority() {
+         return Integer.MAX_VALUE;
+      }
+
+      @Override
+      public boolean faiIfPriorityEqual() {
+         return false;
+      }
+
+      @Override
+      public String message() {
+         return "No matching ) for (";
+      }
+   };
+
    private final TokenParser parser;
    private final Operands operands;
 
@@ -116,44 +196,77 @@ public class SentenceParser {
    public Term parseSentence() {
       if (parser.hasNext()) {
          variables.clear();
-         // need to check if '.' is followed by a '(' as don't want to terminate when encounter '.(1,2)'
-         Token token = parseToken(false, t -> Delimiters.isSentenceTerminator(t) && !parser.isImmediatelyFollowedByBracket(true));
+         Token first = parser.next();
+         parser.rewind(first);
+         Token token = parseToken(first, SENTENCE_TERMINATOR);
          return toTerm(token);
       } else {
          return null;
       }
    }
 
-   private Token parseToken(boolean rewindOnTermination, Function<Token, Boolean> terminationCriteria) {
-      List<Token> tokens = parseTokens(rewindOnTermination, terminationCriteria);
-      return toSingleToken(tokens.toArray(new Token[tokens.size()]), 0, tokens.size(), Integer.MAX_VALUE, false);
-   }
+   private Token parseToken(Token previous, Terminator terminator) {
+      if (!parser.hasNext()) {
+         throw newParserException(previous, terminator.message());
+      }
+      Token first = parser.next();
+      if (terminator.terminate(first, parser)) {
+         throw newParserException(first, "Expected term before " + first);
+      }
+      first = parseToken(first);
 
-   private List<Token> parseTokens(boolean rewindOnTermination, Function<Token, Boolean> terminationCriteria) {
-      List<Token> parsedTokens = new ArrayList<>();
+      if (!parser.hasNext()) {
+         throw newParserException(previous, terminator.message());
+      }
+      Token second = parser.next();
+      if (terminator.terminate(second, parser)) {
+         if (terminator.rewindOnTermination()) {
+            parser.rewind(second);
+         }
+         return first;
+      }
+      second = parseToken(second);
 
+      Token[] tokens = new Token[DEFAULT_TOKEN_ARRAY_LENGTH];
+      tokens[0] = first;
+      tokens[1] = second;
+      int idx = 1;
       while (true) {
-         Token next = parser.next();
+         if (!parser.hasNext()) {
+            throw newParserException(previous, terminator.message());
+         }
 
-         if (terminationCriteria.apply(next)) {
-            if (rewindOnTermination) {
+         Token next = parser.next();
+         if (terminator.terminate(next, parser)) {
+            if (terminator.rewindOnTermination()) {
                parser.rewind(next);
             }
-            return parsedTokens;
-         } else if (Delimiters.isListOpenBracket(next)) {
-            parsedTokens.add(parseList());
-         } else if (Delimiters.isPredicateOpenBracket(next)) {
-            Token bracketedTerm = parseToken(false, Delimiters::isPredicateCloseBracket);
-            parsedTokens.add(new Token(null, TokenType.UNNAMED_BRACKET, new Token[] {bracketedTerm}));
-         } else if (parser.isImmediatelyFollowedByBracket(false)) {
-            parsedTokens.add(parsePredicate(next));
+            return toSingleToken(tokens, 0, idx + 1, terminator.maxPriority(), terminator.faiIfPriorityEqual());
          } else {
-            parsedTokens.add(next);
+            if (++idx == tokens.length) {
+               Token copy[] = new Token[tokens.length + DEFAULT_TOKEN_ARRAY_LENGTH];
+               System.arraycopy(tokens, 0, copy, 0, tokens.length);
+               tokens = copy;
+            }
+            tokens[idx] = parseToken(next);
          }
       }
    }
 
-   private Token parseList() {
+   private Token parseToken(Token next) {
+      if (Delimiters.isListOpenBracket(next)) {
+         return parseList(next);
+      } else if (Delimiters.isPredicateOpenBracket(next)) {
+         Token bracketedTerm = parseToken(next, BRACKET_TERMINATOR);
+         return new Token(next, TokenType.UNNAMED_BRACKET, new Token[] {bracketedTerm});
+      } else if (parser.isImmediatelyFollowedByBracket(false)) {
+         return parsePredicate(next);
+      } else {
+         return next;
+      }
+   }
+
+   private Token parseList(Token openBracket) {
       Token emptyListCheck = parser.next();
       if (Delimiters.isListCloseBracket(emptyListCheck)) {
          return EMPTY_LIST_TOKEN;
@@ -163,32 +276,50 @@ public class SentenceParser {
       List<Token> args = new ArrayList<>();
 
       while (true) {
-         List<Token> elementTokens = parseTokens(true, t -> t.getType() == TokenType.SYMBOL && (",".equals(t.getName()) || "|".equals(t.getName()) || "]".equals(t.getName())));
-         args.add(toSingleToken(elementTokens.toArray(new Token[elementTokens.size()]), 0, elementTokens.size(), COMMA_PRIORITY, true));
+         Token elementToken = parseToken(openBracket, LIST_TERMINATOR);
+         args.add(elementToken);
 
          Token delimiter = parser.next();
 
          if (Delimiters.isListCloseBracket(delimiter)) {
             args.add(EMPTY_LIST_TOKEN);
-            return new Token(".", TokenType.LIST, args.toArray(new Token[args.size()]));
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
          }
 
          if (Delimiters.isListTail(delimiter)) {
-            List<Token> tailTokens = parseTokens(false, Delimiters::isListCloseBracket);
-            args.add(toSingleToken(tailTokens.toArray(new Token[tailTokens.size()]), 0, tailTokens.size(), COMMA_PRIORITY, true));
-            return new Token(".", TokenType.LIST, args.toArray(new Token[args.size()]));
+            Token tail = parseToken(openBracket, LIST_TERMINATOR);
+            Token end = parser.next();
+            if (!Delimiters.isListCloseBracket(end)) {
+               throw newParserException(end, "Expected ]");
+            }
+
+            args.add(tail);
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
          }
       }
    }
 
-   private Token parsePredicate(Token next) {
-      List<Token> args = parseTokens(false, Delimiters::isPredicateCloseBracket);
-      return new Token(next.getName(), TokenType.NAMED_BRACKET, args.toArray(new Token[args.size()]));
+   private Token parsePredicate(Token name) {
+      List<Token> args = new ArrayList<>();
+
+      while (true) {
+         if (!parser.hasNext()) {
+            throw newParserException(name, BRACKET_TERMINATOR.message());
+         }
+
+         Token next = parser.next();
+
+         if (Delimiters.isPredicateCloseBracket(next)) {
+            return new Token(name, TokenType.NAMED_BRACKET, args.toArray(new Token[args.size()]));
+         }
+
+         args.add(parseToken(next));
+      }
    }
 
    private Token toSingleToken(Token[] tokens, int startIdx, int endIdx, int previousPriority, boolean faiIfPriorityEqual) {
       if (endIdx <= startIdx) {
-         throw newParserException("No arguments to parse");
+         throw new RuntimeException("No arguments to parse");
       }
       if (startIdx == endIdx - 1) {
          return tokens[startIdx];
@@ -238,42 +369,35 @@ public class SentenceParser {
       }
 
       if (maxPriority == -1) {
-         StringBuilder sb = new StringBuilder();
-         for (int i = startIdx; i < endIdx; i++) {
-            if (i != startIdx) {
-               sb.append(' ');
-            }
-            sb.append(tokens[i].getName());
-         }
-         throw newParserException("No suitable operands found in: " + sb);
+         throw newParserException(tokens[endIdx - 1], "No suitable operands");
       }
 
       Token operandToken = tokens[maxPriorityIdx];
       if (maxPriority > previousPriority
           || (maxPriority == previousPriority && (faiIfPriorityEqual || (maxPriorityIdx > startIdx && maxPriorityIdx < endIdx - 1 && operands.xfx(operandToken.getName()))))) {
-         throw newParserException("Operator priority clash. " + operandToken.getName() + " (" + maxPriority + ") conflicts with previous priority (" + previousPriority + ")");
+         throw newParserException(operandToken,
+                     "Operator priority clash. " + operandToken.getName() + " (" + maxPriority + ") conflicts with previous priority (" + previousPriority + ")");
       }
 
       if (operandToken.getType() == TokenType.NAMED_BRACKET) {
          // e.g.: a+(b+c)
-         System.out.println(operandToken + " " + startIdx + " " + maxPriorityIdx);
          Token leftArg = toSingleToken(tokens, startIdx, maxPriorityIdx, maxPriority, !operands.yfx(operandToken.getName()));
          tokens[maxPriorityIdx] = toSingleToken(operandToken.getArguments(), 0, operandToken.getArguments().length, Integer.MAX_VALUE, false);
          Token rightArg = toSingleToken(tokens, maxPriorityIdx, endIdx, maxPriority, !operands.xfy(operandToken.getName()));
-         return new Token(operandToken.getName(), TokenType.OPERAND_AND_ARGUMENTS, new Token[] {leftArg, rightArg});
+         return new Token(operandToken, TokenType.OPERAND_AND_ARGUMENTS, new Token[] {leftArg, rightArg});
       } else if (maxPriorityIdx == startIdx) {
          // prefix
          Token arg = toSingleToken(tokens, startIdx + 1, endIdx, maxPriority, operands.fx(operandToken.getName()));
-         return new Token(operandToken.getName(), TokenType.OPERAND_AND_ARGUMENTS, new Token[] {arg});
+         return new Token(operandToken, TokenType.OPERAND_AND_ARGUMENTS, new Token[] {arg});
       } else if (maxPriorityIdx == endIdx - 1) {
          // postfix
          Token arg = toSingleToken(tokens, startIdx, endIdx - 1, maxPriority, operands.xf(operandToken.getName()));
-         return new Token(operandToken.getName(), TokenType.OPERAND_AND_ARGUMENTS, new Token[] {arg});
+         return new Token(operandToken, TokenType.OPERAND_AND_ARGUMENTS, new Token[] {arg});
       } else {
          // infix
          Token leftArg = toSingleToken(tokens, startIdx, maxPriorityIdx, maxPriority, !operands.yfx(operandToken.getName()));
          Token rightArg = toSingleToken(tokens, maxPriorityIdx + 1, endIdx, maxPriority, !operands.xfy(operandToken.getName()));
-         return new Token(operandToken.getName(), TokenType.OPERAND_AND_ARGUMENTS, new Token[] {leftArg, rightArg});
+         return new Token(operandToken, TokenType.OPERAND_AND_ARGUMENTS, new Token[] {leftArg, rightArg});
       }
    }
 
@@ -291,9 +415,9 @@ public class SentenceParser {
          case LIST:
             return toList(token);
          case INTEGER:
-            return toIntegerNumber(token.getName());
+            return toIntegerNumber(token, token.getName());
          case FLOAT:
-            return toDecimalFraction(token.getName());
+            return toDecimalFraction(token, token.getName());
          case EMPTY_LIST:
             return EmptyList.EMPTY_LIST;
          case VARIABLE:
@@ -304,35 +428,40 @@ public class SentenceParser {
    }
 
    private Term toStructureFromNamedBracket(Token token) {
-      // convert -(1) or -(1.0) to numbers rather than structures
-      if ("-".equals(token.getName()) && token.getNumberOfArguments() == 1) {
-         Token arg = token.getArgument(0);
-         if (arg.getType() == TokenType.INTEGER) {
-            return toIntegerNumber("-" + arg.getName());
-         }
-         if (arg.getType() == TokenType.FLOAT) {
-            return toDecimalFraction("-" + arg.getName());
-         }
+      if (isNegativeNumber(token)) {
+         return toNegativeNumber(token);
       }
 
       Token[] input = token.getArguments();
 
       List<Token> tokens = new ArrayList<>();
       int start = 0;
+      boolean previousWasDelimiter = true;
       for (int i = 0; i < input.length; i++) {
          Token next = input[i];
          if (Delimiters.isArgumentSeperator(next)) {
+            if (i <= start) {
+               throw newParserException(next, "Expected argument but found " + next.getName());
+            }
             Token singleToken = toSingleToken(input, start, i, COMMA_PRIORITY, true);
             tokens.add(singleToken);
             start = i + 1;
-         } else if (",".equals(next.getName()) && next.getType() == TokenType.NAMED_BRACKET) {
+            previousWasDelimiter = true;
+         } else if (!previousWasDelimiter && ",".equals(next.getName()) && next.getType() == TokenType.NAMED_BRACKET) {
             if (start != i) {
                Token singleToken = toSingleToken(input, start, i, COMMA_PRIORITY, true);
                tokens.add(singleToken);
             }
-            input[i] = toSingleToken(next.getArguments(), 0, next.getArguments().length, Integer.MAX_VALUE, false);
+            input[i] = toSingleToken(next.getArguments(), 0, next.getNumberOfArguments(), Integer.MAX_VALUE, false);
             start = i;
+
+            previousWasDelimiter = false;
+         } else {
+            previousWasDelimiter = false;
          }
+      }
+      if (input.length <= start) {
+         throw newParserException(input.length == 0 ? token : input[input.length - 1], "No arguments to parse");
       }
       tokens.add(toSingleToken(input, start, input.length, COMMA_PRIORITY, true));
 
@@ -344,15 +473,8 @@ public class SentenceParser {
    }
 
    private Term toStructureFromOperandAndArguments(Token token) {
-      // convert -(1) or -(1.0) to numbers rather than structures
-      if ("-".equals(token.getName()) && token.getNumberOfArguments() == 1) {
-         Token arg = token.getArgument(0);
-         if (arg.getType() == TokenType.INTEGER) {
-            return toIntegerNumber("-" + arg.getName());
-         }
-         if (arg.getType() == TokenType.FLOAT) {
-            return toDecimalFraction("-" + arg.getName());
-         }
+      if (isNegativeNumber(token)) {
+         return toNegativeNumber(token);
       }
 
       Term[] args = new Term[token.getNumberOfArguments()];
@@ -360,6 +482,20 @@ public class SentenceParser {
          args[i] = toTerm(token.getArgument(i));
       }
       return Structure.createStructure(token.getName(), args);
+   }
+
+   private boolean isNegativeNumber(Token t) {
+      return t.getNumberOfArguments() == 1 && "-".equals(t.getName()) && t.getArgument(0).getType().isNumber();
+   }
+
+   private Term toNegativeNumber(Token t) {
+      // convert -(1) or -(1.0) to numbers rather than structures
+      Token arg = t.getArgument(0);
+      if (arg.getType() == TokenType.INTEGER) {
+         return toIntegerNumber(t, "-" + arg.getName());
+      } else {
+         return toDecimalFraction(t, "-" + arg.getName());
+      }
    }
 
    private Term toList(Token token) {
@@ -371,12 +507,20 @@ public class SentenceParser {
       return ListFactory.createList(elements, tail);
    }
 
-   private IntegerNumber toIntegerNumber(String value) {
-      return IntegerNumberCache.valueOf(Long.parseLong(value));
+   private IntegerNumber toIntegerNumber(Token t, String value) {
+      try {
+         return IntegerNumberCache.valueOf(Long.parseLong(value));
+      } catch (NumberFormatException e) {
+         throw newParserException(t, "Invalid numeric value: " + value);
+      }
    }
 
-   private DecimalFraction toDecimalFraction(String value) {
-      return new DecimalFraction(Double.parseDouble(value));
+   private DecimalFraction toDecimalFraction(Token t, String value) {
+      try {
+         return new DecimalFraction(Double.parseDouble(value));
+      } catch (NumberFormatException e) {
+         throw newParserException(t, "Invalid numeric value: " + value);
+      }
    }
 
    private Variable getOrCreateVariable(String id) {
@@ -388,7 +532,19 @@ public class SentenceParser {
    }
 
    /** Returns a new {@link ParserException} with the specified message. */
-   private ParserException newParserException(String message) {
-      return parser.newParserException(message);
+   private static ParserException newParserException(Token token, String message) {
+      throw new ParserException(message, token);
+   }
+
+   private static interface Terminator {
+      boolean terminate(Token token, TokenParser parser);
+
+      boolean rewindOnTermination();
+
+      int maxPriority();
+
+      boolean faiIfPriorityEqual();
+
+      String message();
    }
 }

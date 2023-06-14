@@ -31,4 +31,8 @@ enum TokenType {
    boolean isPossibleOperand() {
       return this == ATOM || this == SYMBOL;
    }
+
+   boolean isNumber() {
+      return this == INTEGER || this == FLOAT;
+   }
 }

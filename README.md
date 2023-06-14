@@ -1,4 +1,5 @@
 # [projog](http://projog.org "Prolog interpreter for Java")
+[![Build Status](https://github.com/s-webber/projog/actions/workflows/github-actions.yml/badge.svg)](https://github.com/s-webber/projog/actions/)
 [![Maven Central](https://img.shields.io/maven-central/v/org.projog/projog-core.svg)](https://search.maven.org/search?q=g:org.projog)
 [![License](https://img.shields.io/badge/license-Apache%20v2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 

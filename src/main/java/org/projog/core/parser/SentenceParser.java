@@ -47,6 +47,7 @@ public class SentenceParser {
    private static final int DEFAULT_TOKEN_ARRAY_LENGTH = 32;
    private static final int COMMA_PRIORITY = 1000;
    private static final Token EMPTY_LIST_TOKEN = new Token((String) null, TokenType.EMPTY_LIST, new Token[0]);
+   private static final String NEGATIVE_SIGN = "-";
    private static final Terminator SENTENCE_TERMINATOR = new Terminator() {
       @Override
       public boolean terminate(Token t, TokenParser parser) {
@@ -481,16 +482,21 @@ public class SentenceParser {
    }
 
    private boolean isNegativeNumber(Token t) {
-      return t.getNumberOfArguments() == 1 && "-".equals(t.getName()) && t.getArgument(0).getType().isNumber();
+      if (t.getNumberOfArguments() != 1 || !NEGATIVE_SIGN.equals(t.getName())) {
+         return false;
+      }
+
+      Token argument = t.getArgument(0);
+      return argument.getType().isNumber() && t.getLineNumber() == argument.getLineNumber() && t.getColumnNumber() == argument.getColumnNumber() - argument.getName().length();
    }
 
    private Term toNegativeNumber(Token t) {
       // convert -(1) or -(1.0) to numbers rather than structures
       Token arg = t.getArgument(0);
       if (arg.getType() == TokenType.INTEGER) {
-         return toIntegerNumber(t, "-" + arg.getName());
+         return toIntegerNumber(t, NEGATIVE_SIGN + arg.getName());
       } else {
-         return toDecimalFraction(t, "-" + arg.getName());
+         return toDecimalFraction(t, NEGATIVE_SIGN + arg.getName());
       }
    }
 

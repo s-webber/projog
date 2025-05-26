@@ -245,6 +245,11 @@ public class SentenceParserTest {
    }
 
    @Test
+   public void testParsingNegativeSign() {
+      assertParse("X = -2, Y = - 2, Z = -Q.", "X = -2 , Y = - 2 , Z = - Q", ",(=(X, -2), ,(=(Y, -(2)), =(Z, -(Q))))");
+   }
+
+   @Test
    public void testExtraTextAfterFullStop() {
       SentenceParser sp = getSentenceParser("?- consult(\'bench.pl\'). jkhkj");
       Term t = sp.parseSentence();
@@ -252,8 +257,8 @@ public class SentenceParserTest {
       try {
          sp.parseSentence();
          fail();
-      } catch (ParserException pe) {
-         // expected
+      } catch (EndOfStreamException pe) {
+         // expect EndOfStreamException
       }
    }
 
@@ -279,8 +284,9 @@ public class SentenceParserTest {
          sp = SentenceParser.getInstance("a ~ ~.", o);
          sp.parseSentence();
          fail();
-      } catch (ParserException e) {
-         // expected
+      } catch (ParserException pe) {
+         // expect ParserException, don't expect EndOfStreamException
+         assertNotSame(EndOfStreamException.class, pe.getClass());
       }
    }
 

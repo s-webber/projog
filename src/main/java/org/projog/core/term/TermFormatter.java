@@ -250,7 +250,9 @@ public class TermFormatter {
    }
 
    private int getPriority(Term next) {
-      if (next.getNumberOfArguments() == 2 && operands.infix(next.getName())) {
+      if (next.getType().isVariable()) {
+         return -1;
+      } else if (next.getNumberOfArguments() == 2 && operands.infix(next.getName())) {
          return operands.getInfixPriority(next.getName());
       } else if (next.getNumberOfArguments() == 1 && operands.prefix(next.getName())) {
          return operands.getPrefixPriority(next.getName());

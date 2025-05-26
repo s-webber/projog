@@ -34,7 +34,8 @@ public class TermFormatterTest {
                "?- X = -1 + 1.684 , p(1, 7.3, [_,[]|c])", //
                "a :- z , (b , c ; e) , f", //
                "X = (1 :- 2) * (3 :- 4)", //
-               "X = (?- 1) * (?- 2)"})
+               "X = (?- 1) * (?- 2)", //
+               "X = - Y"})
    public void testFormatTerm(String inputSyntax) {
       Term inputTerm = parseSentence(inputSyntax + ".");
 

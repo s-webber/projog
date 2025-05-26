@@ -70,9 +70,90 @@ public class ProjogConsoleTest {
    }
 
    @Test
-   public void testInvalidSyntax() throws IOException {
-      String input = createInput("X is 1 + 1");
-      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "No . to indicate end of sentence", "X is 1 + 1", "^");
+   public void testMultiLineQuery() throws IOException {
+      String input = createInput("W=X,", "X=1+1,", "Y is W,", "Z is -W.");
+      String expected = createExpectedOutput(PROMPT, "W = 1 + 1", "X = 1 + 1", "Y = 2", "Z = -2", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLineWithComment() throws IOException {
+      String input = createInput("W=X, % single line comment", "X=1+1,  % single line comment with .", "Y is W, /* multi-line comment", "still in multi-line comment",
+                  "end of multi-line comment*/", "Z is -W. % single line comment after end of sentence");
+      String expected = createExpectedOutput(PROMPT, "W = 1 + 1", "X = 1 + 1", "Y = 2", "Z = -2", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLineList1() throws IOException {
+      String input = createInput("X = [", "a,", "b", ",c", "]", ".");
+      String expected = createExpectedOutput(PROMPT, "X = [a,b,c]", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLineList2() throws IOException {
+      String input = createInput("X = [a,", "b", ",c", "]", ".");
+      String expected = createExpectedOutput(PROMPT, "X = [a,b,c]", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLineListWithoutClosingBracket() throws IOException {
+      String input = createInput("X = [a,", "b", ",c", ".");
+      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "No matching ] for [", "X = [a,", "    ^");
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLinePredicate1() throws IOException {
+      String input = createInput("X = p(", "a,", "b", ",c", ")", ".");
+      String expected = createExpectedOutput(PROMPT, "X = p(a, b, c)", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLinePredicate2() throws IOException {
+      String input = createInput("X = p(a,", "b", ",c", ")", ".");
+      String expected = createExpectedOutput(PROMPT, "X = p(a, b, c)", "", YES);
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMultiLinePredicateWithoutClosingBracket() throws IOException {
+      String input = createInput("X = p(a,", "b", ",c", ".");
+      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "No matching ) for (", "X = p(a,", "    ^");
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testMoreInputAfterSentence() throws IOException {
+      String input = createInput("true. true");
+      String expected = createExpectedOutput(PROMPT, "org.projog.core.ProjogException caught parsing: true. true", "More input found after . in true. true");
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testNoSuitableOperands() throws IOException {
+      String input = createInput("X is 1 2 3.");
+      String expected = createExpectedOutput(PROMPT, "Error parsing query:", "No suitable operands", "X is 1 2 3.", "         ^");
+      String actual = getOutput(input);
+      compare(expected, actual);
+   }
+
+   @Test
+   public void testCannotFindArithmeticOperator() throws IOException {
+      String input = createInput("X is x.");
+      String expected = createExpectedOutput(PROMPT, "Cannot find arithmetic operator: x/0");
       String actual = getOutput(input);
       compare(expected, actual);
    }

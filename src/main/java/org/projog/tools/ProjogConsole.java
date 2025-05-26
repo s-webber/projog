@@ -31,6 +31,7 @@ import org.projog.api.QueryResult;
 import org.projog.api.QueryStatement;
 import org.projog.core.ProjogException;
 import org.projog.core.event.LoggingProjogListener;
+import org.projog.core.parser.EndOfStreamException;
 import org.projog.core.parser.ParserException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateKey;
@@ -75,21 +76,13 @@ public class ProjogConsole {
 
       while (!quit) {
          printPrompt();
-
-         String inputSyntax = in.nextLine();
-         if (isNotEmpty(inputSyntax)) {
-            parseAndExecute(inputSyntax);
-         }
+         parseAndExecute();
       }
    }
 
    private void printPrompt() {
       out.println();
       out.print(QUESTION_PREDICATE_NAME + " ");
-   }
-
-   private static boolean isNotEmpty(String input) {
-      return input.trim().length() > 0;
    }
 
    private void consultScripts(List<String> scriptFilenames) {
@@ -108,9 +101,21 @@ public class ProjogConsole {
       }
    }
 
-   private void parseAndExecute(String inputSyntax) {
+   private void parseAndExecute() {
       try {
-         QueryStatement s = projog.createPlan(inputSyntax).createStatement();
+         String inputSyntax = "";
+         QueryStatement s = null;
+         while (s == null) {
+            inputSyntax += in.nextLine();
+            if (!inputSyntax.isBlank()) {
+               try {
+                  s = projog.createPlan(inputSyntax).createStatement();
+               } catch (EndOfStreamException pe) {
+                  inputSyntax += System.lineSeparator();
+               }
+            }
+         }
+
          QueryResult r = s.executeQuery();
          Set<String> variableIds = r.getVariableIds();
          while (evaluateOnce(r, variableIds) && shouldContinue()) {

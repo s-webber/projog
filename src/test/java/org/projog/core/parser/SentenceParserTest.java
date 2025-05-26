@@ -16,9 +16,13 @@
 package org.projog.core.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.parseSentence;
 import static org.projog.TestUtils.write;
@@ -31,15 +35,20 @@ import org.projog.core.term.Variable;
 public class SentenceParserTest {
    @Test
    public void testIncompleteSentences() {
-      error(":-");
-      error("a :-");
+      assertNull(parseSentence(""));
+      assertNull(parseSentence(" "));
+      assertNull(parseSentence("\n "));
+      error(".");
       error("a :- .");
-      error(":- X is");
-      error(":- X is 1"); // no '.' character at end of sentence
-      error(":- X is p(a, b, c)"); // no '.' character at end of sentence
-      error(":- X is [a, b, c | d]"); // no '.' character at end of sentence
       error(":- X = 'hello."); // no closing quote on atom
-      error(":- X = /*hello."); // no closing */ on comment
+      endOfStreamError(":-");
+      endOfStreamError("a :-");
+      endOfStreamError(":- X is");
+      endOfStreamError(":- X is 1"); // no .
+      endOfStreamError(":- X is p(a, b, c)"); // no '.' character at end of sentence
+      endOfStreamError(":- X is [a, b, c | d]"); // no '.' character at end of sentence
+      endOfStreamError(":- X = %hello."); // no . before % comment
+      endOfStreamError(":- X = /*hello."); // no closing */ on comment
    }
 
    @Test
@@ -50,7 +59,7 @@ public class SentenceParserTest {
       error(":- X is p(a, b))."); // extra )
       error(":- X is p(a b)."); // no ,
       error(":- X is p(, a, b)."); // leading , before first arg
-      error(":- X is p(a, b,)."); // trailing , after last arg
+      endOfStreamError(":- X is p(a, b"); // no ) or .
    }
 
    @Test
@@ -61,6 +70,9 @@ public class SentenceParserTest {
       error(":- X is [a, b |."); // no tail
       error(":- X is [a, b | ]."); // no tail
       error(":- X is [a, b | c, d]."); // 2 args after |
+      endOfStreamError(":- X is [a, b"); // no ] or .
+      endOfStreamError(":- X is [a, b | "); // no ] or . after |
+      endOfStreamError(":- X is [a, b | c"); // no ] or . after tail
    }
 
    @Test
@@ -364,6 +376,20 @@ public class SentenceParserTest {
       check("p(1,2','(3+4),5)", "p(1, 2, +(3, 4), 5)");
    }
 
+   @Test
+   public void testHasNext() {
+      SentenceParser sp = getSentenceParser("A = a. B = b. C = c.");
+      assertTrue(sp.hasNext());
+      assertEquals("=(A, a)", sp.parseSentence().toString());
+      assertTrue(sp.hasNext());
+      assertEquals("=(B, b)", sp.parseSentence().toString());
+      assertTrue(sp.hasNext());
+      assertEquals("=(C, c)", sp.parseSentence().toString());
+      assertFalse(sp.hasNext());
+      assertNull(sp.parseSentence());
+      assertFalse(sp.hasNext());
+   }
+
    private void checkEquation(String input, String expected) {
       check(input, expected);
 
@@ -386,11 +412,15 @@ public class SentenceParserTest {
          Term term = parseSentence(input);
          fail("parsing: " + input + " produced: " + term + " when expected an exception");
       } catch (ParserException pe) {
-         // expected
+         // expect ParserException, don't expect EndOfStreamException
+         assertNotSame(EndOfStreamException.class, pe.getClass());
       } catch (Exception e) {
-         e.printStackTrace();
          fail("parsing: " + input + " produced: " + e + " when expected a ParserException");
       }
+   }
+
+   private void endOfStreamError(String input) {
+      assertThrows(EndOfStreamException.class, () -> parseSentence(input));
    }
 
    /**
@@ -398,10 +428,10 @@ public class SentenceParserTest {
     * @param expectedOutput what toString method of Term should look like
     */
    private Term check(String input, String expectedOutput) {
-      error(input);
+      // assert get EndOfStreamException when input is missing a trailing "."
+      assertThrows(EndOfStreamException.class, () -> parseSentence(input));
       try {
-         input += ".";
-         Term t = parseSentence(input);
+         Term t = parseSentence(input + ".");
          if (!expectedOutput.equals(t.toString())) {
             throw new Exception("got: " + t + " instead of: " + expectedOutput);
          }

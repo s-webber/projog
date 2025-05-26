@@ -149,4 +149,15 @@ public class QueryPlanTest {
          assertEquals("Failed to find a solution for: ,(true, ,(true, fail))", projogException.getMessage());
       }
    }
+
+   @Test
+   public void testMoreThanOneSentenceInQuery() {
+      try {
+         new Projog().createPlan("X is 1. Y is 2.");
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("org.projog.core.ProjogException caught parsing: X is 1. Y is 2.", e.getMessage());
+         assertEquals("More input found after . in X is 1. Y is 2.", e.getCause().getMessage());
+      }
+   }
 }

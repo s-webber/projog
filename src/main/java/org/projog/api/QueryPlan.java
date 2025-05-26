@@ -44,7 +44,7 @@ public class QueryPlan {
          this.parsedInput = sp.parseSentence();
          this.predicateFactory = kb.getPredicates().getPreprocessedPredicateFactory(parsedInput);
 
-         if (sp.parseSentence() != null) {
+         if (sp.hasNext()) {
             throw new ProjogException("More input found after . in " + prologQuery);
          }
       } catch (ParserException pe) {

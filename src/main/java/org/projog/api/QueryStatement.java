@@ -65,7 +65,7 @@ public final class QueryStatement {
          this.predicateFactory = kb.getPredicates().getPredicateFactory(parsedInput);
          this.variables = sp.getParsedTermVariables();
 
-         if (sp.parseSentence() != null) {
+         if (sp.hasNext()) {
             throw new ProjogException("More input found after . in " + prologQuery);
          }
       } catch (ParserException pe) {

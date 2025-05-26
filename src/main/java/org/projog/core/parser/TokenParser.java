@@ -57,6 +57,10 @@ class TokenParser {
       }
    }
 
+   Token getLastParsedToken() {
+      return lastParsedToken;
+   }
+
    /**
     * Parse and return the next {@code Token}.
     *
@@ -77,7 +81,7 @@ class TokenParser {
       skipWhitespaceAndComments();
       final int c = parser.getNext();
       if (isEndOfStream(c)) {
-         throw newParserException("Unexpected end of stream");
+         throw new EndOfStreamException("Unexpected end of stream", parser);
       } else if (isVariable(c)) {
          return parseText(c, VARIABLE);
       } else if (isLowerCase(c)) {
@@ -370,7 +374,7 @@ class TokenParser {
       while (true) {
          int current = parser.getNext();
          if (isEndOfStream(current)) {
-            throw newParserException("Missing */ to close multi-line comment");
+            throw new EndOfStreamException("Missing */ to close multi-line comment", parser);
          } else if (isMultiLineCommentEnd(previous, current)) {
             return;
          } else {

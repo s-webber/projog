@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.parser.ParserException;
+import org.projog.core.parser.EndOfStreamException;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.PredicateUtils;
@@ -176,7 +176,7 @@ public class QueryStatementTest {
       try {
          new QueryStatement(kb, "X");
          fail();
-      } catch (ParserException e) {
+      } catch (EndOfStreamException e) {
          assertEquals("No . to indicate end of sentence Line: X", e.getMessage());
       }
    }

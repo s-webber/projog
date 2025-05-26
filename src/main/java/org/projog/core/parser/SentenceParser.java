@@ -205,19 +205,19 @@ public class SentenceParser {
       }
    }
 
+   public boolean hasNext() {
+      return parser.hasNext();
+   }
+
    private Token parseToken(Token previous, Terminator terminator) {
-      if (!parser.hasNext()) {
-         throw newParserException(previous, terminator.message());
-      }
+      throwExceptionIfEndOfStream(previous, terminator);
       Token first = parser.next();
       if (terminator.terminate(first, parser)) {
          throw newParserException(first, "Expected term before " + first);
       }
       first = parseToken(first);
 
-      if (!parser.hasNext()) {
-         throw newParserException(previous, terminator.message());
-      }
+      throwExceptionIfEndOfStream(previous, terminator);
       Token second = parser.next();
       if (terminator.terminate(second, parser)) {
          if (terminator.rewindOnTermination()) {
@@ -232,9 +232,7 @@ public class SentenceParser {
       tokens[1] = second;
       int idx = 1;
       while (true) {
-         if (!parser.hasNext()) {
-            throw newParserException(previous, terminator.message());
-         }
+         throwExceptionIfEndOfStream(previous, terminator);
 
          Token next = parser.next();
          if (terminator.terminate(next, parser)) {
@@ -303,9 +301,7 @@ public class SentenceParser {
       List<Token> args = new ArrayList<>();
 
       while (true) {
-         if (!parser.hasNext()) {
-            throw newParserException(name, BRACKET_TERMINATOR.message());
-         }
+         throwExceptionIfEndOfStream(name, BRACKET_TERMINATOR);
 
          Token next = parser.next();
 
@@ -528,6 +524,16 @@ public class SentenceParser {
          return new Variable();
       } else {
          return variables.computeIfAbsent(id, name -> new Variable(name));
+      }
+   }
+
+   private void throwExceptionIfEndOfStream(Token previous, Terminator terminator) {
+      if (!parser.hasNext()) {
+         Token lastParsedToken = parser.getLastParsedToken();
+         if (lastParsedToken.getType() == TokenType.SYMBOL && ".".equals(lastParsedToken.getName())) {
+            throw newParserException(previous, terminator.message());
+         }
+         throw new EndOfStreamException(terminator.message(), previous);
       }
    }
 

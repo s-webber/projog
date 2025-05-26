@@ -17,7 +17,9 @@ package org.projog.core.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
@@ -246,6 +248,27 @@ public class TokenParserTest {
 
       // check that can only rewind one token
       assertRewindException(tp, "c");
+   }
+
+   @Test
+   public void testGetLastParsedToken() {
+      StringReader sr = new StringReader("X abc 'hello' =:= 1234 1234.5");
+      TokenParser p = new TokenParser(sr, operands);
+      assertNull(p.getLastParsedToken());
+      Token previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      previous = p.next();
+      assertSame(previous, p.getLastParsedToken());
+      assertThrows(EndOfStreamException.class, () -> p.next());
+      assertSame(previous, p.getLastParsedToken());
    }
 
    private void assertRewindException(TokenParser tp, String value) {

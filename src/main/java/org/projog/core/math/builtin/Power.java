@@ -15,7 +15,15 @@
  */
 package org.projog.core.math.builtin;
 
-import org.projog.core.math.AbstractBinaryArithmeticOperator;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.kb.KnowledgeBaseConsumer;
+import org.projog.core.math.ArithmeticOperator;
+import org.projog.core.math.ArithmeticOperators;
+import org.projog.core.math.Numeric;
+import org.projog.core.term.DecimalFraction;
+import org.projog.core.term.IntegerNumber;
+import org.projog.core.term.Term;
+import org.projog.core.term.TermType;
 
 /* TEST
 %?- X is 2 ** 1
@@ -45,16 +53,62 @@ import org.projog.core.math.AbstractBinaryArithmeticOperator;
 %?- X is -2 ** 2
 % X=4
 
-% Note: in some Prolog implementations the result would be 0.25
 %?- X is -2 ** -2
-% X=0
+% X=0.25
 
-% Note: in some Prolog implementations the result would be 0.25
 %?- X is 2 ** -2
-% X=0
+% X=0.25
 
 %?- X is 0.5 ** 2
 % X=0.25
+
+%?- X is 2 ** 3
+% X=8
+
+%?- X is 2 ** -3
+% X=0.125
+
+%?- X is 1 ** -100
+% X=1
+
+%?- X is -1 ** -3
+% X=-1
+
+%?- X is 0 ** 2
+% X=0
+
+%?- X is 2 ** 0.25
+% X=1.189207115002721
+
+%?- X is 2 ** -0.25
+% X=0.8408964152537145
+
+%?- X is -2 ** 0.25
+% X=NaN
+
+%?- X is -2 ** -0.25
+% X=NaN
+
+%?- X is 0 ** -1
+% X=Infinity
+
+%?- X is 0.0 ** -1.0
+% X=Infinity
+
+%?- X is 0 ** 0
+% X=1
+
+%?- X is 0.0 ** 0.0
+% X=1.0
+
+%?- X is 1 ** -5
+% X=1
+
+%?- X is -1 ** -4
+% X=1
+
+%?- X is -1 ** -5
+% X=-1
 
 % Note: "^" is a synonym for "**".
 %?- X is 3^7
@@ -63,14 +117,46 @@ import org.projog.core.math.AbstractBinaryArithmeticOperator;
 /**
  * <code>**</code> - calculates the result of the first argument raised to the power of the second argument.
  */
-public final class Power extends AbstractBinaryArithmeticOperator {
+public final class Power implements ArithmeticOperator, KnowledgeBaseConsumer {
+   private ArithmeticOperators operators;
+
    @Override
-   protected double calculateDouble(double n1, double n2) {
-      return Math.pow(n1, n2);
+   public Numeric calculate(Term[] args) {
+      Numeric base = operators.getNumeric(args[0]);
+      Numeric exponent = operators.getNumeric(args[1]);
+      if (base.getType() == TermType.INTEGER && exponent.getType() == TermType.INTEGER && (exponent.getLong() >= 0 || base.getLong() == 1 || base.getLong() == -1)) {
+         long result = integerPow(base.getLong(), exponent.getLong());
+         return new IntegerNumber(result);
+      } else {
+         double result = Math.pow(base.getDouble(), exponent.getDouble());
+         return new DecimalFraction(result);
+      }
    }
 
    @Override
-   protected long calculateLong(long n1, long n2) {
-      return (long) Math.pow(n1, n2);
+   public void setKnowledgeBase(KnowledgeBase kb) {
+      this.operators = kb.getArithmeticOperators();
+   }
+
+   public static long integerPow(long base, long exponent) {
+      if (exponent < 0) {
+         if (base == 1) {
+            return 1;
+         } else if (base == -1) {
+            return (exponent % 2 == 0) ? 1 : -1;
+         } else {
+            throw new IllegalArgumentException("Negative exponents not supported for integers.");
+         }
+      }
+
+      int result = 1;
+      while (exponent > 0) {
+         if ((exponent & 1) == 1) {
+            result *= base;
+         }
+         base *= base;
+         exponent >>= 1;
+      }
+      return result;
    }
 }

@@ -104,11 +104,23 @@ import org.projog.core.term.TermType;
 
 %?- X#=Y, label([X,Y])
 %ERROR java.lang.IllegalStateException: Variables not sufficiently bound. Too many possibilities.
+
+%?- X in 7..9, labeling([ff], [X])
+% X=7
+% X=8
+% X=9
+%NO
 */
 /**
  * <code>label([X])</code> - assigns concrete values to the given CLP variables.
  */
 public final class Resolve extends AbstractPredicateFactory {
+   @Override
+   public Predicate getPredicate(Term options, Term variables) {
+      getProjogListeners().notifyWarn("Ignoring " + getTermFormatter().formatTerm(options));
+      return getPredicate(variables);
+   }
+
    @Override
    public Predicate getPredicate(Term arg) {
       ClpConstraintStore.Builder builder = new ClpConstraintStore.Builder();

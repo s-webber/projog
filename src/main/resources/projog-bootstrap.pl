@@ -201,6 +201,7 @@
 ?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.In').
 ?- pj_add_predicate(ins/2, 'org.projog.core.predicate.builtin.clp.In').
 ?- pj_add_predicate(label/1, 'org.projog.core.predicate.builtin.clp.Resolve').
+?- pj_add_predicate(labeling/2, 'org.projog.core.predicate.builtin.clp.Resolve').
 ?- pj_add_predicate(all_different/1, 'org.projog.core.predicate.builtin.clp.Distinct').
 ?- pj_add_predicate(all_distinct/1, 'org.projog.core.predicate.builtin.clp.Distinct').
 ?- pj_add_predicate('#<'/2, 'org.projog.core.predicate.builtin.clp.NumericConstraintPredicate/lessThan').

@@ -190,6 +190,7 @@
 ?- pj_add_predicate(checklist/10, 'org.projog.core.predicate.builtin.list.MapList').
 ?- pj_add_predicate(include/3, 'org.projog.core.predicate.builtin.list.SubList').
 ?- pj_add_predicate(sublist/3, 'org.projog.core.predicate.builtin.list.SubList').
+?- pj_add_predicate(sum_list/2, 'org.projog.core.predicate.builtin.list.SumList').
 ?- pj_add_predicate(foldl/4, 'org.projog.core.predicate.builtin.list.Fold').
 ?- pj_add_predicate(last/2, 'org.projog.core.predicate.builtin.list.Last').
 ?- pj_add_predicate(atomic_list_concat/2, 'org.projog.core.predicate.builtin.list.AtomicListConcat').

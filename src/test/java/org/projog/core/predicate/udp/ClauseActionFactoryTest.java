@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.array;
 import static org.projog.TestUtils.assertClass;
-import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.createClauseModel;
 import static org.projog.core.term.TermUtils.EMPTY_ARRAY;
 
@@ -63,6 +63,8 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 @RunWith(DataProviderRunner.class)
 public class ClauseActionFactoryTest {
+   private static final Atom PREDICATE_TERM = new Atom("test");
+
    private KnowledgeBase kb;
    private PredicateFactory mockPredicateFactory;
    private Predicate mockPredicate1;
@@ -74,11 +76,11 @@ public class ClauseActionFactoryTest {
       mockPredicate2 = mock(Predicate.class);
 
       mockPredicateFactory = mock(PredicateFactory.class);
-      when(mockPredicateFactory.getPredicate(EMPTY_ARRAY)).thenReturn(mockPredicate1, mockPredicate2);
+      when(mockPredicateFactory.getPredicate(PREDICATE_TERM)).thenReturn(mockPredicate1, mockPredicate2);
 
       kb = KnowledgeBaseUtils.createKnowledgeBase();
       KnowledgeBaseUtils.bootstrap(kb);
-      kb.getPredicates().addPredicateFactory(new PredicateKey("test", 0), mockPredicateFactory);
+      kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(PREDICATE_TERM), mockPredicateFactory);
    }
 
    @After
@@ -292,27 +294,29 @@ public class ClauseActionFactoryTest {
       assertSame(mockPredicate1, a.getPredicate(queryArgs));
       assertSame(mockPredicate2, a.getPredicate(queryArgs));
 
-      verify(mockPredicateFactory, times(2)).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
 
    @Test
    public void testVariableAntecedant_getPredicate_with_different_query_args() {
+      Term t1 = atom("test1");
       PredicateFactory pf1 = mock(PredicateFactory.class);
       Predicate p1 = mock(Predicate.class);
-      when(pf1.getPredicate(EMPTY_ARRAY)).thenReturn(p1);
-      kb.getPredicates().addPredicateFactory(new PredicateKey("test1", 0), pf1);
+      when(pf1.getPredicate(t1)).thenReturn(p1);
+      kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(t1), pf1);
 
+      Term t2 = atom("test2");
       PredicateFactory pf2 = mock(PredicateFactory.class);
       Predicate p2 = mock(Predicate.class);
-      when(pf2.getPredicate(EMPTY_ARRAY)).thenReturn(p2);
-      kb.getPredicates().addPredicateFactory(new PredicateKey("test2", 0), pf2);
+      when(pf2.getPredicate(t2)).thenReturn(p2);
+      kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(t2), pf2);
 
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
-      assertSame(p1, a.getPredicate(array(atom("test1"))));
-      assertSame(p2, a.getPredicate(array(atom("test2"))));
+      assertSame(p1, a.getPredicate(array(t1)));
+      assertSame(p2, a.getPredicate(array(t2)));
 
-      verify(pf1, times(1)).getPredicate(EMPTY_ARRAY);
-      verify(pf2, times(1)).getPredicate(EMPTY_ARRAY);
+      verify(pf1, times(1)).getPredicate(t1);
+      verify(pf2, times(1)).getPredicate(t2);
       verifyNoMoreInteractions(pf1, pf2, p1, p2);
    }
 
@@ -374,7 +378,7 @@ public class ClauseActionFactoryTest {
       assertSame(mockPredicate1, a.getPredicate(EMPTY_ARRAY));
       assertSame(mockPredicate2, a.getPredicate(EMPTY_ARRAY));
 
-      verify(mockPredicateFactory, times(2)).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
 
    // TODO p :- test(X). p(X) :- test(X). p(a) :- test(X).
@@ -385,7 +389,7 @@ public class ClauseActionFactoryTest {
       PredicateFactory pf = mock(PredicateFactory.class);
       kb.getPredicates().addPredicateFactory(new PredicateKey("test", 5), pf);
 
-      ArgumentCaptor<Term[]> captor = ArgumentCaptor.forClass(Term[].class);
+      ArgumentCaptor<Term> captor = ArgumentCaptor.forClass(Term.class);
       Predicate p1 = mock(Predicate.class);
       Predicate p2 = mock(Predicate.class);
       when(pf.getPredicate(captor.capture())).thenReturn(p1, p2);
@@ -394,23 +398,23 @@ public class ClauseActionFactoryTest {
       assertSame(p1, a.getPredicate(EMPTY_ARRAY));
       assertSame(p2, a.getPredicate(EMPTY_ARRAY));
 
-      List<Term[]> allValues = captor.getAllValues();
+      List<Term> allValues = captor.getAllValues();
       assertEquals(2, allValues.size());
 
-      Term[] values1 = allValues.get(0);
+      Term[] values1 = allValues.get(0).getArgs();
       assertEquals(atom("y"), values1[1]);
       assertSame(values1[0], values1[2]);
       assertSame(values1[0], values1[3].getArgument(0));
       assertNotSame(values1[0], values1[4]);
 
-      Term[] values2 = allValues.get(1);
+      Term[] values2 = allValues.get(1).getArgs();
       assertNotSame(values1[0], values2[0]);
       assertSame(values1[1], values2[1]);
       assertNotSame(values1[2], values2[2]);
       assertNotSame(values1[3], values2[3]);
       assertNotSame(values1[4], values2[4]);
 
-      verify(pf, times(2)).getPredicate(any(Term[].class));
+      verify(pf, times(2)).getPredicate(any(Term.class));
       verifyNoMoreInteractions(pf, p1, p2);
    }
 
@@ -473,7 +477,7 @@ public class ClauseActionFactoryTest {
       assertSame(mockPredicate1, a.getPredicate(queryArgs));
       assertSame(mockPredicate2, a.getPredicate(queryArgs));
 
-      verify(mockPredicateFactory, times(2)).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -494,7 +498,7 @@ public class ClauseActionFactoryTest {
       assertEquals(atom("b"), y.getTerm());
       assertEquals(atom("c"), z.getTerm());
 
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -507,7 +511,7 @@ public class ClauseActionFactoryTest {
       assertEquals(atom("b"), x.getTerm());
       assertEquals(atom("c"), y.getTerm());
 
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -529,7 +533,7 @@ public class ClauseActionFactoryTest {
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
 
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -607,7 +611,7 @@ public class ClauseActionFactoryTest {
       assertNotSame(v3, v3.getTerm());
       assertEquals("Z", ((Variable) v3.getTerm()).getId());
 
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -615,7 +619,7 @@ public class ClauseActionFactoryTest {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       assertSame(mockPredicate1, a.getPredicate(array(atom("a"), atom("b"), atom("c"))));
       assertSame(mockPredicate2, a.getPredicate(array(atom("a"), atom("d"), atom("c"))));
-      verify(mockPredicateFactory, times(2)).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -637,7 +641,7 @@ public class ClauseActionFactoryTest {
       Variable x = new Variable("X");
       assertSame(mockPredicate1, a.getPredicate(array(x, atom("b"), x)));
       assertEquals(atom("a"), x.getTerm());
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -650,7 +654,7 @@ public class ClauseActionFactoryTest {
    public void testMutableRule_getPredicate_query_args_unify_with_clause_shared_variable() {
       MutableRule a = create(MutableRule.class, "p(X,b,X) :- test.");
       assertSame(mockPredicate1, a.getPredicate(array(atom("a"), atom("b"), atom("a"))));
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -662,7 +666,7 @@ public class ClauseActionFactoryTest {
       assertSame(TermType.VARIABLE, variable.getTerm().getType());
       assertNotSame(variable, variable.getTerm());
       assertEquals("X", ((Variable) variable.getTerm()).getId());
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test
@@ -671,7 +675,7 @@ public class ClauseActionFactoryTest {
       Variable x = new Variable("X");
       assertSame(mockPredicate1, a.getPredicate(array(atom("a"), atom("b"), x)));
       assertEquals(atom("c"), x.getTerm());
-      verify(mockPredicateFactory).getPredicate(EMPTY_ARRAY);
+      verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
    @Test

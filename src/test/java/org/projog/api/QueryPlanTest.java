@@ -34,7 +34,6 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Term;
 
 public class QueryPlanTest {
    /**
@@ -59,6 +58,7 @@ public class QueryPlanTest {
       assertEquals("a", result2.getAtomName("X"));
 
       assertTrue(result3.next());
+      assertEquals("b", result3.getAtomName("X"));
       assertFalse(result3.next());
 
       assertTrue(result1.next());
@@ -79,21 +79,22 @@ public class QueryPlanTest {
     */
    @Test
    public void testPreprocessed() {
+      Atom term = new Atom("test");
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Projog projog = new Projog();
-      projog.addPredicateFactory(new PredicateKey("test", 0), mockPreprocessablePredicateFactory);
+      projog.addPredicateFactory(PredicateKey.createForTerm(term), mockPreprocessablePredicateFactory);
 
-      when(mockPreprocessablePredicateFactory.preprocess(new Atom("test"))).thenReturn(mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(new Term[0])).thenReturn(PredicateUtils.TRUE);
+      when(mockPreprocessablePredicateFactory.preprocess(term)).thenReturn(mockPredicateFactory);
+      when(mockPredicateFactory.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
 
       QueryPlan plan = projog.createPlan("test.");
-      verify(mockPreprocessablePredicateFactory).preprocess(new Atom("test"));
+      verify(mockPreprocessablePredicateFactory).preprocess(term);
 
       plan.executeOnce();
       plan.executeOnce();
       plan.executeOnce();
-      verify(mockPredicateFactory, times(3)).getPredicate(new Term[0]);
+      verify(mockPredicateFactory, times(3)).getPredicate(term);
 
       verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory);
    }
@@ -127,15 +128,16 @@ public class QueryPlanTest {
 
    @Test
    public void testExecuteOnce() {
+      Atom term = new Atom("mock");
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      when(mockPredicateFactory.getPredicate(new Term[0])).thenReturn(PredicateUtils.TRUE);
+      when(mockPredicateFactory.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
       Projog projog = new Projog();
-      projog.addPredicateFactory(new PredicateKey("mock", 0), mockPredicateFactory);
+      projog.addPredicateFactory(PredicateKey.createForTerm(term), mockPredicateFactory);
 
       QueryPlan plan = projog.createPlan("repeat, mock.");
       plan.executeOnce();
 
-      verify(mockPredicateFactory).getPredicate(new Term[0]);
+      verify(mockPredicateFactory).getPredicate(term);
       verifyNoMoreInteractions(mockPredicateFactory);
    }
 

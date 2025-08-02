@@ -33,8 +33,8 @@ final class SingleNonRetryableRulePredicateFactory implements PreprocessablePred
    }
 
    @Override
-   public Predicate getPredicate(Term[] args) {
-      return evaluateClause(clause, spyPoint, args);
+   public Predicate getPredicate(Term term) {
+      return evaluateClause(clause, spyPoint, term.getArgs());
    }
 
    static Predicate evaluateClause(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term[] args) {

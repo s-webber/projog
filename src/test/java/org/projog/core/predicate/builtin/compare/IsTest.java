@@ -51,7 +51,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(1, 1)", isTerm.toString());
    }
 
@@ -63,7 +63,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(21, *(3, 7))", isTerm.toString());
    }
 
@@ -88,7 +88,7 @@ public class IsTest {
          }
       }
       c.unify(new IntegerNumber(100));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy));
       assertEquals("is(212, +(/(*(100, 9), 5), 32))", copy.toString());
       assertEquals(new IntegerNumber(212), f.getTerm());
    }
@@ -101,7 +101,7 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
       assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(21, abs(*(-3, 7)))", isTerm.toString());
    }
 
@@ -126,7 +126,7 @@ public class IsTest {
          }
       }
       y.unify(new IntegerNumber(-7));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy));
       assertEquals("is(6, abs(+(1, -7)))", copy.toString());
       assertEquals(new IntegerNumber(6), x.getTerm());
    }
@@ -158,13 +158,13 @@ public class IsTest {
       for (int i2 = 0; i2 < numBatches; i2++) {
          long now = System.currentTimeMillis();
          for (int i = 0; i < batchSize; i++) {
-            optimised.getPredicate(copy.getArgs());
+            optimised.getPredicate(copy);
             f.backtrack();
          }
          long duration1 = System.currentTimeMillis() - now;
          now = System.currentTimeMillis();
          for (int i = 0; i < batchSize; i++) {
-            is.getPredicate(copy.getArgs());
+            is.getPredicate(copy);
             f.backtrack();
          }
          long duration2 = System.currentTimeMillis() - now;

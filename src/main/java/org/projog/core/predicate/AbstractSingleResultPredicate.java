@@ -37,25 +37,25 @@ public abstract class AbstractSingleResultPredicate implements PredicateFactory,
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public final Predicate getPredicate(Term[] args) {
-      boolean result = evaluate(args);
+   public final Predicate getPredicate(Term term) {
+      boolean result = evaluateTerm(term);
       return toPredicate(result);
    }
 
-   public final boolean evaluate(Term[] args) {
-      switch (args.length) {
+   private boolean evaluateTerm(Term term) {
+      switch (term.getNumberOfArguments()) {
          case 0:
             return evaluate();
          case 1:
-            return evaluate(args[0]);
+            return evaluate(term.getArgument(0));
          case 2:
-            return evaluate(args[0], args[1]);
+            return evaluate(term.getArgument(0), term.getArgument(1));
          case 3:
-            return evaluate(args[0], args[1], args[2]);
+            return evaluate(term.getArgument(0), term.getArgument(1), term.getArgument(2));
          case 4:
-            return evaluate(args[0], args[1], args[2], args[3]);
+            return evaluate(term.getArgument(0), term.getArgument(1), term.getArgument(2), term.getArgument(3));
          default:
-            throw createWrongNumberOfArgumentsException(args.length);
+            throw createWrongNumberOfArgumentsException(term.getNumberOfArguments());
       }
    }
 

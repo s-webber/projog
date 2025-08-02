@@ -58,21 +58,21 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    }
 
    @Override
-   public Predicate getPredicate(Term[] args) {
+   public Predicate getPredicate(Term term) {
       if (hasPrimaryKey) {
-         Term firstArg = args[0];
+         Term firstArg = term.getArgument(0);
          if (firstArg.isImmutable()) {
             ClauseActionMetaData match = index.get(firstArg);
             if (match == null) {
-               return PredicateUtils.createFailurePredicate(spyPoint, args);
+               return PredicateUtils.createFailurePredicate(spyPoint, term.getArgs());
             } else {
-               return PredicateUtils.createSingleClausePredicate(match.clause, spyPoint, args);
+               return PredicateUtils.createSingleClausePredicate(match.clause, spyPoint, term.getArgs());
             }
          }
       }
 
       ClauseActionIterator itr = new ClauseActionIterator(ends[FIRST]);
-      return new InterpretedUserDefinedPredicate(itr, spyPoint, args);
+      return new InterpretedUserDefinedPredicate(itr, spyPoint, term.getArgs());
    }
 
    @Override

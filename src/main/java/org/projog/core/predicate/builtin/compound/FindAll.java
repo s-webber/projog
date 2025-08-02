@@ -87,7 +87,7 @@ public final class FindAll extends AbstractSingleResultPredicate implements Prep
    }
 
    private static boolean evaluateFindAll(PredicateFactory pf, Term template, Term goal, Term output) {
-      final Predicate predicate = pf.getPredicate(goal.getArgs());
+      final Predicate predicate = pf.getPredicate(goal);
       final Term solutions;
       if (predicate.evaluate()) {
          solutions = createListOfAllSolutions(template, predicate);
@@ -131,8 +131,8 @@ public final class FindAll extends AbstractSingleResultPredicate implements Prep
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return PredicateUtils.toPredicate(evaluateFindAll(pf, args[0], args[1], args[2]));
+      public Predicate getPredicate(Term term) {
+         return PredicateUtils.toPredicate(evaluateFindAll(pf, term.getArgument(0), term.getArgument(1), term.getArgument(2)));
       }
 
       @Override

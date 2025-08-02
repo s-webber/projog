@@ -70,7 +70,7 @@ abstract class AbstractCollectionOf implements Predicate {
    private void init(Term template, Term goal) {
       variablesNotInTemplate = getVariablesNotInTemplate(template, goal);
 
-      Predicate predicate = pf.getPredicate(goal.getArgs());
+      Predicate predicate = pf.getPredicate(goal);
 
       Map<Key, List<Term>> m = new LinkedHashMap<>();
       if (predicate.evaluate()) {

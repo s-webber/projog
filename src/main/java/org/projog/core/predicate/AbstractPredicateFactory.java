@@ -29,20 +29,20 @@ public abstract class AbstractPredicateFactory implements PredicateFactory, Know
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public final Predicate getPredicate(Term[] args) {
-      switch (args.length) {
+   public final Predicate getPredicate(Term term) {
+      switch (term.getNumberOfArguments()) {
          case 0:
             return getPredicate();
          case 1:
-            return getPredicate(args[0]);
+            return getPredicateWithOneArgument(term.getArgument(0));
          case 2:
-            return getPredicate(args[0], args[1]);
+            return getPredicate(term.getArgument(0), term.getArgument(1));
          case 3:
-            return getPredicate(args[0], args[1], args[2]);
+            return getPredicate(term.getArgument(0), term.getArgument(1), term.getArgument(2));
          case 4:
-            return getPredicate(args[0], args[1], args[2], args[3]);
+            return getPredicate(term.getArgument(0), term.getArgument(1), term.getArgument(2), term.getArgument(3));
          default:
-            throw createWrongNumberOfArgumentsException(args.length);
+            throw createWrongNumberOfArgumentsException(term.getNumberOfArguments());
       }
    }
 
@@ -50,7 +50,7 @@ public abstract class AbstractPredicateFactory implements PredicateFactory, Know
       throw createWrongNumberOfArgumentsException(0);
    }
 
-   protected Predicate getPredicate(Term arg) {
+   protected Predicate getPredicateWithOneArgument(Term arg) {
       throw createWrongNumberOfArgumentsException(1);
    }
 

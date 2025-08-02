@@ -118,11 +118,11 @@ public final class Resolve extends AbstractPredicateFactory {
    @Override
    public Predicate getPredicate(Term options, Term variables) {
       getProjogListeners().notifyWarn("Ignoring " + getTermFormatter().formatTerm(options));
-      return getPredicate(variables);
+      return getPredicateWithOneArgument(variables);
    }
 
    @Override
-   public Predicate getPredicate(Term arg) {
+   public Predicate getPredicateWithOneArgument(Term arg) {
       ClpConstraintStore.Builder builder = new ClpConstraintStore.Builder();
 
       // find all variables in input argument, and all variables connected to them via constraints

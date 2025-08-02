@@ -16,7 +16,6 @@
 package org.projog.core.predicate.udp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -197,12 +196,12 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    }
 
    @Override
-   public Predicate getPredicate(Term[] args) {
-      if (args.length != predicateKey.getNumArgs()) {
-         throw new ProjogException("User defined predicate: " + predicateKey + " is being called with the wrong number of arguments: " + args.length + " " + Arrays.toString(args));
+   public Predicate getPredicate(Term term) {
+      if (term.getNumberOfArguments() != predicateKey.getNumArgs()) {
+         throw new ProjogException("User defined predicate: " + predicateKey + " is being called with the wrong number of arguments: " + term.getNumberOfArguments() + " " + term);
       }
       compile();
-      return compiledPredicateFactory.getPredicate(args);
+      return compiledPredicateFactory.getPredicate(term);
    }
 
    @Override
@@ -310,16 +309,16 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         if (args[argIdx].isImmutable()) {
-            ClauseAction action = map.get(args[argIdx]);
+      public Predicate getPredicate(Term term) {
+         if (term.getArgument(argIdx).isImmutable()) {
+            ClauseAction action = map.get(term.getArgument(argIdx));
             if (action == null) {
-               return PredicateUtils.createFailurePredicate(spyPoint, args);
+               return PredicateUtils.createFailurePredicate(spyPoint, term.getArgs());
             } else {
-               return PredicateUtils.createSingleClausePredicate(action, spyPoint, args);
+               return PredicateUtils.createSingleClausePredicate(action, spyPoint, term.getArgs());
             }
          } else {
-            return createPredicate(args, actions);
+            return createPredicate(term.getArgs(), actions);
          }
       }
 
@@ -363,15 +362,15 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
+      public Predicate getPredicate(Term term) {
          ClauseAction[] data;
-         if (args[argIdx].isImmutable()) {
-            data = index.getMatches(args);
+         if (term.getArgument(argIdx).isImmutable()) {
+            data = index.getMatches(term.getArgs());
          } else {
             data = actions;
          }
 
-         return createPredicate(args, data);
+         return createPredicate(term.getArgs(), data);
       }
 
       @Override
@@ -408,8 +407,8 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return createPredicate(args, index.index(args));
+      public Predicate getPredicate(Term term) {
+         return createPredicate(term.getArgs(), index.index(term.getArgs()));
       }
 
       @Override
@@ -440,9 +439,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
+      public Predicate getPredicate(Term term) {
          // TODO or do: return createPredicate(args, data);
-         return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, args);
+         return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, term.getArgs());
       }
 
       @Override

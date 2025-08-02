@@ -150,10 +150,9 @@ public final class PredSort extends AbstractSingleResultPredicate implements Pre
          this.predicateName = predicateName;
       }
 
-
       @Override
-      public Predicate getPredicate(Term[] args) {
-         boolean result = evaluatePredSort(pf, predicateName, args[1], args[2]);
+      public Predicate getPredicate(Term term) {
+         boolean result = evaluatePredSort(pf, predicateName, term.getArgument(1), term.getArgument(2));
          return PredicateUtils.toPredicate(result);
       }
 

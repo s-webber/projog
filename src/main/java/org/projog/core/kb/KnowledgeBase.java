@@ -24,7 +24,6 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.builtin.kb.AddPredicateFactory;
-import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
 /**
@@ -40,7 +39,7 @@ public final class KnowledgeBase {
     * The {@code pj_add_predicate/2} predicate allows other implementations of {@link PredicateFactory} to be
     * "plugged-in" to a {@code KnowledgeBase} at runtime using Prolog syntax.
     *
-    * @see AddPredicateFactory#evaluate(Term[])
+    * @see AddPredicateFactory
     */
    private static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
 

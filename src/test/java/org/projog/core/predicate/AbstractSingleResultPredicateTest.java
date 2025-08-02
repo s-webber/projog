@@ -20,14 +20,15 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.projog.TermFactory.atom;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class AbstractSingleResultPredicateTest {
@@ -77,10 +78,10 @@ public class AbstractSingleResultPredicateTest {
       };
 
       b.set(true);
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[0]));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Atom("dummy")));
 
       b.set(false);
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[0]));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Atom("dummy")));
    }
 
    @Test
@@ -92,9 +93,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG2}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG2})));
    }
 
    @Test
@@ -106,9 +107,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1})));
    }
 
    @Test
@@ -120,9 +121,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1})));
    }
 
    @Test
@@ -134,14 +135,22 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(new Term[] {ARG1, ARG2, ARG3, ARG4}));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3, ARG4})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(new Term[] {ARG1, ARG1, ARG1, ARG1}));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1, ARG1})));
    }
 
    private void assertIllegalArgumentException(AbstractSingleResultPredicate pf, int numberOfArguments) {
       try {
-         pf.getPredicate(new Term[numberOfArguments]);
+         Term term;
+         if (numberOfArguments == 0) {
+            term = new Atom("dummy");
+         } else {
+            Term[] args = new Term[numberOfArguments];
+            Arrays.fill(args, new Atom("x"));
+            term = Structure.createStructure("dummy", args);
+         }
+         pf.getPredicate(term);
          fail();
       } catch (IllegalArgumentException e) {
          assertEquals("The predicate factory: " + pf.getClass().getName() + " does next accept the number of arguments: " + numberOfArguments, e.getMessage());

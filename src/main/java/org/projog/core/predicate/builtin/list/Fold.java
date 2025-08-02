@@ -179,8 +179,8 @@ public final class Fold extends AbstractPredicateFactory implements Preprocessab
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return getFoldPredicate(pf, action, args[1], args[2], args[3]);
+      public Predicate getPredicate(Term term) {
+         return getFoldPredicate(pf, action, term.getArgument(1), term.getArgument(2), term.getArgument(3));
       }
 
       @Override

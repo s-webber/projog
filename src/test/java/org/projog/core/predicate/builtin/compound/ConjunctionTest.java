@@ -80,7 +80,7 @@ public class ConjunctionTest {
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
       assertFalse(optimised.isRetryable());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
    }
 
    @Test
@@ -95,7 +95,7 @@ public class ConjunctionTest {
       assertFalse(optimised.isAlwaysCutOnBacktrack());
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy));
       Variable variable = sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());
@@ -108,7 +108,7 @@ public class ConjunctionTest {
       Term term = parseTerm("repeat(2), true.");
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
-      Predicate predicate = optimised.getPredicate(term.getArgs());
+      Predicate predicate = optimised.getPredicate(term);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
       assertTrue(optimised.isRetryable());
@@ -129,7 +129,7 @@ public class ConjunctionTest {
       Term term = parseTerm("member(X, [a,b]), Y=X.");
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
-      Predicate predicate = optimised.getPredicate(term.getArgs());
+      Predicate predicate = optimised.getPredicate(term);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
       assertTrue(optimised.isRetryable());
@@ -150,7 +150,7 @@ public class ConjunctionTest {
       Term term = parseTerm("true, repeat(2).");
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
-      Predicate predicate = optimised.getPredicate(term.getArgs());
+      Predicate predicate = optimised.getPredicate(term);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
       assertTrue(optimised.isRetryable());
@@ -169,7 +169,7 @@ public class ConjunctionTest {
       Term term = parseTerm("member(X, [2,3]), repeat(X).");
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
-      Predicate predicate = optimised.getPredicate(term.getArgs());
+      Predicate predicate = optimised.getPredicate(term);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
       assertTrue(optimised.isRetryable());
@@ -189,13 +189,7 @@ public class ConjunctionTest {
    }
 
    @Test
-   @DataProvider(value = {
-               "!,true.",
-               "true,!.",
-               "!,true,!.",
-               "repeat,!.",
-               "repeat,!,true.",
-               "!,repeat,!.",})
+   @DataProvider(value = {"!,true.", "true,!.", "!,true,!.", "repeat,!.", "repeat,!,true.", "!,repeat,!.",})
    public void testIsAlwaysCutOnBacktrack_true(String clause) {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm(clause);

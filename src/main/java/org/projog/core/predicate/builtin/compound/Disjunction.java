@@ -208,8 +208,8 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return new DisjunctionPredicate(pf1, pf2, args[0], args[1]);
+      public Predicate getPredicate(Term term) {
+         return new DisjunctionPredicate(pf1, pf2, term.getArgument(0), term.getArgument(1));
       }
 
       @Override
@@ -230,15 +230,15 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         Term ifThenTerm = args[0];
+      public Predicate getPredicate(Term term) {
+         Term ifThenTerm = term.getArgument(0);
          Term conditionTerm = ifThenTerm.getArgument(0);
-         Predicate conditionPredicate = condition.getPredicate(conditionTerm.getArgs());
+         Predicate conditionPredicate = condition.getPredicate(conditionTerm);
          if (conditionPredicate.evaluate()) {
-            return thenPf.getPredicate(ifThenTerm.getArgument(1).getTerm().getArgs());
+            return thenPf.getPredicate(ifThenTerm.getArgument(1).getTerm());
          } else {
             conditionTerm.backtrack();
-            return elsePf.getPredicate(args[1].getArgs());
+            return elsePf.getPredicate(term.getArgument(1));
          }
       }
 
@@ -288,7 +288,6 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
       private Predicate firstPredicate;
       private Predicate secondPredicate;
 
-
       private DisjunctionPredicate(PredicateFactory pf1, PredicateFactory pf2, Term inputArg1, Term inputArg2) {
          this.pf1 = pf1;
          this.pf2 = pf2;
@@ -320,7 +319,7 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
          if (pf == null) {
             return getPredicates().getPredicate(t.getTerm());
          } else {
-            return pf.getPredicate(t.getTerm().getArgs());
+            return pf.getPredicate(t.getTerm());
          }
       }
 

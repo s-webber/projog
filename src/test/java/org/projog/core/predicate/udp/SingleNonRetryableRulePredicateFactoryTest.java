@@ -23,8 +23,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.projog.TestUtils.array;
 import static org.projog.TermFactory.atom;
+import static org.projog.TestUtils.array;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,12 +38,12 @@ import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.PredicateUtils;
-import org.projog.core.predicate.udp.SingleNonRetryableRulePredicateFactory;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class SingleNonRetryableRulePredicateFactoryTest {
+   private static final String FUNCTOR = "test";
+
    private SpyPoints spyPoints;
    private ClauseAction mockAction;
    private SingleNonRetryableRulePredicateFactory testObject;
@@ -61,7 +61,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
-      SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
+      SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey(FUNCTOR, 3));
 
       this.testObject = new SingleNonRetryableRulePredicateFactory(mockAction, spyPoint);
       assertFalse(testObject.isRetryable());
@@ -79,7 +79,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenReturn(true);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.TRUE, result);
       assertEquals("", listener.result());
@@ -90,7 +90,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenReturn(false);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, result);
       assertEquals("", listener.result());
@@ -101,7 +101,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, result);
       assertEquals("", listener.result());
@@ -114,7 +114,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       when(mockPredicate.evaluate()).thenThrow(exception);
 
       try {
-         testObject.getPredicate(queryArgs);
+         testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
          fail();
       } catch (ProjogException e) {
          assertEquals("Exception processing: test/3", e.getMessage());
@@ -130,7 +130,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenReturn(true);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.TRUE, result);
       assertEquals("CALLtest(a, b, c)EXITtest(a, b, c)", listener.result());
@@ -142,7 +142,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenReturn(false);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, result);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
@@ -153,7 +153,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      Predicate result = testObject.getPredicate(queryArgs);
+      Predicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, result);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
@@ -166,7 +166,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       when(mockPredicate.evaluate()).thenThrow(exception);
 
       try {
-         testObject.getPredicate(queryArgs);
+         testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
          fail();
       } catch (ProjogException e) {
          assertEquals("Exception processing: test/3", e.getMessage());

@@ -32,9 +32,9 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
+import org.projog.core.term.Atom;
 import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /**
  * Tests {@link StaticUserDefinedPredicateFactory}.
@@ -57,7 +57,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    private void assertSingleRuleAlwaysTruePredicate(String term) {
       PredicateFactory pf = getActualPredicateFactory(toTerms(term));
       assertSame(SingleNonRetryableRulePredicateFactory.class, pf.getClass());
-      Predicate p = pf.getPredicate(TermUtils.EMPTY_ARRAY);
+      Predicate p = pf.getPredicate(new Atom("p"));
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(pf.isRetryable());
@@ -84,7 +84,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    private void assertSingleNonRetryableRulePredicateFactory(String term) {
       PredicateFactory pf = getActualPredicateFactory(toTerms(term));
       assertSame(SingleNonRetryableRulePredicateFactory.class, pf.getClass());
-      Predicate p = pf.getPredicate(TermUtils.EMPTY_ARRAY);
+      Predicate p = pf.getPredicate(new Atom("p"));
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(pf.isRetryable());
    }
@@ -104,7 +104,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       // Note that use to return specialised "MultipleRulesAlwaysTruePredicate" object for predicates of this style
       // but now use generic "InterpretedUserDefinedPredicatePredicateFactory" as seemed overly complex to support
       // this special case when it is so rarely used.
-      Predicate p = pf.getPredicate(createArgs(clauses[0]));
+      Predicate p = pf.getPredicate(Structure.createStructure("p", createArgs(clauses[0])));
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertTrue(p.couldReevaluationSucceed());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
@@ -163,7 +163,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    public void testMultipleFactsWithNoArgumentsPredicate() {
       PredicateFactory pf = getActualPredicateFactory("p.", "p.", "p.");
       assertTrue(pf.isRetryable());
-      Predicate p = pf.getPredicate(TermUtils.EMPTY_ARRAY);
+      Predicate p = pf.getPredicate(new Atom("p"));
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertTrue(p.evaluate());
       assertTrue(p.evaluate());
@@ -196,7 +196,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Structure term = structure("p", atom("q"), atom("w"), atom("e"));
       PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
       assertSame(NeverSucceedsPredicateFactory.class, preprocessedPredicateFactory.getClass());
-      assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(term.getArgs()));
+      assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(Structure.createStructure("p", term.getArgs())));
       assertFalse(preprocessedPredicateFactory.isRetryable());
    }
 
@@ -210,7 +210,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    @Test
    public void testInterpretedUserDefinedPredicate() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
-      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(createArgs(3)).getClass());
+      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(Structure.createStructure("p", createArgs(3))).getClass());
       assertTrue(pf.isRetryable());
    }
 

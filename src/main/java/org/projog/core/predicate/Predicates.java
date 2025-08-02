@@ -65,7 +65,7 @@ public class Predicates {
    }
 
    public Predicate getPredicate(Term t) {
-      return getPredicateFactory(t).getPredicate(t.getArgs());
+      return getPredicateFactory(t).getPredicate(t);
    }
 
    /**
@@ -139,8 +139,8 @@ public class Predicates {
       if (!existingUserDefinedPredicateFactory.isDynamic()) {
          throw new ProjogException(
                      "Cannot append to already defined user defined predicate as it is not dynamic. You can set the predicate to dynamic by adding the following line to start of the file that the predicate is defined in:\n?- dynamic("
-                                 + key
-                                 + ").");
+                                   + key
+                                   + ").");
       }
 
       Iterator<ClauseModel> models = userDefinedPredicate.getImplications();

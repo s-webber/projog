@@ -80,7 +80,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
       for (int i = 0; i < firstClauseOriginalTerms.length; i++) {
          Term t = firstClauseOriginalTerms[i].copy(sharedVariables);
-         if (!firstClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate()) {
+         if (!firstClausePredicateFactories[i].getPredicate(t).evaluate()) {
             return false;
          }
       }
@@ -102,7 +102,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
       for (int i = 0; i < secondClauseOriginalTerms.length - 1; i++) {
          Term t = secondClauseOriginalTerms[i].copy(sharedVariables);
-         if (!secondClausePredicateFactories[i].getPredicate(t.getArgs()).evaluate()) {
+         if (!secondClausePredicateFactories[i].getPredicate(t).evaluate()) {
             return false;
          }
       }

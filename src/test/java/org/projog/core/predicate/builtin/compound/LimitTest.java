@@ -60,7 +60,7 @@ public class LimitTest {
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true);
 
@@ -68,7 +68,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term[] queryArgs = new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)};
+      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));
@@ -82,7 +82,7 @@ public class LimitTest {
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(p.evaluate());
 
-      verify(mockPredicateFactory, times(2)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(2)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verify(mockPredicate, times(4)).couldReevaluationSucceed();
       verifyNoMoreInteractions(mockPredicateFactory, mockPredicate);
@@ -99,7 +99,7 @@ public class LimitTest {
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       when(mockPreprocessablePredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true);
 
@@ -107,7 +107,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term[] queryArgs = new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)};
+      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));
@@ -122,7 +122,7 @@ public class LimitTest {
       assertFalse(p.evaluate());
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
-      verify(mockPredicateFactory, times(2)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(2)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verify(mockPredicate, times(4)).couldReevaluationSucceed();
       verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory, mockPredicate);

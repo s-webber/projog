@@ -25,8 +25,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.projog.TestUtils.array;
 import static org.projog.TermFactory.atom;
+import static org.projog.TestUtils.array;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,12 +40,13 @@ import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.SingleRetryableRulePredicateFactory;
 import org.projog.core.predicate.udp.SingleRetryableRulePredicateFactory.RetryableRulePredicate;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class SingleRetryableRulePredicateFactoryTest {
+   private static final String FUNCTOR = "test";
+
    private SpyPoints spyPoints;
    private ClauseAction mockAction;
    private SingleRetryableRulePredicateFactory testObject;
@@ -80,7 +81,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenReturn(true, true, true, false);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertTrue(result.evaluate());
       assertTrue(result.evaluate());
@@ -96,7 +97,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenReturn(false);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertFalse(result.evaluate());
       assertEquals("", listener.result());
@@ -108,7 +109,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(false);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertFalse(result.evaluate());
       assertEquals("", listener.result());
@@ -121,7 +122,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RuntimeException exception = new RuntimeException();
       when(mockPredicate.evaluate()).thenThrow(exception);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
       try {
          result.evaluate();
          fail();
@@ -140,7 +141,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenReturn(true, true, true, false);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertTrue(result.evaluate());
       assertTrue(result.evaluate());
@@ -156,7 +157,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenReturn(false);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertFalse(result.evaluate());
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
@@ -168,7 +169,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       spyPoints.setTraceEnabled(true);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertFalse(result.evaluate());
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());
@@ -181,7 +182,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       RuntimeException exception = new RuntimeException();
       when(mockPredicate.evaluate()).thenThrow(exception);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
       try {
          result.evaluate();
          fail();
@@ -200,7 +201,7 @@ public class SingleRetryableRulePredicateFactoryTest {
       when(mockPredicate.evaluate()).thenReturn(true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true, false);
 
-      RetryableRulePredicate result = testObject.getPredicate(queryArgs);
+      RetryableRulePredicate result = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       // couldReevaluationSucceed will always return true until evaluate is called
       assertTrue(result.couldReevaluationSucceed());

@@ -119,11 +119,11 @@ public final class IfThen extends AbstractPredicateFactory implements Preprocess
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         Predicate conditionPredicate = condition.getPredicate(args[0].getArgs());
+      public Predicate getPredicate(Term term) {
+         Predicate conditionPredicate = condition.getPredicate(term.getArgument(0));
          if (conditionPredicate.evaluate()) {
             // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-            return action.getPredicate(args[1].getTerm().getArgs());
+            return action.getPredicate(term.getArgument(1).getTerm());
          } else {
             return PredicateUtils.FALSE;
          }

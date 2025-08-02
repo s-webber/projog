@@ -25,10 +25,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.structure;
+import static org.projog.TestUtils.ADD_PREDICATE_KEY;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -406,7 +406,7 @@ public class KnowledgeBaseTest {
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
+      public Predicate getPredicate(Term term) {
          throw new UnsupportedOperationException();
       }
 

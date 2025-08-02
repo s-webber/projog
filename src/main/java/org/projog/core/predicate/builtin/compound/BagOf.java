@@ -132,8 +132,8 @@ public final class BagOf extends AbstractPredicateFactory implements Preprocessa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return new BagOfPredicate(pf, args[0], args[1], args[2]);
+      public Predicate getPredicate(Term term) {
+         return new BagOfPredicate(pf, term.getArgument(0), term.getArgument(1), term.getArgument(2));
       }
 
       @Override

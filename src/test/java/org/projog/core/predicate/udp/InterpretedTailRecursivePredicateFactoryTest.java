@@ -28,10 +28,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.InterpretedTailRecursivePredicate;
-import org.projog.core.predicate.udp.InterpretedTailRecursivePredicateFactory;
-import org.projog.core.predicate.udp.TailRecursivePredicateMetaData;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class InterpretedTailRecursivePredicateFactoryTest {
@@ -41,7 +38,7 @@ public class InterpretedTailRecursivePredicateFactoryTest {
    public void testSingleResultQuery() {
       Term arg1 = parseTerm("[a]");
       Term arg2 = parseTerm("[a,b,c]");
-      InterpretedTailRecursivePredicate singleResultPredicate = FACTORY.getPredicate(new Term[] {arg1, arg2});
+      InterpretedTailRecursivePredicate singleResultPredicate = FACTORY.getPredicate(Structure.createStructure("prefix", new Term[] {arg1, arg2}));
 
       assertFalse(singleResultPredicate.couldReevaluationSucceed());
       assertTrue(singleResultPredicate.evaluate());
@@ -51,7 +48,7 @@ public class InterpretedTailRecursivePredicateFactoryTest {
    public void testMultiResultQuery() {
       Term arg1 = parseTerm("X");
       Term arg2 = parseTerm("[a,b,c]");
-      InterpretedTailRecursivePredicate multiResultPredicate = FACTORY.getPredicate(new Term[] {arg1, arg2});
+      InterpretedTailRecursivePredicate multiResultPredicate = FACTORY.getPredicate(Structure.createStructure("prefix", new Term[] {arg1, arg2}));
 
       assertTrue(multiResultPredicate.couldReevaluationSucceed());
       assertTrue(multiResultPredicate.evaluate());

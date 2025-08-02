@@ -18,8 +18,8 @@ package org.projog.core.predicate.udp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
-import static org.projog.TestUtils.array;
 import static org.projog.TermFactory.atom;
+import static org.projog.TestUtils.array;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,9 +30,12 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class NeverSucceedsPredicateFactoryTest {
+   private static final String FUNCTOR = "test";
+
    private SpyPoints spyPoints;
    private NeverSucceedsPredicateFactory testObject;
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
@@ -44,14 +47,14 @@ public class NeverSucceedsPredicateFactoryTest {
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
-      SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
+      SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey(FUNCTOR, 3));
 
       this.testObject = new NeverSucceedsPredicateFactory(spyPoint);
    }
 
    @Test
    public void testGetPredicate_spy_point_disabled() {
-      Predicate predicate = testObject.getPredicate(queryArgs);
+      Predicate predicate = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, predicate);
       assertEquals("", listener.result());
@@ -61,7 +64,7 @@ public class NeverSucceedsPredicateFactoryTest {
    public void testGetPredicate_spy_point_enabled() {
       spyPoints.setTraceEnabled(true);
 
-      Predicate predicate = testObject.getPredicate(queryArgs);
+      Predicate predicate = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, predicate);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());

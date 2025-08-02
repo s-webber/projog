@@ -70,14 +70,14 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
    }
 
    @Override
-   public InterpretedTailRecursivePredicate getPredicate(Term[] args) {
-      return new InterpretedTailRecursivePredicate(spyPoint, args, firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
-                  secondClausePredicateFactories, secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(args));
+   public InterpretedTailRecursivePredicate getPredicate(Term term) {
+      return new InterpretedTailRecursivePredicate(spyPoint, term.getArgs(), firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
+                  secondClausePredicateFactories, secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(term));
    }
 
-   private boolean isRetryable(Term[] args) {
-      for (int i = 0; i < args.length; i++) {
-         if (args[i].isImmutable() && metaData.isSingleResultIfArgumentImmutable(i)) {
+   private boolean isRetryable(Term term) {
+      for (int i = 0; i < term.getNumberOfArguments(); i++) {
+         if (term.getArgument(i).isImmutable() && metaData.isSingleResultIfArgumentImmutable(i)) {
             return false;
          }
       }

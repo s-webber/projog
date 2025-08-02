@@ -31,7 +31,7 @@ public class PredicateFactoryTest {
          }
 
          @Override
-         public Predicate getPredicate(Term[] args) {
+         public Predicate getPredicate(Term term) {
             throw new UnsupportedOperationException();
          }
       };

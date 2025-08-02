@@ -38,13 +38,13 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
    }
 
    @Override
-   public Predicate getPredicate(Term[] args) {
+   public Predicate getPredicate(Term term) {
       instantiatePredicateFactory();
 
       if (actualPredicateFactory == null) {
          return PredicateUtils.FALSE;
       } else {
-         return actualPredicateFactory.getPredicate(args);
+         return actualPredicateFactory.getPredicate(term);
       }
    }
 

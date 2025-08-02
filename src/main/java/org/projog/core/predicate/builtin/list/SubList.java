@@ -133,18 +133,18 @@ p(X) :- atom(X), writeln('rule 3').
  */
 public final class SubList extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
    @Override
-   protected boolean evaluate(Term partiallyAppliedFunction, Term args, Term filteredOutput) {
-      if (isValidArguments(partiallyAppliedFunction, args)) {
+   protected boolean evaluate(Term partiallyAppliedFunction, Term term, Term filteredOutput) {
+      if (isValidArguments(partiallyAppliedFunction, term)) {
          final PredicateFactory pf = getCurriedPredicateFactory(getPredicates(), partiallyAppliedFunction);
-         return evaluateSubList(pf, partiallyAppliedFunction, args, filteredOutput);
+         return evaluateSubList(pf, partiallyAppliedFunction, term, filteredOutput);
       } else {
          return false;
       }
    }
 
-   private static boolean evaluateSubList(PredicateFactory pf, Term partiallyAppliedFunction, Term args, Term filteredOutput) {
+   private static boolean evaluateSubList(PredicateFactory pf, Term partiallyAppliedFunction, Term term, Term filteredOutput) {
       final List<Term> matches = new ArrayList<>();
-      Term next = args;
+      Term next = term;
       while (next.getType() == TermType.LIST) {
          Term arg = next.getArgument(0);
          if (apply(pf, createArguments(partiallyAppliedFunction, arg))) {
@@ -177,10 +177,10 @@ public final class SubList extends AbstractSingleResultPredicate implements Prep
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         Term list = args[1];
+      public Predicate getPredicate(Term term) {
+         Term list = term.getArgument(1);
          if (isList(list)) {
-            return PredicateUtils.toPredicate(evaluateSubList(predicateFactory, args[0], list, args[2]));
+            return PredicateUtils.toPredicate(evaluateSubList(predicateFactory, term.getArgument(0), list, term.getArgument(2)));
          } else {
             return PredicateUtils.FALSE;
          }

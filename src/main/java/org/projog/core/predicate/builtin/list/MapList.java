@@ -363,8 +363,8 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return getMapListPredicate(pf, args);
+      public Predicate getPredicate(Term term) {
+         return getMapListPredicate(pf, term);
       }
 
       @Override
@@ -379,24 +379,24 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
    }
 
    @Override
-   public Predicate getPredicate(Term[] input) {
-      Term partiallyAppliedFunction = input[0];
+   public Predicate getPredicate(Term input) {
+      Term partiallyAppliedFunction = input.getArgument(0);
       if (!isAtomOrStructure(partiallyAppliedFunction)) {
          return PredicateUtils.FALSE;
       }
 
-      final PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, input.length - 1);
+      final PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, input.getNumberOfArguments() - 1);
       return getMapListPredicate(pf, input);
    }
 
-   private static Predicate getMapListPredicate(PredicateFactory pf, Term[] input) {
-      Term partiallyAppliedFunction = input[0];
+   private static Predicate getMapListPredicate(PredicateFactory pf, Term input) {
+      Term partiallyAppliedFunction = input.getArgument(0);
 
       @SuppressWarnings("unchecked")
-      List<Term>[] lists = new List[input.length - 1];
+      List<Term>[] lists = new List[input.getNumberOfArguments() - 1];
       int length = -1;
       for (int i = 0; i < lists.length; i++) {
-         Term t = input[i + 1];
+         Term t = input.getArgument(i + 1);
          if (!t.getType().isVariable()) {
             List<Term> list = toJavaUtilList(t);
             if (list == null) {
@@ -417,7 +417,7 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
          for (int t = 0; t < length; t++) {
             lists[i].add(new Variable());
          }
-         input[i + 1].unify(ListFactory.createList(lists[i]));
+         input.getArgument(i + 1).unify(ListFactory.createList(lists[i]));
       }
       if (length == 0) {
          return PredicateUtils.TRUE;

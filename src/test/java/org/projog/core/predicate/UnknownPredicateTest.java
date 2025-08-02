@@ -28,10 +28,6 @@ import static org.projog.TermFactory.variable;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
-import org.projog.core.predicate.UnknownPredicate;
 import org.projog.core.predicate.udp.InterpretedUserDefinedPredicate;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
@@ -45,20 +41,21 @@ public class UnknownPredicateTest {
    public void testUnknownPredicate() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       PredicateKey key = new PredicateKey(FUNCTOR, 1);
+      Term terms = Structure.createStructure(FUNCTOR, new Term[] {variable()});
 
       // create UnknownPredicate for a not-yet-defined UnknownPredicateTest/1 predicate
       UnknownPredicate e = new UnknownPredicate(kb, key);
       assertTrue(e.isRetryable());
 
       // assert that FAIL returned when UnknownPredicateTest/1 not yet defined
-      assertSame(PredicateUtils.FALSE, e.getPredicate(new Term[] {variable()}));
+      assertSame(PredicateUtils.FALSE, e.getPredicate(terms));
 
       // define UnknownPredicateTest/1
       kb.getPredicates().createOrReturnUserDefinedPredicate(key);
 
       // assert that new InterpretedUserDefinedPredicate is returned once UnknownPredicateTest/1 defined
-      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(new Term[] {variable()}).getClass());
-      assertNotSame(e.getPredicate(new Term[] {variable()}), e.getPredicate(new Term[] {variable()}));
+      assertSame(InterpretedUserDefinedPredicate.class, e.getPredicate(terms).getClass());
+      assertNotSame(e.getPredicate(terms), e.getPredicate(terms));
    }
 
    @Test

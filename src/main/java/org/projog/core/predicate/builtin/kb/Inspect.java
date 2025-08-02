@@ -147,7 +147,7 @@ public final class Inspect extends AbstractPredicateFactory {
    }
 
    @Override
-   protected Predicate getPredicate(Term clauseHead) {
+   protected Predicate getPredicateWithOneArgument(Term clauseHead) {
       return getPredicate(clauseHead, null);
    }
 

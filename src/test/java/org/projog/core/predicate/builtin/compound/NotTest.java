@@ -35,6 +35,7 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -48,7 +49,7 @@ public class NotTest {
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
-      assertSame(PredicateUtils.TRUE, n.getPredicate(copy.getArgs()));
+      assertSame(PredicateUtils.TRUE, n.getPredicate(copy));
       Variable variable = sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());
@@ -76,18 +77,19 @@ public class NotTest {
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
       Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
 
-      verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verifyNoMoreInteractions(mockPredicateFactory, mockPredicate);
    }
@@ -103,19 +105,20 @@ public class NotTest {
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       when(mockPreprocessablePredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
       Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Not$OptimisedNot", optimised.getClass().getName());
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
+      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
-      verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory, mockPredicate);
    }

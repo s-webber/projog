@@ -33,8 +33,8 @@ final class SingleRetryableRulePredicateFactory implements PreprocessablePredica
    }
 
    @Override
-   public RetryableRulePredicate getPredicate(Term[] args) {
-      return new RetryableRulePredicate(clause, spyPoint, args);
+   public RetryableRulePredicate getPredicate(Term term) {
+      return new RetryableRulePredicate(clause, spyPoint, term.getArgs());
    }
 
    @Override

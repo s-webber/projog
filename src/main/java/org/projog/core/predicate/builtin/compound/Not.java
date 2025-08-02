@@ -70,7 +70,7 @@ public final class Not extends AbstractSingleResultPredicate implements Preproce
    }
 
    private static boolean evaluateNot(Term t, PredicateFactory pf) {
-      Predicate p = pf.getPredicate(t.getArgs());
+      Predicate p = pf.getPredicate(t);
       if (!p.evaluate()) {
          t.backtrack();
          return true;

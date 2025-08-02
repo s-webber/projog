@@ -73,7 +73,7 @@ public final class Once extends AbstractSingleResultPredicate implements Preproc
 
       @Override
       protected boolean evaluate(Term arg) {
-         return pf.getPredicate(arg.getArgs()).evaluate();
+         return pf.getPredicate(arg).evaluate();
       }
    }
 }

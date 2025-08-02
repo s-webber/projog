@@ -45,17 +45,7 @@ public final class QueryResult {
     * @see QueryStatement#executeQuery()
     */
    QueryResult(PredicateFactory predicateFactory, Term query, Map<String, Variable> variables) {
-      int numArgs = query.getNumberOfArguments();
-      if (numArgs == 0) {
-         this.predicate = predicateFactory.getPredicate(TermUtils.EMPTY_ARRAY);
-      } else {
-         Term[] args = new Term[numArgs];
-         for (int i = 0; i < args.length; i++) {
-            args[i] = query.getArgument(i).getTerm();
-         }
-         this.predicate = predicateFactory.getPredicate(args);
-      }
-
+      this.predicate = predicateFactory.getPredicate(query.getTerm());
       this.variables = variables;
    }
 

@@ -90,7 +90,7 @@ public final class RetractAll extends AbstractSingleResultPredicate {
 
    @Override
    protected boolean evaluate(Term t) {
-      Predicate p = retractPredicateFactory.getPredicate(t);
+      Predicate p = retractPredicateFactory.getPredicateWithOneArgument(t);
       while (p.evaluate()) {
          t.backtrack();
       }

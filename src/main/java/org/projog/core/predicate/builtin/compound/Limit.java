@@ -134,8 +134,7 @@ p(d(5),5).
  * <p>
  * Evaluates the goal represented by <code>X</code> for a maximum of <code>N</code> attempts.
  */
-public final class Limit extends AbstractPredicateFactory implements PreprocessablePredicateFactory
-{
+public final class Limit extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    public Predicate getPredicate(Term maxAttempts, Term goal) {
       PredicateFactory pf = getPredicates().getPredicateFactory(goal);
@@ -143,7 +142,7 @@ public final class Limit extends AbstractPredicateFactory implements Preprocessa
    }
 
    private static Predicate getLimitPredicate(PredicateFactory pf, Term maxAttempts, Term goal) {
-      Predicate p = pf.getPredicate(goal.getArgs());
+      Predicate p = pf.getPredicate(goal);
       long n = castToNumeric(maxAttempts).getLong();
       return new LimitPredicate(p, n);
    }
@@ -166,8 +165,8 @@ public final class Limit extends AbstractPredicateFactory implements Preprocessa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return getLimitPredicate(pf, args[0], args[1]);
+      public Predicate getPredicate(Term term) {
+         return getLimitPredicate(pf, term.getArgument(0), term.getArgument(1));
       }
 
       @Override

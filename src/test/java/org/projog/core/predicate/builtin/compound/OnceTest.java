@@ -57,18 +57,19 @@ public class OnceTest {
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
       Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
 
-      verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verifyNoMoreInteractions(mockPredicateFactory, mockPredicate);
    }
@@ -84,19 +85,20 @@ public class OnceTest {
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       when(mockPreprocessablePredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg.getArgs())).thenReturn(mockPredicate);
+      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
       Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(new Term[] {queryArg}));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(new Term[] {queryArg}));
+      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
+      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
 
       verify(mockPreprocessablePredicateFactory).preprocess(queryArg);
-      verify(mockPredicateFactory, times(3)).getPredicate(queryArg.getArgs());
+      verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory, mockPredicate);
    }

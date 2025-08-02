@@ -15,8 +15,6 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import static org.projog.core.term.TermUtils.backtrack;
-
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
@@ -69,7 +67,7 @@ public class PartialApplicationUtils {
    }
 
    // TODO have overloaded version that avoids varargs
-   public static Term[] createArguments(Term partiallyAppliedFunction, Term... extraArguments) {
+   public static Term createArguments(Term partiallyAppliedFunction, Term... extraArguments) {
       int originalNumArgs = partiallyAppliedFunction.getNumberOfArguments();
       Term[] result = new Term[originalNumArgs + extraArguments.length];
 
@@ -81,22 +79,22 @@ public class PartialApplicationUtils {
          result[originalNumArgs + i] = extraArguments[i].getTerm();
       }
 
-      return result;
+      return Structure.createStructure(partiallyAppliedFunction.getName(), result);
    }
 
-   public static boolean apply(PredicateFactory pf, Term[] args) {
-      Predicate p = pf.getPredicate(args);
+   public static boolean apply(PredicateFactory pf, Term term) {
+      Predicate p = pf.getPredicate(term);
       if (p.evaluate()) {
          return true;
       } else {
-         backtrack(args);
+         term.backtrack();
          return false;
       }
    }
 
    public static Predicate getPredicate(PredicateFactory pf, Term action, Term... args) {
-      if (action.getNumberOfArguments() == 0) {
-         return pf.getPredicate(args);
+      if (args.length == 0) {
+         return pf.getPredicate(action);
       } else {
          return pf.getPredicate(createArguments(action, args));
       }

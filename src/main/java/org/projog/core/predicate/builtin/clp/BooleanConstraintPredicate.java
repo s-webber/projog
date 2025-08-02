@@ -161,11 +161,11 @@ public final class BooleanConstraintPredicate implements PredicateFactory, Const
    }
 
    @Override
-   public Predicate getPredicate(Term[] args) {
+   public Predicate getPredicate(Term term) {
       Set<ClpVariable> vars = new HashSet<>();
-      Constraint[] constraints = new Constraint[args.length];
-      for (int i = 0; i < args.length; i++) {
-         constraints[i] = toConstraint(args[i], vars);
+      Constraint[] constraints = new Constraint[term.getNumberOfArguments()];
+      for (int i = 0; i < term.getNumberOfArguments(); i++) {
+         constraints[i] = toConstraint(term.getArgument(i), vars);
       }
       Constraint rule = constraintGenerator.apply(constraints);
       for (ClpVariable c : vars) {

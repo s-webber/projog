@@ -127,21 +127,17 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
    private KnowledgeBase knowledgeBase;
 
    @Override
-   public Predicate getPredicate(Term[] args) {
-      Term goal = args[0];
-      if (args.length == 1) {
-         return getPredicate(goal);
+   public Predicate getPredicate(Term term) {
+      Term goal = term.getArgument(0);
+      if (term.getNumberOfArguments() == 1) {
+         return knowledgeBase.getPredicates().getPredicate(goal);
       } else {
          Term[] goalArgs = goal.getArgs();
-         Term[] callArgs = Arrays.copyOf(goalArgs, goalArgs.length + args.length - 1);
-         System.arraycopy(args, 1, callArgs, goalArgs.length, args.length - 1);
+         Term[] callArgs = Arrays.copyOf(goalArgs, goalArgs.length + term.getNumberOfArguments() - 1);
+         System.arraycopy(term.getArgs(), 1, callArgs, goalArgs.length, term.getNumberOfArguments() - 1);
          Term target = Structure.createStructure(goal.getName(), callArgs);
-         return getPredicate(target);
+         return knowledgeBase.getPredicates().getPredicate(target);
       }
-   }
-
-   private Predicate getPredicate(Term arg) {
-      return knowledgeBase.getPredicates().getPredicate(arg);
    }
 
    @Override

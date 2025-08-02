@@ -31,8 +31,7 @@ import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -141,35 +140,35 @@ public class DynamicUserDefinedPredicateFactoryTest {
       addLast(dp, "b");
       addLast(dp, "c");
 
-      assertTrue(dp.getPredicate(new Term[] {atom("a")}).evaluate());
-      assertTrue(dp.getPredicate(new Term[] {atom("b")}).evaluate());
-      assertTrue(dp.getPredicate(new Term[] {atom("c")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("z")}).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("a")})).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("b")})).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("c")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("z")})).evaluate());
 
       Iterator<ClauseModel> itr = dp.getImplications();
       itr.next();
       itr.remove();
 
-      assertFalse(dp.getPredicate(new Term[] {atom("a")}).evaluate());
-      assertTrue(dp.getPredicate(new Term[] {atom("b")}).evaluate());
-      assertTrue(dp.getPredicate(new Term[] {atom("c")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("z")}).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("a")})).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("b")})).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("c")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("z")})).evaluate());
 
       itr.next();
       itr.remove();
 
-      assertFalse(dp.getPredicate(new Term[] {atom("a")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("b")}).evaluate());
-      assertTrue(dp.getPredicate(new Term[] {atom("c")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("z")}).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("a")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("b")})).evaluate());
+      assertTrue(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("c")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("z")})).evaluate());
 
       itr.next();
       itr.remove();
 
-      assertFalse(dp.getPredicate(new Term[] {atom("a")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("b")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("c")}).evaluate());
-      assertFalse(dp.getPredicate(new Term[] {atom("z")}).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("a")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("b")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("c")})).evaluate());
+      assertFalse(dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, new Term[] {atom("z")})).evaluate());
 
       assertFalse(dp.getImplications().hasNext());
    }
@@ -209,7 +208,7 @@ public class DynamicUserDefinedPredicateFactoryTest {
       for (String d : data) {
          Term inputArg = atom(d);
          Term[] args = new Term[] {inputArg};
-         Predicate e = dp.getPredicate(args);
+         Predicate e = dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, args));
          assertFalse(e.couldReevaluationSucceed());
          assertTrue(e.evaluate());
          assertSame(inputArg, args[0]);
@@ -218,7 +217,7 @@ public class DynamicUserDefinedPredicateFactoryTest {
       // test evaluate with variable as argument
       Term inputArg = variable();
       Term[] args = new Term[] {inputArg};
-      Predicate e = dp.getPredicate(args);
+      Predicate e = dp.getPredicate(Structure.createStructure(TEST_PREDICATE_NAME, args));
       assertTrue(e.couldReevaluationSucceed());
       for (String d : data) {
          assertTrue(e.evaluate());

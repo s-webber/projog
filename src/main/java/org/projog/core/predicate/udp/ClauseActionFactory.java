@@ -119,7 +119,7 @@ final class ClauseActionFactory {
          }
 
          Term antecedant = model.getAntecedent().copy(sharedVariables);
-         return kb.getPredicates().getPredicateFactory(antecedant).getPredicate(antecedant.getArgs());
+         return kb.getPredicates().getPredicateFactory(antecedant).getPredicate(antecedant);
       }
 
       @Override
@@ -189,9 +189,9 @@ final class ClauseActionFactory {
       public Predicate getPredicate(Term[] input) {
          Term antecedent = model.getAntecedent();
          if (antecedent.isImmutable()) {
-            return pf.getPredicate(antecedent.getArgs());
+            return pf.getPredicate(antecedent);
          } else {
-            return pf.getPredicate(TermUtils.copy(antecedent.getArgs()));
+            return pf.getPredicate(antecedent.copy(new HashMap<>()));
          }
       }
 
@@ -276,9 +276,9 @@ final class ClauseActionFactory {
 
          Term antecedent = model.getAntecedent();
          if (antecedent.isImmutable()) {
-            return pf.getPredicate(antecedent.getArgs());
+            return pf.getPredicate(antecedent);
          } else {
-            return pf.getPredicate(TermUtils.copy(antecedent.getArgs()));
+            return pf.getPredicate(antecedent.copy(new HashMap<>()));
          }
       }
 
@@ -366,14 +366,9 @@ final class ClauseActionFactory {
 
          Term antecedent = model.getAntecedent();
          if (antecedent.isImmutable()) {
-            return pf.getPredicate(antecedent.getArgs());
+            return pf.getPredicate(antecedent);
          } else {
-            Term[] originalAntecedentArgs = antecedent.getArgs();
-            Term[] copyAntecedentArgs = new Term[originalAntecedentArgs.length];
-            for (int i = 0; i < originalAntecedentArgs.length; i++) {
-               copyAntecedentArgs[i] = originalAntecedentArgs[i].copy(sharedVariables);
-            }
-            return pf.getPredicate(copyAntecedentArgs);
+            return pf.getPredicate(antecedent.copy(sharedVariables));
          }
       }
 

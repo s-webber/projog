@@ -149,8 +149,8 @@ public final class SetOf extends AbstractPredicateFactory implements Preprocessa
       }
 
       @Override
-      public Predicate getPredicate(Term[] args) {
-         return new SetOfPredicate(pf, args[0], args[1], args[2]);
+      public Predicate getPredicate(Term term) {
+         return new SetOfPredicate(pf, term.getArgument(0), term.getArgument(1), term.getArgument(2));
       }
 
       @Override

@@ -20,10 +20,11 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.projog.TermFactory.atom;
 
+import java.util.Arrays;
+
 import org.junit.Test;
-import org.projog.core.predicate.AbstractPredicateFactory;
-import org.projog.core.predicate.Predicate;
 import org.projog.core.term.Atom;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class AbstractPredicateFactoryTest {
@@ -56,7 +57,7 @@ public class AbstractPredicateFactoryTest {
          }
 
          @Override
-         protected Predicate getPredicate(Term t) {
+         protected Predicate getPredicateWithOneArgument(Term t) {
             assertSame(arg1, t);
             return oneArgPredicate;
          }
@@ -85,11 +86,11 @@ public class AbstractPredicateFactoryTest {
          }
       };
 
-      assertSame(noArgPredicate, pf.getPredicate(new Term[0]));
-      assertSame(oneArgPredicate, pf.getPredicate(new Term[] {arg1}));
-      assertSame(twoArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2}));
-      assertSame(threeArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2, arg3}));
-      assertSame(fourArgsPredicate, pf.getPredicate(new Term[] {arg1, arg2, arg3, arg4}));
+      assertSame(noArgPredicate, pf.getPredicate(new Atom("dummy")));
+      assertSame(oneArgPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1})));
+      assertSame(twoArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2})));
+      assertSame(threeArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2, arg3})));
+      assertSame(fourArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2, arg3, arg4})));
 
       assertIllegalArgumentException(pf, 5);
    }
@@ -110,9 +111,19 @@ public class AbstractPredicateFactoryTest {
 
    private void assertIllegalArgumentException(AbstractPredicateFactory pf, int numberOfArguments) {
       try {
-         pf.getPredicate(new Term[numberOfArguments]);
+         Term term;
+         if (numberOfArguments == 0) {
+            term = new Atom("dummy");
+         } else {
+            Term[] args = new Term[numberOfArguments];
+            Arrays.fill(args, new Atom("x"));
+            term = Structure.createStructure("dummy", args);
+         }
+         pf.getPredicate(term);
          fail();
-      } catch (IllegalArgumentException e) {
+      } catch (
+
+      IllegalArgumentException e) {
          assertEquals("The predicate factory: " + pf.getClass().getName() + " does next accept the number of arguments: " + numberOfArguments, e.getMessage());
       }
    }

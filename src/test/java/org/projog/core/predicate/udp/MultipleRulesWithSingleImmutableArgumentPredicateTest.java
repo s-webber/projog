@@ -33,9 +33,7 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.SucceedsNeverPredicate;
 import org.projog.core.predicate.SucceedsOncePredicate;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.InterpretedUserDefinedPredicate;
-import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
@@ -62,26 +60,27 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    @Test
    public void testSuceedsNever() {
-      assertSame(SucceedsNeverPredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("z")}));
+      assertSame(SucceedsNeverPredicate.SINGLETON, testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("z")})));
    }
 
    @Test
    public void testSucceedsOnce() {
-      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("a")}));
-      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("d")}));
-      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("e")}));
-      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(new Term[] {atom("f")}));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("a")})));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("d")})));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("e")})));
+      assertSame(SucceedsOncePredicate.SINGLETON, testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("f")})));
    }
 
    @Test
    public void testSucceedsMany() {
       assertSucceedsMany(atom("b"), 2);
       assertSucceedsMany(atom("c"), 5);
-      assertNotSame(testObject.getPredicate(new Term[] {atom("b")}), testObject.getPredicate(new Term[] {atom("b")}));
+      assertNotSame(testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("b")})),
+                  testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("b")})));
    }
 
    private void assertSucceedsMany(Term arg, int expectedSuccesses) {
-      Predicate p = testObject.getPredicate(new Term[] {arg});
+      Predicate p = testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {arg}));
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass()); // TODO add assertClass to TestUtils
       for (int i = 0; i < expectedSuccesses; i++) {
          assertTrue(p.couldReevaluationSucceed());
@@ -97,7 +96,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(new Term[] {atom("z")});
+      Predicate p = testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("z")}));
       assertFalse(p.evaluate());
       assertSame(SucceedsNeverPredicate.class, p.getClass());
       assertEquals("CALLtest(z)FAILtest(z)", o.result());
@@ -110,7 +109,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(new Term[] {atom("a")});
+      Predicate p = testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("a")}));
       assertTrue(p.evaluate());
       assertFalse(p.couldReevaluationSucceed());
       assertSame(SucceedsOncePredicate.class, p.getClass());
@@ -124,7 +123,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
       kb.getSpyPoints().setTraceEnabled(true);
 
-      Predicate p = testObject.getPredicate(new Term[] {atom("c")});
+      Predicate p = testObject.getPredicate(Structure.createStructure(FUNCTOR, new Term[] {atom("c")}));
       assertTrue(p.evaluate());
       assertTrue(p.couldReevaluationSucceed());
       assertTrue(p.evaluate());

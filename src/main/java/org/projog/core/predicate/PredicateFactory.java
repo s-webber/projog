@@ -45,7 +45,7 @@ public interface PredicateFactory {
     * @return Predicate to be used in the evaluation of the goal
     * @see Predicate#evaluate()
     */
-   Predicate getPredicate(Term[] args);
+   Predicate getPredicate(Term term);
 
    /**
     * Should instances of this implementation be re-evaluated when backtracking?

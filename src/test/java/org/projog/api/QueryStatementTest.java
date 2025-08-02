@@ -194,14 +194,15 @@ public class QueryStatementTest {
 
    @Test
    public void testExecuteOnce() {
+      Atom term = new Atom("mock");
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      when(mockPredicateFactory.getPredicate(new Term[0])).thenReturn(PredicateUtils.TRUE);
-      kb.getPredicates().addPredicateFactory(new PredicateKey("mock", 0), mockPredicateFactory);
+      when(mockPredicateFactory.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(term), mockPredicateFactory);
 
       QueryStatement s = new QueryStatement(kb, "repeat, mock.");
       s.executeOnce();
 
-      verify(mockPredicateFactory).getPredicate(new Term[0]);
+      verify(mockPredicateFactory).getPredicate(term);
       verifyNoMoreInteractions(mockPredicateFactory);
    }
 

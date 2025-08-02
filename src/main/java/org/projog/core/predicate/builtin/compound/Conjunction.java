@@ -115,7 +115,7 @@ p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
 public final class Conjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    protected Predicate getPredicate(Term arg1, Term arg2) {
-      Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1.getArgs());
+      Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1);
       if (firstPredicate.evaluate()) {
          return new ConjunctionPredicate(firstPredicate, getPredicates().getPredicateFactory(arg2), arg2);
       } else {
@@ -151,7 +151,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
 
       @Override
       protected Predicate getPredicate(Term arg1, Term arg2) {
-         Predicate firstPredicate = firstPredicateFactory.getPredicate(arg1.getArgs());
+         Predicate firstPredicate = firstPredicateFactory.getPredicate(arg1);
          if (firstPredicate.evaluate()) {
             return new ConjunctionPredicate(firstPredicate, secondPredicateFactory, arg2);
          } else {
@@ -182,7 +182,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
 
       @Override
       protected boolean evaluate(Term arg1, Term arg2) {
-         return firstPredicateFactory.getPredicate(arg1.getArgs()).evaluate() && secondPredicateFactory.getPredicate(arg2.getTerm().getArgs()).evaluate();
+         return firstPredicateFactory.getPredicate(arg1).evaluate() && secondPredicateFactory.getPredicate(arg2.getTerm()).evaluate();
       }
    }
 
@@ -204,7 +204,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
          do {
             if (secondPredicate == null) {
                copySecondArgument = originalSecondArgument.getTerm();
-               secondPredicate = secondPredicateFactory.getPredicate(copySecondArgument.getArgs());
+               secondPredicate = secondPredicateFactory.getPredicate(copySecondArgument);
                if (secondPredicate.evaluate()) {
                   return true;
                }

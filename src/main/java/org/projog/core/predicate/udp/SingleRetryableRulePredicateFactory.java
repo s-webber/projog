@@ -61,27 +61,27 @@ final class SingleRetryableRulePredicateFactory implements PreprocessablePredica
          try {
             if (p == null) {
                if (isSpyPointEnabled) {
-                  spyPoint.logCall(this, query.getArgs());
+                  spyPoint.logCall(this, query);
                }
                p = clause.getPredicate(query);
             } else if (isSpyPointEnabled) {
-               spyPoint.logRedo(this, query.getArgs());
+               spyPoint.logRedo(this, query);
             }
 
             if (p.evaluate()) { // TODO p.couldReevaluationSucceed() &&
                if (isSpyPointEnabled) {
-                  spyPoint.logExit(this, query.getArgs(), clause.getModel());
+                  spyPoint.logExit(this, query, clause.getModel());
                }
                return true;
             } else {
                if (isSpyPointEnabled) {
-                  spyPoint.logFail(this, query.getArgs());
+                  spyPoint.logFail(this, query);
                }
                return false;
             }
          } catch (CutException e) {
             if (isSpyPointEnabled) {
-               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query);
             }
             return false;
          } catch (ProjogException pe) {

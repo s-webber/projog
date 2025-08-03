@@ -43,8 +43,8 @@ public final class PredicateUtils {
 
    static Predicate createFailurePredicate(SpyPoint spyPoint, Term query) {
       if (spyPoint.isEnabled()) {
-         spyPoint.logCall(PredicateUtils.class, query.getArgs());
-         spyPoint.logFail(PredicateUtils.class, query.getArgs());
+         spyPoint.logCall(PredicateUtils.class, query);
+         spyPoint.logFail(PredicateUtils.class, query);
       }
       return PredicateUtils.FALSE;
    }

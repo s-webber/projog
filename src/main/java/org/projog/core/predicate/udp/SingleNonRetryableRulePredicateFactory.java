@@ -40,14 +40,14 @@ final class SingleNonRetryableRulePredicateFactory implements PreprocessablePred
    static Predicate evaluateClause(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term query) {
       try {
          if (spyPoint.isEnabled()) {
-            spyPoint.logCall(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
+            spyPoint.logCall(SingleNonRetryableRulePredicateFactory.class, query);
 
             final boolean result = clause.getPredicate(query).evaluate();
 
             if (result) {
-               spyPoint.logExit(SingleNonRetryableRulePredicateFactory.class, query.getArgs(), clause.getModel());
+               spyPoint.logExit(SingleNonRetryableRulePredicateFactory.class, query, clause.getModel());
             } else {
-               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query);
             }
 
             return PredicateUtils.toPredicate(result);
@@ -56,7 +56,7 @@ final class SingleNonRetryableRulePredicateFactory implements PreprocessablePred
          }
       } catch (CutException e) {
          if (spyPoint.isEnabled()) {
-            spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
+            spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query);
          }
          return PredicateUtils.FALSE;
       } catch (ProjogException pe) {

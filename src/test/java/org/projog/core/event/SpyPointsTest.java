@@ -34,6 +34,7 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory;
 import org.projog.core.term.EmptyList;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -201,19 +202,19 @@ public class SpyPointsTest {
       // make a number of log calls to the spy point -
       // the observer should not be updated with any of them as the spy point is not set
       assertFalse(sp.isSet());
-      sp.logCall(this, new Term[] {atom("a")});
-      sp.logExit(this, new Term[] {atom("b")}, 1);
-      sp.logFail(this, new Term[] {atom("c")});
-      sp.logRedo(this, new Term[] {atom("d")});
+      sp.logCall(this, Structure.createStructure("test", new Term[] {atom("a")}));
+      sp.logExit(this, Structure.createStructure("test", new Term[] {atom("b")}), 1);
+      sp.logFail(this, Structure.createStructure("test", new Term[] {atom("c")}));
+      sp.logRedo(this, Structure.createStructure("test", new Term[] {atom("d")}));
       assertTrue(listener.isEmpty());
 
       // set the spy point and then make a number of log calls to the spy point -
       // the observer should now be updated with each call in the order they are made
       testObject.setSpyPoint(key, true);
-      sp.logCall(this, new Term[] {atom("z")});
-      sp.logExit(this, new Term[] {list(atom("a"), variable("X"))}, 0);
-      sp.logFail(this, new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))});
-      sp.logRedo(this, new Term[] {new Variable()});
+      sp.logCall(this, Structure.createStructure("test", new Term[] {atom("z")}));
+      sp.logExit(this, Structure.createStructure("test", new Term[] {list(atom("a"), variable("X"))}), 0);
+      sp.logFail(this, Structure.createStructure("test", new Term[] {structure("c", EmptyList.EMPTY_LIST, atom("z"), integerNumber(1))}));
+      sp.logRedo(this, Structure.createStructure("test", new Term[] {new Variable()}));
       assertEquals(4, listener.size());
       assertProjogEvent(listener.get(0), "CALL", "test(z)");
       assertProjogEvent(listener.get(1), "EXIT", "test([a,X])");

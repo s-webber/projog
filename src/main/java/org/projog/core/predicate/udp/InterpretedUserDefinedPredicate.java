@@ -70,12 +70,12 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
       try {
          if (retryCurrentClauseAction) {
             if (debugEnabled) {
-               spyPoint.logRedo(this, query.getArgs());
+               spyPoint.logRedo(this, query);
             }
             if (currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, query.getArgs(), currentClause.getModel());
+                  spyPoint.logExit(this, query, currentClause.getModel());
                }
                return true;
             }
@@ -84,11 +84,11 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
             query.backtrack();
          } else if (currentClause == null) {
             if (debugEnabled) {
-               spyPoint.logCall(this, query.getArgs());
+               spyPoint.logCall(this, query);
             }
          } else {
             if (debugEnabled) {
-               spyPoint.logRedo(this, query.getArgs());
+               spyPoint.logRedo(this, query);
             }
             query.backtrack();
          }
@@ -99,7 +99,7 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
             if (currentPredicate != null && currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, query.getArgs(), currentClause.getModel());
+                  spyPoint.logExit(this, query, currentClause.getModel());
                }
                return true;
             } else {
@@ -108,12 +108,12 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
             }
          }
          if (debugEnabled) {
-            spyPoint.logFail(this, query.getArgs());
+            spyPoint.logFail(this, query);
          }
          return false;
       } catch (CutException e) {
          if (debugEnabled) {
-            spyPoint.logFail(this, query.getArgs());
+            spyPoint.logFail(this, query);
          }
          return false;
       } catch (ProjogException pe) {

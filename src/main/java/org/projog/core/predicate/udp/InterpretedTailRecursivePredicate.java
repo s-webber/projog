@@ -20,6 +20,8 @@ import java.util.Map;
 
 import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.term.Atom;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -140,28 +142,37 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    @Override
    protected void logCall() {
       if (isSpyPointEnabled) {
-         spyPoint.logCall(this, currentQueryArgs);
+         spyPoint.logCall(this, createTermForSpyPoint());
       }
    }
 
    @Override
    protected void logRedo() {
       if (isSpyPointEnabled) {
-         spyPoint.logCall(this, currentQueryArgs);
+         spyPoint.logCall(this, createTermForSpyPoint());
       }
    }
 
    @Override
    protected void logExit() {
       if (isSpyPointEnabled) {
-         spyPoint.logExit(this, currentQueryArgs, 1);
+         spyPoint.logExit(this, createTermForSpyPoint(), 1);
       }
    }
 
    @Override
    protected void logFail() {
       if (isSpyPointEnabled) {
-         spyPoint.logFail(this, currentQueryArgs);
+         spyPoint.logFail(this, createTermForSpyPoint());
+      }
+   }
+
+   private Term createTermForSpyPoint() { // TODO avoid need to create new term for each spypoint event
+      String name = spyPoint.getPredicateKey().getName();
+      if (currentQueryArgs.length == 0) {
+         return new Atom(name);
+      } else {
+         return Structure.createStructure(name, currentQueryArgs);
       }
    }
 

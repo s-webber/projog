@@ -16,6 +16,7 @@
 package org.projog.core.event;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -23,10 +24,8 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
-import org.projog.core.term.TermUtils;
 
 /**
  * Collection of spy points.
@@ -115,26 +114,26 @@ public final class SpyPoints {
       }
 
       /** Notifies listeners of a first attempt to evaluate a goal. */
-      public void logCall(Object source, Term[] args) {
+      public void logCall(Object source, Term term) {
          if (isEnabled() == false) {
             return;
          }
 
-         projogListeners.notifyCall(new SpyPointEvent(key, args, source));
+         projogListeners.notifyCall(new SpyPointEvent(key, term, source));
       }
 
       /** Notifies listeners of an attempt to re-evaluate a goal. */
-      public void logRedo(Object source, Term[] args) {
+      public void logRedo(Object source, Term term) {
          if (isEnabled() == false) {
             return;
          }
 
-         projogListeners.notifyRedo(new SpyPointEvent(key, args, source));
+         projogListeners.notifyRedo(new SpyPointEvent(key, term, source));
       }
 
       /** Notifies listeners of that an attempt to evaluate a goal has succeeded. */
       @Deprecated
-      public void logExit(Object source, Term[] args, int clauseNumber) {
+      public void logExit(Object source, Term term, int clauseNumber) {
          ClauseModel clauseModel;
          if (clauseNumber != -1) {
             Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = kb.getPredicates().getUserDefinedPredicates();
@@ -145,36 +144,36 @@ public final class SpyPoints {
             clauseModel = null;
          }
 
-         logExit(source, args, clauseModel);
+         logExit(source, term, clauseModel);
       }
 
       /** Notifies listeners of that an attempt to evaluate a goal has succeeded. */
-      public void logExit(Object source, Term[] args, ClauseModel clause) {
+      public void logExit(Object source, Term term, ClauseModel clause) {
          if (isEnabled() == false) {
             return;
          }
 
-         projogListeners.notifyExit(new SpyPointExitEvent(key, args, source, clause));
+         projogListeners.notifyExit(new SpyPointExitEvent(key, term, source, clause));
       }
 
       /** Notifies listeners of that an attempt to evaluate a goal has failed. */
-      public void logFail(Object source, Term[] args) {
+      public void logFail(Object source, Term term) {
          if (isEnabled() == false) {
             return;
          }
 
-         projogListeners.notifyFail(new SpyPointEvent(key, args, source));
+         projogListeners.notifyFail(new SpyPointEvent(key, term, source));
       }
    }
 
    public class SpyPointEvent {
       private final PredicateKey key;
-      private final Term[] args;
+      private final Term term;
       private final Object source;
 
-      private SpyPointEvent(PredicateKey key, Term[] args, Object source) {
+      private SpyPointEvent(PredicateKey key, Term term, Object source) {
          this.key = key;
-         this.args = TermUtils.copy(args);
+         this.term = term.isImmutable() ? term : term.copy(new HashMap<>());
          this.source = source;
       }
 
@@ -183,12 +182,7 @@ public final class SpyPoints {
       }
 
       public String getFormattedTerm() {
-         if (args.length == 0) {
-            return key.getName();
-         } else {
-            Term term = Structure.createStructure(key.getName(), args);
-            return termFormatter.formatTerm(term);
-         }
+         return termFormatter.formatTerm(term);
       }
 
       public int getSourceId() {
@@ -204,8 +198,8 @@ public final class SpyPoints {
    public class SpyPointExitEvent extends SpyPointEvent {
       private final ClauseModel clauseModel;
 
-      private SpyPointExitEvent(PredicateKey key, Term[] args, Object source, ClauseModel clauseModel) {
-         super(key, args, source);
+      private SpyPointExitEvent(PredicateKey key, Term term, Object source, ClauseModel clauseModel) {
+         super(key, term, source);
          this.clauseModel = clauseModel;
       }
 

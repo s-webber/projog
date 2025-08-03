@@ -22,7 +22,6 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /**
  * Represents a user defined predicate.
@@ -32,17 +31,17 @@ import org.projog.core.term.TermUtils;
 public final class InterpretedUserDefinedPredicate implements Predicate {
    private final Iterator<ClauseAction> clauseActions;
    private final SpyPoints.SpyPoint spyPoint;
-   private final Term[] queryArgs;
+   private final Term query;
    private final boolean debugEnabled;
 
    private ClauseAction currentClause;
    private Predicate currentPredicate;
    private boolean retryCurrentClauseAction;
 
-   public InterpretedUserDefinedPredicate(Iterator<ClauseAction> clauseActions, SpyPoints.SpyPoint spyPoint, Term[] queryArgs) {
+   public InterpretedUserDefinedPredicate(Iterator<ClauseAction> clauseActions, SpyPoints.SpyPoint spyPoint, Term query) {
       this.clauseActions = clauseActions;
       this.spyPoint = spyPoint;
-      this.queryArgs = queryArgs;
+      this.query = query;
       this.debugEnabled = spyPoint.isEnabled();
    }
 
@@ -71,50 +70,50 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
       try {
          if (retryCurrentClauseAction) {
             if (debugEnabled) {
-               spyPoint.logRedo(this, queryArgs);
+               spyPoint.logRedo(this, query.getArgs());
             }
             if (currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, queryArgs, currentClause.getModel());
+                  spyPoint.logExit(this, query.getArgs(), currentClause.getModel());
                }
                return true;
             }
             // attempt at retrying has failed so discard it
             retryCurrentClauseAction = false;
-            TermUtils.backtrack(queryArgs);
+            query.backtrack();
          } else if (currentClause == null) {
             if (debugEnabled) {
-               spyPoint.logCall(this, queryArgs);
+               spyPoint.logCall(this, query.getArgs());
             }
          } else {
             if (debugEnabled) {
-               spyPoint.logRedo(this, queryArgs);
+               spyPoint.logRedo(this, query.getArgs());
             }
-            TermUtils.backtrack(queryArgs);
+            query.backtrack();
          }
          // cycle though all rules until none left
          while (clauseActions.hasNext()) {
             currentClause = clauseActions.next();
-            currentPredicate = currentClause.getPredicate(queryArgs);
+            currentPredicate = currentClause.getPredicate(query);
             if (currentPredicate != null && currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
                if (debugEnabled) {
-                  spyPoint.logExit(this, queryArgs, currentClause.getModel());
+                  spyPoint.logExit(this, query.getArgs(), currentClause.getModel());
                }
                return true;
             } else {
                retryCurrentClauseAction = false;
-               TermUtils.backtrack(queryArgs);
+               query.backtrack();
             }
          }
          if (debugEnabled) {
-            spyPoint.logFail(this, queryArgs);
+            spyPoint.logFail(this, query.getArgs());
          }
          return false;
       } catch (CutException e) {
          if (debugEnabled) {
-            spyPoint.logFail(this, queryArgs);
+            spyPoint.logFail(this, query.getArgs());
          }
          return false;
       } catch (ProjogException pe) {

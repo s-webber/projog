@@ -34,29 +34,29 @@ final class SingleNonRetryableRulePredicateFactory implements PreprocessablePred
 
    @Override
    public Predicate getPredicate(Term term) {
-      return evaluateClause(clause, spyPoint, term.getArgs());
+      return evaluateClause(clause, spyPoint, term);
    }
 
-   static Predicate evaluateClause(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term[] args) {
+   static Predicate evaluateClause(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term query) {
       try {
          if (spyPoint.isEnabled()) {
-            spyPoint.logCall(SingleNonRetryableRulePredicateFactory.class, args);
+            spyPoint.logCall(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
 
-            final boolean result = clause.getPredicate(args).evaluate();
+            final boolean result = clause.getPredicate(query).evaluate();
 
             if (result) {
-               spyPoint.logExit(SingleNonRetryableRulePredicateFactory.class, args, clause.getModel());
+               spyPoint.logExit(SingleNonRetryableRulePredicateFactory.class, query.getArgs(), clause.getModel());
             } else {
-               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
             }
 
             return PredicateUtils.toPredicate(result);
          } else {
-            return PredicateUtils.toPredicate(clause.getPredicate(args).evaluate());
+            return PredicateUtils.toPredicate(clause.getPredicate(query).evaluate());
          }
       } catch (CutException e) {
          if (spyPoint.isEnabled()) {
-            spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
+            spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
          }
          return PredicateUtils.FALSE;
       } catch (ProjogException pe) {

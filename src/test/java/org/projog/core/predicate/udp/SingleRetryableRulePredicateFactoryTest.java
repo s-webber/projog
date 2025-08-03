@@ -58,7 +58,7 @@ public class SingleRetryableRulePredicateFactoryTest {
    public void before() {
       this.mockPredicate = mock(Predicate.class);
       this.mockAction = mock(ClauseAction.class);
-      when(mockAction.getPredicate(queryArgs)).thenReturn(mockPredicate);
+      when(mockAction.getPredicate(Structure.createStructure(FUNCTOR, queryArgs))).thenReturn(mockPredicate);
 
       this.listener = new SimpleProjogListener();
       ProjogListeners observable = new ProjogListeners();
@@ -72,7 +72,7 @@ public class SingleRetryableRulePredicateFactoryTest {
 
    @After
    public void after() {
-      verify(mockAction).getPredicate(queryArgs);
+      verify(mockAction).getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
       verifyNoMoreInteractions(mockAction, mockPredicate);
    }
 

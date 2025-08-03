@@ -64,15 +64,15 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          if (firstArg.isImmutable()) {
             ClauseActionMetaData match = index.get(firstArg);
             if (match == null) {
-               return PredicateUtils.createFailurePredicate(spyPoint, term.getArgs());
+               return PredicateUtils.createFailurePredicate(spyPoint, term);
             } else {
-               return PredicateUtils.createSingleClausePredicate(match.clause, spyPoint, term.getArgs());
+               return PredicateUtils.createSingleClausePredicate(match.clause, spyPoint, term);
             }
          }
       }
 
       ClauseActionIterator itr = new ClauseActionIterator(ends[FIRST]);
-      return new InterpretedUserDefinedPredicate(itr, spyPoint, term.getArgs());
+      return new InterpretedUserDefinedPredicate(itr, spyPoint, term);
    }
 
    @Override

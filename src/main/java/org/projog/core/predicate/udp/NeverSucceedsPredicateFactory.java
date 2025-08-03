@@ -29,7 +29,7 @@ final class NeverSucceedsPredicateFactory implements PredicateFactory {
 
    @Override
    public Predicate getPredicate(Term term) {
-      return PredicateUtils.createFailurePredicate(spyPoint, term.getArgs());
+      return PredicateUtils.createFailurePredicate(spyPoint, term);
    }
 
    @Override

@@ -33,18 +33,18 @@ public final class PredicateUtils {
       return result ? TRUE : FALSE;
    }
 
-   static Predicate createSingleClausePredicate(ClauseAction clause, SpyPoint spyPoint, Term[] args) {
+   static Predicate createSingleClausePredicate(ClauseAction clause, SpyPoint spyPoint, Term query) {
       if (clause.isRetryable()) {
-         return new SingleRetryableRulePredicateFactory.RetryableRulePredicate(clause, spyPoint, args);
+         return new SingleRetryableRulePredicateFactory.RetryableRulePredicate(clause, spyPoint, query);
       } else {
-         return SingleNonRetryableRulePredicateFactory.evaluateClause(clause, spyPoint, args);
+         return SingleNonRetryableRulePredicateFactory.evaluateClause(clause, spyPoint, query);
       }
    }
 
-   static Predicate createFailurePredicate(SpyPoint spyPoint, Term[] args) {
+   static Predicate createFailurePredicate(SpyPoint spyPoint, Term query) {
       if (spyPoint.isEnabled()) {
-         spyPoint.logCall(PredicateUtils.class, args);
-         spyPoint.logFail(PredicateUtils.class, args);
+         spyPoint.logCall(PredicateUtils.class, query.getArgs());
+         spyPoint.logFail(PredicateUtils.class, query.getArgs());
       }
       return PredicateUtils.FALSE;
    }

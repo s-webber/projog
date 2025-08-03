@@ -34,7 +34,7 @@ final class SingleRetryableRulePredicateFactory implements PreprocessablePredica
 
    @Override
    public RetryableRulePredicate getPredicate(Term term) {
-      return new RetryableRulePredicate(clause, spyPoint, term.getArgs());
+      return new RetryableRulePredicate(clause, spyPoint, term);
    }
 
    @Override
@@ -43,16 +43,16 @@ final class SingleRetryableRulePredicateFactory implements PreprocessablePredica
    }
 
    public static class RetryableRulePredicate implements Predicate {
-      private final Term[] args;
+      private final Term query;
       private final ClauseAction clause;
       private final SpyPoints.SpyPoint spyPoint;
       private final boolean isSpyPointEnabled;
       private Predicate p;
 
-      public RetryableRulePredicate(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term[] queryArgs) {
+      public RetryableRulePredicate(ClauseAction clause, SpyPoints.SpyPoint spyPoint, Term query) {
          this.clause = clause;
          this.spyPoint = spyPoint;
-         this.args = queryArgs;
+         this.query = query;
          this.isSpyPointEnabled = spyPoint.isEnabled();
       }
 
@@ -61,27 +61,27 @@ final class SingleRetryableRulePredicateFactory implements PreprocessablePredica
          try {
             if (p == null) {
                if (isSpyPointEnabled) {
-                  spyPoint.logCall(this, args);
+                  spyPoint.logCall(this, query.getArgs());
                }
-               p = clause.getPredicate(args);
+               p = clause.getPredicate(query);
             } else if (isSpyPointEnabled) {
-               spyPoint.logRedo(this, args);
+               spyPoint.logRedo(this, query.getArgs());
             }
 
             if (p.evaluate()) { // TODO p.couldReevaluationSucceed() &&
                if (isSpyPointEnabled) {
-                  spyPoint.logExit(this, args, clause.getModel());
+                  spyPoint.logExit(this, query.getArgs(), clause.getModel());
                }
                return true;
             } else {
                if (isSpyPointEnabled) {
-                  spyPoint.logFail(this, args);
+                  spyPoint.logFail(this, query.getArgs());
                }
                return false;
             }
          } catch (CutException e) {
             if (isSpyPointEnabled) {
-               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, args);
+               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query.getArgs());
             }
             return false;
          } catch (ProjogException pe) {

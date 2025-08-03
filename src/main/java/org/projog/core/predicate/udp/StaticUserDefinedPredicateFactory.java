@@ -158,14 +158,14 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private Predicate createPredicate(Term[] args, ClauseAction[] clauses) {
+   private Predicate createPredicate(Term query, ClauseAction[] clauses) {
       switch (clauses.length) {
          case 0:
-            return PredicateUtils.createFailurePredicate(spyPoint, args);
+            return PredicateUtils.createFailurePredicate(spyPoint, query);
          case 1:
-            return PredicateUtils.createSingleClausePredicate(clauses[0], spyPoint, args);
+            return PredicateUtils.createSingleClausePredicate(clauses[0], spyPoint, query);
          default:
-            return new InterpretedUserDefinedPredicate(new ActionIterator(clauses), spyPoint, args);
+            return new InterpretedUserDefinedPredicate(new ActionIterator(clauses), spyPoint, query);
       }
    }
 
@@ -313,12 +313,12 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          if (term.getArgument(argIdx).isImmutable()) {
             ClauseAction action = map.get(term.getArgument(argIdx));
             if (action == null) {
-               return PredicateUtils.createFailurePredicate(spyPoint, term.getArgs());
+               return PredicateUtils.createFailurePredicate(spyPoint, term);
             } else {
-               return PredicateUtils.createSingleClausePredicate(action, spyPoint, term.getArgs());
+               return PredicateUtils.createSingleClausePredicate(action, spyPoint, term);
             }
          } else {
-            return createPredicate(term.getArgs(), actions);
+            return createPredicate(term, actions);
          }
       }
 
@@ -370,7 +370,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
             data = actions;
          }
 
-         return createPredicate(term.getArgs(), data);
+         return createPredicate(term, data);
       }
 
       @Override
@@ -408,7 +408,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public Predicate getPredicate(Term term) {
-         return createPredicate(term.getArgs(), index.index(term.getArgs()));
+         return createPredicate(term, index.index(term.getArgs()));
       }
 
       @Override
@@ -441,7 +441,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       @Override
       public Predicate getPredicate(Term term) {
          // TODO or do: return createPredicate(args, data);
-         return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, term.getArgs());
+         return new InterpretedUserDefinedPredicate(new ActionIterator(data), spyPoint, term);
       }
 
       @Override

@@ -99,7 +99,7 @@ final class ClauseActionFactory {
     * <p>
     * e.g. "p(X) :- X."
     */
-   static final class VariableAntecedantClauseAction implements ClauseAction {
+   static final class VariableAntecedantClauseAction implements ClauseAction { // TODO removed
       private final ClauseModel model;
       private final KnowledgeBase kb;
 
@@ -109,11 +109,11 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
+      public Predicate getPredicate(Term input) {
          Term[] consequentArgs = model.getConsequent().getArgs();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
-         for (int i = 0; i < input.length; i++) {
-            if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
+         for (int i = 0; i < input.getNumberOfArguments(); i++) {
+            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }
@@ -151,7 +151,7 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
+      public Predicate getPredicate(Term input) {
          return PredicateUtils.TRUE;
       }
 
@@ -186,7 +186,7 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
+      public Predicate getPredicate(Term input) {
          Term antecedent = model.getAntecedent();
          if (antecedent.isImmutable()) {
             return pf.getPredicate(antecedent);
@@ -224,15 +224,12 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
-         Term[] consequentArgs = model.getConsequent().getArgs();
-         for (int i = 0; i < input.length; i++) {
-            if (!input[i].unify(consequentArgs[i])) {
-               return PredicateUtils.FALSE;
-            }
+      public Predicate getPredicate(Term input) {
+         if (input.unify(model.getConsequent())) {
+            return PredicateUtils.TRUE;
+         } else {
+            return PredicateUtils.FALSE;
          }
-
-         return PredicateUtils.TRUE;
       }
 
       @Override
@@ -266,12 +263,9 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
-         Term[] consequentArgs = model.getConsequent().getArgs();
-         for (int i = 0; i < input.length; i++) {
-            if (!input[i].unify(consequentArgs[i])) {
-               return PredicateUtils.FALSE;
-            }
+      public Predicate getPredicate(Term input) {
+         if (!input.unify(model.getConsequent())) {
+            return PredicateUtils.FALSE;
          }
 
          Term antecedent = model.getAntecedent();
@@ -311,12 +305,12 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
+      public Predicate getPredicate(Term input) {
          // TODO would be a performance improvement if no clause variable is created unless is a shared variable
          Term[] consequentArgs = model.getConsequent().getArgs();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
-         for (int i = 0; i < input.length; i++) {
-            if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
+         for (int i = 0; i < input.getNumberOfArguments(); i++) {
+            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }
@@ -355,11 +349,11 @@ final class ClauseActionFactory {
       }
 
       @Override
-      public Predicate getPredicate(Term[] input) {
+      public Predicate getPredicate(Term input) {
          Term[] consequentArgs = model.getConsequent().getArgs();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
-         for (int i = 0; i < input.length; i++) {
-            if (!input[i].unify(consequentArgs[i].copy(sharedVariables))) {
+         for (int i = 0; i < input.getNumberOfArguments(); i++) {
+            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }

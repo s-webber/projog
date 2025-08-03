@@ -25,8 +25,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.projog.TestUtils.array;
 import static org.projog.TermFactory.atom;
+import static org.projog.TestUtils.array;
 
 import java.util.Arrays;
 
@@ -44,15 +44,17 @@ import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class InterpretedUserDefinedPredicateTest {
+   private final Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
+   private final Term term = Structure.createStructure("test", queryArgs);
    private SpyPoints spyPoints;
    private SpyPoint spyPoint;
    private ClauseAction mockAction1;
    private ClauseAction mockAction2;
    private ClauseAction mockAction3;
-   private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
    private SimpleListener listener;
 
    @Before
@@ -65,7 +67,7 @@ public class InterpretedUserDefinedPredicateTest {
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
       this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
-      this.spyPoint = spyPoints.getSpyPoint(new PredicateKey("test", 3));
+      this.spyPoint = spyPoints.getSpyPoint(PredicateKey.createForTerm(term));
    }
 
    @After
@@ -95,11 +97,11 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertAllSucceedOnce() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction3.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -110,11 +112,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
 
-      verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
       verify(mockAction1).isAlwaysCutOnBacktrack();
-      verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).getPredicate(term);
       verify(mockAction2).isAlwaysCutOnBacktrack();
-      verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).getPredicate(term);
       verify(mockAction3).isAlwaysCutOnBacktrack();
    }
 
@@ -137,18 +139,18 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertAllFail() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.FALSE);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.FALSE);
+      when(mockAction2.getPredicate(term)).thenReturn(PredicateUtils.FALSE);
+      when(mockAction3.getPredicate(term)).thenReturn(PredicateUtils.FALSE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
 
-      verify(mockAction1).getPredicate(queryArgs);
-      verify(mockAction2).getPredicate(queryArgs);
-      verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
+      verify(mockAction2).getPredicate(term);
+      verify(mockAction3).getPredicate(term);
    }
 
    @Test
@@ -175,15 +177,15 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertSecondRuleRepeatableContinueUntilFails() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenReturn(true, true, true, true, true, false);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true, true, true, true, true);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(term)).thenReturn(mockPredicate);
+      when(mockAction3.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -202,11 +204,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
 
-      verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
       verify(mockAction1).isAlwaysCutOnBacktrack();
-      verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).getPredicate(term);
       verify(mockAction2, times(5)).isAlwaysCutOnBacktrack();
-      verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).getPredicate(term);
       verify(mockAction3).isAlwaysCutOnBacktrack();
       verify(mockPredicate, times(6)).evaluate();
       verify(mockPredicate, times(5)).couldReevaluationSucceed();
@@ -237,15 +239,15 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertSecondRuleRepeatableContinueUntilReevaluationCannotSucceed() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenReturn(true, true, true, true, true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true, true, true, true, false);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
-      when(mockAction3.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(term)).thenReturn(mockPredicate);
+      when(mockAction3.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -264,11 +266,11 @@ public class InterpretedUserDefinedPredicateTest {
       assertFalse(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
 
-      verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
       verify(mockAction1).isAlwaysCutOnBacktrack();
-      verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).getPredicate(term);
       verify(mockAction2, times(5)).isAlwaysCutOnBacktrack();
-      verify(mockAction3).getPredicate(queryArgs);
+      verify(mockAction3).getPredicate(term);
       verify(mockAction3).isAlwaysCutOnBacktrack();
       verify(mockPredicate, times(5)).evaluate();
       verify(mockPredicate, times(5)).couldReevaluationSucceed();
@@ -277,22 +279,22 @@ public class InterpretedUserDefinedPredicateTest {
 
    @Test
    public void testSecondRuleCutException() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenThrow(CutException.CUT_EXCEPTION);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(term)).thenReturn(mockPredicate);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
       assertTrue(testObject.couldReevaluationSucceed());
       assertFalse(testObject.evaluate());
 
-      verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
       verify(mockAction1).isAlwaysCutOnBacktrack();
-      verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).getPredicate(term);
       verify(mockPredicate).evaluate();
       verifyNoMoreInteractions(mockPredicate);
    }
@@ -318,14 +320,14 @@ public class InterpretedUserDefinedPredicateTest {
    }
 
    private void assertSecondRuntimeException() {
-      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, queryArgs);
+      InterpretedUserDefinedPredicate testObject = new InterpretedUserDefinedPredicate(Arrays.asList(mockAction1, mockAction2, mockAction3).iterator(), spyPoint, term);
 
       RuntimeException exception = new RuntimeException();
       Predicate mockPredicate = mock(Predicate.class);
       when(mockPredicate.evaluate()).thenThrow(exception);
 
-      when(mockAction1.getPredicate(queryArgs)).thenReturn(PredicateUtils.TRUE);
-      when(mockAction2.getPredicate(queryArgs)).thenReturn(mockPredicate);
+      when(mockAction1.getPredicate(term)).thenReturn(PredicateUtils.TRUE);
+      when(mockAction2.getPredicate(term)).thenReturn(mockPredicate);
 
       assertTrue(testObject.couldReevaluationSucceed());
       assertTrue(testObject.evaluate());
@@ -338,9 +340,9 @@ public class InterpretedUserDefinedPredicateTest {
          assertSame(exception, e.getCause());
       }
 
-      verify(mockAction1).getPredicate(queryArgs);
+      verify(mockAction1).getPredicate(term);
       verify(mockAction1).isAlwaysCutOnBacktrack();
-      verify(mockAction2).getPredicate(queryArgs);
+      verify(mockAction2).getPredicate(term);
       verify(mockAction2).getModel();
       verify(mockPredicate).evaluate();
       verifyNoMoreInteractions(mockPredicate);

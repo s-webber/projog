@@ -23,14 +23,14 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.list;
-import static org.projog.TestUtils.parseSentence;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
+import static org.projog.TestUtils.assertStrictEquality;
+import static org.projog.TestUtils.parseSentence;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -220,7 +220,7 @@ public class StructureTest {
       Structure original = structure(name, a, x, i, y, d, x);
 
       // make a copy
-      HashMap<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      HashMap<Variable, Variable> sharedVariables = new HashMap<>();
       Structure copy = original.copy(sharedVariables);
 
       // compare copy to original
@@ -232,12 +232,12 @@ public class StructureTest {
 
       assertEquals(name, copy.getName());
       assertEquals(6, copy.getNumberOfArguments());
-      assertSame(a, copy.getArgs()[0]);
-      assertSame(sharedVariables.get(x), copy.getArgs()[1]);
-      assertSame(i, copy.getArgs()[2]);
-      assertSame(sharedVariables.get(y), copy.getArgs()[3]);
-      assertSame(d, copy.getArgs()[4]);
-      assertSame(sharedVariables.get(x), copy.getArgs()[5]);
+      assertSame(a, copy.getArgument(0));
+      assertSame(sharedVariables.get(x), copy.getArgument(1));
+      assertSame(i, copy.getArgument(2));
+      assertSame(sharedVariables.get(y), copy.getArgument(3));
+      assertSame(d, copy.getArgument(4));
+      assertSame(sharedVariables.get(x), copy.getArgument(5));
    }
 
    @Test

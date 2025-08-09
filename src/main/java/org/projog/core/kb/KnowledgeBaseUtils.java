@@ -124,8 +124,8 @@ public final class KnowledgeBaseUtils {
    public static Term[] toArrayOfConjunctions(Term t) {
       List<Term> l = new ArrayList<>();
       while (isConjunction(t)) {
-         l.add(t.getArgs()[0]);
-         t = t.getArgs()[1];
+         l.add(t.getArgument(0));
+         t = t.getArgument(1);
       }
       l.add(t);
       return l.toArray(new Term[l.size()]);
@@ -139,7 +139,7 @@ public final class KnowledgeBaseUtils {
     */
    public static boolean isConjunction(Term t) {
       // is relying on assumption that conjunctions are only, and always, represented by a comma
-      return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getArgs().length == 2;
+      return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getNumberOfArguments() == 2;
    }
 
    /**

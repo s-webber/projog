@@ -68,12 +68,12 @@ public final class PredicateKey implements Comparable<PredicateKey> {
          throw new ProjogException("Expected a predicate with two arguments and the name: '/' but got: " + t);
       }
 
-      if (!PREDICATE_KEY_FUNCTOR.equals(t.getName()) || t.getArgs().length != 2) {
+      if (!PREDICATE_KEY_FUNCTOR.equals(t.getName()) || t.getNumberOfArguments() != 2) {
          throw new ProjogException("Expected a predicate with two arguments and the name: '/' but got: " + t);
       }
 
-      String name = getAtomName(t.getArgs()[0]);
-      int arity = toInt(t.getArgs()[1]);
+      String name = getAtomName(t.getArgument(0));
+      int arity = toInt(t.getArgument(1));
       return new PredicateKey(name, arity);
    }
 

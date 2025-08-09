@@ -22,7 +22,6 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /* TEST
 %TRUE true, true
@@ -213,7 +212,7 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
             }
 
             secondPredicate = null;
-            TermUtils.backtrack(copySecondArgument.getArgs());
+            copySecondArgument.backtrack();
          } while (firstPredicate.couldReevaluationSucceed() && firstPredicate.evaluate());
 
          return false;

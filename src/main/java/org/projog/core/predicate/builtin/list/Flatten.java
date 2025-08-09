@@ -92,14 +92,14 @@ public final class Flatten extends AbstractSingleResultPredicate {
       List<Term> result = new ArrayList<>();
       Term next = input;
       while (next.getType() == TermType.LIST) {
-         Term head = next.getArgument(0);
+         Term head = next.firstArgument();
          if (head.getType() == TermType.LIST) {
             result.addAll(flattenList(head));
          } else if (head.getType() != TermType.EMPTY_LIST) {
             result.add(head);
          }
 
-         next = next.getArgument(1);
+         next = next.secondArgument();
       }
       if (next.getType() != TermType.EMPTY_LIST) {
          result.add(next);

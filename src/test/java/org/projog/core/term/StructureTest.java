@@ -232,10 +232,10 @@ public class StructureTest {
 
       assertEquals(name, copy.getName());
       assertEquals(6, copy.getNumberOfArguments());
-      assertSame(a, copy.getArgument(0));
-      assertSame(sharedVariables.get(x), copy.getArgument(1));
-      assertSame(i, copy.getArgument(2));
-      assertSame(sharedVariables.get(y), copy.getArgument(3));
+      assertSame(a, copy.firstArgument());
+      assertSame(sharedVariables.get(x), copy.secondArgument());
+      assertSame(i, copy.thirdArgument());
+      assertSame(sharedVariables.get(y), copy.fourthArgument());
       assertSame(d, copy.getArgument(4));
       assertSame(sharedVariables.get(x), copy.getArgument(5));
    }
@@ -283,8 +283,8 @@ public class StructureTest {
       Structure p2 = p1.copy(null);
       assertFalse(p1.isImmutable());
       assertTrue(p2.isImmutable());
-      assertSame(v, p1.getArgument(1).getArgument(1));
-      assertSame(a, p2.getArgument(1).getArgument(1));
+      assertSame(v, p1.secondArgument().secondArgument());
+      assertSame(a, p2.secondArgument().secondArgument());
    }
 
    @Test

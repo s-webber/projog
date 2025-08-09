@@ -232,11 +232,11 @@ public final class Dif extends AbstractSingleResultPredicate {
       public boolean postUnify(Variable variable, final Term input) {
          Term attributeValue = input;
          do {
-            Term head = attributeValue.getArgument(0);
-            if (TermUtils.termsEqual(head.getArgument(0), head.getArgument(1))) {
+            Term head = attributeValue.firstArgument();
+            if (TermUtils.termsEqual(head.firstArgument(), head.secondArgument())) {
                return false;
             }
-            attributeValue = attributeValue.getArgument(1);
+            attributeValue = attributeValue.secondArgument();
          } while (attributeValue != EmptyList.EMPTY_LIST);
 
          MyMap sharedVariables = new MyMap();
@@ -245,9 +245,9 @@ public final class Dif extends AbstractSingleResultPredicate {
             if (v != variable) {
                attributeValue = input;
                do {
-                  Term head = attributeValue.getArgument(0);
+                  Term head = attributeValue.firstArgument();
                   appendAttribute((Variable) v.getTerm(), head);
-                  attributeValue = attributeValue.getArgument(1);
+                  attributeValue = attributeValue.secondArgument();
                } while (attributeValue != EmptyList.EMPTY_LIST);
             }
          }
@@ -260,9 +260,9 @@ public final class Dif extends AbstractSingleResultPredicate {
          Term result = b;
 
          do {
-            Term head = a.getArgument(0);
+            Term head = a.firstArgument();
             result = new org.projog.core.term.List(head, result);
-            a = a.getArgument(1);
+            a = a.secondArgument();
          } while (a != EmptyList.EMPTY_LIST);
 
          return result;

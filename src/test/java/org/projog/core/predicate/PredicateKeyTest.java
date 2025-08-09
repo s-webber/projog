@@ -211,8 +211,8 @@ public class PredicateKeyTest {
       assertSame(TermType.STRUCTURE, term.getType());
       assertEquals(PREDICATE_KEY_FUNCTOR, term.getName());
       assertEquals(2, term.getNumberOfArguments());
-      assertEquals(name, ((Atom) term.getArgument(0)).getName());
-      assertEquals(numArgs, ((IntegerNumber) term.getArgument(1)).getLong());
+      assertEquals(name, ((Atom) term.firstArgument()).getName());
+      assertEquals(numArgs, ((IntegerNumber) term.secondArgument()).getLong());
    }
 
    private PredicateKey createKey(String name, int numArgs) {

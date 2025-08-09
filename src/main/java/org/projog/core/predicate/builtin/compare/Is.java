@@ -73,7 +73,7 @@ public final class Is extends AbstractSingleResultPredicate implements Preproces
 
    @Override
    public PredicateFactory preprocess(Term arg) {
-      final ArithmeticOperator o = getArithmeticOperators().getPreprocessedArithmeticOperator(arg.getArgument(1));
+      final ArithmeticOperator o = getArithmeticOperators().getPreprocessedArithmeticOperator(arg.secondArgument());
       if (o == null) {
          return this;
       } else if (o instanceof Numeric) {

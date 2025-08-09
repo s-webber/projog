@@ -133,7 +133,7 @@ public final class PredSort extends AbstractSingleResultPredicate implements Pre
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term goal = term.getArgument(1);
+      Term goal = term.secondArgument();
       if (goal.getType() == TermType.ATOM) {
          return new PreprocessedPredSort(PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(getPredicates(), goal, FIRST_ARG_ARITY), goal);
       } else {
@@ -152,7 +152,7 @@ public final class PredSort extends AbstractSingleResultPredicate implements Pre
 
       @Override
       public Predicate getPredicate(Term term) {
-         boolean result = evaluatePredSort(pf, predicateName, term.getArgument(1), term.getArgument(2));
+         boolean result = evaluatePredSort(pf, predicateName, term.secondArgument(), term.thirdArgument());
          return PredicateUtils.toPredicate(result);
       }
 

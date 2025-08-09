@@ -346,7 +346,7 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
 
    @Override
    public PredicateFactory preprocess(Term input) {
-      Term action = input.getArgument(0);
+      Term action = input.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(action)) {
          PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(predicates, action, input.getNumberOfArguments() - 1);
          return new PreprocessedMapList(pf);
@@ -380,7 +380,7 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
 
    @Override
    public Predicate getPredicate(Term input) {
-      Term partiallyAppliedFunction = input.getArgument(0);
+      Term partiallyAppliedFunction = input.firstArgument();
       if (!isAtomOrStructure(partiallyAppliedFunction)) {
          return PredicateUtils.FALSE;
       }
@@ -390,7 +390,7 @@ public final class MapList implements PredicateFactory, PreprocessablePredicateF
    }
 
    private static Predicate getMapListPredicate(PredicateFactory pf, Term input) {
-      Term partiallyAppliedFunction = input.getArgument(0);
+      Term partiallyAppliedFunction = input.firstArgument();
 
       @SuppressWarnings("unchecked")
       List<Term>[] lists = new List[input.getNumberOfArguments() - 1];

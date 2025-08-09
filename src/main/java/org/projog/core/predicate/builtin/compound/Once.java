@@ -56,7 +56,7 @@ public final class Once extends AbstractSingleResultPredicate implements Preproc
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term arg = term.getArgument(0);
+      Term arg = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg)) {
          return new OptimisedOnce(getPredicates().getPreprocessedPredicateFactory(arg));
       } else {

@@ -64,8 +64,8 @@ public class TermUtilsTest {
       assertSame(TermType.STRUCTURE, t.getType());
       assertSame(p.getName(), t.getName());
       assertEquals(2, t.getNumberOfArguments());
-      assertSame(a, t.getArgument(0));
-      Term copyOfY = t.getArgument(1);
+      assertSame(a, t.firstArgument());
+      Term copyOfY = t.secondArgument();
       assertVariable(copyOfY, "Y");
 
       assertSame(a, output[2]);

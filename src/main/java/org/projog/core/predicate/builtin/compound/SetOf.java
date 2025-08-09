@@ -133,7 +133,7 @@ public final class SetOf extends AbstractPredicateFactory implements Preprocessa
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term goal = term.getArgument(1);
+      Term goal = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(goal)) {
          return new PreprocessedSetOf(getPredicates().getPreprocessedPredicateFactory(goal));
       } else {
@@ -150,7 +150,7 @@ public final class SetOf extends AbstractPredicateFactory implements Preprocessa
 
       @Override
       public Predicate getPredicate(Term term) {
-         return new SetOfPredicate(pf, term.getArgument(0), term.getArgument(1), term.getArgument(2));
+         return new SetOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
       }
 
       @Override

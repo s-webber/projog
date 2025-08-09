@@ -78,7 +78,7 @@ public final class SumList extends AbstractSingleResultPredicate {
       while (tail.getType() != TermType.EMPTY_LIST) {
          assertType(tail, TermType.LIST);
 
-         Term head = tail.getArgument(0);
+         Term head = tail.firstArgument();
          Numeric n = operators.getNumeric(head);
          if (isLong && n.getType() != TermType.INTEGER) {
             isLong = false;
@@ -91,7 +91,7 @@ public final class SumList extends AbstractSingleResultPredicate {
             doubleTotal += n.getDouble();
          }
 
-         tail = tail.getArgument(1);
+         tail = tail.secondArgument();
       }
 
       Term result = isLong ? IntegerNumberCache.valueOf(longTotal) : new DecimalFraction(doubleTotal);

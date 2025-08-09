@@ -62,7 +62,7 @@ final class DefiniteClauseGrammerConvertor {
    private static Term convertSingleListTermAntecedent(Term consequent, Term antecedent) {
       String consequentName = consequent.getName();
       Variable variable = new Variable("A");
-      List list = ListFactory.createList(antecedent.getArgument(0), variable);
+      List list = ListFactory.createList(antecedent.firstArgument(), variable);
       Term[] args = new Term[consequent.getNumberOfArguments() + 2];
       for (int i = 0; i < consequent.getNumberOfArguments(); i++) {
          args[i] = consequent.getArgument(i);
@@ -84,7 +84,7 @@ final class DefiniteClauseGrammerConvertor {
       for (int i = conjunctionOfAtoms.length - 1; i > -1; i--) {
          Term term = conjunctionOfAtoms[i];
          if (term.getName().equals("{")) {
-            Term newAntecedentArg = term.getArgument(0).getArgument(0);
+            Term newAntecedentArg = term.firstArgument().firstArgument();
             newSequence.add(0, newAntecedentArg);
          } else if (term.getType() == TermType.LIST) {
             if (previousList != null) {
@@ -135,8 +135,8 @@ final class DefiniteClauseGrammerConvertor {
    private static Term appendToEndOfList(Term list, Term newTail) {
       ArrayList<Term> terms = new ArrayList<>();
       while (list.getType() == TermType.LIST) {
-         terms.add(list.getArgument(0));
-         list = list.getArgument(1);
+         terms.add(list.firstArgument());
+         list = list.secondArgument();
       }
       return ListFactory.createList(terms.toArray(new Term[terms.size()]), newTail);
    }
@@ -152,17 +152,17 @@ final class DefiniteClauseGrammerConvertor {
    }
 
    private static Term getConsequent(Term dcgTerm) {
-      return dcgTerm.getArgument(0);
+      return dcgTerm.firstArgument();
    }
 
    private static Term getAntecedent(Term dcgTerm) {
-      return dcgTerm.getArgument(1);
+      return dcgTerm.secondArgument();
    }
 
    private static boolean hasSingleListWithSingleAtomElement(Term[] terms) {
       return terms.length == 1
              && terms[0].getType() == TermType.LIST
-             && terms[0].getArgument(0).getType() == TermType.ATOM
-             && terms[0].getArgument(1).getType() == TermType.EMPTY_LIST;
+             && terms[0].firstArgument().getType() == TermType.ATOM
+             && terms[0].secondArgument().getType() == TermType.EMPTY_LIST;
    }
 }

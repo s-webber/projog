@@ -103,18 +103,18 @@ public final class ExtremumList extends AbstractSingleResultPredicate {
       assertType(input, TermType.LIST);
 
       ArithmeticOperators operators = getArithmeticOperators();
-      Numeric result = operators.getNumeric(input.getArgument(0));
-      Term tail = input.getArgument(1);
+      Numeric result = operators.getNumeric(input.firstArgument());
+      Term tail = input.secondArgument();
       while (tail.getType() != TermType.EMPTY_LIST) {
          assertType(tail, TermType.LIST);
 
-         Numeric next = operators.getNumeric(tail.getArgument(0));
+         Numeric next = operators.getNumeric(tail.firstArgument());
          int diff = findMinimum ? NUMERIC_TERM_COMPARATOR.compare(next, result) : NUMERIC_TERM_COMPARATOR.compare(result, next);
          if (diff < 0) {
             result = next;
          }
 
-         tail = tail.getArgument(1);
+         tail = tail.secondArgument();
       }
 
       return output.unify(result);

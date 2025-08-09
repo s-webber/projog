@@ -165,8 +165,8 @@ public final class Member extends AbstractPredicateFactory {
             if (currentList.getType() == TermType.LIST) {
                element.backtrack();
                originalList.backtrack();
-               Term head = currentList.getArgument(0);
-               currentList = currentList.getArgument(1);
+               Term head = currentList.firstArgument();
+               currentList = currentList.secondArgument();
                if (element.unify(head)) {
                   return true;
                }

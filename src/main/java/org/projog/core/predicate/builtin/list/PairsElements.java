@@ -62,13 +62,13 @@ public final class PairsElements extends AbstractSingleResultPredicate {
       Term tail = pairs;
       List<Term> selected = new ArrayList<>();
       while (tail.getType() == TermType.LIST) {
-         Term head = tail.getArgument(0);
+         Term head = tail.firstArgument();
          if (!isKeyValuePair(head)) {
             throw new ProjogException("Expected every element of list to be a compound term with a functor of - and two arguments but got: " + head);
          }
          selected.add(head.getArgument(argumentIdx));
 
-         tail = tail.getArgument(1);
+         tail = tail.secondArgument();
       }
 
       if (tail.getType() != TermType.EMPTY_LIST) {

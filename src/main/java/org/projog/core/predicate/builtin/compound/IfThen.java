@@ -99,8 +99,8 @@ public final class IfThen extends AbstractPredicateFactory implements Preprocess
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term condition = term.getArgument(0);
-      Term action = term.getArgument(1);
+      Term condition = term.firstArgument();
+      Term action = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(condition) || PartialApplicationUtils.isAtomOrStructure(action)) {
          Predicates p = getPredicates();
          return new OptimisedIfThen(p.getPreprocessedPredicateFactory(condition), p.getPreprocessedPredicateFactory(action));
@@ -120,10 +120,10 @@ public final class IfThen extends AbstractPredicateFactory implements Preprocess
 
       @Override
       public Predicate getPredicate(Term term) {
-         Predicate conditionPredicate = condition.getPredicate(term.getArgument(0));
+         Predicate conditionPredicate = condition.getPredicate(term.firstArgument());
          if (conditionPredicate.evaluate()) {
             // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-            return action.getPredicate(term.getArgument(1).getTerm());
+            return action.getPredicate(term.secondArgument().getTerm());
          } else {
             return PredicateUtils.FALSE;
          }

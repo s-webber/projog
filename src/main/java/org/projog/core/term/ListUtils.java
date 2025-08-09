@@ -51,8 +51,8 @@ public final class ListUtils {
       if (list.getType() == TermType.LIST) {
          final List<Term> result = new ArrayList<Term>();
          do {
-            result.add(list.getArgument(0));
-            list = list.getArgument(1);
+            result.add(list.firstArgument());
+            list = list.secondArgument();
          } while (list.getType() == TermType.LIST);
 
          if (list.getType() == TermType.EMPTY_LIST) {
@@ -108,12 +108,12 @@ public final class ListUtils {
          throw new ProjogException("Expected list or empty list but got: " + list.getType() + " with value: " + list);
       }
       while (list.getType() == TermType.LIST) {
-         if (element.unify(list.getArgument(0))) {
+         if (element.unify(list.firstArgument())) {
             return true;
          }
          element.backtrack();
          list.backtrack();
-         list = list.getArgument(1);
+         list = list.secondArgument();
       }
       if (list.getType() == TermType.EMPTY_LIST) {
          return false;

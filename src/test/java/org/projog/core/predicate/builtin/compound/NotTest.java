@@ -71,7 +71,7 @@ public class NotTest {
    public void testPreprocess_not_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term notTerm = parseTerm("not(test(a, b)).");
-      Term queryArg = notTerm.getArgument(0);
+      Term queryArg = notTerm.firstArgument();
       // note not a PreprocessablePredicateFactory
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
@@ -98,7 +98,7 @@ public class NotTest {
    public void testPreprocess_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term notTerm = parseTerm("not(test(a, b)).");
-      Term queryArg = notTerm.getArgument(0);
+      Term queryArg = notTerm.firstArgument();
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);

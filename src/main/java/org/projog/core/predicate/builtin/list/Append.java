@@ -599,16 +599,16 @@ public final class Append extends AbstractPredicateFactory {
             Term l1 = null;
             Term l3 = null;
             if (prefix.getType() == TermType.LIST) {
-               x = prefix.getArgument(0);
-               l1 = prefix.getArgument(1);
+               x = prefix.firstArgument();
+               l1 = prefix.secondArgument();
             }
             if (concatenated.getType() == TermType.LIST) {
                if (x == null) {
-                  x = concatenated.getArgument(0);
-               } else if (!x.unify(concatenated.getArgument(0))) {
+                  x = concatenated.firstArgument();
+               } else if (!x.unify(concatenated.firstArgument())) {
                   return false;
                }
-               l3 = concatenated.getArgument(1);
+               l3 = concatenated.secondArgument();
             }
             if (x == null) {
                x = new Variable("X");
@@ -626,7 +626,7 @@ public final class Append extends AbstractPredicateFactory {
             }
             if (l3 == null) {
                if (concatenated.getType() == TermType.LIST) {
-                  l3 = concatenated.getArgument(1);
+                  l3 = concatenated.secondArgument();
                } else {
                   return false;
                }

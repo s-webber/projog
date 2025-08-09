@@ -124,8 +124,8 @@ public final class Conjunction extends AbstractPredicateFactory implements Prepr
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term firstArg = term.getArgument(0);
-      Term secondArg = term.getArgument(1);
+      Term firstArg = term.firstArgument();
+      Term secondArg = term.secondArgument();
       if (firstArg.getType().isVariable() || secondArg.getType().isVariable()) {
          return this;
       }

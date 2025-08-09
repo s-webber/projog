@@ -84,6 +84,50 @@ public class AtomTest {
    }
 
    @Test
+   public void testFirstArgument() {
+      try {
+         Atom a = atom();
+         a.firstArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 0", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testSecondArgument() {
+      try {
+         Atom a = atom();
+         a.secondArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 1", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testThirdArgument() {
+      try {
+         Atom a = atom();
+         a.thirdArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 2", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testFourthArgument() {
+      try {
+         Atom a = atom();
+         a.fourthArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 3", e.getMessage());
+      }
+   }
+
+   @Test
    public void testGetArgs() {
       Atom a = atom();
       assertSame(TermUtils.EMPTY_ARRAY, a.getArgs());

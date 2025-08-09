@@ -167,7 +167,7 @@ public final class ProjogSourceReader {
     * @param t structure with name of {@code ?-} and a single argument.
     */
    private void processQuestion(Term t) {
-      Predicate e = kb.getPredicates().getPredicate(t.getArgument(0));
+      Predicate e = kb.getPredicates().getPredicate(t.firstArgument());
       while (e.evaluate() && e.couldReevaluationSucceed()) {
          // keep re-evaluating until fail
       }

@@ -175,12 +175,12 @@ p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
 public final class Disjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term arg1 = term.getArgument(0);
-      Term arg2 = term.getArgument(1);
+      Term arg1 = term.firstArgument();
+      Term arg2 = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg1) && PartialApplicationUtils.isAtomOrStructure(arg2)) {
          if (getPredicates().getPredicateFactory(arg1) instanceof IfThen) {
-            Term conditionTerm = arg1.getArgument(0);
-            Term thenTerm = arg1.getArgument(1);
+            Term conditionTerm = arg1.firstArgument();
+            Term thenTerm = arg1.secondArgument();
             if (conditionTerm.getType().isVariable() || thenTerm.getType().isVariable()) {
                return this;
             }
@@ -209,7 +209,7 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
 
       @Override
       public Predicate getPredicate(Term term) {
-         return new DisjunctionPredicate(pf1, pf2, term.getArgument(0), term.getArgument(1));
+         return new DisjunctionPredicate(pf1, pf2, term.firstArgument(), term.secondArgument());
       }
 
       @Override
@@ -231,14 +231,14 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
 
       @Override
       public Predicate getPredicate(Term term) {
-         Term ifThenTerm = term.getArgument(0);
-         Term conditionTerm = ifThenTerm.getArgument(0);
+         Term ifThenTerm = term.firstArgument();
+         Term conditionTerm = ifThenTerm.firstArgument();
          Predicate conditionPredicate = condition.getPredicate(conditionTerm);
          if (conditionPredicate.evaluate()) {
-            return thenPf.getPredicate(ifThenTerm.getArgument(1).getTerm());
+            return thenPf.getPredicate(ifThenTerm.secondArgument().getTerm());
          } else {
             conditionTerm.backtrack();
-            return elsePf.getPredicate(term.getArgument(1));
+            return elsePf.getPredicate(term.secondArgument());
          }
       }
 
@@ -263,8 +263,8 @@ public final class Disjunction extends AbstractPredicateFactory implements Prepr
    }
 
    private Predicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
-      Term conditionTerm = ifThenTerm.getArgument(0);
-      Term thenTerm = ifThenTerm.getArgument(1);
+      Term conditionTerm = ifThenTerm.firstArgument();
+      Term thenTerm = ifThenTerm.secondArgument();
 
       Predicates p = getPredicates();
       Predicate conditionPredicate = p.getPredicate(conditionTerm);

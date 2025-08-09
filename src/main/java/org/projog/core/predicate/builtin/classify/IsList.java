@@ -42,7 +42,7 @@ public final class IsList extends AbstractSingleResultPredicate {
             return true;
          case LIST:
             Term tail = arg;
-            while ((tail = tail.getArgument(1)).getType() == TermType.LIST) {
+            while ((tail = tail.secondArgument()).getType() == TermType.LIST) {
             }
             return tail.getType() == TermType.EMPTY_LIST;
          default:

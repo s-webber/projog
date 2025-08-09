@@ -160,7 +160,7 @@ public final class Fold extends AbstractPredicateFactory implements Preprocessab
 
    @Override
    public PredicateFactory preprocess(Term arg) {
-      Term action = arg.getArgument(0);
+      Term action = arg.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(action)) {
          PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(getPredicates(), action, FIRST_ARG_ARITY);
          return new OptimisedFold(pf, action);
@@ -180,7 +180,7 @@ public final class Fold extends AbstractPredicateFactory implements Preprocessab
 
       @Override
       public Predicate getPredicate(Term term) {
-         return getFoldPredicate(pf, action, term.getArgument(1), term.getArgument(2), term.getArgument(3));
+         return getFoldPredicate(pf, action, term.secondArgument(), term.thirdArgument(), term.fourthArgument());
       }
 
       @Override

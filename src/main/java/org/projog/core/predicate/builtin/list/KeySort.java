@@ -72,7 +72,7 @@ public final class KeySort extends AbstractSingleResultPredicate {
    private static final Comparator<Term> KEY_VALUE_PAIR_COMPARATOR = new Comparator<Term>() {
       @Override
       public int compare(Term kvp1, Term kvp2) {
-         return TERM_COMPARATOR.compare(kvp1.getArgument(0), kvp2.getArgument(0));
+         return TERM_COMPARATOR.compare(kvp1.firstArgument(), kvp2.firstArgument());
       }
    };
 

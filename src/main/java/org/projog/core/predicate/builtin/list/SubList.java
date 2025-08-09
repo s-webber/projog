@@ -146,11 +146,11 @@ public final class SubList extends AbstractSingleResultPredicate implements Prep
       final List<Term> matches = new ArrayList<>();
       Term next = term;
       while (next.getType() == TermType.LIST) {
-         Term arg = next.getArgument(0);
+         Term arg = next.firstArgument();
          if (apply(pf, createArguments(partiallyAppliedFunction, arg))) {
             matches.add(arg);
          }
-         next = next.getArgument(1);
+         next = next.secondArgument();
       }
       return next.getType() == TermType.EMPTY_LIST && filteredOutput.unify(createList(matches));
    }
@@ -161,7 +161,7 @@ public final class SubList extends AbstractSingleResultPredicate implements Prep
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term goal = term.getArgument(0);
+      Term goal = term.firstArgument();
       if (isAtomOrStructure(goal)) {
          return new PreprocessedSubList(getPreprocessedCurriedPredicateFactory(getPredicates(), goal));
       } else {
@@ -178,9 +178,9 @@ public final class SubList extends AbstractSingleResultPredicate implements Prep
 
       @Override
       public Predicate getPredicate(Term term) {
-         Term list = term.getArgument(1);
+         Term list = term.secondArgument();
          if (isList(list)) {
-            return PredicateUtils.toPredicate(evaluateSubList(predicateFactory, term.getArgument(0), list, term.getArgument(2)));
+            return PredicateUtils.toPredicate(evaluateSubList(predicateFactory, term.firstArgument(), list, term.thirdArgument()));
          } else {
             return PredicateUtils.FALSE;
          }

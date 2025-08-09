@@ -115,7 +115,7 @@ public final class TailRecursivePredicateMetaData {
 
    private static boolean isTail(Term list, Term term) {
       if (list.getType() == TermType.LIST) {
-         Term actualTail = list.getArgument(1);
+         Term actualTail = list.secondArgument();
          return TermUtils.termsEqual(actualTail, term);
       } else {
          return false;

@@ -98,8 +98,8 @@ public final class In extends AbstractSingleResultPredicate {
    @Override
    public boolean evaluate(Term t, Term range) {
       assertRange(range);
-      long min = castToNumeric(range.getArgument(0)).getLong();
-      long max = castToNumeric(range.getArgument(1)).getLong();
+      long min = castToNumeric(range.firstArgument()).getLong();
+      long max = castToNumeric(range.secondArgument()).getLong();
       if (min > max) {
          throw new ProjogException("Minimum value > maximum value in: " + range);
       }
@@ -124,11 +124,11 @@ public final class In extends AbstractSingleResultPredicate {
       while (t != EmptyList.EMPTY_LIST) {
          assertType(t, TermType.LIST);
 
-         if (!set(t.getArgument(0), min, max)) {
+         if (!set(t.firstArgument(), min, max)) {
             return false;
          }
 
-         t = t.getArgument(1);
+         t = t.secondArgument();
       }
 
       return true;

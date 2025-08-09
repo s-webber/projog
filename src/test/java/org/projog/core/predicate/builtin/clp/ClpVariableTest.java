@@ -69,7 +69,7 @@ public class ClpVariableTest {
    @Test(expected = UnsupportedOperationException.class)
    public void testGetArgument() {
       ClpVariable v = new ClpVariable();
-      v.getArgument(0);
+      v.firstArgument();
    }
 
    @Test

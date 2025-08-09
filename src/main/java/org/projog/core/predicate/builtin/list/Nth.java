@@ -249,9 +249,9 @@ public final class Nth extends AbstractPredicateFactory {
       int currentIdx = 0;
       while (current.getType() == TermType.LIST) {
          if (currentIdx == requiredIdx) {
-            return element.unify(current.getArgument(0));
+            return element.unify(current.firstArgument());
          }
-         current = current.getArgument(1);
+         current = current.secondArgument();
          currentIdx++;
       }
 
@@ -299,8 +299,8 @@ public final class Nth extends AbstractPredicateFactory {
                return true;
             }
 
-            Term head = list.getArgument(0);
-            list = list.getArgument(1);
+            Term head = list.firstArgument();
+            list = list.secondArgument();
 
             if (element.unify(head)) {
                index.unify(IntegerNumberCache.valueOf(ctr++));

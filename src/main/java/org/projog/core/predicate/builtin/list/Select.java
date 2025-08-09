@@ -78,7 +78,7 @@ public final class Select extends AbstractPredicateFactory {
    public Predicate getPredicate(Term element, Term inputList, Term outputList) {
       // select(X, [Head|Tail], Rest) implemented as: select(Tail, Head, X, Rest)
       if (inputList.getType() == TermType.LIST) {
-         return new SelectPredicate(inputList.getArgument(1), inputList.getArgument(0), element, outputList);
+         return new SelectPredicate(inputList.secondArgument(), inputList.firstArgument(), element, outputList);
       } else if (inputList.getType().isVariable()) {
          Term head = new Variable("Head");
          Term tail = new Variable("Tail");
@@ -124,8 +124,8 @@ public final class Select extends AbstractPredicateFactory {
             Term tail;
             Term head2;
             if (firstArg.getType() == TermType.LIST) {
-               head2 = firstArg.getArgument(0);
-               tail = firstArg.getArgument(1);
+               head2 = firstArg.firstArgument();
+               tail = firstArg.secondArgument();
             } else if (firstArg.getType().isVariable()) {
                head2 = new Variable("Head2");
                tail = new Variable("Tail");
@@ -136,10 +136,10 @@ public final class Select extends AbstractPredicateFactory {
 
             Term rest;
             if (fourthArg.getType() == TermType.LIST) {
-               if (!secondArg.unify(fourthArg.getArgument(0))) {
+               if (!secondArg.unify(fourthArg.firstArgument())) {
                   return false;
                }
-               rest = fourthArg.getArgument(1);
+               rest = fourthArg.secondArgument();
             } else if (fourthArg.getType().isVariable()) {
                rest = new Variable("Rest");
                fourthArg.unify(new List(secondArg, rest));

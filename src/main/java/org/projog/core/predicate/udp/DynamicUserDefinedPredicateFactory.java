@@ -60,7 +60,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    @Override
    public Predicate getPredicate(Term term) {
       if (hasPrimaryKey) {
-         Term firstArg = term.getArgument(0);
+         Term firstArg = term.firstArgument();
          if (firstArg.isImmutable()) {
             ClauseActionMetaData match = index.get(firstArg);
             if (match == null) {
@@ -144,7 +144,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
    private void addToIndex(ClauseModel clauseModel, ClauseActionMetaData metaData) {
       if (hasPrimaryKey) {
-         Term firstArg = clauseModel.getConsequent().getArgument(0);
+         Term firstArg = clauseModel.getConsequent().firstArgument();
          if (!firstArg.isImmutable() || index.put(firstArg, metaData) != null) {
             hasPrimaryKey = false;
             index.clear();
@@ -219,7 +219,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       public void remove() { // TODO find way to use index when retracting
          synchronized (LOCK) {
             if (hasPrimaryKey) {
-               Term firstArg = previous.clause.getModel().getConsequent().getArgument(0);
+               Term firstArg = previous.clause.getModel().getConsequent().firstArgument();
                if (index.remove(firstArg) == null) {
                   throw new IllegalStateException();
                }

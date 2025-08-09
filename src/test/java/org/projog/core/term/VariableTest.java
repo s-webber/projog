@@ -72,6 +72,26 @@ public class VariableTest {
       } catch (NullPointerException e) {
       }
       try {
+         v.firstArgument();
+         fail();
+      } catch (NullPointerException e) {
+      }
+      try {
+         v.secondArgument();
+         fail();
+      } catch (NullPointerException e) {
+      }
+      try {
+         v.thirdArgument();
+         fail();
+      } catch (NullPointerException e) {
+      }
+      try {
+         v.fourthArgument();
+         fail();
+      } catch (NullPointerException e) {
+      }
+      try {
          v.getArgument(0);
          fail();
       } catch (NullPointerException e) {
@@ -214,13 +234,13 @@ public class VariableTest {
       Structure c2 = s2.copy(sharedVariables);
       // check that the single argument of the newly copied structure is the atom itself
       // rather than a variable assigned to the atom
-      assertSame(a, c2.getArgument(0));
+      assertSame(a, c2.firstArgument());
       // check that, while backtracking does affect the first copied structure,
       // it does not alter the second copied structure
       c1.backtrack();
       c2.backtrack();
-      assertSame(Variable.class, c1.getArgument(0).getClass());
-      assertSame(a, c2.getArgument(0));
+      assertSame(Variable.class, c1.firstArgument().getClass());
+      assertSame(a, c2.firstArgument());
    }
 
    @Test
@@ -350,7 +370,7 @@ public class VariableTest {
       assertSame(t.getType(), v1.getType());
       assertSame(t.getNumberOfArguments(), v1.getNumberOfArguments());
       assertSame(t.getArgs(), v1.getArgs());
-      assertSame(t.getArgument(0), v1.getArgument(0));
+      assertSame(t.firstArgument(), v1.firstArgument());
       assertTrue(TermUtils.termsEqual(t, v1));
       assertTrue(TermUtils.termsEqual(v1, v1));
       assertTrue(t.unify(v1));

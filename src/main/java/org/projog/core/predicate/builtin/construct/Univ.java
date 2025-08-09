@@ -110,17 +110,17 @@ public final class Univ extends AbstractSingleResultPredicate {
    }
 
    private Term toPredicate(Term t) {
-      if (t.getArgument(0).getType() != TermType.ATOM) {
+      if (t.firstArgument().getType() != TermType.ATOM) {
          throw new ProjogException("First argument is not an atom in list: " + t);
       }
 
-      String predicateName = t.getArgument(0).getName();
+      String predicateName = t.firstArgument().getName();
 
       ArrayList<Term> predicateArgs = new ArrayList<>();
-      Term arg = t.getArgument(1);
+      Term arg = t.secondArgument();
       while (arg.getType() == TermType.LIST) {
-         predicateArgs.add(arg.getArgument(0));
-         arg = arg.getArgument(1);
+         predicateArgs.add(arg.firstArgument());
+         arg = arg.secondArgument();
       }
       if (arg.getType() != TermType.EMPTY_LIST) {
          predicateArgs.add(arg);

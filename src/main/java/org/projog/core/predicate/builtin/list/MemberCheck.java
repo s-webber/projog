@@ -89,7 +89,7 @@ public final class MemberCheck extends AbstractSingleResultPredicate implements 
    @Override
    public PredicateFactory preprocess(Term term) {
       // TODO if EMPTY_LIST then return a PredicateFactory that always uses PredicateUtils.FALSE.
-      Term prologList = term.getArgument(1);
+      Term prologList = term.secondArgument();
       if (prologList.getType() == TermType.LIST && prologList.isImmutable()) {
          java.util.List<Term> javaList = ListUtils.toJavaUtilList(prologList);
          if (javaList != null) { // i.e. if not a partial list

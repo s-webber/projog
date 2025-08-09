@@ -52,7 +52,7 @@ public class BootstrapTest {
       List<Term> terms = getQueriesByKey(ADD_PREDICATE_KEY);
       assertFalse(terms.isEmpty());
       for (Term t : terms) {
-         assertBuiltInPredicate(t.getArgument(0));
+         assertBuiltInPredicate(t.firstArgument());
       }
    }
 
@@ -61,7 +61,7 @@ public class BootstrapTest {
       List<Term> terms = getQueriesByKey(ADD_ARITHMETIC_OPERATOR_KEY);
       assertFalse(terms.isEmpty());
       for (Term t : terms) {
-         assertArithmeticOperator(t.getArgument(1));
+         assertArithmeticOperator(t.secondArgument());
       }
    }
 
@@ -70,7 +70,7 @@ public class BootstrapTest {
       Term[] terms = parseTermsFromFile(BOOTSTRAP_FILE);
       for (Term next : terms) {
          if (QUESTION_PREDICATE_NAME.equals(next.getName())) {
-            Term t = next.getArgument(0);
+            Term t = next.firstArgument();
             if (key.equals(PredicateKey.createForTerm(t))) {
                result.add(t);
             }

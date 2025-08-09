@@ -34,13 +34,13 @@ public abstract class AbstractPredicateFactory implements PredicateFactory, Know
          case 0:
             return getPredicate();
          case 1:
-            return getPredicateWithOneArgument(term.getArgument(0));
+            return getPredicateWithOneArgument(term.firstArgument());
          case 2:
-            return getPredicate(term.getArgument(0), term.getArgument(1));
+            return getPredicate(term.firstArgument(), term.secondArgument());
          case 3:
-            return getPredicate(term.getArgument(0), term.getArgument(1), term.getArgument(2));
+            return getPredicate(term.firstArgument(), term.secondArgument(), term.thirdArgument());
          case 4:
-            return getPredicate(term.getArgument(0), term.getArgument(1), term.getArgument(2), term.getArgument(3));
+            return getPredicate(term.firstArgument(), term.secondArgument(), term.thirdArgument(), term.fourthArgument());
          default:
             throw createWrongNumberOfArgumentsException(term.getNumberOfArguments());
       }

@@ -287,8 +287,8 @@ public final class Reverse extends AbstractPredicateFactory {
             Term x;
             Term xs;
             if (arg1.getType() == TermType.LIST) {
-               x = arg1.getArgument(0);
-               xs = arg1.getArgument(1);
+               x = arg1.firstArgument();
+               xs = arg1.secondArgument();
             } else if (arg1.getType().isVariable()) {
                x = new Variable("X");
                xs = new Variable("Xs");
@@ -298,7 +298,7 @@ public final class Reverse extends AbstractPredicateFactory {
             }
 
             if (arg4.getType() == TermType.LIST) {
-               arg4 = arg4.getArgument(1);
+               arg4 = arg4.secondArgument();
             } else if (arg4.getType().isVariable()) {
                Variable v = new Variable("Bound");
                arg4.unify(new List(new Variable(), v));

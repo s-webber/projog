@@ -138,10 +138,10 @@ public class SentenceParserTest {
    @Test
    public void testVariables() {
       Term t = parseSentence("test(A, A, _A, _A, B, _, _).");
-      Variable a1 = (Variable) t.getArgument(0);
-      Variable a2 = (Variable) t.getArgument(1);
-      Variable _a1 = (Variable) t.getArgument(2);
-      Variable _a2 = (Variable) t.getArgument(3);
+      Variable a1 = (Variable) t.firstArgument();
+      Variable a2 = (Variable) t.secondArgument();
+      Variable _a1 = (Variable) t.thirdArgument();
+      Variable _a2 = (Variable) t.fourthArgument();
       Variable b = (Variable) t.getArgument(4);
       Variable _1 = (Variable) t.getArgument(5);
       Variable _2 = (Variable) t.getArgument(6);

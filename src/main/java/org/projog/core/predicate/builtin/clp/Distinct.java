@@ -84,7 +84,7 @@ public final class Distinct extends AbstractSingleResultPredicate {
       while (arg != EmptyList.EMPTY_LIST) {
          assertType(arg, TermType.LIST);
 
-         Term head = arg.getArgument(0);
+         Term head = arg.firstArgument();
          if (head.getType() == TermType.CLP_VARIABLE) {
             expressions.add((ClpVariable) head.getTerm());
          } else if (head.getType() == TermType.VARIABLE) {
@@ -97,7 +97,7 @@ public final class Distinct extends AbstractSingleResultPredicate {
             throw new ProjogException("Unexpected term of type: " + head.getType() + " with value: " + head);
          }
 
-         arg = arg.getArgument(1);
+         arg = arg.secondArgument();
       }
 
       return expressions;

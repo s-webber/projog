@@ -128,7 +128,7 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
 
    @Override
    public Predicate getPredicate(Term term) {
-      Term goal = term.getArgument(0);
+      Term goal = term.firstArgument();
       if (term.getNumberOfArguments() == 1) {
          return knowledgeBase.getPredicates().getPredicate(goal);
       } else {

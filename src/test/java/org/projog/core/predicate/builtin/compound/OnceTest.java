@@ -51,7 +51,7 @@ public class OnceTest {
    public void testPreprocess_not_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term onceTerm = parseTerm("once(test(a, b)).");
-      Term queryArg = onceTerm.getArgument(0);
+      Term queryArg = onceTerm.firstArgument();
       // note not a PreprocessablePredicateFactory
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
@@ -78,7 +78,7 @@ public class OnceTest {
    public void testPreprocess_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term onceTerm = parseTerm("once(test(a, b)).");
-      Term queryArg = onceTerm.getArgument(0);
+      Term queryArg = onceTerm.firstArgument();
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);

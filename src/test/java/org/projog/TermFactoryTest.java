@@ -49,7 +49,7 @@ public class TermFactoryTest {
       Structure s = TermFactory.structure();
       assertEquals("test", s.getName());
       assertEquals(1, s.getNumberOfArguments());
-      assertEquals(new Atom("test"), s.getArgument(0));
+      assertEquals(new Atom("test"), s.firstArgument());
    }
 
    @Test
@@ -61,9 +61,9 @@ public class TermFactoryTest {
       Structure s = TermFactory.structure(name, arg1, arg2, arg3);
       assertEquals(name, s.getName());
       assertEquals(3, s.getNumberOfArguments());
-      assertSame(arg1, s.getArgument(0));
-      assertSame(arg2, s.getArgument(1));
-      assertSame(arg3, s.getArgument(2));
+      assertSame(arg1, s.firstArgument());
+      assertSame(arg2, s.secondArgument());
+      assertSame(arg3, s.thirdArgument());
    }
 
    @Test
@@ -72,12 +72,12 @@ public class TermFactoryTest {
       Term arg2 = new Atom("second argument");
       Term arg3 = new Atom("third argument");
       List list = TermFactory.list(arg1, arg2, arg3);
-      assertSame(arg1, list.getArgument(0));
-      list = (List) list.getArgument(1);
-      assertSame(arg2, list.getArgument(0));
-      list = (List) list.getArgument(1);
-      assertSame(arg3, list.getArgument(0));
-      assertSame(EmptyList.EMPTY_LIST, list.getArgument(1));
+      assertSame(arg1, list.firstArgument());
+      list = (List) list.secondArgument();
+      assertSame(arg2, list.firstArgument());
+      list = (List) list.secondArgument();
+      assertSame(arg3, list.firstArgument());
+      assertSame(EmptyList.EMPTY_LIST, list.secondArgument());
    }
 
    @Test

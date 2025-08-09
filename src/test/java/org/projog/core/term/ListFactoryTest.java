@@ -39,8 +39,8 @@ public class ListFactoryTest {
 
       for (Term arg : args) {
          testIsList(l);
-         assertEquals(arg, l.getArgument(0));
-         l = l.getArgument(1);
+         assertEquals(arg, l.firstArgument());
+         l = l.secondArgument();
       }
 
       assertSame(TermType.EMPTY_LIST, l.getType());
@@ -55,8 +55,8 @@ public class ListFactoryTest {
 
       for (Term arg : args) {
          testIsList(l);
-         assertEquals(arg, l.getArgument(0));
-         l = l.getArgument(1);
+         assertEquals(arg, l.firstArgument());
+         l = l.secondArgument();
       }
 
       assertSame(tail, l);
@@ -97,8 +97,8 @@ public class ListFactoryTest {
    public void testCreateListOfLengthOne() {
       Term t = ListFactory.createListOfLength(1);
       assertSame(List.class, t.getClass());
-      assertTrue(t.getArgument(0).getType().isVariable());
-      assertSame(EmptyList.EMPTY_LIST, t.getArgument(1));
+      assertTrue(t.firstArgument().getType().isVariable());
+      assertSame(EmptyList.EMPTY_LIST, t.secondArgument());
       assertEquals(".(E0, [])", t.toString());
    }
 
@@ -106,8 +106,8 @@ public class ListFactoryTest {
    public void testCreateListOfLengthThree() {
       Term t = ListFactory.createListOfLength(3);
       assertSame(List.class, t.getClass());
-      assertTrue(t.getArgument(0).getType().isVariable());
-      assertSame(List.class, t.getArgument(1).getClass());
+      assertTrue(t.firstArgument().getType().isVariable());
+      assertSame(List.class, t.secondArgument().getClass());
       assertEquals(".(E0, .(E1, .(E2, [])))", t.toString());
    }
 
@@ -117,8 +117,8 @@ public class ListFactoryTest {
       Atom tail = atom("b");
       List t = ListFactory.createList(head, tail);
       assertSame(List.class, t.getClass());
-      assertSame(head, t.getArgument(0));
-      assertSame(tail, t.getArgument(1));
+      assertSame(head, t.firstArgument());
+      assertSame(tail, t.secondArgument());
       assertTrue(t.isImmutable());
    }
 
@@ -128,8 +128,8 @@ public class ListFactoryTest {
       Atom tail = atom("b");
       Term t = ListFactory.createList(head, tail);
       assertSame(List.class, t.getClass());
-      assertSame(head, t.getArgument(0));
-      assertSame(tail, t.getArgument(1));
+      assertSame(head, t.firstArgument());
+      assertSame(tail, t.secondArgument());
       assertFalse(t.isImmutable());
    }
 
@@ -139,8 +139,8 @@ public class ListFactoryTest {
       Variable tail = variable("Y");
       Term t = ListFactory.createList(head, tail);
       assertSame(List.class, t.getClass());
-      assertSame(head, t.getArgument(0));
-      assertSame(tail, t.getArgument(1));
+      assertSame(head, t.firstArgument());
+      assertSame(tail, t.secondArgument());
       assertFalse(t.isImmutable());
    }
 
@@ -150,8 +150,8 @@ public class ListFactoryTest {
       Variable tail = variable("Y");
       Term t = ListFactory.createList(head, tail);
       assertSame(List.class, t.getClass());
-      assertSame(head, t.getArgument(0));
-      assertSame(tail, t.getArgument(1));
+      assertSame(head, t.firstArgument());
+      assertSame(tail, t.secondArgument());
       assertFalse(t.isImmutable());
    }
 

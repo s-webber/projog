@@ -82,14 +82,14 @@ public class TermFormatter {
 
    private void writeList(Term p, StringBuilder sb) {
       sb.append('[');
-      Term head = p.getArgument(0);
-      Term tail = p.getArgument(1);
+      Term head = p.firstArgument();
+      Term tail = p.secondArgument();
       write(head, sb);
       Term list;
       while ((list = getList(tail)) != null) {
          sb.append(',');
-         write(list.getArgument(0), sb);
-         tail = list.getArgument(1);
+         write(list.firstArgument(), sb);
+         tail = list.secondArgument();
       }
 
       if (tail.getType() != TermType.EMPTY_LIST) {
@@ -124,8 +124,8 @@ public class TermFormatter {
    }
 
    private void writeInfixOperator(Term p, StringBuilder sb) {
-      Term first = p.getArgument(0);
-      Term second = p.getArgument(1);
+      Term first = p.firstArgument();
+      Term second = p.secondArgument();
       int priority = operands.getInfixPriority(p.getName());
 
       if (shouldLeftArgumentBeBracketed(first, p, priority)) {
@@ -213,13 +213,13 @@ public class TermFormatter {
       sb.append(p.getName()).append(' ');
 
       int p1 = operands.getPrefixPriority(p.getName());
-      int p2 = getPriority(p.getArgument(0));
-      if (p1 < p2 || (p1 == p2 && (operands.fx(p.getName()) || !canBePreceededByEqualPriority(p.getArgument(0))))) {
+      int p2 = getPriority(p.firstArgument());
+      if (p1 < p2 || (p1 == p2 && (operands.fx(p.getName()) || !canBePreceededByEqualPriority(p.firstArgument())))) {
          sb.append('(');
-         write(p.getArgument(0), sb);
+         write(p.firstArgument(), sb);
          sb.append(')');
       } else {
-         write(p.getArgument(0), sb);
+         write(p.firstArgument(), sb);
       }
    }
 
@@ -229,13 +229,13 @@ public class TermFormatter {
 
    private void writePostfixOperator(Term p, StringBuilder sb) {
       int p1 = operands.getPostfixPriority(p.getName());
-      int p2 = getPriority(p.getArgument(0));
-      if (p1 < p2 || (p1 == p2 && (operands.xf(p.getName()) || !canBePreceededByEqualPriority(p.getArgument(0))))) {
+      int p2 = getPriority(p.firstArgument());
+      if (p1 < p2 || (p1 == p2 && (operands.xf(p.getName()) || !canBePreceededByEqualPriority(p.firstArgument())))) {
          sb.append('(');
-         write(p.getArgument(0), sb);
+         write(p.firstArgument(), sb);
          sb.append(')');
       } else {
-         write(p.getArgument(0), sb);
+         write(p.firstArgument(), sb);
       }
 
       sb.append(' ').append(p.getName());

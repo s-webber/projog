@@ -81,7 +81,7 @@ public final class Not extends AbstractSingleResultPredicate implements Preproce
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term arg = term.getArgument(0);
+      Term arg = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg)) {
          return new OptimisedNot(getPredicates().getPreprocessedPredicateFactory(arg));
       } else {

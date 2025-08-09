@@ -47,13 +47,13 @@ public abstract class AbstractSingleResultPredicate implements PredicateFactory,
          case 0:
             return evaluate();
          case 1:
-            return evaluate(term.getArgument(0));
+            return evaluate(term.firstArgument());
          case 2:
-            return evaluate(term.getArgument(0), term.getArgument(1));
+            return evaluate(term.firstArgument(), term.secondArgument());
          case 3:
-            return evaluate(term.getArgument(0), term.getArgument(1), term.getArgument(2));
+            return evaluate(term.firstArgument(), term.secondArgument(), term.thirdArgument());
          case 4:
-            return evaluate(term.getArgument(0), term.getArgument(1), term.getArgument(2), term.getArgument(3));
+            return evaluate(term.firstArgument(), term.secondArgument(), term.thirdArgument(), term.fourthArgument());
          default:
             throw createWrongNumberOfArgumentsException(term.getNumberOfArguments());
       }

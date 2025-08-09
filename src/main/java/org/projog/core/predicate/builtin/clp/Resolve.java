@@ -196,14 +196,14 @@ public final class Resolve extends AbstractPredicateFactory {
       while (arg != EmptyList.EMPTY_LIST) {
          assertType(arg, TermType.LIST);
 
-         Term head = arg.getArgument(0);
+         Term head = arg.firstArgument();
          if (head.getType() == TermType.CLP_VARIABLE) {
             variables.add((ClpVariable) head.getTerm());
          } else if (head.getType() != TermType.INTEGER) {
             throw new ProjogException("Unexpected term of type: " + head.getType() + " with value: " + head);
          }
 
-         arg = arg.getArgument(1);
+         arg = arg.secondArgument();
       }
 
       return variables;

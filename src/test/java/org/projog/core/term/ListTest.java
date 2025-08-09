@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.list;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
+import static org.projog.TestUtils.assertStrictEquality;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,22 +81,22 @@ public class ListTest {
 
       x.unify(a);
 
-      assertSame(x, originalList.getArgument(0));
-      assertSame(sublist, originalList.getArgument(1));
+      assertSame(x, originalList.firstArgument());
+      assertSame(sublist, originalList.secondArgument());
 
       List newList = originalList.getTerm();
       assertNotSame(originalList, newList);
-      assertSame(a, newList.getArgument(0));
-      assertSame(sublist, newList.getArgument(1));
+      assertSame(a, newList.firstArgument());
+      assertSame(sublist, newList.secondArgument());
 
       z.unify(c);
 
       newList = originalList.getTerm();
       assertNotSame(originalList, newList);
-      assertSame(a, newList.getArgument(0));
-      assertNotSame(sublist, newList.getArgument(1));
-      assertSame(y, newList.getArgument(1).getArgument(0));
-      assertSame(c, newList.getArgument(1).getArgument(1));
+      assertSame(a, newList.firstArgument());
+      assertNotSame(sublist, newList.secondArgument());
+      assertSame(y, newList.secondArgument().firstArgument());
+      assertSame(c, newList.secondArgument().secondArgument());
 
       x.backtrack();
       z.backtrack();
@@ -104,10 +104,10 @@ public class ListTest {
 
       newList = originalList.getTerm();
       assertNotSame(originalList, newList);
-      assertSame(x, newList.getArgument(0));
-      assertNotSame(sublist, newList.getArgument(1));
-      assertSame(b, newList.getArgument(1).getArgument(0));
-      assertSame(z, newList.getArgument(1).getArgument(1));
+      assertSame(x, newList.firstArgument());
+      assertNotSame(sublist, newList.secondArgument());
+      assertSame(b, newList.secondArgument().firstArgument());
+      assertSame(z, newList.secondArgument().secondArgument());
    }
 
    @Test
@@ -127,8 +127,32 @@ public class ListTest {
       Term head = new Atom("a");
       Term tail = new Atom("b");
       List testList = new List(head, tail);
+      assertSame(head, testList.firstArgument());
       assertSame(head, testList.getArgument(0));
+      assertSame(tail, testList.secondArgument());
       assertSame(tail, testList.getArgument(1));
+   }
+
+   @Test
+   public void testThirdArgument() {
+      List testList = new List(new Atom("a"), new Atom("b"));
+      try {
+         testList.thirdArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 2", e.getMessage());
+      }
+   }
+
+   @Test
+   public void testFourthArgument() {
+      List testList = new List(new Atom("a"), new Atom("b"));
+      try {
+         testList.fourthArgument();
+         fail();
+      } catch (ArrayIndexOutOfBoundsException e) {
+         assertEquals("Array index out of range: 3", e.getMessage());
+      }
    }
 
    @Test
@@ -173,7 +197,7 @@ public class ListTest {
 
       assertSame(original, original.getTerm());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<Variable, Variable>();
+      Map<Variable, Variable> sharedVariables = new HashMap<>();
       List copy1 = original.copy(sharedVariables);
       assertNotSame(original, copy1);
       assertStrictEquality(original, copy1, false);
@@ -215,31 +239,31 @@ public class ListTest {
       Map<Variable, Variable> variables = new HashMap<>();
       List newList = originalList.copy(variables);
       assertNotSame(originalList, newList);
-      assertSame(variables.get(x), newList.getArgument(0));
-      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
-      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+      assertSame(variables.get(x), newList.firstArgument());
+      assertSame(variables.get(y), newList.secondArgument().firstArgument());
+      assertSame(variables.get(z), newList.secondArgument().secondArgument());
 
       x.unify(a);
 
-      assertSame(x, originalList.getArgument(0));
-      assertSame(sublist, originalList.getArgument(1));
+      assertSame(x, originalList.firstArgument());
+      assertSame(sublist, originalList.secondArgument());
 
       variables = new HashMap<>();
       newList = originalList.copy(variables);
       assertNotSame(originalList, newList);
-      assertSame(a, newList.getArgument(0));
-      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
-      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+      assertSame(a, newList.firstArgument());
+      assertSame(variables.get(y), newList.secondArgument().firstArgument());
+      assertSame(variables.get(z), newList.secondArgument().secondArgument());
 
       z.unify(c);
 
       variables = new HashMap<>();
       newList = originalList.copy(variables);
       assertNotSame(originalList, newList);
-      assertSame(a, newList.getArgument(0));
-      assertNotSame(sublist, newList.getArgument(1));
-      assertSame(variables.get(y), newList.getArgument(1).getArgument(0));
-      assertSame(c, newList.getArgument(1).getArgument(1));
+      assertSame(a, newList.firstArgument());
+      assertNotSame(sublist, newList.secondArgument());
+      assertSame(variables.get(y), newList.secondArgument().firstArgument());
+      assertSame(c, newList.secondArgument().secondArgument());
 
       x.backtrack();
       z.backtrack();
@@ -248,10 +272,10 @@ public class ListTest {
       variables = new HashMap<>();
       newList = originalList.copy(variables);
       assertNotSame(originalList, newList);
-      assertSame(variables.get(x), newList.getArgument(0));
-      assertNotSame(sublist, newList.getArgument(1));
-      assertSame(b, newList.getArgument(1).getArgument(0));
-      assertSame(variables.get(z), newList.getArgument(1).getArgument(1));
+      assertSame(variables.get(x), newList.firstArgument());
+      assertNotSame(sublist, newList.secondArgument());
+      assertSame(b, newList.secondArgument().firstArgument());
+      assertSame(variables.get(z), newList.secondArgument().secondArgument());
    }
 
    @Test
@@ -264,8 +288,8 @@ public class ListTest {
 
       Map<Variable, Variable> variables = new HashMap<>();
       List newList = originalList.copy(variables);
-      assertSame(variables.get(x), newList.getArgument(0));
-      assertSame(sublist, newList.getArgument(1));
+      assertSame(variables.get(x), newList.firstArgument());
+      assertSame(sublist, newList.secondArgument());
    }
 
    @Test
@@ -340,7 +364,7 @@ public class ListTest {
          }
          bigListSyntaxBuilder1.append(i);
          // make one element in second list different than first
-         if (i == LONG_LIST_SIZE/4) {
+         if (i == LONG_LIST_SIZE / 4) {
             bigListSyntaxBuilder2.append(i - 1);
          } else {
             bigListSyntaxBuilder2.append(i);
@@ -438,25 +462,25 @@ public class ListTest {
       assertStrictEquality(input, output, true);
       for (int i = LONG_LIST_SIZE - 1; i > -1; i--) {
          assertSame(List.class, output.getClass());
-         assertSame(atoms[i], output.getArgument(0));
-         output = output.getArgument(1);
+         assertSame(atoms[i], output.firstArgument());
+         output = output.secondArgument();
       }
       assertSame(EmptyList.EMPTY_LIST, output);
 
-      Term tail = input.getArgument(1).getBound();
+      Term tail = input.secondArgument().getBound();
       input.backtrack();
-      assertSame(TermType.VARIABLE, input.getArgument(0).getType());
-      assertEquals("H" + (LONG_LIST_SIZE - 1), input.getArgument(0).toString());
-      assertSame(TermType.VARIABLE, input.getArgument(1).getType());
-      assertEquals("T" + (LONG_LIST_SIZE - 1), input.getArgument(1).toString());
+      assertSame(TermType.VARIABLE, input.firstArgument().getType());
+      assertEquals("H" + (LONG_LIST_SIZE - 1), input.firstArgument().toString());
+      assertSame(TermType.VARIABLE, input.secondArgument().getType());
+      assertEquals("T" + (LONG_LIST_SIZE - 1), input.secondArgument().toString());
 
       boolean first = true;
       for (int i = LONG_LIST_SIZE - 2; i > -1; i--) {
          assertSame(first ? List.class : Variable.class, tail.getClass());
          first = false;
          assertSame(TermType.LIST, tail.getType());
-         assertSame(atoms[i], tail.getArgument(0).getBound());
-         tail = tail.getArgument(1);
+         assertSame(atoms[i], tail.firstArgument().getBound());
+         tail = tail.secondArgument();
       }
       assertSame(Variable.class, tail.getClass());
       assertSame(EmptyList.EMPTY_LIST, tail.getBound());
@@ -505,8 +529,8 @@ public class ListTest {
       List l2 = l1.copy(null);
       assertFalse(l1.isImmutable());
       assertTrue(l2.toString(), l2.isImmutable());
-      assertSame(v, l1.getArgument(1).getArgument(0).getArgument(1));
-      assertSame(a, l2.getArgument(1).getArgument(0).getArgument(1));
+      assertSame(v, l1.secondArgument().firstArgument().secondArgument());
+      assertSame(a, l2.secondArgument().firstArgument().secondArgument());
    }
 
    @Test

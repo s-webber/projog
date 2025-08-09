@@ -51,6 +51,22 @@ public interface Term {
     */
    int getNumberOfArguments();
 
+   default Term firstArgument() {
+      return getArgument(0);
+   }
+
+   default Term secondArgument() {
+      return getArgument(1);
+   }
+
+   default Term thirdArgument() {
+      return getArgument(2);
+   }
+
+   default Term fourthArgument() {
+      return getArgument(3);
+   }
+
    /**
     * Returns the term at the specified position in this term's arguments.
     *

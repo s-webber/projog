@@ -404,7 +404,7 @@ public class ClauseActionFactoryTest {
       Term[] values1 = allValues.get(0).getArgs();
       assertEquals(atom("y"), values1[1]);
       assertSame(values1[0], values1[2]);
-      assertSame(values1[0], values1[3].getArgument(0));
+      assertSame(values1[0], values1[3].firstArgument());
       assertNotSame(values1[0], values1[4]);
 
       Term[] values2 = allValues.get(1).getArgs();

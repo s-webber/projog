@@ -95,18 +95,18 @@ public class ListUtilsTest {
       assertEquals(".(x, .(y, .(z, .(q, _))))", list.toString());
       assertNotSame(tail, tail.getTerm());
       assertSame(TermType.LIST, tail.getType());
-      assertSame(q, tail.getArgument(0));
-      assertSame(TermType.VARIABLE, tail.getArgument(1).getType());
+      assertSame(q, tail.firstArgument());
+      assertSame(TermType.VARIABLE, tail.secondArgument().getType());
 
       Term newList = list.getTerm();
-      Term newTail = tail.getArgument(1);
+      Term newTail = tail.secondArgument();
       Atom w = atom("w");
       assertTrue(ListUtils.isMember(w, newList));
       assertEquals(".(x, .(y, .(z, .(q, .(w, _)))))", newList.toString());
       assertNotSame(newTail, newTail.getTerm());
       assertSame(TermType.LIST, newTail.getType());
-      assertSame(w, newTail.getArgument(0));
-      assertSame(TermType.VARIABLE, newTail.getArgument(1).getType());
+      assertSame(w, newTail.firstArgument());
+      assertSame(TermType.VARIABLE, newTail.secondArgument().getType());
    }
 
    @Test

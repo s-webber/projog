@@ -72,6 +72,16 @@ public final class List implements Term {
    }
 
    @Override
+   public Term firstArgument() {
+      return head;
+   }
+
+   @Override
+   public Term secondArgument() {
+      return tail;
+   }
+
+   @Override
    public Term getArgument(int index) {
       switch (index) {
          case 0:
@@ -155,11 +165,11 @@ public final class List implements Term {
       do {
          TermType tType = t1.getType();
          if (tType == TermType.LIST) {
-            if (t2.getArgument(0).unify(t1.getArgument(0)) == false) {
+            if (t2.firstArgument().unify(t1.firstArgument()) == false) {
                return false;
             }
-            t1 = t1.getArgument(1);
-            t2 = t2.getArgument(1);
+            t1 = t1.secondArgument();
+            t2 = t2.secondArgument();
          } else if (tType.isVariable()) {
             return t1.unify(t2);
          } else {
@@ -196,12 +206,12 @@ public final class List implements Term {
          Term b = (List) o;
 
          do {
-            if (!a.getArgument(0).equals(b.getArgument(0))) {
+            if (!a.firstArgument().equals(b.firstArgument())) {
                return false;
             }
 
-            a = a.getArgument(1);
-            b = b.getArgument(1);
+            a = a.secondArgument();
+            b = b.secondArgument();
          } while (a.getClass() == List.class && b.getClass() == List.class);
 
          return a.equals(b);
@@ -224,9 +234,9 @@ public final class List implements Term {
       do {
          sb.append(ListFactory.LIST_PREDICATE_NAME);
          sb.append("(");
-         sb.append(t.getArgument(0));
+         sb.append(t.firstArgument());
          sb.append(", ");
-         t = t.getArgument(1);
+         t = t.secondArgument();
          listCtr++;
       } while (t.getType() == TermType.LIST);
       sb.append(t);

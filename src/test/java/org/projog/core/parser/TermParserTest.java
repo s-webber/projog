@@ -232,14 +232,14 @@ public class TermParserTest {
       Term t = parseTerm("p(1,a,0.5)=p(a,0.5,1).");
 
       // the integer number 1 will be reused due to th use of IntegerNumberCache
-      assertEquals(t.getArgument(0).getArgument(0), t.getArgument(1).getArgument(2));
-      assertSame(t.getArgument(0).getArgument(0), t.getArgument(1).getArgument(2));
+      assertEquals(t.firstArgument().firstArgument(), t.secondArgument().thirdArgument());
+      assertSame(t.firstArgument().firstArgument(), t.secondArgument().thirdArgument());
 
-      assertEquals(t.getArgument(0).getArgument(1), t.getArgument(1).getArgument(0));
-      assertNotSame(t.getArgument(0).getArgument(1), t.getArgument(1).getArgument(0));
+      assertEquals(t.firstArgument().secondArgument(), t.secondArgument().firstArgument());
+      assertNotSame(t.firstArgument().secondArgument(), t.secondArgument().firstArgument());
 
-      assertEquals(t.getArgument(0).getArgument(2), t.getArgument(1).getArgument(1));
-      assertNotSame(t.getArgument(0).getArgument(2), t.getArgument(1).getArgument(1));
+      assertEquals(t.firstArgument().thirdArgument(), t.secondArgument().secondArgument());
+      assertNotSame(t.firstArgument().thirdArgument(), t.secondArgument().secondArgument());
    }
 
    private void assertNonVariableTerm(Term expected, String input) {

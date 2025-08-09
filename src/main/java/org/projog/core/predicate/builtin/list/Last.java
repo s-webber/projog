@@ -114,12 +114,12 @@ public final class Last extends AbstractPredicateFactory {
       Term last = list;
       while (tail.getType() == TermType.LIST) {
          last = tail;
-         tail = tail.getArgument(1);
+         tail = tail.secondArgument();
       }
 
       if (list != tail && tail.getType() == TermType.EMPTY_LIST) {
          // first arg is a ground list
-         return PredicateUtils.toPredicate(termToUnifyLastElementWith.unify(last.getArgument(0)));
+         return PredicateUtils.toPredicate(termToUnifyLastElementWith.unify(last.firstArgument()));
       } else if (tail.getType().isVariable()) {
          // first arg is a variable or a list with a variable at the tail
          return new LastPredicate(last, tail, termToUnifyLastElementWith);
@@ -159,7 +159,7 @@ public final class Last extends AbstractPredicateFactory {
             }
             tail.unify(EmptyList.EMPTY_LIST);
             retry = true;
-            if (termToUnifyLastElementWith.unify(last.getArgument(0))) {
+            if (termToUnifyLastElementWith.unify(last.firstArgument())) {
                return true;
             }
          }

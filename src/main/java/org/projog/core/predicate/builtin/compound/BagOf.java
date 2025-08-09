@@ -116,7 +116,7 @@ public final class BagOf extends AbstractPredicateFactory implements Preprocessa
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term goal = term.getArgument(1);
+      Term goal = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(goal)) {
          return new PreprocessedBagOf(getPredicates().getPreprocessedPredicateFactory(goal));
       } else {
@@ -133,7 +133,7 @@ public final class BagOf extends AbstractPredicateFactory implements Preprocessa
 
       @Override
       public Predicate getPredicate(Term term) {
-         return new BagOfPredicate(pf, term.getArgument(0), term.getArgument(1), term.getArgument(2));
+         return new BagOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
       }
 
       @Override

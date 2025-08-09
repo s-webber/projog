@@ -54,7 +54,7 @@ public class LimitTest {
    public void testPreprocess_not_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term limitTerm = parseTerm("limit(3, test(a, b)).");
-      Term queryArg = limitTerm.getArgument(1);
+      Term queryArg = limitTerm.secondArgument();
       // note not a PreprocessablePredicateFactory
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
@@ -68,7 +68,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)});
+      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));
@@ -92,7 +92,7 @@ public class LimitTest {
    public void testPreprocess_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term limitTerm = parseTerm("limit(3, test(a, b)).");
-      Term queryArg = limitTerm.getArgument(1);
+      Term queryArg = limitTerm.secondArgument();
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
@@ -107,7 +107,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.getArgument(0), limitTerm.getArgument(1)});
+      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));

@@ -123,7 +123,7 @@ public final class Length extends AbstractPredicateFactory {
       Term tail = list;
       while (tail.getType() == TermType.LIST) {
          actualLength++;
-         tail = tail.getArgument(1);
+         tail = tail.secondArgument();
       }
 
       if (tail == EmptyList.EMPTY_LIST) {

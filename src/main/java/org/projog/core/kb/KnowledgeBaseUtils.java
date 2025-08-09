@@ -124,8 +124,8 @@ public final class KnowledgeBaseUtils {
    public static Term[] toArrayOfConjunctions(Term t) {
       List<Term> l = new ArrayList<>();
       while (isConjunction(t)) {
-         l.add(t.getArgument(0));
-         t = t.getArgument(1);
+         l.add(t.firstArgument());
+         t = t.secondArgument();
       }
       l.add(t);
       return l.toArray(new Term[l.size()]);

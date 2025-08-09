@@ -62,8 +62,8 @@ public final class ConsultList extends AbstractSingleResultPredicate {
          consult(head);
 
          if (tail.getType() == TermType.LIST) {
-            head = tail.getArgument(0);
-            tail = tail.getArgument(1);
+            head = tail.firstArgument();
+            tail = tail.secondArgument();
          } else {
             if (tail.getType() != TermType.EMPTY_LIST) {
                consult(tail);

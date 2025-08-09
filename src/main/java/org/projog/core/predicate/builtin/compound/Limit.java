@@ -149,7 +149,7 @@ public final class Limit extends AbstractPredicateFactory implements Preprocessa
 
    @Override
    public PredicateFactory preprocess(Term term) {
-      Term goal = term.getArgument(1);
+      Term goal = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(goal)) {
          return new OptimisedLimit(getPredicates().getPreprocessedPredicateFactory(goal));
       } else {
@@ -166,7 +166,7 @@ public final class Limit extends AbstractPredicateFactory implements Preprocessa
 
       @Override
       public Predicate getPredicate(Term term) {
-         return getLimitPredicate(pf, term.getArgument(0), term.getArgument(1));
+         return getLimitPredicate(pf, term.firstArgument(), term.secondArgument());
       }
 
       @Override

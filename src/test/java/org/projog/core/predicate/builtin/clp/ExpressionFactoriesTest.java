@@ -142,7 +142,7 @@ public class ExpressionFactoriesTest {
       @Override
       public Expression createExpression(Expression[] args) {
          assertEquals(1, args.length);
-         long expectedValue = ((IntegerNumber) DUMMY_TERM.getArgument(0)).getLong();
+         long expectedValue = ((IntegerNumber) DUMMY_TERM.firstArgument()).getLong();
          assertEquals(expectedValue, ((FixedValue) args[0]).getMin(null));
          return DUMMY_EXPRESSION;
       }

@@ -285,8 +285,8 @@ public final class TermSplit extends AbstractSingleResultPredicate {
    private void appendListElementsToString(StringBuffer sb, Term t) {
       TermType type = t.getType();
       if (type == TermType.LIST) {
-         appendListElementsToString(sb, t.getArgument(0));
-         appendListElementsToString(sb, t.getArgument(1));
+         appendListElementsToString(sb, t.firstArgument());
+         appendListElementsToString(sb, t.secondArgument());
       } else if (type == TermType.ATOM) {
          String name = t.getName();
          sb.append(stringToChar(name));

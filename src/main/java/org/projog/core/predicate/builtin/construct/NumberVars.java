@@ -20,7 +20,7 @@ import java.util.LinkedList;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.IntegerNumberCache;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -121,7 +121,7 @@ public final class NumberVars extends AbstractSingleResultPredicate {
       while (!stack.isEmpty()) {
          Term next = stack.removeFirst();
          if (next.getType().isVariable()) {
-            next.unify(Structure.createStructure("$VAR", new Term[] {IntegerNumberCache.valueOf(ctr++)}));
+            next.unify(StructureFactory.createStructure("$VAR", IntegerNumberCache.valueOf(ctr++)));
          } else {
             for (int i = next.getNumberOfArguments() - 1; i > -1; i--) {
                Term child = next.getArgument(i);

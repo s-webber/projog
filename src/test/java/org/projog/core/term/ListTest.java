@@ -179,7 +179,7 @@ public class ListTest {
       Atom b = new Atom("b");
       Variable X = new Variable("X");
       Variable Y = new Variable("Y");
-      Structure head = structure("p", X);
+      Term head = structure("p", X);
 
       List original = new List(head, Y); // [p(X), Y]
 
@@ -480,8 +480,8 @@ public class ListTest {
       IntegerNumber number = integerNumber(42);
       Variable variable1 = variable("X");
       Variable variable2 = variable("Y");
-      Structure immutableStructure = structure("p", atom("c"));
-      Structure mutableStructure = structure("p", variable("Z"));
+      Term immutableStructure = structure("p", atom("c"));
+      Term mutableStructure = structure("p", variable("Z"));
 
       // assert when both terms are mutable
       assertTrue(new List(atom, number).isImmutable());

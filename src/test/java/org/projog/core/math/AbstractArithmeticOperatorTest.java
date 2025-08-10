@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class AbstractArithmeticOperatorTest {
@@ -63,7 +63,7 @@ public class AbstractArithmeticOperatorTest {
       try {
          DummyArithmeticOperator c = new DummyArithmeticOperator();
          c.setKnowledgeBase(createKnowledgeBase());
-         c.calculate(Structure.createStructure("p", createArgs(numberOfArguments, integerNumber())));
+         c.calculate(StructureFactory.createStructure("p", createArgs(numberOfArguments, integerNumber())));
          fail();
       } catch (IllegalArgumentException e) {
          String expectedMessage = "The ArithmeticOperator: class org.projog.core.math.AbstractArithmeticOperatorTest$DummyArithmeticOperator does next accept the number of arguments: "
@@ -82,8 +82,8 @@ public class AbstractArithmeticOperatorTest {
          }
       };
       c.setKnowledgeBase(createKnowledgeBase());
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {integerNumber()})));
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {decimalFraction()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {integerNumber()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {decimalFraction()})));
    }
 
    @Test
@@ -96,10 +96,10 @@ public class AbstractArithmeticOperatorTest {
          }
       };
       c.setKnowledgeBase(createKnowledgeBase());
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {integerNumber(), integerNumber()})));
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {decimalFraction(), decimalFraction()})));
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {integerNumber(), decimalFraction()})));
-      assertSame(expected, c.calculate(Structure.createStructure("p", new Term[] {decimalFraction(), integerNumber()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {integerNumber(), integerNumber()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {decimalFraction(), decimalFraction()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {integerNumber(), decimalFraction()})));
+      assertSame(expected, c.calculate(StructureFactory.createStructure("p", new Term[] {decimalFraction(), integerNumber()})));
    }
 
    @Test
@@ -136,7 +136,7 @@ public class AbstractArithmeticOperatorTest {
 
    private void assertUnexpectedAtom(AbstractArithmeticOperator c, Term... args) {
       try {
-         c.calculate(Structure.createStructure("p", args));
+         c.calculate(StructureFactory.createStructure("p", args));
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot find arithmetic operator: test/0", e.getMessage());
@@ -145,7 +145,7 @@ public class AbstractArithmeticOperatorTest {
 
    private void assertUnexpectedVariable(AbstractArithmeticOperator c, Term... args) {
       try {
-         c.calculate(Structure.createStructure("p", args));
+         c.calculate(StructureFactory.createStructure("p", args));
          fail();
       } catch (ProjogException e) {
          assertEquals("Cannot get Numeric for term: X of type: VARIABLE", e.getMessage());
@@ -161,8 +161,8 @@ public class AbstractArithmeticOperatorTest {
          }
       };
       c.setKnowledgeBase(createKnowledgeBase());
-      Structure arithmeticFunction = structure("*", integerNumber(3), integerNumber(7));
-      Numeric result = c.calculate(Structure.createStructure("p", new Term[] {arithmeticFunction}));
+      Term arithmeticFunction = structure("*", integerNumber(3), integerNumber(7));
+      Numeric result = c.calculate(StructureFactory.createStructure("p", new Term[] {arithmeticFunction}));
       assertEquals(26, result.getLong()); // 26 = (3*7)+5
    }
 
@@ -175,9 +175,9 @@ public class AbstractArithmeticOperatorTest {
          }
       };
       c.setKnowledgeBase(createKnowledgeBase());
-      Structure f1 = structure("*", integerNumber(3), integerNumber(7));
-      Structure f2 = structure("/", integerNumber(12), integerNumber(2));
-      Numeric result = c.calculate(Structure.createStructure("p", new Term[] {f1, f2}));
+      Term f1 = structure("*", integerNumber(3), integerNumber(7));
+      Term f2 = structure("/", integerNumber(12), integerNumber(2));
+      Numeric result = c.calculate(StructureFactory.createStructure("p", new Term[] {f1, f2}));
       assertEquals(15, result.getLong()); // 15 = (3*7)-(12/2)
    }
 

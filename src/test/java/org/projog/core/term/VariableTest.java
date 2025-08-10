@@ -165,7 +165,7 @@ public class VariableTest {
       Variable y = new Variable("Y");
       Atom a = new Atom("a");
       Atom b = new Atom("b");
-      Structure p = structure("p1", structure("p2", x, atom(), x), y);
+      Term p = structure("p1", structure("p2", x, atom(), x), y);
 
       Variable result = new Variable("Result");
       assertSame(result, result.getTerm());
@@ -218,15 +218,15 @@ public class VariableTest {
    public void testCopy_2() {
       Variable v = variable();
       Atom a = atom();
-      Structure s1 = structure("name", v);
-      Structure s2 = structure("name", v);
+      Term s1 = structure("name", v);
+      Term s2 = structure("name", v);
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
 
-      Structure c1 = s1.copy(sharedVariables);
+      Term c1 = s1.copy(sharedVariables);
       assertTrue(c1.unify(structure("name", a)));
 
-      Structure c2 = s2.copy(sharedVariables);
+      Term c2 = s2.copy(sharedVariables);
       // check that the single argument of the newly copied structure is the atom itself
       // rather than a variable assigned to the atom
       assertSame(a, c2.firstArgument());
@@ -350,7 +350,7 @@ public class VariableTest {
          v2 = tmpVar;
       }
       assertNotEquals(v1, v2);
-      Structure t = structure("name", atom("a"), atom("b"), atom("c"));
+      Term t = structure("name", atom("a"), atom("b"), atom("c"));
       assertTrue(v2.unify(t));
       assertNotEquals(v1, v2);
       assertStrictEquality(v1, v2, true);
@@ -384,7 +384,7 @@ public class VariableTest {
    @Test
    public void testInfiniteTerm() {
       Variable v = variable("X");
-      Structure t = structure("name", v);
+      Term t = structure("name", v);
       assertTrue(v.unify(t));
 
       assertSame(t, v.getBound());
@@ -1115,7 +1115,7 @@ public class VariableTest {
 
    @Test
    public void testVariableNotEqualToUnifiedStructure() {
-      assertVariableNotEqualToUnifiedTerm(Structure.createStructure("test", new Term[] {atom()}));
+      assertVariableNotEqualToUnifiedTerm(StructureFactory.createStructure("test", new Term[] {atom()}));
    }
 
    @Test

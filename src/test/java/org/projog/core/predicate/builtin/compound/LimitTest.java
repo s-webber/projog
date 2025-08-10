@@ -35,7 +35,7 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -44,7 +44,7 @@ public class LimitTest {
    public void testPreprocess_cannot_optimise_variable() {
       Limit o = new Limit();
 
-      Term t = Structure.createStructure("limit", new Term[] {new IntegerNumber(3), new Variable("Y")});
+      Term t = StructureFactory.createStructure("limit", new Term[] {new IntegerNumber(3), new Variable("Y")});
       PredicateFactory optimised = o.preprocess(t);
 
       assertSame(o, optimised);
@@ -68,7 +68,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
+      Term queryArgs = StructureFactory.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));
@@ -107,7 +107,7 @@ public class LimitTest {
       PredicateFactory optimised = o.preprocess(limitTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
-      Term queryArgs = Structure.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
+      Term queryArgs = StructureFactory.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
       assertNotSame(p, optimised.getPredicate(queryArgs));

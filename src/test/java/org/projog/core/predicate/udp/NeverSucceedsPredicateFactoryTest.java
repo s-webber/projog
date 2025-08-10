@@ -30,7 +30,7 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class NeverSucceedsPredicateFactoryTest {
@@ -54,7 +54,7 @@ public class NeverSucceedsPredicateFactoryTest {
 
    @Test
    public void testGetPredicate_spy_point_disabled() {
-      Predicate predicate = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
+      Predicate predicate = testObject.getPredicate(StructureFactory.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, predicate);
       assertEquals("", listener.result());
@@ -64,7 +64,7 @@ public class NeverSucceedsPredicateFactoryTest {
    public void testGetPredicate_spy_point_enabled() {
       spyPoints.setTraceEnabled(true);
 
-      Predicate predicate = testObject.getPredicate(Structure.createStructure(FUNCTOR, queryArgs));
+      Predicate predicate = testObject.getPredicate(StructureFactory.createStructure(FUNCTOR, queryArgs));
 
       assertSame(PredicateUtils.FALSE, predicate);
       assertEquals("CALLtest(a, b, c)FAILtest(a, b, c)", listener.result());

@@ -151,7 +151,7 @@ public class AtomTest {
       assertNotEquals(a, new Atom("x" + a.getName()));
       assertNotEquals(a, new Atom("TEST"));
       assertNotEquals(a, new Atom("tes"));
-      assertNotEquals(a, Structure.createStructure(a.getName(), new Term[] {a}));
+      assertNotEquals(a, StructureFactory.createStructure(a.getName(), new Term[] {a}));
       assertNotEquals(a, ListFactory.createList(a, a));
    }
 }

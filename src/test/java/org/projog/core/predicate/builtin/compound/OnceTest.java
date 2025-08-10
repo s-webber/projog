@@ -32,7 +32,7 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -41,7 +41,7 @@ public class OnceTest {
    public void testPreprocess_cannot_optimise_variable() {
       Once o = new Once();
 
-      Term t = Structure.createStructure("once", new Term[] {new Variable("X")});
+      Term t = StructureFactory.createStructure("once", new Term[] {new Variable("X")});
       PredicateFactory optimised = o.preprocess(t);
 
       assertSame(o, optimised);
@@ -64,7 +64,7 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
@@ -92,7 +92,7 @@ public class OnceTest {
       PredicateFactory optimised = o.preprocess(onceTerm);
 
       assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      Term term = Structure.createStructure("test", new Term[] {queryArg});
+      Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));

@@ -21,7 +21,7 @@ import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -129,7 +129,7 @@ public final class Univ extends AbstractSingleResultPredicate {
       if (predicateArgs.size() == 0) {
          return new Atom(predicateName);
       } else {
-         return Structure.createStructure(predicateName, predicateArgs.toArray(new Term[predicateArgs.size()]));
+         return StructureFactory.createStructure(predicateName, predicateArgs.toArray(new Term[predicateArgs.size()]));
       }
    }
 

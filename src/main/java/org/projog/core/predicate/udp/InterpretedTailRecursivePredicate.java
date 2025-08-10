@@ -21,7 +21,7 @@ import java.util.Map;
 import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -172,7 +172,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
       if (currentQueryArgs.length == 0) {
          return new Atom(name);
       } else {
-         return Structure.createStructure(name, currentQueryArgs);
+         return StructureFactory.createStructure(name, currentQueryArgs);
       }
    }
 

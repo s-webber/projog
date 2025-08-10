@@ -21,7 +21,7 @@ import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumberCache;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -119,7 +119,7 @@ public final class Functor extends AbstractSingleResultPredicate {
          for (int i = 0; i < numArgs; i++) {
             args[i] = new Variable();
          }
-         return Structure.createStructure(functor.getName(), args);
+         return StructureFactory.createStructure(functor.getName(), args);
       }
    }
 }

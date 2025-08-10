@@ -20,13 +20,13 @@ import java.util.Optional;
 
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class SingleSolutionStructureQueryTest extends AbstractQueryTest {
    private static final String EXPECTED_NUMERIC_EXCEPTION_MESSAGE = "Expected Numeric but got: STRUCTURE with value: test(a, 1)";
    private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: STRUCTURE with value: test(a, 1)";
-   private static final Term STRUCTURE = Structure.createStructure("test", new Term[] {new Atom("a"), new IntegerNumber(1)});
+   private static final Term STRUCTURE = StructureFactory.createStructure("test", new Term[] {new Atom("a"), new IntegerNumber(1)});
 
    public SingleSolutionStructureQueryTest() {
       super("X = test(a, 1).");

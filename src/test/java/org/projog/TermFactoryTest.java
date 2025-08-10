@@ -26,7 +26,6 @@ import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -46,7 +45,7 @@ public class TermFactoryTest {
 
    @Test
    public void testStructure() {
-      Structure s = TermFactory.structure();
+      Term s = TermFactory.structure();
       assertEquals("test", s.getName());
       assertEquals(1, s.getNumberOfArguments());
       assertEquals(new Atom("test"), s.firstArgument());
@@ -58,7 +57,7 @@ public class TermFactoryTest {
       Term arg1 = new Atom("first argument");
       Term arg2 = new Atom("second argument");
       Term arg3 = new Atom("third argument");
-      Structure s = TermFactory.structure(name, arg1, arg2, arg3);
+      Term s = TermFactory.structure(name, arg1, arg2, arg3);
       assertEquals(name, s.getName());
       assertEquals(3, s.getNumberOfArguments());
       assertSame(arg1, s.firstArgument());

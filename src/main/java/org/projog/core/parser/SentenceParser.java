@@ -31,7 +31,7 @@ import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -466,7 +466,7 @@ public class SentenceParser {
       for (int i = 0; i < args.length; i++) {
          args[i] = toTerm(tokens.get(i));
       }
-      return Structure.createStructure(token.getName(), args);
+      return StructureFactory.createStructure(token.getName(), args);
    }
 
    private Term toStructureFromOperandAndArguments(Token token) {
@@ -478,7 +478,7 @@ public class SentenceParser {
       for (int i = 0; i < args.length; i++) {
          args[i] = toTerm(token.getArgument(i));
       }
-      return Structure.createStructure(token.getName(), args);
+      return StructureFactory.createStructure(token.getName(), args);
    }
 
    private boolean isNegativeNumber(Token t) {

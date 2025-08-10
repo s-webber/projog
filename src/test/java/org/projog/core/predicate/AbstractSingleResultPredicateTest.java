@@ -28,7 +28,7 @@ import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class AbstractSingleResultPredicateTest {
@@ -93,9 +93,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1})));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG2})));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG2})));
    }
 
    @Test
@@ -107,9 +107,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2})));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG2})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1})));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG1})));
    }
 
    @Test
@@ -121,9 +121,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3})));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1})));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1})));
    }
 
    @Test
@@ -135,9 +135,9 @@ public class AbstractSingleResultPredicateTest {
          }
       };
 
-      assertSame(PredicateUtils.TRUE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3, ARG4})));
+      assertSame(PredicateUtils.TRUE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG2, ARG3, ARG4})));
 
-      assertSame(PredicateUtils.FALSE, pf.getPredicate(Structure.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1, ARG1})));
+      assertSame(PredicateUtils.FALSE, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {ARG1, ARG1, ARG1, ARG1})));
    }
 
    private void assertIllegalArgumentException(AbstractSingleResultPredicate pf, int numberOfArguments) {
@@ -148,7 +148,7 @@ public class AbstractSingleResultPredicateTest {
          } else {
             Term[] args = new Term[numberOfArguments];
             Arrays.fill(args, new Atom("x"));
-            term = Structure.createStructure("dummy", args);
+            term = StructureFactory.createStructure("dummy", args);
          }
          pf.getPredicate(term);
          fail();

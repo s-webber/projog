@@ -16,7 +16,6 @@
 package org.projog.core.math;
 
 import org.projog.core.ProjogException;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermType;
@@ -47,7 +46,7 @@ public final class NumericTermComparator {
     * less than, equal to, or greater than the second.
     * <p>
     * Unlike {@link #compare(Numeric, Numeric)} this method will work for arguments that represent arithmetic
-    * expressions (e.g. a {@link Structure} of the form {@code +(1,2)}) as well as {@link Numeric} terms.
+    * expressions (e.g. a compound term of the form {@code +(1,2)}) as well as {@link Numeric} terms.
     *
     * @param t1 the first term to be compared
     * @param t2 the second term to be compared

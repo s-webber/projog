@@ -33,7 +33,7 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 /**
@@ -104,7 +104,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       // Note that use to return specialised "MultipleRulesAlwaysTruePredicate" object for predicates of this style
       // but now use generic "InterpretedUserDefinedPredicatePredicateFactory" as seemed overly complex to support
       // this special case when it is so rarely used.
-      Predicate p = pf.getPredicate(Structure.createStructure("p", createArgs(clauses[0])));
+      Predicate p = pf.getPredicate(StructureFactory.createStructure("p", createArgs(clauses[0])));
       assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       assertTrue(p.couldReevaluationSucceed());
       for (int i = 0; i < expectedSuccessfulEvaluations; i++) {
@@ -193,7 +193,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       PredicateFactory pf = getActualPredicateFactory("p(a,b,c).", "p(1,2,3).", "p(x,y,Z).");
       assertEquals("org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory", pf.getClass().getName());
       assertTrue(pf.isRetryable());
-      Structure term = structure("p", atom("q"), atom("w"), atom("e"));
+      Term term = structure("p", atom("q"), atom("w"), atom("e"));
       PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
       assertSame(NeverSucceedsPredicateFactory.class, preprocessedPredicateFactory.getClass());
       assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(term));
@@ -210,7 +210,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    @Test
    public void testInterpretedUserDefinedPredicate() {
       PredicateFactory pf = getActualPredicateFactory(toTerms(NON_RECURSIVE_PREDICATE_SYNTAX));
-      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(Structure.createStructure("p", createArgs(3))).getClass());
+      assertSame(InterpretedUserDefinedPredicate.class, pf.getPredicate(StructureFactory.createStructure("p", createArgs(3))).getClass());
       assertTrue(pf.isRetryable());
    }
 

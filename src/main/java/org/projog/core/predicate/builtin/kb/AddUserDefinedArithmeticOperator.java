@@ -22,7 +22,7 @@ import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
@@ -71,7 +71,7 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingleResult
          final Variable result = new Variable("result");
          final Term[] argsPlusResult = createArgumentsIncludingResult(term, result);
 
-         Term s = Structure.createStructure(key.getName(), argsPlusResult);
+         Term s = StructureFactory.createStructure(key.getName(), argsPlusResult);
          if (pf.getPredicate(s).evaluate()) {
             return TermUtils.castToNumeric(result);
          } else {

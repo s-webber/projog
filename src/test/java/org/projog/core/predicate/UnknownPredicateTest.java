@@ -31,7 +31,7 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.udp.InterpretedUserDefinedPredicate;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class UnknownPredicateTest {
@@ -41,7 +41,7 @@ public class UnknownPredicateTest {
    public void testUnknownPredicate() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       PredicateKey key = new PredicateKey(FUNCTOR, 1);
-      Term terms = Structure.createStructure(FUNCTOR, new Term[] {variable()});
+      Term terms = StructureFactory.createStructure(FUNCTOR, new Term[] {variable()});
 
       // create UnknownPredicate for a not-yet-defined UnknownPredicateTest/1 predicate
       UnknownPredicate e = new UnknownPredicate(kb, key);
@@ -66,7 +66,7 @@ public class UnknownPredicateTest {
       // create UnknownPredicate for a not-yet-defined predicate
       UnknownPredicate original = new UnknownPredicate(kb, key);
 
-      PredicateFactory result = original.preprocess(Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
+      PredicateFactory result = original.preprocess(StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
       assertSame(original, result);
    }
@@ -81,7 +81,7 @@ public class UnknownPredicateTest {
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
 
-      PredicateFactory result = original.preprocess(Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
+      PredicateFactory result = original.preprocess(StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
       assertSame(mockPredicateFactory, result);
       verifyNoInteractions(mockPredicateFactory);
@@ -97,10 +97,10 @@ public class UnknownPredicateTest {
       PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
       kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      Term arg = Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")});
+      Term arg = StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")});
       when(mockPreprocessablePredicateFactory.preprocess(arg)).thenReturn(mockPredicateFactory);
 
-      PredicateFactory result = original.preprocess(Structure.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
+      PredicateFactory result = original.preprocess(StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
       assertSame(mockPredicateFactory, result);
       verify(mockPreprocessablePredicateFactory).preprocess(arg);

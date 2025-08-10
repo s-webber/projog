@@ -24,7 +24,7 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 /**
@@ -51,9 +51,9 @@ public final class PredicateMetaData extends AbstractPredicateFactory {
 
    private List<Term> toTerms(String type, PredicateFactory pf) {
       List<Term> attributes = new ArrayList<>();
-      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_class"), new Atom(pf.getClass().getName())}));
-      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_isRetryable"), new Atom("" + pf.isRetryable())}));
-      attributes.add(Structure.createStructure(":", new Term[] {new Atom(type + "_isAlwaysCutOnBacktrack"), new Atom("" + pf.isAlwaysCutOnBacktrack())}));
+      attributes.add(StructureFactory.createStructure(":", new Term[] {new Atom(type + "_class"), new Atom(pf.getClass().getName())}));
+      attributes.add(StructureFactory.createStructure(":", new Term[] {new Atom(type + "_isRetryable"), new Atom("" + pf.isRetryable())}));
+      attributes.add(StructureFactory.createStructure(":", new Term[] {new Atom(type + "_isAlwaysCutOnBacktrack"), new Atom("" + pf.isAlwaysCutOnBacktrack())}));
       return attributes;
    }
 

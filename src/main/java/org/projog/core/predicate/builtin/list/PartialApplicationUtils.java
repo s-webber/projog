@@ -19,7 +19,7 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -55,7 +55,7 @@ public class PartialApplicationUtils {
          args[i] = new Variable();
       }
       // TODO check not numeric before calling .getName()
-      Term t = Structure.createStructure(partiallyAppliedFunction.getName(), args);
+      Term t = StructureFactory.createStructure(partiallyAppliedFunction.getName(), args);
       return predicates.getPreprocessedPredicateFactory(t);
    }
 
@@ -79,7 +79,7 @@ public class PartialApplicationUtils {
          result[originalNumArgs + i] = extraArguments[i].getTerm();
       }
 
-      return Structure.createStructure(partiallyAppliedFunction.getName(), result);
+      return StructureFactory.createStructure(partiallyAppliedFunction.getName(), result);
    }
 
    public static boolean apply(PredicateFactory pf, Term term) {

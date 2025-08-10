@@ -38,7 +38,7 @@ import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class QueryStatementTest {
@@ -47,7 +47,7 @@ public class QueryStatementTest {
    @Test
    public void testSetTerm() {
       QueryStatement s = new QueryStatement(kb, "X = Y.");
-      Term term = Structure.createStructure("test", new Term[] {new Atom("a")});
+      Term term = StructureFactory.createStructure("test", new Term[] {new Atom("a")});
       s.setTerm("Y", term);
       assertSame(term, s.findFirstAsTerm());
    }
@@ -76,7 +76,7 @@ public class QueryStatementTest {
    @Test
    public void testSetListOfTerms_varargs_version() {
       QueryStatement s = new QueryStatement(kb, "X = Y.");
-      Term term1 = Structure.createStructure("test", new Term[] {new Atom("a")});
+      Term term1 = StructureFactory.createStructure("test", new Term[] {new Atom("a")});
       Term term2 = new Atom("a");
       Term term3 = new IntegerNumber(1);
       s.setListOfTerms("Y", term1, term2, term3);
@@ -86,7 +86,7 @@ public class QueryStatementTest {
    @Test
    public void testSetListOfTerms_list_version() {
       QueryStatement s = new QueryStatement(kb, "X = Y.");
-      Term term1 = Structure.createStructure("test", new Term[] {new Atom("a")});
+      Term term1 = StructureFactory.createStructure("test", new Term[] {new Atom("a")});
       Term term2 = new Atom("a");
       Term term3 = new IntegerNumber(1);
       s.setListOfTerms("Y", Arrays.asList(term1, term2, term3));

@@ -19,13 +19,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.projog.TestUtils.assertStrictEquality;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.list;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
+import static org.projog.TestUtils.assertStrictEquality;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,6 +79,10 @@ public class TermTest {
 
                structure("abc", atom()),
                structure("abc", atom(), atom()),
+               structure("abc", atom(), atom(), atom()),
+               structure("abc", atom(), atom(), atom(), atom()),
+               structure("abc", atom(), atom(), atom(), atom(), atom()),
+               structure("abc", atom(), atom(), atom(), atom(), atom(), atom()),
                structure("ABC", atom()),
                structure("ABC", atom(), atom()),
                structure("1", atom()),

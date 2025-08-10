@@ -49,7 +49,7 @@ public class TermUtilsTest {
       Variable y = variable("Y");
       Variable z = variable("Z");
       assertTrue(x.unify(a));
-      Structure p = structure("p", x, y);
+      Term p = structure("p", x, y);
       Term[] input = {a, p, x, y, z};
 
       // perform copy
@@ -167,8 +167,7 @@ public class TermUtilsTest {
       Variable z = variable("Z");
       Variable anon = new Variable();
       Variable[] variables = {q, r, s, t, v, w, x, y, z, anon};
-      Structure input = structure("p1", x, v, anon, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t),
-                  z);
+      Term input = structure("p1", x, v, anon, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t), z);
       Set<Variable> result = TermUtils.getAllVariablesInTerm(input);
       assertEquals(variables.length, result.size());
       for (Variable variable : variables) {
@@ -217,7 +216,7 @@ public class TermUtilsTest {
    public void testStructureCastToNumeric() {
       // test that, even if it represents an arithmetic expression,
       // a structure causes an exception when passed to castToNumeric
-      Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
+      Term arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
       try {
          TermUtils.castToNumeric(arithmeticExpression);
          fail();
@@ -240,7 +239,7 @@ public class TermUtilsTest {
    public void testArithmeticFunctionToLong() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       ArithmeticOperators operators = kb.getArithmeticOperators();
-      Structure arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
+      Term arithmeticExpression = structure("*", integerNumber(3), integerNumber(7));
       assertEquals(21, TermUtils.toLong(operators, arithmeticExpression));
    }
 
@@ -271,7 +270,7 @@ public class TermUtilsTest {
 
    @Test
    public void testGetAtomNameException() {
-      Structure p = structure("testAtomName", atom());
+      Term p = structure("testAtomName", atom());
       try {
          TermUtils.getAtomName(p);
          fail();

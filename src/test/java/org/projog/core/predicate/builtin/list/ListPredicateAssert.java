@@ -36,7 +36,7 @@ import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.UnknownPredicate;
 import org.projog.core.predicate.builtin.construct.NumberVars;
 import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 final class ListPredicateAssert {
@@ -137,7 +137,7 @@ final class ListPredicateAssert {
 
    private Term numberVariables(Term t) {
       Term copy = t.copy(new HashMap<>());
-      new NumberVars().getPredicate(Structure.createStructure("numbervars", new Term[] {copy}));
+      new NumberVars().getPredicate(StructureFactory.createStructure("numbervars", new Term[] {copy}));
       return copy.getTerm();
    }
 }

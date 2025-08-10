@@ -20,7 +20,7 @@ import java.util.Arrays;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -44,7 +44,7 @@ class Record {
       } else {
          Term[] args = new Term[numArgs];
          Arrays.fill(args, new Variable());
-         return Structure.createStructure(name, args);
+         return StructureFactory.createStructure(name, args);
       }
    }
 

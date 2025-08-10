@@ -104,8 +104,8 @@ public class NumericTermComparatorTest {
     */
    @Test
    public void testStructuresRepresentingArithmeticOperators() {
-      Structure addition = structure("+", integerNumber(1), integerNumber(3));
-      Structure subtraction = structure("-", integerNumber(5), integerNumber(2));
+      Term addition = structure("+", integerNumber(1), integerNumber(3));
+      Term subtraction = structure("-", integerNumber(5), integerNumber(2));
 
       // test compare(Term, Term) evaluates structures representing arithmetic expressions
       assertEquals(1, NUMERIC_TERM_COMPARATOR.compare(addition, subtraction, operators));

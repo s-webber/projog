@@ -44,12 +44,12 @@ import org.projog.core.event.SpyPoints.SpyPointExitEvent;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class InterpretedUserDefinedPredicateTest {
    private final Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
-   private final Term term = Structure.createStructure("test", queryArgs);
+   private final Term term = StructureFactory.createStructure("test", queryArgs);
    private SpyPoints spyPoints;
    private SpyPoint spyPoint;
    private ClauseAction mockAction1;

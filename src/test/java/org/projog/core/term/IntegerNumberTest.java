@@ -130,7 +130,7 @@ public class IntegerNumberTest {
       assertNotEquals(n, new IntegerNumber(-7));
       assertNotEquals(n, new DecimalFraction(7));
       assertNotEquals(n, new Atom("7"));
-      assertNotEquals(n, Structure.createStructure("7", new Term[] {n}));
+      assertNotEquals(n, StructureFactory.createStructure("7", new Term[] {n}));
       assertNotEquals(n, ListFactory.createList(n, n));
    }
 }

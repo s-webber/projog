@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class QueryResultTest {
@@ -138,7 +138,7 @@ public class QueryResultTest {
    public void testGetTerm() {
       QueryResult r = new Projog().executeQuery("X = test(a, 1).");
       assertTrue(r.next());
-      Term expected = Structure.createStructure("test", new Term[] {new Atom("a"), new IntegerNumber(1)});
+      Term expected = StructureFactory.createStructure("test", new Term[] {new Atom("a"), new IntegerNumber(1)});
       assertEquals(expected, r.getTerm("X"));
    }
 

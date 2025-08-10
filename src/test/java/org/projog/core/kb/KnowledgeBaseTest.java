@@ -54,7 +54,6 @@ import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 
 public class KnowledgeBaseTest {
@@ -78,7 +77,7 @@ public class KnowledgeBaseTest {
    /** @see ArithmeticOperatorsTest */
    @Test
    public void testGetNumeric() {
-      Structure p = structure("-", integerNumber(7), integerNumber(3));
+      Term p = structure("-", integerNumber(7), integerNumber(3));
       Numeric n = kb.getArithmeticOperators().getNumeric(p);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(4, n.getLong());

@@ -20,7 +20,7 @@ import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
@@ -41,12 +41,12 @@ public class TermFactory {
       return new Atom(name);
    }
 
-   public static Structure structure() {
+   public static Term structure() {
       return structure("test", new Term[] {atom()});
    }
 
-   public static Structure structure(String name, Term... args) {
-      return (Structure) Structure.createStructure(name, args);
+   public static Term structure(String name, Term... args) {
+      return StructureFactory.createStructure(name, args);
    }
 
    public static List list(Term... args) {

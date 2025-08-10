@@ -36,11 +36,11 @@ import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
+import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 public class ExpressionFactoriesTest {
-   private static final Structure DUMMY_TERM = structure("dummy_clp_expression", integerNumber(7));
+   private static final Term DUMMY_TERM = structure("dummy_clp_expression", integerNumber(7));
    private static final PredicateKey DUMMY_KEY = PredicateKey.createForTerm(DUMMY_TERM);
 
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();

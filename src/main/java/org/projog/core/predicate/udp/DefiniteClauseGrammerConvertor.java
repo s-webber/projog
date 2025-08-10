@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.projog.core.ProjogException;
 import org.projog.core.term.List;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -69,7 +69,7 @@ final class DefiniteClauseGrammerConvertor {
       }
       args[args.length - 2] = list;
       args[args.length - 1] = variable;
-      return Structure.createStructure(consequentName, args);
+      return StructureFactory.createStructure(consequentName, args);
    }
 
    // TODO this method is too long - refactor
@@ -94,7 +94,7 @@ final class DefiniteClauseGrammerConvertor {
          } else {
             if (previousList != null) {
                Variable next = new Variable("A" + (varctr++));
-               Term newAntecedentArg = Structure.createStructure("=", new Term[] {next, appendToEndOfList(previousList, previous)});
+               Term newAntecedentArg = StructureFactory.createStructure("=", new Term[] {next, appendToEndOfList(previousList, previous)});
                newSequence.add(0, newAntecedentArg);
                previousList = null;
                previous = next;
@@ -115,7 +115,7 @@ final class DefiniteClauseGrammerConvertor {
       } else {
          newAntecedent = newSequence.get(newSequence.size() - 1);
          for (int i = newSequence.size() - 2; i > -1; i--) {
-            newAntecedent = Structure.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newSequence.get(i), newAntecedent});
+            newAntecedent = StructureFactory.createStructure(CONJUNCTION_PREDICATE_NAME, new Term[] {newSequence.get(i), newAntecedent});
          }
       }
 
@@ -128,7 +128,7 @@ final class DefiniteClauseGrammerConvertor {
       if (newAntecedent == null) {
          return newConsequent;
       } else {
-         return Structure.createStructure(IMPLICATION_PREDICATE_NAME, new Term[] {newConsequent, newAntecedent});
+         return StructureFactory.createStructure(IMPLICATION_PREDICATE_NAME, new Term[] {newConsequent, newAntecedent});
       }
    }
 
@@ -148,7 +148,7 @@ final class DefiniteClauseGrammerConvertor {
       }
       args[original.getNumberOfArguments()] = previous;
       args[original.getNumberOfArguments() + 1] = next;
-      return Structure.createStructure(original.getName(), args);
+      return StructureFactory.createStructure(original.getName(), args);
    }
 
    private static Term getConsequent(Term dcgTerm) {

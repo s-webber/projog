@@ -54,7 +54,7 @@ import org.projog.core.predicate.udp.ClauseActionFactory.MutableRule;
 import org.projog.core.predicate.udp.ClauseActionFactory.VariableAntecedantClauseAction;
 import org.projog.core.predicate.udp.ClauseActionFactory.ZeroArgConsequentRule;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -128,13 +128,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testImmutableFact_getPredicate_query_args_match_clause() {
       ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
    }
 
    @Test
    public void testImmutableFact_getPredicate_query_args_dont_match_clause() {
       ImmutableFact a = create(ImmutableFact.class, "p(a,b,c).");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("z")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("z")))));
    }
 
    @Test
@@ -144,7 +144,7 @@ public class ClauseActionFactoryTest {
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
       Variable z = new Variable("Z");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(x, y, z))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(x, y, z))));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
       assertEquals(atom("c"), z.getTerm());
@@ -156,7 +156,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), x, y))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), x, y))));
       assertEquals(atom("b"), x.getTerm());
       assertEquals(atom("c"), y.getTerm());
    }
@@ -167,7 +167,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(x, y, x))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(x, y, x))));
    }
 
    @Test
@@ -176,7 +176,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(x, y, x))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(x, y, x))));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
    }
@@ -196,48 +196,48 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableFact_getPredicate_query_args_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("d"), atom("c")))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("d"), atom("c")))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_dont_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("d")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("d")))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_shared_variable_doesnt_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(x, atom("b"), x))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(x, atom("b"), x))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_shared_variable_unify_with_clause() {
       MutableFact a = create(MutableFact.class, "p(a,X,a).");
       Variable x = new Variable("X");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(x, atom("b"), x))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(x, atom("b"), x))));
       assertEquals(atom("a"), x.getTerm());
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_dont_unify_with_clause_shared_variable() {
       MutableFact a = create(MutableFact.class, "p(X,b,X).");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_unify_with_clause_shared_variable() {
       MutableFact a = create(MutableFact.class, "p(X,b,X).");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("a")))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("a")))));
    }
 
    @Test
    public void testMutableFact_getPredicate_query_args_variable_unifies_with_clause_variable() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), x, atom("c")))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), x, atom("c")))));
       assertSame(TermType.VARIABLE, x.getTerm().getType());
       // assert query variable has been unified with clause variable
       assertNotSame(x, x.getTerm());
@@ -247,7 +247,7 @@ public class ClauseActionFactoryTest {
    public void testMutableFact_getPredicate_query_args_variable_unifies_with_clause_atom() {
       MutableFact a = create(MutableFact.class, "p(a,X,c).");
       Variable x = new Variable("X");
-      assertSame(PredicateUtils.TRUE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), x))));
+      assertSame(PredicateUtils.TRUE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), x))));
       assertEquals(atom("c"), x.getTerm());
    }
 
@@ -267,7 +267,7 @@ public class ClauseActionFactoryTest {
    public void testVariableAntecedant_getPredicate_unassigned_variable() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
       try {
-         a.getPredicate(Structure.createStructure("p", array(new Variable("Z"))));
+         a.getPredicate(StructureFactory.createStructure("p", array(new Variable("Z"))));
          fail();
       } catch (ProjogException e) {
          assertEquals("Expected an atom or a predicate but got a VARIABLE with value: X", e.getMessage());
@@ -277,13 +277,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testVariableAntecedant_getPredicate_unknown_predicate() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("an_unknown_predicate")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("an_unknown_predicate")))));
    }
 
    @Test
    public void testVariableAntecedant_getPredicate_query_args_dont_unify_with_clause() {
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X,a) :- X.");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("test"), atom("b")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("test"), atom("b")))));
    }
 
    @Test
@@ -291,8 +291,8 @@ public class ClauseActionFactoryTest {
       Term[] queryArgs = array(atom("test"));
 
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", queryArgs)));
-      assertSame(mockPredicate2, a.getPredicate(Structure.createStructure("p", queryArgs)));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", queryArgs)));
+      assertSame(mockPredicate2, a.getPredicate(StructureFactory.createStructure("p", queryArgs)));
 
       verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
@@ -312,8 +312,8 @@ public class ClauseActionFactoryTest {
       kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(t2), pf2);
 
       VariableAntecedantClauseAction a = create(VariableAntecedantClauseAction.class, "p(X) :- X.");
-      assertSame(p1, a.getPredicate(Structure.createStructure("p", array(t1))));
-      assertSame(p2, a.getPredicate(Structure.createStructure("p", array(t2))));
+      assertSame(p1, a.getPredicate(StructureFactory.createStructure("p", array(t1))));
+      assertSame(p2, a.getPredicate(StructureFactory.createStructure("p", array(t2))));
 
       verify(pf1, times(1)).getPredicate(t1);
       verify(pf2, times(1)).getPredicate(t2);
@@ -474,8 +474,8 @@ public class ClauseActionFactoryTest {
    public void testImmutableConsequentRule_getPredicate_query_args_match_clause() {
       ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- test.");
       Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", queryArgs)));
-      assertSame(mockPredicate2, a.getPredicate(Structure.createStructure("p", queryArgs)));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", queryArgs)));
+      assertSame(mockPredicate2, a.getPredicate(StructureFactory.createStructure("p", queryArgs)));
 
       verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
@@ -483,7 +483,7 @@ public class ClauseActionFactoryTest {
    @Test
    public void testImmutableConsequentRule_getPredicate_query_args_dont_match_clause() {
       ImmutableConsequentRule a = create(ImmutableConsequentRule.class, "p(a,b,c) :- test.");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("z")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("z")))));
    }
 
    @Test
@@ -493,7 +493,7 @@ public class ClauseActionFactoryTest {
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
       Variable z = new Variable("Z");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(x, y, z))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(x, y, z))));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
       assertEquals(atom("c"), z.getTerm());
@@ -507,7 +507,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(atom("a"), x, y))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), x, y))));
       assertEquals(atom("b"), x.getTerm());
       assertEquals(atom("c"), y.getTerm());
 
@@ -520,7 +520,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(x, y, x))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(x, y, x))));
    }
 
    @Test
@@ -529,7 +529,7 @@ public class ClauseActionFactoryTest {
 
       Variable x = new Variable("X");
       Variable y = new Variable("Y");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(x, y, x))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(x, y, x))));
       assertEquals(atom("a"), x.getTerm());
       assertEquals(atom("b"), y.getTerm());
 
@@ -596,7 +596,7 @@ public class ClauseActionFactoryTest {
       Variable v2 = new Variable("B");
       Variable v3 = new Variable("C");
 
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(v1, v2, v3))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(v1, v2, v3))));
 
       // assert query variables have been unified with clause variables
       assertSame(TermType.VARIABLE, v1.getTerm().getType());
@@ -617,29 +617,29 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableRule_getPredicate_query_args_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
-      assertSame(mockPredicate2, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("d"), atom("c")))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
+      assertSame(mockPredicate2, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("d"), atom("c")))));
       verify(mockPredicateFactory, times(2)).getPredicate(PREDICATE_TERM);
    }
 
    @Test
    public void testMutableRule_getPredicate_query_args_dont_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("d")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("d")))));
    }
 
    @Test
    public void testMutableRule_getPredicate_query_args_shared_variable_doesnt_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       Variable x = new Variable("X");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(x, atom("b"), x))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(x, atom("b"), x))));
    }
 
    @Test
    public void testMutableRule_getPredicate_query_args_shared_variable_unify_with_clause() {
       MutableRule a = create(MutableRule.class, "p(a,X,a) :- test.");
       Variable x = new Variable("X");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(x, atom("b"), x))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(x, atom("b"), x))));
       assertEquals(atom("a"), x.getTerm());
       verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
@@ -647,13 +647,13 @@ public class ClauseActionFactoryTest {
    @Test
    public void testMutableRule_getPredicate_query_args_dont_unify_with_clause_shared_variable() {
       MutableRule a = create(MutableRule.class, "p(X,b,X) :- test.");
-      assertSame(PredicateUtils.FALSE, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
+      assertSame(PredicateUtils.FALSE, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("c")))));
    }
 
    @Test
    public void testMutableRule_getPredicate_query_args_unify_with_clause_shared_variable() {
       MutableRule a = create(MutableRule.class, "p(X,b,X) :- test.");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), atom("a")))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), atom("a")))));
       verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
 
@@ -661,7 +661,7 @@ public class ClauseActionFactoryTest {
    public void testMutableRule_getPredicate_query_args_variable_unifies_with_clause_variable() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       Variable variable = new Variable("A");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(atom("a"), variable, atom("c")))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), variable, atom("c")))));
       // assert query variable has been unified with clause variable
       assertSame(TermType.VARIABLE, variable.getTerm().getType());
       assertNotSame(variable, variable.getTerm());
@@ -673,7 +673,7 @@ public class ClauseActionFactoryTest {
    public void testMutableRule_getPredicate_query_args_variable_unifies_with_clause_atom() {
       MutableRule a = create(MutableRule.class, "p(a,X,c) :- test.");
       Variable x = new Variable("X");
-      assertSame(mockPredicate1, a.getPredicate(Structure.createStructure("p", array(atom("a"), atom("b"), x))));
+      assertSame(mockPredicate1, a.getPredicate(StructureFactory.createStructure("p", array(atom("a"), atom("b"), x))));
       assertEquals(atom("c"), x.getTerm());
       verify(mockPredicateFactory).getPredicate(PREDICATE_TERM);
    }
@@ -683,18 +683,18 @@ public class ClauseActionFactoryTest {
       MutableFact a = create(MutableFact.class, "p(X,b,Y).");
       Variable x = new Variable("X");
 
-      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {x, x, x})));
+      assertTrue(ClauseActionFactory.isMatch(a, StructureFactory.createStructure("p", new Term[] {x, x, x})));
       assertSame(x, x.getTerm());
 
-      assertFalse(ClauseActionFactory.isMatch(a, Structure.createStructure("x", new Term[] {x, x, x})));
+      assertFalse(ClauseActionFactory.isMatch(a, StructureFactory.createStructure("x", new Term[] {x, x, x})));
       assertSame(x, x.getTerm());
 
-      assertFalse(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {x, new Atom("c"), x})));
+      assertFalse(ClauseActionFactory.isMatch(a, StructureFactory.createStructure("p", new Term[] {x, new Atom("c"), x})));
       assertSame(x, x.getTerm());
 
-      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {new Atom("a"), new Atom("b"), new Atom("c")})));
+      assertTrue(ClauseActionFactory.isMatch(a, StructureFactory.createStructure("p", new Term[] {new Atom("a"), new Atom("b"), new Atom("c")})));
 
-      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {new Atom("c"), new Atom("b"), new Atom("a")})));
+      assertTrue(ClauseActionFactory.isMatch(a, StructureFactory.createStructure("p", new Term[] {new Atom("c"), new Atom("b"), new Atom("a")})));
    }
 
    @SuppressWarnings("unchecked")

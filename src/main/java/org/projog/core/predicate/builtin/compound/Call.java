@@ -19,7 +19,7 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -137,7 +137,7 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
          for (int i = 1; i < term.getNumberOfArguments(); i++) {
             callArgs[goal.getNumberOfArguments() + i - 1] = term.getArgument(i);
          }
-         Term target = Structure.createStructure(goal.getName(), callArgs);
+         Term target = StructureFactory.createStructure(goal.getName(), callArgs);
          return knowledgeBase.getPredicates().getPredicate(target);
       }
    }

@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.EmptyList;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
@@ -212,7 +212,7 @@ public final class Dif extends AbstractSingleResultPredicate {
          case 2:
             return new org.projog.core.term.List(args.get(0), args.get(1));
          default:
-            return Structure.createStructure("f", args.toArray(new Term[args.size()]));
+            return StructureFactory.createStructure("f", args.toArray(new Term[args.size()]));
       }
    }
 

@@ -21,7 +21,7 @@ import static org.projog.core.term.TermUtils.toInt;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumberCache;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 
@@ -31,9 +31,9 @@ import org.projog.core.term.TermType;
  * Defines {@link Term}s by their name (functor) and number of arguments (arity). This "metadata" or "descriptor
  * information" allows rules whose heads (consequences) share the same structure to be grouped together.
  * <p>
- * As {@link org.projog.core.term.Atom} and {@link org.projog.core.term.Structure} are the only subclasses of
- * {@link org.projog.core.term.Term} that can be the head (consequent) of a rule they are the only subclasses of
- * {@link Term} that {@code PredicateKey} is intended to describe.
+ * As terms of type {@link TermType#ATOM} and {@link TermType#STRUCTURE} are the only terms that can be the head
+ * (consequent) of a rule they are the only subclasses of {@link Term} that {@code PredicateKey} is intended to
+ * describe.
  * <p>
  * PredicateKeys are constant; their values cannot be changed after they are created.
  */
@@ -98,7 +98,7 @@ public final class PredicateKey implements Comparable<PredicateKey> {
    }
 
    public Term toTerm() {
-      return Structure.createStructure(PREDICATE_KEY_FUNCTOR, new Term[] {new Atom(name), IntegerNumberCache.valueOf(numArgs)});
+      return StructureFactory.createStructure(PREDICATE_KEY_FUNCTOR, new Atom(name), IntegerNumberCache.valueOf(numArgs));
    }
 
    /**

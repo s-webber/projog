@@ -30,7 +30,6 @@ import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.List;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
@@ -132,7 +131,7 @@ public class TermParserTest {
    private void testPredicate(String syntax) {
       Term t = parseTerm(syntax);
       assertNotNull(t);
-      assertSame(Structure.class, t.getClass());
+      assertSame(TermType.STRUCTURE, t.getType());
    }
 
    @Test

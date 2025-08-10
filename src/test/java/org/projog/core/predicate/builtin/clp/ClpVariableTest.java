@@ -47,7 +47,7 @@ import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.ListFactory;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
 import org.projog.core.term.TermType;
@@ -276,7 +276,7 @@ public class ClpVariableTest {
    @Test
    public void testUnify_structure() {
       ClpVariable v = new ClpVariable();
-      Term s = Structure.createStructure("test", new Term[] {new Atom("a")});
+      Term s = StructureFactory.createStructure("test", new Term[] {new Atom("a")});
       assertFalse(v.unify(s));
       assertFalse(s.unify(v));
    }
@@ -358,7 +358,7 @@ public class ClpVariableTest {
       v.setMin(new CoreConstraintStore(), 0);
       v.setMax(new CoreConstraintStore(), 0);
 
-      Term structure = Structure.createStructure("test", new Term[] {v});
+      Term structure = StructureFactory.createStructure("test", new Term[] {v});
 
       assertNotSame(v, v.getTerm());
 
@@ -371,7 +371,7 @@ public class ClpVariableTest {
    public void testBacktrack_structure_example_2() {
       ClpVariable v = new ClpVariable();
 
-      Term structure = Structure.createStructure("test", new Term[] {v});
+      Term structure = StructureFactory.createStructure("test", new Term[] {v});
 
       v.setMin(new CoreConstraintStore(), 0);
       v.setMax(new CoreConstraintStore(), 0);
@@ -387,7 +387,7 @@ public class ClpVariableTest {
    public void testBacktrack_structure_example_3() {
       ClpVariable v = new ClpVariable();
 
-      Term structure = Structure.createStructure("test", new Term[] {v});
+      Term structure = StructureFactory.createStructure("test", new Term[] {v});
 
       v.setMin(new CoreConstraintStore(), 0);
 
@@ -1099,7 +1099,7 @@ public class ClpVariableTest {
       IntegerNumber i10 = new IntegerNumber(10);
       DecimalFraction d7 = new DecimalFraction(7.5);
       DecimalFraction d10 = new DecimalFraction(10.5);
-      Term s = Structure.createStructure("test", new Term[] {i7, i10, d7, d10});
+      Term s = StructureFactory.createStructure("test", new Term[] {i7, i10, d7, d10});
       Variable v1 = new Variable();
       Variable v2 = new Variable();
       v2.unify(new IntegerNumber(9));

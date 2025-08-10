@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.projog.core.term.Atom;
-import org.projog.core.term.Structure;
+import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class AbstractPredicateFactoryTest {
@@ -87,10 +87,10 @@ public class AbstractPredicateFactoryTest {
       };
 
       assertSame(noArgPredicate, pf.getPredicate(new Atom("dummy")));
-      assertSame(oneArgPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1})));
-      assertSame(twoArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2})));
-      assertSame(threeArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2, arg3})));
-      assertSame(fourArgsPredicate, pf.getPredicate(Structure.createStructure("dummy", new Term[] {arg1, arg2, arg3, arg4})));
+      assertSame(oneArgPredicate, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {arg1})));
+      assertSame(twoArgsPredicate, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {arg1, arg2})));
+      assertSame(threeArgsPredicate, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {arg1, arg2, arg3})));
+      assertSame(fourArgsPredicate, pf.getPredicate(StructureFactory.createStructure("dummy", new Term[] {arg1, arg2, arg3, arg4})));
 
       assertIllegalArgumentException(pf, 5);
    }
@@ -117,7 +117,7 @@ public class AbstractPredicateFactoryTest {
          } else {
             Term[] args = new Term[numberOfArguments];
             Arrays.fill(args, new Atom("x"));
-            term = Structure.createStructure("dummy", args);
+            term = StructureFactory.createStructure("dummy", args);
          }
          pf.getPredicate(term);
          fail();

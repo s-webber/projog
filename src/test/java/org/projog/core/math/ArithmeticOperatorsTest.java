@@ -37,7 +37,6 @@ import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
-import org.projog.core.term.Structure;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermUtils;
 
@@ -46,7 +45,7 @@ public class ArithmeticOperatorsTest {
    private final String dummyOperatorName = "dummy_arithmetic_operator";
    private final PredicateKey dummyOperatorKey = new PredicateKey(dummyOperatorName, 1);
    private final int dummyTermArgument = 7;
-   private final Structure dummyTerm = structure(dummyOperatorName, integerNumber(dummyTermArgument));
+   private final Term dummyTerm = structure(dummyOperatorName, integerNumber(dummyTermArgument));
 
    @Test
    public void testGetNumericIntegerNumber() {
@@ -126,7 +125,7 @@ public class ArithmeticOperatorsTest {
    public void testGetPreprocessedArithmeticOperator_unknown_structure() {
       ArithmeticOperators c = createOperators();
 
-      Structure expression = structure(dummyOperatorName, integerNumber(7));
+      Term expression = structure(dummyOperatorName, integerNumber(7));
       assertNull(c.getPreprocessedArithmeticOperator(expression));
    }
 
@@ -144,7 +143,7 @@ public class ArithmeticOperatorsTest {
 
    @Test
    public void testGetPreprocessedArithmeticOperator_operator_preprocessable() {
-      Structure expression = structure(dummyOperatorName, integerNumber(7));
+      Term expression = structure(dummyOperatorName, integerNumber(7));
       PreprocessableArithmeticOperator mockPreprocessableOperator = mock(PreprocessableArithmeticOperator.class);
       PreprocessableArithmeticOperator mockPreprocessedOperator = mock(PreprocessableArithmeticOperator.class);
       when(mockPreprocessableOperator.preprocess(expression)).thenReturn(mockPreprocessedOperator);

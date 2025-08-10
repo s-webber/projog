@@ -39,7 +39,7 @@ public class TermFormatter {
     * brackets.
     * <p>
     * For example: <pre>
-    * Term structure = Structure.createStructure("+", new IntegerNumber(1), new IntegerNumber(2));
+    * Term structure = StructureFactory.createStructure("+", new IntegerNumber(1), new IntegerNumber(2));
     * Term list = ListFactory.create(new Term[]{new Atom("a"), Atom("b"), Atom("c")});
     * System.out.println("Structure.toString():      "+structure.toString());
     * System.out.println("Write.toString(structure): "+write.toString(structure));

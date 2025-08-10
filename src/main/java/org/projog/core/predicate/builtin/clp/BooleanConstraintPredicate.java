@@ -198,7 +198,7 @@ public final class BooleanConstraintPredicate implements PredicateFactory, Const
             PredicateKey key = PredicateKey.createForTerm(t);
             PredicateFactory factory = predicates.getPredicateFactory(key);
             if (factory instanceof ConstraintFactory) {
-               return ((ConstraintFactory) factory).createConstraint(t.getArgs(), vars);
+               return ((ConstraintFactory) factory).createConstraint(t, vars);
             } else {
                throw new ProjogException("Cannot create CLP constraint from term: " + t);
             }
@@ -220,10 +220,10 @@ public final class BooleanConstraintPredicate implements PredicateFactory, Const
    }
 
    @Override
-   public Constraint createConstraint(Term[] args, Set<ClpVariable> vars) {
-      Constraint[] constraints = new Constraint[args.length];
-      for (int i = 0; i < args.length; i++) {
-         constraints[i] = toConstraint(args[i], vars);
+   public Constraint createConstraint(Term term, Set<ClpVariable> vars) {
+      Constraint[] constraints = new Constraint[term.getNumberOfArguments()];
+      for (int i = 0; i < constraints.length; i++) {
+         constraints[i] = toConstraint(term.getArgument(i), vars);
       }
       return constraintGenerator.apply(constraints);
    }

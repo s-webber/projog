@@ -247,7 +247,7 @@ public final class NumericConstraintPredicate extends AbstractSingleResultPredic
    }
 
    @Override
-   public Constraint createConstraint(Term[] args, Set<ClpVariable> vars) {
-      return constraintGenerator.apply(expressions.toExpression(args[0], vars), expressions.toExpression(args[1], vars));
+   public Constraint createConstraint(Term term, Set<ClpVariable> vars) {
+      return constraintGenerator.apply(expressions.toExpression(term.firstArgument(), vars), expressions.toExpression(term.secondArgument(), vars));
    }
 }

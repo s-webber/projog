@@ -21,5 +21,5 @@ import org.projog.clp.Constraint;
 import org.projog.core.term.Term;
 
 public interface ConstraintFactory {
-   Constraint createConstraint(Term[] args, Set<ClpVariable> vars);
+   Constraint createConstraint(Term term, Set<ClpVariable> vars);
 }

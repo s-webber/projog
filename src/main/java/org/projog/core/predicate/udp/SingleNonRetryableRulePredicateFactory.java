@@ -76,7 +76,7 @@ final class SingleNonRetryableRulePredicateFactory implements PreprocessablePred
 
    @Override
    public PredicateFactory preprocess(Term arg) {
-      if (ClauseActionFactory.isMatch(clause, arg.getArgs())) {
+      if (ClauseActionFactory.isMatch(clause, arg)) {
          return this;
       } else {
          return new NeverSucceedsPredicateFactory(spyPoint);

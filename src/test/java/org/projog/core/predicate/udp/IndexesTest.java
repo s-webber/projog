@@ -18,12 +18,12 @@ package org.projog.core.predicate.udp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.projog.TestUtils.array;
 import static org.projog.TermFactory.atom;
-import static org.projog.TestUtils.createClauseModel;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
+import static org.projog.TestUtils.array;
+import static org.projog.TestUtils.createClauseModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,10 +33,6 @@ import java.util.List;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.Clauses;
-import org.projog.core.predicate.udp.Indexes;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
@@ -60,20 +56,20 @@ public class IndexesTest {
       // 1 arg indexes
       assertMatches(indexes, array(a, v(), v()), first, second, fourth);
       assertMatches(indexes, array(v(), c, v()), second, third);
-      assertMatches(indexes, array(v(), v(), a),third);
+      assertMatches(indexes, array(v(), v(), a), third);
       assertNoMatches(indexes, array(v(), v(), d));
 
       // 2 arg indexes
       assertMatches(indexes, array(a, b, v()), first);
       assertMatches(indexes, array(a, v(), c), first, fourth);
-      assertMatches(indexes, array(v(), c, a),third);
+      assertMatches(indexes, array(v(), c, a), third);
       assertNoMatches(indexes, array(b, a, v()));
 
       // 3 arg indexes
       assertMatches(indexes, array(a, b, c), first);
       assertMatches(indexes, array(a, c, b), second);
-      assertMatches(indexes, array(b, c, a),third);
-      assertMatches(indexes, array(a, d, c),fourth);
+      assertMatches(indexes, array(b, c, a), third);
+      assertMatches(indexes, array(a, d, c), fourth);
       assertNoMatches(indexes, array(c, a, b));
 
       assertEquals(7, indexes.countReferences());
@@ -177,8 +173,8 @@ public class IndexesTest {
       List<ClauseModel> models = new ArrayList<>(numClauses);
       for (int i = 0; i < numClauses; i++) {
          Term[] args = new Term[numArgs];
-         for (int i2=0; i2<args.length; i2++) {
-            args[i2] = integerNumber(i+i2);
+         for (int i2 = 0; i2 < args.length; i2++) {
+            args[i2] = integerNumber(i + i2);
          }
          models.add(ClauseModel.createClauseModel(structure("p", args)));
       }
@@ -192,7 +188,7 @@ public class IndexesTest {
          ClauseModel expected = itr.next();
          Term[] args = array(v(), v(), v(), v(), v(), v(), v(), v(), v());
          args[i] = expected.getConsequent().getArgument(i);
-         ClauseAction[] matches = indexes.index(args);
+         ClauseAction[] matches = indexes.index(structure("p", args));
          assertEquals(1, matches.length);
          assertSame(expected, matches[0].getModel());
       }
@@ -203,7 +199,7 @@ public class IndexesTest {
             Term[] args = array(v(), v(), v(), v(), v(), v(), v(), v(), v());
             args[i1] = expected.getConsequent().getArgument(i1);
             args[i2] = expected.getConsequent().getArgument(i2);
-            ClauseAction[] matches = indexes.index(args);
+            ClauseAction[] matches = indexes.index(structure("p", args));
             assertEquals(1, matches.length);
             assertSame(expected, matches[0].getModel());
          }
@@ -218,7 +214,7 @@ public class IndexesTest {
                args[i1] = expected.getConsequent().getArgument(i1);
                args[i2] = expected.getConsequent().getArgument(i2);
                args[i3] = expected.getConsequent().getArgument(i3);
-               ClauseAction[] matches = indexes.index(args);
+               ClauseAction[] matches = indexes.index(structure("p", args));
                assertEquals(1, matches.length);
                assertSame(expected, matches[0].getModel());
             }
@@ -232,8 +228,8 @@ public class IndexesTest {
 
    private void assertMatches(Indexes indexes, Term[] input, ClauseAction... expected) {
       assertTrue(expected.length > 0);
-      ClauseAction[] actual = indexes.index(input);
-      assertSame(actual, indexes.index(input)); // assert same object gets returned for multiple calls
+      ClauseAction[] actual = indexes.index(structure("p", input));
+      assertSame(actual, indexes.index(structure("p", input))); // assert same object gets returned for multiple calls
       assertEquals(expected.length, actual.length);
       for (int i = 0; i < actual.length; i++) {
          assertSame(expected[i], actual[i]);
@@ -241,8 +237,8 @@ public class IndexesTest {
    }
 
    private void assertNoMatches(Indexes indexes, Term[] input) {
-      ClauseAction[] actual = indexes.index(input);
-      assertSame(actual, indexes.index(input)); // assert same object gets returned for multiple calls
+      ClauseAction[] actual = indexes.index(structure("p", input));
+      assertSame(actual, indexes.index(structure("p", input))); // assert same object gets returned for multiple calls
       assertEquals(0, actual.length);
    }
 

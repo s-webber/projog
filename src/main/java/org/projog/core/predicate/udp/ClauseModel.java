@@ -53,12 +53,11 @@ public final class ClauseModel {
       }
 
       if (original.getName().equals(IMPLICATION_PREDICATE_NAME)) {
-         Term[] implicationArgs = original.getArgs();
-         consequent = implicationArgs[0];
-         if (implicationArgs.length == 2) {
+         consequent = original.firstArgument();
+         if (original.getNumberOfArguments() == 2) {
             // TODO set to TRUE if equal to it
-            antecedent = implicationArgs[1];
-         } else if (implicationArgs.length == 1) {
+            antecedent = original.secondArgument();
+         } else if (original.getNumberOfArguments() == 1) {
             antecedent = TRUE;
          } else {
             throw new RuntimeException(); // TODO throw ProjogException

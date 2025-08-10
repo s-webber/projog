@@ -52,8 +52,8 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
       ClauseModel firstClause = metaData.getFirstClause();
       ClauseModel secondClause = metaData.getSecondClause();
 
-      this.firstClauseConsequentArgs = firstClause.getConsequent().getArgs();
-      this.secondClauseConsequentArgs = secondClause.getConsequent().getArgs();
+      this.firstClauseConsequentArgs = getArgs(firstClause.getConsequent());
+      this.secondClauseConsequentArgs = getArgs(secondClause.getConsequent());
 
       this.firstClauseOriginalTerms = toArrayOfConjunctions(firstClause.getAntecedent());
       this.secondClauseOriginalTerms = toArrayOfConjunctions(secondClause.getAntecedent());
@@ -71,8 +71,16 @@ public final class InterpretedTailRecursivePredicateFactory implements Predicate
 
    @Override
    public InterpretedTailRecursivePredicate getPredicate(Term term) {
-      return new InterpretedTailRecursivePredicate(spyPoint, term.getArgs(), firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
+      return new InterpretedTailRecursivePredicate(spyPoint, term, firstClausePredicateFactories, firstClauseConsequentArgs, firstClauseOriginalTerms,
                   secondClausePredicateFactories, secondClauseConsequentArgs, secondClauseOriginalTerms, isRetryable(term));
+   }
+
+   private Term[] getArgs(Term term) { // TODO move to TermUtils
+      Term[] args = new Term[term.getNumberOfArguments()];
+      for (int i = 0; i < args.length; i++) {
+         args[i] = term.getArgument(i);
+      }
+      return args;
    }
 
    private boolean isRetryable(Term term) {

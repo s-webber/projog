@@ -18,12 +18,7 @@ package org.projog.core.predicate.udp;
 import org.projog.core.term.Term;
 
 final class KeyFactories {
-   private static final KeyFactory[] FACTORIES = {
-               null,
-               new KeyFactory1(),
-               new KeyFactory2(),
-               new KeyFactory3(),
-   };
+   private static final KeyFactory[] FACTORIES = {null, new KeyFactory1(), new KeyFactory2(), new KeyFactory3(),};
 
    static final int MAX_ARGUMENTS_PER_INDEX = FACTORIES.length - 1;
 
@@ -32,21 +27,21 @@ final class KeyFactories {
    }
 
    interface KeyFactory {
-      Object createKey(int[] positions, Term[] args);
+      Object createKey(int[] positions, Term args);
    }
 
    private static final class KeyFactory1 implements KeyFactory {
       @Override
-      public Object createKey(int[] positions, Term[] args) {
+      public Object createKey(int[] positions, Term term) {
          // if only one indexable term than rely on its hashCode and equals to be the key
-         return args[positions[0]];
+         return term.getArgument(positions[0]);
       }
    }
 
    private static final class KeyFactory2 implements KeyFactory {
       @Override
-      public Key2 createKey(int[] positions, Term[] args) {
-         return new Key2(args[positions[0]], args[positions[1]]);
+      public Key2 createKey(int[] positions, Term term) {
+         return new Key2(term.getArgument(positions[0]), term.getArgument(positions[1]));
       }
    }
 
@@ -75,8 +70,8 @@ final class KeyFactories {
 
    private static final class KeyFactory3 implements KeyFactory {
       @Override
-      public Key3 createKey(int[] positions, Term[] args) {
-         return new Key3(args[positions[0]], args[positions[1]], args[positions[2]]);
+      public Key3 createKey(int[] positions, Term term) {
+         return new Key3(term.getArgument(positions[0]), term.getArgument(positions[1]), term.getArgument(positions[2]));
       }
    }
 

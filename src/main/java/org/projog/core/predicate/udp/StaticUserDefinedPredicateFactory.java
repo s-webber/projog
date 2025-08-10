@@ -16,6 +16,7 @@
 package org.projog.core.predicate.udp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +29,6 @@ import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
-import org.projog.core.term.TermUtils;
 
 /**
  * Maintains a record of the clauses that represents a "static" user defined predicate.
@@ -365,7 +365,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public Predicate getPredicate(Term term) {
          ClauseAction[] data;
          if (term.getArgument(argIdx).isImmutable()) {
-            data = index.getMatches(term.getArgs());
+            data = index.getMatches(term);
          } else {
             data = actions;
          }
@@ -382,7 +382,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       public PredicateFactory preprocess(Term arg) {
          ClauseAction[] data;
          if (arg.getArgument(argIdx).isImmutable()) {
-            data = index.getMatches(arg.getArgs());
+            data = index.getMatches(arg);
          } else {
             data = actions;
          }
@@ -408,7 +408,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public Predicate getPredicate(Term term) {
-         return createPredicate(term, index.index(term.getArgs()));
+         return createPredicate(term, index.index(term));
       }
 
       @Override
@@ -418,7 +418,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
       @Override
       public PredicateFactory preprocess(Term arg) {
-         ClauseAction[] data = index.index(arg.getArgs());
+         ClauseAction[] data = index.index(arg);
          List<ClauseAction> result = optimisePredicateFactory(kb, data, arg);
          if (result.size() < index.getClauseCount()) {
             final Clauses clauses = Clauses.createFromActions(kb, result, arg);
@@ -463,9 +463,9 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private static List<ClauseAction> optimisePredicateFactory(KnowledgeBase kb, ClauseAction[] data, Term arg) {
       List<ClauseAction> result = new ArrayList<>();
-      Term[] queryArgs = TermUtils.copy(arg.getArgs());
+      Term copyArg = arg.copy(new HashMap<>());
       for (ClauseAction action : data) {
-         if (ClauseActionFactory.isMatch(action, queryArgs)) {
+         if (ClauseActionFactory.isMatch(action, copyArg)) {
             result.add(action);
          }
       }

@@ -33,8 +33,8 @@ final class Index {
       this.result = result;
    }
 
-   ClauseAction[] getMatches(Term[] args) {
-      Object key = keyFactory.createKey(positions, args);
+   ClauseAction[] getMatches(Term term) {
+      Object key = keyFactory.createKey(positions, term);
       return result.getOrDefault(key, NO_MATCHES);
    }
 

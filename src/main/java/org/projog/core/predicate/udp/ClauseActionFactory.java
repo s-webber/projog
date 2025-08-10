@@ -25,7 +25,6 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
-import org.projog.core.term.TermUtils;
 import org.projog.core.term.Variable;
 
 /**
@@ -37,10 +36,10 @@ final class ClauseActionFactory {
     * <p>
     * TODO move to another class, e.g. ClauseAction
     */
-   static boolean isMatch(ClauseAction clause, Term[] queryArgs) {
-      Term[] clauseArgs = TermUtils.copy(clause.getModel().getConsequent().getArgs());
-      boolean match = TermUtils.unify(queryArgs, clauseArgs);
-      TermUtils.backtrack(queryArgs);
+   static boolean isMatch(ClauseAction clause, Term queryTerm) {
+      Term clauseTerm = clause.getModel().getConsequent().copy(new HashMap<>());
+      boolean match = queryTerm.unify(clauseTerm);
+      queryTerm.backtrack();
       return match;
    }
 
@@ -67,7 +66,8 @@ final class ClauseActionFactory {
       boolean hasConcreteTerms = false;
       boolean hasSharedVariables = false;
       Set<Term> variables = new HashSet<>();
-      for (Term t : consequent.getArgs()) {
+      for (int i = 0; i < consequent.getNumberOfArguments(); i++) {
+         Term t = consequent.getArgument(i);
          if (t.getType() == TermType.VARIABLE) {
             hasVariables = true;
             if (!variables.add(t)) {
@@ -110,10 +110,10 @@ final class ClauseActionFactory {
 
       @Override
       public Predicate getPredicate(Term input) {
-         Term[] consequentArgs = model.getConsequent().getArgs();
+         Term consequent = model.getConsequent();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
-            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
+            if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }
@@ -307,10 +307,10 @@ final class ClauseActionFactory {
       @Override
       public Predicate getPredicate(Term input) {
          // TODO would be a performance improvement if no clause variable is created unless is a shared variable
-         Term[] consequentArgs = model.getConsequent().getArgs();
+         Term consequent = model.getConsequent();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
-            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
+            if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }
@@ -350,10 +350,10 @@ final class ClauseActionFactory {
 
       @Override
       public Predicate getPredicate(Term input) {
-         Term[] consequentArgs = model.getConsequent().getArgs();
+         Term consequent = model.getConsequent();
          Map<Variable, Variable> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
-            if (!input.getArgument(i).unify(consequentArgs[i].copy(sharedVariables))) {
+            if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;
             }
          }

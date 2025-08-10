@@ -26,11 +26,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.ClauseActionFactory;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.Index;
-import org.projog.core.predicate.udp.KeyFactories;
 import org.projog.core.predicate.udp.KeyFactories.KeyFactory;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -57,18 +52,18 @@ public class IndexTest {
       Index i = new Index(positions, clauses);
 
       // Assert getting matches where 2nd arg = B.
-      assertSame(e1, i.getMatches(new Term[] {A, B, C}));
-      assertSame(e1, i.getMatches(new Term[] {C, B, A}));
-      assertSame(e1, i.getMatches(new Term[] {D, B, E}));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {A, B, C})));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {C, B, A})));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {D, B, E})));
 
       // Assert getting matches where 2nd arg = C.
-      assertSame(e2, i.getMatches(new Term[] {A, C, B}));
-      assertSame(e2, i.getMatches(new Term[] {D, C, E}));
+      assertSame(e2, i.getMatches(structure("p", new Term[] {A, C, B})));
+      assertSame(e2, i.getMatches(structure("p", new Term[] {D, C, E})));
 
       // Assert when no match the same zero length arrays are always returned.
-      ClauseAction[] noMatches = i.getMatches(new Term[] {C, A, B});
+      ClauseAction[] noMatches = i.getMatches(structure("p", new Term[] {C, A, B}));
       assertEquals(0, noMatches.length);
-      assertSame(noMatches, i.getMatches(new Term[] {B, D, C}));
+      assertSame(noMatches, i.getMatches(structure("p", new Term[] {B, D, C})));
    }
 
    @Test
@@ -78,26 +73,26 @@ public class IndexTest {
       KeyFactory kf = KeyFactories.getKeyFactory(positions.length);
       Map<Object, ClauseAction[]> clauses = new HashMap<>();
       ClauseAction[] e1 = new ClauseAction[] {clause(A, B, C), clause(A, D, C)};
-      clauses.put(kf.createKey(positions, new Term[] {A, B, C}), e1);
+      clauses.put(kf.createKey(positions, structure("p", new Term[] {A, B, C})), e1);
       ClauseAction[] e2 = new ClauseAction[] {clause(A, B, D)};
-      clauses.put(kf.createKey(positions, new Term[] {A, B, D}), e2);
+      clauses.put(kf.createKey(positions, structure("p", new Term[] {A, B, D})), e2);
 
       // Create index to be tested.
       Index i = new Index(positions, clauses);
 
       // Assert getting matches where 1st arg = A and 3rd arg = C.
-      assertSame(e1, i.getMatches(new Term[] {A, B, C}));
-      assertSame(e1, i.getMatches(new Term[] {A, D, C}));
-      assertSame(e1, i.getMatches(new Term[] {A, E, C}));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {A, B, C})));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {A, D, C})));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {A, E, C})));
 
       // Assert getting matches where 1st arg = A and 3rd arg = C.
-      assertSame(e2, i.getMatches(new Term[] {A, B, D}));
-      assertSame(e2, i.getMatches(new Term[] {A, C, D}));
+      assertSame(e2, i.getMatches(structure("p", new Term[] {A, B, D})));
+      assertSame(e2, i.getMatches(structure("p", new Term[] {A, C, D})));
 
       // Assert when no match the same zero length arrays are always returned.
-      ClauseAction[] noMatches = i.getMatches(new Term[] {A, C, B});
+      ClauseAction[] noMatches = i.getMatches(structure("p", new Term[] {A, C, B}));
       assertEquals(0, noMatches.length);
-      assertSame(noMatches, i.getMatches(new Term[] {D, A, E}));
+      assertSame(noMatches, i.getMatches(structure("p", new Term[] {D, A, E})));
    }
 
    @Test
@@ -107,23 +102,23 @@ public class IndexTest {
       KeyFactory kf = KeyFactories.getKeyFactory(positions.length);
       Map<Object, ClauseAction[]> clauses = new HashMap<>();
       ClauseAction[] e1 = new ClauseAction[] {clause(A, B, C)};
-      clauses.put(kf.createKey(positions, new Term[] {A, B, C}), e1);
+      clauses.put(kf.createKey(positions, structure("p", new Term[] {A, B, C})), e1);
       ClauseAction[] e2 = new ClauseAction[] {clause(A, B, D)};
-      clauses.put(kf.createKey(positions, new Term[] {A, B, D}), e2);
+      clauses.put(kf.createKey(positions, structure("p", new Term[] {A, B, D})), e2);
 
       // Create index to be tested.
       Index i = new Index(positions, clauses);
 
       // Assert getting matches where 1st arg = A, 2nd arg = B and 3rd arg = C.
-      assertSame(e1, i.getMatches(new Term[] {A, B, C}));
+      assertSame(e1, i.getMatches(structure("p", new Term[] {A, B, C})));
 
       // Assert getting matches where 1st arg = A, 2nd arg = B and 3rd arg = D.
-      assertSame(e2, i.getMatches(new Term[] {A, B, D}));
+      assertSame(e2, i.getMatches(structure("p", new Term[] {A, B, D})));
 
       // Assert when no match the same zero length arrays are always returned.
-      ClauseAction[] noMatches = i.getMatches(new Term[] {A, C, B});
+      ClauseAction[] noMatches = i.getMatches(structure("p", new Term[] {A, C, B}));
       assertEquals(0, noMatches.length);
-      assertSame(noMatches, i.getMatches(new Term[] {A, C, E}));
+      assertSame(noMatches, i.getMatches(structure("p", new Term[] {A, C, E})));
    }
 
    private ClauseAction clause(Term t1, Term t2, Term t3) {

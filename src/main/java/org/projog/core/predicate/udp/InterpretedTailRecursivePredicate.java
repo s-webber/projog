@@ -48,15 +48,15 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
    private final Term[] secondClauseConsequentArgs;
    private final Term[] secondClauseOriginalTerms;
 
-   InterpretedTailRecursivePredicate(SpyPoint spyPoint, Term[] inputArgs, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs,
+   InterpretedTailRecursivePredicate(SpyPoint spyPoint, Term inputTerm, PredicateFactory[] firstClausePredicateFactories, Term[] firstClauseConsequentArgs,
                Term[] firstClauseOriginalTerms, PredicateFactory[] secondClausePredicateFactories, Term[] secondClauseConsequentArgs, Term[] secondClauseOriginalTerms,
                boolean isRetryable) {
       this.isSpyPointEnabled = spyPoint.isEnabled();
       this.spyPoint = spyPoint;
-      this.numArgs = inputArgs.length;
+      this.numArgs = inputTerm.getNumberOfArguments();
       this.currentQueryArgs = new Term[numArgs];
       for (int i = 0; i < numArgs; i++) {
-         currentQueryArgs[i] = inputArgs[i].getTerm();
+         currentQueryArgs[i] = inputTerm.getArgument(i).getTerm();
       }
 
       this.firstClausePredicateFactories = firstClausePredicateFactories;
@@ -109,9 +109,9 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
          }
       }
 
-      Term finalTermArgs[] = secondClauseOriginalTerms[secondClauseOriginalTerms.length - 1].getArgs();
+      Term finalTerm = secondClauseOriginalTerms[secondClauseOriginalTerms.length - 1];
       for (int i = 0; i < numArgs; i++) {
-         currentQueryArgs[i] = finalTermArgs[i].copy(sharedVariables);
+         currentQueryArgs[i] = finalTerm.getArgument(i).copy(sharedVariables);
       }
 
       return true;

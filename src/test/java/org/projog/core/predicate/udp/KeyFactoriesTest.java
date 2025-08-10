@@ -21,9 +21,9 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TermFactory.atom;
+import static org.projog.TermFactory.structure;
 
 import org.junit.Test;
-import org.projog.core.predicate.udp.KeyFactories;
 import org.projog.core.predicate.udp.KeyFactories.KeyFactory;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -45,9 +45,9 @@ public class KeyFactoriesTest {
       Term[] args = new Term[] {A, B, C};
       KeyFactory kf = KeyFactories.getKeyFactory(1);
 
-      assertSame(A, kf.createKey(new int[] {0}, args));
-      assertSame(B, kf.createKey(new int[] {1}, args));
-      assertSame(C, kf.createKey(new int[] {2}, args));
+      assertSame(A, kf.createKey(new int[] {0}, structure("p", args)));
+      assertSame(B, kf.createKey(new int[] {1}, structure("p", args)));
+      assertSame(C, kf.createKey(new int[] {2}, structure("p", args)));
    }
 
    @Test
@@ -55,14 +55,14 @@ public class KeyFactoriesTest {
       Term[] args = new Term[] {A, B, C};
       KeyFactory kf = KeyFactories.getKeyFactory(2);
 
-      Object k = kf.createKey(new int[] {0, 1}, args);
+      Object k = kf.createKey(new int[] {0, 1}, structure("p", args));
 
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 2}, args));
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {1, 2}, args));
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 1}, new Term[] {B, A, C}));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 2}, structure("p", args)));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {1, 2}, structure("p", args)));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 1}, structure("p", new Term[] {B, A, C})));
 
-      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1}, args));
-      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1}, new Term[] {A, B, D}));
+      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1}, structure("p", args)));
+      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1}, structure("p", new Term[] {A, B, D})));
    }
 
    @Test
@@ -70,14 +70,14 @@ public class KeyFactoriesTest {
       Term[] args = new Term[] {A, B, C, D};
       KeyFactory kf = KeyFactories.getKeyFactory(3);
 
-      Object k = kf.createKey(new int[] {0, 1, 2}, args);
+      Object k = kf.createKey(new int[] {0, 1, 2}, structure("p", args));
 
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 2, 3}, args));
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {1, 2, 3}, args));
-      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, new Term[] {A, C, B, D}));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 2, 3}, structure("p", args)));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {1, 2, 3}, structure("p", args)));
+      assertNotEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, structure("p", new Term[] {A, C, B, D})));
 
-      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, args));
-      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, new Term[] {A, B, C, E}));
+      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, structure("p", args)));
+      assertEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, structure("p", new Term[] {A, B, C, E})));
    }
 
    private void assertNotEqualsHashCode(Object o1, Object o2) { // TODO move to TestUtils

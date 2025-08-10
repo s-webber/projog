@@ -58,13 +58,13 @@ final class Indexes {
       indexes = new SoftReference[size + 1];
    }
 
-   ClauseAction[] index(Term[] args) { // TODO rename
-      int bitmask = createBitmask(args);
+   ClauseAction[] index(Term term) { // TODO rename
+      int bitmask = createBitmask(term);
 
       if (bitmask == 0) {
          return masterData;
       } else {
-         return getOrCreateIndex(bitmask).getMatches(args);
+         return getOrCreateIndex(bitmask).getMatches(term);
       }
    }
 
@@ -72,10 +72,10 @@ final class Indexes {
       return masterData.length;
    }
 
-   private int createBitmask(Term[] args) {
+   private int createBitmask(Term term) {
       int bitmask = 0;
       for (int i = 0, b = 1, bitCount = 0; i < numIndexableArgs; i++, b *= 2) {
-         if (args[indexableArgs[i]].isImmutable()) {
+         if (term.getArgument(indexableArgs[i]).isImmutable()) {
             bitmask += b;
             if (++bitCount == KeyFactories.MAX_ARGUMENTS_PER_INDEX) {
                return bitmask;
@@ -129,7 +129,7 @@ final class Indexes {
       Map<Object, List<ClauseAction>> map = new HashMap<>();
       KeyFactory keyFactory = KeyFactories.getKeyFactory(positions.length);
       for (ClauseAction clause : masterData) {
-         Object key = keyFactory.createKey(positions, clause.getModel().getConsequent().getArgs());
+         Object key = keyFactory.createKey(positions, clause.getModel().getConsequent());
          List<ClauseAction> list = map.get(key);
          if (list == null) {
             list = new ArrayList<>();

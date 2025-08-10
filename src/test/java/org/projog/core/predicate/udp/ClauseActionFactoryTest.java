@@ -683,15 +683,18 @@ public class ClauseActionFactoryTest {
       MutableFact a = create(MutableFact.class, "p(X,b,Y).");
       Variable x = new Variable("X");
 
-      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {x, x, x}));
+      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {x, x, x})));
       assertSame(x, x.getTerm());
 
-      assertFalse(ClauseActionFactory.isMatch(a, new Term[] {x, new Atom("c"), x}));
+      assertFalse(ClauseActionFactory.isMatch(a, Structure.createStructure("x", new Term[] {x, x, x})));
       assertSame(x, x.getTerm());
 
-      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {new Atom("a"), new Atom("b"), new Atom("c")}));
+      assertFalse(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {x, new Atom("c"), x})));
+      assertSame(x, x.getTerm());
 
-      assertTrue(ClauseActionFactory.isMatch(a, new Term[] {new Atom("c"), new Atom("b"), new Atom("a")}));
+      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {new Atom("a"), new Atom("b"), new Atom("c")})));
+
+      assertTrue(ClauseActionFactory.isMatch(a, Structure.createStructure("p", new Term[] {new Atom("c"), new Atom("b"), new Atom("a")})));
    }
 
    @SuppressWarnings("unchecked")

@@ -196,7 +196,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       Structure term = structure("p", atom("q"), atom("w"), atom("e"));
       PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
       assertSame(NeverSucceedsPredicateFactory.class, preprocessedPredicateFactory.getClass());
-      assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(Structure.createStructure("p", term.getArgs())));
+      assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(term));
       assertFalse(preprocessedPredicateFactory.isRetryable());
    }
 

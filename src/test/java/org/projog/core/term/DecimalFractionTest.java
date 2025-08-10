@@ -110,12 +110,6 @@ public class DecimalFractionTest {
    }
 
    @Test
-   public void testGetArgs() {
-      DecimalFraction d = decimalFraction();
-      assertSame(TermUtils.EMPTY_ARRAY, d.getArgs());
-   }
-
-   @Test
    public void testHashCode() {
       DecimalFraction n = new DecimalFraction(7);
 

@@ -128,12 +128,6 @@ public class AtomTest {
    }
 
    @Test
-   public void testGetArgs() {
-      Atom a = atom();
-      assertSame(TermUtils.EMPTY_ARRAY, a.getArgs());
-   }
-
-   @Test
    public void testHashCode() {
       Atom a = new Atom("test");
 

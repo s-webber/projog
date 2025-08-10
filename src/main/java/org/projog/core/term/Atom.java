@@ -43,11 +43,6 @@ public final class Atom implements Term {
    }
 
    @Override
-   public Term[] getArgs() {
-      return TermUtils.EMPTY_ARRAY;
-   }
-
-   @Override
    public int getNumberOfArguments() {
       return 0;
    }

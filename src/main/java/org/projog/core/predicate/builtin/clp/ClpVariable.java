@@ -97,11 +97,6 @@ final class ClpVariable implements Numeric, LeafExpression {
    }
 
    @Override
-   public Term[] getArgs() {
-      throw new UnsupportedOperationException();
-   }
-
-   @Override
    public int getNumberOfArguments() {
       return 0;
    }

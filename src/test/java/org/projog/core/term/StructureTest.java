@@ -15,7 +15,6 @@
  */
 package org.projog.core.term;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -46,7 +45,6 @@ public class StructureTest {
       Term[] args = {atom(), structure(), integerNumber(), decimalFraction(), variable()};
       Structure p = structure("test", args);
       assertEquals("test", p.getName());
-      assertArrayEquals(args, p.getArgs());
       assertEquals(5, p.getNumberOfArguments());
       for (int i = 0; i < args.length; i++) {
          assertSame(args[i], p.getArgument(i));

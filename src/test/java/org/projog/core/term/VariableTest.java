@@ -62,11 +62,6 @@ public class VariableTest {
       } catch (NullPointerException e) {
       }
       try {
-         v.getArgs();
-         fail();
-      } catch (NullPointerException e) {
-      }
-      try {
          v.getNumberOfArguments();
          fail();
       } catch (NullPointerException e) {
@@ -369,7 +364,6 @@ public class VariableTest {
       assertSame(t.getName(), v1.getName());
       assertSame(t.getType(), v1.getType());
       assertSame(t.getNumberOfArguments(), v1.getNumberOfArguments());
-      assertSame(t.getArgs(), v1.getArgs());
       assertSame(t.firstArgument(), v1.firstArgument());
       assertTrue(TermUtils.termsEqual(t, v1));
       assertTrue(TermUtils.termsEqual(v1, v1));

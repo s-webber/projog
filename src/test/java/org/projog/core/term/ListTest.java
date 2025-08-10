@@ -168,18 +168,6 @@ public class ListTest {
    }
 
    @Test
-   public void testGetArgs() {
-      Term head = new Atom("a");
-      Term tail = new Atom("b");
-      List testList = new List(head, tail);
-      Term[] args = testList.getArgs();
-      assertEquals(2, args.length);
-      assertSame(head, args[0]);
-      assertSame(tail, args[1]);
-      assertNotSame(args, testList.getArgs());
-   }
-
-   @Test
    public void testCopyNoVariableElements() {
       List testList = new List(new Atom("a"), new Atom("b"));
       assertSame(testList, testList.copy(null));

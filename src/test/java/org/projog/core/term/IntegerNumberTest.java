@@ -109,12 +109,6 @@ public class IntegerNumberTest {
    }
 
    @Test
-   public void testGetArgs() {
-      IntegerNumber i = integerNumber();
-      assertSame(TermUtils.EMPTY_ARRAY, i.getArgs());
-   }
-
-   @Test
    public void testHashCode() {
       IntegerNumber n = new IntegerNumber(7);
 

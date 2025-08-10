@@ -46,11 +46,6 @@ public final class DecimalFraction implements Numeric {
    }
 
    @Override
-   public Term[] getArgs() {
-      return TermUtils.EMPTY_ARRAY;
-   }
-
-   @Override
    public int getNumberOfArguments() {
       return 0;
    }

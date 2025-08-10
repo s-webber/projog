@@ -62,11 +62,6 @@ public final class List implements Term {
    }
 
    @Override
-   public Term[] getArgs() {
-      return new Term[] {head, tail};
-   }
-
-   @Override
    public int getNumberOfArguments() {
       return 2;
    }

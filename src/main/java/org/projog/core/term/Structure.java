@@ -87,11 +87,6 @@ public final class Structure implements Term {
    }
 
    @Override
-   public Term[] getArgs() {
-      return args;
-   }
-
-   @Override
    public int getNumberOfArguments() {
       return args.length;
    }
@@ -170,15 +165,14 @@ public final class Structure implements Term {
    public boolean unify(Term t) {
       TermType tType = t.getType();
       if (tType == TermType.STRUCTURE) {
-         Term[] tArgs = t.getArgs();
-         if (args.length != tArgs.length) {
+         if (args.length != t.getNumberOfArguments()) {
             return false;
          }
          if (!functor.equals(t.getName())) {
             return false;
          }
          for (int i = 0; i < args.length; i++) {
-            if (!args[i].unify(tArgs[i])) {
+            if (!args[i].unify(t.getArgument(i))) {
                return false;
             }
          }

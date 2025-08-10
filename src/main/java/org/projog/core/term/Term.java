@@ -34,17 +34,6 @@ public interface Term {
    String getName();
 
    /**
-    * Returns an array of this terms's arguments.
-    * <p>
-    * <b>Note: for performance reasons the array returned is the same array used internally be the term instance so be
-    * careful not to alter the array returned as changes will be reflected in the original term.</b>
-    *
-    * @return array of this terms's arguments
-    * @see #getArgument(int)
-    */
-   Term[] getArgs();
-
-   /**
     * Returns the number of arguments in this term.
     *
     * @return number of arguments in this term

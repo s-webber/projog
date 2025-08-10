@@ -73,9 +73,4 @@ public class EmptyListTest {
          assertEquals("Array index out of range: " + index, e.getMessage());
       }
    }
-
-   @Test
-   public void testGetArgs() {
-      assertSame(TermUtils.EMPTY_ARRAY, EMPTY_LIST.getArgs());
-   }
 }

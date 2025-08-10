@@ -61,12 +61,6 @@ public class ClpVariableTest {
    }
 
    @Test(expected = UnsupportedOperationException.class)
-   public void testGetArgs() {
-      ClpVariable v = new ClpVariable();
-      v.getArgs();
-   }
-
-   @Test(expected = UnsupportedOperationException.class)
    public void testGetArgument() {
       ClpVariable v = new ClpVariable();
       v.firstArgument();

@@ -94,19 +94,19 @@ public class TailRecursivePredicateMetaDataTest {
 
    private void assertSingleResultTailRecursive(String input) {
       Term parsedSentence = TestUtils.parseSentence(input);
-      assertTrue(isSingleResultTailRecursive(copyClauses(), parsedSentence.getArgs()));
+      assertTrue(isSingleResultTailRecursive(copyClauses(), parsedSentence));
    }
 
    private void assertMultipleResultsTailRecursive(String input) {
       Term parsedSentence = TestUtils.parseSentence(input);
-      assertFalse(isSingleResultTailRecursive(copyClauses(), parsedSentence.getArgs()));
+      assertFalse(isSingleResultTailRecursive(copyClauses(), parsedSentence));
    }
 
-   private boolean isSingleResultTailRecursive(List<ClauseModel> facts, Term[] args) {
+   private boolean isSingleResultTailRecursive(List<ClauseModel> facts, Term term) {
       TailRecursivePredicateMetaData metaData = TailRecursivePredicateMetaData.create(kb, facts);
       assertNotNull(metaData);
-      for (int i = 0; i < args.length; i++) {
-         if (metaData.isSingleResultIfArgumentImmutable(i) && args[i].getType().isVariable() == false) {
+      for (int i = 0; i < term.getNumberOfArguments(); i++) {
+         if (metaData.isSingleResultIfArgumentImmutable(i) && term.getArgument(i).getType().isVariable() == false) {
             return true;
          }
       }

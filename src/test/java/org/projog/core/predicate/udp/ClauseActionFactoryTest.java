@@ -401,18 +401,18 @@ public class ClauseActionFactoryTest {
       List<Term> allValues = captor.getAllValues();
       assertEquals(2, allValues.size());
 
-      Term[] values1 = allValues.get(0).getArgs();
-      assertEquals(atom("y"), values1[1]);
-      assertSame(values1[0], values1[2]);
-      assertSame(values1[0], values1[3].firstArgument());
-      assertNotSame(values1[0], values1[4]);
+      Term values1 = allValues.get(0);
+      assertEquals(atom("y"), values1.getArgument(1));
+      assertSame(values1.firstArgument(), values1.getArgument(2));
+      assertSame(values1.firstArgument(), values1.getArgument(3).firstArgument());
+      assertNotSame(values1.firstArgument(), values1.getArgument(4));
 
-      Term[] values2 = allValues.get(1).getArgs();
-      assertNotSame(values1[0], values2[0]);
-      assertSame(values1[1], values2[1]);
-      assertNotSame(values1[2], values2[2]);
-      assertNotSame(values1[3], values2[3]);
-      assertNotSame(values1[4], values2[4]);
+      Term values2 = allValues.get(1);
+      assertNotSame(values1.getArgument(0), values2.getArgument(0));
+      assertSame(values1.getArgument(1), values2.getArgument(1));
+      assertNotSame(values1.getArgument(2), values2.getArgument(2));
+      assertNotSame(values1.getArgument(3), values2.getArgument(3));
+      assertNotSame(values1.getArgument(4), values2.getArgument(4));
 
       verify(pf, times(2)).getPredicate(any(Term.class));
       verifyNoMoreInteractions(pf, p1, p2);

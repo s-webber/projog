@@ -128,19 +128,6 @@ public final class Variable implements Term {
    }
 
    /**
-    * Calls {@link Term#getArgs()} on the {@link Term} this variable is instantiated with.
-    *
-    * @throws NullPointerException if the {@code Variable} is currently uninstantiated
-    */
-   @Override
-   public Term[] getArgs() {
-      if (value == null) {
-         throw new NullPointerException();
-      }
-      return getValue().getArgs();
-   }
-
-   /**
     * Calls {@link Term#getNumberOfArguments()} on the {@link Term} this variable is instantiated with.
     *
     * @throws NullPointerException if the {@code Variable} is currently uninstantiated

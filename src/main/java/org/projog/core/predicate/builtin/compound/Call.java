@@ -15,8 +15,6 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import java.util.Arrays;
-
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
@@ -132,9 +130,13 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
       if (term.getNumberOfArguments() == 1) {
          return knowledgeBase.getPredicates().getPredicate(goal);
       } else {
-         Term[] goalArgs = goal.getArgs();
-         Term[] callArgs = Arrays.copyOf(goalArgs, goalArgs.length + term.getNumberOfArguments() - 1);
-         System.arraycopy(term.getArgs(), 1, callArgs, goalArgs.length, term.getNumberOfArguments() - 1);
+         Term[] callArgs = new Term[goal.getNumberOfArguments() + term.getNumberOfArguments() - 1];
+         for (int i = 0; i < goal.getNumberOfArguments(); i++) {
+            callArgs[i] = goal.getArgument(i);
+         }
+         for (int i = 1; i < term.getNumberOfArguments(); i++) {
+            callArgs[goal.getNumberOfArguments() + i - 1] = term.getArgument(i);
+         }
          Term target = Structure.createStructure(goal.getName(), callArgs);
          return knowledgeBase.getPredicates().getPredicate(target);
       }

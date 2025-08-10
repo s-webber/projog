@@ -66,13 +66,12 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
          return this;
       }
 
-      Term[] arguments = expression.getArgs();
-      if (arguments.length == 1) {
-         return preprocessUnaryOperator(arguments[0]);
-      } else if (arguments.length == 2) {
-         return preprocessBinaryOperator(arguments[0], arguments[1]);
+      if (expression.getNumberOfArguments() == 1) {
+         return preprocessUnaryOperator(expression.firstArgument());
+      } else if (expression.getNumberOfArguments() == 2) {
+         return preprocessBinaryOperator(expression.firstArgument(), expression.secondArgument());
       } else {
-         throw createWrongNumberOfArgumentsException(arguments.length);
+         throw createWrongNumberOfArgumentsException(expression.getNumberOfArguments());
       }
    }
 

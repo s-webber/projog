@@ -66,7 +66,7 @@ public class IntegerNumberTest {
    @Test
    public void testCalculate() {
       IntegerNumber i1 = new IntegerNumber(0);
-      IntegerNumber i2 = i1.calculate(TermUtils.EMPTY_ARRAY);
+      IntegerNumber i2 = i1.calculate(null);
       assertSame(i1, i2);
    }
 

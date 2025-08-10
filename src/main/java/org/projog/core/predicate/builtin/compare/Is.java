@@ -105,7 +105,7 @@ public final class Is extends AbstractSingleResultPredicate implements Preproces
 
       @Override
       public boolean evaluate(Term arg1, Term arg2) {
-         return arg1.unify(o.calculate(arg2.getArgs()));
+         return arg1.unify(o.calculate(arg2));
       }
    }
 }

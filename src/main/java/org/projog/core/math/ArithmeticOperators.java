@@ -95,18 +95,13 @@ public final class ArithmeticOperators {
          case FRACTION:
          case INTEGER:
             return TermUtils.castToNumeric(t);
-         case STRUCTURE:
-            return calculate(t, t.getArgs());
          case ATOM:
-            return calculate(t, TermUtils.EMPTY_ARRAY);
+         case STRUCTURE:
+            PredicateKey key = PredicateKey.createForTerm(t);
+            return getArithmeticOperator(key).calculate(t);
          default:
             throw new ProjogException("Cannot get Numeric for term: " + t + " of type: " + type);
       }
-   }
-
-   private Numeric calculate(Term term, Term[] args) {
-      PredicateKey key = PredicateKey.createForTerm(term);
-      return getArithmeticOperator(key).calculate(args);
    }
 
    /**

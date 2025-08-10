@@ -34,17 +34,17 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
    }
 
    @Override
-   public final Numeric calculate(Term[] args) {
-      switch (args.length) {
+   public final Numeric calculate(Term term) {
+      switch (term.getNumberOfArguments()) {
          case 1:
-            Numeric n = operators.getNumeric(args[0]);
+            Numeric n = operators.getNumeric(term.firstArgument());
             return calculate(n);
          case 2:
-            Numeric n1 = operators.getNumeric(args[0]);
-            Numeric n2 = operators.getNumeric(args[1]);
+            Numeric n1 = operators.getNumeric(term.firstArgument());
+            Numeric n2 = operators.getNumeric(term.secondArgument());
             return calculate(n1, n2);
          default:
-            throw createWrongNumberOfArgumentsException(args.length);
+            throw createWrongNumberOfArgumentsException(term.getNumberOfArguments());
       }
    }
 
@@ -118,8 +118,8 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       }
 
       @Override
-      public Numeric calculate(Term[] args) {
-         Numeric n = o.calculate(args[0].getArgs());
+      public Numeric calculate(Term term) {
+         Numeric n = o.calculate(term.firstArgument());
          return AbstractArithmeticOperator.this.calculate(n);
       }
    }
@@ -134,9 +134,9 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       }
 
       @Override
-      public Numeric calculate(Term[] args) {
-         Numeric n1 = o1 == null ? operators.getNumeric(args[0]) : o1.calculate(args[0].getArgs());
-         Numeric n2 = o2 == null ? operators.getNumeric(args[1]) : o2.calculate(args[1].getArgs());
+      public Numeric calculate(Term term) {
+         Numeric n1 = o1 == null ? operators.getNumeric(term.firstArgument()) : o1.calculate(term.firstArgument());
+         Numeric n2 = o2 == null ? operators.getNumeric(term.secondArgument()) : o2.calculate(term.secondArgument());
          return AbstractArithmeticOperator.this.calculate(n1, n2);
       }
    }

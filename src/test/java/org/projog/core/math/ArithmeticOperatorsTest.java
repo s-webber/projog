@@ -34,9 +34,6 @@ import org.projog.TestUtils;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseConsumer;
-import org.projog.core.math.ArithmeticOperator;
-import org.projog.core.math.ArithmeticOperators;
-import org.projog.core.math.PreprocessableArithmeticOperator;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.IntegerNumber;
@@ -245,12 +242,12 @@ public class ArithmeticOperatorsTest {
        * @return an IntegerNumber with a value of the first input argument + 1
        */
       @Override
-      public Numeric calculate(Term[] args) {
+      public Numeric calculate(Term term) {
          if (kb == null) {
             // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);
          }
-         long input = TermUtils.castToNumeric(args[0]).getLong();
+         long input = TermUtils.castToNumeric(term.firstArgument()).getLong();
          long output = input + 1;
          return new IntegerNumber(output);
       }
@@ -277,12 +274,12 @@ public class ArithmeticOperatorsTest {
        * @return an IntegerNumber with a value of the first input argument + 1
        */
       @Override
-      public Numeric calculate(Term[] args) {
+      public Numeric calculate(Term term) {
          if (kb == null) {
             // setKnowledgeBase should be called by ArithmeticOperators when it creates an instance of this class
             throw new RuntimeException("KnowledgeBase not set on " + this);
          }
-         long input = TermUtils.castToNumeric(args[0]).getLong();
+         long input = TermUtils.castToNumeric(term.firstArgument()).getLong();
          long output = input * 3;
          return new IntegerNumber(output);
       }

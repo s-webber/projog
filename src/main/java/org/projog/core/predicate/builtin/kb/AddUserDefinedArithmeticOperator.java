@@ -15,8 +15,6 @@
  */
 package org.projog.core.predicate.builtin.kb;
 
-import java.util.Arrays;
-
 import org.projog.core.ProjogException;
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.math.Numeric;
@@ -69,22 +67,22 @@ public final class AddUserDefinedArithmeticOperator extends AbstractSingleResult
       }
 
       @Override
-      public Numeric calculate(Term[] args) {
+      public Numeric calculate(Term term) {
          final Variable result = new Variable("result");
-         final Term[] argsPlusResult = createArgumentsIncludingResult(args, result);
+         final Term[] argsPlusResult = createArgumentsIncludingResult(term, result);
 
          Term s = Structure.createStructure(key.getName(), argsPlusResult);
          if (pf.getPredicate(s).evaluate()) {
             return TermUtils.castToNumeric(result);
          } else {
-            throw new ProjogException("Could not evaluate: " + key + " with arguments: " + Arrays.toString(args));
+            throw new ProjogException("Could not evaluate: " + key + " for: " + term);
          }
       }
 
-      private Term[] createArgumentsIncludingResult(Term[] args, final Variable result) {
+      private Term[] createArgumentsIncludingResult(Term term, final Variable result) {
          final Term[] argsPlusResult = new Term[numArgs + 1];
          for (int i = 0; i < numArgs; i++) {
-            argsPlusResult[i] = args[i].getTerm();
+            argsPlusResult[i] = term.getArgument(i).getTerm();
          }
          argsPlusResult[numArgs] = result;
          return argsPlusResult;

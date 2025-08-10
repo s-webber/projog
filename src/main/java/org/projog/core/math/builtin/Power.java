@@ -121,9 +121,9 @@ public final class Power implements ArithmeticOperator, KnowledgeBaseConsumer {
    private ArithmeticOperators operators;
 
    @Override
-   public Numeric calculate(Term[] args) {
-      Numeric base = operators.getNumeric(args[0]);
-      Numeric exponent = operators.getNumeric(args[1]);
+   public Numeric calculate(Term term) {
+      Numeric base = operators.getNumeric(term.firstArgument());
+      Numeric exponent = operators.getNumeric(term.secondArgument());
       if (base.getType() == TermType.INTEGER && exponent.getType() == TermType.INTEGER && (exponent.getLong() >= 0 || base.getLong() == 1 || base.getLong() == -1)) {
          long result = integerPow(base.getLong(), exponent.getLong());
          return new IntegerNumber(result);

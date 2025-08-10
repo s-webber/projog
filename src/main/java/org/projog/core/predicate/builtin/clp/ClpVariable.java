@@ -282,7 +282,7 @@ final class ClpVariable implements Numeric, LeafExpression {
    }
 
    @Override
-   public Numeric calculate(Term[] args) {
+   public Numeric calculate(Term term) {
       return this;
    }
 

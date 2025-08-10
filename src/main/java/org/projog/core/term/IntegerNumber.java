@@ -121,7 +121,7 @@ public final class IntegerNumber implements Numeric {
    }
 
    @Override
-   public IntegerNumber calculate(Term[] args) {
+   public IntegerNumber calculate(Term term) {
       return this;
    }
 

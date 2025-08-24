@@ -15,7 +15,7 @@
  */
 package org.projog.core.kb;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,29 +154,57 @@ public final class KnowledgeBaseUtils {
     * invoking the specified method (as a no argument static method) of the specified class.</li>
     * </ol>
     */
-   public static <T> T instantiate(KnowledgeBase knowledgeBase, String input) throws ReflectiveOperationException {
-      T result = instantiate(input);
-
-      if (result instanceof KnowledgeBaseConsumer) {
-         ((KnowledgeBaseConsumer) result).setKnowledgeBase(knowledgeBase);
-      }
-
-      return result;
-   }
-
-   // TODO share with KnowledgeBaseServiceLocator.newInstance pass KnowledgeBase to constructor
    @SuppressWarnings("unchecked")
-   private static <T> T instantiate(String input) throws ReflectiveOperationException {
-      T result;
+   public static <T> T instantiate(KnowledgeBase kb, String input) throws ReflectiveOperationException {
+      Object result;
+
       int slashPos = input.indexOf('/');
       if (slashPos != -1) {
          String className = input.substring(0, slashPos);
          String methodName = input.substring(slashPos + 1);
-         Method m = Class.forName(className).getMethod(methodName);
-         result = (T) m.invoke(null);
+         result = invokeFactoryMethod(kb, methodName, Class.forName(className));
       } else {
-         result = (T) Class.forName(input).newInstance();
+         result = newInstance(kb, Class.forName(input));
       }
-      return result;
+
+      if (result instanceof KnowledgeBaseConsumer) {
+         ((KnowledgeBaseConsumer) result).setKnowledgeBase(kb);
+      }
+
+      return (T) result;
+   }
+
+   /**
+    * Returns a new instance of the specified class.
+    * <p>
+    * If the class has a constructor that takes a KnowledgeBase as its single argument then an attempt is made to use
+    * that to construct the new instance - else an attempt is made to construct a new instance using the no-arg
+    * constructor.
+    */
+   public static Object newInstance(KnowledgeBase kb, Class<?> c) throws ReflectiveOperationException {
+      Constructor<?> constructor = getKnowledgeBaseArgumentConstructor(c);
+      if (constructor != null) {
+         return constructor.newInstance(kb);
+      } else {
+         return c.getDeclaredConstructor().newInstance();
+      }
+   }
+
+   private static Constructor<?> getKnowledgeBaseArgumentConstructor(Class<?> c) throws ReflectiveOperationException {
+      for (Constructor<?> constructor : c.getConstructors()) {
+         Class<?>[] parameterTypes = constructor.getParameterTypes();
+         if (parameterTypes.length == 1 && parameterTypes[0] == KnowledgeBase.class) {
+            return constructor;
+         }
+      }
+      return null;
+   }
+
+   private static Object invokeFactoryMethod(KnowledgeBase kb, String methodName, Class<?> c) throws ReflectiveOperationException {
+      try {
+         return c.getMethod(methodName, KnowledgeBase.class).invoke(null, kb);
+      } catch (NoSuchMethodException e) {
+         return c.getMethod(methodName).invoke(null);
+      }
    }
 }

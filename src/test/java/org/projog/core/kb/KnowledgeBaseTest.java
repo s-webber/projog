@@ -358,6 +358,26 @@ public class KnowledgeBaseTest {
       assertSame(DummyPredicateFactoryNoPublicConstructor.class, predicates.getPredicateFactory(key).getClass());
    }
 
+   /** Test creating predicate factory using a public constructor that takes a KnowledgeBase. */
+   @Test
+   public void testAddPredicateFactoryUsingConstructorWithKnowledgeBase() {
+      final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
+      final String className = DummyPredicateFactorySingleArgMethod.class.getName();
+      predicates.addPredicateFactory(key, className + "/getInstance");
+      assertSame(DummyPredicateFactorySingleArgMethod.class, predicates.getPredicateFactory(key).getClass());
+      DummyPredicateFactorySingleArgMethod pf = (DummyPredicateFactorySingleArgMethod) predicates.getPredicateFactory(key);
+      assertSame(kb, pf.kb);
+   }
+
+   /** Test using a static method, that takes a KnowledgeBase, to add a predicate factory. */
+   @Test
+   public void testAddPredicateFactoryUsingStaticMethodWithKnowledgeBase() {
+      final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
+      final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
+      predicates.addPredicateFactory(key, className + "/getInstance");
+      assertSame(DummyPredicateFactoryNoPublicConstructor.class, predicates.getPredicateFactory(key).getClass());
+   }
+
    @Test
    public void testPreprocess_when_PreprocessablePredicateFactory() {
       Term term = structure("testOptimise", atom("test"));
@@ -389,6 +409,47 @@ public class KnowledgeBaseTest {
 
       private DummyPredicateFactoryNoPublicConstructor() {
          // private as want to test creation using getInstance static method
+      }
+
+      @Override
+      public Predicate getPredicate(Term term) {
+         throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public boolean isRetryable() {
+         throw new UnsupportedOperationException();
+      }
+   }
+
+   public static class DummyPredicateFactorySingleArgConstructor implements PredicateFactory {
+      private final KnowledgeBase kb;
+
+      public DummyPredicateFactorySingleArgConstructor(KnowledgeBase kb) {
+         this.kb = kb;
+      }
+
+      @Override
+      public Predicate getPredicate(Term term) {
+         throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public boolean isRetryable() {
+         throw new UnsupportedOperationException();
+      }
+   }
+
+   public static class DummyPredicateFactorySingleArgMethod implements PredicateFactory {
+      private final KnowledgeBase kb;
+
+      public static DummyPredicateFactorySingleArgMethod getInstance(KnowledgeBase kb) {
+         return new DummyPredicateFactorySingleArgMethod(kb);
+      }
+
+      private DummyPredicateFactorySingleArgMethod(KnowledgeBase kb) {
+         // private as want to test creation using getInstance static method
+         this.kb = kb;
       }
 
       @Override

@@ -62,13 +62,31 @@ public class CoreUtilsTest {
    }
 
    @Test
-   public void testKnowledgeBaseConsumer_staticMethod() throws Exception {
+   public void testKnowledgeBaseConsumer_singleArgConstructor() throws Exception {
+      KnowledgeBase knowledgeBase = KnowledgeBaseUtils.createKnowledgeBase();
+      SingleArgConstructorExample o = KnowledgeBaseUtils.instantiate(knowledgeBase, "org.projog.core.kb.CoreUtilsTest$SingleArgConstructorExample");
+      assertNotNull(o);
+      assertSame(knowledgeBase, o.kb);
+      assertEquals(1, SingleArgConstructorExample.INSTANCE_CTR);
+   }
+
+   @Test
+   public void testKnowledgeBaseConsumer_noArgStaticMethod() throws Exception {
       KnowledgeBase knowledgeBase = KnowledgeBaseUtils.createKnowledgeBase();
       KnowledgeBaseConsumerStaticMethodExample o = KnowledgeBaseUtils.instantiate(knowledgeBase,
                   "org.projog.core.kb.CoreUtilsTest$KnowledgeBaseConsumerStaticMethodExample/create");
       assertNotNull(o);
       assertSame(knowledgeBase, o.kb);
       assertEquals(1, KnowledgeBaseConsumerStaticMethodExample.INSTANCE_CTR);
+   }
+
+   @Test
+   public void testKnowledgeBaseConsumer_singleArgStaticMethod() throws Exception {
+      KnowledgeBase knowledgeBase = KnowledgeBaseUtils.createKnowledgeBase();
+      SingleArgStaticMethodExample o = KnowledgeBaseUtils.instantiate(knowledgeBase, "org.projog.core.kb.CoreUtilsTest$SingleArgStaticMethodExample/create");
+      assertNotNull(o);
+      assertSame(knowledgeBase, o.kb);
+      assertEquals(1, SingleArgStaticMethodExample.INSTANCE_CTR);
    }
 
    public static class KnowledgeBaseConsumerNoArgConstructorExample implements KnowledgeBaseConsumer {
@@ -86,6 +104,17 @@ public class CoreUtilsTest {
             throw new IllegalStateException();
          }
          this.kb = knowledgeBase;
+      }
+   }
+
+   public static class SingleArgConstructorExample {
+      static int INSTANCE_CTR;
+
+      final KnowledgeBase kb;
+
+      public SingleArgConstructorExample(KnowledgeBase kb) {
+         this.kb = kb;
+         INSTANCE_CTR++;
       }
    }
 
@@ -108,6 +137,21 @@ public class CoreUtilsTest {
             throw new IllegalStateException();
          }
          this.kb = knowledgeBase;
+      }
+   }
+
+   public static class SingleArgStaticMethodExample {
+      static int INSTANCE_CTR;
+
+      final KnowledgeBase kb;
+
+      public static SingleArgStaticMethodExample create(KnowledgeBase kb) {
+         INSTANCE_CTR++;
+         return new SingleArgStaticMethodExample(kb);
+      }
+
+      private SingleArgStaticMethodExample(KnowledgeBase kb) {
+         this.kb = kb;
       }
    }
 }

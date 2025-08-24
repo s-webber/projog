@@ -15,8 +15,6 @@
  */
 package org.projog.core.kb;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -117,18 +115,23 @@ public class KnowledgeBaseServiceLocator {
    @SuppressWarnings("unchecked")
    public <T> T getInstance(Class<?> referenceType, Class<?> instanceType) {
       Object r = services.get(referenceType);
-      if (r == null) {
-         r = createInstance(referenceType, instanceType);
+      if (r != null) {
+         return (T) r;
       }
-      return (T) r;
+
+      try {
+         return (T) createInstance(referenceType, instanceType);
+      } catch (ReflectiveOperationException e) {
+         throw new RuntimeException("Could not create new instance of service: " + instanceType, e);
+      }
    }
 
-   private Object createInstance(Class<?> referenceType, Class<?> instanceType) {
+   private Object createInstance(Class<?> referenceType, Class<?> instanceType) throws ReflectiveOperationException {
       synchronized (services) {
          Object r = services.get(referenceType);
          if (r == null) {
             assertAssignableFrom(referenceType, instanceType);
-            r = newInstance(instanceType);
+            r = KnowledgeBaseUtils.newInstance(kb, instanceType);
             services.put(referenceType, r);
          }
          return r;
@@ -145,35 +148,5 @@ public class KnowledgeBaseServiceLocator {
       if (!referenceType.isInstance(instance)) {
          throw new IllegalArgumentException(instance + " is not of type: " + referenceType);
       }
-   }
-
-   /**
-    * Returns a new instance of the specified class.
-    * <p>
-    * If the class has a constructor that takes a KnowledgeBase as its single argument then an attempt is made to use
-    * that to construct the new instance - else an attempt is made to construct a new instance using the no-arg
-    * constructor.
-    */
-   private Object newInstance(Class<?> c) {
-      try {
-         Constructor<?> constructor = getKnowledgeBaseArgumentConstructor(c);
-         if (constructor != null) {
-            return constructor.newInstance(kb);
-         } else {
-            return c.newInstance();
-         }
-      } catch (Exception e) {
-         throw new RuntimeException("Could not create new instance of service: " + c, e);
-      }
-   }
-
-   private Constructor<?> getKnowledgeBaseArgumentConstructor(Class<?> c) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-      for (Constructor<?> constructor : c.getConstructors()) {
-         Class<?>[] parameterTypes = constructor.getParameterTypes();
-         if (parameterTypes.length == 1 && parameterTypes[0] == KnowledgeBase.class) {
-            return constructor;
-         }
-      }
-      return null;
    }
 }

@@ -33,7 +33,6 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -60,6 +59,7 @@ public class LimitTest {
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
+      when(mockPredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true);
       when(mockPredicate.couldReevaluationSucceed()).thenReturn(true);
@@ -82,6 +82,7 @@ public class LimitTest {
       assertFalse(p.couldReevaluationSucceed());
       assertFalse(p.evaluate());
 
+      verify(mockPredicateFactory).preprocess(queryArgs.secondArgument());
       verify(mockPredicateFactory, times(2)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verify(mockPredicate, times(4)).couldReevaluationSucceed();
@@ -93,7 +94,7 @@ public class LimitTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term limitTerm = parseTerm("limit(3, test(a, b)).");
       Term queryArg = limitTerm.secondArgument();
-      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
+      PredicateFactory mockPreprocessablePredicateFactory = mock(PredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);

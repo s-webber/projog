@@ -24,7 +24,6 @@ import java.util.List;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.ListFactory;
@@ -76,7 +75,7 @@ compare_retryable('=',_,_).
  * has the value <code>=</code>, <code>&lt;</code> or <code>&gt;</code>.
  * </p>
  */
-public final class PredSort extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class PredSort extends AbstractSingleResultPredicate implements PredicateFactory {
    // The SWI version of this predicate removes duplicates and backtracks to find alternative solutions.
    // TODO Either change this version to behave the same or update documentation to make it clear how the behaviour of this version differs from SWI.
 

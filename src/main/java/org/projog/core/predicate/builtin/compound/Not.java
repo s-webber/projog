@@ -20,7 +20,6 @@ import java.util.Objects;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
@@ -62,7 +61,7 @@ test2(X) :- \+ \+ X=1, X=2.
  * The <code>\+ X</code> goal fails if an attempt to satisfy the goal represented by the term <code>X</code> succeeds.
  * </p>
  */
-public final class Not extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class Not extends AbstractSingleResultPredicate implements PredicateFactory {
    @Override
    protected boolean evaluate(Term t) {
       PredicateFactory pf = getPredicates().getPredicateFactory(t);

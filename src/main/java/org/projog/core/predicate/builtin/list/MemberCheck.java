@@ -19,7 +19,6 @@ import static org.projog.core.term.ListUtils.isMember;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.List;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
@@ -76,7 +75,7 @@ import org.projog.core.term.Variable;
  * occurrence will be matched.
  * </p>
  */
-public final class MemberCheck extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class MemberCheck extends AbstractSingleResultPredicate implements PredicateFactory {
    @Override
    protected boolean evaluate(Term element, Term list) {
       if (list.getType().isVariable()) {

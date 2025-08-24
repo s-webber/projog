@@ -20,7 +20,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.projog.TermFactory.variable;
@@ -72,38 +71,22 @@ public class UnknownPredicateTest {
    }
 
    @Test
-   public void testPreprocess_not_PreprocessablePredicateFactory() {
+   public void testPreprocess_when_known() {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       PredicateKey key = new PredicateKey(FUNCTOR, 1);
 
-      // create UnknownPredicate for a predicate represented by a mock PredicateFactory (note not a PreprocessablePredicateFactory)
+      // create UnknownPredicate for a predicate represented by a mock PredicateFactory
       UnknownPredicate original = new UnknownPredicate(kb, key);
-      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
-
-      PredicateFactory result = original.preprocess(StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
-
-      assertSame(mockPredicateFactory, result);
-      verifyNoInteractions(mockPredicateFactory);
-   }
-
-   @Test
-   public void testPreprocess_PreprocessablePredicateFactory() {
-      KnowledgeBase kb = TestUtils.createKnowledgeBase();
-      PredicateKey key = new PredicateKey(FUNCTOR, 1);
-
-      // create UnknownPredicate for a predicate represented by a mock PreprocessablePredicateFactory
-      UnknownPredicate original = new UnknownPredicate(kb, key);
-      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
-      kb.getPredicates().addPredicateFactory(key, mockPreprocessablePredicateFactory);
-      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
+      PredicateFactory mockKnownPredicateFactory = mock(PredicateFactory.class);
+      kb.getPredicates().addPredicateFactory(key, mockKnownPredicateFactory);
+      PredicateFactory mockPreprocessedPredicateFactory = mock(PredicateFactory.class);
       Term arg = StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")});
-      when(mockPreprocessablePredicateFactory.preprocess(arg)).thenReturn(mockPredicateFactory);
+      when(mockKnownPredicateFactory.preprocess(arg)).thenReturn(mockPreprocessedPredicateFactory);
 
       PredicateFactory result = original.preprocess(StructureFactory.createStructure(FUNCTOR, new Term[] {new Atom("a")}));
 
-      assertSame(mockPredicateFactory, result);
-      verify(mockPreprocessablePredicateFactory).preprocess(arg);
-      verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory);
+      assertSame(mockPreprocessedPredicateFactory, result);
+      verify(mockKnownPredicateFactory).preprocess(arg);
+      verifyNoMoreInteractions(mockKnownPredicateFactory, mockPreprocessedPredicateFactory);
    }
 }

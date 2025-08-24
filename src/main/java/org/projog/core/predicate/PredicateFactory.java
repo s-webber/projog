@@ -69,4 +69,8 @@ public interface PredicateFactory {
    default boolean isAlwaysCutOnBacktrack() {
       return false;
    }
+
+   default PredicateFactory preprocess(Term arg) {
+      return this;
+   }
 }

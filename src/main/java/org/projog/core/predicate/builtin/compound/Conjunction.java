@@ -19,7 +19,6 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
@@ -111,7 +110,7 @@ p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
  * <code>X</code>. If <code>X</code> fails the entire conjunction fails.
  * </p>
  */
-public final class Conjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class Conjunction extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    protected Predicate getPredicate(Term arg1, Term arg2) {
       Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1);

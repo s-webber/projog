@@ -22,7 +22,6 @@ import java.util.List;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermComparator;
@@ -100,7 +99,7 @@ p(d,2).
  * variables. The elements in <code>L</code> will appear in sorted order and will not include duplicates. Fails if
  * <code>P</code> has no solutions.
  */
-public final class SetOf extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class SetOf extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    protected Predicate getPredicate(Term template, Term goal, Term bag) {
       return new SetOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);

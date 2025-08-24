@@ -44,7 +44,6 @@ import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.UnknownPredicate;
 import org.projog.core.predicate.builtin.bool.Fail;
 import org.projog.core.predicate.builtin.bool.True;
@@ -362,7 +361,7 @@ public class KnowledgeBaseTest {
    @Test
    public void testPreprocess_when_PreprocessablePredicateFactory() {
       Term term = structure("testOptimise", atom("test"));
-      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
+      PredicateFactory mockPreprocessablePredicateFactory = mock(PredicateFactory.class);
       predicates.addPredicateFactory(PredicateKey.createForTerm(term), mockPreprocessablePredicateFactory);
 
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
@@ -372,18 +371,6 @@ public class KnowledgeBaseTest {
 
       verify(mockPreprocessablePredicateFactory).preprocess(term);
       verifyNoMoreInteractions(mockPreprocessablePredicateFactory, mockPredicateFactory);
-   }
-
-   @Test
-   public void testPreprocess_when_not_PreprocessablePredicateFactory() {
-      // note that mockPredicateFactory is not an instance of PreprocessablePredicateFactory
-      Term term = structure("testOptimise", atom("test"));
-      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      predicates.addPredicateFactory(PredicateKey.createForTerm(term), mockPredicateFactory);
-
-      assertSame(mockPredicateFactory, predicates.getPreprocessedPredicateFactory(term));
-
-      verifyNoMoreInteractions(mockPredicateFactory);
    }
 
    private void assertGetPredicateFactory(Term input, Class<?> expected) {

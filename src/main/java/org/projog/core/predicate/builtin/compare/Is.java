@@ -19,7 +19,6 @@ import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.math.Numeric;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -64,7 +63,7 @@ import org.projog.core.term.Term;
  * made to match the number to <code>X</code>. The goal succeeds or fails based on the match.
  * </p>
  */
-public final class Is extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class Is extends AbstractSingleResultPredicate implements PredicateFactory {
    @Override
    protected boolean evaluate(Term arg1, Term arg2) {
       Numeric n = getArithmeticOperators().getNumeric(arg2);

@@ -19,7 +19,6 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
@@ -85,7 +84,7 @@ if_then_else_test(3).
  *
  * @see Disjunction
  */
-public final class IfThen extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class IfThen extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    protected Predicate getPredicate(Term conditionTerm, Term thenTerm) {
       Predicate conditionPredicate = getPredicates().getPredicate(conditionTerm);

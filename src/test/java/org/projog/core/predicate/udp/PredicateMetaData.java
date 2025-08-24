@@ -22,7 +22,6 @@ import java.util.List;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Atom;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -41,10 +40,9 @@ public final class PredicateMetaData extends AbstractPredicateFactory {
          PredicateFactory apf = ((StaticUserDefinedPredicateFactory) pf).getActualPredicateFactory();
          attributes.addAll(toTerms("actual", apf));
       }
-      if (pf instanceof PreprocessablePredicateFactory) {
-         PredicateFactory preprocessed = ((PreprocessablePredicateFactory) pf).preprocess(input);
-         attributes.addAll(toTerms("processed", preprocessed));
-      }
+
+      PredicateFactory preprocessed = pf.preprocess(input);
+      attributes.addAll(toTerms("processed", preprocessed));
 
       return new MetaDataPredicate(variable, attributes);
    }

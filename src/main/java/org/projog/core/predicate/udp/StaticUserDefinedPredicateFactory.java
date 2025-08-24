@@ -27,7 +27,6 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
 /**
@@ -35,7 +34,7 @@ import org.projog.core.term.Term;
  * <p>
  * A "static" user defined predicate is one that can not have clauses added or removed after it is first defined.
  */
-public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory, PreprocessablePredicateFactory {
+public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory {
    private final Object lock = new Object();
    private final PredicateKey predicateKey;
    private final KnowledgeBase kb;
@@ -258,13 +257,11 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          compile();
       }
 
-      if (compiledPredicateFactory instanceof PreprocessablePredicateFactory) {
-         return ((PreprocessablePredicateFactory) compiledPredicateFactory).preprocess(arg);
-      } else if (compiledPredicateFactory != null) {
-         return compiledPredicateFactory;
-      } else {
-         return this;
+      if (compiledPredicateFactory != null) {
+         return compiledPredicateFactory.preprocess(arg);
       }
+
+      return this;
    }
 
    /**
@@ -292,7 +289,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class LinkedHashMapPredicateFactory implements PreprocessablePredicateFactory {
+   private final class LinkedHashMapPredicateFactory implements PredicateFactory {
       private final int argIdx;
       private final ClauseAction[] actions;
       private final LinkedHashMap<Term, ClauseAction> map;
@@ -348,7 +345,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class SingleIndexPredicateFactory implements PreprocessablePredicateFactory {
+   private final class SingleIndexPredicateFactory implements PredicateFactory {
       private final int argIdx;
       private final Index index;
       private final ClauseAction[] actions;
@@ -397,7 +394,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class IndexablePredicateFactory implements PreprocessablePredicateFactory {
+   private final class IndexablePredicateFactory implements PredicateFactory {
       private final Indexes index;
       private final boolean retryable;
 
@@ -429,7 +426,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
-   private final class NotIndexablePredicateFactory implements PreprocessablePredicateFactory {
+   private final class NotIndexablePredicateFactory implements PredicateFactory {
       private final ClauseAction[] data;
       private final boolean retryable;
 

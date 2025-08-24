@@ -22,7 +22,6 @@ import java.util.List;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
@@ -80,7 +79,7 @@ y(X) :- X = o(T,R), q(T), q(R).
  * <code>findall(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
  * <code>P</code>. Succeeds with <code>L</code> unified to an empty list if <code>P</code> has no solutions.
  */
-public final class FindAll extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class FindAll extends AbstractSingleResultPredicate implements PredicateFactory {
    @Override
    protected boolean evaluate(Term template, Term goal, Term output) {
       return evaluateFindAll(getPredicates().getPredicateFactory(goal), template, goal, output);

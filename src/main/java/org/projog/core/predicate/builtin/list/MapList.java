@@ -28,7 +28,6 @@ import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
@@ -336,7 +335,7 @@ nine_arg_predicate(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
  * list <code>Y</code>.
  * </p>
  */
-public final class MapList implements PredicateFactory, PreprocessablePredicateFactory, KnowledgeBaseConsumer {
+public final class MapList implements PredicateFactory, KnowledgeBaseConsumer {
    private Predicates predicates;
 
    @Override

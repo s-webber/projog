@@ -20,7 +20,6 @@ import java.util.List;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
@@ -96,7 +95,7 @@ p(d,2).
  * variables. The elements in <code>L</code> will appear in the order they were found and may include duplicates. Fails
  * if <code>P</code> has no solutions.
  */
-public final class BagOf extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class BagOf extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    protected Predicate getPredicate(Term template, Term goal, Term bag) {
       return new BagOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);

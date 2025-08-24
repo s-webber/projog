@@ -31,7 +31,6 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Atom;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -194,7 +193,7 @@ public class StaticUserDefinedPredicateFactoryTest {
       assertEquals("org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory$IndexablePredicateFactory", pf.getClass().getName());
       assertTrue(pf.isRetryable());
       Term term = structure("p", atom("q"), atom("w"), atom("e"));
-      PredicateFactory preprocessedPredicateFactory = ((PreprocessablePredicateFactory) pf).preprocess(term);
+      PredicateFactory preprocessedPredicateFactory = pf.preprocess(term);
       assertSame(NeverSucceedsPredicateFactory.class, preprocessedPredicateFactory.getClass());
       assertSame(PredicateUtils.FALSE, preprocessedPredicateFactory.getPredicate(term));
       assertFalse(preprocessedPredicateFactory.isRetryable());

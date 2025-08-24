@@ -33,7 +33,6 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -77,6 +76,7 @@ public class NotTest {
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);
       kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
+      when(mockPredicateFactory.preprocess(queryArg)).thenReturn(mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
       when(mockPredicate.evaluate()).thenReturn(true, false, true);
 
@@ -89,6 +89,7 @@ public class NotTest {
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
 
+      verify(mockPredicateFactory).preprocess(queryArg);
       verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
       verify(mockPredicate, times(3)).evaluate();
       verifyNoMoreInteractions(mockPredicateFactory, mockPredicate);
@@ -99,7 +100,7 @@ public class NotTest {
       KnowledgeBase kb = createKnowledgeBase();
       Term notTerm = parseTerm("not(test(a, b)).");
       Term queryArg = notTerm.firstArgument();
-      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
+      PredicateFactory mockPreprocessablePredicateFactory = mock(PredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);

@@ -20,7 +20,6 @@ import java.util.Objects;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
@@ -47,7 +46,7 @@ import org.projog.core.term.Term;
  * succeeds. No attempt is made to retry the goal during backtracking - it is only evaluated once.
  * </p>
  */
-public final class Once extends AbstractSingleResultPredicate implements PreprocessablePredicateFactory {
+public final class Once extends AbstractSingleResultPredicate implements PredicateFactory {
    @Override
    protected boolean evaluate(Term t) {
       Predicate e = getPredicates().getPredicate(t);

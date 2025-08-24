@@ -22,6 +22,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -76,6 +77,7 @@ public class ClauseActionFactoryTest {
       mockPredicate2 = mock(Predicate.class);
 
       mockPredicateFactory = mock(PredicateFactory.class);
+      when(mockPredicateFactory.preprocess(PREDICATE_TERM)).thenReturn(mockPredicateFactory);
       when(mockPredicateFactory.getPredicate(PREDICATE_TERM)).thenReturn(mockPredicate1, mockPredicate2);
 
       kb = KnowledgeBaseUtils.createKnowledgeBase();
@@ -85,6 +87,7 @@ public class ClauseActionFactoryTest {
 
    @After
    public void after() {
+      verify(mockPredicateFactory, atMost(1)).preprocess(any(Term.class));
       verifyNoInteractions(mockPredicate1, mockPredicate2);
       verifyNoMoreInteractions(mockPredicateFactory);
    }
@@ -387,6 +390,8 @@ public class ClauseActionFactoryTest {
    @Test
    public void testZeroArgConsequentRule_getPredicate_antecedent_mutable() {
       PredicateFactory pf = mock(PredicateFactory.class);
+      when(pf.preprocess(any(Term.class))).thenReturn(pf);
+
       kb.getPredicates().addPredicateFactory(new PredicateKey("test", 5), pf);
 
       ArgumentCaptor<Term> captor = ArgumentCaptor.forClass(Term.class);
@@ -414,6 +419,7 @@ public class ClauseActionFactoryTest {
       assertNotSame(values1.getArgument(3), values2.getArgument(3));
       assertNotSame(values1.getArgument(4), values2.getArgument(4));
 
+      verify(pf).preprocess(any(Term.class));
       verify(pf, times(2)).getPredicate(any(Term.class));
       verifyNoMoreInteractions(pf, p1, p2);
    }

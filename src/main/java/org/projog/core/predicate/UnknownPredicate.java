@@ -27,7 +27,7 @@ import org.projog.core.term.Term;
  * @see Predicates#getPredicateFactory(PredicateKey)
  * @see Predicates#getPredicateFactory(Term)
  */
-public final class UnknownPredicate implements PreprocessablePredicateFactory {
+public final class UnknownPredicate implements PredicateFactory {
    private final KnowledgeBase kb;
    private final PredicateKey key;
    private PredicateFactory actualPredicateFactory; //  TODO update Javadoc to explain actualPredicateFactory
@@ -54,10 +54,8 @@ public final class UnknownPredicate implements PreprocessablePredicateFactory {
 
       if (actualPredicateFactory == null) {
          return this;
-      } else if (actualPredicateFactory instanceof PreprocessablePredicateFactory) {
-         return ((PreprocessablePredicateFactory) actualPredicateFactory).preprocess(arg);
       } else {
-         return actualPredicateFactory;
+         return actualPredicateFactory.preprocess(arg);
       }
    }
 

@@ -20,10 +20,9 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.Term;
 
-final class SingleNonRetryableRulePredicateFactory implements PreprocessablePredicateFactory {
+final class SingleNonRetryableRulePredicateFactory implements PredicateFactory {
    private final ClauseAction clause;
    private final SpyPoints.SpyPoint spyPoint;
 

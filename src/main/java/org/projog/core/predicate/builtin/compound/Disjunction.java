@@ -19,7 +19,6 @@ import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.Predicates;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
@@ -172,7 +171,7 @@ p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
  *
  * @see IfThen
  */
-public final class Disjunction extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class Disjunction extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg1 = term.firstArgument();

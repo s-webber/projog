@@ -22,7 +22,6 @@ import java.util.Objects;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.term.Term;
 
@@ -134,7 +133,7 @@ p(d(5),5).
  * <p>
  * Evaluates the goal represented by <code>X</code> for a maximum of <code>N</code> attempts.
  */
-public final class Limit extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class Limit extends AbstractPredicateFactory implements PredicateFactory {
    @Override
    public Predicate getPredicate(Term maxAttempts, Term goal) {
       PredicateFactory pf = getPredicates().getPredicateFactory(goal);

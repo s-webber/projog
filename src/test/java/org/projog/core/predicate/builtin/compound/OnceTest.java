@@ -30,7 +30,6 @@ import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -48,38 +47,11 @@ public class OnceTest {
    }
 
    @Test
-   public void testPreprocess_not_PreprocessablePredicateFactory() {
-      KnowledgeBase kb = createKnowledgeBase();
-      Term onceTerm = parseTerm("once(test(a, b)).");
-      Term queryArg = onceTerm.firstArgument();
-      // note not a PreprocessablePredicateFactory
-      PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
-      Predicate mockPredicate = mock(Predicate.class);
-      PredicateKey key = PredicateKey.createForTerm(queryArg);
-      kb.getPredicates().addPredicateFactory(key, mockPredicateFactory);
-      when(mockPredicateFactory.getPredicate(queryArg)).thenReturn(mockPredicate);
-      when(mockPredicate.evaluate()).thenReturn(true, false, true);
-
-      Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
-      PredicateFactory optimised = o.preprocess(onceTerm);
-
-      assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
-      Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
-      assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
-      assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
-
-      verify(mockPredicateFactory, times(3)).getPredicate(queryArg);
-      verify(mockPredicate, times(3)).evaluate();
-      verifyNoMoreInteractions(mockPredicateFactory, mockPredicate);
-   }
-
-   @Test
    public void testPreprocess_PreprocessablePredicateFactory() {
       KnowledgeBase kb = createKnowledgeBase();
       Term onceTerm = parseTerm("once(test(a, b)).");
       Term queryArg = onceTerm.firstArgument();
-      PreprocessablePredicateFactory mockPreprocessablePredicateFactory = mock(PreprocessablePredicateFactory.class);
+      PredicateFactory mockPreprocessablePredicateFactory = mock(PredicateFactory.class);
       PredicateFactory mockPredicateFactory = mock(PredicateFactory.class);
       Predicate mockPredicate = mock(Predicate.class);
       PredicateKey key = PredicateKey.createForTerm(queryArg);

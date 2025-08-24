@@ -150,12 +150,7 @@ public class Predicates {
    }
 
    public PredicateFactory getPreprocessedPredicateFactory(Term term) {
-      PredicateFactory pf = getPredicateFactory(term);
-      if (pf instanceof PreprocessablePredicateFactory) {
-         return ((PreprocessablePredicateFactory) pf).preprocess(term);
-      } else {
-         return pf;
-      }
+      return getPredicateFactory(term).preprocess(term);
    }
 
    /**

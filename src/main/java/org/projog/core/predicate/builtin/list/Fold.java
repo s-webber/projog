@@ -24,7 +24,6 @@ import org.projog.core.ProjogException;
 import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PreprocessablePredicateFactory;
 import org.projog.core.term.ListUtils;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
@@ -154,7 +153,7 @@ four_arg_predicate(b,_,_,_).
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function)">Wikipedia</a>.
  */
-public final class Fold extends AbstractPredicateFactory implements PreprocessablePredicateFactory {
+public final class Fold extends AbstractPredicateFactory implements PredicateFactory {
    /** The arity of the predicate represented by the first argument. */
    private static final int FIRST_ARG_ARITY = 3;
 

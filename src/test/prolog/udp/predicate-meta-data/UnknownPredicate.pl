@@ -16,6 +16,9 @@
 % X=factory_class : org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory
 % X=factory_isRetryable : true
 % X=factory_isAlwaysCutOnBacktrack : false
+% X=processed_class : org.projog.core.predicate.udp.DynamicUserDefinedPredicateFactory
+% X=processed_isRetryable : true
+% X=processed_isAlwaysCutOnBacktrack : false
 
 %TRUE p(a)
 

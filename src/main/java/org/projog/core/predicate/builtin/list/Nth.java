@@ -17,8 +17,8 @@ package org.projog.core.predicate.builtin.list;
 
 import static org.projog.core.term.TermUtils.toInt;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumberCache;
@@ -218,7 +218,7 @@ import org.projog.core.term.Variable;
  * Indexing starts at 0 when using <code>nth0</code>. Indexing starts at 1 when using <code>nth1</code>.
  * </p>
  */
-public final class Nth extends AbstractPredicateFactory {
+public final class Nth implements PredicateFactory {
    public static Nth nth0() {
       return new Nth(0);
    }
@@ -234,7 +234,11 @@ public final class Nth extends AbstractPredicateFactory {
    }
 
    @Override
-   protected Predicate getPredicate(Term index, Term list, Term element) {
+   public Predicate getPredicate(Term input) {
+      Term index = input.firstArgument();
+      Term list = input.secondArgument();
+      Term element = input.thirdArgument();
+
       if (index.getType().isVariable()) {
          return new Retryable(index, list, element);
       } else {
@@ -272,6 +276,11 @@ public final class Nth extends AbstractPredicateFactory {
       } else {
          return false;
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private class Retryable implements Predicate {
@@ -323,7 +332,6 @@ public final class Nth extends AbstractPredicateFactory {
          return false;
       }
 
-      //TODO add to TermUtils (plus 1 and 2 args versions)
       private void backtrack(Term index, Term list, Term element) {
          index.backtrack();
          list.backtrack();
@@ -335,4 +343,5 @@ public final class Nth extends AbstractPredicateFactory {
          return list.getType() == TermType.LIST || list.getType().isVariable();
       }
    }
+
 }

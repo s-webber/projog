@@ -15,12 +15,12 @@
  */
 package org.projog.core.predicate.builtin.db;
 
-import static org.projog.core.kb.KnowledgeBaseServiceLocator.getServiceLocator;
-
 import java.util.Iterator;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
+import org.projog.core.kb.KnowledgeBaseServiceLocator;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
@@ -37,17 +37,20 @@ import org.projog.core.term.Variable;
  * <code>recorded(X,Y,Z)</code> succeeds if there exists an association between the key represented by <code>X</code>
  * and the term represented by <code>Y</code>, with the reference represented by <code>Z</code>.
  */
-public final class Recorded extends AbstractPredicateFactory {
-   @Override
-   protected Predicate getPredicate(Term key, Term value) {
-      return getPredicate(key, value, new Variable());
+public final class Recorded implements PredicateFactory {
+   private final RecordedDatabase database;
+
+   public Recorded(KnowledgeBase kb) {
+      this.database = KnowledgeBaseServiceLocator.getServiceLocator(kb).getInstance(RecordedDatabase.class);
    }
 
    @Override
-   protected Predicate getPredicate(Term key, Term value, Term reference) {
-      RecordedDatabase database = getServiceLocator(getKnowledgeBase()).getInstance(RecordedDatabase.class);
-      Iterator<Record> itr = getIterator(key, database);
-      return new RecordedPredicate(key, value, reference, itr);
+   public Predicate getPredicate(Term input) {
+      Term key = input.firstArgument();
+      Term value = input.secondArgument();
+      Term reference = input.getNumberOfArguments() == 2 ? new Variable() : input.thirdArgument();
+
+      return new RecordedPredicate(key, value, reference, getIterator(key, database));
    }
 
    private Iterator<Record> getIterator(Term key, RecordedDatabase database) {
@@ -57,6 +60,11 @@ public final class Recorded extends AbstractPredicateFactory {
          PredicateKey k = PredicateKey.createForTerm(key);
          return database.getChain(k);
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static final class RecordedPredicate implements Predicate {

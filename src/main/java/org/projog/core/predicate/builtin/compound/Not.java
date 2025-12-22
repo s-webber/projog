@@ -15,12 +15,11 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import java.util.Objects;
-
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -61,43 +60,42 @@ test2(X) :- \+ \+ X=1, X=2.
  * The <code>\+ X</code> goal fails if an attempt to satisfy the goal represented by the term <code>X</code> succeeds.
  * </p>
  */
-public final class Not extends AbstractSingleResultPredicate implements PredicateFactory {
-   @Override
-   protected boolean evaluate(Term t) {
-      PredicateFactory pf = getPredicates().getPredicateFactory(t);
-      return evaluateNot(t, pf);
+public final class Not implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public Not(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
    }
 
-   private static boolean evaluateNot(Term t, PredicateFactory pf) {
-      Predicate p = pf.getPredicate(t);
-      if (!p.evaluate()) {
-         t.backtrack();
-         return true;
-      } else {
-         return false;
-      }
+   private Not(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
    }
 
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg)) {
-         return new OptimisedNot(getPredicates().getPreprocessedPredicateFactory(arg));
+         return new Not(kb, kb.getPredicates().getPreprocessedPredicateFactory(arg));
       } else {
          return this;
       }
    }
 
-   private static final class OptimisedNot extends AbstractSingleResultPredicate {
-      private final PredicateFactory pf;
-
-      OptimisedNot(PredicateFactory pf) {
-         this.pf = Objects.requireNonNull(pf);
+   @Override
+   public Predicate getPredicate(Term term) {
+      Term arg = term.firstArgument();
+      if (!pf.getPredicate(arg).evaluate()) {
+         arg.backtrack();
+         return PredicateUtils.TRUE;
+      } else {
+         return PredicateUtils.FALSE;
       }
+   }
 
-      @Override
-      protected boolean evaluate(Term arg) {
-         return evaluateNot(arg, pf);
-      }
+   @Override
+   public final boolean isRetryable() {
+      return false;
    }
 }

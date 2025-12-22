@@ -19,9 +19,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.Predicates;
 import org.projog.core.term.Atom;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -29,12 +30,21 @@ import org.projog.core.term.Term;
 /**
  * Used by system tests in src/test/prolog/udp/predicate-meta-data
  */
-public final class PredicateMetaData extends AbstractPredicateFactory {
+public final class PredicateMetaData implements PredicateFactory {
+   private final Predicates predicates;
+
+   public PredicateMetaData(KnowledgeBase kb) {
+      this.predicates = kb.getPredicates();
+   }
+
    @Override
-   protected Predicate getPredicate(Term input, Term variable) {
+   public Predicate getPredicate(Term term) {
+      Term input = term.firstArgument();
+      Term variable = term.secondArgument();
+
       List<Term> attributes = new ArrayList<>();
 
-      PredicateFactory pf = getPredicates().getPredicateFactory(input);
+      PredicateFactory pf = predicates.getPredicateFactory(input);
       attributes.addAll(toTerms("factory", pf));
       if (pf instanceof StaticUserDefinedPredicateFactory) {
          PredicateFactory apf = ((StaticUserDefinedPredicateFactory) pf).getActualPredicateFactory();
@@ -53,6 +63,11 @@ public final class PredicateMetaData extends AbstractPredicateFactory {
       attributes.add(StructureFactory.createStructure(":", new Term[] {new Atom(type + "_isRetryable"), new Atom("" + pf.isRetryable())}));
       attributes.add(StructureFactory.createStructure(":", new Term[] {new Atom(type + "_isAlwaysCutOnBacktrack"), new Atom("" + pf.isAlwaysCutOnBacktrack())}));
       return attributes;
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static class MetaDataPredicate implements Predicate {

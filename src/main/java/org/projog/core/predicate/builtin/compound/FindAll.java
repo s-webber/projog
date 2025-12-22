@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
@@ -79,10 +79,32 @@ y(X) :- X = o(T,R), q(T), q(R).
  * <code>findall(X,P,L)</code> produces a list (<code>L</code>) of <code>X</code> for each possible solution of the goal
  * <code>P</code>. Succeeds with <code>L</code> unified to an empty list if <code>P</code> has no solutions.
  */
-public final class FindAll extends AbstractSingleResultPredicate implements PredicateFactory {
+public final class FindAll implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public FindAll(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private FindAll(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   protected boolean evaluate(Term template, Term goal, Term output) {
-      return evaluateFindAll(getPredicates().getPredicateFactory(goal), template, goal, output);
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.secondArgument();
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new FindAll(kb, kb.getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      return PredicateUtils.toPredicate(evaluateFindAll(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument()));
    }
 
    private static boolean evaluateFindAll(PredicateFactory pf, Term template, Term goal, Term output) {
@@ -113,30 +135,7 @@ public final class FindAll extends AbstractSingleResultPredicate implements Pred
    }
 
    @Override
-   public PredicateFactory preprocess(Term term) {
-      Term goal = term.secondArgument();
-      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
-         return new PreprocessedFindAll(getPredicates().getPreprocessedPredicateFactory(goal));
-      } else {
-         return this;
-      }
-   }
-
-   private static class PreprocessedFindAll implements PredicateFactory {
-      private final PredicateFactory pf;
-
-      public PreprocessedFindAll(PredicateFactory pf) {
-         this.pf = pf;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return PredicateUtils.toPredicate(evaluateFindAll(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument()));
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return false;
-      }
+   public boolean isRetryable() {
+      return false;
    }
 }

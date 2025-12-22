@@ -15,9 +15,9 @@
  */
 package org.projog.core.predicate.builtin.list;
 
+import org.projog.core.ProjogException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.Predicates;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
@@ -38,14 +38,6 @@ public class PartialApplicationUtils {
       return type == TermType.EMPTY_LIST || type == TermType.LIST;
    }
 
-   public static PredicateFactory getCurriedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
-      return getPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, 1);
-   }
-
-   public static PredicateFactory getPreprocessedCurriedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction) {
-      return getPreprocessedPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, 1);
-   }
-
    public static PredicateFactory getPreprocessedPartiallyAppliedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int extraArgs) {
       Term[] args = new Term[partiallyAppliedFunction.getNumberOfArguments() + extraArgs];
       for (int i = 0; i < partiallyAppliedFunction.getNumberOfArguments(); i++) {
@@ -54,20 +46,23 @@ public class PartialApplicationUtils {
       for (int i = partiallyAppliedFunction.getNumberOfArguments(); i < args.length; i++) {
          args[i] = new Variable();
       }
-      // TODO check not numeric before calling .getName()
+
+      TermType type = partiallyAppliedFunction.getType(); // TODO is this used?
+      if (type != TermType.STRUCTURE && type != TermType.ATOM && type != TermType.LIST) {
+         throw new ProjogException(getInvalidTypeExceptionMessage(partiallyAppliedFunction));
+      }
+
       Term t = StructureFactory.createStructure(partiallyAppliedFunction.getName(), args);
       return predicates.getPreprocessedPredicateFactory(t);
    }
 
-   public static PredicateFactory getPartiallyAppliedPredicateFactory(Predicates predicates, Term partiallyAppliedFunction, int numberOfExtraArguments) {
-      int numArgs = partiallyAppliedFunction.getNumberOfArguments() + numberOfExtraArguments;
-      // TODO check not numeric before calling .getName()
-      PredicateKey key = new PredicateKey(partiallyAppliedFunction.getName(), numArgs);
-      return predicates.getPredicateFactory(key);
-   }
-
    // TODO have overloaded version that avoids varargs
    public static Term createArguments(Term partiallyAppliedFunction, Term... extraArguments) {
+      TermType type = partiallyAppliedFunction.getType(); // TODO move to TermUtils and share with PredicateKey
+      if (type != TermType.STRUCTURE && type != TermType.ATOM && type != TermType.LIST) {
+         throw new ProjogException(getInvalidTypeExceptionMessage(partiallyAppliedFunction));
+      }
+
       int originalNumArgs = partiallyAppliedFunction.getNumberOfArguments();
       Term[] result = new Term[originalNumArgs + extraArguments.length];
 
@@ -80,6 +75,10 @@ public class PartialApplicationUtils {
       }
 
       return StructureFactory.createStructure(partiallyAppliedFunction.getName(), result);
+   }
+
+   private static String getInvalidTypeExceptionMessage(Term t) {
+      return "Expected an atom or a predicate but got a " + t.getType() + " with value: " + t;
    }
 
    public static boolean apply(PredicateFactory pf, Term term) {
@@ -100,7 +99,7 @@ public class PartialApplicationUtils {
       }
    }
 
-   static boolean isKeyValuePair(Term t) {
+   static boolean isKeyValuePair(Term t) { // TODO move to TermUtils
       return t.getType() == TermType.STRUCTURE && KEY_VALUE_PAIR_FUNCTOR.equals(t.getName()) && t.getNumberOfArguments() == 2;
    }
 }

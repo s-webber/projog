@@ -15,7 +15,7 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.Predicates;
@@ -171,30 +171,66 @@ p1(X, Y, Z) :- p2(X); p3(Y); p4(X,Y,Z).
  *
  * @see IfThen
  */
-public final class Disjunction extends AbstractPredicateFactory implements PredicateFactory {
+public final class Disjunction implements PredicateFactory {
+   private final Predicates predicates;
+
+   public Disjunction(KnowledgeBase kb) {
+      this.predicates = kb.getPredicates();
+   }
+
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg1 = term.firstArgument();
       Term arg2 = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg1) && PartialApplicationUtils.isAtomOrStructure(arg2)) {
-         if (getPredicates().getPredicateFactory(arg1) instanceof IfThen) {
+         if (predicates.getPredicateFactory(arg1) instanceof IfThen) {
             Term conditionTerm = arg1.firstArgument();
             Term thenTerm = arg1.secondArgument();
             if (conditionTerm.getType().isVariable() || thenTerm.getType().isVariable()) {
                return this;
             }
-            PredicateFactory condition = getPredicates().getPreprocessedPredicateFactory(conditionTerm);
-            PredicateFactory thenPf = getPredicates().getPreprocessedPredicateFactory(thenTerm);
-            PredicateFactory elsePf = getPredicates().getPreprocessedPredicateFactory(arg2);
+            PredicateFactory condition = predicates.getPreprocessedPredicateFactory(conditionTerm);
+            PredicateFactory thenPf = predicates.getPreprocessedPredicateFactory(thenTerm);
+            PredicateFactory elsePf = predicates.getPreprocessedPredicateFactory(arg2);
             return new OptimisedIfThenElse(condition, thenPf, elsePf);
          } else {
-            PredicateFactory pf1 = getPredicates().getPreprocessedPredicateFactory(arg1);
-            PredicateFactory pf2 = getPredicates().getPreprocessedPredicateFactory(arg2);
+            PredicateFactory pf1 = predicates.getPreprocessedPredicateFactory(arg1);
+            PredicateFactory pf2 = predicates.getPreprocessedPredicateFactory(arg2);
             return new OptimisedDisjunction(pf1, pf2);
          }
       } else {
          return this;
       }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      Term firstArgument = term.firstArgument();
+      Term secondArgument = term.secondArgument();
+
+      if (predicates.getPredicateFactory(firstArgument) instanceof IfThen) {
+         return createIfThenElse(firstArgument, secondArgument);
+      } else {
+         return new DisjunctionPredicate(predicates.getPredicateFactory(firstArgument), predicates.getPredicateFactory(secondArgument), firstArgument, secondArgument);
+      }
+   }
+
+   private Predicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
+      Term conditionTerm = ifThenTerm.firstArgument();
+      Term thenTerm = ifThenTerm.secondArgument();
+
+      Predicate conditionPredicate = predicates.getPredicate(conditionTerm);
+      if (conditionPredicate.evaluate()) {
+         return predicates.getPredicate(thenTerm.getTerm());
+      } else {
+         conditionTerm.backtrack();
+         return predicates.getPredicate(elseTerm);
+      }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private class OptimisedDisjunction implements PredicateFactory {
@@ -252,33 +288,6 @@ public final class Disjunction extends AbstractPredicateFactory implements Predi
       }
    }
 
-   @Override
-   protected Predicate getPredicate(Term firstArg, Term secondArg) {
-      if (getPredicates().getPredicateFactory(firstArg) instanceof IfThen) {
-         return createIfThenElse(firstArg, secondArg);
-      } else {
-         return createDisjunction(firstArg, secondArg);
-      }
-   }
-
-   private Predicate createIfThenElse(Term ifThenTerm, Term elseTerm) {
-      Term conditionTerm = ifThenTerm.firstArgument();
-      Term thenTerm = ifThenTerm.secondArgument();
-
-      Predicates p = getPredicates();
-      Predicate conditionPredicate = p.getPredicate(conditionTerm);
-      if (conditionPredicate.evaluate()) {
-         return p.getPredicate(thenTerm.getTerm());
-      } else {
-         conditionTerm.backtrack();
-         return p.getPredicate(elseTerm);
-      }
-   }
-
-   private DisjunctionPredicate createDisjunction(Term firstArg, Term secondArg) {
-      return new DisjunctionPredicate(null, null, firstArg, secondArg);
-   }
-
    private final class DisjunctionPredicate implements Predicate {
       private final PredicateFactory pf1;
       private final PredicateFactory pf2;
@@ -297,7 +306,7 @@ public final class Disjunction extends AbstractPredicateFactory implements Predi
       @Override
       public boolean evaluate() {
          if (firstPredicate == null) {
-            firstPredicate = getPredicate(pf1, inputArg1);
+            firstPredicate = pf1.getPredicate(inputArg1);
             if (firstPredicate.evaluate()) {
                return true;
             }
@@ -307,18 +316,10 @@ public final class Disjunction extends AbstractPredicateFactory implements Predi
 
          if (secondPredicate == null) {
             inputArg1.backtrack();
-            secondPredicate = getPredicate(pf2, inputArg2);
+            secondPredicate = pf2.getPredicate(inputArg2);
             return secondPredicate.evaluate();
          } else {
             return secondPredicate.couldReevaluationSucceed() && secondPredicate.evaluate();
-         }
-      }
-
-      private Predicate getPredicate(PredicateFactory pf, Term t) {
-         if (pf == null) {
-            return getPredicates().getPredicate(t.getTerm());
-         } else {
-            return pf.getPredicate(t.getTerm());
          }
       }
 

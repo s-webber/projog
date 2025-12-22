@@ -15,10 +15,9 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
@@ -84,16 +83,19 @@ if_then_else_test(3).
  *
  * @see Disjunction
  */
-public final class IfThen extends AbstractPredicateFactory implements PredicateFactory {
-   @Override
-   protected Predicate getPredicate(Term conditionTerm, Term thenTerm) {
-      Predicate conditionPredicate = getPredicates().getPredicate(conditionTerm);
-      if (conditionPredicate.evaluate()) {
-         // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-         return getPredicates().getPredicate(thenTerm.getTerm());
-      } else {
-         return PredicateUtils.FALSE;
-      }
+public final class IfThen implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory conditionPredicateFactory;
+   private final PredicateFactory actionPredicateFactory;
+
+   public IfThen(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder(), kb.getPredicates().placeholder());
+   }
+
+   private IfThen(KnowledgeBase kb, PredicateFactory conditionPredicateFactory, PredicateFactory actionPredicateFactory) {
+      this.kb = kb;
+      this.conditionPredicateFactory = conditionPredicateFactory;
+      this.actionPredicateFactory = actionPredicateFactory;
    }
 
    @Override
@@ -101,36 +103,25 @@ public final class IfThen extends AbstractPredicateFactory implements PredicateF
       Term condition = term.firstArgument();
       Term action = term.secondArgument();
       if (PartialApplicationUtils.isAtomOrStructure(condition) || PartialApplicationUtils.isAtomOrStructure(action)) {
-         Predicates p = getPredicates();
-         return new OptimisedIfThen(p.getPreprocessedPredicateFactory(condition), p.getPreprocessedPredicateFactory(action));
+         return new IfThen(kb, kb.getPredicates().getPreprocessedPredicateFactory(condition), kb.getPredicates().getPreprocessedPredicateFactory(action));
       } else {
          return this;
       }
    }
 
-   private static final class OptimisedIfThen implements PredicateFactory {
-      private final PredicateFactory condition;
-      private final PredicateFactory action;
-
-      OptimisedIfThen(PredicateFactory condition, PredicateFactory action) {
-         this.condition = condition;
-         this.action = action;
+   @Override
+   public Predicate getPredicate(Term term) {
+      Predicate conditionPredicate = conditionPredicateFactory.getPredicate(term.firstArgument());
+      if (conditionPredicate.evaluate()) {
+         // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
+         return actionPredicateFactory.getPredicate(term.secondArgument().getTerm());
+      } else {
+         return PredicateUtils.FALSE;
       }
+   }
 
-      @Override
-      public Predicate getPredicate(Term term) {
-         Predicate conditionPredicate = condition.getPredicate(term.firstArgument());
-         if (conditionPredicate.evaluate()) {
-            // TODO should we need to call getTerm before calling getPredicate, or should getPredicate contain that logic?
-            return action.getPredicate(term.secondArgument().getTerm());
-         } else {
-            return PredicateUtils.FALSE;
-         }
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return action.isRetryable();
-      }
+   @Override
+   public boolean isRetryable() {
+      return actionPredicateFactory.isRetryable();
    }
 }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.ListUtils;
@@ -138,6 +138,26 @@ four_arg_predicate(b,_,_,_).
 % C=999
 % X=99999
 
+%?- (X = multiple_result_predicate ; X= single_result_predicate), foldl(X, [2,4,7], 42, Y)
+% X = multiple_result_predicate
+% Y = 55
+% X = multiple_result_predicate
+% Y = 336
+% X = multiple_result_predicate
+% Y = 183
+% X = multiple_result_predicate
+% Y = 1232
+% X = multiple_result_predicate
+% Y = 95
+% X = multiple_result_predicate
+% Y = 616
+% X = multiple_result_predicate
+% Y = 343
+% X = multiple_result_predicate
+% Y = 2352
+% X = single_result_predicate
+% Y = 55
+
 %FAIL foldl(four_arg_predicate(3), [2,4,7], 0, 14)
 
 %FAIL foldl(four_arg_predicate(4), [2,4,7], 0, X)
@@ -153,45 +173,41 @@ four_arg_predicate(b,_,_,_).
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function)">Wikipedia</a>.
  */
-public final class Fold extends AbstractPredicateFactory implements PredicateFactory {
+public final class Fold implements PredicateFactory {
    /** The arity of the predicate represented by the first argument. */
    private static final int FIRST_ARG_ARITY = 3;
 
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public Fold(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private Fold(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   public PredicateFactory preprocess(Term arg) {
-      Term action = arg.firstArgument();
+   public PredicateFactory preprocess(Term term) {
+      Term action = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(action)) {
-         PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(getPredicates(), action, FIRST_ARG_ARITY);
-         return new OptimisedFold(pf, action);
+         PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(kb.getPredicates(), action, FIRST_ARG_ARITY);
+         return new Fold(kb, pf);
       } else {
          return this;
       }
    }
 
-   private static class OptimisedFold implements PredicateFactory {
-      final PredicateFactory pf;
-      final Term action;
-
-      public OptimisedFold(PredicateFactory pf, Term action) {
-         this.pf = pf;
-         this.action = action;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return getFoldPredicate(pf, action, term.secondArgument(), term.thirdArgument(), term.fourthArgument());
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return pf.isRetryable();
-      }
+   @Override
+   public Predicate getPredicate(Term term) {
+      return getFoldPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument(), term.fourthArgument());
    }
 
    @Override
-   protected Predicate getPredicate(Term atom, Term values, Term start, Term result) {
-      PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(getPredicates(), atom, FIRST_ARG_ARITY);
-      return getFoldPredicate(pf, atom, values, start, result);
+   public boolean isRetryable() {
+      return pf.isRetryable();
    }
 
    private static Predicate getFoldPredicate(PredicateFactory pf, Term action, Term values, Term start, Term result) {

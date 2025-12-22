@@ -368,4 +368,16 @@ public class PredicatesTest {
       assertSame(PredicateUtils.TRUE, p.getPredicate(atom("true")));
       assertSame(PredicateUtils.FALSE, p.getPredicate(atom("does_not_exist")));
    }
+
+   @Test
+   public void testPlaceholder() {
+      Predicates predicates = TestUtils.createKnowledgeBase().getPredicates();
+      PredicateFactory placeholder = predicates.placeholder();
+      assertSame(placeholder, predicates.placeholder());
+      assertSame(placeholder, placeholder.preprocess(null));
+      assertTrue(placeholder.isRetryable());
+      assertFalse(placeholder.isAlwaysCutOnBacktrack());
+      assertSame(PredicateUtils.TRUE, placeholder.getPredicate(atom("true")));
+      assertSame(PredicateUtils.FALSE, placeholder.getPredicate(atom("does_not_exist")));
+   }
 }

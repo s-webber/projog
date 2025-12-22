@@ -18,9 +18,11 @@ package org.projog.core.predicate.builtin.kb;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.Predicates;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -52,11 +54,22 @@ import org.projog.core.term.Term;
  * <p>
  * <code>current_predicate(X)</code> attempts to unify <code>X</code> against all currently defined predicates.
  */
-public final class CurrentPredicate extends AbstractPredicateFactory {
+public final class CurrentPredicate implements PredicateFactory {
+   private Predicates predicates;
+
+   public CurrentPredicate(KnowledgeBase kb) {
+      this.predicates = kb.getPredicates();
+   }
+
    @Override
-   protected Predicate getPredicateWithOneArgument(Term arg) {
-      Set<PredicateKey> keys = getPredicates().getAllDefinedPredicateKeys();
-      return new Retryable(arg, keys);
+   public Predicate getPredicate(Term arg) {
+      Set<PredicateKey> keys = predicates.getAllDefinedPredicateKeys();
+      return new Retryable(arg.firstArgument(), keys);
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static class Retryable implements Predicate {

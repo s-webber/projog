@@ -39,7 +39,7 @@ public class MemberCheckTest {
 
       PredicateFactory optimised = m.preprocess(term);
 
-      assertEquals("org.projog.core.predicate.builtin.list.MemberCheck$PreprocessedMemberCheck", optimised.getClass().getName());
+      assertEquals("org.projog.core.predicate.builtin.list.MemberCheck$ImmutableListMemberCheck", optimised.getClass().getName());
    }
 
    @Test

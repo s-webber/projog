@@ -18,9 +18,10 @@ package org.projog.core.predicate.builtin.compare;
 import static org.projog.core.math.NumericTermComparator.NUMERIC_TERM_COMPARATOR;
 import static org.projog.core.term.TermUtils.toLong;
 
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.math.ArithmeticOperators;
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.IntegerNumberCache;
@@ -78,16 +79,30 @@ import org.projog.core.term.Term;
  * values in the range from <code>X</code> to <code>Y</code>.
  * </p>
  */
-public final class Between extends AbstractPredicateFactory {
+public final class Between implements PredicateFactory {
+   private final ArithmeticOperators operators;
+
+   public Between(KnowledgeBase kb) {
+      this.operators = kb.getArithmeticOperators();
+   }
+
    @Override
-   protected Predicate getPredicate(Term low, Term high, Term middle) {
-      ArithmeticOperators operators = getArithmeticOperators();
+   public Predicate getPredicate(Term term) {
+      Term low = term.firstArgument();
+      Term high = term.secondArgument();
+      Term middle = term.thirdArgument();
+
       if (middle.getType().isVariable()) {
          return new Retryable(middle, toLong(operators, low), toLong(operators, high));
       } else {
          boolean result = NUMERIC_TERM_COMPARATOR.compare(low, middle, operators) < 1 && NUMERIC_TERM_COMPARATOR.compare(middle, high, operators) < 1;
          return PredicateUtils.toPredicate(result);
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static class Retryable implements Predicate {

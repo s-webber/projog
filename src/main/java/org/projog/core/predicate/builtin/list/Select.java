@@ -15,8 +15,8 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.List;
@@ -73,9 +73,13 @@ import org.projog.core.term.Variable;
  * represented by <code>Y</code>. An attempt is made to retry the goal during backtracking.
  * </p>
  */
-public final class Select extends AbstractPredicateFactory {
+public final class Select implements PredicateFactory {
    @Override
-   public Predicate getPredicate(Term element, Term inputList, Term outputList) {
+   public Predicate getPredicate(Term input) {
+      Term element = input.firstArgument();
+      Term inputList = input.secondArgument();
+      Term outputList = input.thirdArgument();
+
       // select(X, [Head|Tail], Rest) implemented as: select(Tail, Head, X, Rest)
       if (inputList.getType() == TermType.LIST) {
          return new SelectPredicate(inputList.secondArgument(), inputList.firstArgument(), element, outputList);
@@ -88,6 +92,11 @@ public final class Select extends AbstractPredicateFactory {
       } else {
          return PredicateUtils.FALSE;
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static final class SelectPredicate implements Predicate {

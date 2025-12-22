@@ -15,9 +15,11 @@
  */
 package org.projog.core.predicate.builtin.list;
 
+import static org.projog.core.predicate.udp.PredicateUtils.toPredicate;
 import static org.projog.core.term.ListUtils.isMember;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.List;
 import org.projog.core.term.ListUtils;
@@ -75,51 +77,55 @@ import org.projog.core.term.Variable;
  * occurrence will be matched.
  * </p>
  */
-public final class MemberCheck extends AbstractSingleResultPredicate implements PredicateFactory {
-   @Override
-   protected boolean evaluate(Term element, Term list) {
-      if (list.getType().isVariable()) {
-         return list.unify(new List(element, new Variable()));
-      } else {
-         return isMember(element, list);
-      }
-   }
-
+public final class MemberCheck implements PredicateFactory {
    @Override
    public PredicateFactory preprocess(Term term) {
-      // TODO if EMPTY_LIST then return a PredicateFactory that always uses PredicateUtils.FALSE.
       Term prologList = term.secondArgument();
       if (prologList.getType() == TermType.LIST && prologList.isImmutable()) {
          java.util.List<Term> javaList = ListUtils.toJavaUtilList(prologList);
-         if (javaList != null) { // i.e. if not a partial list
-            // TODO if no duplicates then could replace List with LinkedHashSet
-            return new PreprocessedMemberCheck(javaList);
+         if (javaList != null) {
+            return new ImmutableListMemberCheck(javaList.toArray(new Term[javaList.size()]));
          }
       }
 
       return this;
    }
 
-   private static class PreprocessedMemberCheck extends AbstractSingleResultPredicate {
-      private final java.util.List<Term> javaList;
+   @Override
+   public Predicate getPredicate(Term term) {
+      Term element = term.firstArgument();
+      Term list = term.secondArgument();
 
-      PreprocessedMemberCheck(java.util.List<Term> javaList) {
-         this.javaList = javaList;
+      boolean result;
+      if (list.getType().isVariable()) {
+         result = list.unify(new List(element, new Variable()));
+      } else {
+         result = isMember(element, list);
+      }
+      return toPredicate(result);
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return false;
+   }
+
+   private static class ImmutableListMemberCheck extends AbstractSingleResultPredicate {
+      private final Term[] immutableTerms;
+
+      ImmutableListMemberCheck(Term[] immutableTerms) {
+         this.immutableTerms = immutableTerms;
       }
 
       @Override
       protected boolean evaluate(Term element, Term notUsed) {
-         if (element.isImmutable()) {
-            return javaList.contains(element);
-         } else {
-            for (Term next : javaList) {
-               if (element.unify(next)) {
-                  return true;
-               }
-               element.backtrack();
+         for (Term immutableTerm : immutableTerms) {
+            if (element.unify(immutableTerm)) {
+               return true;
             }
-            return false;
+            element.backtrack();
          }
+         return false;
       }
    }
 }

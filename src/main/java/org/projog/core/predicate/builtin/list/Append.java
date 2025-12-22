@@ -15,8 +15,8 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.List;
 import org.projog.core.term.Term;
@@ -562,10 +562,15 @@ import org.projog.core.term.Variable;
  * the list <code>Z</code>.
  * </p>
  */
-public final class Append extends AbstractPredicateFactory {
+public final class Append implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(Term prefix, Term suffix, Term concatenated) {
-      return new AppendPredicate(prefix, suffix, concatenated);
+   public Predicate getPredicate(Term term) {
+      return new AppendPredicate(term.firstArgument(), term.secondArgument(), term.thirdArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private final static class AppendPredicate implements Predicate {
@@ -643,4 +648,5 @@ public final class Append extends AbstractPredicateFactory {
          return !retrying || (prefix != EmptyList.EMPTY_LIST && concatenated != EmptyList.EMPTY_LIST);
       }
    }
+
 }

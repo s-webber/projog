@@ -83,7 +83,7 @@ public class NotTest {
       Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Not$OptimisedNot", optimised.getClass().getName());
+      assertSame(Not.class, optimised.getClass());
       Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
@@ -112,7 +112,7 @@ public class NotTest {
       Not n = (Not) kb.getPredicates().getPredicateFactory(notTerm);
       PredicateFactory optimised = n.preprocess(notTerm);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Not$OptimisedNot", optimised.getClass().getName());
+      assertSame(Not.class, optimised.getClass());
       Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));

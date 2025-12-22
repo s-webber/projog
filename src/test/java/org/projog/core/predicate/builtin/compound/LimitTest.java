@@ -41,7 +41,7 @@ import org.projog.core.term.Variable;
 public class LimitTest {
    @Test
    public void testPreprocess_cannot_optimise_variable() {
-      Limit o = new Limit();
+      Limit o = new Limit(createKnowledgeBase());
 
       Term t = StructureFactory.createStructure("limit", new Term[] {new IntegerNumber(3), new Variable("Y")});
       PredicateFactory optimised = o.preprocess(t);
@@ -67,7 +67,7 @@ public class LimitTest {
       Limit o = (Limit) kb.getPredicates().getPredicateFactory(limitTerm);
       PredicateFactory optimised = o.preprocess(limitTerm);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
+      assertSame(Limit.class, optimised.getClass());
       Term queryArgs = StructureFactory.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());
@@ -107,7 +107,7 @@ public class LimitTest {
       Limit o = (Limit) kb.getPredicates().getPredicateFactory(limitTerm);
       PredicateFactory optimised = o.preprocess(limitTerm);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Limit$OptimisedLimit", optimised.getClass().getName());
+      assertSame(Limit.class, optimised.getClass());
       Term queryArgs = StructureFactory.createStructure("limit", new Term[] {limitTerm.firstArgument(), limitTerm.secondArgument()});
       Predicate p = optimised.getPredicate(queryArgs);
       assertEquals("org.projog.core.predicate.builtin.compound.Limit$LimitPredicate", p.getClass().getName());

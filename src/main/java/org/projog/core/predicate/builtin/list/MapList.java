@@ -17,17 +17,14 @@ package org.projog.core.predicate.builtin.list;
 
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.apply;
 import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.createArguments;
-import static org.projog.core.predicate.builtin.list.PartialApplicationUtils.isAtomOrStructure;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
-import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
@@ -63,9 +60,15 @@ import org.projog.core.term.Variable;
 
 %FAIL maplist(=(p(W)), [p(1),p(2),p(3)])
 
-% First argument must be an atom or structure. Second argument must be a list.
-%FAIL maplist(X, [])
+% First argument must be an atom or structure, unless second arg is an empty list. Second argument must be a list.
 %FAIL maplist(atom, X)
+%?- maplist(X, [a])
+%ERROR Expected an atom or a predicate but got a VARIABLE with value: X
+%?- maplist(1, [a])
+%ERROR Expected an atom or a predicate but got a INTEGER with value: 1
+%?- maplist(X, [])
+% X=UNINSTANTIATED VARIABLE
+%TRUE maplist(1, [])
 
 % maplist/3 applies the goal to pairs of elements from two lists.
 %TRUE maplist(=, [1,2,3], [1,2,3])
@@ -335,57 +338,38 @@ nine_arg_predicate(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
  * list <code>Y</code>.
  * </p>
  */
-public final class MapList implements PredicateFactory, KnowledgeBaseConsumer {
-   private Predicates predicates;
+public final class MapList implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
 
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      this.predicates = kb.getPredicates();
+   public MapList(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private MapList(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
    }
 
    @Override
-   public PredicateFactory preprocess(Term input) {
-      Term action = input.firstArgument();
+   public PredicateFactory preprocess(Term term) {
+      Term action = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(action)) {
-         PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(predicates, action, input.getNumberOfArguments() - 1);
-         return new PreprocessedMapList(pf);
+         PredicateFactory pf = PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(kb.getPredicates(), action, term.getNumberOfArguments() - 1);
+         return new MapList(kb, pf);
       } else {
          return this;
       }
    }
 
-   private static class PreprocessedMapList implements PredicateFactory {
-      private final PredicateFactory pf;
-
-      PreprocessedMapList(PredicateFactory pf) {
-         this.pf = pf;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return getMapListPredicate(pf, term);
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return pf.isRetryable();
-      }
+   @Override
+   public Predicate getPredicate(Term term) {
+      return getMapListPredicate(pf, term);
    }
 
    @Override
    public boolean isRetryable() {
-      return true;
-   }
-
-   @Override
-   public Predicate getPredicate(Term input) {
-      Term partiallyAppliedFunction = input.firstArgument();
-      if (!isAtomOrStructure(partiallyAppliedFunction)) {
-         return PredicateUtils.FALSE;
-      }
-
-      final PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(predicates, partiallyAppliedFunction, input.getNumberOfArguments() - 1);
-      return getMapListPredicate(pf, input);
+      return pf.isRetryable();
    }
 
    private static Predicate getMapListPredicate(PredicateFactory pf, Term input) {

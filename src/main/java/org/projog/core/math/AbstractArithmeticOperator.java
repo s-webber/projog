@@ -90,10 +90,8 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       final ArithmeticOperator o = operators.getPreprocessedArithmeticOperator(argument);
       if (o instanceof Numeric) {
          return calculate((Numeric) o);
-      } else if (o != null) {
-         return new PreprocessedUnaryOperator(o);
       } else {
-         return this;
+         return new PreprocessedUnaryOperator(o);
       }
    }
 
@@ -102,10 +100,8 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
       final ArithmeticOperator o2 = operators.getPreprocessedArithmeticOperator(argument2);
       if (o1 instanceof Numeric && o2 instanceof Numeric) {
          return calculate((Numeric) o1, (Numeric) o2);
-      } else if (o1 != null || o2 != null) {
-         return new PreprocessedBinaryOperator(o1, o2);
       } else {
-         return this;
+         return new PreprocessedBinaryOperator(o1, o2);
       }
    }
 
@@ -134,8 +130,8 @@ public abstract class AbstractArithmeticOperator implements PreprocessableArithm
 
       @Override
       public Numeric calculate(Term term) {
-         Numeric n1 = o1 == null ? operators.getNumeric(term.firstArgument()) : o1.calculate(term.firstArgument());
-         Numeric n2 = o2 == null ? operators.getNumeric(term.secondArgument()) : o2.calculate(term.secondArgument());
+         Numeric n1 = o1.calculate(term.firstArgument());
+         Numeric n2 = o2.calculate(term.secondArgument());
          return AbstractArithmeticOperator.this.calculate(n1, n2);
       }
    }

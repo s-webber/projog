@@ -15,9 +15,10 @@
  */
 package org.projog.core.predicate.builtin.flow;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.term.Term;
 
 /* TEST
 %TRUE_NO repeat, !
@@ -47,10 +48,15 @@ a(X, Y) :- Y = 2.
  * The "cut", represented as a <code>!</code>, is a special mechanism which affects how prolog backtracks.
  * </p>
  */
-public final class Cut extends AbstractPredicateFactory {
+public final class Cut implements PredicateFactory {
    @Override
-   protected Predicate getPredicate() {
+   public Predicate getPredicate(Term term) {
       return new CutPredicate();
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    @Override

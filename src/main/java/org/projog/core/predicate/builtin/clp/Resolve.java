@@ -30,8 +30,9 @@ import org.projog.clp.ClpConstraintStore;
 import org.projog.clp.Constraint;
 import org.projog.clp.Variable;
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumberCache;
@@ -114,15 +115,23 @@ import org.projog.core.term.TermType;
 /**
  * <code>label([X])</code> - assigns concrete values to the given CLP variables.
  */
-public final class Resolve extends AbstractPredicateFactory {
-   @Override
-   public Predicate getPredicate(Term options, Term variables) {
-      getProjogListeners().notifyWarn("Ignoring " + getTermFormatter().formatTerm(options));
-      return getPredicateWithOneArgument(variables);
+public final class Resolve implements PredicateFactory {
+   private final KnowledgeBase kb;
+
+   public Resolve(KnowledgeBase kb) {
+      this.kb = kb;
    }
 
    @Override
-   public Predicate getPredicateWithOneArgument(Term arg) {
+   public Predicate getPredicate(Term input) {
+      Term arg;
+      if (input.getNumberOfArguments() == 1) {
+         arg = input.firstArgument();
+      } else {
+         kb.getProjogListeners().notifyWarn("Ignoring " + kb.getTermFormatter().formatTerm(input.firstArgument()));
+         arg = input.secondArgument();
+      }
+
       ClpConstraintStore.Builder builder = new ClpConstraintStore.Builder();
 
       // find all variables in input argument, and all variables connected to them via constraints
@@ -139,7 +148,9 @@ public final class Resolve extends AbstractPredicateFactory {
       }
 
       // for all constraints replace each ClpVariable with its corresponding Variable
-      for (Constraint c : getConstraints(variablesList)) {
+      for (Constraint c :
+
+      getConstraints(variablesList)) {
          Constraint replacement = c.replace(e -> {
             if (e instanceof ClpVariable) {
                Variable v = variablesSet.get(((ClpVariable) e).getTerm());
@@ -230,6 +241,11 @@ public final class Resolve extends AbstractPredicateFactory {
       }
 
       return new BruteForceSearch(environment);
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static final class ClpResolvePredicate implements Predicate {

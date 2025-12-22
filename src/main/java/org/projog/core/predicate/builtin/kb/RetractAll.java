@@ -15,8 +15,10 @@
  */
 package org.projog.core.predicate.builtin.kb;
 
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -79,21 +81,24 @@ non_dynamic_predicate(1,2,3).
  * instantiated that the predicate of the clause can be determined.
  * </p>
  */
-public final class RetractAll extends AbstractSingleResultPredicate {
-   private Inspect retractPredicateFactory;
+public final class RetractAll implements PredicateFactory {
+   private final Inspect retractPredicateFactory;
 
-   @Override
-   protected void init() {
-      retractPredicateFactory = Inspect.retract();
-      retractPredicateFactory.setKnowledgeBase(getKnowledgeBase());
+   public RetractAll(KnowledgeBase kb) {
+      retractPredicateFactory = Inspect.retract(kb);
    }
 
    @Override
-   protected boolean evaluate(Term t) {
-      Predicate p = retractPredicateFactory.getPredicateWithOneArgument(t);
+   public Predicate getPredicate(Term term) {
+      Predicate p = retractPredicateFactory.getPredicate(term);
       while (p.evaluate()) {
-         t.backtrack();
+         term.backtrack();
       }
-      return true;
+      return PredicateUtils.TRUE;
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return false;
    }
 }

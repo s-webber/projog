@@ -41,9 +41,11 @@ public final class ArithmeticOperators {
    private final Object lock = new Object();
    private final Map<PredicateKey, String> operatorClassNames = new HashMap<>();
    private final Map<PredicateKey, ArithmeticOperator> operatorInstances = new HashMap<>();
+   private final DeferredArithmeticOperator deferredArithmeticOperator;
 
    public ArithmeticOperators(KnowledgeBase kb) {
       this.kb = kb;
+      this.deferredArithmeticOperator = new DeferredArithmeticOperator();
    }
 
    /**
@@ -105,20 +107,18 @@ public final class ArithmeticOperators {
    }
 
    /**
-    * @return null if not found
+    * @return placeholder if argument is not numeric, atom or term
     */
    public ArithmeticOperator getPreprocessedArithmeticOperator(Term argument) {
       if (argument.getType().isNumeric()) {
          return (Numeric) argument.getTerm();
-      } else if (argument.getType() == TermType.ATOM || argument.getType() == TermType.STRUCTURE) {
-         PredicateKey key = PredicateKey.createForTerm(argument);
-         return getPreprocessedArithmeticOperator(key, argument);
-      } else {
-         return null;
       }
-   }
 
-   private ArithmeticOperator getPreprocessedArithmeticOperator(PredicateKey key, Term argument) {
+      if (argument.getType() != TermType.ATOM && argument.getType() != TermType.STRUCTURE) {
+         return deferredArithmeticOperator;
+      }
+
+      PredicateKey key = PredicateKey.createForTerm(argument);
       if (operatorInstances.containsKey(key) || operatorClassNames.containsKey(key)) {
          ArithmeticOperator ao = getArithmeticOperator(key);
          if (ao instanceof PreprocessableArithmeticOperator) {
@@ -126,9 +126,9 @@ public final class ArithmeticOperators {
          } else {
             return ao;
          }
-      } else {
-         return null;
       }
+
+      return deferredArithmeticOperator;
    }
 
    /**
@@ -161,6 +161,17 @@ public final class ArithmeticOperators {
          return KnowledgeBaseUtils.instantiate(kb, className);
       } catch (Exception e) {
          throw new RuntimeException("Could not create new ArithmeticOperator using: " + className, e);
+      }
+   }
+
+   public ArithmeticOperator placeholder() {
+      return deferredArithmeticOperator;
+   }
+
+   private class DeferredArithmeticOperator implements ArithmeticOperator {
+      @Override
+      public Numeric calculate(Term term) {
+         return ArithmeticOperators.this.getNumeric(term);
       }
    }
 }

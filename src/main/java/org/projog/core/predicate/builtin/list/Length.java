@@ -20,8 +20,8 @@ import static org.projog.core.term.ListFactory.createListOfLength;
 import static org.projog.core.term.TermUtils.toInt;
 
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumberCache;
 import org.projog.core.term.Term;
@@ -116,9 +116,12 @@ import org.projog.core.term.TermType;
  * value <code>Y</code>.
  * </p>
  */
-public final class Length extends AbstractPredicateFactory {
+public final class Length implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(final Term list, final Term expectedLength) {
+   public Predicate getPredicate(final Term input) {
+      final Term list = input.firstArgument();
+      final Term expectedLength = input.secondArgument();
+
       int actualLength = 0;
       Term tail = list;
       while (tail.getType() == TermType.LIST) {
@@ -136,6 +139,11 @@ public final class Length extends AbstractPredicateFactory {
          int requiredLength = toInt(expectedLength) - actualLength;
          return toPredicate(requiredLength > -1 && tail.unify(createListOfLength(requiredLength)));
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static class Retryable implements Predicate {

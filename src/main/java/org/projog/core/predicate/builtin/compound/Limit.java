@@ -17,9 +17,7 @@ package org.projog.core.predicate.builtin.compound;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import java.util.Objects;
-
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
@@ -133,11 +131,32 @@ p(d(5),5).
  * <p>
  * Evaluates the goal represented by <code>X</code> for a maximum of <code>N</code> attempts.
  */
-public final class Limit extends AbstractPredicateFactory implements PredicateFactory {
+public final class Limit implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public Limit(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private Limit(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   public Predicate getPredicate(Term maxAttempts, Term goal) {
-      PredicateFactory pf = getPredicates().getPredicateFactory(goal);
-      return getLimitPredicate(pf, maxAttempts, goal);
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.secondArgument();
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new Limit(kb, kb.getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      return getLimitPredicate(pf, term.firstArgument(), term.secondArgument());
    }
 
    private static Predicate getLimitPredicate(PredicateFactory pf, Term maxAttempts, Term goal) {
@@ -147,31 +166,8 @@ public final class Limit extends AbstractPredicateFactory implements PredicateFa
    }
 
    @Override
-   public PredicateFactory preprocess(Term term) {
-      Term goal = term.secondArgument();
-      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
-         return new OptimisedLimit(getPredicates().getPreprocessedPredicateFactory(goal));
-      } else {
-         return this;
-      }
-   }
-
-   private static final class OptimisedLimit implements PredicateFactory {
-      private final PredicateFactory pf;
-
-      OptimisedLimit(PredicateFactory pf) {
-         this.pf = Objects.requireNonNull(pf);
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return getLimitPredicate(pf, term.firstArgument(), term.secondArgument());
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true;
-      }
+   public boolean isRetryable() {
+      return true;
    }
 
    private static final class LimitPredicate implements Predicate {

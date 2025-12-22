@@ -60,8 +60,11 @@ public class Predicates {
 
    private final KnowledgeBase kb;
 
+   private final DeferredPredicateFactory deferredPredicateFactory;
+
    public Predicates(KnowledgeBase kb) {
       this.kb = kb;
+      this.deferredPredicateFactory = new DeferredPredicateFactory();
    }
 
    public Predicate getPredicate(Term t) {
@@ -270,5 +273,21 @@ public class Predicates {
 
    private boolean isExistingUserDefinedPredicate(PredicateKey key) {
       return userDefinedPredicates.containsKey(key);
+   }
+
+   public PredicateFactory placeholder() {
+      return deferredPredicateFactory;
+   }
+
+   private class DeferredPredicateFactory implements PredicateFactory {
+      @Override
+      public Predicate getPredicate(Term term) {
+         return Predicates.this.getPredicate(term);
+      }
+
+      @Override
+      public boolean isRetryable() {
+         return true;
+      }
    }
 }

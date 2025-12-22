@@ -25,6 +25,7 @@ import org.projog.core.parser.Operands;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
+@Deprecated
 public abstract class AbstractPredicateFactory implements PredicateFactory, KnowledgeBaseConsumer {
    private KnowledgeBase knowledgeBase;
 

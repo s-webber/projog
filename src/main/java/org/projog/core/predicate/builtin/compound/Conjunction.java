@@ -15,8 +15,7 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
@@ -110,15 +109,19 @@ p1(X, Y, Z) :- p2(X), p3(Y), p4(X,Y,Z).
  * <code>X</code>. If <code>X</code> fails the entire conjunction fails.
  * </p>
  */
-public final class Conjunction extends AbstractPredicateFactory implements PredicateFactory {
-   @Override
-   protected Predicate getPredicate(Term arg1, Term arg2) {
-      Predicate firstPredicate = getPredicates().getPredicateFactory(arg1).getPredicate(arg1);
-      if (firstPredicate.evaluate()) {
-         return new ConjunctionPredicate(firstPredicate, getPredicates().getPredicateFactory(arg2), arg2);
-      } else {
-         return PredicateUtils.FALSE;
-      }
+public final class Conjunction implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory firstPredicateFactory;
+   private final PredicateFactory secondPredicateFactory;
+
+   public Conjunction(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder(), kb.getPredicates().placeholder());
+   }
+
+   private Conjunction(KnowledgeBase kb, PredicateFactory firstPredicateFactory, PredicateFactory secondPredicateFactory) {
+      this.kb = kb;
+      this.firstPredicateFactory = firstPredicateFactory;
+      this.secondPredicateFactory = secondPredicateFactory;
    }
 
    @Override
@@ -129,58 +132,38 @@ public final class Conjunction extends AbstractPredicateFactory implements Predi
          return this;
       }
 
-      PredicateFactory firstPredicateFactory = getPredicates().getPreprocessedPredicateFactory(firstArg);
-      PredicateFactory secondPredicateFactory = getPredicates().getPreprocessedPredicateFactory(secondArg);
-      if (firstPredicateFactory.isRetryable() || secondPredicateFactory.isRetryable()) {
-         return new OptimisedRetryableConjuction(firstPredicateFactory, secondPredicateFactory);
+      PredicateFactory firstPredicateFactory = kb.getPredicates().getPreprocessedPredicateFactory(firstArg);
+      PredicateFactory secondPredicateFactory = kb.getPredicates().getPreprocessedPredicateFactory(secondArg);
+      return new Conjunction(kb, firstPredicateFactory, secondPredicateFactory);
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      Predicate firstPredicate = firstPredicateFactory.getPredicate(term.firstArgument());
+      if (!firstPredicate.evaluate()) {
+         return PredicateUtils.FALSE;
+      }
+
+      if (!firstPredicate.couldReevaluationSucceed()) {
+         return secondPredicateFactory.getPredicate(term.secondArgument().getTerm());
+      }
+
+      return new ConjunctionPredicate(firstPredicate, secondPredicateFactory, term.secondArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return firstPredicateFactory.isRetryable() || secondPredicateFactory.isRetryable();
+   }
+
+   @Override
+   public boolean isAlwaysCutOnBacktrack() {
+      if (secondPredicateFactory.isAlwaysCutOnBacktrack()) {
+         return true;
+      } else if (firstPredicateFactory.isAlwaysCutOnBacktrack() && !secondPredicateFactory.isRetryable()) {
+         return true;
       } else {
-         return new OptimisedSingletonConjuction(firstPredicateFactory, secondPredicateFactory);
-      }
-   }
-
-   private static final class OptimisedRetryableConjuction extends AbstractPredicateFactory {
-      private final PredicateFactory firstPredicateFactory;
-      private final PredicateFactory secondPredicateFactory;
-
-      OptimisedRetryableConjuction(PredicateFactory firstPredicateFactory, PredicateFactory secondPredicateFactory) {
-         this.firstPredicateFactory = firstPredicateFactory;
-         this.secondPredicateFactory = secondPredicateFactory;
-      }
-
-      @Override
-      protected Predicate getPredicate(Term arg1, Term arg2) {
-         Predicate firstPredicate = firstPredicateFactory.getPredicate(arg1);
-         if (firstPredicate.evaluate()) {
-            return new ConjunctionPredicate(firstPredicate, secondPredicateFactory, arg2);
-         } else {
-            return PredicateUtils.FALSE;
-         }
-      }
-
-      @Override
-      public boolean isAlwaysCutOnBacktrack() {
-         if (secondPredicateFactory.isAlwaysCutOnBacktrack()) {
-            return true;
-         } else if (firstPredicateFactory.isAlwaysCutOnBacktrack() && !secondPredicateFactory.isRetryable()) {
-            return true;
-         } else {
-            return false;
-         }
-      }
-   }
-
-   private static final class OptimisedSingletonConjuction extends AbstractSingleResultPredicate {
-      private final PredicateFactory firstPredicateFactory;
-      private final PredicateFactory secondPredicateFactory;
-
-      OptimisedSingletonConjuction(PredicateFactory firstPredicateFactory, PredicateFactory secondPredicateFactory) {
-         this.firstPredicateFactory = firstPredicateFactory;
-         this.secondPredicateFactory = secondPredicateFactory;
-      }
-
-      @Override
-      protected boolean evaluate(Term arg1, Term arg2) {
-         return firstPredicateFactory.getPredicate(arg1).evaluate() && secondPredicateFactory.getPredicate(arg2.getTerm()).evaluate();
+         return false;
       }
    }
 

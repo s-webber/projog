@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
@@ -75,17 +75,39 @@ compare_retryable('=',_,_).
  * has the value <code>=</code>, <code>&lt;</code> or <code>&gt;</code>.
  * </p>
  */
-public final class PredSort extends AbstractSingleResultPredicate implements PredicateFactory {
+public final class PredSort implements PredicateFactory {
    // The SWI version of this predicate removes duplicates and backtracks to find alternative solutions.
    // TODO Either change this version to behave the same or update documentation to make it clear how the behaviour of this version differs from SWI.
 
    /** The arity of the predicate represented by the first argument. */
    private static final int FIRST_ARG_ARITY = 3;
 
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public PredSort(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private PredSort(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   protected boolean evaluate(Term predicateName, Term input, Term sorted) {
-      PredicateFactory pf = PartialApplicationUtils.getPartiallyAppliedPredicateFactory(getPredicates(), predicateName, FIRST_ARG_ARITY);
-      return evaluatePredSort(pf, predicateName, input, sorted);
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.secondArgument();
+      if (goal.getType() == TermType.ATOM) {
+         return new PredSort(kb, PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(kb.getPredicates(), goal, FIRST_ARG_ARITY));
+      } else {
+         return this;
+      }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      boolean result = evaluatePredSort(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
+      return PredicateUtils.toPredicate(result);
    }
 
    private static boolean evaluatePredSort(PredicateFactory pf, Term predicateName, Term input, Term sorted) {
@@ -131,33 +153,7 @@ public final class PredSort extends AbstractSingleResultPredicate implements Pre
    }
 
    @Override
-   public PredicateFactory preprocess(Term term) {
-      Term goal = term.secondArgument();
-      if (goal.getType() == TermType.ATOM) {
-         return new PreprocessedPredSort(PartialApplicationUtils.getPreprocessedPartiallyAppliedPredicateFactory(getPredicates(), goal, FIRST_ARG_ARITY), goal);
-      } else {
-         return this;
-      }
-   }
-
-   private static class PreprocessedPredSort implements PredicateFactory {
-      private final PredicateFactory pf;
-      private final Term predicateName;
-
-      private PreprocessedPredSort(PredicateFactory pf, Term predicateName) {
-         this.pf = pf;
-         this.predicateName = predicateName;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         boolean result = evaluatePredSort(pf, predicateName, term.secondArgument(), term.thirdArgument());
-         return PredicateUtils.toPredicate(result);
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return false;
-      }
+   public boolean isRetryable() {
+      return false;
    }
 }

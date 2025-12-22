@@ -19,8 +19,8 @@ import static org.projog.core.term.TermType.ATOM;
 import static org.projog.core.term.TermUtils.getAtomName;
 
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
@@ -119,9 +119,13 @@ import org.projog.core.term.TermType;
  * of atoms <code>X</code> and <code>Y</code>.
  * </p>
  */
-public final class AtomConcat extends AbstractPredicateFactory {
+public final class AtomConcat implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(Term prefix, Term suffix, Term combined) {
+   public Predicate getPredicate(Term input) {
+      Term prefix = input.firstArgument();
+      Term suffix = input.secondArgument();
+      Term combined = input.thirdArgument();
+
       if (prefix.getType().isVariable() && suffix.getType().isVariable()) {
          return new Retryable(prefix, suffix, getAtomName(combined));
       } else {
@@ -163,6 +167,11 @@ public final class AtomConcat extends AbstractPredicateFactory {
 
    private boolean isAtom(Term t) {
       return t.getType() == ATOM;
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static class Retryable implements Predicate {

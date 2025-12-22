@@ -15,8 +15,8 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.List;
 import org.projog.core.term.Term;
@@ -246,10 +246,15 @@ import org.projog.core.term.Variable;
  * elements in list <code>Y</code>.
  * </p>
  */
-public final class Reverse extends AbstractPredicateFactory {
+public final class Reverse implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(final Term list1, final Term list2) {
-      return new ReversePredicate(list1, list2);
+   public Predicate getPredicate(Term term) {
+      return new ReversePredicate(term.firstArgument(), term.secondArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private final static class ReversePredicate implements Predicate {

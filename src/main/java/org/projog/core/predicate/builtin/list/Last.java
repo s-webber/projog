@@ -15,8 +15,8 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.List;
@@ -107,11 +107,15 @@ import org.projog.core.term.Variable;
 /**
  * <code>last(X,Y)</code> - finds the last element of a list.
  */
-public final class Last extends AbstractPredicateFactory {
+public final class Last implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(Term list, Term termToUnifyLastElementWith) {
+   public Predicate getPredicate(Term input) {
+      Term list = input.firstArgument();
+      Term termToUnifyLastElementWith = input.secondArgument();
+
       Term tail = list;
       Term last = list;
+
       while (tail.getType() == TermType.LIST) {
          last = tail;
          tail = tail.secondArgument();

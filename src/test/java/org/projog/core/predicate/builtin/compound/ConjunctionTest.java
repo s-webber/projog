@@ -78,7 +78,7 @@ public class ConjunctionTest {
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertFalse(optimised.isRetryable());
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
    }
@@ -90,7 +90,7 @@ public class ConjunctionTest {
       Conjunction c = (Conjunction) kb.getPredicates().getPredicateFactory(term);
       PredicateFactory optimised = c.preprocess(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedSingletonConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertFalse(optimised.isRetryable());
       assertFalse(optimised.isAlwaysCutOnBacktrack());
       Map<Variable, Variable> sharedVariables = new HashMap<>();
@@ -110,7 +110,7 @@ public class ConjunctionTest {
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertTrue(optimised.isRetryable());
       assertFalse(optimised.isAlwaysCutOnBacktrack());
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
@@ -131,7 +131,7 @@ public class ConjunctionTest {
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertTrue(optimised.isRetryable());
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
       assertTrue(predicate.couldReevaluationSucceed());
@@ -152,9 +152,9 @@ public class ConjunctionTest {
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertTrue(optimised.isRetryable());
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
+      assertEquals("org.projog.core.predicate.builtin.flow.RepeatSetAmount$RepeatSetAmountPredicate", predicate.getClass().getName());
       assertTrue(predicate.couldReevaluationSucceed());
       assertTrue(predicate.evaluate());
       assertTrue(predicate.couldReevaluationSucceed());
@@ -171,7 +171,7 @@ public class ConjunctionTest {
       PredicateFactory optimised = c.preprocess(term);
       Predicate predicate = optimised.getPredicate(term);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$OptimisedRetryableConjuction", optimised.getClass().getName());
+      assertSame(Conjunction.class, optimised.getClass());
       assertTrue(optimised.isRetryable());
       assertEquals("org.projog.core.predicate.builtin.compound.Conjunction$ConjunctionPredicate", predicate.getClass().getName());
       assertTrue(predicate.couldReevaluationSucceed());

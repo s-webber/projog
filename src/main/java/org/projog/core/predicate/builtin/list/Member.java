@@ -15,8 +15,8 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.List;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
@@ -134,10 +134,15 @@ import org.projog.core.term.Variable;
  * retry the goal during backtracking - so it can be used to enumerate the members of a list.
  * </p>
  */
-public final class Member extends AbstractPredicateFactory {
+public final class Member implements PredicateFactory {
    @Override
-   protected Predicate getPredicate(Term element, Term list) {
-      return new MemberPredicate(element, list);
+   public Predicate getPredicate(Term term) {
+      return new MemberPredicate(term.firstArgument(), term.secondArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private final class MemberPredicate implements Predicate {

@@ -39,12 +39,14 @@ public class CutTest {
    public void testGetPredicate() {
       Cut c = new Cut();
 
-      Predicate p1 = c.getPredicate();
+      Predicate p1 = c.getPredicate(null);
       assertTrue(p1.evaluate());
+      assertTrue(p1.couldReevaluationSucceed());
       assertThrows(CutException.class, () -> p1.evaluate());
 
-      Predicate p2 = c.getPredicate();
+      Predicate p2 = c.getPredicate(null);
       assertTrue(p2.evaluate());
+      assertTrue(p2.couldReevaluationSucceed());
       assertThrows(CutException.class, () -> p2.evaluate());
    }
 }

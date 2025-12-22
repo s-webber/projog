@@ -16,7 +16,6 @@
 package org.projog.core.math;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -118,7 +117,7 @@ public class ArithmeticOperatorsTest {
    public void testGetPreprocessedArithmeticOperator_variable() {
       ArithmeticOperators c = createOperators();
 
-      assertNull(c.getPreprocessedArithmeticOperator(variable()));
+      assertEquals("org.projog.core.math.ArithmeticOperators$DeferredArithmeticOperator", c.getPreprocessedArithmeticOperator(variable()).getClass().getName());
    }
 
    @Test
@@ -126,7 +125,7 @@ public class ArithmeticOperatorsTest {
       ArithmeticOperators c = createOperators();
 
       Term expression = structure(dummyOperatorName, integerNumber(7));
-      assertNull(c.getPreprocessedArithmeticOperator(expression));
+      assertEquals("org.projog.core.math.ArithmeticOperators$DeferredArithmeticOperator", c.getPreprocessedArithmeticOperator(expression).getClass().getName());
    }
 
    @Test
@@ -227,6 +226,15 @@ public class ArithmeticOperatorsTest {
       Numeric n = c.getNumeric(dummyTerm);
       assertSame(IntegerNumber.class, n.getClass());
       assertEquals(dummyTermArgument * 3, n.getLong());
+   }
+
+   @Test
+   public void testPlaceholder() {
+      ArithmeticOperators arithmeticOperators = kb.getArithmeticOperators();
+      ArithmeticOperator placeholder = arithmeticOperators.placeholder();
+      assertSame(placeholder, arithmeticOperators.placeholder());
+      assertEquals(integerNumber(3), placeholder.calculate(structure("+", integerNumber(1), integerNumber(2))));
+      assertEquals(integerNumber(-1), placeholder.calculate(structure("-", integerNumber(1), integerNumber(2))));
    }
 
    private ArithmeticOperators createOperators() {

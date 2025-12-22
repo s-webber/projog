@@ -15,10 +15,12 @@
  */
 package org.projog.core.predicate.builtin.compare;
 
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.math.Numeric;
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -63,48 +65,41 @@ import org.projog.core.term.Term;
  * made to match the number to <code>X</code>. The goal succeeds or fails based on the match.
  * </p>
  */
-public final class Is extends AbstractSingleResultPredicate implements PredicateFactory {
-   @Override
-   protected boolean evaluate(Term arg1, Term arg2) {
-      Numeric n = getArithmeticOperators().getNumeric(arg2);
-      return arg1.unify(n);
+public final class Is implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final ArithmeticOperator arithmeticOperator;
+
+   public Is(KnowledgeBase kb) {
+      this(kb, kb.getArithmeticOperators().placeholder());
+   }
+
+   private Is(KnowledgeBase kb, ArithmeticOperator arithmeticOperator) {
+      this.kb = kb;
+      this.arithmeticOperator = arithmeticOperator;
+      if (arithmeticOperator == null) {
+         throw new NullPointerException();
+      }
    }
 
    @Override
-   public PredicateFactory preprocess(Term arg) {
-      final ArithmeticOperator o = getArithmeticOperators().getPreprocessedArithmeticOperator(arg.secondArgument());
-      if (o == null) {
+   public PredicateFactory preprocess(Term term) {
+      Term secondArgument = term.secondArgument();
+      if (secondArgument.getType().isVariable()) {
          return this;
-      } else if (o instanceof Numeric) {
-         return new Unify((Numeric) o);
-      } else {
-         return new PreprocessedIs(o);
       }
+
+      ArithmeticOperator arithmeticOperator = kb.getArithmeticOperators().getPreprocessedArithmeticOperator(secondArgument);
+      return new Is(kb, arithmeticOperator);
    }
 
-   private static final class Unify extends AbstractSingleResultPredicate {
-      final Numeric n;
-
-      Unify(Numeric n) {
-         this.n = n;
-      }
-
-      @Override
-      public boolean evaluate(Term arg1, Term arg2) {
-         return arg1.unify(n);
-      }
+   @Override
+   public Predicate getPredicate(Term term) {
+      Numeric n = arithmeticOperator.calculate(term.secondArgument());
+      return term.firstArgument().unify(n) ? PredicateUtils.TRUE : PredicateUtils.FALSE;
    }
 
-   private static final class PreprocessedIs extends AbstractSingleResultPredicate {
-      final ArithmeticOperator o;
-
-      PreprocessedIs(ArithmeticOperator o) {
-         this.o = o;
-      }
-
-      @Override
-      public boolean evaluate(Term arg1, Term arg2) {
-         return arg1.unify(o.calculate(arg2));
-      }
+   @Override
+   public boolean isRetryable() {
+      return false;
    }
 }

@@ -100,8 +100,8 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
    }
 
    @Override
-   public PredicateFactory preprocess(Term arg) {
-      if (ClauseActionFactory.isMatch(clause, arg)) {
+   public PredicateFactory preprocess(Term term) {
+      if (ClauseActionFactory.isMatch(clause, term)) {
          return this;
       } else {
          return new NeverSucceedsPredicateFactory(spyPoint);

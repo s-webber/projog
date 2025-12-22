@@ -15,7 +15,6 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -38,7 +37,7 @@ import org.projog.core.term.Variable;
 public class OnceTest {
    @Test
    public void testPreprocess_cannot_optimise_variable() {
-      Once o = new Once();
+      Once o = new Once(createKnowledgeBase());
 
       Term t = StructureFactory.createStructure("once", new Term[] {new Variable("X")});
       PredicateFactory optimised = o.preprocess(t);
@@ -63,7 +62,7 @@ public class OnceTest {
       Once o = (Once) kb.getPredicates().getPredicateFactory(onceTerm);
       PredicateFactory optimised = o.preprocess(onceTerm);
 
-      assertEquals("org.projog.core.predicate.builtin.compound.Once$OptimisedOnce", optimised.getClass().getName());
+      assertSame(Once.class, optimised.getClass());
       Term term = StructureFactory.createStructure("test", new Term[] {queryArg});
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(term));
       assertSame(PredicateUtils.FALSE, optimised.getPredicate(term));

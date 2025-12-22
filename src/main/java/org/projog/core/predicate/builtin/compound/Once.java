@@ -15,12 +15,11 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import java.util.Objects;
-
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
+import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
 
 // TODO shouldn't need to wrap disjunctions in brackets. e.g. should be able to do: once(true;true;fail)
@@ -46,33 +45,37 @@ import org.projog.core.term.Term;
  * succeeds. No attempt is made to retry the goal during backtracking - it is only evaluated once.
  * </p>
  */
-public final class Once extends AbstractSingleResultPredicate implements PredicateFactory {
-   @Override
-   protected boolean evaluate(Term t) {
-      Predicate e = getPredicates().getPredicate(t);
-      return e.evaluate();
+public final class Once implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public Once(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private Once(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
    }
 
    @Override
    public PredicateFactory preprocess(Term term) {
       Term arg = term.firstArgument();
       if (PartialApplicationUtils.isAtomOrStructure(arg)) {
-         return new OptimisedOnce(getPredicates().getPreprocessedPredicateFactory(arg));
+         return new Once(kb, kb.getPredicates().getPreprocessedPredicateFactory(arg));
       } else {
          return this;
       }
    }
 
-   private static final class OptimisedOnce extends AbstractSingleResultPredicate {
-      private final PredicateFactory pf;
+   @Override
+   public Predicate getPredicate(Term t) {
+      boolean result = pf.getPredicate(t.firstArgument()).evaluate();
+      return PredicateUtils.toPredicate(result);
+   }
 
-      OptimisedOnce(PredicateFactory pf) {
-         this.pf = Objects.requireNonNull(pf);
-      }
-
-      @Override
-      protected boolean evaluate(Term arg) {
-         return pf.getPredicate(arg).evaluate();
-      }
+   @Override
+   public boolean isRetryable() {
+      return false;
    }
 }

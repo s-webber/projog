@@ -17,8 +17,8 @@ package org.projog.core.predicate.builtin.flow;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 
 /* TEST
@@ -57,11 +57,16 @@ import org.projog.core.term.Term;
 /**
  * <code>repeat(N)</code> - succeeds <code>N</code> times.
  */
-public final class RepeatSetAmount extends AbstractPredicateFactory {
+public final class RepeatSetAmount implements PredicateFactory {
    @Override
-   protected Predicate getPredicateWithOneArgument(Term arg) {
-      long n = castToNumeric(arg).getLong();
+   public Predicate getPredicate(Term term) {
+      long n = castToNumeric(term.firstArgument()).getLong();
       return new RepeatSetAmountPredicate(n);
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private static final class RepeatSetAmountPredicate implements Predicate {

@@ -15,8 +15,9 @@
  */
 package org.projog.core.predicate.builtin.flow;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.term.Term;
 
 /* TEST
 %?- repeat
@@ -61,24 +62,24 @@ print_first_sentence :-
  * <code>repeat</code> <i>always</i> succeeds even when an attempt is made to re-satisfy it.
  * </p>
  */
-public final class RepeatInfinitely extends AbstractPredicateFactory {
-   private static final RepeatInfinitelyPredicate SINGLETON = new RepeatInfinitelyPredicate();
-
+public final class RepeatInfinitely implements PredicateFactory, Predicate {
    @Override
-   protected Predicate getPredicate() {
-      return SINGLETON;
+   public Predicate getPredicate(Term term) {
+      return this;
    }
 
-   private static class RepeatInfinitelyPredicate implements Predicate
-   {
-      @Override
-      public boolean evaluate() {
-         return true;
-      }
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
 
-      @Override
-      public boolean couldReevaluationSucceed() {
-         return true;
-      }
+   @Override
+   public boolean evaluate() {
+      return true;
+   }
+
+   @Override
+   public boolean couldReevaluationSucceed() {
+      return true;
    }
 }

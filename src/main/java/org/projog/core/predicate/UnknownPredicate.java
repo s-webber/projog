@@ -49,13 +49,13 @@ public final class UnknownPredicate implements PredicateFactory {
    }
 
    @Override
-   public PredicateFactory preprocess(Term arg) {
+   public PredicateFactory preprocess(Term term) {
       instantiatePredicateFactory();
 
       if (actualPredicateFactory == null) {
          return this;
       } else {
-         return actualPredicateFactory.preprocess(arg);
+         return actualPredicateFactory.preprocess(term);
       }
    }
 

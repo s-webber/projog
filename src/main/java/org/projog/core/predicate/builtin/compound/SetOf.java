@@ -19,7 +19,7 @@ import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
 
 import java.util.List;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
@@ -99,10 +99,37 @@ p(d,2).
  * variables. The elements in <code>L</code> will appear in sorted order and will not include duplicates. Fails if
  * <code>P</code> has no solutions.
  */
-public final class SetOf extends AbstractPredicateFactory implements PredicateFactory {
+public final class SetOf implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public SetOf(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private SetOf(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   protected Predicate getPredicate(Term template, Term goal, Term bag) {
-      return new SetOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.secondArgument();
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new SetOf(kb, kb.getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      return new SetOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true; // TODO
    }
 
    private static final class SetOfPredicate extends AbstractCollectionOf {
@@ -127,34 +154,6 @@ public final class SetOf extends AbstractPredicateFactory implements PredicateFa
             }
          }
          list.add(newTerm);
-      }
-   }
-
-   @Override
-   public PredicateFactory preprocess(Term term) {
-      Term goal = term.secondArgument();
-      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
-         return new PreprocessedSetOf(getPredicates().getPreprocessedPredicateFactory(goal));
-      } else {
-         return this;
-      }
-   }
-
-   private static class PreprocessedSetOf implements PredicateFactory {
-      private final PredicateFactory pf;
-
-      PreprocessedSetOf(PredicateFactory pf) {
-         this.pf = pf;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return new SetOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true; // TODO
       }
    }
 }

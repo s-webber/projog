@@ -23,8 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
 import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.predicate.builtin.io.GetChar;
 import org.projog.core.term.Atom;
@@ -233,7 +233,7 @@ white_test :- char_type(X, white), write('>'), write(X), write('<'), nl, fail.
  * <li><code>white</code> - whitespace</li>
  * </ul>
  */
-public final class CharType extends AbstractPredicateFactory {
+public final class CharType implements PredicateFactory {
    private static final Type[] EMPTY_TYPES_ARRAY = new Type[] {};
    private static final Atom[] ALL_CHARACTERS = new Atom[MAX_VALUE + 2];
    static {
@@ -309,7 +309,10 @@ public final class CharType extends AbstractPredicateFactory {
    }
 
    @Override
-   protected Predicate getPredicate(Term character, Term type) {
+   public Predicate getPredicate(Term input) {
+      Term character = input.firstArgument();
+      Term type = input.secondArgument();
+
       Term[] characters;
       if (character.getType().isVariable()) {
          characters = ALL_CHARACTERS;
@@ -330,6 +333,11 @@ public final class CharType extends AbstractPredicateFactory {
          }
       }
       return new CharTypePredicate(character, type, new State(characters, characterTypes));
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private final class CharTypePredicate implements Predicate {

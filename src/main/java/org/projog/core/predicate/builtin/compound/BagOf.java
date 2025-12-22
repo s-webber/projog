@@ -17,7 +17,7 @@ package org.projog.core.predicate.builtin.compound;
 
 import java.util.List;
 
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.builtin.list.PartialApplicationUtils;
@@ -95,10 +95,37 @@ p(d,2).
  * variables. The elements in <code>L</code> will appear in the order they were found and may include duplicates. Fails
  * if <code>P</code> has no solutions.
  */
-public final class BagOf extends AbstractPredicateFactory implements PredicateFactory {
+public final class BagOf implements PredicateFactory {
+   private final KnowledgeBase kb;
+   private final PredicateFactory pf;
+
+   public BagOf(KnowledgeBase kb) {
+      this(kb, kb.getPredicates().placeholder());
+   }
+
+   private BagOf(KnowledgeBase kb, PredicateFactory pf) {
+      this.kb = kb;
+      this.pf = pf;
+   }
+
    @Override
-   protected Predicate getPredicate(Term template, Term goal, Term bag) {
-      return new BagOfPredicate(getPredicates().getPredicateFactory(goal), template, goal, bag);
+   public PredicateFactory preprocess(Term term) {
+      Term goal = term.secondArgument();
+      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
+         return new BagOf(kb, kb.getPredicates().getPreprocessedPredicateFactory(goal));
+      } else {
+         return this;
+      }
+   }
+
+   @Override
+   public Predicate getPredicate(Term term) {
+      return new BagOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true; // TODO
    }
 
    private static final class BagOfPredicate extends AbstractCollectionOf {
@@ -110,34 +137,6 @@ public final class BagOf extends AbstractPredicateFactory implements PredicateFa
       @Override
       protected void add(List<Term> l, Term t) {
          l.add(t);
-      }
-   }
-
-   @Override
-   public PredicateFactory preprocess(Term term) {
-      Term goal = term.secondArgument();
-      if (PartialApplicationUtils.isAtomOrStructure(goal)) {
-         return new PreprocessedBagOf(getPredicates().getPreprocessedPredicateFactory(goal));
-      } else {
-         return this;
-      }
-   }
-
-   private static class PreprocessedBagOf implements PredicateFactory {
-      private final PredicateFactory pf;
-
-      PreprocessedBagOf(PredicateFactory pf) {
-         this.pf = pf;
-      }
-
-      @Override
-      public Predicate getPredicate(Term term) {
-         return new BagOfPredicate(pf, term.firstArgument(), term.secondArgument(), term.thirdArgument());
-      }
-
-      @Override
-      public boolean isRetryable() {
-         return true; // TODO
       }
    }
 }

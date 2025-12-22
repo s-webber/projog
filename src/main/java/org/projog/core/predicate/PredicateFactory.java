@@ -70,7 +70,7 @@ public interface PredicateFactory {
       return false;
    }
 
-   default PredicateFactory preprocess(Term arg) {
+   default PredicateFactory preprocess(Term term) {
       return this;
    }
 }

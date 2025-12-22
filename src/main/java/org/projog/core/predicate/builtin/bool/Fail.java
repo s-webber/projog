@@ -15,7 +15,10 @@
  */
 package org.projog.core.predicate.builtin.bool;
 
-import org.projog.core.predicate.AbstractSingleResultPredicate;
+import org.projog.core.predicate.Predicate;
+import org.projog.core.predicate.PredicateFactory;
+import org.projog.core.predicate.udp.PredicateUtils;
+import org.projog.core.term.Term;
 
 /* TEST
 %FAIL fail
@@ -46,9 +49,14 @@ test :- a(X), a(Y), write(Y), write(' '), write(X), nl, fail.
  * The goal <code>fail</code> always fails.
  * </p>
  */
-public final class Fail extends AbstractSingleResultPredicate {
+public final class Fail implements PredicateFactory {
    @Override
-   public boolean evaluate() {
+   public Predicate getPredicate(Term term) {
+      return PredicateUtils.FALSE;
+   }
+
+   @Override
+   public boolean isRetryable() {
       return false;
    }
 }

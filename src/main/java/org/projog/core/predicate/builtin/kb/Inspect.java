@@ -18,10 +18,11 @@ package org.projog.core.predicate.builtin.kb;
 import java.util.Iterator;
 
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.AbstractPredicateFactory;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
+import org.projog.core.predicate.Predicates;
 import org.projog.core.predicate.UnknownPredicate;
 import org.projog.core.predicate.udp.ClauseModel;
 import org.projog.core.predicate.udp.PredicateUtils;
@@ -127,33 +128,33 @@ non_dynamic_predicate(1,2,3).
  * matches is removed. <code>X</code> must be suitably instantiated that the predicate of the clause can be determined.
  * </p>
  */
-public final class Inspect extends AbstractPredicateFactory {
+public final class Inspect implements PredicateFactory {
+   private final Predicates predicates;
    /**
     * {@code true} if matching rules should be removed (retracted) from the knowledge base as part of calls to
     * {@link #evaluate(Term, Term)} or {@code false} if the knowledge base should remain unaltered.
     */
    private final boolean doRemoveMatches;
 
-   public static Inspect inspectClause() {
-      return new Inspect(false);
+   public static Inspect inspectClause(KnowledgeBase kb) {
+      return new Inspect(kb, false);
    }
 
-   public static Inspect retract() {
-      return new Inspect(true);
+   public static Inspect retract(KnowledgeBase kb) {
+      return new Inspect(kb, true);
    }
 
-   private Inspect(boolean doRemoveMatches) {
+   private Inspect(KnowledgeBase kb, boolean doRemoveMatches) {
+      this.predicates = kb.getPredicates();
       this.doRemoveMatches = doRemoveMatches;
    }
 
    @Override
-   protected Predicate getPredicateWithOneArgument(Term clauseHead) {
-      return getPredicate(clauseHead, null);
-   }
+   public Predicate getPredicate(Term term) {
+      Term clauseHead = term.firstArgument();
+      Term clauseBody = term.getNumberOfArguments() > 1 ? term.secondArgument() : null;
 
-   @Override
-   protected Predicate getPredicate(Term clauseHead, Term clauseBody) {
-      PredicateFactory predicateFactory = getPredicates().getPredicateFactory(clauseHead);
+      PredicateFactory predicateFactory = predicates.getPredicateFactory(clauseHead);
       if (predicateFactory instanceof UserDefinedPredicateFactory) {
          UserDefinedPredicateFactory userDefinedPredicate = (UserDefinedPredicateFactory) predicateFactory;
          return new InspectPredicate(clauseHead, clauseBody, userDefinedPredicate.getImplications());
@@ -163,6 +164,11 @@ public final class Inspect extends AbstractPredicateFactory {
          PredicateKey key = PredicateKey.createForTerm(clauseHead);
          throw new ProjogException("Cannot inspect clauses of built-in predicate: " + key);
       }
+   }
+
+   @Override
+   public boolean isRetryable() {
+      return true;
    }
 
    private final class InspectPredicate implements Predicate {

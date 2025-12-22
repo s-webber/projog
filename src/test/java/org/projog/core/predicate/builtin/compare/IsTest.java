@@ -50,7 +50,7 @@ public class IsTest {
 
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
-      assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
+      assertSame(Is.class, optimised.getClass());
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(1, 1)", isTerm.toString());
    }
@@ -62,7 +62,7 @@ public class IsTest {
 
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
-      assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
+      assertSame(Is.class, optimised.getClass());
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(21, *(3, 7))", isTerm.toString());
    }
@@ -74,7 +74,7 @@ public class IsTest {
 
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
-      assertEquals("org.projog.core.predicate.builtin.compare.Is$PreprocessedIs", optimised.getClass().getName());
+      assertSame(Is.class, optimised.getClass());
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = isTerm.copy(sharedVariables);
@@ -100,7 +100,7 @@ public class IsTest {
 
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
-      assertEquals("org.projog.core.predicate.builtin.compare.Is$Unify", optimised.getClass().getName());
+      assertSame(Is.class, optimised.getClass());
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(isTerm));
       assertEquals("is(21, abs(*(-3, 7)))", isTerm.toString());
    }
@@ -112,7 +112,7 @@ public class IsTest {
 
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
-      assertEquals("org.projog.core.predicate.builtin.compare.Is$PreprocessedIs", optimised.getClass().getName());
+      assertSame(Is.class, optimised.getClass());
 
       Map<Variable, Variable> sharedVariables = new HashMap<>();
       Term copy = isTerm.copy(sharedVariables);

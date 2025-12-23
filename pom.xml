@@ -32,12 +32,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    <scm>
     <connection>scm:git:git://github.com/s-webber/projog.git</connection>
     <developerConnection>scm:git:ssh://github.com:s-webber/projog.git</developerConnection>
-    <url>http://github.com/s-webber/projog/tree/master</url>
+    <url>https://github.com/s-webber/projog/tree/master</url>
    </scm>
 
    <properties>
-      <maven.compiler.source>8</maven.compiler.source>
-      <maven.compiler.target>8</maven.compiler.target>
+      <maven.compiler.release>8</maven.compiler.release>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
 
@@ -68,7 +67,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <dependency>
          <groupId>org.mockito</groupId>
          <artifactId>mockito-core</artifactId>
-         <version>3.6.28</version>
+         <version>5.21.0</version>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -93,9 +92,34 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    <build>
       <plugins>
          <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-compiler-plugin</artifactId>
+           <version>3.11.0</version>
+         </plugin>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-dependency-plugin</artifactId>
+           <version>3.9.0</version>
+           <executions>
+             <execution>
+               <goals>
+                 <goal>properties</goal>
+               </goals>
+             </execution>
+           </executions>
+         </plugin>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-surefire-plugin</artifactId>
+           <version>3.5.4</version>
+           <configuration>
+             <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+           </configuration>
+         </plugin>
+         <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.10</version>
+            <version>0.8.14</version>
             <executions>
                <execution>
                   <id>default-prepare-agent</id>
@@ -151,7 +175,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-source-plugin</artifactId>
-                  <version>2.2.1</version>
+                  <version>3.4.0</version>
                   <executions>
                      <execution>
                         <id>attach-sources</id>
@@ -164,7 +188,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-javadoc-plugin</artifactId>
-                  <version>2.9.1</version>
+                  <version>3.12.0</version>
                   <executions>
                      <execution>
                         <id>attach-javadocs</id>
@@ -219,57 +243,30 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       <!-- mvn site -->
       <plugins>
          <plugin>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>2.8.1</version>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-project-info-reports-plugin</artifactId>
+           <version>3.9.0</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.3</version>
+            <version>3.12.0</version>
             <configuration>
                <additionalparam>-Xdoclint:none</additionalparam>
                <bottom><![CDATA[<a href='http://projog.org' title='Prolog programming for the Java platform' target='_blank'>projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
                <doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
                <windowtitle>Projog - a Java based implementation of the Prolog logic programming language.</windowtitle>
+               <failOnError>false</failOnError>
             </configuration>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.6</version>
+            <version>3.28.0</version>
             <configuration>
-               <verbose>true</verbose>
-               <minimumPriority>0</minimumPriority>
-               <targetJdk>1.8</targetJdk>
                <rulesets>
                   <ruleset>src/test/resources/pmd-ruleset.xml</ruleset>
                </rulesets>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.17</version>
-            <configuration>
-               <configLocation>src/test/resources/checkstyle-checks.xml</configLocation>
-            </configuration>
-            <reportSets>
-               <reportSet>
-                  <reports>
-                     <report>checkstyle</report>
-                  </reports>
-               </reportSet>
-            </reportSets>
-         </plugin>
-         <plugin>
-             <!-- To see bug detail using the Findbugs GUI, use the following command "mvn findbugs:gui" -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>3.0.3</version>
-            <configuration>
-               <effort>Max</effort>
-               <threshold>Low</threshold>
-               <xmlOutput>true</xmlOutput>
             </configuration>
          </plugin>
       </plugins>

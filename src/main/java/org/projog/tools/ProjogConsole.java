@@ -107,7 +107,7 @@ public class ProjogConsole {
          QueryStatement s = null;
          while (s == null) {
             inputSyntax += in.nextLine();
-            if (!inputSyntax.isBlank()) {
+            if (inputSyntax.trim().length() != 0) {
                try {
                   s = projog.createPlan(inputSyntax).createStatement();
                } catch (EndOfStreamException pe) {

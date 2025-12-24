@@ -72,4 +72,6 @@ public interface UserDefinedPredicateFactory extends PredicateFactory {
     * @return the clause at the specified position in this predicate's list of clauses or {@code null} if out of bounds
     */
    public ClauseModel getClauseModel(int index);
+
+   public void compile();
 }

@@ -195,9 +195,7 @@ public final class ProjogSourceReader {
          kb.getPredicates().addUserDefinedPredicate(userDefinedPredicate);
       }
       for (UserDefinedPredicateFactory userDefinedPredicate : userDefinedPredicates.values()) {
-         if (userDefinedPredicate instanceof StaticUserDefinedPredicateFactory) {
-            ((StaticUserDefinedPredicateFactory) userDefinedPredicate).compile();
-         }
+         userDefinedPredicate.compile();
       }
    }
 }

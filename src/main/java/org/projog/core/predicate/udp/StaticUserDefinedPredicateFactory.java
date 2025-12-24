@@ -77,6 +77,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
    }
 
+   @Override
    public void compile() {
       // make sure we only call setCompiledPredicateFactory once per instance
       if (compiledPredicateFactory == null) {
@@ -207,7 +208,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       return predicateKey;
    }
 
-   public PredicateFactory getActualPredicateFactory() { // TODO make package level access
+   PredicateFactory getActualPredicateFactory() {
       compile();
       return compiledPredicateFactory;
    }
@@ -224,7 +225,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
     * </ul>
     */
    @Override
-   public Iterator<ClauseModel> getImplications() {
+   public ImplicationsIterator getImplications() {
       return new ImplicationsIterator(implications);
    }
 
@@ -261,31 +262,6 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
       }
 
       return this;
-   }
-
-   /**
-    * @see StaticUserDefinedPredicateFactory#getImplications
-    */
-   private static final class ImplicationsIterator implements Iterator<ClauseModel> {
-      private final Iterator<ClauseModel> iterator;
-
-      ImplicationsIterator(List<ClauseModel> implications) {
-         iterator = implications.iterator();
-      }
-
-      @Override
-      public boolean hasNext() {
-         return iterator.hasNext();
-      }
-
-      /**
-       * Returns a <i>new copy</i> to avoid the original being altered.
-       */
-      @Override
-      public ClauseModel next() {
-         ClauseModel clauseModel = iterator.next();
-         return clauseModel.copy();
-      }
    }
 
    private final class LinkedHashMapPredicateFactory implements PredicateFactory {

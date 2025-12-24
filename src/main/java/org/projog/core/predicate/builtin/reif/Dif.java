@@ -172,7 +172,7 @@ public final class Dif extends AbstractSingleResultPredicate {
          return true;
       }
 
-      MyMap sharedVariables = new MyMap();
+      ExactCopyMap sharedVariables = new ExactCopyMap();
       Term copy1 = arg1.copy(sharedVariables);
       Term copy2 = arg2.copy(sharedVariables);
       if (!copy1.unify(copy2)) {
@@ -239,7 +239,7 @@ public final class Dif extends AbstractSingleResultPredicate {
             attributeValue = attributeValue.secondArgument();
          } while (attributeValue != EmptyList.EMPTY_LIST);
 
-         MyMap sharedVariables = new MyMap();
+         ExactCopyMap sharedVariables = new ExactCopyMap();
          variable.copy(sharedVariables);
          for (Variable v : sharedVariables.variables) {
             if (v != variable) {
@@ -269,7 +269,7 @@ public final class Dif extends AbstractSingleResultPredicate {
       }
    }
 
-   private static final class MyMap implements Map<Variable, Term> {
+   private static final class ExactCopyMap implements Map<Variable, Term> {
       Set<Variable> variables = new HashSet<>();
 
       @Override

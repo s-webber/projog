@@ -21,11 +21,14 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.structure;
+import static org.projog.TestUtils.createClauseModel;
+import static org.projog.TestUtils.createKnowledgeBase;
+import static org.projog.TestUtils.parseSentence;
+import static org.projog.TestUtils.write;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.projog.TestUtils;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
@@ -234,8 +237,8 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    @Test
    public void testAddFirst() {
-      KnowledgeBase kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
-      Term t = TestUtils.parseSentence("test(X).");
+      KnowledgeBase kb = createKnowledgeBase();
+      Term t = parseSentence("test(X).");
       ClauseModel clauseModel = ClauseModel.createClauseModel(t);
       StaticUserDefinedPredicateFactory f = new StaticUserDefinedPredicateFactory(kb, PredicateKey.createForTerm(t));
       try {
@@ -247,8 +250,8 @@ public class StaticUserDefinedPredicateFactoryTest {
 
    @Test
    public void testAddLast() {
-      KnowledgeBase kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
-      Term t = TestUtils.parseSentence("test(a).");
+      KnowledgeBase kb = createKnowledgeBase();
+      Term t = parseSentence("test(a).");
       StaticUserDefinedPredicateFactory f = new StaticUserDefinedPredicateFactory(kb, PredicateKey.createForTerm(t));
 
       // ok to add clause as predicate not yet compiled
@@ -258,12 +261,30 @@ public class StaticUserDefinedPredicateFactoryTest {
       f.compile();
 
       // no longer ok to add clause as predicate has been compiled
-      ClauseModel secondClause = ClauseModel.createClauseModel(TestUtils.parseSentence("test(z)."));
+      ClauseModel secondClause = ClauseModel.createClauseModel(parseSentence("test(z)."));
       try {
          f.addFirst(secondClause);
       } catch (ProjogException e) {
          assertEquals("Cannot add clause to already defined user defined predicate as it is not dynamic: test/1 clause: test(z)", e.getMessage());
       }
+   }
+
+   @Test
+   public void testGetImplications() {
+      KnowledgeBase kb = createKnowledgeBase();
+      StaticUserDefinedPredicateFactory f = new StaticUserDefinedPredicateFactory(kb, new PredicateKey("test", 1));
+
+      f.addLast(createClauseModel("test(3)."));
+      f.addLast(createClauseModel("test(1)."));
+      f.addLast(createClauseModel("test(2)."));
+
+      ImplicationsIterator iterator = f.getImplications();
+
+      assertEquals("test(3)", write(iterator.next().getOriginal()));
+      assertEquals("test(1)", write(iterator.next().getOriginal()));
+      assertEquals("test(2)", write(iterator.next().getOriginal()));
+
+      assertFalse(iterator.hasNext());
    }
 
    private static void assertSingleRetryableRulePredicateFactory(PredicateFactory p) {
@@ -297,7 +318,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    }
 
    private static PredicateFactory getActualPredicateFactory(Term[] clauses) {
-      KnowledgeBase kb = TestUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
+      KnowledgeBase kb = createKnowledgeBase();
       StaticUserDefinedPredicateFactory f = null;
       for (Term clause : clauses) {
          ClauseModel clauseModel = ClauseModel.createClauseModel(clause);
@@ -313,7 +334,7 @@ public class StaticUserDefinedPredicateFactoryTest {
    private static Term[] toTerms(String... clausesSyntax) {
       Term[] clauses = new Term[clausesSyntax.length];
       for (int i = 0; i < clauses.length; i++) {
-         clauses[i] = TestUtils.parseSentence(clausesSyntax[i]);
+         clauses[i] = parseSentence(clausesSyntax[i]);
       }
       return clauses;
    }

@@ -85,6 +85,15 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       return true;
    }
 
+   @Override
+   public boolean isRetryable() {
+      return true;
+   }
+
+   @Override
+   public void compile() {
+   }
+
    /**
     * Returns an iterator over the clauses of this user defined predicate.
     * <p>
@@ -257,10 +266,5 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       ClauseActionMetaData(KnowledgeBase kb, ClauseModel clauseModel) {
          this.clause = ClauseActionFactory.createClauseAction(kb, clauseModel);
       }
-   }
-
-   @Override
-   public boolean isRetryable() {
-      return true;
    }
 }

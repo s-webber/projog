@@ -15,11 +15,8 @@
  */
 package org.projog.core.predicate.builtin.construct;
 
-import java.util.HashMap;
-
 import org.projog.core.predicate.AbstractSingleResultPredicate;
 import org.projog.core.term.Term;
-import org.projog.core.term.Variable;
 
 /* TEST
 %?- copy_term(X, Y), X \== Y
@@ -77,7 +74,6 @@ import org.projog.core.term.Variable;
 public final class CopyTerm extends AbstractSingleResultPredicate {
    @Override
    protected boolean evaluate(Term arg1, Term arg2) {
-      Term copy = arg1.copy(new HashMap<Variable, Variable>());
-      return arg2.unify(copy);
+      return arg2.unify(arg1.copy());
    }
 }

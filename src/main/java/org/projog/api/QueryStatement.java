@@ -88,10 +88,11 @@ public final class QueryStatement {
          this.parsedInput = prologQuery;
          this.variables = EMPTY_VARIABLES;
       } else {
-         Map<Variable, Variable> sharedVariables = new HashMap<>();
+         Map<Variable, Term> sharedVariables = new HashMap<>();
          this.parsedInput = prologQuery.copy(sharedVariables);
          this.variables = new HashMap<>(sharedVariables.size());
-         for (Variable variable : sharedVariables.values()) {
+         for (Term t : sharedVariables.values()) {
+            Variable variable = (Variable) t;
             if (!variable.isAnonymous() && variables.put(variable.getId(), variable) != null) {
                throw new IllegalStateException("Duplicate variable id: " + variable.getId());
             }
@@ -313,7 +314,7 @@ public final class QueryStatement {
    public QueryResult executeQuery() {
       if (invoked) {
          throw new ProjogException("This QueryStatement has already been evaluated. "
-                     + "If you want to reuse the same query then consider using a QueryPlan. See: Projog.createPlan(String)");
+                                   + "If you want to reuse the same query then consider using a QueryPlan. See: Projog.createPlan(String)");
       }
       invoked = true;
       return new QueryResult(predicateFactory, parsedInput, variables);

@@ -195,16 +195,45 @@ public class VariableTest {
       assertSame(result, result.getBound());
    }
 
+   /** Test then when call copy on an uninstantiated variable then a new variable returned. */
    @Test
-   public void testCopy() {
+   public void testCopyUninstantiated() {
       Variable v = variable();
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = v.copy(sharedVariables);
       assertEquals(1, sharedVariables.size());
       assertSame(copy, sharedVariables.get(v));
       assertFalse(TermUtils.termsEqual(v, copy));
       assertTrue(v.unify(copy));
       assertTrue(TermUtils.termsEqual(v, copy));
+   }
+
+   /** Test then when call copy on a variable instantiated to a immutable term then the immutable is returned. */
+   @Test
+   public void testCopyInstantiatedImmutableVariable() {
+      Variable v = variable();
+      Atom a = atom();
+      v.unify(a);
+      assertSame(a, v.copy());
+      assertSame(a, v.copy(null));
+   }
+
+   /** Test then when call copy on a variable instantiated to a immutable term then the immutable is returned. */
+   @Test
+   public void testCopyInstantiatedMutableVariable() {
+      // assign variable to a structure that has a variable as its single argument
+      Variable originalTerm = variable();
+      Variable structuresArgumennt = variable();
+      Term structure = structure("test", structuresArgumennt);
+      originalTerm.unify(structure);
+
+      Map<Variable, Term> sharedVariables = new HashMap<>();
+      Term copy = originalTerm.copy(sharedVariables);
+      assertSame(TermType.STRUCTURE, copy.getType());
+      assertSame(structure.getName(), copy.getName());
+      assertEquals(1, copy.getNumberOfArguments());
+      assertEquals(TermType.VARIABLE, copy.firstArgument().getType());
+      assertSame(sharedVariables.get(structuresArgumennt), copy.firstArgument());
    }
 
    /**
@@ -215,13 +244,13 @@ public class VariableTest {
     * {@link org.projog.core.udp.interpreter.InterpretedTailRecursivePredicate} to work.
     */
    @Test
-   public void testCopy_2() {
+   public void testCopyTwoTermsUsingTheSameMap() {
       Variable v = variable();
       Atom a = atom();
       Term s1 = structure("name", v);
       Term s2 = structure("name", v);
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
 
       Term c1 = s1.copy(sharedVariables);
       assertTrue(c1.unify(structure("name", a)));
@@ -396,7 +425,17 @@ public class VariableTest {
       } catch (StackOverflowError e) {
       }
       try {
+         v.copy();
+         fail();
+      } catch (StackOverflowError e) {
+      }
+      try {
          t.copy(new HashMap<>());
+         fail();
+      } catch (StackOverflowError e) {
+      }
+      try {
+         t.copy();
          fail();
       } catch (StackOverflowError e) {
       }

@@ -214,14 +214,14 @@ public class StructureTest {
       Term original = structure(name, a, x, i, y, d, x);
 
       // make a copy
-      HashMap<Variable, Variable> sharedVariables = new HashMap<>();
+      HashMap<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = original.copy(sharedVariables);
 
       // compare copy to original
       assertEquals(2, sharedVariables.size());
-      assertEquals("X", sharedVariables.get(x).getId());
+      assertEquals("X", ((Variable) sharedVariables.get(x)).getId());
       assertNotEquals(x, sharedVariables.get(x));
-      assertEquals("Y", sharedVariables.get(y).getId());
+      assertEquals("Y", ((Variable) sharedVariables.get(y)).getId());
       assertNotEquals(y, sharedVariables.get(y));
 
       assertEquals(name, copy.getName());
@@ -242,7 +242,7 @@ public class StructureTest {
 
       assertSame(original, original.getTerm());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy1 = original.copy(sharedVariables);
       assertNotSame(original, copy1);
       assertStrictEquality(original, copy1, false);

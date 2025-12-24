@@ -16,7 +16,6 @@
 package org.projog.core.predicate.udp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -460,7 +459,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private static List<ClauseAction> optimisePredicateFactory(KnowledgeBase kb, ClauseAction[] data, Term arg) {
       List<ClauseAction> result = new ArrayList<>();
-      Term copyArg = arg.copy(new HashMap<>());
+      Term copyArg = arg.copy();
       for (ClauseAction action : data) {
          if (ClauseActionFactory.isMatch(action, copyArg)) {
             result.add(action);

@@ -70,7 +70,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
    @Override
    protected boolean matchFirstRule() {
-      final Map<Variable, Variable> sharedVariables = new HashMap<>();
+      final Map<Variable, Term> sharedVariables = new HashMap<>();
       final Term[] newConsequentArgs = new Term[numArgs];
       for (int i = 0; i < numArgs; i++) {
          newConsequentArgs[i] = firstClauseConsequentArgs[i].copy(sharedVariables);
@@ -92,7 +92,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
 
    @Override
    protected boolean matchSecondRule() {
-      final Map<Variable, Variable> sharedVariables = new HashMap<>();
+      final Map<Variable, Term> sharedVariables = new HashMap<>();
       final Term[] newConsequentArgs = new Term[numArgs];
       for (int i = 0; i < numArgs; i++) {
          newConsequentArgs[i] = secondClauseConsequentArgs[i].copy(sharedVariables);

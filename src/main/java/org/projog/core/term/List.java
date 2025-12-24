@@ -109,7 +109,7 @@ public final class List implements Term {
    }
 
    @Override
-   public List copy(Map<Variable, Variable> sharedVariables) {
+   public List copy(Map<Variable, Term> sharedVariables) {
       return traverse(t -> t.copy(sharedVariables));
    }
 

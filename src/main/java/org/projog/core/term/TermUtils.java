@@ -51,7 +51,7 @@ public final class TermUtils {
    public static Term[] copy(final Term... input) {
       final int numTerms = input.length;
       final Term[] output = new Term[numTerms];
-      final Map<Variable, Variable> vars = new HashMap<>();
+      final Map<Variable, Term> vars = new HashMap<>();
       for (int i = 0; i < numTerms; i++) {
          output[i] = input[i].copy(vars);
       }

@@ -46,10 +46,10 @@ public class NotTest {
       Term term = parseTerm("not((X=4, X<3)).");
       Not n = (Not) kb.getPredicates().getPredicateFactory(term);
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
       assertSame(PredicateUtils.TRUE, n.getPredicate(copy));
-      Variable variable = sharedVariables.values().iterator().next();
+      Variable variable = (Variable) sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());
       assertEquals(TermType.VARIABLE, variable.getType());

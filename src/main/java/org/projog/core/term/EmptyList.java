@@ -45,7 +45,7 @@ public final class EmptyList implements Term {
    }
 
    @Override
-   public Term copy(Map<Variable, Variable> sharedVariables) {
+   public Term copy(Map<Variable, Term> sharedVariables) {
       return EMPTY_LIST;
    }
 

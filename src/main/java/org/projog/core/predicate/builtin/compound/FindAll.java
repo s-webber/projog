@@ -16,7 +16,6 @@
 package org.projog.core.predicate.builtin.compound;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.projog.core.kb.KnowledgeBase;
@@ -27,7 +26,6 @@ import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.ListFactory;
 import org.projog.core.term.Term;
-import org.projog.core.term.Variable;
 
 /* TEST
 z(r).
@@ -123,7 +121,7 @@ public final class FindAll implements PredicateFactory {
    private static Term createListOfAllSolutions(Term template, final Predicate predicate) {
       final List<Term> solutions = new ArrayList<>();
       do {
-         solutions.add(template.copy(new HashMap<Variable, Variable>()));
+         solutions.add(template.copy());
       } while (hasFoundAnotherSolution(predicate));
       final Term output = ListFactory.createList(solutions);
       output.backtrack();

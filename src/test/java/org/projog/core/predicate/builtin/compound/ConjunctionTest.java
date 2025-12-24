@@ -93,10 +93,10 @@ public class ConjunctionTest {
       assertSame(Conjunction.class, optimised.getClass());
       assertFalse(optimised.isRetryable());
       assertFalse(optimised.isAlwaysCutOnBacktrack());
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = term.copy(sharedVariables);
       assertSame(PredicateUtils.TRUE, optimised.getPredicate(copy));
-      Variable variable = sharedVariables.values().iterator().next();
+      Variable variable = (Variable) sharedVariables.values().iterator().next();
       // confirm the backtrack implemented by Not did not unassign X
       assertEquals("X", variable.getId());
       assertEquals(new IntegerNumber(6), variable.getTerm());

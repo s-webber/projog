@@ -37,7 +37,7 @@ final class ClauseActionFactory {
     * TODO move to another class, e.g. ClauseAction
     */
    static boolean isMatch(ClauseAction clause, Term queryTerm) {
-      Term clauseTerm = clause.getModel().getConsequent().copy(new HashMap<>());
+      Term clauseTerm = clause.getModel().getConsequent().copy();
       boolean match = queryTerm.unify(clauseTerm);
       queryTerm.backtrack();
       return match;
@@ -111,7 +111,7 @@ final class ClauseActionFactory {
       @Override
       public Predicate getPredicate(Term input) {
          Term consequent = model.getConsequent();
-         Map<Variable, Variable> sharedVariables = new HashMap<>();
+         Map<Variable, Term> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
             if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;
@@ -187,12 +187,7 @@ final class ClauseActionFactory {
 
       @Override
       public Predicate getPredicate(Term input) {
-         Term antecedent = model.getAntecedent();
-         if (antecedent.isImmutable()) {
-            return pf.getPredicate(antecedent);
-         } else {
-            return pf.getPredicate(antecedent.copy(new HashMap<>()));
-         }
+         return pf.getPredicate(model.getAntecedent().copy());
       }
 
       @Override
@@ -268,12 +263,7 @@ final class ClauseActionFactory {
             return PredicateUtils.FALSE;
          }
 
-         Term antecedent = model.getAntecedent();
-         if (antecedent.isImmutable()) {
-            return pf.getPredicate(antecedent);
-         } else {
-            return pf.getPredicate(antecedent.copy(new HashMap<>()));
-         }
+         return pf.getPredicate(model.getAntecedent().copy());
       }
 
       @Override
@@ -308,7 +298,7 @@ final class ClauseActionFactory {
       public Predicate getPredicate(Term input) {
          // TODO would be a performance improvement if no clause variable is created unless is a shared variable
          Term consequent = model.getConsequent();
-         Map<Variable, Variable> sharedVariables = new HashMap<>();
+         Map<Variable, Term> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
             if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;
@@ -351,7 +341,7 @@ final class ClauseActionFactory {
       @Override
       public Predicate getPredicate(Term input) {
          Term consequent = model.getConsequent();
-         Map<Variable, Variable> sharedVariables = new HashMap<>();
+         Map<Variable, Term> sharedVariables = new HashMap<>();
          for (int i = 0; i < input.getNumberOfArguments(); i++) {
             if (!input.getArgument(i).unify(consequent.getArgument(i).copy(sharedVariables))) {
                return PredicateUtils.FALSE;

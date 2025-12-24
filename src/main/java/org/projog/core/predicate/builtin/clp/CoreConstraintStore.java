@@ -94,7 +94,7 @@ final class CoreConstraintStore implements ConstraintStore {
    // TODO can this be more efficient? copying ClpVariable every time and backtracking on failure
    private ExpressionResult update(Expression id, Function<VariableState, VariableStateResult> f) {
       ClpVariable original = ((ClpVariable) id).getTerm();
-      ClpVariable copy = original.copy();
+      ClpVariable copy = original.createChild();
       VariableStateResult r = f.apply(copy.getState());
       if (r == VariableStateResult.UPDATED) {
          addConstraints(copy);

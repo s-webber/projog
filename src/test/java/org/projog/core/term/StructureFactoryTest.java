@@ -737,7 +737,7 @@ public class StructureFactoryTest {
             assertSame(mutableStructure, mutableStructure.getTerm());
 
             // test copy behaviour with uninstantiated variable as argument of structure
-            Map<Variable, Variable> sharedVariables = new HashMap<>();
+            Map<Variable, Term> sharedVariables = new HashMap<>();
             Term copy = mutableStructure.copy(sharedVariables);
             assertNotSame(mutableStructure, copy);
             assertSame(mutableStructure.getClass(), copy.getClass());

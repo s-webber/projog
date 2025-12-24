@@ -269,7 +269,7 @@ public final class Dif extends AbstractSingleResultPredicate {
       }
    }
 
-   private static final class MyMap implements Map<Variable, Variable> {
+   private static final class MyMap implements Map<Variable, Term> {
       Set<Variable> variables = new HashSet<>();
 
       @Override
@@ -300,7 +300,7 @@ public final class Dif extends AbstractSingleResultPredicate {
       }
 
       @Override
-      public Variable put(Variable key, Variable value) {
+      public Variable put(Variable key, Term value) {
          throw new UnsupportedOperationException();
       }
 
@@ -310,7 +310,7 @@ public final class Dif extends AbstractSingleResultPredicate {
       }
 
       @Override
-      public void putAll(Map<? extends Variable, ? extends Variable> m) {
+      public void putAll(Map<? extends Variable, ? extends Term> m) {
          throw new UnsupportedOperationException();
       }
 
@@ -325,12 +325,12 @@ public final class Dif extends AbstractSingleResultPredicate {
       }
 
       @Override
-      public Collection<Variable> values() {
+      public Collection<Term> values() {
          throw new UnsupportedOperationException();
       }
 
       @Override
-      public Set<Map.Entry<Variable, Variable>> entrySet() {
+      public Set<Map.Entry<Variable, Term>> entrySet() {
          throw new UnsupportedOperationException();
       }
    }

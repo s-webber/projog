@@ -71,7 +71,7 @@ public final class Atom implements Term {
    }
 
    @Override
-   public Atom copy(Map<Variable, Variable> sharedVariables) {
+   public Atom copy(Map<Variable, Term> sharedVariables) {
       return this;
    }
 

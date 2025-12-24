@@ -78,7 +78,7 @@ public final class IntegerNumber implements Numeric {
    }
 
    @Override
-   public IntegerNumber copy(Map<Variable, Variable> sharedVariables) {
+   public IntegerNumber copy(Map<Variable, Term> sharedVariables) {
       return this;
    }
 

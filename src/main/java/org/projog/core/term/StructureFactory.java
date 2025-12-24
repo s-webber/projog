@@ -101,7 +101,7 @@ public final class StructureFactory {
       }
 
       @Override
-      public SingleArgumentStructure copy(Map<Variable, Variable> sharedVariables) {
+      public SingleArgumentStructure copy(Map<Variable, Term> sharedVariables) {
          if (argument.isImmutable()) {
             return this;
          }
@@ -226,7 +226,7 @@ public final class StructureFactory {
       }
 
       @Override
-      public TwoArgumentStructure copy(Map<Variable, Variable> sharedVariables) {
+      public TwoArgumentStructure copy(Map<Variable, Term> sharedVariables) {
          if (isImmutable) {
             return this;
          }
@@ -363,7 +363,7 @@ public final class StructureFactory {
       }
 
       @Override
-      public ThreeArgumentStructure copy(Map<Variable, Variable> sharedVariables) {
+      public ThreeArgumentStructure copy(Map<Variable, Term> sharedVariables) {
          if (isImmutable) {
             return this;
          }
@@ -512,7 +512,7 @@ public final class StructureFactory {
       }
 
       @Override
-      public FourArgumentStructure copy(Map<Variable, Variable> sharedVariables) {
+      public FourArgumentStructure copy(Map<Variable, Term> sharedVariables) {
          if (isImmutable) {
             return this;
          }
@@ -664,7 +664,7 @@ public final class StructureFactory {
       }
 
       @Override
-      public MultipleArgumentStructure copy(Map<Variable, Variable> sharedVariables) {
+      public MultipleArgumentStructure copy(Map<Variable, Term> sharedVariables) {
          if (immutable) {
             return this;
          } else {

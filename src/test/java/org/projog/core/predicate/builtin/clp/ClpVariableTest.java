@@ -1001,7 +1001,7 @@ public class ClpVariableTest {
    }
 
    @Test
-   public void testCopy_no_bitset() {
+   public void testCreateChild_no_bitset() {
       CoreConstraintStore e = new CoreConstraintStore();
       Constraint c1 = mock(Constraint.class);
       Constraint c2 = mock(Constraint.class);
@@ -1012,7 +1012,7 @@ public class ClpVariableTest {
       original.setMax(e, 12);
       original = original.getTerm();
 
-      ClpVariable copy = original.copy();
+      ClpVariable copy = original.createChild();
       assertNotSame(copy, original);
       assertSame(copy, original.getTerm());
 
@@ -1034,7 +1034,7 @@ public class ClpVariableTest {
    }
 
    @Test
-   public void testCopy_bitset() {
+   public void testCreateChild_bitset() {
       CoreConstraintStore e = new CoreConstraintStore();
       Constraint c1 = mock(Constraint.class);
       Constraint c2 = mock(Constraint.class);
@@ -1046,7 +1046,7 @@ public class ClpVariableTest {
       original.setNot(e, 12);
       original = original.getTerm();
 
-      ClpVariable copy = original.copy();
+      ClpVariable copy = original.createChild();
       assertNotSame(copy, original);
       assertSame(copy, original.getTerm());
 
@@ -1077,12 +1077,19 @@ public class ClpVariableTest {
       } catch (ProjogException e) {
          assertEquals("CLP_VARIABLE does not support copy, so is not suitable for use in this scenario", e.getMessage());
       }
+      try {
+         v.copy();
+         fail();
+      } catch (ProjogException e) {
+         assertEquals("CLP_VARIABLE does not support copy, so is not suitable for use in this scenario", e.getMessage());
+      }
 
       CoreConstraintStore e = new CoreConstraintStore();
       v.setMin(e, 8);
       v.setMax(e, 8);
 
       assertSame(v.getTerm(), v.copy(new HashMap<>()));
+      assertSame(v.getTerm(), v.copy());
    }
 
    @Test

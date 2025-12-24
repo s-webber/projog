@@ -76,11 +76,12 @@ public class IsTest {
       PredicateFactory optimised = is.preprocess(isTerm);
       assertSame(Is.class, optimised.getClass());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = isTerm.copy(sharedVariables);
       Variable f = null;
       Variable c = null;
-      for (Variable v : sharedVariables.values()) {
+      for (Term t : sharedVariables.values()) {
+         Variable v = (Variable) t;
          if ("F".equals(v.getId())) {
             f = v;
          } else if ("C".equals(v.getId())) {
@@ -114,11 +115,12 @@ public class IsTest {
       PredicateFactory optimised = is.preprocess(isTerm);
       assertSame(Is.class, optimised.getClass());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = isTerm.copy(sharedVariables);
       Variable x = null;
       Variable y = null;
-      for (Variable v : sharedVariables.values()) {
+      for (Term t : sharedVariables.values()) {
+         Variable v = (Variable) t;
          if ("X".equals(v.getId())) {
             x = v;
          } else if ("Y".equals(v.getId())) {
@@ -140,11 +142,12 @@ public class IsTest {
       Is is = (Is) kb.getPredicates().getPredicateFactory(isTerm);
       PredicateFactory optimised = is.preprocess(isTerm);
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       Term copy = isTerm.copy(sharedVariables);
       Variable f = null;
       Variable c = null;
-      for (Variable v : sharedVariables.values()) {
+      for (Term t : sharedVariables.values()) {
+         Variable v = (Variable) t;
          if ("F".equals(v.getId())) {
             f = v;
          } else if ("C".equals(v.getId())) {

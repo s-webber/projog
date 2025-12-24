@@ -15,6 +15,7 @@
  */
 package org.projog.core.term;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -84,7 +85,15 @@ public interface Term {
     * value = version used in copy)
     * @return a copy of this term
     */
-   Term copy(Map<Variable, Variable> sharedVariables);
+   Term copy(Map<Variable, Term> sharedVariables);
+
+   default Term copy() {
+      if (isImmutable()) {
+         return this;
+      } else {
+         return copy(new HashMap<>());
+      }
+   }
 
    /**
     * Returns the term this object is bound to.

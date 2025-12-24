@@ -23,7 +23,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.Set;
 
 import org.projog.api.Projog;
@@ -39,6 +38,9 @@ import org.projog.core.predicate.udp.StaticUserDefinedPredicateFactory;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
+/**
+ * Used to confirm that built-in predicate (written in Java) has same behaviour as equivalent version written in Prolog.
+ */
 final class ListPredicateAssert {
    private final String builtInPredicateName;
    private final String userDefinedPredicateName;
@@ -136,7 +138,7 @@ final class ListPredicateAssert {
    }
 
    private Term numberVariables(Term t) {
-      Term copy = t.copy(new HashMap<>());
+      Term copy = t.copy();
       new NumberVars().getPredicate(StructureFactory.createStructure("numbervars", new Term[] {copy}));
       return copy.getTerm();
    }

@@ -82,7 +82,7 @@ final class ClpVariable implements Numeric, LeafExpression {
       return getTerm().state;
    }
 
-   public ClpVariable copy() {
+   public ClpVariable createChild() {
       if (child != null) {
          throw new IllegalStateException();
       }
@@ -117,7 +117,7 @@ final class ClpVariable implements Numeric, LeafExpression {
    }
 
    @Override
-   public ClpVariable copy(Map<Variable, Variable> sharedVariables) {
+   public ClpVariable copy(Map<Variable, Term> sharedVariables) {
       ClpVariable t = getTerm();
       if (t.isImmutable()) {
          return t;
@@ -181,7 +181,7 @@ final class ClpVariable implements Numeric, LeafExpression {
 
    private boolean unifyLong(Term t) {
       long value = castToNumeric(t).getLong();
-      ClpVariable copy = copy();
+      ClpVariable copy = createChild();
       CoreConstraintStore environment = new CoreConstraintStore();
       if (copy.setMin(environment, value) == ExpressionResult.INVALID || copy.setMax(environment, value) == ExpressionResult.INVALID) {
          return false;

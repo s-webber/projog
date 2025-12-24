@@ -74,7 +74,7 @@ public final class DecimalFraction implements Numeric {
    }
 
    @Override
-   public DecimalFraction copy(Map<Variable, Variable> sharedVariables) {
+   public DecimalFraction copy(Map<Variable, Term> sharedVariables) {
       return this;
    }
 

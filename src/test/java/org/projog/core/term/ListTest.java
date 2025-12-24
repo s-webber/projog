@@ -171,6 +171,7 @@ public class ListTest {
    public void testCopyNoVariableElements() {
       List testList = new List(new Atom("a"), new Atom("b"));
       assertSame(testList, testList.copy(null));
+      assertSame(testList, testList.copy());
    }
 
    @Test
@@ -185,7 +186,7 @@ public class ListTest {
 
       assertSame(original, original.getTerm());
 
-      Map<Variable, Variable> sharedVariables = new HashMap<>();
+      Map<Variable, Term> sharedVariables = new HashMap<>();
       List copy1 = original.copy(sharedVariables);
       assertNotSame(original, copy1);
       assertStrictEquality(original, copy1, false);
@@ -202,6 +203,7 @@ public class ListTest {
       assertStrictEquality(original, copy2, true);
       assertEquals(original.toString(), copy2.toString());
       assertSame(copy2, copy2.copy(null));
+      assertSame(copy2, copy2.copy());
       assertSame(copy2, copy2.getTerm());
 
       X.backtrack();
@@ -224,7 +226,7 @@ public class ListTest {
       List sublist = ListFactory.createList(y, z);
       List originalList = ListFactory.createList(x, sublist);
 
-      Map<Variable, Variable> variables = new HashMap<>();
+      Map<Variable, Term> variables = new HashMap<>();
       List newList = originalList.copy(variables);
       assertNotSame(originalList, newList);
       assertSame(variables.get(x), newList.firstArgument());
@@ -274,7 +276,7 @@ public class ListTest {
       List sublist = ListFactory.createList(a, b);
       List originalList = ListFactory.createList(x, sublist);
 
-      Map<Variable, Variable> variables = new HashMap<>();
+      Map<Variable, Term> variables = new HashMap<>();
       List newList = originalList.copy(variables);
       assertSame(variables.get(x), newList.firstArgument());
       assertSame(sublist, newList.secondArgument());

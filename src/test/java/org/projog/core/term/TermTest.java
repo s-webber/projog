@@ -109,7 +109,9 @@ public class TermTest {
    @Test
    public void testCopy() {
       for (Term t1 : IMMUTABLE_TERMS) {
-         Map<Variable, Variable> sharedVariables = new HashMap<>();
+         assertSame(t1, t1.copy());
+
+         Map<Variable, Term> sharedVariables = new HashMap<>();
          Term t2 = t1.copy(sharedVariables);
          assertSame(t1, t2);
          assertTrue(sharedVariables.isEmpty());

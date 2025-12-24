@@ -251,9 +251,9 @@ public final class Variable implements Term {
    }
 
    @Override
-   public Term copy(Map<Variable, Variable> sharedVariables) {
+   public Term copy(Map<Variable, Term> sharedVariables) {
       if (value == null) {
-         Variable result = sharedVariables.get(this);
+         Term result = sharedVariables.get(this);
          if (result == null) {
             result = new Variable(id, attributes);
             sharedVariables.put(this, result);

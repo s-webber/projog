@@ -16,7 +16,6 @@
 package org.projog.core.event;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -173,7 +172,7 @@ public final class SpyPoints {
 
       private SpyPointEvent(PredicateKey key, Term term, Object source) {
          this.key = key;
-         this.term = term.isImmutable() ? term : term.copy(new HashMap<>());
+         this.term = term.copy();
          this.source = source;
       }
 

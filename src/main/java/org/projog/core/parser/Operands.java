@@ -94,19 +94,31 @@ public final class Operands {
       throw new ProjogException("Do not support associativity: " + a);
    }
 
+   public Operand getInfixOperand(String op) {
+      return infixOperands.get(op);
+   }
+
+   public Operand getPrefixOperand(String op) {
+      return prefixOperands.get(op);
+   }
+
+   public Operand getPostfixOperand(String op) {
+      return postfixOperands.get(op);
+   }
+
    /** Returns the priority (precedence/level) of the infix operator represented by {@code op}. */
    public int getInfixPriority(String op) {
-      return infixOperands.get(op).precedence;
+      return getInfixOperand(op).precedence;
    }
 
    /** Returns the priority (precedence/level) of the prefix operator represented by {@code op}. */
    public int getPrefixPriority(String op) {
-      return prefixOperands.get(op).precedence;
+      return getPrefixOperand(op).precedence;
    }
 
    /** Returns the priority (precedence/level) of the postfix operator represented by {@code op}. */
    public int getPostfixPriority(String op) {
-      return postfixOperands.get(op).precedence;
+      return getPostfixOperand(op).precedence;
    }
 
    /**
@@ -191,7 +203,7 @@ public final class Operands {
       return infix(commandName) || prefix(commandName) || postfix(commandName);
    }
 
-   private static class Operand {
+   public static final class Operand {
       final Associativity associativity;
 
       final int precedence;
@@ -199,6 +211,46 @@ public final class Operands {
       Operand(Associativity associativity, int precedence) {
          this.associativity = associativity;
          this.precedence = precedence;
+      }
+
+      public boolean isInfix() {
+         return associativity.location == Location.INFIX;
+      }
+
+      public boolean isPrefix() {
+         return associativity.location == Location.PREFIX;
+      }
+
+      public boolean isPostfix() {
+         return associativity.location == Location.POSTFIX;
+      }
+
+      public boolean xfx() {
+         return associativity == Associativity.xfx;
+      }
+
+      public boolean xfy() {
+         return associativity == Associativity.xfy;
+      }
+
+      public boolean yfx() {
+         return associativity == Associativity.yfx;
+      }
+
+      public boolean fx() {
+         return associativity == Associativity.fx;
+      }
+
+      public boolean fy() {
+         return associativity == Associativity.fy;
+      }
+
+      public boolean xf() {
+         return associativity == Associativity.xf;
+      }
+
+      public boolean yf() {
+         return associativity == Associativity.yf;
       }
    }
 

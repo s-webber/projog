@@ -258,27 +258,22 @@
 ?- pj_add_arithmetic_operator(min/2, 'org.projog.core.math.builtin.Min').
 ?- pj_add_arithmetic_operator(abs/1, 'org.projog.core.math.builtin.Abs').
 
-% definite clause grammers (DCG)
-?- op(1200, xfx, '-->').
-?- op(901, fx, '{').
-?- op(900, xf, '}').
-
 % operators
 ?- op(1200, xfx, ':-').
 ?- op(1200, fx, ':-').
-?- op(1100, fx, dynamic).
+?- op(1150, fx, dynamic).
 ?- op(1100, xfy, ';').
 ?- op(1050, xfy, '->').
 ?- op(1000, xfy, ',').
 ?- op(900, fy, '\\+').
-?- op(700, xfx, '=').
-?- op(700, xfx, '==').
-?- op(700, xfx, '=:=').
-?- op(700, xfx, '=\\=').
-?- op(700, xfx, '=..').
 ?- op(700, xfx, '<').
-?- op(700, xfx, '>').
+?- op(700, xfx, '=').
+?- op(700, xfx, '=..').
+?- op(700, xfx, '=:=').
 ?- op(700, xfx, '=<').
+?- op(700, xfx, '==').
+?- op(700, xfx, '=\\=').
+?- op(700, xfx, '>').
 ?- op(700, xfx, '>=').
 ?- op(700, xfx, '@<').
 ?- op(700, xfx, '@=<').
@@ -287,6 +282,30 @@
 ?- op(700, xfx, '\\=').
 ?- op(700, xfx, '\\==').
 ?- op(700, xfx, is).
+?- op(600, xfy, ':').
+?- op(500, yfx, '+').
+?- op(500, yfx, '-').
+?- op(500, yfx, '/\\').
+?- op(500, yfx, '\\/').
+?- op(400, yfx, '*').
+?- op(400, yfx, '//').
+?- op(400, yfx, '<<').
+?- op(400, yfx, '>>').
+?- op(400, yfx, mod).
+?- op(400, yfx, rem).
+?- op(400, yfx, xor).
+?- op(200, xfx, '**').
+?- op(200, xfy, '^').
+?- op(200, fy, '-').
+
+% constraint logic programming (CLP) operators
+?- op(760, yfx, '#<==>').
+?- op(750, xfy, '#==>').
+?- op(750, xfy, '#<==').
+?- op(740, yfx, '#\\/').
+?- op(730, xfy, '#\\').
+?- op(720, yfx, '#/\\').
+?- op(710, fy, '#\\').
 ?- op(700, xfx, in).
 ?- op(700, xfx, ins).
 ?- op(700, xfx, '#=').
@@ -295,26 +314,9 @@
 ?- op(700, xfx, '#>').
 ?- op(700, xfx, '#=<').
 ?- op(700, xfx, '#>=').
-?- op(760, yfx, '#<==>').
-?- op(750, xfy, '#==>').
-?- op(750, xfy, '#<==').
-?- op(720, yfx, '#/\\').
-?- op(740, yfx, '#\\/').
-?- op(730, xfy, '#\\').
-?- op(710, fy, '#\\').
-?- op(600, xfy, '..').
-?- op(600, xfy, ':').
-?- op(500, yfx, '+').
-?- op(500, yfx, '-').
-?- op(400, yfx, '*').
-?- op(400, yfx, '**').
-?- op(400, yfx, '^').
-?- op(400, yfx, '//').
-?- op(400, yfx, mod).
-?- op(400, yfx, rem).
-?- op(400, yfx, '/\\').
-?- op(400, yfx, '\\/').
-?- op(400, yfx, xor).
-?- op(400, yfx, '<<').
-?- op(400, yfx, '>>').
-?- op(200, fy, '-').
+?- op(450, xfx, '..').
+
+% definite clause grammers (DCG) operators
+?- op(1200, xfx, '-->').
+?- op(901, fx, '{').
+?- op(900, xf, '}').

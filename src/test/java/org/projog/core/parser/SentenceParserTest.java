@@ -89,6 +89,7 @@ public class SentenceParserTest {
       error(":- X = 1 + 2 + 3 + 4 = 5.");
       error("a ?- b.");
       error("?- a ?- b.");
+      error(":- ?- X.");
       error("?- :- X.");
       error("?- ?- true.");
    }
@@ -394,6 +395,18 @@ public class SentenceParserTest {
       assertFalse(sp.hasNext());
       assertNull(sp.parseSentence());
       assertFalse(sp.hasNext());
+   }
+
+   @Test
+   public void testParseMinusSignPrefix() {
+      check("-2", "-2");
+      check("- 2", "-(2)");
+      check("-X", "-(X)");
+      check("- X", "-(X)");
+      check("-2 ** Y", "**(-2, Y)");
+      check("- 2 ** Y", "-(**(2, Y))");
+      check("- X ** Y", "-(**(X, Y))");
+      check("-X ** Y", "-(**(X, Y))");
    }
 
    private void checkEquation(String input, String expected) {

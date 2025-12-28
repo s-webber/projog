@@ -179,8 +179,8 @@ public class TokenParserTest {
 
    @Test
    public void testSequence() {
-      assertParse("Abc12.5@>=-0_2_jgkj a-2hUY_ty\nu\n% kghjgkj\na/*b*/c 0'zyz 0' 0'\u00610'\u0062345", "Abc12", ".", "5", "@>=", "-", "0", "_2_jgkj", "a", "-", "2", "hUY_ty", "u",
-                  "a", "c", "122", "yz", "32", "97", "98", "345");
+      assertParse("Abc12.5@>=-0_2_jgkj -X a-2hUY_ty\nu\n% kghjgkj\na/*b*/c 0'zyz 0' 0'\u00610'\u0062345-->", "Abc12", ".", "5", "@>=", "-", "0", "_2_jgkj", "-", "X", "a", "-", "2",
+                  "hUY_ty", "u", "a", "c", "122", "yz", "32", "97", "98", "345", "-->");
    }
 
    @Test

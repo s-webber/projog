@@ -57,16 +57,12 @@ public class SentenceParserOperatorPrecedenceTest {
    @DataProvider({
                "1 xfx100 2 xfx100 3.",
                "1 xfx100 2 xfy100 3.",
-               "1 xfx100 2 yfx100 3.",
-               "1 xfy100 2 xfx100 3.",
                "1 yfx100 2 xfx100 3.",
                "1 yfx100 2 xfy100 3.",
                "fx100 1 xfx100 2.",
                "fx100 1 xfy100 2.",
-               "fy100 1 xfx100 2.",
                "1 xfx100 2 xf100.",
                "1 yfx100 2 xf100.",
-               "1 xfx100 2 yf100.",
                "fx100 fx100 1.",
                "fx100 fy100 1.",
                "1 xf100 xf100.",
@@ -109,17 +105,18 @@ public class SentenceParserOperatorPrecedenceTest {
                "fx200 1 xfx100 2. OUTPUTS fx200(xfx100(1, 2))",
                "1 xfx200 2 xf100. OUTPUTS xfx200(1, xf100(2))",
                "1 xfx100 2 xf200. OUTPUTS xf200(xfx100(1, 2))",
+               "1 xfx100 2 yfx100 3. OUTPUTS yfx100(xfx100(1, 2), 3)",
+               "fy100 1 xfx100 2. OUTPUTS fy100(xfx100(1, 2))",
+               "1 xfx100 2 yf100. OUTPUTS yf100(xfx100(1, 2))",
+               "1 xfy100 2 xfx100 3. OUTPUTS xfy100(1, xfx100(2, 3))",
                // testcases from testOperatorPriorityClash with brackets added to make valid:
                "(1 xfx100 2) xfx100 3. OUTPUTS xfx100(xfx100(1, 2), 3)",
                "(1 xfx100 2) xfy100 3. OUTPUTS xfy100(xfx100(1, 2), 3)",
-               "(1 xfx100 2) yfx100 3. OUTPUTS yfx100(xfx100(1, 2), 3)",
-               "(1 xfy100 2) xfx100 3. OUTPUTS xfx100(xfy100(1, 2), 3)",
                "(1 yfx100 2) xfx100 3. OUTPUTS xfx100(yfx100(1, 2), 3)",
                "(1 yfx100 2) xfy100 3. OUTPUTS xfy100(yfx100(1, 2), 3)",
                "1 xfx100 (2 xfx100 3). OUTPUTS xfx100(1, xfx100(2, 3))",
                "1 xfx100 (2 xfy100 3). OUTPUTS xfx100(1, xfy100(2, 3))",
                "1 xfx100 (2 yfx100 3). OUTPUTS xfx100(1, yfx100(2, 3))",
-               "1 xfy100 (2 xfx100 3). OUTPUTS xfy100(1, xfx100(2, 3))",
                "1 yfx100 (2 xfx100 3). OUTPUTS yfx100(1, xfx100(2, 3))",
                "1 yfx100 (2 xfy100 3). OUTPUTS yfx100(1, xfy100(2, 3))",
                "(fx100 1) xfx100 2. OUTPUTS xfx100(fx100(1), 2)",
@@ -136,10 +133,8 @@ public class SentenceParserOperatorPrecedenceTest {
                "(1 yf100) xf100. OUTPUTS xf100(yf100(1))",
                "(fx100 1) xf100. OUTPUTS xf100(fx100(1))",
                "fx100 (1 xf100). OUTPUTS fx100(xf100(1))",
-               "fy100 (1 xfx100 2). OUTPUTS fy100(xfx100(1, 2))",
                "(fy100 1) xfx100 2. OUTPUTS xfx100(fy100(1), 2)",
-               "1 xfx100 (2 yf100). OUTPUTS xfx100(1, yf100(2))",
-               "(1 xfx100 2) yf100. OUTPUTS yf100(xfx100(1, 2))"})
+               "1 xfx100 (2 yf100). OUTPUTS xfx100(1, yf100(2))"})
    public void testParsedSuccessfully(String input, String expected) {
       Term t = SentenceParser.getInstance(input, OPERANDS).parseSentence();
       assertEquals(expected, t.toString());

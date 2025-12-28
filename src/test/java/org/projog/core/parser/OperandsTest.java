@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,8 @@ package org.projog.core.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -25,7 +27,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;
-import org.projog.core.parser.Operands;
+import org.projog.core.parser.Operands.Operand;
 
 public class OperandsTest {
    private static final String[] ASSOCIATIVITES = {"fx", "fy", "xfx", "xfy", "yfx", "xf", "yf"};
@@ -100,23 +102,40 @@ public class OperandsTest {
       assertEquals(t.xf(), o.xf(t.name));
       assertEquals(t.yf(), o.yf(t.name));
 
-      try {
+      if (t.prefix()) {
+         Operand prefixOperand = o.getPrefixOperand(t.name);
+         assertTrue(prefixOperand.isPrefix());
+         assertFalse(prefixOperand.isInfix());
+         assertFalse(prefixOperand.isPostfix());
+         assertEquals(t.priority, prefixOperand.precedence);
          assertEquals(t.priority, o.getPrefixPriority(t.name));
-         assertTrue(t.prefix());
-      } catch (NullPointerException e) {
-         assertFalse(t.prefix());
+      } else {
+         assertNull(o.getPrefixOperand(t.name));
+         assertThrows(NullPointerException.class, () -> o.getPrefixPriority(t.name));
       }
-      try {
+
+      if (t.infix()) {
+         Operand infixOperand = o.getInfixOperand(t.name);
+         assertTrue(infixOperand.isInfix());
+         assertFalse(infixOperand.isPrefix());
+         assertFalse(infixOperand.isPostfix());
+         assertEquals(t.priority, infixOperand.precedence);
          assertEquals(t.priority, o.getInfixPriority(t.name));
-         assertTrue(t.infix());
-      } catch (NullPointerException e) {
-         assertFalse(t.infix());
+      } else {
+         assertNull(o.getInfixOperand(t.name));
+         assertThrows(NullPointerException.class, () -> o.getInfixPriority(t.name));
       }
-      try {
+
+      if (t.postfix()) {
+         Operand postfixOperand = o.getPostfixOperand(t.name);
+         assertTrue(postfixOperand.isPostfix());
+         assertFalse(postfixOperand.isPrefix());
+         assertFalse(postfixOperand.isInfix());
+         assertEquals(t.priority, postfixOperand.precedence);
          assertEquals(t.priority, o.getPostfixPriority(t.name));
-         assertTrue(t.postfix());
-      } catch (NullPointerException e) {
-         assertFalse(t.postfix());
+      } else {
+         assertNull(o.getPostfixOperand(t.name));
+         assertThrows(NullPointerException.class, () -> o.getPostfixPriority(t.name));
       }
    }
 

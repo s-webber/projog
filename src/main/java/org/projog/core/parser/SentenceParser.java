@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.projog.core.parser.Operands.Operand;
 import org.projog.core.term.Atom;
 import org.projog.core.term.DecimalFraction;
 import org.projog.core.term.EmptyList;
@@ -322,56 +323,75 @@ public class SentenceParser {
          return tokens[startIdx];
       }
 
-      int maxPriority = -1;
+      Operand maxPriorityOperand = null;
       int maxPriorityIdx = startIdx;
 
       // find the token which represents an operand with the highest priority
       for (int i = startIdx; i < endIdx; i++) {
          Token next = tokens[i];
 
-         if (next.getType().isPossibleOperand()) {
-            int priority = -1;
+         Operand nextOperand = null;
+         boolean foundNewNax = false;
 
-            if ("-".equals(next.getName()) && maxPriorityIdx > startIdx && maxPriorityIdx == i - 1) {
+         if (next.getType().isPossibleOperand()) {
+            boolean startsWithPossibleNegativeNumber = isPossibleNegativeNumber(tokens, i);
+            if (startsWithPossibleNegativeNumber) {
+               if (startIdx == endIdx - 2) {
+                  return new Token(NEGATIVE_SIGN + tokens[i + 1].getName(), tokens[i + 1].getType(), new Token[0]);
+               }
+            }
+
+            if (startsWithPossibleNegativeNumber && maxPriorityIdx > startIdx && maxPriorityIdx == i - 1) {
                // e.g. 1 + -2.
             } else if (i == startIdx) {
-               if (operands.prefix(next.getName())) {
-                  priority = operands.getPrefixPriority(next.getName());
+               if (operands.prefix(next.getName()) && !startsWithPossibleNegativeNumber) {
+                  nextOperand = operands.getPrefixOperand(next.getName());
                }
             } else if (i == endIdx - 1) {
                if (operands.postfix(next.getName())) {
-                  priority = operands.getPostfixPriority(next.getName());
+                  nextOperand = operands.getPostfixOperand(next.getName());
                }
             } else if (operands.infix(next.getName())) {
-               priority = operands.getInfixPriority(next.getName());
+               nextOperand = operands.getInfixOperand(next.getName());
             }
 
-            if (priority > maxPriority
-                || (priority == maxPriority
-                    && ((i > startIdx
-                         && i < endIdx - 1
-                         && ((operands.yfx(next.getName()) || (operands.xfx(next.getName())) && (maxPriorityIdx != startIdx || !operands.fx(tokens[startIdx].getName())))))
-                        || (i == endIdx - 1 && operands.yf(next.getName()))))) {
-               maxPriority = priority;
-               maxPriorityIdx = i;
+            if (nextOperand == null) {
+               // skip
+            } else if (maxPriorityOperand == null || nextOperand.precedence > maxPriorityOperand.precedence) {
+               foundNewNax = true;
+            } else if (nextOperand.precedence < maxPriorityOperand.precedence) {
+               // skip
+            } else if (maxPriorityOperand.isPrefix() && maxPriorityOperand.fy() && (nextOperand.xfx() || nextOperand.xfy())) {
+               // - 2 ** Y
+            } else if (nextOperand.isInfix() && !(maxPriorityOperand.xfy() && nextOperand.xfx()) && !(maxPriorityOperand.fx() && nextOperand.xfx()) && !nextOperand.xfy()) {
+               foundNewNax = true;
+            } else if (nextOperand.yf()) {
+               foundNewNax = true;
             }
          } else if (i > startIdx && next.getType() == TokenType.NAMED_BRACKET && operands.infix(next.getName())) {
             // e.g.: a+(b+c)
-            int priority = operands.getInfixPriority(next.getName());
-            if (priority > maxPriority || (priority == maxPriority && (operands.yfx(next.getName()) && (maxPriorityIdx != startIdx || !operands.fx(tokens[startIdx].getName()))))) {
-               maxPriority = priority;
-               maxPriorityIdx = i;
+            nextOperand = operands.getInfixOperand(next.getName());
+            if ((maxPriorityOperand == null || nextOperand.precedence > maxPriorityOperand.precedence)
+                || (nextOperand.precedence == maxPriorityOperand.precedence && (nextOperand.yfx() && !maxPriorityOperand.fx()))) {
+               foundNewNax = true;
             }
+         }
+
+         if (foundNewNax) {
+            maxPriorityOperand = nextOperand;
+            maxPriorityIdx = i;
          }
       }
 
-      if (maxPriority == -1) {
+      if (maxPriorityOperand == null) {
          throw newParserException(tokens[endIdx - 1], "No suitable operands");
       }
 
       Token operandToken = tokens[maxPriorityIdx];
-      if (maxPriority > previousPriority
-          || (maxPriority == previousPriority && (faiIfPriorityEqual || (maxPriorityIdx > startIdx && maxPriorityIdx < endIdx - 1 && operands.xfx(operandToken.getName()))))) {
+      int maxPriority = maxPriorityOperand.precedence;
+      //      if (maxPriority > previousPriority
+      //          || (maxPriority == previousPriority && (faiIfPriorityEqual || (maxPriorityIdx > startIdx && maxPriorityIdx < endIdx - 1 && operands.xfx(operandToken.getName()))))) {
+      if (maxPriority > previousPriority || (maxPriority == previousPriority && faiIfPriorityEqual)) {
          throw newParserException(operandToken,
                      "Operator priority clash. " + operandToken.getName() + " (" + maxPriority + ") conflicts with previous priority (" + previousPriority + ")");
       }
@@ -396,6 +416,20 @@ public class SentenceParser {
          Token rightArg = toSingleToken(tokens, maxPriorityIdx + 1, endIdx, maxPriority, !operands.xfy(operandToken.getName()));
          return new Token(operandToken, TokenType.OPERAND_AND_ARGUMENTS, new Token[] {leftArg, rightArg});
       }
+   }
+
+   private boolean isPossibleNegativeNumber(Token[] tokens, int startIdx) {
+      if (tokens.length == startIdx + 1) {
+         return false;
+      }
+
+      Token first = tokens[startIdx];
+      Token second = tokens[startIdx + 1];
+      return NEGATIVE_SIGN.equals(first.getName())
+             && first.getType() == TokenType.SYMBOL
+             && second.getType().isNumber()
+             && first.getLineNumber() == second.getLineNumber()
+             && first.getColumnNumber() == second.getColumnNumber() - second.getName().length();
    }
 
    private Term toTerm(Token token) {
@@ -425,10 +459,6 @@ public class SentenceParser {
    }
 
    private Term toStructureFromNamedBracket(Token token) {
-      if (isNegativeNumber(token)) {
-         return toNegativeNumber(token);
-      }
-
       Token[] input = token.getArguments();
 
       List<Token> tokens = new ArrayList<>();
@@ -470,34 +500,11 @@ public class SentenceParser {
    }
 
    private Term toStructureFromOperandAndArguments(Token token) {
-      if (isNegativeNumber(token)) {
-         return toNegativeNumber(token);
-      }
-
       Term[] args = new Term[token.getNumberOfArguments()];
       for (int i = 0; i < args.length; i++) {
          args[i] = toTerm(token.getArgument(i));
       }
       return StructureFactory.createStructure(token.getName(), args);
-   }
-
-   private boolean isNegativeNumber(Token t) {
-      if (t.getNumberOfArguments() != 1 || !NEGATIVE_SIGN.equals(t.getName())) {
-         return false;
-      }
-
-      Token argument = t.getArgument(0);
-      return argument.getType().isNumber() && t.getLineNumber() == argument.getLineNumber() && t.getColumnNumber() == argument.getColumnNumber() - argument.getName().length();
-   }
-
-   private Term toNegativeNumber(Token t) {
-      // convert -(1) or -(1.0) to numbers rather than structures
-      Token arg = t.getArgument(0);
-      if (arg.getType() == TokenType.INTEGER) {
-         return toIntegerNumber(t, NEGATIVE_SIGN + arg.getName());
-      } else {
-         return toDecimalFraction(t, NEGATIVE_SIGN + arg.getName());
-      }
    }
 
    private Term toList(Token token) {

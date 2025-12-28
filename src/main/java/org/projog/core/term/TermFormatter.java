@@ -156,12 +156,9 @@ public class TermFormatter {
 
       if (nextPriority == parentInfixPriority) {
          if (next.getNumberOfArguments() == 2) {
-            if (operands.xfx(next.getName()) || operands.xfx(parentInfixTerm.getName())) {
-               return true;
-            }
-            if (operands.yfx(next.getName()) && operands.xfy(parentInfixTerm.getName())) {
-               return true;
-            }
+            boolean left = operands.xfx(next.getName()) || operands.yfx(next.getName());
+            boolean right = operands.xfx(parentInfixTerm.getName()) || operands.xfy(parentInfixTerm.getName());
+            return left && right;
          } else if (next.getNumberOfArguments() == 1 && operands.prefix(next.getName())) {
             if (operands.xfx(parentInfixTerm.getName())) {
                return true;
@@ -185,6 +182,9 @@ public class TermFormatter {
 
       if (parentInfixPriority == nextPriority) {
          if (next.getNumberOfArguments() == 2) {
+            if (operands.xfx(next.getName()) && operands.xfy(parentInfixTerm.getName())) {
+               return false;
+            }
             if (operands.xfx(next.getName()) || operands.xfx(parentInfixTerm.getName())) {
                return true;
             }
@@ -214,7 +214,14 @@ public class TermFormatter {
 
       int p1 = operands.getPrefixPriority(p.getName());
       int p2 = getPriority(p.firstArgument());
-      if (p1 < p2 || (p1 == p2 && (operands.fx(p.getName()) || !canBePreceededByEqualPriority(p.firstArgument())))) {
+      boolean addBracket = false;
+      if (p1 < p2) {
+         addBracket = true;
+      } else if (p1 == p2 && operands.fx(p.getName())) {
+         addBracket = true;
+      }
+
+      if (addBracket) {
          sb.append('(');
          write(p.firstArgument(), sb);
          sb.append(')');
@@ -230,7 +237,14 @@ public class TermFormatter {
    private void writePostfixOperator(Term p, StringBuilder sb) {
       int p1 = operands.getPostfixPriority(p.getName());
       int p2 = getPriority(p.firstArgument());
-      if (p1 < p2 || (p1 == p2 && (operands.xf(p.getName()) || !canBePreceededByEqualPriority(p.firstArgument())))) {
+      boolean addBracket = false;
+      if (p1 < p2) {
+         addBracket = true;
+      } else if (p1 == p2 && operands.xf(p.getName())) {
+         addBracket = true;
+      }
+
+      if (addBracket) {
          sb.append('(');
          write(p.firstArgument(), sb);
          sb.append(')');
@@ -239,14 +253,6 @@ public class TermFormatter {
       }
 
       sb.append(' ').append(p.getName());
-   }
-
-   private boolean canBePreceededByEqualPriority(Term next) {
-      if (next.getNumberOfArguments() == 2 && operands.infix(next.getName())) {
-         return operands.xfy(next.getName());
-      } else {
-         return true;
-      }
    }
 
    private int getPriority(Term next) {

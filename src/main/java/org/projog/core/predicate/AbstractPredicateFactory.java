@@ -85,7 +85,7 @@ public abstract class AbstractPredicateFactory implements PredicateFactory, Know
    /**
     * This method is called by {@link #setKnowledgeBase(KnowledgeBase)}.
     * <p>
-    * Can be overridden by subclasses to perform initialisation before any calls to {@link #getPredicate(Term[])} are
+    * Can be overridden by subclasses to perform initialisation before any calls to {@link #getPredicate(Term)} are
     * made. As {@link #setKnowledgeBase(KnowledgeBase)} will have already been called before this method is invoked,
     * overridden versions will be able to access the {@code KnowledgeBase} using {@link #getKnowledgeBase()}.
     */

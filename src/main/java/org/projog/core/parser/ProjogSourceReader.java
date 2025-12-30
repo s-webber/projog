@@ -38,7 +38,7 @@ import org.projog.core.term.Term;
 /**
  * Populates a {@link KnowledgeBase} with clauses parsed from Prolog syntax.
  * <p>
- * <img src="doc-files/ProjogSourceReader.png">
+ * <img src="doc-files/ProjogSourceReader.png" alt="Class diagram">
  * </p>
  */
 public final class ProjogSourceReader {

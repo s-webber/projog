@@ -29,7 +29,7 @@ import org.projog.core.term.TermFormatter;
 /**
  * The central object that connects the various components of an instance of the "core" inference engine.
  * <p>
- * <img src="doc-files/KnowledgeBase.png">
+ * <img src="doc-files/KnowledgeBase.png" alt="Class diagram">
  * </p>
  */
 public final class KnowledgeBase {

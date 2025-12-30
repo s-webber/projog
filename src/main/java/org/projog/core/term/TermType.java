@@ -35,7 +35,7 @@ public enum TermType {
    EMPTY_LIST(false, false, false, 5),
    /** @see Atom */
    ATOM(false, false, false, 6),
-   /** @see Structure */
+   /** @see StructureFactory */
    STRUCTURE(true, false, false, 7),
    /** @see List */
    LIST(true, false, false, 8);

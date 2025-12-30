@@ -41,7 +41,7 @@ public interface PredicateFactory {
    /**
     * Returns a {@link Predicate} to be used in the evaluation of a goal.
     *
-    * @param args the arguments to use in the evaluation of the goal
+    * @param term the term containing the arguments to use in the evaluation of the goal
     * @return Predicate to be used in the evaluation of the goal
     * @see Predicate#evaluate()
     */

@@ -91,6 +91,7 @@ import org.projog.core.term.TermUtils;
  * Supported special character sequences are:
  * </p>
  * <table>
+ * <caption>Supported special character sequences</caption>
  * <tr>
  * <th>Sequence</th>
  * <th>Action</th>

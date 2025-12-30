@@ -20,7 +20,7 @@ import org.projog.core.term.Term;
 /**
  * Represents a function that returns a single numerical value.
  * <p>
- * <img src="doc-files/ArithmeticOperator.png">
+ * <img src="doc-files/ArithmeticOperator.png" alt="Class diagram">
  * </p>
  *
  * @see ArithmeticOperators

@@ -40,7 +40,7 @@ import org.projog.core.term.Term;
  * <p>
  * Contains a single instance of {@link org.projog.core.kb.KnowledgeBase}.
  * </p>
- * <img src="doc-files/Projog.png">
+ * <img src="doc-files/Projog.png" alt="Class diagram">
  */
 public final class Projog {
    private final KnowledgeBase kb;

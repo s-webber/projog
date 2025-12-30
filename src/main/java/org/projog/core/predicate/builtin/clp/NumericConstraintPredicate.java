@@ -187,7 +187,6 @@ import org.projog.core.term.Term;
 */
 /**
  * CLP predicates for comparing numeric values.
- * <p>
  * <ul>
  * <li><code>#=</code> equal to</li>
  * <li><code>#\=</code> not equal to</li>

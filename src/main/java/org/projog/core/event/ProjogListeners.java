@@ -36,7 +36,7 @@ public class ProjogListeners {
     * Adds a listener to the set of listeners.
     *
     * @param listener a listener to be added
-    * @return <tt>true</tt> if this instance did not already reference the specified listener
+    * @return {@code true} if this instance did not already reference the specified listener
     */
    public boolean addListener(ProjogListener listener) {
       return listeners.add(listener);
@@ -46,7 +46,7 @@ public class ProjogListeners {
     * Deletes an observer from the set of observers of this objects internal {@code Observable}.
     *
     * @param listener a listener to be deleted
-    * @return <tt>true</tt> if this instance did reference the specified listener
+    * @return {@code true} if this instance did reference the specified listener
     */
    public boolean deleteListener(ProjogListener listener) {
       return listeners.remove(listener);

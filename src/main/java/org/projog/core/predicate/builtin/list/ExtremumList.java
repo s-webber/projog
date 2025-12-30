@@ -74,7 +74,6 @@ import org.projog.core.term.TermType;
 */
 /**
  * <code>min_list</code> / <code>max_list</code>
- * <p>
  * <ul>
  * <li><code>min_list(Min, List)</code> - True if Min is the smallest number in List. Fails if List is empty.</li>
  * <li><code>max_list(Max, List)</code> - True if Max is the largest number in List. Fails if List is empty.</li>

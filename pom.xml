@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
   <groupId>org.projog</groupId>
   <artifactId>projog-core</artifactId>
-  <version>0.11.0-SNAPSHOT</version>
+  <version>0.12.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>projog-core</name>
@@ -80,13 +80,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
    <distributionManagement>
       <snapshotRepository>
-         <id>ossrh</id>
-         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+         <id>central</id>
+         <url>https://central.sonatype.com/repository/maven-snapshots/.</url>
       </snapshotRepository>
-      <repository>
-         <id>ossrh</id>
-         <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-      </repository>
    </distributionManagement>
 
    <build>
@@ -219,19 +215,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                      </execution>
                   </executions>
                </plugin>
-               <!--
-               The Nexus Staging Maven Plugin is the recommended way to deploy components to OSSRH 
-               and release them to the Central Repository.
-               -->
+               <!-- https://central.sonatype.org/publish/publish-portal-maven/ -->
                <plugin>
-                  <groupId>org.sonatype.plugins</groupId>
-                  <artifactId>nexus-staging-maven-plugin</artifactId>
-                  <version>1.6.3</version>
+                  <groupId>org.sonatype.central</groupId>
+                  <artifactId>central-publishing-maven-plugin</artifactId>
+                  <version>0.9.0</version>
                   <extensions>true</extensions>
                   <configuration>
-                     <serverId>ossrh</serverId>
-                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                     <publishingServerId>central</publishingServerId>
                   </configuration>
                </plugin>
             </plugins>
@@ -256,7 +247,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                <bottom><![CDATA[<a href='http://projog.org' title='Prolog programming for the Java platform' target='_blank'>projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
                <doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
                <windowtitle>Projog - a Java based implementation of the Prolog logic programming language.</windowtitle>
-               <failOnError>false</failOnError>
             </configuration>
          </plugin>
          <plugin>

@@ -175,7 +175,6 @@ import org.projog.core.term.TermType;
 */
 /**
  * <code>atom_chars</code> / <code>atom_codes</code> / <code>number_chars</code> / <code>number_codes</code>
- * <p>
  * <ul>
  * <li><code>atom_chars(A,L)</code> compares the atom <code>A</code> to the list of characters <code>L</code>.</li>
  * <li><code>atom_codes(A,L)</code> compares the atom <code>A</code> to the list of character codes <code>L</code>.</li>

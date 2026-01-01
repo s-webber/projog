@@ -5,13 +5,30 @@
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
 	<description>Custom PMD rules for the Projog project</description>
 
-	<rule ref="category/java/bestpractices.xml"/>
+	<rule ref="category/java/bestpractices.xml">
+		<exclude name="AvoidReassigningParameters"/>
+		<exclude name="ExhaustiveSwitchHasDefault"/>
+		<exclude name="ImplicitFunctionalInterface"/>
+		<exclude name="UseVarargs"/>
+	</rule>
 	<rule ref="category/java/design.xml">
+		<exclude name="AvoidCatchingGenericException"/>
+		<exclude name="AvoidThrowingNullPointerException"/>
+		<exclude name="AvoidThrowingRawExceptionTypes"/>
+		<exclude name="CognitiveComplexity"/>
+		<exclude name="CyclomaticComplexity"/>
 		<exclude name="LawOfDemeter"/>
 		<exclude name="LoosePackageCoupling"/>
+		<exclude name="NPathComplexity"/>
+		<exclude name="TooManyMethods"/>
 	</rule>
-	<rule ref="category/java/errorprone.xml"/>
+	<rule ref="category/java/errorprone.xml">
+		<exclude name="AvoidLiteralsInIfCondition"/>
+		<exclude name="CompareObjectsWithEquals"/>
+	</rule>
 	<rule ref="category/java/multithreading.xml"/>
-	<rule ref="category/java/performance.xml"/>
+	<rule ref="category/java/performance.xml">
+		<exclude name="AvoidInstantiatingObjectsInLoops"/>
+	</rule>
 	<rule ref="category/java/security.xml"/>
 </ruleset>

@@ -92,7 +92,7 @@ public final class SpyPoints {
       return Collections.unmodifiableMap(spyPoints);
    }
 
-   public class SpyPoint {
+   public final class SpyPoint {
       private final PredicateKey key;
       private boolean set;
 
@@ -114,7 +114,7 @@ public final class SpyPoints {
 
       /** Notifies listeners of a first attempt to evaluate a goal. */
       public void logCall(Object source, Term term) {
-         if (isEnabled() == false) {
+         if (!isEnabled()) {
             return;
          }
 
@@ -123,7 +123,7 @@ public final class SpyPoints {
 
       /** Notifies listeners of an attempt to re-evaluate a goal. */
       public void logRedo(Object source, Term term) {
-         if (isEnabled() == false) {
+         if (!isEnabled()) {
             return;
          }
 
@@ -148,7 +148,7 @@ public final class SpyPoints {
 
       /** Notifies listeners of that an attempt to evaluate a goal has succeeded. */
       public void logExit(Object source, Term term, ClauseModel clause) {
-         if (isEnabled() == false) {
+         if (!isEnabled()) {
             return;
          }
 
@@ -157,7 +157,7 @@ public final class SpyPoints {
 
       /** Notifies listeners of that an attempt to evaluate a goal has failed. */
       public void logFail(Object source, Term term) {
-         if (isEnabled() == false) {
+         if (!isEnabled()) {
             return;
          }
 
@@ -194,7 +194,7 @@ public final class SpyPoints {
       }
    }
 
-   public class SpyPointExitEvent extends SpyPointEvent {
+   public final class SpyPointExitEvent extends SpyPointEvent {
       private final ClauseModel clauseModel;
 
       private SpyPointExitEvent(PredicateKey key, Term term, Object source, ClauseModel clauseModel) {

@@ -146,11 +146,11 @@ public final class Length implements PredicateFactory {
       return true;
    }
 
-   private static class Retryable implements Predicate {
+   private static final class Retryable implements Predicate {
       final int startLength;
       final Term list;
       final Term length;
-      int currentLength = 0;
+      int currentLength;
 
       private Retryable(int startLength, Term list, Term length) {
          this.startLength = startLength;

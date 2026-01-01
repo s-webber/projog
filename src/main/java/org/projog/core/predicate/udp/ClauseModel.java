@@ -52,7 +52,7 @@ public final class ClauseModel {
          original = DefiniteClauseGrammerConvertor.convert(original);
       }
 
-      if (original.getName().equals(IMPLICATION_PREDICATE_NAME)) {
+      if (IMPLICATION_PREDICATE_NAME.equals(original.getName())) {
          consequent = original.firstArgument();
          if (original.getNumberOfArguments() == 2) {
             // TODO set to TRUE if equal to it

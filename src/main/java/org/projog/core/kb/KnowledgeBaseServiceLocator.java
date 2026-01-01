@@ -28,7 +28,7 @@ import java.util.WeakHashMap;
  * {@code RecordedDatabase} can be associated with one, and only one, {@code KnowledgeBase}.
  * </p>
  */
-public class KnowledgeBaseServiceLocator {
+public final class KnowledgeBaseServiceLocator {
    private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new WeakHashMap<>();
 
    /**

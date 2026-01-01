@@ -24,6 +24,9 @@ import java.util.Map;
  * Also known as a "compound term".
  */
 public final class StructureFactory {
+   private StructureFactory() {
+   }
+
    public static Term createStructure(String functor, Term[] args) {
       switch (args.length) {
          case 0:
@@ -55,7 +58,7 @@ public final class StructureFactory {
 
    private static boolean isImmutable(Term[] args) {
       for (Term t : args) {
-         if (t.isImmutable() == false) {
+         if (!t.isImmutable()) {
             return false;
          }
       }
@@ -179,7 +182,7 @@ public final class StructureFactory {
       private final String functor;
       private final Term first;
       private final Term second;
-      private boolean isImmutable;
+      private final boolean isImmutable;
 
       private TwoArgumentStructure(String functor, Term first, Term second) {
          this.functor = functor;
@@ -308,7 +311,7 @@ public final class StructureFactory {
       private final Term first;
       private final Term second;
       private final Term third;
-      private boolean isImmutable;
+      private final boolean isImmutable;
 
       private ThreeArgumentStructure(String functor, Term first, Term second, Term third) {
          this.functor = functor;
@@ -449,7 +452,7 @@ public final class StructureFactory {
       private final Term second;
       private final Term third;
       private final Term fourth;
-      private boolean isImmutable;
+      private final boolean isImmutable;
 
       private FourArgumentStructure(String functor, Term first, Term second, Term third, Term fourth) {
          this.functor = functor;
@@ -651,7 +654,7 @@ public final class StructureFactory {
                if (newArgs[i] != args[i]) {
                   returnThis = false;
                }
-               if (newArgs[i].isImmutable() == false) {
+               if (!newArgs[i].isImmutable()) {
                   newImmutable = false;
                }
             }
@@ -676,7 +679,7 @@ public final class StructureFactory {
                if (newArgs[i] != args[i]) {
                   returnThis = false;
                }
-               if (newArgs[i].isImmutable() == false) {
+               if (!newArgs[i].isImmutable()) {
                   newIsImmutable = false;
                }
             }
@@ -739,9 +742,7 @@ public final class StructureFactory {
 
       @Override
       public String toString() {
-         StringBuilder sb = new StringBuilder();
-         sb.append(functor);
-         sb.append("(");
+         StringBuilder sb = new StringBuilder().append(functor).append('(');
          boolean first = true;
          if (args != null) {
             for (Term arg : args) {
@@ -753,7 +754,7 @@ public final class StructureFactory {
                sb.append(arg);
             }
          }
-         sb.append(")");
+         sb.append(')');
          return sb.toString();
       }
    }

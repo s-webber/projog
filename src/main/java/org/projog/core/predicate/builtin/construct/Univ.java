@@ -126,11 +126,7 @@ public final class Univ extends AbstractSingleResultPredicate {
          predicateArgs.add(arg);
       }
 
-      if (predicateArgs.size() == 0) {
-         return new Atom(predicateName);
-      } else {
-         return StructureFactory.createStructure(predicateName, predicateArgs.toArray(new Term[predicateArgs.size()]));
-      }
+      return StructureFactory.createStructure(predicateName, predicateArgs.toArray(new Term[0]));
    }
 
    private Term toList(Term t) {

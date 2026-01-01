@@ -212,7 +212,7 @@ public final class Dif extends AbstractSingleResultPredicate {
          case 2:
             return new org.projog.core.term.List(args.get(0), args.get(1));
          default:
-            return StructureFactory.createStructure("f", args.toArray(new Term[args.size()]));
+            return StructureFactory.createStructure("f", args.toArray(new Term[0]));
       }
    }
 
@@ -270,7 +270,7 @@ public final class Dif extends AbstractSingleResultPredicate {
    }
 
    private static final class ExactCopyMap implements Map<Variable, Term> {
-      Set<Variable> variables = new HashSet<>();
+      final Set<Variable> variables = new HashSet<>();
 
       @Override
       public int size() {

@@ -42,7 +42,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    private final KnowledgeBase kb;
    private final SpyPoints.SpyPoint spyPoint;
    private final ClauseActionMetaData[] ends = new ClauseActionMetaData[2];
-   private ConcurrentHashMap<Term, ClauseActionMetaData> index;
+   private final ConcurrentHashMap<Term, ClauseActionMetaData> index;
    private boolean hasPrimaryKey;
 
    public DynamicUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
@@ -201,7 +201,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
       }
    }
 
-   private class ImplicationsIterator implements Iterator<ClauseModel> {
+   private final class ImplicationsIterator implements Iterator<ClauseModel> {
       private ClauseActionMetaData previous;
 
       @Override

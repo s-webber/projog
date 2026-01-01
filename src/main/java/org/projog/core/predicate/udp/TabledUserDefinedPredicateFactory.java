@@ -160,7 +160,7 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
             throw new RuntimeException(processor.exception);
          }
       }
-      Term[] result = processor.result.toArray(new Term[processor.result.size()]);
+      Term[] result = processor.result.toArray(new Term[0]);
 
       // if the Processor was created as part of this method call then store the result in the cache so it can be reused
       if (newProcessor) {

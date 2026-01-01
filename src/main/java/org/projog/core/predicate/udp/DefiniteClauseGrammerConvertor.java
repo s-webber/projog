@@ -35,15 +35,18 @@ import org.projog.core.term.Variable;
  * DCGs provide a convenient way to express grammar rules.
  */
 final class DefiniteClauseGrammerConvertor {
+   private DefiniteClauseGrammerConvertor() {
+   }
+
    static boolean isDCG(Term dcgTerm) { // should this be moved to KnowledgeBaseUtils?
-      return dcgTerm.getType() == TermType.STRUCTURE && dcgTerm.getNumberOfArguments() == 2 && dcgTerm.getName().equals("-->");
+      return dcgTerm.getType() == TermType.STRUCTURE && dcgTerm.getNumberOfArguments() == 2 && "-->".equals(dcgTerm.getName());
    }
 
    /**
     * @param dcgTerm predicate with name "-->" and two arguments
     */
    static Term convert(Term dcgTerm) {
-      if (isDCG(dcgTerm) == false) {
+      if (!isDCG(dcgTerm)) {
          throw new ProjogException("Expected two argument predicate named \"-->\" but got: " + dcgTerm);
       }
 
@@ -83,7 +86,7 @@ final class DefiniteClauseGrammerConvertor {
       Term previousList = null;
       for (int i = conjunctionOfAtoms.length - 1; i > -1; i--) {
          Term term = conjunctionOfAtoms[i];
-         if (term.getName().equals("{")) {
+         if ("{".equals(term.getName())) {
             Term newAntecedentArg = term.firstArgument().firstArgument();
             newSequence.add(0, newAntecedentArg);
          } else if (term.getType() == TermType.LIST) {
@@ -138,7 +141,7 @@ final class DefiniteClauseGrammerConvertor {
          terms.add(list.firstArgument());
          list = list.secondArgument();
       }
-      return ListFactory.createList(terms.toArray(new Term[terms.size()]), newTail);
+      return ListFactory.createList(terms.toArray(new Term[0]), newTail);
    }
 
    private static Term createNewPredicate(Term original, Term previous, Term next) {

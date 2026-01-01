@@ -158,17 +158,8 @@ public class ProjogConsole {
             processThrowable(cause);
          }
       } else {
-         StringBuilder sb = new StringBuilder();
-         sb.append("Caught: ");
-         sb.append(e.getClass().getName());
          StackTraceElement ste = e.getStackTrace()[0];
-         sb.append(" from class: ");
-         sb.append(ste.getClassName());
-         sb.append(" method: ");
-         sb.append(ste.getMethodName());
-         sb.append(" line: ");
-         sb.append(ste.getLineNumber());
-         out.println(sb);
+         out.println("Caught: " + e.getClass().getName() + " from class: " + ste.getClassName() + " method: " + ste.getMethodName() + " line: " + ste.getLineNumber());
          String message = e.getMessage();
          if (message != null) {
             out.println("Description: " + message);

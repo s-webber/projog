@@ -170,7 +170,7 @@ class TokenParser {
     */
    private Token parseQuotedText() {
       StringBuilder sb = new StringBuilder();
-      do {
+      while (true) {
          int c = parser.getNext();
          if (isQuote(c)) {
             c = parser.getNext();
@@ -190,7 +190,7 @@ class TokenParser {
             throw newParserException("No closing ' on quoted string");
          }
          sb.append((char) c);
-      } while (true);
+      }
    }
 
    /**
@@ -238,11 +238,7 @@ class TokenParser {
    }
 
    private int parseUnicode() {
-      StringBuilder hex = new StringBuilder(4);
-      hex.append(parseHex());
-      hex.append(parseHex());
-      hex.append(parseHex());
-      hex.append(parseHex());
+      StringBuilder hex = new StringBuilder(4).append(parseHex()).append(parseHex()).append(parseHex()).append(parseHex());
       return Integer.parseInt(hex.toString(), 16);
    }
 

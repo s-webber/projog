@@ -160,7 +160,7 @@ public final class List implements Term {
       do {
          TermType tType = t1.getType();
          if (tType == TermType.LIST) {
-            if (t2.firstArgument().unify(t1.firstArgument()) == false) {
+            if (!t2.firstArgument().unify(t1.firstArgument())) {
                return false;
             }
             t1 = t1.secondArgument();
@@ -227,16 +227,13 @@ public final class List implements Term {
       int listCtr = 0;
       Term t = this;
       do {
-         sb.append(ListFactory.LIST_PREDICATE_NAME);
-         sb.append("(");
-         sb.append(t.firstArgument());
-         sb.append(", ");
+         sb.append(ListFactory.LIST_PREDICATE_NAME).append('(').append(t.firstArgument()).append(", ");
          t = t.secondArgument();
          listCtr++;
       } while (t.getType() == TermType.LIST);
       sb.append(t);
       for (int i = 0; i < listCtr; i++) {
-         sb.append(")");
+         sb.append(')');
       }
       return sb.toString();
    }

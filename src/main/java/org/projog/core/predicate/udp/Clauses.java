@@ -24,7 +24,7 @@ import org.projog.core.term.Term;
 import org.projog.core.term.Variable;
 
 // TODO add Javadoc and review method and variable names
-class Clauses {
+final class Clauses {
    private static final Clauses EMPTY = new Clauses(Collections.emptyList(), new int[0]);
 
    private final List<ClauseAction> clauses;
@@ -86,8 +86,8 @@ class Clauses {
 
    private static int count(boolean[] a) {
       int ctr = 0;
-      for (int i = 0; i < a.length; i++) {
-         if (a[i]) {
+      for (boolean element : a) {
+         if (element) {
             ctr++;
          }
       }
@@ -105,6 +105,6 @@ class Clauses {
    }
 
    ClauseAction[] getClauseActions() {
-      return clauses.toArray(new ClauseAction[clauses.size()]);
+      return clauses.toArray(new ClauseAction[0]);
    }
 }

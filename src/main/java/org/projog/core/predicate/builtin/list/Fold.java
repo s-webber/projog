@@ -245,7 +245,7 @@ public final class Fold implements PredicateFactory {
       return result.unify(output);
    }
 
-   private static class Retryable implements Predicate {
+   private static final class Retryable implements Predicate {
       private final PredicateFactory pf;
       private final Term action;
       private final List<Term> values;

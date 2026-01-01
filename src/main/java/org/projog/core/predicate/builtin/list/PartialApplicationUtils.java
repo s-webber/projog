@@ -25,8 +25,11 @@ import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
 // Moved methods to separate class so can be used by both MapList and SubList. TODO move to TermUtils
-public class PartialApplicationUtils {
+public final class PartialApplicationUtils {
    private static final String KEY_VALUE_PAIR_FUNCTOR = "-";
+
+   private PartialApplicationUtils() {
+   }
 
    public static boolean isAtomOrStructure(Term arg) {
       TermType type = arg.getType();

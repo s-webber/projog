@@ -22,6 +22,9 @@ final class KeyFactories {
 
    static final int MAX_ARGUMENTS_PER_INDEX = FACTORIES.length - 1;
 
+   private KeyFactories() {
+   }
+
    static KeyFactory getKeyFactory(int numArgs) {
       return FACTORIES[numArgs];
    }

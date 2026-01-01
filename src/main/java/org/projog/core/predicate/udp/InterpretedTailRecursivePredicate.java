@@ -76,7 +76,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
          newConsequentArgs[i] = firstClauseConsequentArgs[i].copy(sharedVariables);
       }
 
-      if (unify(currentQueryArgs, newConsequentArgs) == false) {
+      if (!unify(currentQueryArgs, newConsequentArgs)) {
          return false;
       }
 
@@ -98,7 +98,7 @@ final class InterpretedTailRecursivePredicate extends TailRecursivePredicate {
          newConsequentArgs[i] = secondClauseConsequentArgs[i].copy(sharedVariables);
       }
 
-      if (unify(currentQueryArgs, newConsequentArgs) == false) {
+      if (!unify(currentQueryArgs, newConsequentArgs)) {
          return false;
       }
 

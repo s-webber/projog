@@ -15,7 +15,7 @@
  */
 package org.projog.core.predicate;
 
-public class SucceedsOncePredicate implements Predicate {
+public final class SucceedsOncePredicate implements Predicate {
    public static final SucceedsOncePredicate SINGLETON = new SucceedsOncePredicate();
 
    private SucceedsOncePredicate() {

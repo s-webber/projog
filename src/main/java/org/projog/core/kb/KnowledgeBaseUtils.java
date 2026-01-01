@@ -128,7 +128,7 @@ public final class KnowledgeBaseUtils {
          t = t.secondArgument();
       }
       l.add(t);
-      return l.toArray(new Term[l.size()]);
+      return l.toArray(new Term[0]);
    }
 
    /**

@@ -44,7 +44,7 @@ import org.projog.core.term.Variable;
  *
  * @see Operands
  */
-public class SentenceParser {
+public final class SentenceParser {
    private static final int DEFAULT_TOKEN_ARRAY_LENGTH = 32;
    private static final int COMMA_PRIORITY = 1000;
    private static final Token EMPTY_LIST_TOKEN = new Token((String) null, TokenType.EMPTY_LIST, new Token[0]);
@@ -283,7 +283,7 @@ public class SentenceParser {
 
          if (Delimiters.isListCloseBracket(delimiter)) {
             args.add(EMPTY_LIST_TOKEN);
-            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[0]));
          }
 
          if (Delimiters.isListTail(delimiter)) {
@@ -294,7 +294,7 @@ public class SentenceParser {
             }
 
             args.add(tail);
-            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[0]));
          }
       }
    }
@@ -308,7 +308,7 @@ public class SentenceParser {
          Token next = parser.next();
 
          if (Delimiters.isPredicateCloseBracket(next)) {
-            return new Token(name, TokenType.NAMED_BRACKET, args.toArray(new Token[args.size()]));
+            return new Token(name, TokenType.NAMED_BRACKET, args.toArray(new Token[0]));
          }
 
          args.add(parseToken(next));
@@ -335,10 +335,8 @@ public class SentenceParser {
 
          if (next.getType().isPossibleOperand()) {
             boolean startsWithPossibleNegativeNumber = isPossibleNegativeNumber(tokens, i);
-            if (startsWithPossibleNegativeNumber) {
-               if (startIdx == endIdx - 2) {
-                  return new Token(NEGATIVE_SIGN + tokens[i + 1].getName(), tokens[i + 1].getType(), new Token[0]);
-               }
+            if (startsWithPossibleNegativeNumber && startIdx == endIdx - 2) {
+               return new Token(NEGATIVE_SIGN + tokens[i + 1].getName(), tokens[i + 1].getType(), new Token[0]);
             }
 
             if (startsWithPossibleNegativeNumber && maxPriorityIdx > startIdx && maxPriorityIdx == i - 1) {

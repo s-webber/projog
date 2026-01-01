@@ -139,9 +139,9 @@ public final class Last implements PredicateFactory {
    }
 
    private static final class LastPredicate implements Predicate {
-      Term last;
-      Term tail;
-      Term termToUnifyLastElementWith;
+      final Term last;
+      final Term tail;
+      final Term termToUnifyLastElementWith;
       Term newHead;
       boolean retry;
 

@@ -216,7 +216,7 @@ public class TokenParserTest {
       assertParse("/*\n\n*\n/\n*/a/*/b*c/d/*e*/f", "a", "f");
    }
 
-   /** @see {@link TokenParser#rewind(String)} */
+   /** @see TokenParser#rewind(Token) */
    @Test
    public void testRewindException() {
       TokenParser tp = create("a b c");

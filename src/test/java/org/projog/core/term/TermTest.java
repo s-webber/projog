@@ -195,7 +195,7 @@ public class TermTest {
       }
    }
 
-   /** test {@link AnonymousVariable} unifies with everything and is strictly equal to nothing */
+   /** test a {@link Variable} unifies with everything and is strictly equal to nothing */
    @Test
    public void testUnifyAndStrictEqualityWithAnonymousVariable() {
       for (Term t : IMMUTABLE_TERMS) {

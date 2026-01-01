@@ -240,8 +240,8 @@ public class VariableTest {
     * Tests that, when {@link Variable#copy(Map)} is called on a variable whose "copy" (contained in the specified Map)
     * is already instantiated, the term the "copy" is instantiated with gets returned rather than the "copy" itself.
     * <p>
-    * This behaviour is required for things like
-    * {@link org.projog.core.udp.interpreter.InterpretedTailRecursivePredicate} to work.
+    * This behaviour is required for things like {@link org.projog.core.predicate.udp.InterpretedTailRecursivePredicate}
+    * to work.
     */
    @Test
    public void testCopyTwoTermsUsingTheSameMap() {

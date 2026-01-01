@@ -82,10 +82,8 @@ public class NumericTermComparatorTest {
    }
 
    /**
-    * NumericTermComparator provides an overloaded version of {@link NumericTermComparator#compare(Term, Term)} that
-    * also accepts a {@code KnowledgeBase} argument - this method tests that overloaded version.
+    * Tests {@link NumericTermComparator#compare(Term, Term, ArithmeticOperators)}
     *
-    * @see NumericTermComparator#compare(Term, Term, KnowledgeBase)
     * @see #testStructuresRepresentingArithmeticOperators
     */
    @Test
@@ -99,7 +97,7 @@ public class NumericTermComparatorTest {
    }
 
    /**
-    * Test that {@link NumericTermComparator#compare(Term, Term, KnowledgeBase)} works with {@code Structure}s that
+    * Test that {@link NumericTermComparator#compare(Term, Term, ArithmeticOperators)} works with compound terms that
     * represent arithmetic expressions.
     */
    @Test

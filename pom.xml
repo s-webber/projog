@@ -86,6 +86,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    </distributionManagement>
 
    <build>
+      <pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.12.0</version>
+            <configuration>
+               <additionalparam>-Xdoclint:none</additionalparam>
+               <bottom><![CDATA[<a href='https://projog.org' title='Prolog interpreter for Java' target='_blank'>projog.org</a> - Prolog interpreter for Java ${project.version}]]></bottom>
+               <doctitle>Projog is an implementation of the Prolog programming language for the Java platform.</doctitle>
+               <windowtitle>Projog - Prolog interpreter for Java.</windowtitle>
+            </configuration>
+          </plugin>
+        </plugins>
+      </pluginManagement>
       <plugins>
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
@@ -112,6 +127,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
              <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
            </configuration>
          </plugin>
+         <!-- mvn jacoco:report -->
          <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -158,7 +174,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
    <!--
    mvn versions:set -DnewVersion=1.2.3
    mvn clean deploy -P release
-   https://oss.sonatype.org/#nexus-search;quick~org.projog
+   https://central.sonatype.com/artifact/org.projog/projog-core
    -->
    <profiles>
       <profile>
@@ -184,18 +200,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-javadoc-plugin</artifactId>
-                  <version>3.12.0</version>
-                  <executions>
-                     <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                           <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                           <additionalparam>-Xdoclint:none</additionalparam>
-                        </configuration>
-                     </execution>
-                  </executions>
                </plugin>
                <!--
                The Maven GPG plugin is used to sign the components.
@@ -241,13 +245,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.12.0</version>
-            <configuration>
-               <additionalparam>-Xdoclint:none</additionalparam>
-               <bottom><![CDATA[<a href='http://projog.org' title='Prolog programming for the Java platform' target='_blank'>projog.org</a> - a Java based implementation of the Prolog logic programming language. ${project.version}]]></bottom>
-               <doctitle>Projog - a Java based implementation of the Prolog logic programming language.</doctitle>
-               <windowtitle>Projog - a Java based implementation of the Prolog logic programming language.</windowtitle>
-            </configuration>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>

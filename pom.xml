@@ -11,7 +11,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 
   <name>projog-core</name>
   <description>An implementation of the Prolog programming language for the Java platform.</description>
-  <url>http://projog.org</url>
+  <url>https://projog.org</url>
 
   <licenses>
     <license>

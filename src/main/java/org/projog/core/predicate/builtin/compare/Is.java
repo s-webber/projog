@@ -76,9 +76,6 @@ public final class Is implements PredicateFactory {
    private Is(KnowledgeBase kb, ArithmeticOperator arithmeticOperator) {
       this.kb = kb;
       this.arithmeticOperator = arithmeticOperator;
-      if (arithmeticOperator == null) {
-         throw new NullPointerException();
-      }
    }
 
    @Override

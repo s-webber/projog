@@ -81,7 +81,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
 
    private void assertSucceedsMany(Term arg, int expectedSuccesses) {
       Predicate p = testObject.getPredicate(StructureFactory.createStructure(FUNCTOR, new Term[] {arg}));
-      assertSame(InterpretedUserDefinedPredicate.class, p.getClass()); // TODO add assertClass to TestUtils
+      assertSame(InterpretedUserDefinedPredicate.class, p.getClass());
       for (int i = 0; i < expectedSuccesses; i++) {
          assertTrue(p.couldReevaluationSucceed());
          assertTrue(p.evaluate());

@@ -270,7 +270,7 @@ public final class Dif extends AbstractSingleResultPredicate {
    }
 
    private static final class ExactCopyMap implements Map<Variable, Term> {
-      Set<Variable> variables = new HashSet<>();
+      final Set<Variable> variables = new HashSet<>();
 
       @Override
       public int size() {

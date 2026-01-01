@@ -84,7 +84,7 @@ public class KnowledgeBaseTest {
    }
 
    @Test
-   public void testCannotOverwritePluginPredicate() { // TODO these assertions are duplicated in PredicatesTest
+   public void testCannotOverwritePluginPredicate() { // NOTE these assertions are duplicated in PredicatesTest
       Term input = atom("true");
       PredicateKey key = PredicateKey.createForTerm(input);
       try {
@@ -350,18 +350,18 @@ public class KnowledgeBaseTest {
       }
    }
 
-   /** Test using a static method to add a predicate factory that does not have a public no arg constructor. */
+   /** Test using a static getInstance() method to add a predicate factory. */
    @Test
-   public void testAddPredicateFactoryUsingStaticMethod() {
+   public void testAddPredicateFactoryUsingStaticMethodWithoutKnowledgeBaseParameter() {
       final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
       final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
       predicates.addPredicateFactory(key, className + "/getInstance");
       assertSame(DummyPredicateFactoryNoPublicConstructor.class, predicates.getPredicateFactory(key).getClass());
    }
 
-   /** Test creating predicate factory using a public constructor that takes a KnowledgeBase. */
+   /** Test using a static getInstance(KnowledgeBase) method to add a predicate factory. */
    @Test
-   public void testAddPredicateFactoryUsingConstructorWithKnowledgeBase() {
+   public void testAddPredicateFactoryUsingStaticMethodWithKnowledgeBase() {
       final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
       final String className = DummyPredicateFactorySingleArgMethod.class.getName();
       predicates.addPredicateFactory(key, className + "/getInstance");
@@ -370,13 +370,15 @@ public class KnowledgeBaseTest {
       assertSame(kb, pf.kb);
    }
 
-   /** Test using a static method, that takes a KnowledgeBase, to add a predicate factory. */
+   /** Test creating predicate factory using a public constructor that takes a KnowledgeBase. */
    @Test
-   public void testAddPredicateFactoryUsingStaticMethodWithKnowledgeBase() {
+   public void testAddPredicateFactoryUsingConstructorWithKnowledgeBase() {
       final PredicateKey key = new PredicateKey("testAddPredicateFactory", 1);
-      final String className = DummyPredicateFactoryNoPublicConstructor.class.getName();
-      predicates.addPredicateFactory(key, className + "/getInstance");
-      assertSame(DummyPredicateFactoryNoPublicConstructor.class, predicates.getPredicateFactory(key).getClass());
+      final String className = DummyPredicateFactorySingleArgConstructor.class.getName();
+      predicates.addPredicateFactory(key, className);
+      assertSame(DummyPredicateFactorySingleArgConstructor.class, predicates.getPredicateFactory(key).getClass());
+      DummyPredicateFactorySingleArgConstructor pf = (DummyPredicateFactorySingleArgConstructor) predicates.getPredicateFactory(key);
+      assertSame(kb, pf.kb);
    }
 
    @Test
@@ -403,7 +405,7 @@ public class KnowledgeBaseTest {
       assertSame(expected, ef2.getClass());
    }
 
-   public static class DummyPredicateFactoryNoPublicConstructor implements PredicateFactory {
+   public static final class DummyPredicateFactoryNoPublicConstructor implements PredicateFactory {
       public static DummyPredicateFactoryNoPublicConstructor getInstance() {
          return new DummyPredicateFactoryNoPublicConstructor();
       }
@@ -423,10 +425,15 @@ public class KnowledgeBaseTest {
       }
    }
 
-   public static class DummyPredicateFactorySingleArgConstructor implements PredicateFactory {
+   public static final class DummyPredicateFactorySingleArgMethod implements PredicateFactory {
       private final KnowledgeBase kb;
 
-      public DummyPredicateFactorySingleArgConstructor(KnowledgeBase kb) {
+      public static DummyPredicateFactorySingleArgMethod getInstance(KnowledgeBase kb) {
+         return new DummyPredicateFactorySingleArgMethod(kb);
+      }
+
+      private DummyPredicateFactorySingleArgMethod(KnowledgeBase kb) {
+         // private as want to test creation using getInstance static method
          this.kb = kb;
       }
 
@@ -441,15 +448,10 @@ public class KnowledgeBaseTest {
       }
    }
 
-   public static class DummyPredicateFactorySingleArgMethod implements PredicateFactory {
+   public static final class DummyPredicateFactorySingleArgConstructor implements PredicateFactory {
       private final KnowledgeBase kb;
 
-      public static DummyPredicateFactorySingleArgMethod getInstance(KnowledgeBase kb) {
-         return new DummyPredicateFactorySingleArgMethod(kb);
-      }
-
-      private DummyPredicateFactorySingleArgMethod(KnowledgeBase kb) {
-         // private as want to test creation using getInstance static method
+      public DummyPredicateFactorySingleArgConstructor(KnowledgeBase kb) {
          this.kb = kb;
       }
 

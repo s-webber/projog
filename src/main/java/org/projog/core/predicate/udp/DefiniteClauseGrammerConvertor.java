@@ -39,14 +39,14 @@ final class DefiniteClauseGrammerConvertor {
    }
 
    static boolean isDCG(Term dcgTerm) { // should this be moved to KnowledgeBaseUtils?
-      return dcgTerm.getType() == TermType.STRUCTURE && dcgTerm.getNumberOfArguments() == 2 && dcgTerm.getName().equals("-->");
+      return dcgTerm.getType() == TermType.STRUCTURE && dcgTerm.getNumberOfArguments() == 2 && "-->".equals(dcgTerm.getName());
    }
 
    /**
     * @param dcgTerm predicate with name "-->" and two arguments
     */
    static Term convert(Term dcgTerm) {
-      if (isDCG(dcgTerm) == false) {
+      if (!isDCG(dcgTerm)) {
          throw new ProjogException("Expected two argument predicate named \"-->\" but got: " + dcgTerm);
       }
 
@@ -86,7 +86,7 @@ final class DefiniteClauseGrammerConvertor {
       Term previousList = null;
       for (int i = conjunctionOfAtoms.length - 1; i > -1; i--) {
          Term term = conjunctionOfAtoms[i];
-         if (term.getName().equals("{")) {
+         if ("{".equals(term.getName())) {
             Term newAntecedentArg = term.firstArgument().firstArgument();
             newSequence.add(0, newAntecedentArg);
          } else if (term.getType() == TermType.LIST) {

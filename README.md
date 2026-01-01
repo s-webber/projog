@@ -1,4 +1,4 @@
-# [projog](http://projog.org "Prolog interpreter for Java")
+# [projog](https://projog.org "Prolog interpreter for Java")
 [![Build Status](https://github.com/s-webber/projog/actions/workflows/github-actions.yml/badge.svg)](https://github.com/s-webber/projog/actions/)
 [![Maven Central](https://img.shields.io/maven-central/v/org.projog/projog-core.svg)](https://search.maven.org/search?q=g:org.projog)
 [![License](https://img.shields.io/badge/license-Apache%20v2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -11,19 +11,19 @@ Projog can be used as a stand-alone console application or embedded in your Java
 
 ## Resources
 
-- [Frequently Asked Questions](http://projog.org/faq.html)
-- [Getting Started](http://projog.org/getting-started.html)
-- [Calling Prolog from Java](http://projog.org/calling-prolog-from-java.html)
-- [Extending Prolog using Java](http://projog.org/extending-prolog-with-java.html)
+- [Frequently Asked Questions](https://projog.org/faq.html)
+- [Getting Started](https://projog.org/getting-started.html)
+- [Calling Prolog from Java](https://projog.org/calling-prolog-from-java.html)
+- [Extending Prolog using Java](https://projog.org/extending-prolog-with-java.html)
 - Example applications: [Prolog Expert System](https://github.com/s-webber/prolog-expert-system) and [Prolog Wumpus World](https://github.com/s-webber/prolog-wumpus-world)
-- [Class diagrams](http://projog.org/class-diagrams.html) and [design decisions](http://projog.org/design-decisions.html)
+- [Class diagrams](https://projog.org/class-diagrams.html) and [design decisions](https://projog.org/design-decisions.html)
 
 ## Quick Start Guide
 
 The following commands will download Projog and start the console:
 
 ```sh
-$ wget http://projog.org/downloads/projog-0.11.0.zip
+$ wget https://projog.org/downloads/projog-0.11.0.zip
 $ jar xvf projog-0.11.0.zip
 $ cd projog-0.11.0
 $ chmod u+x projog-console.sh

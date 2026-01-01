@@ -88,7 +88,6 @@ import org.projog.core.term.TermType;
 % X=6
 %NO
 
-% TODO should the result be formatted as  X=5..6\/8\/12\/22..25
 %?- X in 5..6\/8\/12\/22..25
 % X={5, 6, 8, 12, 22, 23, 24, 25}
 

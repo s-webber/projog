@@ -65,10 +65,10 @@ import org.projog.core.term.Term;
 %NO
 
 %?- random_permutation(X, Y)
-%ERROR Expected at least on argument to be a list but got: X and: Y
+%ERROR Expected at least one argument to be a list but got: X and: Y
 
 %?- random_permutation([a|_], [b|_])
-%ERROR Expected at least on argument to be a list but got: .(a, _) and: .(b, _)
+%ERROR Expected at least one argument to be a list but got: .(a, _) and: .(b, _)
 */
 /**
  * <code>random_permutation(X,Y)</code> - produces a random permutation of a list.
@@ -89,7 +89,7 @@ public final class RandomPermutation extends AbstractSingleResultPredicate {
          return shuffleAndUnify(a, list);
       }
 
-      throw new ProjogException("Expected at least on argument to be a list but got: " + a + " and: " + b);
+      throw new ProjogException("Expected at least one argument to be a list but got: " + a + " and: " + b);
    }
 
    private boolean shuffleAndUnify(Term term, List<Term> list) {

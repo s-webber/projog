@@ -19,6 +19,7 @@ import static org.projog.core.term.EmptyList.EMPTY_LIST;
 import static org.projog.core.term.ListUtils.toJavaUtilList;
 import static org.projog.core.term.TermUtils.toLong;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.projog.core.predicate.AbstractSingleResultPredicate;
@@ -291,11 +292,9 @@ public final class Writef extends AbstractSingleResultPredicate {
    }
 
    private String getWhitespace(int diff) {
-      String s = "";
-      for (int i = 0; i < diff; i++) {
-         s += " ";
-      }
-      return s;
+      char[] spaces = new char[diff];
+      Arrays.fill(spaces, ' ');
+      return new String(spaces);
    }
 
    private int parseNumber(Formatter f) {
@@ -336,11 +335,7 @@ public final class Writef extends AbstractSingleResultPredicate {
    }
 
    private int parseUnicode(final Formatter f) {
-      final StringBuilder sb = new StringBuilder();
-      sb.append((char) f.pop());
-      sb.append((char) f.pop());
-      sb.append((char) f.pop());
-      sb.append((char) f.pop());
+      final StringBuilder sb = new StringBuilder(4).append((char) f.pop()).append((char) f.pop()).append((char) f.pop()).append((char) f.pop());
       return Integer.parseInt(sb.toString(), 16);
    }
 

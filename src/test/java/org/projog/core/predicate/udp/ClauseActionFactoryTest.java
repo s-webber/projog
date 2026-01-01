@@ -31,7 +31,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.array;
-import static org.projog.TestUtils.assertClass;
 import static org.projog.TestUtils.createClauseModel;
 
 import java.util.List;
@@ -707,7 +706,7 @@ public class ClauseActionFactoryTest {
    private <T extends ClauseAction> T create(Class<?> type, String syntax) {
       ClauseModel model = createClauseModel(syntax);
       ClauseAction result = ClauseActionFactory.createClauseAction(kb, model);
-      assertClass(type, result);
+      assertSame(type, result.getClass());
       assertSame(model, result.getModel());
       return (T) result;
    }

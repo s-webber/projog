@@ -87,8 +87,6 @@ import org.projog.core.term.TermType;
 % Y=9
 %QUIT
 
-% TODO fix documentation generator to handle QUIT
-
 %?- length([a,b|X],8)
 % X=[E0,E1,E2,E3,E4,E5]
 %?- length([a,b|X],3)
@@ -150,7 +148,7 @@ public final class Length implements PredicateFactory {
       final int startLength;
       final Term list;
       final Term length;
-      int currentLength = 0;
+      int currentLength;
 
       private Retryable(int startLength, Term list, Term length) {
          this.startLength = startLength;

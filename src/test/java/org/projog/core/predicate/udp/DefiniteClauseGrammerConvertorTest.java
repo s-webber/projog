@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.predicate.udp.DefiniteClauseGrammerConvertor;
 import org.projog.core.term.Term;
 
 public class DefiniteClauseGrammerConvertorTest {

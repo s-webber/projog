@@ -122,7 +122,6 @@ final class ClpVariable implements Numeric, LeafExpression {
       if (t.isImmutable()) {
          return t;
       } else {
-         // TODO is there a better alternative to throwing an exception?
          throw new ProjogException(TermType.CLP_VARIABLE + " does not support copy, so is not suitable for use in this scenario");
       }
    }

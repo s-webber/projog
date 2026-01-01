@@ -26,16 +26,13 @@ import java.util.List;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.predicate.udp.ClauseAction;
-import org.projog.core.predicate.udp.ClauseModel;
-import org.projog.core.predicate.udp.Clauses;
 
 public class ClausesTest {
    @Test
    public void testEmpty() {
       Clauses c = Clauses.createFromModels(TestUtils.createKnowledgeBase(), Collections.<ClauseModel> emptyList());
-      assertEquals(0, c.getClauseActions().length); // TODO use assertEmpty
-      assertEquals(0, c.getImmutableColumns().length); // TODO use assertEmpty
+      assertEquals(0, c.getClauseActions().length);
+      assertEquals(0, c.getImmutableColumns().length);
    }
 
    @Test
@@ -131,7 +128,7 @@ public class ClausesTest {
       assertEquals(":-(p(X, Y), ,(a(X), b(Y)))", actions[1].getModel().getOriginal().toString());
    }
 
-   private Clauses createClauses(String... clauses) { // TODO move to TestUtils
+   private Clauses createClauses(String... clauses) {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       List<ClauseModel> models = new ArrayList<>();
       for (String clause : clauses) {
@@ -140,7 +137,7 @@ public class ClausesTest {
       return Clauses.createFromModels(kb, models);
    }
 
-   private void assertEmpty(int[] array) { // TODO more to TestUtils
+   private void assertEmpty(int[] array) {
       assertEquals(0, array.length);
    }
 }

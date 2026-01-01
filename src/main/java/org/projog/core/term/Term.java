@@ -98,8 +98,7 @@ public interface Term {
    /**
     * Returns the term this object is bound to.
     * <p>
-    * For anything other than a {@code Variable} this method will return {@code this}. TODO think of a better name and
-    * explanation.
+    * For anything other than a {@code Variable} this method will return {@code this}.
     */
    default Term getBound() {
       return this;

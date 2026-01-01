@@ -29,7 +29,6 @@ import static org.projog.TermFactory.variable;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;
-import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.EmptyList;
 import org.projog.core.term.IntegerNumber;

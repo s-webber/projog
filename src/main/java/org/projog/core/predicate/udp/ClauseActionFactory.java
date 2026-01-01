@@ -78,7 +78,7 @@ final class ClauseActionFactory {
             }
          } else {
             hasConcreteTerms = true;
-            if (t.isImmutable() == false) {
+            if (!t.isImmutable()) {
                hasVariables = true;
             }
          }

@@ -49,7 +49,7 @@ public final class ListUtils {
     */
    public static List<Term> toJavaUtilList(Term list) {
       if (list.getType() == TermType.LIST) {
-         final List<Term> result = new ArrayList<Term>();
+         final List<Term> result = new ArrayList<>();
          do {
             result.add(list.firstArgument());
             list = list.secondArgument();
@@ -65,7 +65,6 @@ public final class ListUtils {
          return Collections.emptyList();
       } else {
          // not a list
-         // TODO consider throwing exception here rather than returning null
          return null;
       }
    }
@@ -104,7 +103,6 @@ public final class ListUtils {
     */
    public static boolean isMember(Term element, Term list) {
       if (list.getType() != TermType.LIST && list.getType() != TermType.EMPTY_LIST) {
-         // TODO have InvalidTermTypeException which extends ProjogException
          throw new ProjogException("Expected list or empty list but got: " + list.getType() + " with value: " + list);
       }
       while (list.getType() == TermType.LIST) {

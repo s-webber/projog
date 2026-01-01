@@ -319,7 +319,7 @@ public final class CharType implements PredicateFactory {
       } else {
          characters = new Term[] {character};
       }
-      Type[] characterTypes = {};
+      Type[] characterTypes;
       if (type.getType().isVariable()) {
          characterTypes = CHARACTER_TYPES_ARRAY;
       } else {
@@ -373,7 +373,7 @@ public final class CharType implements PredicateFactory {
    private static class State {
       final Term[] characters;
       final Type[] characterTypes;
-      int characterCtr = 0;
+      int characterCtr;
       int characterTypeCtr = -1;
 
       State(Term[] characters, Type[] characterTypes) {

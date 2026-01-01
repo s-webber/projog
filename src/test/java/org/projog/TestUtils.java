@@ -16,7 +16,6 @@
 package org.projog;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.io.FileReader;
@@ -138,9 +137,5 @@ public class TestUtils {
          // assert that if terms are equal then they have the same hashcode
          assertEquals(t1.getTerm().hashCode(), t2.getTerm().hashCode());
       }
-   }
-
-   public static void assertClass(Class<?> expected, Object instance) {
-      assertSame(expected, instance.getClass());
    }
 }

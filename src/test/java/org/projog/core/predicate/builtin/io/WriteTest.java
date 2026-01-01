@@ -24,7 +24,6 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.projog.core.predicate.builtin.io.Write;
 import org.projog.core.term.Atom;
 
 public class WriteTest {

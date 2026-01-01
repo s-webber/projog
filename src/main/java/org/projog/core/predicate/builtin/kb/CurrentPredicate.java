@@ -55,7 +55,7 @@ import org.projog.core.term.Term;
  * <code>current_predicate(X)</code> attempts to unify <code>X</code> against all currently defined predicates.
  */
 public final class CurrentPredicate implements PredicateFactory {
-   private Predicates predicates;
+   private final Predicates predicates;
 
    public CurrentPredicate(KnowledgeBase kb) {
       this.predicates = kb.getPredicates();

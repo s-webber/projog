@@ -80,13 +80,13 @@ public class KeyFactoriesTest {
       assertEqualsHashCode(k, kf.createKey(new int[] {0, 1, 2}, structure("p", new Term[] {A, B, C, E})));
    }
 
-   private void assertNotEqualsHashCode(Object o1, Object o2) { // TODO move to TestUtils
+   private void assertNotEqualsHashCode(Object o1, Object o2) {
       assertFalse(o1.equals(o2));
       assertFalse(o2.equals(o1));
       assertNotEquals(o1.hashCode(), o2.hashCode());
    }
 
-   private void assertEqualsHashCode(Object o1, Object o2) { // TODO move to TestUtils
+   private void assertEqualsHashCode(Object o1, Object o2) {
       assertTrue(o1.equals(o2));
       assertTrue(o2.equals(o1));
       assertEquals(o1.hashCode(), o2.hashCode());

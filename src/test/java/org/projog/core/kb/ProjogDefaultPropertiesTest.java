@@ -18,7 +18,6 @@ package org.projog.core.kb;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.projog.core.kb.ProjogDefaultProperties;
 
 public class ProjogDefaultPropertiesTest {
    private final ProjogDefaultProperties properties = new ProjogDefaultProperties();

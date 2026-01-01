@@ -17,7 +17,7 @@ package org.projog.core.parser;
 
 import static org.projog.core.parser.TokenType.SYMBOL;
 
-final class Delimiters { //TODO remove unused methods
+final class Delimiters {
    private static final char ARGUMENT_SEPARATOR = ',';
    private static final char PREDICATE_OPENING_BRACKET = '(';
    private static final char PREDICATE_CLOSING_BRACKET = ')';
@@ -46,10 +46,6 @@ final class Delimiters { //TODO remove unused methods
          default:
             return false;
       }
-   }
-
-   static boolean isListOpenBracket(int c) {
-      return c == LIST_OPENING_BRACKET;
    }
 
    static boolean isPredicateOpenBracket(Token token) {

@@ -18,15 +18,15 @@ package org.projog.core.parser;
 /** @see TokenParser */
 enum TokenType {
    ATOM,
+   SYMBOL,
    INTEGER,
    FLOAT,
    VARIABLE,
    NAMED_BRACKET,
-   OPERAND_AND_ARGUMENTS,
-   SYMBOL,
    UNNAMED_BRACKET,
-   EMPTY_LIST,
-   LIST;
+   OPERAND_AND_ARGUMENTS,
+   LIST,
+   EMPTY_LIST;
 
    boolean isPossibleOperand() {
       return this == ATOM || this == SYMBOL;

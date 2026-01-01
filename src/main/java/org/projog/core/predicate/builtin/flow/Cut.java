@@ -65,7 +65,7 @@ public final class Cut implements PredicateFactory {
    }
 
    private final static class CutPredicate implements Predicate {
-      private boolean retried = false;
+      private boolean retried;
 
       @Override
       public boolean evaluate() {

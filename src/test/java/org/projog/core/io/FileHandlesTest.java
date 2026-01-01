@@ -33,7 +33,6 @@ import java.nio.file.Files;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;
-import org.projog.core.io.FileHandles;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;
 

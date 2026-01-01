@@ -40,6 +40,11 @@ squared(X,Y) :- Y is X * X.
 
 %?- X is squared(3)
 % X=9
+
+always_fails(X, Y) :- fail.
+%TRUE arithmetic_function(always_fails/1)
+%?- X is always_fails(3)
+%ERROR Could not evaluate: always_fails/2 for: always_fails(3)
 */
 /**
  * <code>arithmetic_function(X)</code> - defines a predicate as an arithmetic function.

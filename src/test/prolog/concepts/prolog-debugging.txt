@@ -13,8 +13,8 @@ Once debugging is enabled the user is notified of four kinds of events:
 The Prolog commands available to control debugging are: 
  <code><a href="Trace.html">trace</a></code>,
  <code><a href="NoTrace.html">notrace</a></code>,
- <code><a href="Spy.html">spy</a></code>,
- <code><a href="NoSpy.html">nospy</a></code>,
+ <code><a href="AlterSpyPoint.html">spy</a></code>,
+ <code><a href="AlterSpyPoint.html">nospy</a></code>,
  <code><a href="NoDebug.html">nodebug</a></code> and
  <code><a href="Debugging.html">debugging</a></code>.
 </p>

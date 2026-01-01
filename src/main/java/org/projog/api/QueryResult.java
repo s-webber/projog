@@ -101,8 +101,6 @@ public final class QueryResult {
       return hasFailed || (hasBeenEvaluated && !predicate.couldReevaluationSucceed());
    }
 
-   // TODO add getList?
-
    /**
     * Returns the name of the atom instantiated to the variable with the specified id.
     *

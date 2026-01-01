@@ -18,7 +18,6 @@ package org.projog.core.predicate;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
-import org.projog.core.predicate.SucceedsNeverPredicate;
 
 public class SucceedsNeverPredicateTest {
    @Test

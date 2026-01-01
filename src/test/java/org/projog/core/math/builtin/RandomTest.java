@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.math.ArithmeticOperators;
-import org.projog.core.math.builtin.Random;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Term;
 

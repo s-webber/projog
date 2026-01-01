@@ -30,9 +30,9 @@ import org.projog.core.term.Term;
  * other predicates to be "plugged-in" to Projog.</li>
  * </ul>
  * <p>
- * <b>Note:</b> Rather than directly implementing {@code PredicateFactory} it is recommended to extend either
- * {@link org.projog.core.predicate.AbstractSingleResultPredicate} or
- * {@link org.projog.core.predicate.AbstractPredicateFactory}.
+ * <b>Note:</b> For predicates that should never be re-evaluated when backtracking, it is recommended to extend
+ * {@link org.projog.core.predicate.AbstractSingleResultPredicate} rather than directly implementing
+ * {@code PredicateFactory}.
  * </p>
  *
  * @see Predicates#addPredicateFactory(PredicateKey, String)

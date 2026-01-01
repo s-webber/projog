@@ -248,7 +248,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
          compile();
       }
 
-      return compiledPredicateFactory == null ? true : compiledPredicateFactory.isRetryable();
+      return compiledPredicateFactory == null || compiledPredicateFactory.isRetryable();
    }
 
    @Override
@@ -449,7 +449,7 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
 
    private static final class ActionIterator implements Iterator<ClauseAction> {
       private final ClauseAction[] clauses;
-      private int pos = 0;
+      private int pos;
 
       ActionIterator(ClauseAction[] clauses) {
          this.clauses = clauses;

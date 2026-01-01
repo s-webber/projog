@@ -271,14 +271,13 @@ public class TermFormatter {
 
    private void writeNonOperatorPredicate(Term p, StringBuilder sb) {
       String name = p.getName();
-      sb.append(name);
-      sb.append("(");
+      sb.append(name).append('(');
       for (int i = 0; i < p.getNumberOfArguments(); i++) {
          if (i != 0) {
             sb.append(", ");
          }
          write(p.getArgument(i), sb);
       }
-      sb.append(")");
+      sb.append(')');
    }
 }

@@ -122,8 +122,9 @@ public final class Between implements PredicateFactory {
             middle.backtrack();
             IntegerNumber n = IntegerNumberCache.valueOf(ctr++);
             return middle.unify(n);
+         } else {
+            return false;
          }
-         return false;
       }
 
       @Override

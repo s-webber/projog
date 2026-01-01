@@ -193,7 +193,6 @@ public class AbstractArithmeticOperatorTest {
       c.setKnowledgeBase(createKnowledgeBase());
       assertEquals(integerNumber(-84), c.preprocess(structure("dummy", integerNumber(42))));
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedUnaryOperator", c.preprocess(structure("dummy", variable())).getClass().getName());
-      // TODO test PreprocessedUnaryOperator
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedUnaryOperator",
                   c.preprocess(structure("dummy", structure("+", integerNumber(), variable()))).getClass().getName());
    }
@@ -209,7 +208,6 @@ public class AbstractArithmeticOperatorTest {
       c.setKnowledgeBase(createKnowledgeBase());
       assertEquals(integerNumber(47), c.preprocess(structure("dummy", integerNumber(8), integerNumber(3))));
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator", c.preprocess(structure("dummy", variable(), variable())).getClass().getName());
-      // TODO test PreprocessedBinaryOperator
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
                   c.preprocess(structure("dummy", variable(), structure("+", integerNumber(), variable()))).getClass().getName());
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",

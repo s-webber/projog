@@ -16,9 +16,7 @@
 package org.projog.core.term;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.projog.core.ProjogException;
 import org.projog.core.math.ArithmeticOperators;
@@ -71,52 +69,6 @@ public final class TermUtils {
    }
 
    /**
-    * Attempts to unify all corresponding {@link Term}s in the specified arrays.
-    * <p>
-    * <b>Note: If the attempt to unify the corresponding terms is unsuccessful only the terms in {@code queryArgs} will
-    * get backtracked.</b>
-    *
-    * @param queryArgs terms to unify with {@code consequentArgs}
-    * @param consequentArgs terms to unify with {@code queryArgs}
-    * @return {@code true} if the attempt to unify all corresponding terms was successful
-    */
-   public static boolean unify(final Term[] queryArgs, final Term[] consequentArgs) {
-      for (int i = 0; i < queryArgs.length; i++) {
-         if (!consequentArgs[i].unify(queryArgs[i])) {
-            for (int j = 0; j < i; j++) {
-               queryArgs[j].backtrack();
-            }
-            return false;
-         }
-      }
-      return true;
-   }
-
-   /**
-    * Returns all {@link Variable}s contained in the specified term.
-    *
-    * @param argument the term to find variables for
-    * @return all {@link Variable}s contained in the specified term.
-    */
-   public static Set<Variable> getAllVariablesInTerm(final Term argument) {
-      final Set<Variable> variables = new LinkedHashSet<>();
-      getAllVariablesInTerm(argument, variables);
-      return variables;
-   }
-
-   private static void getAllVariablesInTerm(final Term argument, final Set<Variable> variables) {
-      if (argument.isImmutable()) {
-         // ignore
-      } else if (argument.getType() == TermType.VARIABLE) {
-         variables.add((Variable) argument);
-      } else {
-         for (int i = 0; i < argument.getNumberOfArguments(); i++) {
-            getAllVariablesInTerm(argument.getArgument(i), variables);
-         }
-      }
-   }
-
-   /**
     * Return the {@link Numeric} represented by the specified {@link Term}.
     *
     * @param t the term representing a {@link Numeric}
@@ -156,11 +108,8 @@ public final class TermUtils {
     */
    public static long toLong(final ArithmeticOperators operators, final Term t) {
       final Numeric n = operators.getNumeric(t);
-      if (n.getType() == TermType.INTEGER) { // TODO use assertType
-         return n.getLong();
-      } else {
-         throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
-      }
+      assertType(n, TermType.INTEGER);
+      return n.getLong();
    }
 
    /**
@@ -171,9 +120,7 @@ public final class TermUtils {
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     */
    public static String getAtomName(final Term t) {
-      if (t.getType() != TermType.ATOM) { // TODO use assertType
-         throw new ProjogException("Expected an atom but got: " + t.getType() + " with value: " + t);
-      }
+      assertType(t, TermType.ATOM);
       return t.getName();
    }
 

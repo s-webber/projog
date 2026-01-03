@@ -25,7 +25,7 @@ import org.projog.core.term.Variable;
 
 public class SingleSolutionVariableQueryTest extends AbstractQueryTest {
    private static final String EXPECTED_NUMERIC_EXCEPTION_MESSAGE = "Expected Numeric but got: VARIABLE with value: X";
-   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: VARIABLE with value: X";
+   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected ATOM but got: VARIABLE with value: X";
 
    public SingleSolutionVariableQueryTest() {
       super("var(X).");

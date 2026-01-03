@@ -16,6 +16,8 @@
 package org.projog.core.predicate.builtin.compound;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -93,10 +95,22 @@ abstract class AbstractCollectionOf implements Predicate {
    protected abstract void add(List<Term> l, Term t);
 
    private List<Variable> getVariablesNotInTemplate(Term template, Term goal) {
-      Set<Variable> variablesInGoal = TermUtils.getAllVariablesInTerm(goal);
-      Set<Variable> variablesInTemplate = TermUtils.getAllVariablesInTerm(template);
+      Set<Variable> variablesInGoal = getAllVariablesInTerm(goal);
+      Set<Variable> variablesInTemplate = getAllVariablesInTerm(template);
       variablesInGoal.removeAll(variablesInTemplate);
       return new ArrayList<>(variablesInGoal);
+   }
+
+   /**
+    * Returns all {@link Variable}s contained in the specified term.
+    *
+    * @param argument the term to find variables for
+    * @return all {@link Variable}s contained in the specified term.
+    */
+   private static Set<Variable> getAllVariablesInTerm(final Term argument) {
+      HashMap<Variable, Term> variables = new HashMap<>();
+      argument.copy(variables);
+      return new HashSet<>(variables.keySet());
    }
 
    private boolean hasFoundAnotherSolution(final Predicate predicate) {

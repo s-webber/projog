@@ -52,12 +52,6 @@ public final class SpyPoints {
       this.termFormatter = kb.getTermFormatter();
    }
 
-   public SpyPoints(ProjogListeners observable, TermFormatter termFormatter) { // TODO only used by tests - remove
-      this.kb = null;
-      this.projogListeners = observable;
-      this.termFormatter = termFormatter;
-   }
-
    public void setTraceEnabled(boolean traceEnabled) {
       this.traceEnabled = traceEnabled;
    }

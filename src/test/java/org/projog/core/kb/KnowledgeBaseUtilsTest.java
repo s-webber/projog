@@ -94,14 +94,6 @@ public class KnowledgeBaseUtilsTest {
    }
 
    @Test
-   public void testIsConjuction() {
-      assertFalse(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("true.")));
-      assertTrue(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("true, true.")));
-      assertTrue(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("true, true, true.")));
-      assertTrue(KnowledgeBaseUtils.isConjunction(TestUtils.parseSentence("repeat(3), X<1, write(V), nl, true, !, fail.")));
-   }
-
-   @Test
    public void testIsSingleAnswer_NonRetryablePredicate() {
       // test single term representing a predicate that is not repeatable
       assertTrue(KnowledgeBaseUtils.isSingleAnswer(kb, atom("true")));

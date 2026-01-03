@@ -184,6 +184,7 @@ public class SpyPointsTest {
       assertTrue(sp.isSet() == false && sp.isEnabled() == true);
    }
 
+   @SuppressWarnings("deprecation")
    @Test
    public void testSpyPointUpdatesObserver() {
       // add a listener to the KnowledgeBase's ProjogListeners

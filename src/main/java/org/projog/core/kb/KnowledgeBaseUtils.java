@@ -137,7 +137,7 @@ public final class KnowledgeBaseUtils {
     * A {@link Term} is judged to represent a conjunction if is a structure with a functor of
     * {@link #CONJUNCTION_PREDICATE_NAME} and exactly two arguments.
     */
-   public static boolean isConjunction(Term t) {
+   private static boolean isConjunction(Term t) {
       // is relying on assumption that conjunctions are only, and always, represented by a comma
       return t.getType() == TermType.STRUCTURE && CONJUNCTION_PREDICATE_NAME.equals(t.getName()) && t.getNumberOfArguments() == 2;
    }

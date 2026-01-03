@@ -26,7 +26,7 @@ import org.projog.core.term.Term;
 
 public class MultiSolutionsMixedTermTypeQueryTest extends AbstractQueryTest {
    private static final String EXPECTED_NUMERIC_EXCEPTION_MESSAGE = "Expected Numeric but got: STRUCTURE with value: s(a, 1)";
-   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: STRUCTURE with value: s(a, 1)";
+   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected ATOM but got: STRUCTURE with value: s(a, 1)";
    private static final Term STRUCTURE = StructureFactory.createStructure("s", new Term[] {new Atom("a"), new IntegerNumber(1)});
 
    public MultiSolutionsMixedTermTypeQueryTest() {

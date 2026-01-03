@@ -28,6 +28,7 @@ import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
 
 public class AbstractPredicateFactoryTest {
+   @SuppressWarnings("deprecation")
    @Test
    public void testIllegalArgumentException() {
       AbstractPredicateFactory pf = new AbstractPredicateFactory() {
@@ -37,6 +38,7 @@ public class AbstractPredicateFactoryTest {
       }
    }
 
+   @SuppressWarnings("deprecation")
    @Test
    public void testOverridenMethods() {
       final Atom arg1 = atom("a");
@@ -109,6 +111,7 @@ public class AbstractPredicateFactoryTest {
       };
    }
 
+   @SuppressWarnings("deprecation")
    private void assertIllegalArgumentException(AbstractPredicateFactory pf, int numberOfArguments) {
       try {
          Term term;

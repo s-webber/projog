@@ -16,18 +16,14 @@
 package org.projog.core.term;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
-import static org.projog.TermFactory.list;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
-
-import java.util.Set;
 
 import org.junit.Test;
 import org.projog.TestUtils;
@@ -111,71 +107,6 @@ public class TermUtilsTest {
    }
 
    @Test
-   public void testUnifySuccess() {
-      // setup input terms
-      Variable x = variable("X");
-      Variable y = variable("Y");
-      Variable z = variable("Z");
-      Atom a = atom("a");
-      Atom b = atom("b");
-      Atom c = atom("c");
-      Term[] input1 = {x, b, z};
-      Term[] input2 = {a, y, c};
-
-      // attempt unification
-      assertTrue(TermUtils.unify(input1, input2));
-
-      // assert all variables unified to atoms
-      assertSame(a, x.getTerm());
-      assertSame(b, y.getTerm());
-      assertSame(c, z.getTerm());
-   }
-
-   @Test
-   public void testUnifyFailure() {
-      // setup input terms
-      Variable x = variable("X");
-      Variable y = variable("Y");
-      Variable z = variable("Z");
-      Atom a = atom("a");
-      Atom b = atom("b");
-      Atom c = atom("c");
-      Term[] input1 = {x, b, z, b};
-      Term[] input2 = {a, y, c, a};
-
-      // attempt unification
-      assertFalse(TermUtils.unify(input1, input2));
-
-      // assert all variables in input1 were backed tracked
-      assertSame(x, x.getTerm());
-      assertSame(z, z.getTerm());
-
-      // as javadocs states, terms passed in second argument to unify may not be backtracked
-      assertSame(b, y.getTerm());
-   }
-
-   @Test
-   public void testGetAllVariablesInTerm() {
-      Variable q = variable("Q");
-      Variable r = variable("R");
-      Variable s = variable("S");
-      Variable t = variable("T");
-      Variable v = variable("V");
-      Variable w = variable("W");
-      Variable x = variable("X");
-      Variable y = variable("Y");
-      Variable z = variable("Z");
-      Variable anon = new Variable();
-      Variable[] variables = {q, r, s, t, v, w, x, y, z, anon};
-      Term input = structure("p1", x, v, anon, EmptyList.EMPTY_LIST, y, q, integerNumber(1), structure("p2", y, decimalFraction(1.5), w), list(s, y, integerNumber(7), r, t), z);
-      Set<Variable> result = TermUtils.getAllVariablesInTerm(input);
-      assertEquals(variables.length, result.size());
-      for (Variable variable : variables) {
-         assertTrue(result.contains(variable));
-      }
-   }
-
-   @Test
    public void testIntegerNumberCastToNumeric() {
       IntegerNumber i = integerNumber();
       assertSame(i, TermUtils.castToNumeric(i));
@@ -248,8 +179,8 @@ public class TermUtilsTest {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       assertTestToLongException(kb, atom("test"), "Cannot find arithmetic operator: test/0");
       assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find arithmetic operator: p/2");
-      assertTestToLongException(kb, decimalFraction(0), "Expected integer but got: FRACTION with value: 0.0");
-      assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected integer but got: FRACTION with value: 2.0");
+      assertTestToLongException(kb, decimalFraction(0), "Expected INTEGER but got: FRACTION with value: 0.0");
+      assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected INTEGER but got: FRACTION with value: 2.0");
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
@@ -275,7 +206,7 @@ public class TermUtilsTest {
          TermUtils.getAtomName(p);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
+         assertEquals("Expected ATOM but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
       }
    }
 

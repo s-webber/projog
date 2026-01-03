@@ -24,8 +24,9 @@ import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
-import static org.projog.TestUtils.createArgs;
 import static org.projog.TestUtils.createKnowledgeBase;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;
@@ -192,7 +193,6 @@ public class AbstractArithmeticOperatorTest {
       c.setKnowledgeBase(createKnowledgeBase());
       assertEquals(integerNumber(-84), c.preprocess(structure("dummy", integerNumber(42))));
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedUnaryOperator", c.preprocess(structure("dummy", variable())).getClass().getName());
-      // TODO test PreprocessedUnaryOperator
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedUnaryOperator",
                   c.preprocess(structure("dummy", structure("+", integerNumber(), variable()))).getClass().getName());
    }
@@ -208,7 +208,6 @@ public class AbstractArithmeticOperatorTest {
       c.setKnowledgeBase(createKnowledgeBase());
       assertEquals(integerNumber(47), c.preprocess(structure("dummy", integerNumber(8), integerNumber(3))));
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator", c.preprocess(structure("dummy", variable(), variable())).getClass().getName());
-      // TODO test PreprocessedBinaryOperator
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
                   c.preprocess(structure("dummy", variable(), structure("+", integerNumber(), variable()))).getClass().getName());
       assertEquals("org.projog.core.math.AbstractArithmeticOperator$PreprocessedBinaryOperator",
@@ -234,5 +233,11 @@ public class AbstractArithmeticOperatorTest {
       final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
       };
       assertTrue(c.isPure());
+   }
+
+   private static Term[] createArgs(int numberOfArguments, Term term) {
+      Term[] args = new Term[numberOfArguments];
+      Arrays.fill(args, term);
+      return args;
    }
 }

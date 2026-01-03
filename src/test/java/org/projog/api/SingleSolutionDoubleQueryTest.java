@@ -21,7 +21,7 @@ import java.util.Optional;
 import org.projog.core.term.DecimalFraction;
 
 public class SingleSolutionDoubleQueryTest extends AbstractQueryTest {
-   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: FRACTION with value: 42.5";
+   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected ATOM but got: FRACTION with value: 42.5";
    private static final double DOUBLE_VALUE = 42.5;
 
    public SingleSolutionDoubleQueryTest() {

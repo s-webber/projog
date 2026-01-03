@@ -135,6 +135,4 @@ public abstract class AbstractSingleResultPredicate implements PredicateFactory,
    protected final FileHandles getFileHandles() {
       return knowledgeBase.getFileHandles();
    }
-
-   // TODO add more convenience methods like getOutputStream() and formatTerm(Term)
 }

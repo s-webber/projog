@@ -54,7 +54,7 @@ overloaded_predicate_name(X, Y) :- X = this_rule_has_two_arguments, X = Y.
 %TRUE listing(predicate_name_that_doesnt_exist_in_knowledge_base)
 
 %?- listing(X)
-%ERROR Expected an atom but got: VARIABLE with value: X
+%ERROR Expected ATOM but got: VARIABLE with value: X
 */
 /**
  * <code>listing(X)</code> - outputs current clauses.

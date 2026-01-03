@@ -41,11 +41,13 @@ import org.projog.core.event.SpyPoints;
 import org.projog.core.event.SpyPoints.SpyPoint;
 import org.projog.core.event.SpyPoints.SpyPointEvent;
 import org.projog.core.event.SpyPoints.SpyPointExitEvent;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 public class InterpretedUserDefinedPredicateTest {
    private final Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
@@ -64,9 +66,15 @@ public class InterpretedUserDefinedPredicateTest {
       this.mockAction3 = mock(ClauseAction.class);
 
       this.listener = new SimpleListener();
+
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
-      this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
+      TermFormatter termFormatter = TestUtils.createTermFormatter();
+      KnowledgeBase mockKnowledgeBase = mock(KnowledgeBase.class);
+      when(mockKnowledgeBase.getTermFormatter()).thenReturn(termFormatter);
+      when(mockKnowledgeBase.getProjogListeners()).thenReturn(observable);
+
+      this.spyPoints = new SpyPoints(mockKnowledgeBase);
       this.spyPoint = spyPoints.getSpyPoint(PredicateKey.createForTerm(term));
    }
 

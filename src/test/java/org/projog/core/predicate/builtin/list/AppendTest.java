@@ -25,8 +25,7 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 public class AppendTest {
    private static final String APPEND_PROLOG =
                //
-               "append_([],L,L)." +
-               "append_([X|L1],L2,[X|L3]) :- append_(L1,L2,L3).";
+               "append_([],L,L)." + "append_([X|L1],L2,[X|L3]) :- append_(L1,L2,L3).";
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("append", 3, APPEND_PROLOG);
 
@@ -89,8 +88,7 @@ public class AppendTest {
                "length(X,1000),length(Y,1000),append(X,Y,Z),numbervars(X:Y).",
                "length(X,1000),length(Y,1000),length(Z,2000),append(X,Y,Z),numbervars(Z).",
                "length(X,1000),length(Y,1000),length(Z,2000),numbervars(Z),append(X,Y,Z).",
-               "length(X,1000),length(Y,1000),length(Z,2000),numbervars(X:Y),append(X,Y,Z).",
-   })
+               "length(X,1000),length(Y,1000),length(Z,2000),numbervars(X:Y),append(X,Y,Z).",})
    public void testLongLists(String query) {
       PREDICATE_ASSERT.assertQuery(query);
    }

@@ -22,8 +22,6 @@ package org.projog.core.kb;
  * implementations can extend this class and just override the method(s) they require to be different, rather than
  * implementing {@link ProjogProperties} directly.
  * </p>
- * TODO if this project is upgraded from Java 7 then this class can be removed and its functionality implemented as
- * default methods of the ProjogProperties interface.
  */
 public class ProjogDefaultProperties implements ProjogProperties {
    /** Returns {@link #DEFAULT_BOOTSTRAP_SCRIPT} */

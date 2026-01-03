@@ -21,10 +21,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.projog.TestUtils.ADD_ARITHMETIC_OPERATOR_KEY;
 import static org.projog.TestUtils.ADD_PREDICATE_KEY;
-import static org.projog.TestUtils.BOOTSTRAP_FILE;
 import static org.projog.TestUtils.parseTermsFromFile;
 import static org.projog.core.kb.KnowledgeBaseUtils.QUESTION_PREDICATE_NAME;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.projog.TestUtils;
-import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -45,6 +44,8 @@ import org.projog.core.term.Term;
  * {@code projog-bootstrap.pl} is used to configure the build-in predicates and arithmetic functions.
  */
 public class BootstrapTest {
+   private static final File BOOTSTRAP_FILE = new File("src/main/resources/projog-bootstrap.pl");
+
    private final KnowledgeBase kb = TestUtils.createKnowledgeBase();
 
    @Test

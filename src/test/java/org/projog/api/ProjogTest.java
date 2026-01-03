@@ -21,7 +21,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.projog.TestUtils.PROJOG_DEFAULT_PROPERTIES;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +31,7 @@ import java.io.StringReader;
 import org.junit.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
+import org.projog.core.kb.ProjogDefaultProperties;
 import org.projog.core.kb.ProjogProperties;
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.math.Numeric;
@@ -151,7 +151,7 @@ public class ProjogTest {
    /** Attempts to open a file that doesn't exist to see how non-ProjogException exceptions are dealt with. */
    @Test
    public void testIOExceptionWhileEvaluatingQueries() {
-      assertStackTraceOfIOExceptionWhileEvaluatingQueries(PROJOG_DEFAULT_PROPERTIES);
+      assertStackTraceOfIOExceptionWhileEvaluatingQueries(new ProjogDefaultProperties());
    }
 
    private void assertStackTraceOfIOExceptionWhileEvaluatingQueries(ProjogProperties projogProperties) {

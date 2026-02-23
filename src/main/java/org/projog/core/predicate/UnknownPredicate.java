@@ -15,6 +15,9 @@
  */
 package org.projog.core.predicate;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.udp.PredicateUtils;
 import org.projog.core.term.Term;
@@ -30,7 +33,14 @@ import org.projog.core.term.Term;
 public final class UnknownPredicate implements PredicateFactory {
    private final KnowledgeBase kb;
    private final PredicateKey key;
-   private PredicateFactory actualPredicateFactory; //  TODO update Javadoc to explain actualPredicateFactory
+   private final Lock lock = new ReentrantLock();
+   /**
+    * The actual predicate factory to use for {@author key}.
+    * <p>
+    * This is for the scenario where there the predicate was not defined when first referenced, but has since been
+    * defined.
+    */
+   private PredicateFactory actualPredicateFactory;
 
    public UnknownPredicate(KnowledgeBase kb, PredicateKey key) {
       this.kb = kb;
@@ -64,7 +74,9 @@ public final class UnknownPredicate implements PredicateFactory {
          return;
       }
 
-      synchronized (key) {
+      try {
+         lock.lock();
+
          if (actualPredicateFactory == null) {
             PredicateFactory pf = kb.getPredicates().getPredicateFactory(key);
             if (pf instanceof UnknownPredicate) {
@@ -73,6 +85,8 @@ public final class UnknownPredicate implements PredicateFactory {
                actualPredicateFactory = pf;
             }
          }
+      } finally {
+         lock.unlock();
       }
    }
 

@@ -17,9 +17,9 @@ package org.projog.core.predicate.builtin.clp;
 
 import static org.projog.core.term.TermUtils.castToNumeric;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.projog.clp.Expression;
 import org.projog.clp.FixedValue;
@@ -41,9 +41,8 @@ import org.projog.core.term.Term;
  */
 public final class ExpressionFactories {
    private final KnowledgeBase kb;
-   private final Object lock = new Object();
-   private final Map<PredicateKey, String> factoryClassNames = new HashMap<>();
-   private final Map<PredicateKey, ExpressionFactory> factoryInstances = new HashMap<>();
+   private final Map<PredicateKey, String> factoryClassNames = new ConcurrentHashMap<>();
+   private final Map<PredicateKey, ExpressionFactory> factoryInstances = new ConcurrentHashMap<>();
 
    public ExpressionFactories(KnowledgeBase kb) {
       this.kb = kb;
@@ -57,12 +56,9 @@ public final class ExpressionFactories {
     * @throws ProjogException if there is already a {@code ExpressionFactory} associated with the {@code PredicateKey}
     */
    public void addExpressionFactory(PredicateKey key, String operatorClassName) {
-      synchronized (lock) {
-         if (factoryClassNames.containsKey(key)) {
-            throw new ProjogException("Already defined CLP expression: " + key);
-         } else {
-            factoryClassNames.put(key, operatorClassName);
-         }
+      String existingValue = factoryClassNames.putIfAbsent(key, operatorClassName);
+      if (existingValue != null) {
+         throw new ProjogException("Already defined CLP expression: " + key);
       }
    }
 
@@ -105,14 +101,7 @@ public final class ExpressionFactories {
    }
 
    private ExpressionFactory instantiateExpressionFactory(PredicateKey key) {
-      synchronized (lock) {
-         ExpressionFactory factory = factoryInstances.get(key);
-         if (factory == null) {
-            factory = instantiateExpressionFactory(factoryClassNames.get(key));
-            factoryInstances.put(key, factory);
-         }
-         return factory;
-      }
+      return factoryInstances.computeIfAbsent(key, k -> instantiateExpressionFactory(factoryClassNames.get(k)));
    }
 
    private ExpressionFactory instantiateExpressionFactory(String className) {

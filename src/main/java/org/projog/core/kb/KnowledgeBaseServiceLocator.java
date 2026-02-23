@@ -15,10 +15,9 @@
  */
 package org.projog.core.kb;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Associates arbitrary objects with a {@code KnowledgeBase}.
@@ -29,7 +28,7 @@ import java.util.WeakHashMap;
  * </p>
  */
 public final class KnowledgeBaseServiceLocator {
-   private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new WeakHashMap<>();
+   private static final Map<KnowledgeBase, KnowledgeBaseServiceLocator> CACHE = new ConcurrentHashMap<>();
 
    /**
     * Returns the {@code KnowledgeBaseServiceLocator} associated with the specified {@code KnowledgeBase}.
@@ -39,26 +38,11 @@ public final class KnowledgeBaseServiceLocator {
     * </p>
     */
    public static KnowledgeBaseServiceLocator getServiceLocator(KnowledgeBase kb) {
-      KnowledgeBaseServiceLocator l = CACHE.get(kb);
-      if (l == null) {
-         l = createServiceLocator(kb);
-      }
-      return l;
-   }
-
-   private static KnowledgeBaseServiceLocator createServiceLocator(KnowledgeBase kb) {
-      synchronized (CACHE) {
-         KnowledgeBaseServiceLocator l = CACHE.get(kb);
-         if (l == null) {
-            l = new KnowledgeBaseServiceLocator(kb);
-            CACHE.put(kb, l);
-         }
-         return l;
-      }
+      return CACHE.computeIfAbsent(kb, k -> new KnowledgeBaseServiceLocator(k));
    }
 
    private final KnowledgeBase kb;
-   private final Map<Class<?>, Object> services = new HashMap<>();
+   private final Map<Class<?>, Object> services = new ConcurrentHashMap<>();
 
    /** @see #getServiceLocator */
    private KnowledgeBaseServiceLocator(KnowledgeBase kb) {
@@ -73,13 +57,9 @@ public final class KnowledgeBaseServiceLocator {
     */
    public void addInstance(Class<?> referenceType, Object instance) {
       assertInstanceOf(referenceType, instance);
-      synchronized (services) {
-         Object r = services.get(referenceType);
-         if (r == null) {
-            services.put(referenceType, instance);
-         } else {
-            throw new IllegalStateException("Already have a service with key: " + referenceType);
-         }
+      Object existingValue = services.putIfAbsent(referenceType, instance);
+      if (existingValue != null) {
+         throw new IllegalStateException("Already have a service with key: " + referenceType);
       }
    }
 
@@ -114,27 +94,15 @@ public final class KnowledgeBaseServiceLocator {
     */
    @SuppressWarnings("unchecked")
    public <T> T getInstance(Class<?> referenceType, Class<?> instanceType) {
-      Object r = services.get(referenceType);
-      if (r != null) {
-         return (T) r;
-      }
-
-      try {
-         return (T) createInstance(referenceType, instanceType);
-      } catch (ReflectiveOperationException e) {
-         throw new RuntimeException("Could not create new instance of service: " + instanceType, e);
-      }
+      return (T) services.computeIfAbsent(referenceType, k -> createInstance(referenceType, instanceType));
    }
 
-   private Object createInstance(Class<?> referenceType, Class<?> instanceType) throws ReflectiveOperationException {
-      synchronized (services) {
-         Object r = services.get(referenceType);
-         if (r == null) {
-            assertAssignableFrom(referenceType, instanceType);
-            r = KnowledgeBaseUtils.newInstance(kb, instanceType);
-            services.put(referenceType, r);
-         }
-         return r;
+   private Object createInstance(Class<?> referenceType, Class<?> instanceType) {
+      try {
+         assertAssignableFrom(referenceType, instanceType);
+         return KnowledgeBaseUtils.newInstance(kb, instanceType);
+      } catch (ReflectiveOperationException e) {
+         throw new RuntimeException("Could not create new instance of service: " + instanceType, e);
       }
    }
 

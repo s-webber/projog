@@ -19,6 +19,8 @@ import static org.projog.core.term.TermUtils.getAtomName;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.parser.ProjogSourceReader;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
@@ -36,20 +38,23 @@ import org.projog.core.term.Term;
  * </p>
  */
 public final class EnsureLoaded extends AbstractSingleResultPredicate {
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
 
    private final Set<String> loadedResources = new HashSet<>();
 
    @Override
    protected boolean evaluate(Term arg) {
       String resourceName = getResourceName(arg);
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (loadedResources.contains(resourceName)) {
             getProjogListeners().notifyInfo("Already loaded: " + resourceName);
          } else {
             ProjogSourceReader.parseResource(getKnowledgeBase(), resourceName);
             loadedResources.add(resourceName);
          }
+      } finally {
+         lock.unlock();
       }
       return true;
    }

@@ -15,8 +15,10 @@
  */
 package org.projog.core.predicate.builtin.kb;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.math.Numeric;
 import org.projog.core.predicate.AbstractSingleResultPredicate;
@@ -55,33 +57,24 @@ import org.projog.core.term.Term;
  * argument must be a numeric value.
  */
 public final class Flag extends AbstractSingleResultPredicate {
-   private final Map<PredicateKey, Numeric> flags = new HashMap<>();
+   private final Map<PredicateKey, Numeric> flags = new ConcurrentHashMap<>();
+   private final Lock lock = new ReentrantLock();
 
    @Override
    protected boolean evaluate(Term key, Term oldValue, Term newValue) {
       PredicateKey pk = PredicateKey.createForTerm(key);
-      synchronized (flags) {
-         Numeric n = getOrCreate(pk);
+      try {
+         lock.lock();
 
+         Numeric n = flags.getOrDefault(pk, IntegerNumberCache.ZERO);
          if (oldValue.unify(n)) {
-            put(pk, newValue);
+            flags.put(pk, getArithmeticOperators().getNumeric(newValue));
             return true;
          } else {
             return false;
          }
+      } finally {
+         lock.unlock();
       }
-   }
-
-   private Numeric getOrCreate(PredicateKey pk) {
-      Numeric n = flags.get(pk);
-      if (n == null) {
-         n = IntegerNumberCache.ZERO;
-         flags.put(pk, n);
-      }
-      return n;
-   }
-
-   private void put(PredicateKey pk, Term value) {
-      flags.put(pk, getArithmeticOperators().getNumeric(value));
    }
 }

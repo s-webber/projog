@@ -16,12 +16,15 @@
 package org.projog.core.predicate;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.SortedMap;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -37,26 +40,26 @@ public final class Predicates {
     * Used to coordinate access to {@link javaPredicateClassNames}, {@link #javaPredicateInstances} and
     * {@link #userDefinedPredicates}
     */
-   private final Object predicatesLock = new Object();
+   private final Lock lock = new ReentrantLock();
 
    /**
     * The class names of "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this
     * {@code KnowledgeBase}.
     */
-   private final Map<PredicateKey, String> javaPredicateClassNames = new HashMap<>();
+   private final Map<PredicateKey, String> javaPredicateClassNames = new ConcurrentHashMap<>();
 
    /**
     * The instances of "built-in" Java predicates (i.e. not defined using Prolog syntax) associated with this
     * {@code KnowledgeBase}.
     */
-   private final Map<PredicateKey, PredicateFactory> javaPredicateInstances = new HashMap<>();
+   private final Map<PredicateKey, PredicateFactory> javaPredicateInstances = new ConcurrentHashMap<>();
 
    /**
     * The user-defined predicates (i.e. defined using Prolog syntax) associated with this {@code KnowledgeBase}.
     * <p>
-    * Uses TreeMap to enforce predictable ordering for when iterated (e.g. by <code>listing(X)</code>).
+    * Uses ConcurrentSkipListMap to enforce predictable ordering for when iterated (e.g. by <code>listing(X)</code>).
     */
-   private final Map<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new TreeMap<>();
+   private final SortedMap<PredicateKey, UserDefinedPredicateFactory> userDefinedPredicates = new ConcurrentSkipListMap<>();
 
    private final KnowledgeBase kb;
 
@@ -98,7 +101,8 @@ public final class Predicates {
     */
    public UserDefinedPredicateFactory createOrReturnUserDefinedPredicate(PredicateKey key) {
       UserDefinedPredicateFactory userDefinedPredicate;
-      synchronized (predicatesLock) { // TODO if already in userDefinedPredicates then avoid need to synch
+      try {
+         lock.lock();
          if (isExistingJavaPredicate(key)) {
             throw new ProjogException("Cannot replace already defined built-in predicate: " + key);
          }
@@ -110,6 +114,8 @@ public final class Predicates {
             userDefinedPredicate = new DynamicUserDefinedPredicateFactory(kb, key);
             addUserDefinedPredicate(userDefinedPredicate);
          }
+      } finally {
+         lock.unlock();
       }
       return userDefinedPredicate;
    }
@@ -124,12 +130,15 @@ public final class Predicates {
     */
    public void addUserDefinedPredicate(UserDefinedPredicateFactory userDefinedPredicate) {
       PredicateKey key = userDefinedPredicate.getPredicateKey();
-      synchronized (predicatesLock) {
+      try {
+         lock.lock();
          if (isExistingPredicate(key)) {
             updateExistingPredicate(key, userDefinedPredicate);
          } else {
             userDefinedPredicates.put(key, userDefinedPredicate);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -194,7 +203,8 @@ public final class Predicates {
    }
 
    private PredicateFactory instantiatePredicateFactory(PredicateKey key) {
-      synchronized (predicatesLock) {
+      try {
+         lock.lock();
          PredicateFactory predicateFactory = getExistingPredicateFactory(key);
          if (predicateFactory != null) {
             return predicateFactory;
@@ -203,6 +213,8 @@ public final class Predicates {
             javaPredicateInstances.put(key, predicateFactory);
             return predicateFactory;
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -231,12 +243,15 @@ public final class Predicates {
     * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
     */
    public void addPredicateFactory(PredicateKey key, String predicateFactoryClassName) {
-      synchronized (predicatesLock) {
+      try {
+         lock.lock();
          if (isExistingPredicate(key)) {
             throw new ProjogException("Already defined: " + key);
          } else {
             javaPredicateClassNames.put(key, predicateFactoryClassName);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -253,13 +268,16 @@ public final class Predicates {
     * @throws ProjogException if there is already a {@link PredicateFactory} associated with the {@code PredicateKey}
     */
    public void addPredicateFactory(PredicateKey key, PredicateFactory predicateFactory) {
-      synchronized (predicatesLock) {
+      try {
+         lock.lock();
          if (isExistingPredicate(key)) {
             throw new ProjogException("Already defined: " + key);
          } else {
             javaPredicateClassNames.put(key, predicateFactory.getClass().getName());
             javaPredicateInstances.put(key, predicateFactory);
          }
+      } finally {
+         lock.unlock();
       }
    }
 

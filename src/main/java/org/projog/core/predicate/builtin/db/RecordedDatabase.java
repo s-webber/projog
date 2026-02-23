@@ -19,10 +19,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.IntegerNumber;
@@ -36,9 +38,10 @@ import org.projog.core.term.Term;
  */
 public final class RecordedDatabase {
    private final AtomicLong referenceCtr = new AtomicLong();
-   private final SortedMap<Long, Link> references = new TreeMap<>();
+   private final Map<Long, Link> references = new ConcurrentHashMap<>();
    private final List<PredicateKey> keys = new ArrayList<>();
-   private final SortedMap<PredicateKey, Chain> chains = new TreeMap<>();
+   private final Map<PredicateKey, Chain> chains = new ConcurrentHashMap<>();
+   private final Lock lock = new ReentrantLock();
 
    /**
     * Associates a value with a key.
@@ -85,13 +88,17 @@ public final class RecordedDatabase {
 
    private Chain createChain(PredicateKey key) {
       Chain chain;
-      synchronized (chains) {
+      try {
+         lock.lock();
+
          chain = chains.get(key);
          if (chain == null) {
             chain = new Chain(key);
             chains.put(key, chain);
             keys.add(key);
          }
+      } finally {
+         lock.unlock();
       }
       return chain;
    }
@@ -108,7 +115,9 @@ public final class RecordedDatabase {
    }
 
    private void addReference(IntegerNumber reference, Link link, boolean addLast) {
-      synchronized (references) {
+      try {
+         lock.lock();
+
          references.put(reference.getLong(), link);
 
          Chain c = link.chain;
@@ -123,13 +132,16 @@ public final class RecordedDatabase {
             link.next = c.first;
             c.first = link;
          }
+      } finally {
+         lock.unlock();
       }
    }
 
    private boolean removeReference(Long reference) {
-      synchronized (references) {
-         Link link = references.remove(reference);
+      try {
+         lock.lock();
 
+         Link link = references.remove(reference);
          if (link == null) {
             return false;
          }
@@ -152,6 +164,8 @@ public final class RecordedDatabase {
          link.deleted = true;
 
          return true;
+      } finally {
+         lock.unlock();
       }
    }
 

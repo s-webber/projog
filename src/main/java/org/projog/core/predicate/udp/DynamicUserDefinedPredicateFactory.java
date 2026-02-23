@@ -17,6 +17,8 @@ package org.projog.core.predicate.udp;
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.event.SpyPoints;
 import org.projog.core.kb.KnowledgeBase;
@@ -38,7 +40,7 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
    private static final int FIRST = 0;
    private static final int LAST = 1;
 
-   private final Object LOCK = new Object();
+   private final Lock lock = new ReentrantLock();
    private final KnowledgeBase kb;
    private final SpyPoints.SpyPoint spyPoint;
    private final ClauseActionMetaData[] ends = new ClauseActionMetaData[2];
@@ -113,7 +115,8 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
    @Override
    public void addFirst(ClauseModel clauseModel) {
-      synchronized (LOCK) {
+      try {
+         lock.lock();
          ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          addToIndex(clauseModel, newClause);
 
@@ -128,12 +131,15 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          newClause.next = first;
          first.previous = newClause;
          ends[FIRST] = newClause;
+      } finally {
+         lock.unlock();
       }
    }
 
    @Override
    public void addLast(ClauseModel clauseModel) {
-      synchronized (LOCK) {
+      try {
+         lock.lock();
          ClauseActionMetaData newClause = createClauseActionMetaData(clauseModel);
          addToIndex(clauseModel, newClause);
 
@@ -148,6 +154,8 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
          last.next = newClause;
          newClause.previous = last;
          ends[LAST] = newClause;
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -226,7 +234,8 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
 
       @Override
       public void remove() { // TODO find way to use index when retracting
-         synchronized (LOCK) {
+         try {
+            lock.lock();
             if (hasPrimaryKey) {
                Term firstArg = previous.clause.getModel().getConsequent().firstArgument();
                if (index.remove(firstArg) == null) {
@@ -254,6 +263,8 @@ public final class DynamicUserDefinedPredicateFactory implements UserDefinedPred
             if (ends[FIRST] == null && ends[LAST] == null) {
                hasPrimaryKey = index != null;
             }
+         } finally {
+            lock.unlock();
          }
       }
    }

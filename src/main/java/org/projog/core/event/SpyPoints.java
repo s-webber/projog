@@ -15,9 +15,9 @@
  */
 package org.projog.core.event;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateKey;
@@ -39,8 +39,7 @@ import org.projog.core.term.TermFormatter;
  * @see KnowledgeBase#getSpyPoints()
  */
 public final class SpyPoints {
-   private final Object lock = new Object();
-   private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>(); // TODO make concurrent?
+   private final Map<PredicateKey, SpyPoint> spyPoints = new ConcurrentHashMap<>();
    private final KnowledgeBase kb;
    private final ProjogListeners projogListeners;
    private final TermFormatter termFormatter;
@@ -57,33 +56,16 @@ public final class SpyPoints {
    }
 
    public void setSpyPoint(PredicateKey key, boolean set) {
-      synchronized (lock) {
-         SpyPoint sp = getSpyPoint(key);
-         sp.set = set;
-      }
+      SpyPoint sp = getSpyPoint(key);
+      sp.set = set;
    }
 
    public SpyPoint getSpyPoint(PredicateKey key) {
-      SpyPoint spyPoint = spyPoints.get(key);
-      if (spyPoint == null) {
-         spyPoint = createNewSpyPoint(key);
-      }
-      return spyPoint;
-   }
-
-   private SpyPoint createNewSpyPoint(PredicateKey key) {
-      synchronized (lock) {
-         SpyPoint spyPoint = spyPoints.get(key);
-         if (spyPoint == null) {
-            spyPoint = new SpyPoint(key);
-            spyPoints.put(key, spyPoint);
-         }
-         return spyPoint;
-      }
+      return spyPoints.computeIfAbsent(key, SpyPoint::new);
    }
 
    public Map<PredicateKey, SpyPoint> getSpyPoints() {
-      return Collections.unmodifiableMap(spyPoints);
+      return new TreeMap<>(spyPoints);
    }
 
    public final class SpyPoint {

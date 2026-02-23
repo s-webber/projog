@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.predicate.udp.KeyFactories.KeyFactory;
 import org.projog.core.term.Term;
@@ -38,7 +40,7 @@ final class Indexes {
    private static final int MAX_INDEXABLE_ARGS = 9;
 
    private final ClauseAction[] masterData;
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final SoftReference<Index>[] indexes;
    private final int[] indexableArgs;
    private final int numIndexableArgs;
@@ -90,7 +92,8 @@ final class Indexes {
       Index index = ref != null ? ref.get() : null;
 
       if (index == null) {
-         synchronized (lock) {
+         try {
+            lock.lock();
             while (index == null) {
                ref = indexes[bitmask];
                index = ref != null ? ref.get() : null;
@@ -100,6 +103,8 @@ final class Indexes {
                   indexes[bitmask] = new SoftReference<>(index);
                }
             }
+         } finally {
+            lock.unlock();
          }
       }
 

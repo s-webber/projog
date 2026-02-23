@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -35,8 +38,9 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
    private final PredicateKey predicateKey;
    private final KnowledgeBase kb;
    private final List<ClauseModel> implications;
-   private final Map<Term, Processor> processing = new HashMap<>();
-   private final Map<Term, Term[]> cache = new HashMap<>();
+   private final Map<Term, Processor> processing = new ConcurrentHashMap<>();
+   private final Map<Term, Term[]> cache = new ConcurrentHashMap<>();
+   private final Lock lock = new ReentrantLock();
    private Clauses clauses;
 
    public TabledUserDefinedPredicateFactory(KnowledgeBase kb, PredicateKey predicateKey) {
@@ -104,10 +108,14 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
    public void compile() {
       // make sure we only call clauses once per instance
       if (clauses == null) {
-         synchronized (cache) {
+         try {
+            lock.lock();
+
             if (clauses == null) {
                clauses = Clauses.createFromModels(kb, implications);
             }
+         } finally {
+            lock.unlock();
          }
       }
    }
@@ -122,7 +130,9 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
 
       Processor processor;
       final boolean newProcessor;
-      synchronized (processing) {
+      try {
+         lock.lock();
+
          // if already have a processed result for this query then return it now rather than processing a new version
          Term[] previouslyCachedResult = cache.get(queryKey);
          if (previouslyCachedResult != null) {
@@ -138,6 +148,8 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
             processor = new Processor(term, clauses, Thread.currentThread());
             processing.put(queryKey, processor);
          }
+      } finally {
+         lock.unlock();
       }
 
       // if query is being processed by another thread then wait for it to finish and then reuse the cached result
@@ -164,9 +176,13 @@ public final class TabledUserDefinedPredicateFactory implements UserDefinedPredi
 
       // if the Processor was created as part of this method call then store the result in the cache so it can be reused
       if (newProcessor) {
-         synchronized (processing) {
+         try {
+            lock.lock();
+
             cache.put(queryKey, result);
             processing.remove(queryKey);
+         } finally {
+            lock.unlock();
          }
          // notify any threads that are waiting for the result
          synchronized (processor) {

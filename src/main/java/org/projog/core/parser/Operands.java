@@ -18,6 +18,8 @@ package org.projog.core.parser;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -39,7 +41,7 @@ import org.projog.core.kb.KnowledgeBase;
  * @see KnowledgeBase#getOperands()
  */
 public final class Operands {
-   private final Object LOCK = new Object();
+   private final Lock lock = new ReentrantLock();
 
    private final Map<String, Operand> infixOperands = new HashMap<>();
 
@@ -57,7 +59,8 @@ public final class Operands {
    public void addOperand(String operandName, String associativityName, int precedence) {
       Associativity a = getAssociativity(associativityName);
       Map<String, Operand> operandsMap = getOperandsMap(a);
-      synchronized (LOCK) {
+      try {
+         lock.lock();
          if (operandsMap.containsKey(operandName)) {
             Operand o = operandsMap.get(operandName);
             // if the operand is already registered throw an exception if the precedence is different else do nothing
@@ -67,6 +70,8 @@ public final class Operands {
          } else {
             operandsMap.put(operandName, new Operand(a, precedence));
          }
+      } finally {
+         lock.unlock();
       }
    }
 

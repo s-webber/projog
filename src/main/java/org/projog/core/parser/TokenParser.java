@@ -36,6 +36,25 @@ import java.io.Reader;
  * @see SentenceParser
  */
 class TokenParser {
+   /**
+    * A character preceded by a backslash (\) is an escape sequence and has special meaning.
+    * <p>
+    * {@code ESCAPE_SEQUENCES} contains the escape sequences. See:
+    * https://docs.oracle.com/javase/tutorial/java/data/characters.html
+    * </p>
+    */
+   private static final char[] ESCAPE_SEQUENCES = new char[128];
+   static {
+      ESCAPE_SEQUENCES['t'] = '\t';
+      ESCAPE_SEQUENCES['b'] = '\b';
+      ESCAPE_SEQUENCES['n'] = '\n';
+      ESCAPE_SEQUENCES['r'] = '\r';
+      ESCAPE_SEQUENCES['f'] = '\f';
+      ESCAPE_SEQUENCES['\''] = '\'';
+      ESCAPE_SEQUENCES['"'] = '"';
+      ESCAPE_SEQUENCES['\\'] = '\\';
+   }
+
    private final CharacterParser parser;
    private final Operands operands;
    private Token lastParsedToken;
@@ -302,27 +321,11 @@ class TokenParser {
    }
 
    private int escape(int escape) {
-      // https://docs.oracle.com/javase/tutorial/java/data/characters.html
-      switch (escape) {
-         case 't': // tab
-            return '\t';
-         case 'b': // backspace
-            return '\b';
-         case 'n': // newline
-            return '\n';
-         case 'r': // carriage return
-            return '\r';
-         case 'f': // formfeed
-            return '\f';
-         case '\'': // single quote
-            return '\'';
-         case '\"': // double quote
-            return '\"';
-         case '\\': // backslash
-            return '\\';
-         default:
-            throw newParserException("invalid character escape sequence");
+      char value = escape < ESCAPE_SEQUENCES.length ? ESCAPE_SEQUENCES[escape] : 0;
+      if (value != 0) {
+         return value;
       }
+      throw newParserException("invalid character escape sequence");
    }
 
    private Token parseSymbol(int c) {

@@ -134,26 +134,26 @@ public final class AtomConcat implements PredicateFactory {
       }
    }
 
-   private boolean evaluate(Term arg1, Term arg2, Term arg3) { // TODO rename arguments
-      assertAtomOrVariable(arg1);
-      assertAtomOrVariable(arg2);
-      assertAtomOrVariable(arg3);
+   private boolean evaluate(Term prefix, Term suffix, Term result) {
+      assertAtomOrVariable(prefix);
+      assertAtomOrVariable(suffix);
+      assertAtomOrVariable(result);
 
-      final boolean isArg1Atom = isAtom(arg1);
-      final boolean isArg2Atom = isAtom(arg2);
+      final boolean isArg1Atom = isAtom(prefix);
+      final boolean isArg2Atom = isAtom(suffix);
       if (isArg1Atom && isArg2Atom) {
-         final Atom concat = new Atom(arg1.getName() + arg2.getName());
-         return arg3.unify(concat);
+         final Atom concat = new Atom(prefix.getName() + suffix.getName());
+         return result.unify(concat);
       } else {
-         final String atomName = getAtomName(arg3);
+         final String resultName = getAtomName(result);
          if (isArg1Atom) {
-            String prefix = arg1.getName();
-            return (atomName.startsWith(prefix) && arg2.unify(new Atom(atomName.substring(prefix.length()))));
+            String prefixName = prefix.getName();
+            return (resultName.startsWith(prefixName) && suffix.unify(new Atom(resultName.substring(prefixName.length()))));
          } else if (isArg2Atom) {
-            String suffix = arg2.getName();
-            return (atomName.endsWith(suffix) && arg1.unify(new Atom(atomName.substring(0, (atomName.length() - suffix.length())))));
+            String suffixName = suffix.getName();
+            return (resultName.endsWith(suffixName) && prefix.unify(new Atom(resultName.substring(0, (resultName.length() - suffixName.length())))));
          } else {
-            throw new ProjogException("If third argument is not an atom then both first and second arguments must be: " + arg1 + " " + arg2 + " " + arg3);
+            throw new ProjogException("If third argument is not an atom then both first and second arguments must be: " + prefix + " " + suffix + " " + result);
          }
       }
    }
@@ -188,7 +188,7 @@ public final class AtomConcat implements PredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
+         if (couldReevaluationSucceed()) {
             arg1.backtrack();
             arg2.backtrack();
 
@@ -197,8 +197,9 @@ public final class AtomConcat implements PredicateFactory {
             ctr++;
 
             return arg1.unify(prefix) && arg2.unify(suffix);
+         } else {
+            return false;
          }
-         return false;
       }
 
       @Override

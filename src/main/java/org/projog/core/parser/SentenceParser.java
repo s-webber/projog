@@ -387,8 +387,6 @@ public final class SentenceParser {
 
       Token operandToken = tokens[maxPriorityIdx];
       int maxPriority = maxPriorityOperand.precedence;
-      //      if (maxPriority > previousPriority
-      //          || (maxPriority == previousPriority && (faiIfPriorityEqual || (maxPriorityIdx > startIdx && maxPriorityIdx < endIdx - 1 && operands.xfx(operandToken.getName()))))) {
       if (maxPriority > previousPriority || (maxPriority == previousPriority && faiIfPriorityEqual)) {
          throw newParserException(operandToken,
                      "Operator priority clash. " + operandToken.getName() + " (" + maxPriority + ") conflicts with previous priority (" + previousPriority + ")");
@@ -430,33 +428,38 @@ public final class SentenceParser {
              && first.getColumnNumber() == second.getColumnNumber() - second.getName().length();
    }
 
+   // NOTE: PMD warns of high cognitive and cyclomatic complexity - but keeping as is because:
+   // 1. Method is small and intent is clear.
+   // 2. Fast, as switch on enum be implemented by complier as switch on small dense ints (tableswitch).
+   // 3. Using Map<Enum, Function> would have performance cost.
+   // 4. Moving logic to Token (polymorphism) would make intent these clear and create circular dependency.
    private Term toTerm(Token token) {
       switch (token.getType()) {
-         case UNNAMED_BRACKET:
-            return toTerm(token.getArgument(0));
          case ATOM:
          case SYMBOL:
             return new Atom(token.getName());
-         case NAMED_BRACKET:
-            return toStructureFromNamedBracket(token);
-         case OPERAND_AND_ARGUMENTS:
-            return toStructureFromOperandAndArguments(token);
-         case LIST:
-            return toList(token);
          case INTEGER:
             return toIntegerNumber(token, token.getName());
          case FLOAT:
             return toDecimalFraction(token, token.getName());
-         case EMPTY_LIST:
-            return EmptyList.EMPTY_LIST;
          case VARIABLE:
             return getOrCreateVariable(token.getName());
+         case NAMED_BRACKET:
+            return toStructureFromNamedBracket(token);
+         case UNNAMED_BRACKET:
+            return toTerm(token.getArgument(0));
+         case OPERAND_AND_ARGUMENTS:
+            return toStructureFromOperandAndArguments(token);
+         case LIST:
+            return toList(token);
+         case EMPTY_LIST:
+            return EmptyList.EMPTY_LIST;
          default:
             throw new IllegalArgumentException(token.getType() + " " + token);
       }
    }
 
-   private Term toStructureFromNamedBracket(Token token) {
+   private Term toStructureFromNamedBracket(final Token token) {
       Token[] input = token.getArguments();
 
       List<Token> tokens = new ArrayList<>();
@@ -490,11 +493,11 @@ public final class SentenceParser {
       }
       tokens.add(toSingleToken(input, start, input.length, COMMA_PRIORITY, true));
 
-      Term[] args = new Term[tokens.size()];
-      for (int i = 0; i < args.length; i++) {
-         args[i] = toTerm(tokens.get(i));
+      Term[] termArgs = new Term[tokens.size()];
+      for (int i = 0; i < termArgs.length; i++) {
+         termArgs[i] = toTerm(tokens.get(i));
       }
-      return StructureFactory.createStructure(token.getName(), args);
+      return StructureFactory.createStructure(token.getName(), termArgs);
    }
 
    private Term toStructureFromOperandAndArguments(Token token) {

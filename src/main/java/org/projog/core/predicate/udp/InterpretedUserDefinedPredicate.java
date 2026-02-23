@@ -69,52 +69,40 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
    public boolean evaluate() {
       try {
          if (retryCurrentClauseAction) {
-            if (debugEnabled) {
-               spyPoint.logRedo(this, query);
-            }
+            logRedo();
             if (currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
-               if (debugEnabled) {
-                  spyPoint.logExit(this, query, currentClause.getModel());
-               }
+               logExit();
                return true;
             }
             // attempt at retrying has failed so discard it
             retryCurrentClauseAction = false;
             query.backtrack();
          } else if (currentClause == null) {
-            if (debugEnabled) {
-               spyPoint.logCall(this, query);
-            }
+            logCall();
          } else {
-            if (debugEnabled) {
-               spyPoint.logRedo(this, query);
-            }
+            logRedo();
             query.backtrack();
          }
+
          // cycle though all rules until none left
          while (clauseActions.hasNext()) {
             currentClause = clauseActions.next();
             currentPredicate = currentClause.getPredicate(query);
             if (currentPredicate != null && currentPredicate.evaluate()) {
                retryCurrentClauseAction = currentPredicate.couldReevaluationSucceed();
-               if (debugEnabled) {
-                  spyPoint.logExit(this, query, currentClause.getModel());
-               }
+               logExit();
                return true;
             } else {
                retryCurrentClauseAction = false;
                query.backtrack();
             }
          }
-         if (debugEnabled) {
-            spyPoint.logFail(this, query);
-         }
+
+         logFail();
          return false;
       } catch (CutException e) {
-         if (debugEnabled) {
-            spyPoint.logFail(this, query);
-         }
+         logFail();
          return false;
       } catch (ProjogException pe) {
          pe.addClause(currentClause.getModel());
@@ -123,6 +111,30 @@ public final class InterpretedUserDefinedPredicate implements Predicate {
          ProjogException pe = new ProjogException("Exception processing: " + spyPoint.getPredicateKey(), t);
          pe.addClause(currentClause.getModel());
          throw pe;
+      }
+   }
+
+   private void logCall() {
+      if (debugEnabled) {
+         spyPoint.logCall(this, query);
+      }
+   }
+
+   private void logExit() {
+      if (debugEnabled) {
+         spyPoint.logExit(this, query, currentClause.getModel());
+      }
+   }
+
+   private void logRedo() {
+      if (debugEnabled) {
+         spyPoint.logRedo(this, query);
+      }
+   }
+
+   private void logFail() {
+      if (debugEnabled) {
+         spyPoint.logFail(this, query);
       }
    }
 

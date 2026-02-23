@@ -80,7 +80,7 @@ final class Clauses {
       return result;
    }
 
-   private static boolean isAnonymousVariable(Term arg) { // TODO move to TermUtils?
+   private static boolean isAnonymousVariable(Term arg) {
       return arg.getType().isVariable() && ((Variable) arg.getTerm()).isAnonymous();
    }
 

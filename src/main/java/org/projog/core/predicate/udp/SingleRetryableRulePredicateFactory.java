@@ -59,29 +59,21 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
       public boolean evaluate() {
          try {
             if (p == null) {
-               if (isSpyPointEnabled) {
-                  spyPoint.logCall(this, query);
-               }
+               logCall();
                p = clause.getPredicate(query);
-            } else if (isSpyPointEnabled) {
-               spyPoint.logRedo(this, query);
+            } else {
+               logRedo();
             }
 
             if (p.evaluate()) { // TODO p.couldReevaluationSucceed() &&
-               if (isSpyPointEnabled) {
-                  spyPoint.logExit(this, query, clause.getModel());
-               }
+               logExit();
                return true;
             } else {
-               if (isSpyPointEnabled) {
-                  spyPoint.logFail(this, query);
-               }
+               logFail();
                return false;
             }
          } catch (CutException e) {
-            if (isSpyPointEnabled) {
-               spyPoint.logFail(SingleNonRetryableRulePredicateFactory.class, query);
-            }
+            logFail();
             return false;
          } catch (ProjogException pe) {
             pe.addClause(clause.getModel());
@@ -90,6 +82,30 @@ final class SingleRetryableRulePredicateFactory implements PredicateFactory {
             ProjogException pe = new ProjogException("Exception processing: " + spyPoint.getPredicateKey(), t);
             pe.addClause(clause.getModel());
             throw pe;
+         }
+      }
+
+      private void logCall() {
+         if (isSpyPointEnabled) {
+            spyPoint.logCall(this, query);
+         }
+      }
+
+      private void logExit() {
+         if (isSpyPointEnabled) {
+            spyPoint.logExit(this, query, clause.getModel());
+         }
+      }
+
+      private void logRedo() {
+         if (isSpyPointEnabled) {
+            spyPoint.logRedo(this, query);
+         }
+      }
+
+      private void logFail() {
+         if (isSpyPointEnabled) {
+            spyPoint.logFail(this, query);
          }
       }
 

@@ -172,6 +172,12 @@ import org.projog.core.term.TermType;
 
 %?- number_codes('193457260',X)
 %ERROR Unexpected type for first argument: ATOM
+
+%?- number_chars(9223372036854775807, X)
+% X = [9,2,2,3,3,7,2,0,3,6,8,5,4,7,7,5,8,0,7]
+
+%?- number_chars(X, ['9','2','2','3','3','7','2','0','3','6','8','5','4','7','7','5','8','0','7'])
+% X=9223372036854775807
 */
 /**
  * <code>atom_chars</code> / <code>atom_codes</code> / <code>number_chars</code> / <code>number_codes</code>
@@ -335,7 +341,7 @@ public final class TermSplit extends AbstractSingleResultPredicate {
 
    private IntegerNumber toInteger(String s) {
       try {
-         return IntegerNumberCache.valueOf(Integer.parseInt(s)); // TODO should this be Long.parseLong
+         return IntegerNumberCache.valueOf(Long.parseLong(s));
       } catch (NumberFormatException e) {
          throw new ProjogException("Could not convert characters to an integer: '" + s + "'");
       }

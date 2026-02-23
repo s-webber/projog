@@ -15,6 +15,8 @@
  */
 package org.projog.core.math.builtin;
 
+import java.math.BigInteger;
+
 import org.projog.core.math.AbstractBinaryIntegerArithmeticOperator;
 
 /* TEST
@@ -45,5 +47,12 @@ public final class ShiftLeft extends AbstractBinaryIntegerArithmeticOperator {
    @Override
    protected long calculateLong(long n1, long n2) {
       return n1 << n2;
+   }
+
+   public static BigInteger shift(BigInteger x, int n) {
+      x.longValueExact();
+      //return (n >= 0) ? x.shiftLeft(n) : x.shiftRight(-n); //<<
+      //return (n >= 0) ? x.shiftRight(n) : x.shiftLeft(-n); //>>
+      return null;
    }
 }

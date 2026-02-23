@@ -30,7 +30,13 @@ import org.projog.core.term.Term;
 public final class UnknownPredicate implements PredicateFactory {
    private final KnowledgeBase kb;
    private final PredicateKey key;
-   private PredicateFactory actualPredicateFactory; //  TODO update Javadoc to explain actualPredicateFactory
+   /**
+    * The actual predicate factory to use for {@author key}.
+    * <p>
+    * This is for the scenario where there the predicate was not defined when first referenced, but has since been
+    * defined.
+    */
+   private PredicateFactory actualPredicateFactory;
 
    public UnknownPredicate(KnowledgeBase kb, PredicateKey key) {
       this.kb = kb;

@@ -15,11 +15,15 @@
 		<exclude name="AvoidCatchingGenericException"/>
 		<exclude name="AvoidThrowingNullPointerException"/>
 		<exclude name="AvoidThrowingRawExceptionTypes"/>
+		<!--
 		<exclude name="CognitiveComplexity"/>
 		<exclude name="CyclomaticComplexity"/>
+		-->
 		<exclude name="LawOfDemeter"/>
+		<!--
 		<exclude name="LoosePackageCoupling"/>
 		<exclude name="NPathComplexity"/>
+		-->
 		<exclude name="TooManyMethods"/>
 	</rule>
 	<rule ref="category/java/errorprone.xml">

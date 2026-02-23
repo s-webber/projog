@@ -28,7 +28,7 @@ public final class EmptyList implements Term {
     * Singleton instance
     * <p>
     * For performance reasons, use t.getType()==TermType.EMPTY_LIST to check if a term is an empty list, rather than
-    * using t.getTerm()==EmptyList.EMPTY_LIST. TODO confirm this is what the code is doing
+    * using t.getTerm()==EmptyList.EMPTY_LIST.
     */
    public static final EmptyList EMPTY_LIST = new EmptyList();
 

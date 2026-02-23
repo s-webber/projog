@@ -127,6 +127,7 @@ public class TokenParserTest {
    public void testInvalidEscapedCharCode() {
       assertParserException("0'\\a", "invalid character escape sequence Line: 0'\\a");
       assertParserException("0'\\A", "invalid character escape sequence Line: 0'\\A");
+      assertParserException("0'\\0", "invalid character escape sequence Line: 0'\\0");
       assertParserException("0'\\1", "invalid character escape sequence Line: 0'\\1");
       assertParserException("0'\\ ", "invalid character escape sequence Line: 0'\\ ");
       assertParserException("0'\\.", "invalid character escape sequence Line: 0'\\.");

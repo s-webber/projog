@@ -341,7 +341,7 @@ public class StructureTest {
       assertHashCodeNotEquals(structure("p", new DecimalFraction(1)), structure("p", new IntegerNumber(1)));
    }
 
-   private void assertHashCodeEquals(Object a, Object b) { // TODO move to TestUtils and use from other Term tests
+   private void assertHashCodeEquals(Object a, Object b) {
       assertEquals(a.hashCode(), b.hashCode());
    }
 

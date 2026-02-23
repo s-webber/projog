@@ -118,12 +118,13 @@ public final class Between implements PredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
+         if (couldReevaluationSucceed()) {
             middle.backtrack();
             IntegerNumber n = IntegerNumberCache.valueOf(ctr++);
             return middle.unify(n);
+         } else {
+            return false;
          }
-         return false;
       }
 
       @Override

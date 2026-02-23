@@ -51,7 +51,6 @@ public final class ConvertTime extends AbstractSingleResultPredicate {
    }
 
    private Atom createAtom(Date d) {
-      // TODO have overloaded versions of convert_time that allow the date format and timezone to be specified?
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
       sdf.setTimeZone(TimeZone.getTimeZone("GMT-0"));
       return new Atom(sdf.format(d));

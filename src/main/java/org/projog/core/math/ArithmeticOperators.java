@@ -17,6 +17,8 @@ package org.projog.core.math;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -38,7 +40,7 @@ import org.projog.core.term.TermUtils;
  */
 public final class ArithmeticOperators {
    private final KnowledgeBase kb;
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final Map<PredicateKey, String> operatorClassNames = new HashMap<>();
    private final Map<PredicateKey, ArithmeticOperator> operatorInstances = new HashMap<>();
    private final DeferredArithmeticOperator deferredArithmeticOperator;
@@ -56,13 +58,16 @@ public final class ArithmeticOperators {
     * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
     */
    public void addArithmeticOperator(PredicateKey key, ArithmeticOperator operator) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (operatorClassNames.containsKey(key)) {
             throw new ProjogException("Already defined operator: " + key);
          } else {
             operatorClassNames.put(key, operator.getClass().getName());
             operatorInstances.put(key, operator);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -74,12 +79,15 @@ public final class ArithmeticOperators {
     * @throws ProjogException if there is already a {@link ArithmeticOperator} associated with the {@code PredicateKey}
     */
    public void addArithmeticOperator(PredicateKey key, String operatorClassName) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (operatorClassNames.containsKey(key)) {
             throw new ProjogException("Already defined operator: " + key);
          } else {
             operatorClassNames.put(key, operatorClassName);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -146,13 +154,16 @@ public final class ArithmeticOperators {
    }
 
    private ArithmeticOperator instantiateArithmeticOperator(PredicateKey key) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          ArithmeticOperator operator = operatorInstances.get(key);
          if (operator == null) {
             operator = instantiateArithmeticOperator(operatorClassNames.get(key));
             operatorInstances.put(key, operator);
          }
          return operator;
+      } finally {
+         lock.unlock();
       }
    }
 

@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -52,7 +54,7 @@ public final class FileHandles {
     */
    public static final Atom USER_INPUT_HANDLE = new Atom("user_input");
 
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final Map<String, InputStream> inputHandles = new HashMap<>();
    private final Map<String, PrintStream> outputHandles = new HashMap<>();
 
@@ -115,11 +117,14 @@ public final class FileHandles {
     * @see #USER_INPUT_HANDLE
     */
    public void setUserInput(InputStream is) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          inputHandles.put(USER_INPUT_HANDLE.getName(), is);
          if (USER_INPUT_HANDLE.equals(currentInputHandle)) {
             setInput(USER_INPUT_HANDLE);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -129,11 +134,14 @@ public final class FileHandles {
     * @see #USER_OUTPUT_HANDLE
     */
    public void setUserOutput(PrintStream ps) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          outputHandles.put(USER_OUTPUT_HANDLE.getName(), ps);
          if (USER_OUTPUT_HANDLE.equals(currentOutputHandle)) {
             setOutput(USER_OUTPUT_HANDLE);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -144,13 +152,16 @@ public final class FileHandles {
     */
    public void setInput(Term handle) {
       String handleName = getAtomName(handle);
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (inputHandles.containsKey(handleName)) {
             currentInputHandle = handle;
             in = inputHandles.get(handleName);
          } else {
             throw new ProjogException("cannot find file input handle with name: " + handleName);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -161,13 +172,16 @@ public final class FileHandles {
     */
    public void setOutput(Term handle) {
       String handleName = getAtomName(handle);
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (outputHandles.containsKey(handleName)) {
             currentOutputHandle = handle;
             out = outputHandles.get(handleName);
          } else {
             throw new ProjogException("cannot find file output handle with name: " + handleName);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -181,13 +195,16 @@ public final class FileHandles {
     */
    public Atom openInput(String fileName) throws IOException {
       String handleName = fileName + "_input_handle";
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (inputHandles.containsKey(handleName)) {
             throw new ProjogException("Can not open input for: " + fileName + " as it is already open");
          } else {
             InputStream is = new FileInputStream(fileName);
             inputHandles.put(handleName, is);
          }
+      } finally {
+         lock.unlock();
       }
       return new Atom(handleName);
    }
@@ -202,13 +219,16 @@ public final class FileHandles {
     */
    public Atom openOutput(String fileName) throws IOException {
       String handleName = fileName + "_output_handle";
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (outputHandles.containsKey(handleName)) {
             throw new ProjogException("Can not open output for: " + fileName + " as it is already open");
          } else {
             OutputStream os = new FileOutputStream(fileName);
             outputHandles.put(handleName, new PrintStream(os));
          }
+      } finally {
+         lock.unlock();
       }
       return new Atom(handleName);
    }
@@ -221,7 +241,8 @@ public final class FileHandles {
     */
    public void close(Term handle) throws IOException {
       String handleName = getAtomName(handle);
-      synchronized (lock) {
+      try {
+         lock.lock();
          PrintStream ps = outputHandles.get(handleName);
          if (ps != null) {
             outputHandles.remove(handleName);
@@ -234,6 +255,8 @@ public final class FileHandles {
             is.close();
             return;
          }
+      } finally {
+         lock.unlock();
       }
    }
 

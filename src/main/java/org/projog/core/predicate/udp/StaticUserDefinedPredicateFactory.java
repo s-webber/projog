@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.ProjogException;
 import org.projog.core.event.SpyPoints;
@@ -34,7 +36,7 @@ import org.projog.core.term.Term;
  * A "static" user defined predicate is one that can not have clauses added or removed after it is first defined.
  */
 public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFactory {
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final PredicateKey predicateKey;
    private final KnowledgeBase kb;
    private final SpyPoints.SpyPoint spyPoint;
@@ -81,10 +83,13 @@ public class StaticUserDefinedPredicateFactory implements UserDefinedPredicateFa
    public void compile() {
       // make sure we only call setCompiledPredicateFactory once per instance
       if (compiledPredicateFactory == null) {
-         synchronized (lock) {
+         try {
+            lock.lock();
             if (compiledPredicateFactory == null) {
                setCompiledPredicateFactory();
             }
+         } finally {
+            lock.unlock();
          }
       }
    }

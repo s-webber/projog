@@ -20,6 +20,8 @@ import static org.projog.core.term.TermUtils.castToNumeric;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.clp.Expression;
 import org.projog.clp.FixedValue;
@@ -41,7 +43,7 @@ import org.projog.core.term.Term;
  */
 public final class ExpressionFactories {
    private final KnowledgeBase kb;
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final Map<PredicateKey, String> factoryClassNames = new HashMap<>();
    private final Map<PredicateKey, ExpressionFactory> factoryInstances = new HashMap<>();
 
@@ -57,12 +59,15 @@ public final class ExpressionFactories {
     * @throws ProjogException if there is already a {@code ExpressionFactory} associated with the {@code PredicateKey}
     */
    public void addExpressionFactory(PredicateKey key, String operatorClassName) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          if (factoryClassNames.containsKey(key)) {
             throw new ProjogException("Already defined CLP expression: " + key);
          } else {
             factoryClassNames.put(key, operatorClassName);
          }
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -105,13 +110,16 @@ public final class ExpressionFactories {
    }
 
    private ExpressionFactory instantiateExpressionFactory(PredicateKey key) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          ExpressionFactory factory = factoryInstances.get(key);
          if (factory == null) {
             factory = instantiateExpressionFactory(factoryClassNames.get(key));
             factoryInstances.put(key, factory);
          }
          return factory;
+      } finally {
+         lock.unlock();
       }
    }
 

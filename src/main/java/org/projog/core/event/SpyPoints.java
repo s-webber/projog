@@ -18,6 +18,8 @@ package org.projog.core.event;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateKey;
@@ -39,7 +41,7 @@ import org.projog.core.term.TermFormatter;
  * @see KnowledgeBase#getSpyPoints()
  */
 public final class SpyPoints {
-   private final Object lock = new Object();
+   private final Lock lock = new ReentrantLock();
    private final Map<PredicateKey, SpyPoint> spyPoints = new TreeMap<>(); // TODO make concurrent?
    private final KnowledgeBase kb;
    private final ProjogListeners projogListeners;
@@ -57,9 +59,12 @@ public final class SpyPoints {
    }
 
    public void setSpyPoint(PredicateKey key, boolean set) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          SpyPoint sp = getSpyPoint(key);
          sp.set = set;
+      } finally {
+         lock.unlock();
       }
    }
 
@@ -72,13 +77,16 @@ public final class SpyPoints {
    }
 
    private SpyPoint createNewSpyPoint(PredicateKey key) {
-      synchronized (lock) {
+      try {
+         lock.lock();
          SpyPoint spyPoint = spyPoints.get(key);
          if (spyPoint == null) {
             spyPoint = new SpyPoint(key);
             spyPoints.put(key, spyPoint);
          }
          return spyPoint;
+      } finally {
+         lock.unlock();
       }
    }
 

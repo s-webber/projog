@@ -21,7 +21,6 @@ import org.projog.core.term.Term;
 public interface ClauseAction {
    Predicate getPredicate(Term input);
 
-   // TODO is this method needed? should it return model.copy()
    ClauseModel getModel();
 
    boolean isRetryable();

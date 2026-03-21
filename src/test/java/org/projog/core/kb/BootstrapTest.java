@@ -92,8 +92,7 @@ public class BootstrapTest {
    }
 
    private void assertArithmeticOperator(Term className) throws Exception {
-      Class<?> c = Class.forName(className.getName());
-      Object o = c.newInstance();
+      Object o = KnowledgeBaseUtils.instantiate(kb, className.getName());
       assertTrue(o instanceof ArithmeticOperator);
       assertFinal(o);
    }

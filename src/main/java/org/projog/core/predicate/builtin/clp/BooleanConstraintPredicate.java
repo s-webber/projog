@@ -34,7 +34,6 @@ import org.projog.clp.bool.Or;
 import org.projog.clp.bool.Xor;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.PredicateKey;
@@ -124,40 +123,41 @@ import org.projog.core.term.Term;
  * <li><code>#==&gt;</code> implication</li>
  * </ul>
  */
-public final class BooleanConstraintPredicate implements PredicateFactory, ConstraintFactory, KnowledgeBaseConsumer {
-   public static BooleanConstraintPredicate equivalent() {
-      return new BooleanConstraintPredicate(args -> new Equivalent(args[0], args[1]));
+public final class BooleanConstraintPredicate implements PredicateFactory, ConstraintFactory {
+   public static BooleanConstraintPredicate equivalent(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Equivalent(args[0], args[1]));
    }
 
-   public static BooleanConstraintPredicate leftImpliesRight() {
-      return new BooleanConstraintPredicate(args -> new Implication(args[0], args[1]));
+   public static BooleanConstraintPredicate leftImpliesRight(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Implication(args[0], args[1]));
    }
 
-   public static BooleanConstraintPredicate rightImpliesLeft() {
-      return new BooleanConstraintPredicate(args -> new Implication(args[1], args[0]));
+   public static BooleanConstraintPredicate rightImpliesLeft(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Implication(args[1], args[0]));
    }
 
-   public static BooleanConstraintPredicate and() {
-      return new BooleanConstraintPredicate(args -> new And(args[0], args[1]));
+   public static BooleanConstraintPredicate and(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new And(args[0], args[1]));
    }
 
-   public static BooleanConstraintPredicate or() {
-      return new BooleanConstraintPredicate(args -> new Or(args[0], args[1]));
+   public static BooleanConstraintPredicate or(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Or(args[0], args[1]));
    }
 
-   public static BooleanConstraintPredicate xor() {
-      return new BooleanConstraintPredicate(args -> new Xor(args[0], args[1]));
+   public static BooleanConstraintPredicate xor(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Xor(args[0], args[1]));
    }
 
-   public static BooleanConstraintPredicate not() {
-      return new BooleanConstraintPredicate(args -> new Not(args[0]));
+   public static BooleanConstraintPredicate not(KnowledgeBase kb) {
+      return new BooleanConstraintPredicate(kb, args -> new Not(args[0]));
    }
 
    private final Function<Constraint[], Constraint> constraintGenerator;
-   private Predicates predicates;
+   private final Predicates predicates;
 
-   private BooleanConstraintPredicate(Function<Constraint[], Constraint> constraintGenerator) {
+   private BooleanConstraintPredicate(KnowledgeBase kb, Function<Constraint[], Constraint> constraintGenerator) {
       this.constraintGenerator = constraintGenerator;
+      this.predicates = kb.getPredicates();
    }
 
    @Override
@@ -226,10 +226,5 @@ public final class BooleanConstraintPredicate implements PredicateFactory, Const
          constraints[i] = toConstraint(term.getArgument(i), vars);
       }
       return constraintGenerator.apply(constraints);
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase knowledgeBase) { // TODO pass KnowledgeBase into constructor rather than implementing KnowledgeBaseConsumer
-      this.predicates = knowledgeBase.getPredicates();
    }
 }

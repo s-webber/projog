@@ -16,7 +16,6 @@
 package org.projog.core.math.builtin;
 
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.math.ArithmeticOperator;
 import org.projog.core.math.ArithmeticOperators;
 import org.projog.core.math.Numeric;
@@ -117,8 +116,12 @@ import org.projog.core.term.TermType;
 /**
  * <code>**</code> - calculates the result of the first argument raised to the power of the second argument.
  */
-public final class Power implements ArithmeticOperator, KnowledgeBaseConsumer {
+public final class Power implements ArithmeticOperator {
    private ArithmeticOperators operators;
+
+   public Power(KnowledgeBase kb) {
+      this.operators = kb.getArithmeticOperators();
+   }
 
    @Override
    public Numeric calculate(Term term) {
@@ -131,11 +134,6 @@ public final class Power implements ArithmeticOperator, KnowledgeBaseConsumer {
          double result = Math.pow(base.getDouble(), exponent.getDouble());
          return new DecimalFraction(result);
       }
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase kb) {
-      this.operators = kb.getArithmeticOperators();
    }
 
    public static long integerPow(long base, long exponent) {

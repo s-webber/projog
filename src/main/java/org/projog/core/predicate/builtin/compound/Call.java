@@ -16,7 +16,6 @@
 package org.projog.core.predicate.builtin.compound;
 
 import org.projog.core.kb.KnowledgeBase;
-import org.projog.core.kb.KnowledgeBaseConsumer;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.StructureFactory;
@@ -121,8 +120,12 @@ test(V1,V2,V3,V4,V5,V6,V7,V8,V9) :-
  * argument list of the goal represented by the first argument.
  * </p>
  */
-public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
+public final class Call implements PredicateFactory {
    private KnowledgeBase knowledgeBase;
+
+   public Call(KnowledgeBase kb) {
+      this.knowledgeBase = kb;
+   }
 
    @Override
    public Predicate getPredicate(Term term) {
@@ -145,10 +148,5 @@ public final class Call implements PredicateFactory, KnowledgeBaseConsumer {
    @Override
    public boolean isRetryable() {
       return true;
-   }
-
-   @Override
-   public void setKnowledgeBase(KnowledgeBase knowledgeBase) {
-      this.knowledgeBase = knowledgeBase;
    }
 }

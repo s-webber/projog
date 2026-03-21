@@ -66,11 +66,11 @@
 ?- pj_add_predicate(call/10, 'org.projog.core.predicate.builtin.compound.Call').
 ?- pj_add_predicate(time/1, 'org.projog.core.predicate.builtin.compound.Call').
 ?- pj_add_predicate(once/1, 'org.projog.core.predicate.builtin.compound.Once').
-?- pj_add_predicate(bagof/3, 'org.projog.core.predicate.builtin.compound.BagOf').
 ?- pj_add_predicate(findall/3, 'org.projog.core.predicate.builtin.compound.FindAll').
-?- pj_add_predicate(setof/3, 'org.projog.core.predicate.builtin.compound.SetOf').
 ?- pj_add_predicate('->'/2, 'org.projog.core.predicate.builtin.compound.IfThen').
 ?- pj_add_predicate(limit/2, 'org.projog.core.predicate.builtin.compound.Limit').
+?- pj_add_predicate(bagof/3, 'org.projog.core.predicate.builtin.compound.CollectionOf/bagOf').
+?- pj_add_predicate(setof/3, 'org.projog.core.predicate.builtin.compound.CollectionOf/setOf').
 
 % construct
 ?- pj_add_predicate(functor/3, 'org.projog.core.predicate.builtin.construct.Functor').

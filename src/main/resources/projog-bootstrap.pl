@@ -252,8 +252,8 @@
 ?- pj_add_arithmetic_operator('/\\'/2, 'org.projog.core.math.builtin.BitwiseAnd').
 ?- pj_add_arithmetic_operator('\\/'/2, 'org.projog.core.math.builtin.BitwiseOr').
 ?- pj_add_arithmetic_operator(xor/2, 'org.projog.core.math.builtin.BitwiseXor').
-?- pj_add_arithmetic_operator('<<'/2, 'org.projog.core.math.builtin.ShiftLeft').
-?- pj_add_arithmetic_operator('>>'/2, 'org.projog.core.math.builtin.ShiftRight').
+?- pj_add_arithmetic_operator('<<'/2, 'org.projog.core.math.builtin.BitShift/shiftLeft').
+?- pj_add_arithmetic_operator('>>'/2, 'org.projog.core.math.builtin.BitShift/shiftRight').
 ?- pj_add_arithmetic_operator(max/2, 'org.projog.core.math.builtin.Max').
 ?- pj_add_arithmetic_operator(min/2, 'org.projog.core.math.builtin.Min').
 ?- pj_add_arithmetic_operator(abs/1, 'org.projog.core.math.builtin.Abs').

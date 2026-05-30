@@ -15,16 +15,14 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.concurrent.TimeUnit;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(DataProviderRunner.class)
 public class LengthTest {
    private static final String LENGTH_PROLOG =
-               //
                "length_(L, N) :- length_(L, 0, N)." +
                "length_(L,_,_) :- nonvar(L), \\+ L==[], \\+ L=[_|_], _ is _+1." +
                "length_(_,_,N) :- nonvar(N), \\+ number(N), _ is N+1." +
@@ -33,8 +31,9 @@ public class LengthTest {
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("length", 2, LENGTH_PROLOG);
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "[] X",
                "[] -1",
                "[] 0",

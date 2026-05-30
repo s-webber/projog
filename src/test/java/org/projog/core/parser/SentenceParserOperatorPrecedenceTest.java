@@ -15,19 +15,16 @@
  */
 package org.projog.core.parser;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-
-@RunWith(DataProviderRunner.class)
 public class SentenceParserOperatorPrecedenceTest {
    private static final Operands OPERANDS = new Operands();
    static {
@@ -53,8 +50,8 @@ public class SentenceParserOperatorPrecedenceTest {
       OPERANDS.addOperand("yf200", "yf", 200);
    }
 
-   @Test
-   @DataProvider({
+   @ParameterizedTest
+   @ValueSource(strings = {
                "1 xfx100 2 xfx100 3.",
                "1 xfx100 2 xfy100 3.",
                "1 yfx100 2 xfx100 3.",
@@ -77,8 +74,8 @@ public class SentenceParserOperatorPrecedenceTest {
       }
    }
 
-   @Test
-   @DataProvider(splitBy = " OUTPUTS ", value = {
+   @ParameterizedTest
+   @CsvSource(delimiterString = " OUTPUTS ", value = {
                "1 xfx200 2 xfx100 3. OUTPUTS xfx200(1, xfx100(2, 3))",
                "1 xfx100 2 xfx200 3. OUTPUTS xfx200(xfx100(1, 2), 3)",
                "1 xfy100 2 xfy100 3. OUTPUTS xfy100(1, xfy100(2, 3))",

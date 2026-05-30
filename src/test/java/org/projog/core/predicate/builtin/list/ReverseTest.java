@@ -15,24 +15,22 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.concurrent.TimeUnit;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(DataProviderRunner.class)
 public class ReverseTest {
    private static final String REVERSE_PROLOG =
                //
-               "reverse_(Xs, Ys) :- reverse_(Xs, [], Ys, Ys)."
-               + "reverse_([], Ys, Ys, [])."
-               + "reverse_([X|Xs], Rs, Ys, [_|Bound]) :- reverse_(Xs, [X|Rs], Ys, Bound).";
+               "reverse_(Xs, Ys) :- reverse_(Xs, [], Ys, Ys)." + "reverse_([], Ys, Ys, [])." + "reverse_([X|Xs], Rs, Ys, [_|Bound]) :- reverse_(Xs, [X|Rs], Ys, Bound).";
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("reverse", 2, REVERSE_PROLOG);
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "[a,b,c] [c,b,a]",
                "[a(X),b(Y),c(Z)] [c(z),b(y),a(x)]",
                "[a(X),b(Y),c(Z)] [c(Z),b(Y),a(X)]",
@@ -71,11 +69,11 @@ public class ReverseTest {
       }
    }
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "length(X,1000),reverse(X,Y),numbervars(X),reverse(X,Z),reverse(Q,Z).",
-               "length(X,1000),length(Y,1000),length(Z,2000),numbervars(X),reverse(X,Y),reverse(Z,X).",
-   })
+               "length(X,1000),length(Y,1000),length(Z,2000),numbervars(X),reverse(X,Y),reverse(Z,X).",})
    public void testLongLists(String query) {
       PREDICATE_ASSERT.assertQuery(query);
    }

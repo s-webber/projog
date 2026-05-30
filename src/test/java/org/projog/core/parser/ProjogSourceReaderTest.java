@@ -15,12 +15,12 @@
  */
 package org.projog.core.parser;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.writeToTempFile;
 
@@ -28,7 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateFactory;
@@ -148,7 +148,7 @@ public class ProjogSourceReaderTest {
 
    private void assertMessageContainsText(ProjogException e, String text) {
       int i = e.getMessage().indexOf(text);
-      assertTrue(e.getMessage(), i > -1);
+      assertTrue(i > -1, e.getMessage());
    }
 
    private File writeToFile(String contents) {

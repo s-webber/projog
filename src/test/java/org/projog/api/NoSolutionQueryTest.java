@@ -18,6 +18,8 @@ package org.projog.api;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
+
 public class NoSolutionQueryTest extends AbstractQueryTest {
    private static final String NO_SOLUTION_EXCEPTION_MESSAGE = "No solution found.";
 
@@ -26,61 +28,73 @@ public class NoSolutionQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertException(NO_SOLUTION_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertEquals(Optional.empty());
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertEquals(Collections.emptyList());
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertException(NO_SOLUTION_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertEquals(Optional.empty());
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertEquals(Collections.emptyList());
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertException(NO_SOLUTION_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertEquals(Optional.empty());
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertEquals(Collections.emptyList());
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertException(NO_SOLUTION_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertEquals(Optional.empty());
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertEquals(Collections.emptyList());
    }

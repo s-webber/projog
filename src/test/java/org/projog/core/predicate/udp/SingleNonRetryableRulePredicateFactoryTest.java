@@ -15,10 +15,10 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -26,9 +26,9 @@ import static org.mockito.Mockito.when;
 import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.array;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
@@ -53,7 +53,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
    private SimpleProjogListener listener;
 
-   @Before
+   @BeforeEach
    public void before() {
       this.mockPredicate = mock(Predicate.class);
       this.mockAction = mock(ClauseAction.class);
@@ -75,7 +75,7 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       assertFalse(testObject.isRetryable());
    }
 
-   @After
+   @AfterEach
    public void after() {
       verify(mockAction).getPredicate(StructureFactory.createStructure(FUNCTOR, queryArgs));
       verify(mockPredicate).evaluate();

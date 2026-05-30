@@ -15,15 +15,15 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.structure;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.udp.KeyFactories.KeyFactory;

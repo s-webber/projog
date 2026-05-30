@@ -15,9 +15,9 @@
  */
 package org.projog.core.math;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -28,7 +28,7 @@ import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.TestUtils;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;

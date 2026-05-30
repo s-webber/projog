@@ -15,7 +15,7 @@
  */
 package org.projog;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.api.Projog;
 import org.projog.core.event.ProjogListener;
 import org.projog.core.event.SpyPoints.SpyPointEvent;
@@ -121,7 +121,7 @@ public class PrologTest {
       });
 
       // assert that notifications
-      assertEquals(events.toString(), 2, events.size());
+      assertEquals(2, events.size(), events.toString());
       assertEquals("Reading prolog source in: projog-bootstrap.pl from classpath", events.get(0));
       assertEquals("Reading prolog source in: target" + File.separator + "predicateTooLargeToCompileToJava.pl from file system", events.get(1));
    }

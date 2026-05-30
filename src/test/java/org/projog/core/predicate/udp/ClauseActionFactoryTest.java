@@ -15,12 +15,12 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
@@ -35,10 +35,9 @@ import static org.projog.TestUtils.createClauseModel;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.projog.core.ProjogException;
 import org.projog.core.kb.KnowledgeBase;
@@ -59,9 +58,6 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermType;
 import org.projog.core.term.Variable;
 
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-
-@RunWith(DataProviderRunner.class)
 public class ClauseActionFactoryTest {
    private static final Atom PREDICATE_TERM = new Atom("test");
 
@@ -70,7 +66,7 @@ public class ClauseActionFactoryTest {
    private Predicate mockPredicate1;
    private Predicate mockPredicate2;
 
-   @Before
+   @BeforeEach
    public void before() {
       mockPredicate1 = mock(Predicate.class);
       mockPredicate2 = mock(Predicate.class);
@@ -84,7 +80,7 @@ public class ClauseActionFactoryTest {
       kb.getPredicates().addPredicateFactory(PredicateKey.createForTerm(PREDICATE_TERM), mockPredicateFactory);
    }
 
-   @After
+   @AfterEach
    public void after() {
       verify(mockPredicateFactory, atMost(1)).preprocess(any(Term.class));
       verifyNoInteractions(mockPredicate1, mockPredicate2);

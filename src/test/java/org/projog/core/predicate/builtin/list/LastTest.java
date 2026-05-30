@@ -15,24 +15,22 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.concurrent.TimeUnit;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(DataProviderRunner.class)
 public class LastTest {
    private static final String LAST_PROLOG =
                //
-               "last_([X|Xs], Last) :- last_(Xs, X, Last)." +
-               "last_([], Last, Last)." +
-               "last_([X|Xs], _, Last) :- last_(Xs, X, Last).";
+               "last_([X|Xs], Last) :- last_(Xs, X, Last)." + "last_([], Last, Last)." + "last_([X|Xs], _, Last) :- last_(Xs, X, Last).";
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("last", 2, LAST_PROLOG);
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "[a] X",
                "[a] a",
                "[a] b",
@@ -65,7 +63,7 @@ public class LastTest {
       PREDICATE_ASSERT.assertArgs(arg1, arg2);
    }
 
-   @Test(timeout = 5000)
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
    public void testLongList() {
       PREDICATE_ASSERT.assertQuery("length(X,1000),numbervars(X),last(X,Y).");
    }

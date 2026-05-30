@@ -18,6 +18,7 @@ package org.projog.api;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
 import org.projog.core.term.DecimalFraction;
 
 public class SingleSolutionDoubleQueryTest extends AbstractQueryTest {
@@ -29,61 +30,73 @@ public class SingleSolutionDoubleQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertEquals(new DecimalFraction(DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertEquals(Optional.of(new DecimalFraction(DOUBLE_VALUE)));
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertEquals(Collections.singletonList(new DecimalFraction(DOUBLE_VALUE)));
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertEquals(DOUBLE_VALUE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertEquals(Optional.of(DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertEquals(Collections.singletonList(DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertEquals((long) DOUBLE_VALUE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertEquals(Optional.of((long) DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertEquals(Collections.singletonList((long) DOUBLE_VALUE));
    }

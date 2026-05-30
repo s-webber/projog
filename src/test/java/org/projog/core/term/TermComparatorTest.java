@@ -1,12 +1,12 @@
 /*
  * Copyright 2013-2014 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,8 @@
  */
 package org.projog.core.term;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
@@ -25,7 +25,7 @@ import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
 import static org.projog.core.term.TermComparator.TERM_COMPARATOR;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TermComparatorTest {
    /**
@@ -34,23 +34,38 @@ public class TermComparatorTest {
     * Note: only one variable and no ANONYMOUS_VARIABLE as ANONYMOUS_VARIABLE and "variable against variable"
     * comparisons tested separately.
     */
-   private static final Term[] TERMS_ORDERED_IN_LOWEST_PRECEDENCE = {variable("A"),
+   private static final Term[] TERMS_ORDERED_IN_LOWEST_PRECEDENCE = {
+               variable("A"),
 
-   decimalFraction(-2.1), decimalFraction(-1.9), decimalFraction(0), decimalFraction(1),
+               decimalFraction(-2.1),
+               decimalFraction(-1.9),
+               decimalFraction(0),
+               decimalFraction(1),
 
-   integerNumber(-2), integerNumber(0), integerNumber(1),
+               integerNumber(-2),
+               integerNumber(0),
+               integerNumber(1),
 
-   EmptyList.EMPTY_LIST,
+               EmptyList.EMPTY_LIST,
 
-   atom("a"), atom("z"),
+               atom("a"),
+               atom("z"),
 
-   structure("a", atom("b")), structure("b", atom("a")), structure("b", structure("a", atom())),
+               structure("a", atom("b")),
+               structure("b", atom("a")),
+               structure("b", structure("a", atom())),
 
-   structure("!", atom("a"), atom("b")),
+               structure("!", atom("a"), atom("b")),
 
-   list(atom("a"), atom("b")), list(atom("b"), atom("a")), list(atom("b"), atom("a"), atom("b")), list(atom("c"), atom("a")), list(structure("a", atom()), atom("b")),
+               list(atom("a"), atom("b")),
+               list(atom("b"), atom("a")),
+               list(atom("b"), atom("a"), atom("b")),
+               list(atom("c"), atom("a")),
+               list(structure("a", atom()), atom("b")),
 
-   structure("a", atom("a"), atom("b")), structure("a", atom("a"), atom("z")), structure("a", atom("a"), structure("z", atom()))};
+               structure("a", atom("a"), atom("b")),
+               structure("a", atom("a"), atom("z")),
+               structure("a", atom("a"), structure("z", atom()))};
 
    @Test
    public void testCompareTerms() {
@@ -105,17 +120,17 @@ public class TermComparatorTest {
    }
 
    private void testNotEqual(Term t1, Term t2) {
-      assertTrue(t1 + " " + t2, TERM_COMPARATOR.compare(t1, t2) != 0);
-      assertTrue(t2 + " " + t1, TERM_COMPARATOR.compare(t2, t1) != 0);
+      assertTrue(TERM_COMPARATOR.compare(t1, t2) != 0, t1 + " " + t2);
+      assertTrue(TERM_COMPARATOR.compare(t2, t1) != 0, t2 + " " + t1);
    }
 
    private void testEqual(Term t1, Term t2) {
-      assertEquals(t1 + " " + t2, 0, TERM_COMPARATOR.compare(t1, t2));
-      assertEquals(t2 + " " + t1, 0, TERM_COMPARATOR.compare(t2, t1));
+      assertEquals(0, TERM_COMPARATOR.compare(t1, t2), t1 + " " + t2);
+      assertEquals(0, TERM_COMPARATOR.compare(t2, t1), t2 + " " + t1);
    }
 
    private void testIsGreater(Term t1, Term t2) {
-      assertTrue(t1 + " " + t2, TERM_COMPARATOR.compare(t1, t2) > 0);
-      assertTrue(t2 + " " + t1, TERM_COMPARATOR.compare(t2, t1) < 0);
+      assertTrue(TERM_COMPARATOR.compare(t1, t2) > 0, t1 + " " + t2);
+      assertTrue(TERM_COMPARATOR.compare(t2, t1) < 0, t2 + " " + t1);
    }
 }

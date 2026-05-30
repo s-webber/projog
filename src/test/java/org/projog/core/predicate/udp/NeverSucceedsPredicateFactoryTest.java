@@ -15,16 +15,16 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.array;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.event.ProjogListeners;
@@ -45,7 +45,7 @@ public class NeverSucceedsPredicateFactoryTest {
    private Term[] queryArgs = array(atom("a"), atom("b"), atom("c"));
    private SimpleProjogListener listener;
 
-   @Before
+   @BeforeEach
    public void before() {
       this.listener = new SimpleProjogListener();
 

@@ -15,10 +15,10 @@
  */
 package org.projog.core.predicate.builtin.clp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.clp.Expression;
 import org.projog.clp.FixedValue;
 import org.projog.clp.math.Absolute;

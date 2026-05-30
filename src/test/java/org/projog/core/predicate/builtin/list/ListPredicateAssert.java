@@ -15,12 +15,12 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.StringReader;
 import java.util.Set;
@@ -55,9 +55,9 @@ final class ListPredicateAssert {
       projog.consultReader(new StringReader(prologSource));
       Predicates predicates = projog.getKnowledgeBase().getPredicates();
       PredicateFactory builtInPredicateFactory = predicates.getPredicateFactory(new PredicateKey(builtInPredicateName, arity));
-      assertNotSame(builtInPredicateName, UnknownPredicate.class, builtInPredicateFactory.getClass());
+      assertNotSame(UnknownPredicate.class, builtInPredicateFactory.getClass(), builtInPredicateName);
       PredicateFactory userDefinedPredicateFactory = predicates.getPredicateFactory(new PredicateKey(userDefinedPredicateName, arity));
-      assertSame(userDefinedPredicateName, StaticUserDefinedPredicateFactory.class, userDefinedPredicateFactory.getClass());
+      assertSame(StaticUserDefinedPredicateFactory.class, userDefinedPredicateFactory.getClass(), userDefinedPredicateName);
    }
 
    void assertQuery(String query) {
@@ -80,7 +80,7 @@ final class ListPredicateAssert {
       try {
          r1 = projog.executeQuery(query1);
       } catch (ProjogException | OutOfMemoryError e1) {
-         assertFalse(e1.getMessage(), e1 instanceof ParserException);
+         assertFalse(e1 instanceof ParserException, e1.getMessage());
          try {
             projog.executeQuery(query2).next();
             throw new RuntimeException("No exception " + query2, e1);
@@ -124,7 +124,7 @@ final class ListPredicateAssert {
                }
             }
             Term t2 = r2.getTerm(variableId);
-            assertEquals(query1, numberVariables(t1), numberVariables(t2));
+            assertEquals(numberVariables(t1), numberVariables(t2), query1);
          }
 
          if (ctr++ > 50) {

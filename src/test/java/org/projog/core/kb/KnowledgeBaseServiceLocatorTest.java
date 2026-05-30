@@ -15,17 +15,17 @@
  */
 package org.projog.core.kb;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.projog.TestUtils.createKnowledgeBase;
 
 import java.io.Serializable;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class KnowledgeBaseServiceLocatorTest {
    /** Tests one-to-one relationship between KnowledgeBase and KnowledgeBaseServiceLocator instances */

@@ -16,7 +16,7 @@
 package org.projog.tools;
 
 import static java.lang.System.lineSeparator;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.projog.TestUtils.writeToTempFile;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ProjogConsoleTest {
    private static final String ERROR_MESSAGE = "Invalid. Enter ; to continue or q to quit. ";

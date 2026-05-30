@@ -15,10 +15,10 @@
  */
 package org.projog.core.math.builtin;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.math.ArithmeticOperators;

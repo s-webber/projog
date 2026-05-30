@@ -18,17 +18,16 @@ package org.projog.api;
 /**
  * Tests various methods of both {@link QueryStatement} and {@link QueryResult} against the same Prolog query.
  */
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.StringReader;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.projog.core.ProjogException;
 import org.projog.core.term.Term;
 
@@ -63,94 +62,82 @@ abstract class AbstractQueryTest {
       projog.consultReader(new StringReader(clauses));
    }
 
-   @BeforeClass
+   @BeforeAll
    public static void beforeClass() {
       METHOD_INVOCATIONS_CTR = 0;
    }
 
-   @AfterClass
+   @AfterAll
    public static void afterClass() {
-      Assert.assertEquals("not all methods have been asserted", 0b111111111111, METHOD_INVOCATIONS_CTR);
+      Assertions.assertEquals(0b111111111111, METHOD_INVOCATIONS_CTR, "not all methods have been asserted");
    }
 
-   @Test
    public abstract void testFindFirstAsTerm();
 
    protected StatementMethod<Term> findFirstAsTerm() {
       return findFirstAsTerm;
    }
 
-   @Test
    public abstract void testFindFirstAsOptionalTerm();
 
    protected StatementMethod<Optional<Term>> findFirstAsOptionalTerm() {
       return findFirstAsOptionalTerm;
    }
 
-   @Test
    public abstract void testFindAllAsTerm();
 
    protected StatementMethod<List<Term>> findAllAsTerm() {
       return findAllAsTerm;
    }
 
-   @Test
    public abstract void testFindFirstAsAtomName();
 
    protected StatementMethod<String> findFirstAsAtomName() {
       return findFirstAsAtomName;
    }
 
-   @Test
    public abstract void testFindFirstAsOptionalAtomName();
 
    protected StatementMethod<Optional<String>> findFirstAsOptionalAtomName() {
       return findFirstAsOptionalAtomName;
    }
 
-   @Test
    public abstract void testFindAllAsAtomName();
 
    protected StatementMethod<List<String>> findAllAsAtomName() {
       return findAllAsAtomName;
    }
 
-   @Test
    public abstract void testFindFirstAsDouble();
 
    protected StatementMethod<Double> findFirstAsDouble() {
       return findFirstAsDouble;
    }
 
-   @Test
    public abstract void testFindFirstAsOptionalDouble();
 
    protected StatementMethod<Optional<Double>> findFirstAsOptionalDouble() {
       return findFirstAsOptionalDouble;
    }
 
-   @Test
    public abstract void testFindAllAsDouble();
 
    protected StatementMethod<List<Double>> findAllAsDouble() {
       return findAllAsDouble;
    }
 
-   @Test
    public abstract void testFindFirstAsLong();
 
    protected StatementMethod<Long> findFirstAsLong() {
       return findFirstAsLong;
    }
 
-   @Test
    public abstract void testFindFirstAsOptionalLong();
 
    protected StatementMethod<Optional<Long>> findFirstAsOptionalLong() {
       return findFirstAsOptionalLong;
    }
 
-   @Test
    public abstract void testFindAllAsLong();
 
    protected StatementMethod<List<Long>> findAllAsLong() {
@@ -176,12 +163,12 @@ abstract class AbstractQueryTest {
 
       void assertEquals(T expected) {
          QueryStatement s = createStatement();
-         Assert.assertEquals(expected, statementMethod.apply(s));
+         Assertions.assertEquals(expected, statementMethod.apply(s));
 
          // run twice to confirm QueryPlan is reusable
          QueryPlan p = projog.createPlan(query);
-         Assert.assertEquals(expected, planMethod.apply(p));
-         Assert.assertEquals(expected, planMethod.apply(p));
+         Assertions.assertEquals(expected, planMethod.apply(p));
+         Assertions.assertEquals(expected, planMethod.apply(p));
       }
 
       void assertException(String expectedMessage) {
@@ -190,7 +177,7 @@ abstract class AbstractQueryTest {
             statementMethod.apply(s);
             fail();
          } catch (ProjogException e) {
-            Assert.assertEquals(expectedMessage, e.getMessage());
+            Assertions.assertEquals(expectedMessage, e.getMessage());
          }
 
          QueryPlan p = projog.createPlan(query);
@@ -198,7 +185,7 @@ abstract class AbstractQueryTest {
             planMethod.apply(p);
             fail();
          } catch (ProjogException e) {
-            Assert.assertEquals(expectedMessage, e.getMessage());
+            Assertions.assertEquals(expectedMessage, e.getMessage());
          }
       }
 

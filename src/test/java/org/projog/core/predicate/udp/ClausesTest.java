@@ -15,15 +15,15 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.projog.TestUtils.createClauseModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
 

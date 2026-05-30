@@ -15,23 +15,20 @@
  */
 package org.projog.core.term;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.projog.TermFactory.integerNumber;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * @see TermTest
  */
-@RunWith(DataProviderRunner.class)
 public class IntegerNumberTest {
    private static final double DELTA = 0;
 
@@ -96,8 +93,8 @@ public class IntegerNumberTest {
       assertEquals(0, i.getNumberOfArguments());
    }
 
-   @Test
-   @DataProvider({"-1", "0", "1"})
+   @ParameterizedTest
+   @ValueSource(ints = {-1, 0, 1})
    public void testGetArgument(int index) {
       try {
          IntegerNumber i = integerNumber();

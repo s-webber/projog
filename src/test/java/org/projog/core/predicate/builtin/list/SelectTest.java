@@ -15,24 +15,24 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.concurrent.TimeUnit;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(DataProviderRunner.class)
 public class SelectTest {
    private static final String SELECT_PROLOG =
                //
-               "select_(X, [Head|Tail], Rest) :- select3_(Tail, Head, X, Rest)." +
-               "select3_(Tail, Head, Head, Tail)." +
-               "select3_([Head2|Tail], Head, X, [Head|Rest]) :- select3_(Tail, Head2, X, Rest).";
+               "select_(X, [Head|Tail], Rest) :- select3_(Tail, Head, X, Rest)."
+                                               + "select3_(Tail, Head, Head, Tail)."
+                                               + "select3_([Head2|Tail], Head, X, [Head|Rest]) :- select3_(Tail, Head2, X, Rest).";
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("select", 3, SELECT_PROLOG);
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "a [a,b,c] X",
                "b [a,b,c] X",
                "c [a,b,c] X",
@@ -59,10 +59,9 @@ public class SelectTest {
       PREDICATE_ASSERT.assertArgs(arg1, arg2, arg3);
    }
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
-               "length(X,10000),numbervars(X),last(X,Last),select(Last,X,Result).",
-               "length(X,10000),numbervars(X),last(X,Last),select(Last,X,Result).",})
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {"length(X,10000),numbervars(X),last(X,Last),select(Last,X,Result).", "length(X,10000),numbervars(X),last(X,Last),select(Last,X,Result).",})
    public void testLongLists(String query) {
       PREDICATE_ASSERT.assertQuery(query);
    }

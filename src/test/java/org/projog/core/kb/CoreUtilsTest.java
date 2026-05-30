@@ -15,13 +15,14 @@
  */
 package org.projog.core.kb;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Calendar;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CoreUtilsTest {
    @Test
@@ -36,19 +37,19 @@ public class CoreUtilsTest {
       assertNotNull(c);
    }
 
-   @Test(expected = ClassNotFoundException.class)
+   @Test
    public void testInstantiateClassNotFound() throws Exception {
-      KnowledgeBaseUtils.instantiate(null, "org.projog.DoesntExist");
+      assertThrows(ClassNotFoundException.class, () -> KnowledgeBaseUtils.instantiate(null, "org.projog.DoesntExist"));
    }
 
-   @Test(expected = NoSuchMethodException.class)
+   @Test
    public void testInstantiateNoSuchMethod() throws Exception {
-      KnowledgeBaseUtils.instantiate(null, "java.lang.String/getInstance");
+      assertThrows(NoSuchMethodException.class, () -> KnowledgeBaseUtils.instantiate(null, "java.lang.String/getInstance"));
    }
 
-   @Test(expected = IllegalAccessException.class)
+   @Test
    public void testInstantiateIllegalAccess() throws Exception {
-      KnowledgeBaseUtils.instantiate(null, "java.util.Calendar");
+      assertThrows(IllegalAccessException.class, () -> KnowledgeBaseUtils.instantiate(null, "java.util.Calendar"));
    }
 
    @Test

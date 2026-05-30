@@ -15,9 +15,9 @@
  */
 package org.projog.api;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.Atom;
 import org.projog.core.term.Term;

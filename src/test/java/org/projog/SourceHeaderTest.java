@@ -1,12 +1,12 @@
 /*
  * Copyright 2015 S. Webber
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,8 @@
 package org.projog;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /** Tests that the contents of every Java source file starts with the license header. */
 public class SourceHeaderTest {
@@ -53,12 +53,12 @@ public class SourceHeaderTest {
    private void assertSourceHeader(Path p) throws IOException {
       List<String> lines = Files.readAllLines(p, Charset.defaultCharset());
       String failureMessage = "No source header found for " + p.toFile();
-      assertTrue(failureMessage, lines.size() > 15);
-      assertEquals(failureMessage, "/*", lines.get(0));
-      assertEquals(failureMessage, " * Licensed under the Apache License, Version 2.0 (the \"License\");", lines.get(3));
-      assertEquals(failureMessage, " * you may not use this file except in compliance with the License.", lines.get(4));
-      assertEquals(failureMessage, " * You may obtain a copy of the License at", lines.get(5));
-      assertEquals(failureMessage, " *     http://www.apache.org/licenses/LICENSE-2.0", lines.get(7));
+      assertTrue(lines.size() > 15, failureMessage);
+      assertEquals("/*", lines.get(0), failureMessage);
+      assertEquals(" * Licensed under the Apache License, Version 2.0 (the \"License\");", lines.get(3), failureMessage);
+      assertEquals(" * you may not use this file except in compliance with the License.", lines.get(4), failureMessage);
+      assertEquals(" * You may obtain a copy of the License at", lines.get(5), failureMessage);
+      assertEquals(" *     http://www.apache.org/licenses/LICENSE-2.0", lines.get(7), failureMessage);
    }
 
    private class JavaSourceFinder extends SimpleFileVisitor<Path> {

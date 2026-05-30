@@ -15,21 +15,18 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseTerm;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.term.Term;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-
-@RunWith(DataProviderRunner.class)
 public class MemberCheckTest {
    @Test
    public void testPreprocessed() {
@@ -42,8 +39,8 @@ public class MemberCheckTest {
       assertEquals("org.projog.core.predicate.builtin.list.MemberCheck$ImmutableListMemberCheck", optimised.getClass().getName());
    }
 
-   @Test
-   @DataProvider(splitBy = " ", value = {
+   @ParameterizedTest
+   @ValueSource(strings = {
                "[]",
                "[a|b]",
                "[X,Y,Z]",

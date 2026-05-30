@@ -15,18 +15,19 @@
  */
 package org.projog.core.predicate.builtin.compound;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseTerm;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateFactory;
@@ -36,10 +37,6 @@ import org.projog.core.term.Term;
 import org.projog.core.term.TermFormatter;
 import org.projog.core.term.Variable;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-
-@RunWith(DataProviderRunner.class)
 public class ConjunctionTest {
    @Test
    public void testPreprocess_cannot_optimise_when_both_arguments_are_variables() {
@@ -188,8 +185,8 @@ public class ConjunctionTest {
       assertFalse(predicate.evaluate());
    }
 
-   @Test
-   @DataProvider(value = {"!,true.", "true,!.", "!,true,!.", "repeat,!.", "repeat,!,true.", "!,repeat,!.",})
+   @ParameterizedTest
+   @ValueSource(strings = {"!,true.", "true,!.", "!,true,!.", "repeat,!.", "repeat,!,true.", "!,repeat,!.",})
    public void testIsAlwaysCutOnBacktrack_true(String clause) {
       KnowledgeBase kb = createKnowledgeBase();
       Term term = parseTerm(clause);
@@ -198,8 +195,8 @@ public class ConjunctionTest {
       assertTrue(optimised.isAlwaysCutOnBacktrack());
    }
 
-   @Test
-   @DataProvider(value = {
+   @ParameterizedTest
+   @ValueSource(strings = {
                "true,true.",
                "repeat,repeat.",
                "true,repeat.",

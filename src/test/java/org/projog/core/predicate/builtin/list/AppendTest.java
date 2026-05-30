@@ -15,13 +15,12 @@
  */
 package org.projog.core.predicate.builtin.list;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.concurrent.TimeUnit;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(DataProviderRunner.class)
 public class AppendTest {
    private static final String APPEND_PROLOG =
                //
@@ -29,8 +28,9 @@ public class AppendTest {
 
    private static final ListPredicateAssert PREDICATE_ASSERT = new ListPredicateAssert("append", 3, APPEND_PROLOG);
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "[a,b,c] [d,e,f] X",
                "[a,b,c] [d,e,f] [a,b,c,d,e,f]",
                "[a,b,c] [d,e,f] [a,b,c,d,e]",
@@ -82,8 +82,9 @@ public class AppendTest {
       PREDICATE_ASSERT.assertArgs(arg1, arg2, arg3);
    }
 
-   @Test(timeout = 5000)
-   @DataProvider(splitBy = " ", value = {
+   @Timeout(value = 5, unit = TimeUnit.SECONDS)
+   @ParameterizedTest
+   @CsvSource(delimiter = ' ', value = {
                "length(X,1000),length(Y,1000),numbervars(X:Y),append(X,Y,Z).",
                "length(X,1000),length(Y,1000),append(X,Y,Z),numbervars(X:Y).",
                "length(X,1000),length(Y,1000),length(Z,2000),append(X,Y,Z),numbervars(Z).",

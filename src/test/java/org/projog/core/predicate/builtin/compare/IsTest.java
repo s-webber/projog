@@ -15,17 +15,17 @@
  */
 package org.projog.core.predicate.builtin.compare;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseTerm;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.PredicateFactory;
 import org.projog.core.predicate.udp.PredicateUtils;
@@ -133,7 +133,7 @@ public class IsTest {
       assertEquals(new IntegerNumber(6), x.getTerm());
    }
 
-   @Ignore
+   @Disabled
    @Test
    public void testPreprocess_time_test() {
       KnowledgeBase kb = createKnowledgeBase();
@@ -177,6 +177,6 @@ public class IsTest {
       }
 
       // confirm that preprocessed is faster more than 90% of the time
-      assertTrue("was: " + betterCtr, betterCtr < numBatches * .9);
+      assertTrue(betterCtr < numBatches * .9, "was: " + betterCtr);
    }
 }

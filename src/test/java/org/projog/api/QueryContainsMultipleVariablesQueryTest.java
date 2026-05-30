@@ -15,6 +15,8 @@
  */
 package org.projog.api;
 
+import org.junit.jupiter.api.Test;
+
 public class QueryContainsMultipleVariablesQueryTest extends AbstractQueryTest {
    private static final String EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE = "Expected exactly one uninstantiated variable but found X and Y";
 
@@ -23,61 +25,73 @@ public class QueryContainsMultipleVariablesQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertException(EXPECTED_ONE_VARIABLE_EXCEPTION_MESSAGE);
    }

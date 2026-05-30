@@ -15,13 +15,13 @@
  */
 package org.projog.core.term;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
@@ -33,17 +33,14 @@ import static org.projog.TestUtils.assertStrictEquality;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.projog.TestUtils;
-
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 
 /**
  * @see TermTest
  */
-@RunWith(DataProviderRunner.class)
 public class ListTest {
    private static final int LONG_LIST_SIZE = 1000;
 
@@ -155,8 +152,8 @@ public class ListTest {
       }
    }
 
-   @Test
-   @DataProvider({"-1", "2", "3"})
+   @ParameterizedTest
+   @ValueSource(ints = {-1, 2, 3})
    public void testGetArgumentIndexOutOfBounds(int index) {
       List testList = new List(new Atom("a"), new Atom("b"));
       try {
@@ -518,7 +515,7 @@ public class ListTest {
       v.unify(a);
       List l2 = l1.copy(null);
       assertFalse(l1.isImmutable());
-      assertTrue(l2.toString(), l2.isImmutable());
+      assertTrue(l2.isImmutable());
       assertSame(v, l1.secondArgument().firstArgument().secondArgument());
       assertSame(a, l2.secondArgument().firstArgument().secondArgument());
    }

@@ -18,6 +18,7 @@ package org.projog.api;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
 import org.projog.core.term.Atom;
 
 public class SingleSolutionAtomQueryTest extends AbstractQueryTest {
@@ -29,61 +30,73 @@ public class SingleSolutionAtomQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertEquals(new Atom(ATOM_NAME));
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertEquals(Optional.of(new Atom(ATOM_NAME)));
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertEquals(Collections.singletonList(new Atom(ATOM_NAME)));
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertEquals(ATOM_NAME);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertEquals(Optional.of(ATOM_NAME));
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertEquals(Collections.singletonList(ATOM_NAME));
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }

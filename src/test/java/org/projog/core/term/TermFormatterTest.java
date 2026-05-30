@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 S. Webber
+pom * Copyright 2013-2014 S. Webber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,18 @@
  */
 package org.projog.core.term;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.projog.TestUtils.createKnowledgeBase;
 import static org.projog.TestUtils.parseSentence;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-
-@RunWith(DataProviderRunner.class)
 public class TermFormatterTest {
    private static final TermFormatter TERM_FORMATTER = createKnowledgeBase().getTermFormatter();
 
-   @Test
-   @DataProvider({
+   @ParameterizedTest
+   @ValueSource(strings = {
                "?- X = -1 + 1.684 , p(1, 7.3, [_,[]|c])", //
                "a :- z , (b , c ; e) , f", //
                "X = (1 :- 2) * (3 :- 4)", //

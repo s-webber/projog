@@ -15,15 +15,15 @@
  */
 package org.projog.core.predicate.builtin.io;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.projog.TestUtils.createKnowledgeBase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.projog.core.term.Atom;
 
 public class WriteTest {
@@ -32,7 +32,7 @@ public class WriteTest {
    private final ByteArrayOutputStream redirectedOut = new ByteArrayOutputStream();
    private final PrintStream originalOut = System.out;
 
-   @Before
+   @BeforeEach
    public void setUpStreams() {
       System.setOut(new PrintStream(redirectedOut));
    }
@@ -53,7 +53,7 @@ public class WriteTest {
       assertEquals(TEXT + System.lineSeparator(), redirectedOut.toString());
    }
 
-   @After
+   @AfterEach
    public void restoreStreams() {
       System.setOut(originalOut);
    }

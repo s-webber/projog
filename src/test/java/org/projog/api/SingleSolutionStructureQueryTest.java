@@ -18,6 +18,7 @@ package org.projog.api;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
 import org.projog.core.term.Atom;
 import org.projog.core.term.IntegerNumber;
 import org.projog.core.term.StructureFactory;
@@ -33,61 +34,73 @@ public class SingleSolutionStructureQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertEquals(STRUCTURE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertEquals(Optional.of(STRUCTURE));
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertEquals(Collections.singletonList(STRUCTURE));
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertException(EXPECTED_NUMERIC_EXCEPTION_MESSAGE);
    }

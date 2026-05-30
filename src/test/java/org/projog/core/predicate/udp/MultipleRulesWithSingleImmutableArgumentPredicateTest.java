@@ -15,16 +15,16 @@
  */
 package org.projog.core.predicate.udp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.projog.TermFactory.atom;
 import static org.projog.TermFactory.structure;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.projog.SimpleProjogListener;
 import org.projog.TestUtils;
 import org.projog.core.kb.KnowledgeBase;
@@ -42,7 +42,7 @@ public class MultipleRulesWithSingleImmutableArgumentPredicateTest {
    private KnowledgeBase kb;
    private PredicateFactory testObject;
 
-   @Before
+   @BeforeEach
    public void init() {
       String[] atomNames = {"a", "b", "c", "c", "c", "c", "c", "d", "e", "b", "f"};
 

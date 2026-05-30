@@ -18,6 +18,7 @@ package org.projog.api;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
 import org.projog.core.term.DecimalFraction;
 
 public class MultiSolutionsDoubleQueryTest extends AbstractQueryTest {
@@ -31,61 +32,73 @@ public class MultiSolutionsDoubleQueryTest extends AbstractQueryTest {
    }
 
    @Override
+   @Test
    public void testFindFirstAsTerm() {
       findFirstAsTerm().assertEquals(new DecimalFraction(FIRST_DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalTerm() {
       findFirstAsOptionalTerm().assertEquals(Optional.of(new DecimalFraction(FIRST_DOUBLE_VALUE)));
    }
 
    @Override
+   @Test
    public void testFindAllAsTerm() {
       findAllAsTerm().assertEquals(Arrays.asList(new DecimalFraction(FIRST_DOUBLE_VALUE), new DecimalFraction(SECOND_DOUBLE_VALUE), new DecimalFraction(THIRD_DOUBLE_VALUE)));
    }
 
    @Override
+   @Test
    public void testFindFirstAsAtomName() {
       findFirstAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalAtomName() {
       findFirstAsOptionalAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindAllAsAtomName() {
       findAllAsAtomName().assertException(EXPECTED_ATOM_EXCEPTION_MESSAGE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsDouble() {
       findFirstAsDouble().assertEquals(FIRST_DOUBLE_VALUE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalDouble() {
       findFirstAsOptionalDouble().assertEquals(Optional.of(FIRST_DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindAllAsDouble() {
       findAllAsDouble().assertEquals(Arrays.asList(FIRST_DOUBLE_VALUE, SECOND_DOUBLE_VALUE, THIRD_DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindFirstAsLong() {
       findFirstAsLong().assertEquals((long) FIRST_DOUBLE_VALUE);
    }
 
    @Override
+   @Test
    public void testFindFirstAsOptionalLong() {
       findFirstAsOptionalLong().assertEquals(Optional.of((long) FIRST_DOUBLE_VALUE));
    }
 
    @Override
+   @Test
    public void testFindAllAsLong() {
       findAllAsLong().assertEquals(Arrays.asList((long) FIRST_DOUBLE_VALUE, (long) SECOND_DOUBLE_VALUE, (long) THIRD_DOUBLE_VALUE));
    }

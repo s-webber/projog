@@ -281,7 +281,7 @@ public final class Projog {
       for (ClauseModel clause : clauses) {
          result.add(new ProjogStackTraceElement(clause.getPredicateKey(), clause.getOriginal()));
       }
-      return result.toArray(new ProjogStackTraceElement[result.size()]);
+      return result.toArray(new ProjogStackTraceElement[0]);
    }
 
    private List<ClauseModel> getClauses(Throwable e) {

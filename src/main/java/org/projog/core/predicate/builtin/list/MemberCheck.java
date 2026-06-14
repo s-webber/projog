@@ -84,7 +84,7 @@ public final class MemberCheck implements PredicateFactory {
       if (prologList.getType() == TermType.LIST && prologList.isImmutable()) {
          java.util.List<Term> javaList = ListUtils.toJavaUtilList(prologList);
          if (javaList != null) {
-            return new ImmutableListMemberCheck(javaList.toArray(new Term[javaList.size()]));
+            return new ImmutableListMemberCheck(javaList.toArray(new Term[0]));
          }
       }
 

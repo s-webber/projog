@@ -283,7 +283,7 @@ public final class SentenceParser {
 
          if (Delimiters.isListCloseBracket(delimiter)) {
             args.add(EMPTY_LIST_TOKEN);
-            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[0]));
          }
 
          if (Delimiters.isListTail(delimiter)) {
@@ -294,7 +294,7 @@ public final class SentenceParser {
             }
 
             args.add(tail);
-            return new Token((String) null, TokenType.LIST, args.toArray(new Token[args.size()]));
+            return new Token((String) null, TokenType.LIST, args.toArray(new Token[0]));
          }
       }
    }
@@ -308,7 +308,7 @@ public final class SentenceParser {
          Token next = parser.next();
 
          if (Delimiters.isPredicateCloseBracket(next)) {
-            return new Token(name, TokenType.NAMED_BRACKET, args.toArray(new Token[args.size()]));
+            return new Token(name, TokenType.NAMED_BRACKET, args.toArray(new Token[0]));
          }
 
          args.add(parseToken(next));

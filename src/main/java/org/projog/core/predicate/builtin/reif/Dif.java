@@ -212,7 +212,7 @@ public final class Dif extends AbstractSingleResultPredicate {
          case 2:
             return new org.projog.core.term.List(args.get(0), args.get(1));
          default:
-            return StructureFactory.createStructure("f", args.toArray(new Term[args.size()]));
+            return StructureFactory.createStructure("f", args.toArray(new Term[0]));
       }
    }
 

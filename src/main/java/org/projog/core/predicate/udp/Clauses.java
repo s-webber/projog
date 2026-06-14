@@ -105,6 +105,6 @@ final class Clauses {
    }
 
    ClauseAction[] getClauseActions() {
-      return clauses.toArray(new ClauseAction[clauses.size()]);
+      return clauses.toArray(new ClauseAction[0]);
    }
 }

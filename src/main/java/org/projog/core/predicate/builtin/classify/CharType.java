@@ -257,7 +257,7 @@ public final class CharType implements PredicateFactory {
       addType("lower", lower);
       addType("white", intsToStrings('\t', ' '));
 
-      CHARACTER_TYPES_ARRAY = CHARACTER_TYPES_MAP.values().toArray(new Type[CHARACTER_TYPES_MAP.size()]);
+      CHARACTER_TYPES_ARRAY = CHARACTER_TYPES_MAP.values().toArray(new Type[0]);
    }
 
    /** @see GetChar#toString(int) */

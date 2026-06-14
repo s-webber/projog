@@ -143,7 +143,7 @@ final class Indexes {
    private Map<Object, ClauseAction[]> convertListsToArrays(Map<Object, List<ClauseAction>> map) {
       Map<Object, ClauseAction[]> result = new HashMap<>(map.size());
       for (Map.Entry<Object, List<ClauseAction>> e : map.entrySet()) {
-         result.put(e.getKey(), e.getValue().toArray(new ClauseAction[e.getValue().size()]));
+         result.put(e.getKey(), e.getValue().toArray(new ClauseAction[0]));
       }
       return result;
    }

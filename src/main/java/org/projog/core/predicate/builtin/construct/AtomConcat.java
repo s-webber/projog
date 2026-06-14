@@ -188,7 +188,7 @@ public final class AtomConcat implements PredicateFactory {
 
       @Override
       public boolean evaluate() {
-         while (couldReevaluationSucceed()) {
+         if (couldReevaluationSucceed()) {
             arg1.backtrack();
             arg2.backtrack();
 

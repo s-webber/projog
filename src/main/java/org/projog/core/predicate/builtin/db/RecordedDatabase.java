@@ -34,7 +34,7 @@ import org.projog.core.term.Term;
  * <p>
  * Multiple terms can be associated with the same key.
  */
-public class RecordedDatabase {
+public final class RecordedDatabase {
    private final AtomicLong referenceCtr = new AtomicLong();
    private final SortedMap<Long, Link> references = new TreeMap<>();
    private final List<PredicateKey> keys = new ArrayList<>();
@@ -155,7 +155,7 @@ public class RecordedDatabase {
       }
    }
 
-   private class DatabaseIterator implements Iterator<Record> {
+   private final class DatabaseIterator implements Iterator<Record> {
       private int keyIdx;
       private ChainIterator chainIterator;
 
@@ -191,7 +191,7 @@ public class RecordedDatabase {
       }
    }
 
-   private static class ChainIterator implements Iterator<Record> {
+   private static final class ChainIterator implements Iterator<Record> {
       private Link current;
 
       ChainIterator(Chain chain) {
@@ -226,7 +226,7 @@ public class RecordedDatabase {
       }
    }
 
-   private static class Chain {
+   private static final class Chain {
       final PredicateKey key;
       Link first;
       Link last;
@@ -236,7 +236,7 @@ public class RecordedDatabase {
       }
    }
 
-   private static class Link {
+   private static final class Link {
       final Chain chain;
       final IntegerNumber reference;
       final Term value;

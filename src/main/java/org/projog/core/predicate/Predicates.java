@@ -32,7 +32,7 @@ import org.projog.core.predicate.udp.UserDefinedPredicateFactory;
 import org.projog.core.term.Term;
 
 /** Acts as a repository of rules and facts. */
-public class Predicates {
+public final class Predicates {
    /**
     * Used to coordinate access to {@link javaPredicateClassNames}, {@link #javaPredicateInstances} and
     * {@link #userDefinedPredicates}
@@ -279,7 +279,7 @@ public class Predicates {
       return deferredPredicateFactory;
    }
 
-   private class DeferredPredicateFactory implements PredicateFactory {
+   private final class DeferredPredicateFactory implements PredicateFactory {
       @Override
       public Predicate getPredicate(Term term) {
          return Predicates.this.getPredicate(term);

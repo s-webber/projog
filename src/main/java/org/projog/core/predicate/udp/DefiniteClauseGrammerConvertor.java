@@ -35,6 +35,9 @@ import org.projog.core.term.Variable;
  * DCGs provide a convenient way to express grammar rules.
  */
 final class DefiniteClauseGrammerConvertor {
+   private DefiniteClauseGrammerConvertor() {
+   }
+
    static boolean isDCG(Term dcgTerm) { // should this be moved to KnowledgeBaseUtils?
       return dcgTerm.getType() == TermType.STRUCTURE && dcgTerm.getNumberOfArguments() == 2 && dcgTerm.getName().equals("-->");
    }

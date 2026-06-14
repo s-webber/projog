@@ -15,7 +15,7 @@
  */
 package org.projog.core.predicate;
 
-public class SucceedsNeverPredicate implements Predicate {
+public final class SucceedsNeverPredicate implements Predicate {
    public static final SucceedsNeverPredicate SINGLETON = new SucceedsNeverPredicate();
 
    private SucceedsNeverPredicate() {

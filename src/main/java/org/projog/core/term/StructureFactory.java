@@ -24,6 +24,9 @@ import java.util.Map;
  * Also known as a "compound term".
  */
 public final class StructureFactory {
+   private StructureFactory() {
+   }
+
    public static Term createStructure(String functor, Term[] args) {
       switch (args.length) {
          case 0:

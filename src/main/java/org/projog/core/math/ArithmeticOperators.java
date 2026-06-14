@@ -168,7 +168,7 @@ public final class ArithmeticOperators {
       return deferredArithmeticOperator;
    }
 
-   private class DeferredArithmeticOperator implements ArithmeticOperator {
+   private final class DeferredArithmeticOperator implements ArithmeticOperator {
       @Override
       public Numeric calculate(Term term) {
          return ArithmeticOperators.this.getNumeric(term);

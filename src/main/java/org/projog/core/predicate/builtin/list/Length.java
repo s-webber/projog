@@ -146,7 +146,7 @@ public final class Length implements PredicateFactory {
       return true;
    }
 
-   private static class Retryable implements Predicate {
+   private static final class Retryable implements Predicate {
       final int startLength;
       final Term list;
       final Term length;

@@ -31,6 +31,9 @@ import org.projog.core.term.Variable;
  * Constructs new {@link ClauseAction} instances.
  */
 final class ClauseActionFactory {
+   private ClauseActionFactory() {
+   }
+
    /**
     * Returns true if the arguments unify with the consequent of the clause.
     * <p>

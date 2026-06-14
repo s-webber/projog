@@ -92,7 +92,7 @@ public final class SpyPoints {
       return Collections.unmodifiableMap(spyPoints);
    }
 
-   public class SpyPoint {
+   public final class SpyPoint {
       private final PredicateKey key;
       private boolean set;
 
@@ -194,7 +194,7 @@ public final class SpyPoints {
       }
    }
 
-   public class SpyPointExitEvent extends SpyPointEvent {
+   public final class SpyPointExitEvent extends SpyPointEvent {
       private final ClauseModel clauseModel;
 
       private SpyPointExitEvent(PredicateKey key, Term term, Object source, ClauseModel clauseModel) {

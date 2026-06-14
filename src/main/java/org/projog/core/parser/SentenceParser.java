@@ -44,7 +44,7 @@ import org.projog.core.term.Variable;
  *
  * @see Operands
  */
-public class SentenceParser {
+public final class SentenceParser {
    private static final int DEFAULT_TOKEN_ARRAY_LENGTH = 32;
    private static final int COMMA_PRIORITY = 1000;
    private static final Token EMPTY_LIST_TOKEN = new Token((String) null, TokenType.EMPTY_LIST, new Token[0]);

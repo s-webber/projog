@@ -72,7 +72,7 @@ public final class CurrentPredicate implements PredicateFactory {
       return true;
    }
 
-   private static class Retryable implements Predicate {
+   private static final class Retryable implements Predicate {
       private final Term arg;
       private final Iterator<PredicateKey> iterator;
 

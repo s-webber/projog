@@ -102,11 +102,11 @@ import org.projog.core.term.TermType;
 
 % Examples when combination of term types cause failure:
 %?- atom_concat(X, Y, Z)
-%ERROR Expected an atom but got: VARIABLE with value: Z
+%ERROR Expected ATOM but got: VARIABLE with value: Z
 %?- atom_concat('', Y, Z)
-%ERROR Expected an atom but got: VARIABLE with value: Z
+%ERROR Expected ATOM but got: VARIABLE with value: Z
 %?- atom_concat(X, '', Z)
-%ERROR Expected an atom but got: VARIABLE with value: Z
+%ERROR Expected ATOM but got: VARIABLE with value: Z
 %FAIL atom_concat(a, b, c)
 %FAIL atom_concat(a, '', '')
 %FAIL atom_concat('', b, '')

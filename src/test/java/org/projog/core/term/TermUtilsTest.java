@@ -248,8 +248,8 @@ public class TermUtilsTest {
       KnowledgeBase kb = TestUtils.createKnowledgeBase();
       assertTestToLongException(kb, atom("test"), "Cannot find arithmetic operator: test/0");
       assertTestToLongException(kb, structure("p", integerNumber(1), integerNumber(1)), "Cannot find arithmetic operator: p/2");
-      assertTestToLongException(kb, decimalFraction(0), "Expected integer but got: FRACTION with value: 0.0");
-      assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected integer but got: FRACTION with value: 2.0");
+      assertTestToLongException(kb, decimalFraction(0), "Expected INTEGER but got: FRACTION with value: 0.0");
+      assertTestToLongException(kb, structure("+", decimalFraction(1.0), decimalFraction(1.0)), "Expected INTEGER but got: FRACTION with value: 2.0");
    }
 
    private void assertTestToLongException(KnowledgeBase kb, Term t, String expectedExceptionMessage) {
@@ -275,7 +275,7 @@ public class TermUtilsTest {
          TermUtils.getAtomName(p);
          fail();
       } catch (ProjogException e) {
-         assertEquals("Expected an atom but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
+         assertEquals("Expected ATOM but got: STRUCTURE with value: testAtomName(test)", e.getMessage());
       }
    }
 

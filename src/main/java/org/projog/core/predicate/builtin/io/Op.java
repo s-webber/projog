@@ -37,10 +37,10 @@ import org.projog.core.term.Term;
 %ERROR Expected Numeric but got: VARIABLE with value: X
 
 %?- op(1000,Y,'><')
-%ERROR Expected an atom but got: VARIABLE with value: Y
+%ERROR Expected ATOM but got: VARIABLE with value: Y
 
 %?- op(1000,xfx,Z)
-%ERROR Expected an atom but got: VARIABLE with value: Z
+%ERROR Expected ATOM but got: VARIABLE with value: Z
 
 %?- op(1000,zfz,'><')
 %ERROR Cannot add operand with associativity of: zfz as the only values allowed are: [xfx, xfy, yfx, fx, fy, xf, yf]

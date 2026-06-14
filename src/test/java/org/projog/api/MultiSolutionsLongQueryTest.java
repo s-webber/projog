@@ -21,7 +21,7 @@ import java.util.Optional;
 import org.projog.core.term.IntegerNumber;
 
 public class MultiSolutionsLongQueryTest extends AbstractQueryTest {
-   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: INTEGER with value: 42";
+   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected ATOM but got: INTEGER with value: 42";
    private static final long FIRST_LONG_VALUE = 42;
    private static final long SECOND_LONG_VALUE = 180;
    private static final long THIRD_LONG_VALUE = -7;

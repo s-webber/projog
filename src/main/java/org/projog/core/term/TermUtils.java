@@ -156,11 +156,8 @@ public final class TermUtils {
     */
    public static long toLong(final ArithmeticOperators operators, final Term t) {
       final Numeric n = operators.getNumeric(t);
-      if (n.getType() == TermType.INTEGER) { // TODO use assertType
-         return n.getLong();
-      } else {
-         throw new ProjogException("Expected integer but got: " + n.getType() + " with value: " + n);
-      }
+      assertType(n, TermType.INTEGER);
+      return n.getLong();
    }
 
    /**
@@ -171,9 +168,7 @@ public final class TermUtils {
     * @throws ProjogException if the specified {@link Term} does not represent an {@link Atom}
     */
    public static String getAtomName(final Term t) {
-      if (t.getType() != TermType.ATOM) { // TODO use assertType
-         throw new ProjogException("Expected an atom but got: " + t.getType() + " with value: " + t);
-      }
+      assertType(t, TermType.ATOM);
       return t.getName();
    }
 

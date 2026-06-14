@@ -25,7 +25,7 @@ import org.projog.core.term.Term;
 
 public class SingleSolutionStructureQueryTest extends AbstractQueryTest {
    private static final String EXPECTED_NUMERIC_EXCEPTION_MESSAGE = "Expected Numeric but got: STRUCTURE with value: test(a, 1)";
-   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected an atom but got: STRUCTURE with value: test(a, 1)";
+   private static final String EXPECTED_ATOM_EXCEPTION_MESSAGE = "Expected ATOM but got: STRUCTURE with value: test(a, 1)";
    private static final Term STRUCTURE = StructureFactory.createStructure("test", new Term[] {new Atom("a"), new IntegerNumber(1)});
 
    public SingleSolutionStructureQueryTest() {

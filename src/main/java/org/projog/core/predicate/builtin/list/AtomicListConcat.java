@@ -57,40 +57,40 @@ import org.projog.core.term.TermType;
 %FAIL atomic_list_concat(['1','2','3'], 123)
 
 %?- atomic_list_concat([Y], X)
-%ERROR Expected an atom but got: VARIABLE with value: Y
+%ERROR Expected ATOM but got: VARIABLE with value: Y
 
 %?- atomic_list_concat([1], X)
-%ERROR Expected an atom but got: INTEGER with value: 1
+%ERROR Expected ATOM but got: INTEGER with value: 1
 
 %?- atomic_list_concat([p(a)], X)
-%ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%ERROR Expected ATOM but got: STRUCTURE with value: p(a)
 
 %?- atomic_list_concat([[a]], X)
-%ERROR Expected an atom but got: LIST with value: .(a, [])
+%ERROR Expected ATOM but got: LIST with value: .(a, [])
 
 %?- atomic_list_concat([Y], -, X)
-%ERROR Expected an atom but got: VARIABLE with value: Y
+%ERROR Expected ATOM but got: VARIABLE with value: Y
 
 %?- atomic_list_concat([1], -, X)
-%ERROR Expected an atom but got: INTEGER with value: 1
+%ERROR Expected ATOM but got: INTEGER with value: 1
 
 %?- atomic_list_concat([p(a)], -, X)
-%ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%ERROR Expected ATOM but got: STRUCTURE with value: p(a)
 
 %?- atomic_list_concat([[a]], -, X)
-%ERROR Expected an atom but got: LIST with value: .(a, [])
+%ERROR Expected ATOM but got: LIST with value: .(a, [])
 
 %?- atomic_list_concat([a], Y, X)
-%ERROR Expected an atom but got: VARIABLE with value: Y
+%ERROR Expected ATOM but got: VARIABLE with value: Y
 
 %?- atomic_list_concat([a], 1, X)
-%ERROR Expected an atom but got: INTEGER with value: 1
+%ERROR Expected ATOM but got: INTEGER with value: 1
 
 %?- atomic_list_concat([a], p(a), X)
-%ERROR Expected an atom but got: STRUCTURE with value: p(a)
+%ERROR Expected ATOM but got: STRUCTURE with value: p(a)
 
 %?- atomic_list_concat([a], [a], X)
-%ERROR Expected an atom but got: LIST with value: .(a, [])
+%ERROR Expected ATOM but got: LIST with value: .(a, [])
 */
 /**
  * <code>atomic_list_concat(List,Separator,Atom)</code> / <code>atomic_list_concat(List,Atom)</code>

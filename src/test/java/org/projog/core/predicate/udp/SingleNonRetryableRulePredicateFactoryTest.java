@@ -35,11 +35,13 @@ import org.projog.core.ProjogException;
 import org.projog.core.event.ProjogListeners;
 import org.projog.core.event.SpyPoints;
 import org.projog.core.event.SpyPoints.SpyPoint;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.CutException;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 public class SingleNonRetryableRulePredicateFactoryTest {
    private static final String FUNCTOR = "test";
@@ -58,9 +60,15 @@ public class SingleNonRetryableRulePredicateFactoryTest {
       when(mockAction.getPredicate(StructureFactory.createStructure(FUNCTOR, queryArgs))).thenReturn(mockPredicate);
 
       this.listener = new SimpleProjogListener();
+
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
-      this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
+      TermFormatter termFormatter = TestUtils.createTermFormatter();
+      KnowledgeBase mockKnowledgeBase = mock(KnowledgeBase.class);
+      when(mockKnowledgeBase.getTermFormatter()).thenReturn(termFormatter);
+      when(mockKnowledgeBase.getProjogListeners()).thenReturn(observable);
+
+      this.spyPoints = new SpyPoints(mockKnowledgeBase);
       SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey(FUNCTOR, 3));
 
       this.testObject = new SingleNonRetryableRulePredicateFactory(mockAction, spyPoint);

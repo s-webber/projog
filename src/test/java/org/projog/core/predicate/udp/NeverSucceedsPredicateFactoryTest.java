@@ -18,6 +18,8 @@ package org.projog.core.predicate.udp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.projog.TermFactory.atom;
 import static org.projog.TestUtils.array;
 
@@ -28,10 +30,12 @@ import org.projog.TestUtils;
 import org.projog.core.event.ProjogListeners;
 import org.projog.core.event.SpyPoints;
 import org.projog.core.event.SpyPoints.SpyPoint;
+import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.predicate.Predicate;
 import org.projog.core.predicate.PredicateKey;
 import org.projog.core.term.StructureFactory;
 import org.projog.core.term.Term;
+import org.projog.core.term.TermFormatter;
 
 public class NeverSucceedsPredicateFactoryTest {
    private static final String FUNCTOR = "test";
@@ -44,9 +48,15 @@ public class NeverSucceedsPredicateFactoryTest {
    @Before
    public void before() {
       this.listener = new SimpleProjogListener();
+
       ProjogListeners observable = new ProjogListeners();
       observable.addListener(listener);
-      this.spyPoints = new SpyPoints(observable, TestUtils.createTermFormatter());
+      TermFormatter termFormatter = TestUtils.createTermFormatter();
+      KnowledgeBase mockKnowledgeBase = mock(KnowledgeBase.class);
+      when(mockKnowledgeBase.getTermFormatter()).thenReturn(termFormatter);
+      when(mockKnowledgeBase.getProjogListeners()).thenReturn(observable);
+
+      this.spyPoints = new SpyPoints(mockKnowledgeBase);
       SpyPoint spyPoint = spyPoints.getSpyPoint(new PredicateKey(FUNCTOR, 3));
 
       this.testObject = new NeverSucceedsPredicateFactory(spyPoint);

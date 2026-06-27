@@ -69,8 +69,9 @@ public class KnowledgeBaseTest {
    /** Check that {@link ProjogProperties} is configurable. */
    @Test
    public void testConfiguredProjogProperties() {
-      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(TestUtils.PROJOG_DEFAULT_PROPERTIES);
-      assertSame(TestUtils.PROJOG_DEFAULT_PROPERTIES, kb.getProjogProperties());
+      ProjogProperties properties = new ProjogDefaultProperties();
+      KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(properties);
+      assertSame(properties, kb.getProjogProperties());
    }
 
    /** @see ArithmeticOperatorsTest */

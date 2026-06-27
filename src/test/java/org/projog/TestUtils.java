@@ -23,12 +23,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.projog.core.kb.KnowledgeBase;
 import org.projog.core.kb.KnowledgeBaseUtils;
-import org.projog.core.kb.ProjogDefaultProperties;
-import org.projog.core.kb.ProjogProperties;
 import org.projog.core.parser.Operands;
 import org.projog.core.parser.SentenceParser;
 import org.projog.core.predicate.PredicateKey;
@@ -43,8 +40,6 @@ import org.projog.core.term.TermUtils;
 public class TestUtils {
    public static final PredicateKey ADD_PREDICATE_KEY = new PredicateKey("pj_add_predicate", 2);
    public static final PredicateKey ADD_ARITHMETIC_OPERATOR_KEY = new PredicateKey("pj_add_arithmetic_operator", 2);
-   public static final File BOOTSTRAP_FILE = new File("src/main/resources/projog-bootstrap.pl");
-   public static final ProjogProperties PROJOG_DEFAULT_PROPERTIES = new ProjogDefaultProperties();
 
    private static final File TEMP_DIR = new File("target");
 
@@ -87,25 +82,8 @@ public class TestUtils {
       }
    }
 
-   public static KnowledgeBase createKnowledgeBase(ProjogProperties projogProperties) {
-      try {
-         KnowledgeBase kb = KnowledgeBaseUtils.createKnowledgeBase(projogProperties);
-         KnowledgeBaseUtils.bootstrap(kb);
-         return kb;
-      } catch (Throwable t) {
-         t.printStackTrace();
-         throw new RuntimeException(t);
-      }
-   }
-
    public static Term[] array(Term... terms) {
       return terms;
-   }
-
-   public static Term[] createArgs(int numberOfArguments, Term term) {
-      Term[] args = new Term[numberOfArguments];
-      Arrays.fill(args, term);
-      return args;
    }
 
    public static SentenceParser createSentenceParser(String prologSyntax) {

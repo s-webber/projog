@@ -24,8 +24,9 @@ import static org.projog.TermFactory.decimalFraction;
 import static org.projog.TermFactory.integerNumber;
 import static org.projog.TermFactory.structure;
 import static org.projog.TermFactory.variable;
-import static org.projog.TestUtils.createArgs;
 import static org.projog.TestUtils.createKnowledgeBase;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.projog.core.ProjogException;
@@ -234,5 +235,11 @@ public class AbstractArithmeticOperatorTest {
       final AbstractArithmeticOperator c = new AbstractArithmeticOperator() {
       };
       assertTrue(c.isPure());
+   }
+
+   private static Term[] createArgs(int numberOfArguments, Term term) {
+      Term[] args = new Term[numberOfArguments];
+      Arrays.fill(args, term);
+      return args;
    }
 }

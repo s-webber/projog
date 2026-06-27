@@ -16,9 +16,7 @@
 package org.projog.core.term;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.projog.core.ProjogException;
 import org.projog.core.math.ArithmeticOperators;
@@ -67,52 +65,6 @@ public final class TermUtils {
    public static void backtrack(final Term[] terms) {
       for (final Term t : terms) {
          t.backtrack();
-      }
-   }
-
-   /**
-    * Attempts to unify all corresponding {@link Term}s in the specified arrays.
-    * <p>
-    * <b>Note: If the attempt to unify the corresponding terms is unsuccessful only the terms in {@code queryArgs} will
-    * get backtracked.</b>
-    *
-    * @param queryArgs terms to unify with {@code consequentArgs}
-    * @param consequentArgs terms to unify with {@code queryArgs}
-    * @return {@code true} if the attempt to unify all corresponding terms was successful
-    */
-   public static boolean unify(final Term[] queryArgs, final Term[] consequentArgs) {
-      for (int i = 0; i < queryArgs.length; i++) {
-         if (!consequentArgs[i].unify(queryArgs[i])) {
-            for (int j = 0; j < i; j++) {
-               queryArgs[j].backtrack();
-            }
-            return false;
-         }
-      }
-      return true;
-   }
-
-   /**
-    * Returns all {@link Variable}s contained in the specified term.
-    *
-    * @param argument the term to find variables for
-    * @return all {@link Variable}s contained in the specified term.
-    */
-   public static Set<Variable> getAllVariablesInTerm(final Term argument) {
-      final Set<Variable> variables = new LinkedHashSet<>();
-      getAllVariablesInTerm(argument, variables);
-      return variables;
-   }
-
-   private static void getAllVariablesInTerm(final Term argument, final Set<Variable> variables) {
-      if (argument.isImmutable()) {
-         // ignore
-      } else if (argument.getType() == TermType.VARIABLE) {
-         variables.add((Variable) argument);
-      } else {
-         for (int i = 0; i < argument.getNumberOfArguments(); i++) {
-            getAllVariablesInTerm(argument.getArgument(i), variables);
-         }
       }
    }
 

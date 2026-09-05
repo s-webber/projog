@@ -199,6 +199,7 @@
 ?- pj_add_predicate(pairs_keys/2, 'org.projog.core.predicate.builtin.list.PairsElements/keys').
 ?- pj_add_predicate(pairs_values/2, 'org.projog.core.predicate.builtin.list.PairsElements/values').
 ?- pj_add_predicate(random_permutation/2, 'org.projog.core.predicate.builtin.list.RandomPermutation').
+?- pj_add_predicate(random_member/2, 'org.projog.core.predicate.builtin.list.RandomMember').
 
 % clp
 ?- pj_add_predicate(in/2, 'org.projog.core.predicate.builtin.clp.In').
